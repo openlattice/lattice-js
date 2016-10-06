@@ -37,7 +37,12 @@
     "webpack:prod": "NODE_ENV=production webpack --config config/webpack.config.babel.js",
     "webpack:server": "NODE_ENV=development webpack-dev-server --config config/webpack.config.babel.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "lodash": "^4.16.4",
+    "loglevel": "^1.4.1",
+    "moment": "^2.15.1"
+  },
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
