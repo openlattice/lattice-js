@@ -4,37 +4,23 @@
 
 /* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies */
 
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import Webpack from 'webpack';
 
 import PACKAGE from '../package.json';
 
-import * as PATHS from './paths.js';
+import LIB_CONFIG from './lib.config.js';
+import LIB_PATHS from './lib.paths.js';
 
 import {
-  isDev,
-  isProd,
   ifDev,
   ifProd
 } from './env.js';
 
-import {
-  compact
-} from './utils.js';
-
-/*
- * constants
- */
-
-const BANNER = `
-${PACKAGE.name} - v${PACKAGE.version}
-${PACKAGE.description}
-${PACKAGE.homepage}
-
-Copyright (c) 2014-2016, Kryptnostic, Inc. All rights reserved.
-`;
-
-const BUILD_FILE_NAME = PACKAGE.name;
+function compact(arr :Array<any>) :Array<any> {
+  return arr.filter((element :any) => {
+    return !!element;
+  });
+}
 
 /*
  * loaders
@@ -42,10 +28,10 @@ const BUILD_FILE_NAME = PACKAGE.name;
 
 const BABEL_LOADER = {
   loader: 'babel',
-  test: /\.(js|jsx)$/,
+  test: /\.js$/,
   include: [
-    PATHS.ABS.SOURCE,
-    PATHS.ABS.TEST
+    LIB_PATHS.SOURCE,
+    LIB_PATHS.TEST
   ]
 };
 
@@ -59,18 +45,15 @@ const JSON_LOADER = {
  */
 
 const BANNER_PLUGIN = new Webpack.BannerPlugin({
-  banner: BANNER,
+  banner: LIB_CONFIG.BANNER,
   entryOnly: true
 });
 
 const DEFINE_PLUGIN = new Webpack.DefinePlugin({
-  __DEV__: JSON.stringify(isDev),
-  __PROD__: JSON.stringify(isProd),
   __VERSION__: JSON.stringify(`v${PACKAGE.version}`)
 });
 
 const DEV_PLUGINS = [
-  new HtmlWebpackPlugin(),
   new Webpack.NamedModulesPlugin()
 ];
 
@@ -92,13 +75,15 @@ const PROD_PLUGINS = [
 
 export default {
   bail: true,
-  entry: PATHS.ENTRY,
+  entry: LIB_PATHS.ENTRY,
   output: {
-    path: PATHS.ABS.BUILD,
+    library: 'Loom',
+    libraryTarget: 'umd',
+    path: LIB_PATHS.BUILD,
     publicPath: '/',
     filename: ifProd(
-      `${BUILD_FILE_NAME}.min.js`,
-      `${BUILD_FILE_NAME}.js`,
+      `${LIB_CONFIG.LIB_FILE_NAME}.min.js`,
+      `${LIB_CONFIG.LIB_FILE_NAME}.js`,
     )
   },
   module: {
@@ -118,8 +103,8 @@ export default {
     extensions: ['.js'],
     alias: {},
     modules: [
-      PATHS.ABS.SOURCE,
-      PATHS.ABS.NODE_MODULES
+      LIB_PATHS.SOURCE,
+      LIB_PATHS.NODE
     ]
   }
 };
