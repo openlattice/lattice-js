@@ -1,0 +1,50 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:flowtype/recommended"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "flowtype"
+  ],
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    },
+    "import/resolver": {
+      "webpack": {
+        "config": "config/webpack.config.babel.js"
+      }
+    }
+  },
+  "rules": {
+    "arrow-body-style": ["error", "always"],
+    "brace-style": ["error", "stroustrup"],
+    "comma-dangle": ["error", "never"],
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "tabWidth": 2,
+        "ignoreUrls": true,
+        "ignoreComments": false
+      }
+    ],
+    "padded-blocks": "off",
+    "space-before-function-paren": ["error", "never"],
+
+    "flowtype/space-after-type-colon": ["error", "never"],
+    "flowtype/space-before-type-colon": ["error", "always"],
+
+    "import/order": [
+      "warn",
+      {
+        "groups": ["builtin", "external", "internal", ["sibling", "parent"], "index"]
+      }
+    ]
+  }
+}
