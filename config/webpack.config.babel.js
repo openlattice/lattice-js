@@ -14,7 +14,8 @@ import LIB_PATHS from './lib.paths.js';
 import {
   isDev,
   ifDev,
-  ifProd
+  ifProd,
+  ifMin
 } from './env.js';
 
 function compact(arr :Array<any>) :Array<any> {
@@ -84,7 +85,7 @@ export default {
     libraryTarget: 'umd',
     path: LIB_PATHS.BUILD,
     publicPath: '/',
-    filename: ifProd(
+    filename: ifMin(
       `${LIB_CONFIG.LIB_FILE_NAME}.min.js`,
       `${LIB_CONFIG.LIB_FILE_NAME}.js`,
     )
