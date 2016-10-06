@@ -25,10 +25,12 @@ const MULTIPLE_PATH = 'multiple';
  *
  */
 
-export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise {
+export function getAllEntitiesOfType(fullyQualifiedName :Object) :Promise {
+
+  const { namespace, name } = fullyQualifiedName;
 
   return DataApi
-    .get(`/${ENTITY_DATA_PATH}/${entityTypeFqn.namespace}/${entityTypeFqn.name}`)
+    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -67,10 +69,12 @@ export function createEntity(createEntityRequest :Object) :Promise {
  *
  */
 
-export function getEntitySet(entitySetFqn :Object) :Promise {
+export function getEntitySet(fullyQualifiedName :Object) :Promise {
+
+  const { namespace, name } = fullyQualifiedName;
 
   return DataApi
-    .get(`/${ENTITY_SET_PATH}/${entitySetFqn.namespace}/${entitySetFqn.name}`)
+    .get(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
