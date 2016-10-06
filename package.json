@@ -24,20 +24,23 @@
   "license": "Apache-2.0",
   "main": "src/index.js",
   "scripts": {
-    "build:dev": "npm-run-all clean webpack:dev",
-    "build:prod": "npm-run-all clean webpack:prod",
+    "build": "npm-run-all clean lint --parallel build:dev build:prod",
+    "build:dev": "npm-run-all webpack:dev",
+    "build:prod": "npm-run-all webpack:prod",
     "clean": "rimraf build/*",
-    "flow": "echo \"Error: flow task not implemented\" && exit 1",
+    "flow": "flow check",
     "lint": "eslint --config .eslintrc src test",
+    "playground": "npm run webpack:server",
     "release:major": "echo \"Error: release:major task not implemented\" && exit 1",
     "release:minor": "echo \"Error: release:minor task not implemented\" && exit 1",
     "release:patch": "echo \"Error: release:patch task not implemented\" && exit 1",
     "test": "echo \"Error: test task not implemented\" && exit 1",
     "webpack:dev": "NODE_ENV=development webpack --config config/webpack.config.babel.js",
     "webpack:prod": "NODE_ENV=production webpack --config config/webpack.config.babel.js",
-    "webpack:server": "NODE_ENV=development webpack-dev-server --config config/webpack.config.babel.js"
+    "webpack:server": "NODE_ENV=development webpack-dev-server --config config/webpack.config.babel.js --port 9000 --content-base build/"
   },
   "dependencies": {
+    "axios": "^0.14.0",
     "bluebird": "^3.4.6",
     "lodash": "^4.16.4",
     "loglevel": "^1.4.1",

@@ -2,9 +2,11 @@
  * @flow
  */
 
-import {
-  ifElse
-} from './utils.js';
+function ifElse(condition :boolean) :Function {
+  return (isTrue :any, isFalse :any) => {
+    return condition ? isTrue : isFalse;
+  };
+}
 
 const NODE_ENV :string = process.env.NODE_ENV || 'development';
 
