@@ -12,6 +12,7 @@ import LIB_CONFIG from './lib.config.js';
 import LIB_PATHS from './lib.paths.js';
 
 import {
+  isDev,
   ifDev,
   ifProd
 } from './env.js';
@@ -50,6 +51,8 @@ const BANNER_PLUGIN = new Webpack.BannerPlugin({
 });
 
 const DEFINE_PLUGIN = new Webpack.DefinePlugin({
+  __API_ENDPOINTS__: JSON.stringify(LIB_CONFIG.API_ENDPOINTS),
+  __DEV__: JSON.stringify(isDev),
   __VERSION__: JSON.stringify(`v${PACKAGE.version}`)
 });
 
@@ -77,7 +80,7 @@ export default {
   bail: true,
   entry: LIB_PATHS.ENTRY,
   output: {
-    library: 'Loom',
+    library: LIB_CONFIG.LIB_NAMESPACE,
     libraryTarget: 'umd',
     path: LIB_PATHS.BUILD,
     publicPath: '/',
