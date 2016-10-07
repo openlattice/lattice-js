@@ -8,11 +8,11 @@ function ifElse(condition :boolean) :Function {
   };
 }
 
-const NODE_ENV :string = process.env.NODE_ENV || 'development';
+const BUILD :string = process.env.BUILD || 'development';
 const MINIMIZE :string = process.env.MINIMIZE || 'false';
 
-const isDev :boolean = NODE_ENV === 'development';
-const isProd :boolean = NODE_ENV === 'production';
+const isDev :boolean = BUILD === 'development';
+const isProd :boolean = BUILD === 'production';
 
 const ifDev :Function = ifElse(isDev);
 const ifProd :Function = ifElse(isProd);

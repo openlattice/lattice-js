@@ -84,7 +84,7 @@
     "webpack-dev-server": {
       "command": "webpack-dev-server --config config/webpack.config.babel.js --port 9000 --content-base build/",
       "env": {
-        "NODE_ENV": "development"
+        "BUILD": "development"
       }
     }
   }
