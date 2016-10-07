@@ -65,12 +65,14 @@ const PROD_PLUGINS = [
   new Webpack.optimize.DedupePlugin(),
   new Webpack.optimize.OccurrenceOrderPlugin(),
   new Webpack.LoaderOptionsPlugin({
-    minimize: true,
+    minimize: ifMin(true, false),
     debug: false
   }),
-  new Webpack.optimize.UglifyJsPlugin({
-    comments: false
-  })
+  ifMin(
+    new Webpack.optimize.UglifyJsPlugin({
+      comments: false
+    })
+  )
 ];
 
 /*
