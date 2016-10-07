@@ -1,6 +1,6 @@
 {
   "name": "loom-api",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "homepage": "https://github.com/kryptnostic/loom-api-js",
   "description": "JavaScript SDK for all Loom REST APIs",
   "author": {
