@@ -15,7 +15,9 @@ import {
   isDev,
   ifDev,
   ifProd,
-  ifMin
+  ifMin,
+  ifNode,
+  TARGET_ENV
 } from './env.js';
 
 function compact(arr :Array<any>) :Array<any> {
@@ -88,8 +90,8 @@ export default {
     path: LIB_PATHS.BUILD,
     publicPath: '/',
     filename: ifMin(
-      `${LIB_CONFIG.LIB_FILE_NAME}.min.js`,
-      `${LIB_CONFIG.LIB_FILE_NAME}.js`,
+      ifNode(`${LIB_CONFIG.LIB_FILE_NAME}.node.min.js`, `${LIB_CONFIG.LIB_FILE_NAME}.min.js`),
+      ifNode(`${LIB_CONFIG.LIB_FILE_NAME}.node.js`, `${LIB_CONFIG.LIB_FILE_NAME}.js`)
     )
   },
   module: {
@@ -112,5 +114,6 @@ export default {
       LIB_PATHS.SOURCE,
       LIB_PATHS.NODE
     ]
-  }
+  },
+  target: TARGET_ENV
 };
