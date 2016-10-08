@@ -1,6 +1,6 @@
 {
   "name": "loom-api",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/kryptnostic/loom-api-js",
   "description": "JavaScript SDK for all Loom REST APIs",
   "author": {
@@ -22,7 +22,8 @@
     "url": "https://github.com/kryptnostic/loom-api-js/issues"
   },
   "license": "Apache-2.0",
-  "main": "build/loom-api.js",
+  "main": "build/loom-api.node.js",
+  "browser": "build/loom-api.js",
   "dependencies": {
     "axios": "^0.14.0",
     "bluebird": "^3.4.6",
@@ -54,9 +55,11 @@
     "webpack-dev-server": "^2.1.0-beta"
   },
   "scripts": {
-    "build": "npm-run-all clean lint --parallel build:prod build:prod:min",
+    "build": "npm-run-all clean lint --parallel build:prod build:prod:min build:prod:node build:prod:node:min",
     "build:prod": "better-npm-run build:prod",
     "build:prod:min": "better-npm-run build:prod:min",
+    "build:prod:node": "better-npm-run build:prod:node",
+    "build:prod:node:min": "better-npm-run build:prod:node:min",
     "clean": "rimraf build/*",
     "flow": "flow check",
     "lint": "eslint --config .eslintrc src test",
@@ -71,14 +74,32 @@
       "command": "webpack --config config/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
-        "MINIMIZE": "false"
+        "MINIMIZE": "false",
+        "TARGET_ENV": "web"
       }
     },
     "build:prod:min": {
       "command": "webpack --config config/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
-        "MINIMIZE": "true"
+        "MINIMIZE": "true",
+        "TARGET_ENV": "web"
+      }
+    },
+    "build:prod:node": {
+      "command": "webpack --config config/webpack.config.babel.js",
+      "env": {
+        "BUILD": "production",
+        "MINIMIZE": "false",
+        "TARGET_ENV": "node"
+      }
+    },
+    "build:prod:node:min": {
+      "command": "webpack --config config/webpack.config.babel.js",
+      "env": {
+        "BUILD": "production",
+        "MINIMIZE": "true",
+        "TARGET_ENV": "node"
       }
     },
     "webpack-dev-server": {
