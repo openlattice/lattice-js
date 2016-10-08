@@ -33,7 +33,7 @@ const LIB_NAMESPACE = 'Loom';
  */
 
 const BASE_URL = ifProd(
-  'http://demo.loom.digital',
+  'http://test.loom.digital',
   'http://localhost:8080'
 );
 
