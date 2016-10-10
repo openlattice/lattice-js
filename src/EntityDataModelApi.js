@@ -7,13 +7,12 @@ import Promise from 'bluebird';
 
 import Logger from './utils/Logger';
 
-declare var __API_ENDPOINTS__;
+import {
+  getApiBaseUrl,
+  EDM_API
+} from './config/ApiEndpoints';
 
 const LOG = new Logger('EntityDataModelApi');
-
-const EntityDataModelApi = Axios.create({
-  baseURL: __API_ENDPOINTS__.EDM
-});
 
 const SCHEMA_PATH = 'schema';
 const ENTITY_SET_PATH = 'entity/set';
@@ -28,8 +27,8 @@ const PROPERTY_TYPE_PATH = 'property/type';
 
 export function getEntityDataModel() :Promise {
 
-  return EntityDataModelApi
-    .get('/')
+  return Axios
+    .get(`${getApiBaseUrl(EDM_API)}/`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -48,8 +47,8 @@ export function getSchema(fullyQualifiedName :Object) :Promise {
 
   const { namespace, name } = fullyQualifiedName;
 
-  return EntityDataModelApi
-    .get(`/${SCHEMA_PATH}/${namespace}/${name}`)
+  return Axios
+    .get(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -60,8 +59,8 @@ export function getSchema(fullyQualifiedName :Object) :Promise {
 
 export function getAllSchemas() :Promise {
 
-  return EntityDataModelApi
-    .get(`/${SCHEMA_PATH}`)
+  return Axios
+    .get(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -72,8 +71,8 @@ export function getAllSchemas() :Promise {
 
 export function getSchemasInNamespace(namespace :string) :Promise {
 
-  return EntityDataModelApi
-    .get(`/${SCHEMA_PATH}/${namespace}`)
+  return Axios
+    .get(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -85,8 +84,8 @@ export function getSchemasInNamespace(namespace :string) :Promise {
 export function createSchema(createSchemaRequest :Object) :Promise {
 
 
-  return EntityDataModelApi
-    .put(`/${SCHEMA_PATH}`, createSchemaRequest)
+  return Axios
+    .put(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}`, createSchemaRequest)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -103,8 +102,8 @@ export function createSchema(createSchemaRequest :Object) :Promise {
 
 export function getEntitySets() :Promise {
 
-  return EntityDataModelApi
-    .get(`/${ENTITY_SET_PATH}`)
+  return Axios
+    .get(`${getApiBaseUrl(EDM_API)}/${ENTITY_SET_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -115,8 +114,8 @@ export function getEntitySets() :Promise {
 
 export function createEntitySets(entitySets :Array<Object>) :Promise {
 
-  return EntityDataModelApi
-    .post(`/${ENTITY_SET_PATH}`, entitySets)
+  return Axios
+    .post(`${getApiBaseUrl(EDM_API)}/${ENTITY_SET_PATH}`, entitySets)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -135,8 +134,8 @@ export function getEntityType(fullyQualifiedName :Object) :Promise {
 
   const { namespace, name } = fullyQualifiedName;
 
-  return EntityDataModelApi
-    .get(`/${ENTITY_TYPE_PATH}/${namespace}/${name}`)
+  return Axios
+    .get(`${getApiBaseUrl(EDM_API)}/${ENTITY_TYPE_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -147,8 +146,8 @@ export function getEntityType(fullyQualifiedName :Object) :Promise {
 
 export function getEntityTypes() :Promise {
 
-  return EntityDataModelApi
-    .get(`/${ENTITY_TYPE_PATH}`)
+  return Axios
+    .get(`${getApiBaseUrl(EDM_API)}/${ENTITY_TYPE_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -159,8 +158,8 @@ export function getEntityTypes() :Promise {
 
 export function createEntityType(entityType :Object) :Promise {
 
-  return EntityDataModelApi
-    .post(`/${ENTITY_TYPE_PATH}`, entityType)
+  return Axios
+    .post(`${getApiBaseUrl(EDM_API)}/${ENTITY_TYPE_PATH}`, entityType)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -173,8 +172,8 @@ export function deleteEntityType(fullyQualifiedName :Object) :Promise {
 
   const { namespace, name } = fullyQualifiedName;
 
-  return EntityDataModelApi
-    .delete(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
+  return Axios
+    .delete(`${getApiBaseUrl(EDM_API)}/${ENTITY_SET_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -187,8 +186,8 @@ export function addEntityTypesToSchema(fullyQualifiedName :Object, entityTypes :
 
   const { namespace, name } = fullyQualifiedName;
 
-  return EntityDataModelApi
-    .put(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
+  return Axios
+    .put(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -201,8 +200,8 @@ export function removeEntityTypesFromSchema(fullyQualifiedName :Object, entityTy
 
   const { namespace, name } = fullyQualifiedName;
 
-  return EntityDataModelApi
-    .delete(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
+  return Axios
+    .delete(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -219,8 +218,8 @@ export function removeEntityTypesFromSchema(fullyQualifiedName :Object, entityTy
 
 export function createPropertyType(propertyType :Object) :Promise {
 
-  return EntityDataModelApi
-    .post(`/${PROPERTY_TYPE_PATH}`, propertyType)
+  return Axios
+    .post(`${getApiBaseUrl(EDM_API)}/${PROPERTY_TYPE_PATH}`, propertyType)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -233,8 +232,8 @@ export function deletePropertyType(fullyQualifiedName :Object) :Promise {
 
   const { namespace, name } = fullyQualifiedName;
 
-  return EntityDataModelApi
-    .delete(`/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
+  return Axios
+    .delete(`${getApiBaseUrl(EDM_API)}/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

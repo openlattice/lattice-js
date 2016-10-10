@@ -34,6 +34,19 @@
         "ignoreComments": false
       }
     ],
+    "new-cap": [
+      "error",
+      {
+        "capIsNewExceptions": [
+          "Immutable.List",
+          "Immutable.OrderedList",
+          "Immutable.Map",
+          "Immutable.OrderedMap",
+          "Immutable.Set",
+          "Immutable.OrderedSet"
+        ]
+      }
+    ],
     "padded-blocks": "off",
     "space-before-function-paren": ["error", "never"],
 
