@@ -57,8 +57,8 @@
     "webpack-dev-server": "^2.1.0-beta"
   },
   "scripts": {
-    "build": "npm-run-all clean lint --parallel build:prod build:prod:node",
-    "build:min": "npm-run-all clean lint --parallel build:prod:min build:prod:node:min",
+    "build": "npm-run-all lint --parallel build:prod build:prod:node",
+    "build:min": "npm-run-all lint --parallel build:prod:min build:prod:node:min",
     "build:prod": "better-npm-run build:prod",
     "build:prod:min": "better-npm-run build:prod:min",
     "build:prod:node": "better-npm-run build:prod:node",
