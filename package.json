@@ -27,6 +27,7 @@
   "dependencies": {
     "axios": "^0.14.0",
     "bluebird": "^3.4.6",
+    "immutable": "^3.8.1",
     "lodash": "^4.16.4",
     "loglevel": "^1.4.1",
     "moment": "^2.15.1"
@@ -48,6 +49,7 @@
     "eslint-plugin-flowtype": "^2.19.0",
     "eslint-plugin-import": "^1.15.0",
     "flow-bin": "^0.32.0",
+    "iflow-lodash": "^1.1.27",
     "json-loader": "^0.5.4",
     "npm-run-all": "^3.1.0",
     "rimraf": "2.5.4",
