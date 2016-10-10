@@ -1,7 +1,7 @@
 {
-  "name": "loom-api",
-  "version": "0.1.3",
-  "homepage": "https://github.com/kryptnostic/loom-api-js",
+  "name": "loom-data",
+  "version": "0.2.0",
+  "homepage": "https://github.com/kryptnostic/loom-data-js",
   "description": "JavaScript SDK for all Loom REST APIs",
   "author": {
     "name": "Kryptnostic, Inc.",
@@ -16,14 +16,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kryptnostic/loom-api-js.git"
+    "url": "git+https://github.com/kryptnostic/loom-data-js.git"
   },
   "bugs": {
-    "url": "https://github.com/kryptnostic/loom-api-js/issues"
+    "url": "https://github.com/kryptnostic/loom-data-js/issues"
   },
   "license": "Apache-2.0",
-  "main": "build/loom-api.node.js",
-  "browser": "build/loom-api.js",
+  "main": "build/loom-data.node.js",
+  "browser": "build/loom-data.js",
   "dependencies": {
     "axios": "^0.14.0",
     "bluebird": "^3.4.6",
