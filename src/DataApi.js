@@ -7,13 +7,12 @@ import Promise from 'bluebird';
 
 import Logger from './utils/Logger';
 
-declare var __API_ENDPOINTS__;
+import {
+  getApiBaseUrl,
+  DATA_API
+} from './config/ApiEndpoints';
 
 const LOG = new Logger('DataApi');
-
-const DataApi = Axios.create({
-  baseURL: __API_ENDPOINTS__.DATA
-});
 
 const ENTITY_DATA_PATH = 'entitydata';
 const ENTITY_SET_PATH = 'entityset';
@@ -29,8 +28,8 @@ export function getAllEntitiesOfType(fullyQualifiedName :Object) :Promise {
 
   const { namespace, name } = fullyQualifiedName;
 
-  return DataApi
-    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}`)
+  return Axios
+    .get(`${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -41,8 +40,8 @@ export function getAllEntitiesOfType(fullyQualifiedName :Object) :Promise {
 
 export function getAllEntitiesOfTypes(entityTypes :Array<Object>) :Promise {
 
-  return DataApi
-    .put(`/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypes)
+  return Axios
+    .put(`${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypes)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -53,8 +52,8 @@ export function getAllEntitiesOfTypes(entityTypes :Array<Object>) :Promise {
 
 export function createEntity(createEntityRequest :Object) :Promise {
 
-  return DataApi
-    .post(`/${ENTITY_DATA_PATH}`, createEntityRequest)
+  return Axios
+    .post(`${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}`, createEntityRequest)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -73,8 +72,8 @@ export function getEntitySet(fullyQualifiedName :Object) :Promise {
 
   const { namespace, name } = fullyQualifiedName;
 
-  return DataApi
-    .get(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
+  return Axios
+    .get(`${getApiBaseUrl(DATA_API)}/${ENTITY_SET_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

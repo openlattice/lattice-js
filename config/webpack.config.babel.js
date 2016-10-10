@@ -13,6 +13,7 @@ import LIB_PATHS from './lib.paths.js';
 
 import {
   isDev,
+  isProd,
   ifDev,
   ifProd,
   ifMin,
@@ -54,8 +55,8 @@ const BANNER_PLUGIN = new Webpack.BannerPlugin({
 });
 
 const DEFINE_PLUGIN = new Webpack.DefinePlugin({
-  __API_ENDPOINTS__: JSON.stringify(LIB_CONFIG.API_ENDPOINTS),
   __DEV__: JSON.stringify(isDev),
+  __PROD__: JSON.stringify(isProd),
   __VERSION__: JSON.stringify(`v${PACKAGE.version}`)
 });
 
