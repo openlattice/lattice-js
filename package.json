@@ -70,7 +70,7 @@
     "release:minor": "npm version minor -m \"releasing v%s\"",
     "release:patch": "npm version patch -m \"releasing v%s\"",
     "version": "npm-run-all clean lint --parallel build build:min && git add -A package.json build/",
-    "postversion": "echo \"git push && git push --tags\"",
+    "postversion": "git push && git push --tags",
     "test": "echo \"Error: test task not implemented\" && exit 1",
     "webpack-dev-server": "better-npm-run webpack-dev-server"
   },
