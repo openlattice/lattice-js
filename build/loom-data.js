@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.2.1
+ * loom-data - v0.2.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -44593,7 +44593,7 @@ var _Configuration = __webpack_require__(5);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.2.1";
+var version = "v0.2.2";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
