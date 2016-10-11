@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.2.0
+ * loom-data - v0.2.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -38224,7 +38224,9 @@ function removeEntityTypesFromSchema(fullyQualifiedName, entityTypes) {
   var name = fullyQualifiedName.name;
 
 
-  return _axios2.default.delete((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API) + '/' + SCHEMA_PATH + '/' + namespace + '/' + name, entityTypes).then(function (axiosResponse) {
+  return _axios2.default.delete((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API) + '/' + SCHEMA_PATH + '/' + namespace + '/' + name, {
+    data: entityTypes
+  }).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -44591,7 +44593,7 @@ var _Configuration = __webpack_require__(5);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.2.0";
+var version = "v0.2.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
