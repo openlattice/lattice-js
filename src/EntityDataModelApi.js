@@ -201,7 +201,9 @@ export function removeEntityTypesFromSchema(fullyQualifiedName :Object, entityTy
   const { namespace, name } = fullyQualifiedName;
 
   return Axios
-    .delete(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
+    .delete(`${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}`, {
+      data: entityTypes
+    })
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
