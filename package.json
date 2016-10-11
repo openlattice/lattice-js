@@ -57,8 +57,8 @@
     "webpack-dev-server": "^2.1.0-beta"
   },
   "scripts": {
-    "build": "npm-run-all lint --parallel build:prod build:prod:node",
-    "build:min": "npm-run-all lint --parallel build:prod:min build:prod:node:min",
+    "build": "npm-run-all --parallel build:prod build:prod:node",
+    "build:min": "npm-run-all --parallel build:prod:min build:prod:node:min",
     "build:prod": "better-npm-run build:prod",
     "build:prod:min": "better-npm-run build:prod:min",
     "build:prod:node": "better-npm-run build:prod:node",
@@ -66,9 +66,11 @@
     "clean": "rimraf build/*",
     "flow": "flow check",
     "lint": "eslint --config .eslintrc src test",
-    "release:major": "echo \"Error: release:major task not implemented\" && exit 1",
-    "release:minor": "echo \"Error: release:minor task not implemented\" && exit 1",
-    "release:patch": "echo \"Error: release:patch task not implemented\" && exit 1",
+    "release:major": "npm version major -m \"releasing %s\"",
+    "release:minor": "npm version minor -m \"releasing %s\"",
+    "release:patch": "npm version patch -m \"releasing %s\"",
+    "version": "npm-run-all clean lint --parallel build build:min && git add -A package.json build/",
+    "postversion": "echo \"git push && git push --tags\"",
     "test": "echo \"Error: test task not implemented\" && exit 1",
     "webpack-dev-server": "better-npm-run webpack-dev-server"
   },
