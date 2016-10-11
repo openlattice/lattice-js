@@ -38,6 +38,7 @@
       "error",
       {
         "capIsNewExceptions": [
+          "Axios",
           "Immutable.List",
           "Immutable.OrderedList",
           "Immutable.Map",
