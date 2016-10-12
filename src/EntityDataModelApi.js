@@ -2,9 +2,6 @@
  * @flow
  */
 
-import Axios from 'axios';
-import Promise from 'bluebird';
-
 import Logger from './utils/Logger';
 
 import {
