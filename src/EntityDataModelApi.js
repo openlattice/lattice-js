@@ -143,6 +143,22 @@ export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Ar
     });
 }
 
+export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+
+  const { namespace, name } = schemaFqn;
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .delete(`/${SCHEMA_PATH}/${namespace}/${name}/${DELETE_PROPERTY_TYPES_PATH}`, {
+      data: propertyTypeFqns
+    })
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
 /*
  *
  * EntitySet APIs
