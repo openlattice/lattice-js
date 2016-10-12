@@ -2,14 +2,21 @@
  * @flow
  */
 
+<<<<<<< HEAD
 import Axios from 'axios';
 
+=======
+>>>>>>> origin/develop
 import Logger from './utils/Logger';
 
 import {
   getApiBaseUrl,
   DATA_API
 } from './config/ApiEndpoints';
+
+import {
+  getAxiosInstance
+} from './utils/AxiosUtils';
 
 const LOG = new Logger('DataApi');
 
@@ -36,12 +43,12 @@ const MULTIPLE_PATH = 'multiple';
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
  */
-export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise {
+export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 
   const { namespace, name } = entityTypeFqn;
 
-  return Axios
-    .get(`${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}`)
+  return getAxiosInstance(getApiBaseUrl(DATA_API))
+    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -57,10 +64,10 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise {
  * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
  * @returns {Promise<Array<Array<Object>>>} - a Promise that will resolve with the entity data as its fulfillment value
  */
-export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise {
+export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise<> {
 
-  return Axios
-    .put(`${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypeFqns)
+  return getAxiosInstance(getApiBaseUrl(DATA_API))
+    .put(`/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypeFqns)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -76,10 +83,10 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise {
  * @param {Object} createEntityRequest
  @ @returns {Promise}
  */
-export function createEntity(createEntityRequest :Object) :Promise {
+export function createEntity(createEntityRequest :Object) :Promise<> {
 
-  return Axios
-    .post(`${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}`, createEntityRequest)
+  return getAxiosInstance(getApiBaseUrl(DATA_API))
+    .post(`/${ENTITY_DATA_PATH}`, createEntityRequest)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -100,12 +107,12 @@ export function createEntity(createEntityRequest :Object) :Promise {
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  @ @returns {Promise}
  */
-export function getEntitySet(entityTypeFqn :Object) :Promise {
+export function getEntitySet(entityTypeFqn :Object) :Promise<> {
 
   const { namespace, name } = entityTypeFqn;
 
-  return Axios
-    .get(`${getApiBaseUrl(DATA_API)}/${ENTITY_SET_PATH}/${namespace}/${name}`)
+  return getAxiosInstance(getApiBaseUrl(DATA_API))
+    .get(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

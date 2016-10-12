@@ -15,7 +15,7 @@ declare var __PROD__ :boolean;
 
 const LOG = new Logger('Configuration');
 
-export const BACKEND_URLS :Map<string, string> = Immutable.Map({
+const BACKEND_URLS :Map<string, string> = Immutable.Map({
   DEV: 'http://localhost:8080',
   STG: 'http://test.loom.digital',
   PROD: 'http://api.loom.digital'
@@ -26,7 +26,7 @@ if (__PROD__) {
   baseUrl = BACKEND_URLS.get('PROD');
 }
 
-export function getBaseUrl() :string {
+function getBaseUrl() :string {
 
   return baseUrl;
 }
@@ -35,7 +35,7 @@ type ConfigurationObject = {
   baseUrl :string
 };
 
-export function configure(config :ConfigurationObject) {
+function configure(config :ConfigurationObject) {
 
   if (isNonEmptyString(config.baseUrl)) {
 
@@ -53,3 +53,9 @@ export function configure(config :ConfigurationObject) {
     LOG.warn('invalid configuration option: "baseUrl" must be a non-empty string');
   }
 }
+
+export {
+  BACKEND_URLS,
+  configure,
+  getBaseUrl
+};
