@@ -283,6 +283,20 @@ export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propert
  *
  */
 
+export function getPropertyType(propertyTypeFqn :Object) :Promise<> {
+
+  const { namespace, name } = propertyTypeFqn;
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .get(`/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
 export function createPropertyType(propertyType :Object) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
