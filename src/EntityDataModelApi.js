@@ -22,6 +22,7 @@ const SCHEMA_PATH = 'schema';
 const ENTITY_SET_PATH = 'entity/set';
 const ENTITY_TYPE_PATH = 'entity/type';
 const PROPERTY_TYPE_PATH = 'property/type';
+const ADD_PROPERTY_TYPES_PATH = 'addPropertyTypes';
 
 /*
  *
@@ -126,6 +127,7 @@ export function removeEntityTypesFromSchema(fullyQualifiedName :Object, entityTy
       LOG.error(e);
     });
 }
+
 /*
  *
  * EntitySet APIs
@@ -206,6 +208,20 @@ export function deleteEntityType(fullyQualifiedName :Object) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .delete(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .put(`/${ENTITY_TYPE_PATH}/${namespace}/${name}/${ADD_PROPERTY_TYPES_PATH}`, propertyTypeFqns)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
