@@ -49,9 +49,9 @@ export function getEntityDataModel() :Promise<> {
  *
  */
 
-export function getSchema(fullyQualifiedName :Object) :Promise<> {
+export function getSchema(schemaFqn :Object) :Promise<> {
 
-  const { namespace, name } = fullyQualifiedName;
+  const { namespace, name } = schemaFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .get(`/${SCHEMA_PATH}/${namespace}/${name}`)
@@ -99,9 +99,9 @@ export function createSchema(createSchemaRequest :Object) :Promise<> {
     });
 }
 
-export function addEntityTypesToSchema(fullyQualifiedName :Object, entityTypes :Array<Object>) :Promise<> {
+export function addEntityTypesToSchema(schemaFqn :Object, entityTypes :Array<Object>) :Promise<> {
 
-  const { namespace, name } = fullyQualifiedName;
+  const { namespace, name } = schemaFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .put(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
@@ -113,14 +113,28 @@ export function addEntityTypesToSchema(fullyQualifiedName :Object, entityTypes :
     });
 }
 
-export function removeEntityTypesFromSchema(fullyQualifiedName :Object, entityTypes :Array<Object>) :Promise<> {
+export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypes :Array<Object>) :Promise<> {
 
-  const { namespace, name } = fullyQualifiedName;
+  const { namespace, name } = schemaFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .delete(`/${SCHEMA_PATH}/${namespace}/${name}`, {
       data: entityTypes
     })
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+
+  const { namespace, name } = schemaFqn;
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .put(`/${SCHEMA_PATH}/${namespace}/${name}/${ADD_PROPERTY_TYPES_PATH}`, propertyTypeFqns)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -165,9 +179,9 @@ export function createEntitySets(entitySets :Array<Object>) :Promise<> {
  *
  */
 
-export function getEntityType(fullyQualifiedName :Object) :Promise<> {
+export function getEntityType(entityTypeFqn :Object) :Promise<> {
 
-  const { namespace, name } = fullyQualifiedName;
+  const { namespace, name } = entityTypeFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .get(`/${ENTITY_TYPE_PATH}/${namespace}/${name}`)
@@ -203,9 +217,9 @@ export function createEntityType(entityType :Object) :Promise<> {
     });
 }
 
-export function deleteEntityType(fullyQualifiedName :Object) :Promise<> {
+export function deleteEntityType(entityTypeFqn :Object) :Promise<> {
 
-  const { namespace, name } = fullyQualifiedName;
+  const { namespace, name } = entityTypeFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .delete(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
@@ -265,9 +279,9 @@ export function createPropertyType(propertyType :Object) :Promise<> {
     });
 }
 
-export function deletePropertyType(fullyQualifiedName :Object) :Promise<> {
+export function deletePropertyType(propertyTypeFqn :Object) :Promise<> {
 
-  const { namespace, name } = fullyQualifiedName;
+  const { namespace, name } = propertyTypeFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .delete(`/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
