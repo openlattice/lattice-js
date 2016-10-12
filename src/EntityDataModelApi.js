@@ -97,6 +97,35 @@ export function createSchema(createSchemaRequest :Object) :Promise<> {
     });
 }
 
+export function addEntityTypesToSchema(fullyQualifiedName :Object, entityTypes :Array<Object>) :Promise<> {
+
+  const { namespace, name } = fullyQualifiedName;
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .put(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+export function removeEntityTypesFromSchema(fullyQualifiedName :Object, entityTypes :Array<Object>) :Promise<> {
+
+  const { namespace, name } = fullyQualifiedName;
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .delete(`/${SCHEMA_PATH}/${namespace}/${name}`, {
+      data: entityTypes
+    })
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
 /*
  *
  * EntitySet APIs
@@ -177,36 +206,6 @@ export function deleteEntityType(fullyQualifiedName :Object) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .delete(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-export function addEntityTypesToSchema(fullyQualifiedName :Object, entityTypes :Array<Object>) :Promise<> {
-
-  const { namespace, name } = fullyQualifiedName;
-
-  return getAxiosInstance(getApiBaseUrl(EDM_API))
-    .put(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-export function removeEntityTypesFromSchema(fullyQualifiedName :Object, entityTypes :Array<Object>) :Promise<> {
-
-  const { namespace, name } = fullyQualifiedName;
-
-  return getAxiosInstance(getApiBaseUrl(EDM_API))
-    .delete(`/${SCHEMA_PATH}/${namespace}/${name}`, {
-      data: entityTypes
-    })
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
