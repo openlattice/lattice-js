@@ -23,6 +23,7 @@ const ENTITY_SET_PATH = 'entity/set';
 const ENTITY_TYPE_PATH = 'entity/type';
 const PROPERTY_TYPE_PATH = 'property/type';
 const ADD_PROPERTY_TYPES_PATH = 'addPropertyTypes';
+const DELETE_PROPERTY_TYPES_PATH = 'deletePropertyTypes';
 
 /*
  *
@@ -222,6 +223,22 @@ export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyType
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .put(`/${ENTITY_TYPE_PATH}/${namespace}/${name}/${ADD_PROPERTY_TYPES_PATH}`, propertyTypeFqns)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .delete(`/${ENTITY_TYPE_PATH}/${namespace}/${name}/${DELETE_PROPERTY_TYPES_PATH}`, {
+      data: propertyTypeFqns
+    })
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
