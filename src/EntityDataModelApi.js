@@ -297,6 +297,18 @@ export function getPropertyType(propertyTypeFqn :Object) :Promise<> {
     });
 }
 
+export function getPropertyTypes() :Promise<> {
+
+  return getAxiosInstance(getApiBaseUrl(EDM_API))
+    .get(`/${PROPERTY_TYPE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
 export function getPropertyTypesInNamespace(namespace :string) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
