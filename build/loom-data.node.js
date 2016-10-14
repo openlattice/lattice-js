@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.3.0
+ * loom-data - v0.4.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -37073,8 +37073,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getAllEntitiesOfType = getAllEntitiesOfType;
 exports.getAllEntitiesOfTypes = getAllEntitiesOfTypes;
+exports.getAllEntitiesOfTypeInSet = getAllEntitiesOfTypeInSet;
 exports.createEntity = createEntity;
-exports.getEntitySet = getEntitySet;
 
 var _Logger = __webpack_require__(3);
 
@@ -37088,22 +37088,44 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var LOG = new _Logger2.default('DataApi');
 
-var ENTITY_DATA_PATH = 'entitydata';
-var ENTITY_SET_PATH = 'entityset';
-var MULTIPLE_PATH = 'multiple';
-
 /*
  *
- * EntityData APIs
+ * constants
  *
  */
 
 /**
+ * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
+ *
+ * @module DataApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.DataApi.get...
+ *
+ * @example
+ * import { DataApi } from 'loom-data';
+ * // DataApi.get...
+ */
+
+var ENTITY_DATA_PATH = 'entitydata';
+var MULTIPLE_PATH = 'multiple';
+
+/**
+ * `GET /entitydata/{namespace}/{name}`
+ *
  * Gets all entity data for the given EntityType
  *
- * @public
+ * @static
+ * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
+ *
+ * @example
+ * DataApi.getAllEntitiesOfType(
+ *   { namespace: 'LOOM', name: 'MyEntity' }
+ * );
  */
 function getAllEntitiesOfType(entityTypeFqn) {
   var namespace = entityTypeFqn.namespace;
@@ -37118,11 +37140,20 @@ function getAllEntitiesOfType(entityTypeFqn) {
 }
 
 /**
+ * `PUT /entitydata/multiple`
+ *
  * Gets all entity data for the given array of EntityTypes
  *
- * @public
+ * @static
+ * @memberof loom-data.DataApi
  * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
  * @returns {Promise<Array<Array<Object>>>} - a Promise that will resolve with the entity data as its fulfillment value
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypes([
+ *   { namespace: 'LOOM', name: 'MyEntity1' },
+ *   { namespace: 'LOOM', name: 'MyEntity2' }
+ * ]);
  */
 function getAllEntitiesOfTypes(entityTypeFqns) {
 
@@ -37134,39 +37165,57 @@ function getAllEntitiesOfTypes(entityTypeFqns) {
 }
 
 /**
- * TODO: finish docs...
- * Creates an entry for the given entity data
+ * `GET /entitydata/{namespace}/{name}/{name}`
  *
- * @param {Object} createEntityRequest
- @ @returns {Promise}
+ * Gets all entity data in the EntitySet defined by the given EntityType.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {String} entitySetName - the value of the "name" field of the EntitySet
+ * @returns {Promise}
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeInSet({
+ *   { namespace: 'LOOM', name: 'MyEntity' },
+ *   'MyEntityCollection'
+ * });
  */
-function createEntity(createEntityRequest) {
+function getAllEntitiesOfTypeInSet(entityTypeFqn, entitySetName) {
+  var namespace = entityTypeFqn.namespace;
+  var name = entityTypeFqn.name;
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).post('/' + ENTITY_DATA_PATH, createEntityRequest).then(function (axiosResponse) {
+
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).get('/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
   });
 }
 
-/*
- *
- * EntitySet APIs
- *
- */
-
 /**
- * TODO: finish docs...
+ * `POST /entitydata`
  *
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- @ @returns {Promise}
+ * Creates an entry for the given entity data
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} createEntityRequest
+ * @returns {Promise}
+ *
+ * @example
+ * DataApi.createEntity(
+ *   type: { namespace: 'LOOM', name: 'MyEntity' },
+ *   entitySetName: 'MyEntityCollection',
+ *   properties: [
+ *     { namespace: 'LOOM', name: 'MyPropertyType1' }
+ *     { namespace: 'LOOM', name: 'MyPropertyType2' }
+ *   ]
+ * );
  */
-function getEntitySet(entityTypeFqn) {
-  var namespace = entityTypeFqn.namespace;
-  var name = entityTypeFqn.name;
+function createEntity(createEntityRequest) {
 
-
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).get('/' + ENTITY_SET_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).post('/' + ENTITY_DATA_PATH, createEntityRequest).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -39203,7 +39252,7 @@ module.exports = {
 				"spec": ">=0.14.0 <0.15.0",
 				"type": "range"
 			},
-			"/Users/HristoOskov/dev/loom/loom-api-js"
+			"/Users/HristoOskov/dev/loom/loom-data-js"
 		]
 	],
 	"_from": "axios@>=0.14.0 <0.15.0",
@@ -39237,7 +39286,7 @@ module.exports = {
 	"_shasum": "40f24f2f4e913b9faa43d3a7b2e40ab8729afa90",
 	"_shrinkwrap": null,
 	"_spec": "axios@^0.14.0",
-	"_where": "/Users/HristoOskov/dev/loom/loom-api-js",
+	"_where": "/Users/HristoOskov/dev/loom/loom-data-js",
 	"author": {
 		"name": "Matt Zabriskie"
 	},
@@ -40012,7 +40061,13 @@ var _Configuration = __webpack_require__(4);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.3.0";
+var version = "v0.4.0"; /**
+                            * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
+                            * writing data into the Loom DataStore. The library exposes a thin wrapper around each of Loom's REST APIs to
+                            * standardize the data models and formats used, and facilitate communication with Loom.
+                            *
+                            * @module loom-data
+                            */
 
 exports.version = version;
 exports.configure = _Configuration.configure;
