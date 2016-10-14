@@ -36,14 +36,7 @@ const LOG = new Logger('DataApi');
  */
 
 const ENTITY_DATA_PATH = 'entitydata';
-const ENTITY_SET_PATH = 'entityset';
 const MULTIPLE_PATH = 'multiple';
-
-/*
- *
- * EntityData APIs
- *
- */
 
 /**
  * `GET /entitydata/{namespace}/{name}`
@@ -104,6 +97,33 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise<> 
 }
 
 /**
+ * `GET /entitydata/{namespace}/{name}/{name}`
+ *
+ * Gets all entity data in the EntitySet defined by the given EntityType
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @returns {Promise}
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeInSet(...)
+ */
+export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getAxiosInstance(getApiBaseUrl(DATA_API))
+    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
  * `POST /entitydata`
  *
  * Creates an entry for the given entity data
@@ -120,39 +140,6 @@ export function createEntity(createEntityRequest :Object) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(DATA_API))
     .post(`/${ENTITY_DATA_PATH}`, createEntityRequest)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/*
- *
- * EntitySet APIs
- *
- */
-
-/**
- * `GET /entityset/{namespace}/{name}`
- *
- * Gets all entity data in the EntitySet defined by the given EntityType
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @returns {Promise}
- *
- * @example
- * DataApi.getAllEntitiesInSetOfType(...)
- */
-export function getAllEntitiesInSetOfType(entityTypeFqn :Object) :Promise<> {
-
-  const { namespace, name } = entityTypeFqn;
-
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
-    .get(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
