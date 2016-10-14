@@ -3,6 +3,7 @@
  *
  * @module DataApi
  * @memberof loom-data
+ *
  * @example
  * import Loom from 'loom-data';
  * // Loom.DataApi.get...
@@ -49,10 +50,9 @@ const MULTIPLE_PATH = 'multiple';
  * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
  *
  * @example
- * DataApi.getAllEntitiesOfType({
- *   namespace: 'LOOM',
- *   name: 'MyEntity'
- * })
+ * DataApi.getAllEntitiesOfType(
+ *   { namespace: 'LOOM', name: 'MyEntity' }
+ * );
  */
 export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 
@@ -82,7 +82,7 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
  * DataApi.getAllEntitiesOfTypes([
  *   { namespace: 'LOOM', name: 'MyEntity1' },
  *   { namespace: 'LOOM', name: 'MyEntity2' }
- * ])
+ * ]);
  */
 export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise<> {
 
@@ -99,15 +99,19 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise<> 
 /**
  * `GET /entitydata/{namespace}/{name}/{name}`
  *
- * Gets all entity data in the EntitySet defined by the given EntityType
+ * Gets all entity data in the EntitySet defined by the given EntityType.
  *
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {String} entitySetName - the value of the "name" field of the EntitySet
  * @returns {Promise}
  *
  * @example
- * DataApi.getAllEntitiesOfTypeInSet(...)
+ * DataApi.getAllEntitiesOfTypeInSet({
+ *   { namespace: 'LOOM', name: 'MyEntity' },
+ *   'MyEntityCollection'
+ * });
  */
 export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
 
@@ -134,7 +138,14 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
  * @returns {Promise}
  *
  * @example
- * DataApi.createEntity(...)
+ * DataApi.createEntity(
+ *   type: { namespace: 'LOOM', name: 'MyEntity' },
+ *   entitySetName: 'MyEntityCollection',
+ *   properties: [
+ *     { namespace: 'LOOM', name: 'MyPropertyType1' }
+ *     { namespace: 'LOOM', name: 'MyPropertyType2' }
+ *   ]
+ * );
  */
 export function createEntity(createEntityRequest :Object) :Promise<> {
 

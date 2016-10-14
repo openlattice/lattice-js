@@ -35,10 +35,9 @@ Gets all entity data for the given EntityType
 **Examples**
 
 ```javascript
-DataApi.getAllEntitiesOfType({
-  namespace: 'LOOM',
-  name: 'MyEntity'
-})
+DataApi.getAllEntitiesOfType(
+  { namespace: 'LOOM', name: 'MyEntity' }
+);
 ```
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with the entity data as its fulfillment value
@@ -59,10 +58,32 @@ Gets all entity data for the given array of EntityTypes
 DataApi.getAllEntitiesOfTypes([
   { namespace: 'LOOM', name: 'MyEntity1' },
   { namespace: 'LOOM', name: 'MyEntity2' }
-])
+]);
 ```
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>>** a Promise that will resolve with the entity data as its fulfillment value
+
+### getAllEntitiesOfTypeInSet
+
+`GET /entitydata/{namespace}/{name}/{name}`
+
+Gets all entity data in the EntitySet defined by the given EntityType.
+
+**Parameters**
+
+-   `entityTypeFqn` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object literal representing a fully qualified name
+-   `entitySetName` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the value of the "name" field of the EntitySet
+
+**Examples**
+
+```javascript
+DataApi.getAllEntitiesOfTypeInSet({
+  { namespace: 'LOOM', name: 'MyEntity' },
+  'MyEntityCollection'
+});
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
 ### createEntity
 
@@ -77,25 +98,14 @@ Creates an entry for the given entity data
 **Examples**
 
 ```javascript
-DataApi.createEntity(...)
-```
-
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
-
-### getAllEntitiesInSetOfType
-
-`GET /entityset/{namespace}/{name}`
-
-Gets all entity data in the EntitySet defined by the given EntityType
-
-**Parameters**
-
--   `entityTypeFqn` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object literal representing a fully qualified name
-
-**Examples**
-
-```javascript
-DataApi.getAllEntitiesInSetOfType(...)
+DataApi.createEntity(
+  type: { namespace: 'LOOM', name: 'MyEntity' },
+  entitySetName: 'MyEntityCollection',
+  properties: [
+    { namespace: 'LOOM', name: 'MyPropertyType1' }
+    { namespace: 'LOOM', name: 'MyPropertyType2' }
+  ]
+);
 ```
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
