@@ -1,12 +1,20 @@
+/**
+ * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
+ *
+ * @module DataApi
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.DataApi.get...
+ *
+ * @example
+ * import { DataApi } from 'loom-data';
+ * // DataApi.get...
+ */
+
 /*
  * @flow
  */
 
-<<<<<<< HEAD
-import Axios from 'axios';
-
-=======
->>>>>>> origin/develop
 import Logger from './utils/Logger';
 
 import {
@@ -37,11 +45,22 @@ const MULTIPLE_PATH = 'multiple';
  */
 
 /**
+ * ```
+ * GET /entitydata/{namespace}/{name}
+ * ```
+ *
  * Gets all entity data for the given EntityType
  *
- * @public
+ * @static
+ * @memberof DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
+ *
+ * @example
+ * DataApi.getAllEntitiesOfType({
+ *   namespace: 'LOOM',
+ *   name: 'MyEntity'
+ * })
  */
 export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 
@@ -58,11 +77,22 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 }
 
 /**
+ * ```
+ * PUT /entitydata/multiple
+ * ```
+ *
  * Gets all entity data for the given array of EntityTypes
  *
- * @public
+ * @static
+ * @memberof DataApi
  * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
  * @returns {Promise<Array<Array<Object>>>} - a Promise that will resolve with the entity data as its fulfillment value
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypes([
+ *   { namespace: 'LOOM', name: 'MyEntity1' },
+ *   { namespace: 'LOOM', name: 'MyEntity2' }
+ * ])
  */
 export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise<> {
 
@@ -77,11 +107,19 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Array<Object>) :Promise<> 
 }
 
 /**
- * TODO: finish docs...
+ * ```
+ * POST /entitydata
+ * ```
+ *
  * Creates an entry for the given entity data
  *
+ * @static
+ * @memberof DataApi
  * @param {Object} createEntityRequest
- @ @returns {Promise}
+ * @returns {Promise}
+ *
+ * @example
+ * DataApi.createEntity(...)
  */
 export function createEntity(createEntityRequest :Object) :Promise<> {
 
@@ -102,12 +140,21 @@ export function createEntity(createEntityRequest :Object) :Promise<> {
  */
 
 /**
- * TODO: finish docs...
+ * ```
+ * GET /entityset/{namespace}/{name}
+ * ```
  *
+ * Gets all entity data in the EntitySet defined by the given EntityType
+ *
+ * @static
+ * @memberof DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- @ @returns {Promise}
+ * @returns {Promise}
+ *
+ * @example
+ * DataApi.getAllEntitiesInSetOfType(...)
  */
-export function getEntitySet(entityTypeFqn :Object) :Promise<> {
+export function getAllEntitiesInSetOfType(entityTypeFqn :Object) :Promise<> {
 
   const { namespace, name } = entityTypeFqn;
 
