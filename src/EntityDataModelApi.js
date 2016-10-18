@@ -96,7 +96,7 @@ export function createSchema(createSchemaRequest :Object) :Promise<> {
     });
 }
 
-export function addEntityTypesToSchema(schemaFqn :Object, entityTypes :Array<Object>) :Promise<> {
+export function addEntityTypesToSchema(schemaFqn :Object, entityTypes :Object[]) :Promise<> {
 
   const { namespace, name } = schemaFqn;
 
@@ -110,7 +110,7 @@ export function addEntityTypesToSchema(schemaFqn :Object, entityTypes :Array<Obj
     });
 }
 
-export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypes :Array<Object>) :Promise<> {
+export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypes :Object[]) :Promise<> {
 
   const { namespace, name } = schemaFqn;
 
@@ -126,7 +126,7 @@ export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypes :Arra
     });
 }
 
-export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
 
   const { namespace, name } = schemaFqn;
 
@@ -140,7 +140,7 @@ export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Ar
     });
 }
 
-export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
 
   const { namespace, name } = schemaFqn;
 
@@ -174,7 +174,7 @@ export function getEntitySets() :Promise<> {
     });
 }
 
-export function createEntitySets(entitySets :Array<Object>) :Promise<> {
+export function createEntitySets(entitySets :Object[]) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .post(`/${ENTITY_SET_PATH}`, entitySets)
@@ -244,7 +244,7 @@ export function deleteEntityType(entityTypeFqn :Object) :Promise<> {
     });
 }
 
-export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
 
   const { namespace, name } = entityTypeFqn;
 
@@ -258,7 +258,7 @@ export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyType
     });
 }
 
-export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propertyTypeFqns :Array<Object>) :Promise<> {
+export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
 
   const { namespace, name } = entityTypeFqn;
 

@@ -25,6 +25,17 @@
     "arrow-body-style": ["error", "always"],
     "brace-style": ["error", "stroustrup"],
     "comma-dangle": ["error", "never"],
+    "indent": [
+      "error",
+      2,
+      {
+        "FunctionDeclaration": {
+          "body": 1,
+          "parameters": 2
+        },
+        "SwitchCase": 1
+      }
+    ],
     "max-len": [
       "error",
       {
