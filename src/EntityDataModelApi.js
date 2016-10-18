@@ -2,6 +2,21 @@
  * @flow
  */
 
+/**
+ * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
+ *
+ * @module EntityDataModelApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.EntityDataModelApi.get...
+ *
+ * @example
+ * import { EntityDataModelApi } from 'loom-data';
+ * // EntityDataModelApi.get...
+ */
+
 import Logger from './utils/Logger';
 
 import {
@@ -28,6 +43,15 @@ const DELETE_PROPERTY_TYPES_PATH = 'deletePropertyTypes';
  *
  */
 
+/**
+ * `GET /`
+ *
+ * Gets the entire Entity Data Model schema.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise} - a Promise that will resolve with the Entity Data Model schema as its fulfillment value
+ */
 export function getEntityDataModel() :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))

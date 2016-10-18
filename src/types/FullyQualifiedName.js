@@ -48,13 +48,6 @@ import {
 
 const LOG = new Logger('FullyQualifiedName');
 
-/**
- * An object literal to represent a FullyQualifiedName string, which is in the form of `"{namespace}.{name}"`.
- *
- * @typedef {Object} FqnObjectLiteral
- * @property {String} namespace - the part of the FullyQualifiedName before the dot
- * @property {String} name - the part of the FullyQualifiedName after the dot
- */
 export type FqnObjectLiteral = {
   namespace :string,
   name :string
