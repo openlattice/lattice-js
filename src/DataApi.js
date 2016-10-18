@@ -47,7 +47,7 @@ const MULTIPLE_PATH = 'multiple';
 /**
  * `GET /entitydata/{namespace}/{name}`
  *
- * Gets all entity data for the given EntityType
+ * Gets all entity data for the given EntityType.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -77,6 +77,24 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
     });
 }
 
+/**
+ * `GET /entitydata/{namespace}/{name}`
+ *
+ * Gets all entity data for the given EntityType as a file download.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {String} fileType - the format in which to download the data
+ * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
+ *
+ * @example
+ * // download data as a JSON file
+ * DataApi.getAllEntitiesOfType(
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "json"
+ * );
+ */
 export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :string) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
@@ -166,6 +184,26 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
     });
 }
 
+/**
+ * `GET /entitydata/{namespace}/{name}/{name}`
+ *
+ * Gets all entity data in the EntitySet defined by the given EntityType as a file download.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {String} entitySetName - the value of the "name" field of the EntitySet
+ * @param {String} fileType - the format in which to download the data
+ * @returns {Promise}
+ *
+ * @example
+ * // download data as a JSON file
+ * DataApi.getAllEntitiesOfTypeInSet({
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "MyEntityCollection",
+ *   "json"
+ * });
+ */
 export function downloadAllEntitiesOfTypeInSet(
     entityTypeFqn :Object, entitySetName :string, fileType :string) :Promise<> {
 
