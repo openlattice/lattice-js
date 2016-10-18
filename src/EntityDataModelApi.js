@@ -17,6 +17,7 @@
  * // EntityDataModelApi.get...
  */
 
+import FullyQualifiedName from './types/FullyQualifiedName';
 import Logger from './utils/Logger';
 
 import {
@@ -70,7 +71,26 @@ export function getEntityDataModel() :Promise<> {
  *
  */
 
+/**
+ * `GET /schema/{namespace}/{name}`
+ *
+ * Gets the schema definition for the given Schema.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Object} schemaFqn - an object literal representing a fully qualified name
+ * @return {Promise} - a Promise that will resolve with the schema definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getSchema(
+ *   { namespace: "LOOM", name: "MySchema" }
+ * );
+ */
 export function getSchema(schemaFqn :Object) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
+  }
 
   const { namespace, name } = schemaFqn;
 

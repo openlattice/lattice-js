@@ -62,7 +62,7 @@ const MULTIPLE_PATH = 'multiple';
 export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
   const { namespace, name } = entityTypeFqn;
@@ -98,7 +98,7 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :string) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
   const { namespace, name } = entityTypeFqn;
@@ -165,7 +165,7 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
 export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
   if (isNonEmptyString(entitySetName)) {
@@ -208,7 +208,7 @@ export function downloadAllEntitiesOfTypeInSet(
     entityTypeFqn :Object, entitySetName :string, fileType :string) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
   if (isNonEmptyString(entitySetName)) {
