@@ -74,7 +74,7 @@ export function getEntityDataModel() :Promise<> {
 /**
  * `GET /schema/{namespace}/{name}`
  *
- * Gets the schema definition for the given Schema.
+ * Gets the schema definition for the given schema FQN.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
@@ -104,6 +104,18 @@ export function getSchema(schemaFqn :Object) :Promise<> {
     });
 }
 
+/**
+ * `GET /schema`
+ *
+ * Gets all schema definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise} - a Promise that will resolve with all schema definitions as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllSchemas();
+ */
 export function getAllSchemas() :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))

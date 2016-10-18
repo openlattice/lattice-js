@@ -47,7 +47,7 @@ const MULTIPLE_PATH = 'multiple';
 /**
  * `GET /entitydata/{namespace}/{name}`
  *
- * Gets all entity data for the given EntityType.
+ * Gets all entity data for the given EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -80,7 +80,7 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 /**
  * `GET /entitydata/{namespace}/{name}`
  *
- * Gets all entity data for the given EntityType as a file download.
+ * Gets all entity data for the given EntityType FQN as a file download.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -120,7 +120,7 @@ export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :strin
 /**
  * `PUT /entitydata/multiple`
  *
- * Gets all entity data for the given array of EntityTypes
+ * Gets all entity data for the given EntityType FQNs.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -148,7 +148,7 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
 /**
  * `GET /entitydata/{namespace}/{name}/{name}`
  *
- * Gets all entity data in the EntitySet defined by the given EntityType.
+ * Gets all entity data in the EntitySet defined by the given EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -187,7 +187,7 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
 /**
  * `GET /entitydata/{namespace}/{name}/{name}`
  *
- * Gets all entity data in the EntitySet defined by the given EntityType as a file download.
+ * Gets all entity data in the EntitySet defined by the given EntityType FQN as a file download.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -234,7 +234,7 @@ export function downloadAllEntitiesOfTypeInSet(
 /**
  * `POST /entitydata`
  *
- * Creates an entry for the given entity data
+ * Creates an entry for the given entity data.
  *
  * @static
  * @memberof loom-data.DataApi
