@@ -168,7 +168,7 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  if (isNonEmptyString(entitySetName)) {
+  if (!isNonEmptyString(entitySetName)) {
     return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
   }
 
@@ -211,7 +211,7 @@ export function downloadAllEntitiesOfTypeInSet(
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  if (isNonEmptyString(entitySetName)) {
+  if (!isNonEmptyString(entitySetName)) {
     return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
   }
 

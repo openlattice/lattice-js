@@ -29,6 +29,10 @@ import {
   getAxiosInstance
 } from './utils/AxiosUtils';
 
+import {
+  isNonEmptyString
+} from './utils/LangUtils';
+
 const LOG = new Logger('EntityDataModelApi');
 
 const SCHEMA_PATH = 'schema';
@@ -128,7 +132,24 @@ export function getAllSchemas() :Promise<> {
     });
 }
 
+/**
+ * `GET /schema/{namespace}`
+ *
+ * Gets all schema definitions under the given namespace.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @return {Promise} - a Promise that will resolve with all schema definitions as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getSchemasInNamespace("LOOM");
+ */
 export function getSchemasInNamespace(namespace :string) :Promise<> {
+
+  if (!isNonEmptyString(namespace)) {
+    return Promise.reject('invalid parameter: namespace must be a non-empty string');
+  }
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .get(`/${SCHEMA_PATH}/${namespace}`)
