@@ -47,7 +47,7 @@ export default class Logger {
     this.logger = log.getLogger(name);
   }
 
-  log(logLevel :string, message :any, ...args :Array<any>) {
+  log(logLevel :string, message :any, ...args :any[]) {
 
     const messagePrefix = getMessagePrefix(logLevel, this.name);
 
@@ -73,22 +73,22 @@ export default class Logger {
     this.log(LOG_LEVELS.TRACE, message);
   }
 
-  debug(message :any, ...args :Array<any>) {
+  debug(message :any, ...args :any[]) {
 
     this.log(LOG_LEVELS.DEBUG, message, ...args);
   }
 
-  info(message :any, ...args :Array<any>) {
+  info(message :any, ...args :any[]) {
 
     this.log(LOG_LEVELS.INFO, message, ...args);
   }
 
-  warn(message :any, ...args :Array<any>) {
+  warn(message :any, ...args :any[]) {
 
     this.log(LOG_LEVELS.WARN, message, ...args);
   }
 
-  error(message :any, ...args :Array<any>) {
+  error(message :any, ...args :any[]) {
 
     this.log(LOG_LEVELS.ERROR, message, ...args);
   }
