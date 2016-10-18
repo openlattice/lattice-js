@@ -161,10 +161,29 @@ export function getSchemasInNamespace(namespace :string) :Promise<> {
     });
 }
 
-export function createSchema(createSchemaRequest :Object) :Promise<> {
+/**
+ * `PUT /schema`
+ *
+ * Creates a new schema definition for the given schema FQN, it it does not already exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Object} schemaFqn - an object literal representing a fully qualified name
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.createSchema(
+ *   { namespace: "LOOM", name: "MySchema" }
+ * );
+ */
+export function createSchema(schemaFqn :Object) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
+  }
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
-    .put(`/${SCHEMA_PATH}`, createSchemaRequest)
+    .put(`/${SCHEMA_PATH}`, schemaFqn)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
