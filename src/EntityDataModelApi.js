@@ -537,12 +537,29 @@ export function createEntityType(entityType :Object) :Promise<> {
     });
 }
 
+/**
+ * `DELETE /entity/type/{namespace}/{name}`
+ *
+ * Deletes the EntityType definition for the given EntityType FQN.
+ *
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.deleteEntityType(
+ *   { namespace: "LOOM", name: "MyEntity" }
+ * );
+ */
 export function deleteEntityType(entityTypeFqn :Object) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
 
   const { namespace, name } = entityTypeFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
-    .delete(`/${ENTITY_SET_PATH}/${namespace}/${name}`)
+    .delete(`/${ENTITY_TYPE_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
