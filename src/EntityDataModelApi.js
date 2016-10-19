@@ -202,6 +202,15 @@ export function createSchema(schemaFqn :Object) :Promise<> {
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
  * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.addEntityTypesToSchema(
+ *   { namespace: "LOOM", name: "MySchema" },
+ *   [
+ *     { namespace: "LOOM", name: "MyEntity1" },
+ *     { namespace: "LOOM", name: "MyEntity2" }
+ *   ]
+ * );
  */
 export function addEntityTypesToSchema(schemaFqn :Object, entityTypeFqns :Object[]) :Promise<> {
 
