@@ -115,7 +115,7 @@ export function getSchema(schemaFqn :Object) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<Array<Object>>} - a Promise that will resolve with all schema definitions as its fulfillment value
+ * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllSchemas();
@@ -140,7 +140,7 @@ export function getAllSchemas() :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
- * @return {Promise<Array<Object>>} - a Promise that will resolve with all schema definitions as its fulfillment value
+ * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getSchemasInNamespace("LOOM");
@@ -200,7 +200,7 @@ export function createSchema(schemaFqn :Object) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
+ * @param {Object[]} entityTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
  *
  * @example
@@ -246,7 +246,7 @@ export function addEntityTypesToSchema(schemaFqn :Object, entityTypeFqns :Object
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
+ * @param {Object[]} entityTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
  *
  * @example
@@ -294,7 +294,7 @@ export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypeFqns :O
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Array<Object>} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
  *
  * @example
@@ -340,7 +340,7 @@ export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Ob
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Array<Object>} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
  *
  * @example
@@ -393,8 +393,7 @@ export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqn
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<Array<Object>>} - a Promise that will resolve with all EntitySet definitions as its fulfillment
- * value
+ * @return {Promise<Object[]>} - a Promise that will resolve with all EntitySet definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllEntitySets();
@@ -418,7 +417,7 @@ export function getAllEntitySets() :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {Array<Object>} entitySets
+ * @param {Object[]} entitySets
  * @return {Promise}
  *
  * @example
@@ -479,7 +478,17 @@ export function getEntityType(entityTypeFqn :Object) :Promise<> {
     });
 }
 
-export function getEntityTypes() :Promise<> {
+/**
+ * `GET /entity/type/{namespace}/{name}`
+ *
+ * Gets all EntityType definitions.
+ *
+ * @return {Promise<Object[]>} - a Promise that will resolve with all EntityType definitions as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllEntityTypes();
+ */
+export function getAllEntityTypes() :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .get(`/${ENTITY_TYPE_PATH}`)
