@@ -410,6 +410,25 @@ export function getAllEntitySets() :Promise<> {
     });
 }
 
+/**
+ * `POST /entity/set`
+ *
+ * Creates a new EntitySet definition for each of the given EntitySet FQNs, it they do not already exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Array<Object>} entitySets
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.createEntitySets(
+ *   [{
+ *     name: "MyEntities",
+ *     type: { namespace: "LOOM", name: "MyEntity" },
+ *     title: "a collection of MyEntity EntityTypes"
+ *   }]
+ * );
+ */
 export function createEntitySets(entitySets :Object[]) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
