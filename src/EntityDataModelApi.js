@@ -386,7 +386,19 @@ export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqn
  *
  */
 
-export function getEntitySets() :Promise<> {
+/**
+ * `GET /entity/set`
+ *
+ * Gets all EntitySet definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<Object>} - a Promise that will resolve with all EntitySet definitions as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllEntitySets();
+ */
+export function getAllEntitySets() :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .get(`/${ENTITY_SET_PATH}`)
