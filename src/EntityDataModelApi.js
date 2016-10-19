@@ -238,13 +238,45 @@ export function addEntityTypesToSchema(schemaFqn :Object, entityTypeFqns :Object
     });
 }
 
-export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypes :Object[]) :Promise<> {
+/**
+ * `DELETE /schema/{namespace}/{name}`
+ *
+ * Updates the schema definition for the given schema FQN with the removal of the given EntityType FQNs.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Object} schemaFqn - an object literal representing a fully qualified name
+ * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.removeEntityTypesFromSchema(
+ *   { namespace: "LOOM", name: "MySchema" },
+ *   [
+ *     { namespace: "LOOM", name: "MyEntity1" },
+ *     { namespace: "LOOM", name: "MyEntity2" }
+ *   ]
+ * );
+ */
+export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypeFqns :Object[]) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
+  }
+
+  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValidFqns) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
 
   const { namespace, name } = schemaFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .delete(`/${SCHEMA_PATH}/${namespace}/${name}`, {
-      data: entityTypes
+      data: entityTypeFqns
     })
     .then((axiosResponse) => {
       return axiosResponse.data;
