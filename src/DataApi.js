@@ -78,43 +78,28 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 }
 
 /**
- * `GET /entitydata/{namespace}/{name}`
- *
- * Gets all entity data for the given EntityType FQN as a file download.
+ * Returns the URL to be used for a direct file download for all entity data for the given EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @param {String} fileType - the format in which to download the data
- * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
+ * @returns {String} - the file download URL
  *
  * @example
- * // download data as a JSON file
- * DataApi.getAllEntitiesOfType(
+ * DataApi.getAllEntitiesOfTypeUrl(
  *   { namespace: "LOOM", name: "MyEntity" },
  *   "json"
  * );
  */
-export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :string) :Promise<> {
+export function getAllEntitiesOfTypeUrl(entityTypeFqn :Object, fileType :string) :?string {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+    return null;
   }
 
   const { namespace, name } = entityTypeFqn;
-
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
-    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}`, {
-      params: {
-        fileType
-      }
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}?fileType=${fileType}`;
 }
 
 /**
@@ -193,50 +178,30 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
 }
 
 /**
- * `GET /entitydata/{namespace}/{name}/{name}`
- *
- * Gets all entity data in the EntitySet defined by the given EntityType FQN as a file download.
+ * Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
+ * EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @param {String} entitySetName - the value of the "name" field of the EntitySet
- * @param {String} fileType - the format in which to download the data
- * @returns {Promise}
+ * @returns {String} - the file download URL
  *
  * @example
- * // download data as a JSON file
- * DataApi.getAllEntitiesOfTypeInSet({
+ * DataApi.getAllEntitiesOfTypeInSetUrl({
  *   { namespace: "LOOM", name: "MyEntity" },
  *   "MyEntityCollection",
  *   "json"
  * });
  */
-export function downloadAllEntitiesOfTypeInSet(
-    entityTypeFqn :Object, entitySetName :string, fileType :string) :Promise<> {
+export function getAllEntitiesOfTypeInSetUrl(entityTypeFqn :Object, entitySetName :string, fileType :string) :?string {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
-  }
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn) || !isNonEmptyString(entitySetName)) {
+    return null;
   }
 
   const { namespace, name } = entityTypeFqn;
-
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
-    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}`, {
-      params: {
-        fileType
-      }
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}?fileType=${fileType}`;
 }
 
 /**
