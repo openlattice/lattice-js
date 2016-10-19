@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.5.0
+ * loom-data - v0.5.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -37507,10 +37507,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getAllEntitiesOfType = getAllEntitiesOfType;
-exports.downloadAllEntitiesOfType = downloadAllEntitiesOfType;
+exports.getAllEntitiesOfTypeUrl = getAllEntitiesOfTypeUrl;
 exports.getAllEntitiesOfTypes = getAllEntitiesOfTypes;
 exports.getAllEntitiesOfTypeInSet = getAllEntitiesOfTypeInSet;
-exports.downloadAllEntitiesOfTypeInSet = downloadAllEntitiesOfTypeInSet;
+exports.getAllEntitiesOfTypeInSetUrl = getAllEntitiesOfTypeInSetUrl;
 exports.createEntity = createEntity;
 
 var _FullyQualifiedName = __webpack_require__(10);
@@ -37588,42 +37588,30 @@ function getAllEntitiesOfType(entityTypeFqn) {
 }
 
 /**
- * `GET /entitydata/{namespace}/{name}`
- *
- * Gets all entity data for the given EntityType FQN as a file download.
+ * Returns the URL to be used for a direct file download for all entity data for the given EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @param {String} fileType - the format in which to download the data
- * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
+ * @returns {String} - the file download URL
  *
  * @example
- * // download data as a JSON file
- * DataApi.getAllEntitiesOfType(
+ * DataApi.getAllEntitiesOfTypeUrl(
  *   { namespace: "LOOM", name: "MyEntity" },
  *   "json"
  * );
  */
-function downloadAllEntitiesOfType(entityTypeFqn, fileType) {
+function getAllEntitiesOfTypeUrl(entityTypeFqn, fileType) {
 
   if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+    return null;
   }
 
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
-
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).get('/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name, {
-    params: {
-      fileType: fileType
-    }
-  }).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
-  });
+  return (0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API) + '/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType;
 }
 
 /**
@@ -37698,48 +37686,32 @@ function getAllEntitiesOfTypeInSet(entityTypeFqn, entitySetName) {
 }
 
 /**
- * `GET /entitydata/{namespace}/{name}/{name}`
- *
- * Gets all entity data in the EntitySet defined by the given EntityType FQN as a file download.
+ * Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
+ * EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @param {String} entitySetName - the value of the "name" field of the EntitySet
- * @param {String} fileType - the format in which to download the data
- * @returns {Promise}
+ * @returns {String} - the file download URL
  *
  * @example
- * // download data as a JSON file
- * DataApi.getAllEntitiesOfTypeInSet({
+ * DataApi.getAllEntitiesOfTypeInSetUrl({
  *   { namespace: "LOOM", name: "MyEntity" },
  *   "MyEntityCollection",
  *   "json"
  * });
  */
-function downloadAllEntitiesOfTypeInSet(entityTypeFqn, entitySetName, fileType) {
+function getAllEntitiesOfTypeInSetUrl(entityTypeFqn, entitySetName, fileType) {
 
-  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn) || !(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return null;
   }
 
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
-
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).get('/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName, {
-    params: {
-      fileType: fileType
-    }
-  }).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
-  });
+  return (0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API) + '/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + fileType;
 }
 
 /**
@@ -39952,7 +39924,7 @@ var _Configuration = __webpack_require__(5);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.5.0";
+var version = "v0.5.1";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
