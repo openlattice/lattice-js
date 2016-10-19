@@ -47,7 +47,7 @@ const MULTIPLE_PATH = 'multiple';
 /**
  * `GET /entitydata/{namespace}/{name}`
  *
- * Gets all entity data for the given EntityType
+ * Gets all entity data for the given EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -62,7 +62,7 @@ const MULTIPLE_PATH = 'multiple';
 export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
   const { namespace, name } = entityTypeFqn;
@@ -77,10 +77,28 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
     });
 }
 
+/**
+ * `GET /entitydata/{namespace}/{name}`
+ *
+ * Gets all entity data for the given EntityType FQN as a file download.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {String} fileType - the format in which to download the data
+ * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
+ *
+ * @example
+ * // download data as a JSON file
+ * DataApi.getAllEntitiesOfType(
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "json"
+ * );
+ */
 export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :string) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
   const { namespace, name } = entityTypeFqn;
@@ -102,7 +120,7 @@ export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :strin
 /**
  * `PUT /entitydata/multiple`
  *
- * Gets all entity data for the given array of EntityTypes
+ * Gets all entity data for the given EntityType FQNs.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -117,6 +135,14 @@ export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :strin
  */
 export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
 
+  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValidFqns) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
+
   return getAxiosInstance(getApiBaseUrl(DATA_API))
     .put(`/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypeFqns)
     .then((axiosResponse) => {
@@ -130,7 +156,7 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
 /**
  * `GET /entitydata/{namespace}/{name}/{name}`
  *
- * Gets all entity data in the EntitySet defined by the given EntityType.
+ * Gets all entity data in the EntitySet defined by the given EntityType FQN.
  *
  * @static
  * @memberof loom-data.DataApi
@@ -147,10 +173,10 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
 export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  if (isNonEmptyString(entitySetName)) {
+  if (!isNonEmptyString(entitySetName)) {
     return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
   }
 
@@ -166,14 +192,34 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
     });
 }
 
+/**
+ * `GET /entitydata/{namespace}/{name}/{name}`
+ *
+ * Gets all entity data in the EntitySet defined by the given EntityType FQN as a file download.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {String} entitySetName - the value of the "name" field of the EntitySet
+ * @param {String} fileType - the format in which to download the data
+ * @returns {Promise}
+ *
+ * @example
+ * // download data as a JSON file
+ * DataApi.getAllEntitiesOfTypeInSet({
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "MyEntityCollection",
+ *   "json"
+ * });
+ */
 export function downloadAllEntitiesOfTypeInSet(
     entityTypeFqn :Object, entitySetName :string, fileType :string) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid object literal');
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  if (isNonEmptyString(entitySetName)) {
+  if (!isNonEmptyString(entitySetName)) {
     return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
   }
 
@@ -196,7 +242,7 @@ export function downloadAllEntitiesOfTypeInSet(
 /**
  * `POST /entitydata`
  *
- * Creates an entry for the given entity data
+ * Creates an entry for the given entity data.
  *
  * @static
  * @memberof loom-data.DataApi
