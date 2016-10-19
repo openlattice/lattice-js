@@ -762,6 +762,26 @@ export function getPropertyTypesInNamespace(namespace :string) :Promise<> {
     });
 }
 
+/**
+ * `POST /property/type`
+ *
+ * Creates a new PropertyType definition.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Object} propertyType
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.createPropertyType(
+ *   {
+ *     namespace: "LOOM",
+ *     name: "MyProperty",
+ *     datatype: "String",
+ *     properties: 0
+ *   }
+ * );
+ */
 export function createPropertyType(propertyType :Object) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
