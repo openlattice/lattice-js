@@ -664,7 +664,24 @@ export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propert
  *
  */
 
+/**
+ * `GET /property/type/{namespace}/{name}`
+ *
+ * Gets the PropertyType definition for the given PropertyType FQN.
+ *
+ * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
+ * @return {Promise<Object>} - a Promise that will resolve with the PropertyType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getPropertyType(
+ *   { namespace: "LOOM", name: "MyProperty" }
+ * );
+ */
 export function getPropertyType(propertyTypeFqn :Object) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn)) {
+    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
+  }
 
   const { namespace, name } = propertyTypeFqn;
 
