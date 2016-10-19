@@ -794,7 +794,26 @@ export function createPropertyType(propertyType :Object) :Promise<> {
     });
 }
 
+/**
+ * `DELETE /property/type/{namespace}/{name}`
+ *
+ * Deletes the PropertyType definition for the given PropertyType FQN.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.deletePropertyType(
+ *   { namespace: "LOOM", name: "MyProperty" }
+ * );
+ */
 export function deletePropertyType(propertyTypeFqn :Object) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn)) {
+    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
+  }
 
   const { namespace, name } = propertyTypeFqn;
 
