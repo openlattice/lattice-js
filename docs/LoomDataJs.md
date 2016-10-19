@@ -42,11 +42,9 @@ DataApi.getAllEntitiesOfType(
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with the entity data as its fulfillment value
 
-### downloadAllEntitiesOfType
+### getAllEntitiesOfTypeUrl
 
-`GET /entitydata/{namespace}/{name}`
-
-Gets all entity data for the given EntityType FQN as a file download.
+Returns the URL to be used for a direct file download for all entity data for the given EntityType FQN.
 
 **Parameters**
 
@@ -56,14 +54,13 @@ Gets all entity data for the given EntityType FQN as a file download.
 **Examples**
 
 ```javascript
-// download data as a JSON file
-DataApi.getAllEntitiesOfType(
+DataApi.getAllEntitiesOfTypeUrl(
   { namespace: "LOOM", name: "MyEntity" },
   "json"
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with the entity data as its fulfillment value
+Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the file download URL
 
 ### getAllEntitiesOfTypes
 
@@ -108,30 +105,28 @@ DataApi.getAllEntitiesOfTypeInSet({
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
 
-### downloadAllEntitiesOfTypeInSet
+### getAllEntitiesOfTypeInSetUrl
 
-`GET /entitydata/{namespace}/{name}/{name}`
-
-Gets all entity data in the EntitySet defined by the given EntityType FQN as a file download.
+Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
+EntityType FQN.
 
 **Parameters**
 
 -   `entityTypeFqn` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object literal representing a fully qualified name
 -   `entitySetName` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the value of the "name" field of the EntitySet
--   `fileType` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the format in which to download the data
+-   `fileType` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 **Examples**
 
 ```javascript
-// download data as a JSON file
-DataApi.getAllEntitiesOfTypeInSet({
+DataApi.getAllEntitiesOfTypeInSetUrl({
   { namespace: "LOOM", name: "MyEntity" },
   "MyEntityCollection",
   "json"
 });
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the file download URL
 
 ### createEntity
 
