@@ -332,7 +332,39 @@ export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Ob
     });
 }
 
+/**
+ * `DELETE /schema/{namespace}/{name}/deletePropertyTypes`
+ *
+ * Updates the schema definition for the given schema FQN with the removal of the given PropertyType FQNs.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Object} schemaFqn - an object literal representing a fully qualified name
+ * @param {Array<Object>} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.removePropertyTypesFromSchema(
+ *   { namespace: "LOOM", name: "MySchema" },
+ *   [
+ *     { namespace: "LOOM", name: "MyProperty1" },
+ *     { namespace: "LOOM", name: "MyProperty2" }
+ *   ]
+ * );
+ */
 export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
+  }
+
+  const allValidFqns = propertyTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValidFqns) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
+  }
 
   const { namespace, name } = schemaFqn;
 
