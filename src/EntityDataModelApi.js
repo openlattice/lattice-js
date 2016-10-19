@@ -413,7 +413,7 @@ export function getAllEntitySets() :Promise<> {
 /**
  * `POST /entity/set`
  *
- * Creates a new EntitySet definition for each of the given EntitySet FQNs, it they do not already exist.
+ * Creates a new EntitySet definition.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
@@ -500,6 +500,31 @@ export function getAllEntityTypes() :Promise<> {
     });
 }
 
+/**
+ * `POST /entity/type`
+ *
+ * Creates a new EntityType definition.
+ *
+ * @param {Object} entityType
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.createEntityType(
+ *   {
+ *     namespace: "LOOM",
+ *     type: "MyEntity",
+ *     key: [
+ *       { namespace: "LOOM", name: "MyProperty1" }
+ *       { namespace: "LOOM", name: "MyProperty2" }
+ *     ],
+ *     properties: [
+ *       { namespace: "LOOM", name: "MyProperty1" }
+ *       { namespace: "LOOM", name: "MyProperty2" }
+ *       { namespace: "LOOM", name: "MyProperty3" }
+ *     ]
+ *   }
+ * );
+ */
 export function createEntityType(entityType :Object) :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
