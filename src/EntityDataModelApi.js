@@ -733,7 +733,24 @@ export function getAllPropertyTypes() :Promise<> {
     });
 }
 
+/**
+ * `GET /property/type/{namespace}`
+ *
+ * Gets all PropertyType definitions under the given namespace.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @return {Promise<Object[]>} - a Promise that will resolve with all PropertyType definitions as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getPropertyTypesInNamespace("LOOM");
+ */
 export function getPropertyTypesInNamespace(namespace :string) :Promise<> {
+
+  if (!isNonEmptyString(namespace)) {
+    return Promise.reject('invalid parameter: namespace must be a non-empty string');
+  }
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .get(`/${PROPERTY_TYPE_PATH}/${namespace}`)
