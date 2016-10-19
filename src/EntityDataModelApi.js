@@ -312,8 +312,8 @@ export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Ob
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = propertyTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
   if (!allValidFqns) {
@@ -358,8 +358,8 @@ export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqn
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = propertyTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
   if (!allValidFqns) {
@@ -568,7 +568,37 @@ export function deleteEntityType(entityTypeFqn :Object) :Promise<> {
     });
 }
 
+/**
+ * `PUT /entity/type/{namespace}/{name}/addPropertyTypes`
+ *
+ * Updates the EntityType definition for the given EntityType FQN with the addition of the given PropertyType FQNs.
+ *
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.addPropertyTypesToEntityType(
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   [
+ *     { namespace: "LOOM", name: "MyProperty1" },
+ *     { namespace: "LOOM", name: "MyProperty2" }
+ *   ]
+ * );
+ */
 export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
+  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
+  }, true);
+
+  if (!allValidFqns) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
+  }
 
   const { namespace, name } = entityTypeFqn;
 
