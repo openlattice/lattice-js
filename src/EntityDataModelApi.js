@@ -83,7 +83,7 @@ export function getEntityDataModel() :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @return {Promise} - a Promise that will resolve with the schema definition as its fulfillment value
+ * @return {Promise<Object>} - a Promise that will resolve with the schema definition as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getSchema(
@@ -115,7 +115,7 @@ export function getSchema(schemaFqn :Object) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise} - a Promise that will resolve with all schema definitions as its fulfillment value
+ * @return {Promise<Array<Object>>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllSchemas();
@@ -140,7 +140,7 @@ export function getAllSchemas() :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
- * @return {Promise} - a Promise that will resolve with all schema definitions as its fulfillment value
+ * @return {Promise<Array<Object>>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getSchemasInNamespace("LOOM");
@@ -393,7 +393,8 @@ export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqn
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<Object>} - a Promise that will resolve with all EntitySet definitions as its fulfillment value
+ * @return {Promise<Array<Object>>} - a Promise that will resolve with all EntitySet definitions as its fulfillment
+ * value
  *
  * @example
  * EntityDataModelApi.getAllEntitySets();
@@ -447,7 +448,24 @@ export function createEntitySets(entitySets :Object[]) :Promise<> {
  *
  */
 
+/**
+ * `GET /entity/type/{namespace}/{name}`
+ *
+ * Gets the EntityType definition for the given EntityType FQN.
+ *
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @return {Promise<Object>} - a Promise that will resolve with the EntityType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityType(
+ *   { namespace: "LOOM", name: "MyEntity" }
+ * );
+ */
 export function getEntityType(entityTypeFqn :Object) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
 
   const { namespace, name } = entityTypeFqn;
 
