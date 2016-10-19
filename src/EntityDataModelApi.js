@@ -192,12 +192,35 @@ export function createSchema(schemaFqn :Object) :Promise<> {
     });
 }
 
-export function addEntityTypesToSchema(schemaFqn :Object, entityTypes :Object[]) :Promise<> {
+/**
+ * `PUT /schema/{namespace}/{name}`
+ *
+ * Updates the schema definition for the given schema FQN with the addition of the given EntityType FQNs.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {Object} schemaFqn - an object literal representing a fully qualified name
+ * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
+ * @return {Promise}
+ */
+export function addEntityTypesToSchema(schemaFqn :Object, entityTypeFqns :Object[]) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
+  }
+
+  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValidFqns) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
 
   const { namespace, name } = schemaFqn;
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
-    .put(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypes)
+    .put(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypeFqns)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

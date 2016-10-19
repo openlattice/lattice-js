@@ -135,6 +135,14 @@ export function downloadAllEntitiesOfType(entityTypeFqn :Object, fileType :strin
  */
 export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
 
+  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValidFqns) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
+
   return getAxiosInstance(getApiBaseUrl(DATA_API))
     .put(`/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypeFqns)
     .then((axiosResponse) => {
