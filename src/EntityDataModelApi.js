@@ -612,7 +612,37 @@ export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyType
     });
 }
 
+/**
+ * `DELETE /entity/type/{namespace}/{name}/deletePropertyTypes`
+ *
+ * Updates the EntityType definition for the given EntityType FQN with the removal of the given PropertyType FQNs.
+ *
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.removePropertyTypesFromEntityType(
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   [
+ *     { namespace: "LOOM", name: "MyProperty1" },
+ *     { namespace: "LOOM", name: "MyProperty2" }
+ *   ]
+ * );
+ */
 export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
+  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
+  }, true);
+
+  if (!allValidFqns) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
+  }
 
   const { namespace, name } = entityTypeFqn;
 
