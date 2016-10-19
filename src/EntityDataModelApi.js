@@ -452,6 +452,8 @@ export function createEntitySets(entitySets :Object[]) :Promise<> {
  *
  * Gets the EntityType definition for the given EntityType FQN.
  *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @return {Promise<Object>} - a Promise that will resolve with the EntityType definition as its fulfillment value
  *
@@ -479,10 +481,12 @@ export function getEntityType(entityTypeFqn :Object) :Promise<> {
 }
 
 /**
- * `GET /entity/type/{namespace}/{name}`
+ * `GET /entity/type`
  *
  * Gets all EntityType definitions.
  *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
  * @return {Promise<Object[]>} - a Promise that will resolve with all EntityType definitions as its fulfillment value
  *
  * @example
@@ -505,6 +509,8 @@ export function getAllEntityTypes() :Promise<> {
  *
  * Creates a new EntityType definition.
  *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
  * @param {Object} entityType
  * @return {Promise}
  *
@@ -542,6 +548,8 @@ export function createEntityType(entityType :Object) :Promise<> {
  *
  * Deletes the EntityType definition for the given EntityType FQN.
  *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @return {Promise}
  *
@@ -573,6 +581,8 @@ export function deleteEntityType(entityTypeFqn :Object) :Promise<> {
  *
  * Updates the EntityType definition for the given EntityType FQN with the addition of the given PropertyType FQNs.
  *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
@@ -617,6 +627,8 @@ export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyType
  *
  * Updates the EntityType definition for the given EntityType FQN with the removal of the given PropertyType FQNs.
  *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
@@ -669,6 +681,8 @@ export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propert
  *
  * Gets the PropertyType definition for the given PropertyType FQN.
  *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
  * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
  * @return {Promise<Object>} - a Promise that will resolve with the PropertyType definition as its fulfillment value
  *
@@ -695,7 +709,19 @@ export function getPropertyType(propertyTypeFqn :Object) :Promise<> {
     });
 }
 
-export function getPropertyTypes() :Promise<> {
+/**
+ * `GET /property/type`
+ *
+ * Gets all PropertyType definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<Object[]>} - a Promise that will resolve with all PropertyType definitions as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllPropertyTypes();
+ */
+export function getAllPropertyTypes() :Promise<> {
 
   return getAxiosInstance(getApiBaseUrl(EDM_API))
     .get(`/${PROPERTY_TYPE_PATH}`)
