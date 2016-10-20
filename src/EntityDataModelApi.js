@@ -139,7 +139,7 @@ export function getAllSchemas() :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @param {string} namespace - the substring before the dot in a FullyQualifiedName String
  * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
@@ -740,7 +740,7 @@ export function getAllPropertyTypes() :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @param {string} namespace - the substring before the dot in a FullyQualifiedName String
  * @return {Promise<Object[]>} - a Promise that will resolve with all PropertyType definitions as its fulfillment value
  *
  * @example

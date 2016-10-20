@@ -83,8 +83,8 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} fileType - the format in which to download the data
- * @returns {String} - the file download URL
+ * @param {string} fileType - the format in which to download the data
+ * @returns {string} - the file download URL
  *
  * @example
  * DataApi.getAllEntitiesOfTypeUrl(
@@ -146,7 +146,7 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} entitySetName - the value of the "name" field of the EntitySet
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
  * @returns {Promise}
  *
  * @example
@@ -184,8 +184,8 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} entitySetName - the value of the "name" field of the EntitySet
- * @returns {String} - the file download URL
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @returns {string} - the file download URL
  *
  * @example
  * DataApi.getAllEntitiesOfTypeInSetUrl({
