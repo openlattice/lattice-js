@@ -2,14 +2,14 @@
  * @flow
  */
 
-/* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies */
+/* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies, import/extensions */
 
 import Webpack from 'webpack';
 
-import PACKAGE from '../package.json';
+import PACKAGE from '../../package.json';
 
-import LIB_CONFIG from './lib.config.js';
-import LIB_PATHS from './lib.paths.js';
+import LIB_CONFIG from '../lib.config.js';
+import LIB_PATHS from '../lib.paths.js';
 
 import {
   isDev,
@@ -19,7 +19,7 @@ import {
   ifMin,
   ifNode,
   TARGET_ENV
-} from './env.js';
+} from '../env.js';
 
 function compact(arr :Array<any>) :Array<any> {
   return arr.filter((element :any) => {

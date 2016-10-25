@@ -143,9 +143,9 @@ export function getAllSchemas() :Promise<> {
  * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
- * EntityDataModelApi.getSchemasInNamespace("LOOM");
+ * EntityDataModelApi.getAllSchemasInNamespace("LOOM");
  */
-export function getSchemasInNamespace(namespace :string) :Promise<> {
+export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 
   if (!isNonEmptyString(namespace)) {
     return Promise.reject('invalid parameter: namespace must be a non-empty string');
@@ -744,9 +744,9 @@ export function getAllPropertyTypes() :Promise<> {
  * @return {Promise<Object[]>} - a Promise that will resolve with all PropertyType definitions as its fulfillment value
  *
  * @example
- * EntityDataModelApi.getPropertyTypesInNamespace("LOOM");
+ * EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
  */
-export function getPropertyTypesInNamespace(namespace :string) :Promise<> {
+export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
 
   if (!isNonEmptyString(namespace)) {
     return Promise.reject('invalid parameter: namespace must be a non-empty string');
