@@ -17,7 +17,7 @@ function getDataStoreUrl() :string {
 
   const baseUrl = getBaseUrl();
 
-  if (BACKEND_URLS.get('DEV').includes(baseUrl)) {
+  if (BACKEND_URLS.get('LOCAL').includes(baseUrl)) {
     return baseUrl;
   }
 
