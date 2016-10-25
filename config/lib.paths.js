@@ -2,6 +2,8 @@
  * @flow
  */
 
+/* eslint-disable import/extensions */
+
 import path from 'path';
 
 import LIB_CONFIG from './lib.config.js';
