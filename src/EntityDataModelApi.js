@@ -520,12 +520,12 @@ export function getAllEntityTypes() :Promise<> {
  *     namespace: "LOOM",
  *     type: "MyEntity",
  *     key: [
- *       { namespace: "LOOM", name: "MyProperty1" }
+ *       { namespace: "LOOM", name: "MyProperty1" },
  *       { namespace: "LOOM", name: "MyProperty2" }
  *     ],
  *     properties: [
- *       { namespace: "LOOM", name: "MyProperty1" }
- *       { namespace: "LOOM", name: "MyProperty2" }
+ *       { namespace: "LOOM", name: "MyProperty1" },
+ *       { namespace: "LOOM", name: "MyProperty2" },
  *       { namespace: "LOOM", name: "MyProperty3" }
  *     ]
  *   }
