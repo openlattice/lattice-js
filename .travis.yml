@@ -13,9 +13,8 @@ node_js:
   - "6"
 
 cache:
-  paths:
-    - node_modules
   directories:
+    - node_modules
     - travis_phantomjs
 
 before_install:
