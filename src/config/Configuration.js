@@ -4,7 +4,7 @@
 
 import Immutable from 'immutable';
 
-import Logger from '../utils/Logger';
+import EnvToUrlMap from '../constants/EnvToUrlMap';
 
 import {
   isNonEmptyString
@@ -12,53 +12,44 @@ import {
 
 declare var __PROD__ :boolean;
 
-const LOG = new Logger('Configuration');
-
-const BACKEND_URLS :Map<string, string> = Immutable.Map({
-  LOCAL: 'http://localhost:8080',
-  DEV: 'http://dev.loom.digital',
-  STG: 'http://staging.loom.digital',
-  PROD: 'http://api.loom.digital'
-});
-
-let baseUrl :string = BACKEND_URLS.get('LOCAL');
-if (__PROD__) {
-  baseUrl = BACKEND_URLS.get('PROD');
-}
-
-function getBaseUrl() :string {
-
-  return baseUrl;
-}
-
 type ConfigurationObject = {
   baseUrl :string
 };
 
+let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string, any>) => {
+
+  if (__PROD__) {
+    map.set('baseUrl', EnvToUrlMap.get('PROD'));
+  }
+  else {
+    map.set('baseUrl', EnvToUrlMap.get('LOCAL'));
+  }
+});
+
 function configure(config :ConfigurationObject) {
 
   if (isNonEmptyString(config.baseUrl)) {
-
-    if (BACKEND_URLS.get('PROD').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('PROD');
+    if (EnvToUrlMap.get('PROD').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('PROD'));
     }
-    else if (BACKEND_URLS.get('STG').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('STG');
+    else if (EnvToUrlMap.get('STG').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('STG'));
     }
-    else if (BACKEND_URLS.get('DEV').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('DEV');
+    else if (EnvToUrlMap.get('DEV').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('DEV'));
     }
-    else if (BACKEND_URLS.get('LOCAL').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('LOCAL');
+    else if (EnvToUrlMap.get('LOCAL').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('LOCAL'));
     }
-  }
-  else {
-    LOG.warn('invalid configuration option: "baseUrl" must be a non-empty string');
   }
 }
 
-export {
-  BACKEND_URLS,
+function getConfig() :Map<string, any> {
+
+  return configObj;
+}
+
+export default {
   configure,
-  getBaseUrl
+  getConfig
 };
