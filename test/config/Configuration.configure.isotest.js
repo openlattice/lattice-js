@@ -1,10 +1,8 @@
-import Immutable from 'immutable';
-
 import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 
 import * as Config from '../../src/config/Configuration';
 
-fdescribe('Configuration.configure()', () => {
+describe('Configuration.configure()', () => {
 
   it(`should correctly set the base URL to ${EnvToUrlMap.get('LOCAL')}`, () => {
 

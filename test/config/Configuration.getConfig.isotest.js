@@ -4,7 +4,7 @@ import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 
 import * as Config from '../../src/config/Configuration';
 
-fdescribe('Configuration.getConfig()', () => {
+describe('Configuration.getConfig()', () => {
 
   it('should be an instance of Immutable.Map', () => {
     expect(Config.getConfig()).toEqual(jasmine.any(Immutable.Map));
@@ -27,7 +27,7 @@ fdescribe('Configuration.getConfig()', () => {
 
     it('should be defined', () => {
       expect(Config.getConfig().get('baseUrl')).toBeDefined();
-    })
+    });
 
     it(`should default to ${EnvToUrlMap.get('LOCAL')}`, () => {
       expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('LOCAL'));
