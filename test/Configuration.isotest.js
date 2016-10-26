@@ -1,5 +1,3 @@
-import * as ApiEndpoints from '../src/config/ApiEndpoints';
-import * as ApiNames from '../src/constants/ApiNames';
 import * as Configuration from '../src/config/Configuration';
 
 const ENVIRONMENT_URLS = {
