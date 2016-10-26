@@ -21,9 +21,12 @@ import FullyQualifiedName from './types/FullyQualifiedName';
 import Logger from './utils/Logger';
 
 import {
-  getApiBaseUrl,
-  EDM_API
+  getApiBaseUrl
 } from './config/ApiEndpoints';
+
+import {
+  EDM_API
+} from './constants/ApiNames';
 
 import {
   getAxiosInstance

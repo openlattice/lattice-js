@@ -2,6 +2,13 @@
  * @flow
  */
 
+/* eslint-disable import/prefer-default-export */
+
+import {
+  DATA_API,
+  EDM_API
+} from '../constants/ApiNames';
+
 import {
   getBaseUrl,
   BACKEND_URLS
@@ -9,9 +16,6 @@ import {
 
 const DATA_PATH :string = 'data';
 const ONTOLOGY_PATH :string = 'ontology';
-
-const DATA_API :string = 'DataApi';
-const EDM_API :string = 'EntityDataModelApi';
 
 function getDataStoreUrl() :string {
 
@@ -37,7 +41,5 @@ function getApiBaseUrl(api :string) :string {
 }
 
 export {
-  DATA_API,
-  EDM_API,
   getApiBaseUrl
 };
