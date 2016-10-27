@@ -92,7 +92,7 @@
   },
   "betterScripts": {
     "build:prod": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "false",
@@ -100,7 +100,7 @@
       }
     },
     "build:prod:min": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "true",
@@ -108,7 +108,7 @@
       }
     },
     "build:prod:node": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "false",
@@ -116,7 +116,7 @@
       }
     },
     "build:prod:node:min": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "true",
@@ -154,7 +154,7 @@
       }
     },
     "webpack-dev-server": {
-      "command": "webpack-dev-server --config config/webpack.config.babel.js --port 9000 --content-base build/",
+      "command": "webpack-dev-server --config config/webpack/webpack.config.babel.js --port 9000 --content-base build/",
       "env": {
         "BUILD": "development"
       }
