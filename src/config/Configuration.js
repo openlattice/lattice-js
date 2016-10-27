@@ -49,7 +49,7 @@ function getConfig() :Map<string, any> {
   return configObj;
 }
 
-export default {
+export {
   configure,
   getConfig
 };
