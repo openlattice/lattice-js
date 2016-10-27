@@ -7,7 +7,7 @@ export default function getBaseKarmaConfig(theKarmaConfigObject :Object) {
   return {
 
     // root path that will be used to resolve all relative paths defined in "files" and "exclude"
-    basePath: '../test/',
+    basePath: '../..',
 
     /*
      * a list of files to load in the browser
@@ -15,7 +15,7 @@ export default function getBaseKarmaConfig(theKarmaConfigObject :Object) {
      * http://karma-runner.github.io/0.13/config/files.html
      */
     files: [
-      '../../node_modules/babel-polyfill/dist/polyfill.js'
+      './node_modules/babel-polyfill/dist/polyfill.js'
     ],
 
     // a list of files to exclude from the matching files specified in the "files" config

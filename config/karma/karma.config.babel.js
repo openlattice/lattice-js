@@ -9,13 +9,13 @@ import {
 const FILE_MATCHERS = {
 
   // match all test files: *.test.js
-  ALL_TESTS: '../../test/**/*.?(iso)test.js',
+  ALL_TESTS: './test/**/*.?(iso)test.js',
 
   // match all test files that must run in an individual (dedicated) bundle: *.isotest.js
-  ISOLATED_TESTS: '../../test/**/*.isotest.js',
+  ISOLATED_TESTS: './test/**/*.isotest.js',
 
   // match all test files included in the webpack testing context that will run in a single bundle
-  TEST_SUITE: '../../test/TestSuite.js'
+  TEST_SUITE: './test/TestSuite.js'
 };
 
 export default function karmaConfig(theKarmaConfigObject :Object) {
