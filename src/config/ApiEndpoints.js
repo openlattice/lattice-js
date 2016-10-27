@@ -4,8 +4,11 @@
 
 /* eslint-disable import/prefer-default-export */
 
-import Config from './Configuration';
 import EnvToUrlMap from '../constants/EnvToUrlMap';
+
+import {
+  getConfig
+} from './Configuration';
 
 import {
   DATA_API,
@@ -17,7 +20,7 @@ const ONTOLOGY_PATH :string = 'ontology';
 
 function getDataStoreUrl() :string {
 
-  const baseUrl :string = Config.getConfig().get('baseUrl');
+  const baseUrl :string = getConfig().get('baseUrl');
 
   if (EnvToUrlMap.get('LOCAL').includes(baseUrl)) {
     return baseUrl;
@@ -34,7 +37,7 @@ function getApiBaseUrl(api :string) :string {
     case EDM_API:
       return `${getDataStoreUrl()}/${ONTOLOGY_PATH}`;
     default:
-      return Config.getConfig().get('baseUrl');
+      return getConfig().get('baseUrl');
   }
 }
 
