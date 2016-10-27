@@ -132,25 +132,25 @@
     "test:karma:run": {
       "command": "karma run config/karma/karma.config.js --",
       "env": {
-        "BUILD": "test"
+        "BUILD": "development"
       }
     },
     "test:karma:start": {
       "command": "karma start config/karma/karma.config.js --singleRun=false",
       "env": {
-        "BUILD": "test"
+        "BUILD": "development"
       }
     },
     "test:karma:watch": {
       "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true",
       "env": {
-        "BUILD": "test"
+        "BUILD": "development"
       }
     },
     "test:karma:browser": {
       "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true --browsers=Chrome --reporters=kjhtml",
       "env": {
-        "BUILD": "test"
+        "BUILD": "development"
       }
     },
     "webpack-dev-server": {

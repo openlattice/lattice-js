@@ -26,6 +26,7 @@ const ifNode :Function = ifElse(TARGET_ENV === 'node');
 export {
   isDev,
   isProd,
+  isTest,
   ifDev,
   ifProd,
   ifTest,

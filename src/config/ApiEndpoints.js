@@ -2,22 +2,24 @@
  * @flow
  */
 
+/* eslint-disable import/prefer-default-export */
+
+import Config from './Configuration';
+import EnvToUrlMap from '../constants/EnvToUrlMap';
+
 import {
-  getBaseUrl,
-  BACKEND_URLS
-} from './Configuration';
+  DATA_API,
+  EDM_API
+} from '../constants/ApiNames';
 
 const DATA_PATH :string = 'data';
 const ONTOLOGY_PATH :string = 'ontology';
 
-const DATA_API :string = 'DataApi';
-const EDM_API :string = 'EntityDataModelApi';
-
 function getDataStoreUrl() :string {
 
-  const baseUrl = getBaseUrl();
+  const baseUrl :string = Config.getConfig().get('baseUrl');
 
-  if (BACKEND_URLS.get('LOCAL').includes(baseUrl)) {
+  if (EnvToUrlMap.get('LOCAL').includes(baseUrl)) {
     return baseUrl;
   }
 
@@ -32,12 +34,10 @@ function getApiBaseUrl(api :string) :string {
     case EDM_API:
       return `${getDataStoreUrl()}/${ONTOLOGY_PATH}`;
     default:
-      return getBaseUrl();
+      return Config.getConfig().get('baseUrl');
   }
 }
 
 export {
-  DATA_API,
-  EDM_API,
   getApiBaseUrl
 };

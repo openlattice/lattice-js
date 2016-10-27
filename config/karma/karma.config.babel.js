@@ -1,136 +1,45 @@
-/*
- * @flow
- */
-
 /* eslint-disable import/extensions */
 
-import webpackConfig from '../webpack/webpack.config.babel.js';
+import getBaseKarmaConfig from './karma.config.base.js';
 
 import {
-  ifTest
+  isTest
 } from '../env.js';
 
-const FILES = {
+const FILE_MATCHERS = {
 
   // match all test files: *.test.js
-  ALL_TESTS: '../../test/**/*.test.js',
+  ALL_TESTS: './test/**/*.?(iso)test.js',
 
-  // match all test files that will run in a single bundle
-  TEST_SUITE_BUNDLE: '../../test/TestSuite.js'
+  // match all test files that must run in an individual (dedicated) bundle: *.isotest.js
+  ISOLATED_TESTS: './test/**/*.isotest.js',
+
+  // match all test files included in the webpack testing context that will run in a single bundle
+  TEST_SUITE: './test/TestSuite.js'
 };
 
-export default (theKarmaConfigObject :Object) => {
+export default function karmaConfig(theKarmaConfigObject :Object) {
 
-  const baseKarmaConfig = {
+  const baseKarmaConfig = getBaseKarmaConfig(theKarmaConfigObject);
 
-    // root path that will be used to resolve all relative paths defined in "files" and "exclude"
-    basePath: '../test/',
+  if (isTest) {
 
-    /*
-     * a list of files to load in the browser
-     *
-     * http://karma-runner.github.io/0.13/config/files.html
-     */
-    files: [
-      '../../node_modules/babel-polyfill/dist/polyfill.js',
-      ifTest(
-        { pattern: FILES.TEST_SUITE_BUNDLE, included: true, watched: false },
-        { pattern: FILES.ALL_TESTS, included: true, watched: false }
-      )
-    ],
+    baseKarmaConfig.files.push(
+      { pattern: FILE_MATCHERS.ISOLATED_TESTS, included: true, watched: false },
+      { pattern: FILE_MATCHERS.TEST_SUITE, included: true, watched: false }
+    );
 
-    // a list of files to exclude from the matching files specified in the "files" config
-    exclude: [],
+    baseKarmaConfig.preprocessors[FILE_MATCHERS.ISOLATED_TESTS] = ['webpack'];
+    baseKarmaConfig.preprocessors[FILE_MATCHERS.TEST_SUITE] = ['webpack'];
+  }
+  else {
 
-    /*
-     * a list of browsers to launch and capture
-     *
-     * http://karma-runner.github.io/0.13/config/browsers.html
-     * https://npmjs.org/browse/keyword/karma-launcher
-     */
-    browsers: [
-      'PhantomJS'
-    ],
+    baseKarmaConfig.files.push(
+      { pattern: FILE_MATCHERS.ALL_TESTS, included: true, watched: false }
+    );
 
-    /*
-     * a list of test frameworks to use
-     *
-     * https://npmjs.org/browse/keyword/karma-adapter
-     */
-    frameworks: [
-      'jasmine'
-    ],
-
-    /*
-     * a list of reporters to use for test results
-     *
-     * https://npmjs.org/browse/keyword/karma-reporter
-     */
-    reporters: [
-      'spec', // karma-spec-reporter
-      'jasmine-diff' // karma-jasmine-diff-reporter
-    ],
-
-    /*
-     * configuration for karma-spec-reporter
-     * https://github.com/mlex/karma-spec-reporter
-     */
-    specReporter: {
-      showSpecTiming: true,
-      suppressSkipped: true // don't print information about skipped tests
-    },
-
-    /*
-     * the keys in the "preprocessors" config filter the matching files specified in the "files" config for processing
-     * before serving them to the browser
-     *
-     * http://karma-runner.github.io/0.13/config/preprocessors.html
-     * https://npmjs.org/browse/keyword/karma-preprocessor
-     */
-    preprocessors: {
-      [FILES.TEST_SUITE_BUNDLE]: ['webpack'],
-      [FILES.ALL_TESTS]: ['webpack']
-    },
-
-    /*
-     * https://github.com/webpack/karma-webpack
-     */
-    webpack: webpackConfig,
-
-    /*
-     * https://webpack.github.io/docs/webpack-dev-middleware.html
-     */
-    webpackMiddleware: {
-      noInfo: true
-    },
-
-    /*
-     * enables or disables watching files so to execute the tests whenever a file changes
-     */
-    autoWatch: false,
-
-    /*
-     * the amount of time (in ms) Karma will wait for a message from a browser before disconnecting from it
-     */
-    browserNoActivityTimeout: 60000, // 60s
-
-    /*
-     * continuous integration mode
-     * if true, Karma will start and capture all configured browsers, run the tests, and then exit with an exit code of
-     * 0 or 1; 0 if all tests passed, 1 if any tests failed
-     */
-    singleRun: true,
-
-    /*
-     * possible values:
-     *   config.LOG_DISABLE
-     *   config.LOG_ERROR
-     *   config.LOG_WARN
-     *   config.LOG_INFO
-     *   config.LOG_DEBUG
-     */
-    logLevel: theKarmaConfigObject.LOG_DEBUG
-  };
+    baseKarmaConfig.preprocessors[FILE_MATCHERS.ALL_TESTS] = ['webpack'];
+  }
 
   theKarmaConfigObject.set(baseKarmaConfig);
-};
+}
