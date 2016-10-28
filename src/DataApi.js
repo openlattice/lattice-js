@@ -21,9 +21,12 @@ import FullyQualifiedName from './types/FullyQualifiedName';
 import Logger from './utils/Logger';
 
 import {
-  getApiBaseUrl,
-  DATA_API
+  getApiBaseUrl
 } from './config/ApiEndpoints';
+
+import {
+  DATA_API
+} from './constants/ApiNames';
 
 import {
   getAxiosInstance
@@ -83,16 +86,16 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} fileType - the format in which to download the data
- * @returns {String} - the file download URL
+ * @param {string} fileType - the format in which to download the data
+ * @returns {string} - the file download URL
  *
  * @example
- * DataApi.getAllEntitiesOfTypeUrl(
+ * DataApi.getAllEntitiesOfTypeFileUrl(
  *   { namespace: "LOOM", name: "MyEntity" },
  *   "json"
  * );
  */
-export function getAllEntitiesOfTypeUrl(entityTypeFqn :Object, fileType :string) :?string {
+export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :Object, fileType :string) :?string {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
     return null;
@@ -100,6 +103,73 @@ export function getAllEntitiesOfTypeUrl(entityTypeFqn :Object, fileType :string)
 
   const { namespace, name } = entityTypeFqn;
   return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}?fileType=${fileType}`;
+}
+
+/**
+ * `GET /entitydata/{namespace}/{name}/{name}`
+ *
+ * Gets all entity data in the EntitySet defined by the given EntityType FQN.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @returns {Promise}
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeInSet({
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "MyEntityCollection"
+ * });
+ */
+export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getAxiosInstance(getApiBaseUrl(DATA_API))
+    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
+ * EntityType FQN.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @returns {string} - the file download URL
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeInSetFileUrl({
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "MyEntityCollection",
+ *   "json"
+ * });
+ */
+export function getAllEntitiesOfTypeInSetFileUrl(
+    entityTypeFqn :Object, entitySetName :string, fileType :string) :?string {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn) || !isNonEmptyString(entitySetName)) {
+    return null;
+  }
+
+  const { namespace, name } = entityTypeFqn;
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}?fileType=${fileType}`;
 }
 
 /**
@@ -139,72 +209,6 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
 }
 
 /**
- * `GET /entitydata/{namespace}/{name}/{name}`
- *
- * Gets all entity data in the EntitySet defined by the given EntityType FQN.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} entitySetName - the value of the "name" field of the EntitySet
- * @returns {Promise}
- *
- * @example
- * DataApi.getAllEntitiesOfTypeInSet({
- *   { namespace: "LOOM", name: "MyEntity" },
- *   "MyEntityCollection"
- * });
- */
-export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
-  }
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  const { namespace, name } = entityTypeFqn;
-
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
-    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
- * EntityType FQN.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} entitySetName - the value of the "name" field of the EntitySet
- * @returns {String} - the file download URL
- *
- * @example
- * DataApi.getAllEntitiesOfTypeInSetUrl({
- *   { namespace: "LOOM", name: "MyEntity" },
- *   "MyEntityCollection",
- *   "json"
- * });
- */
-export function getAllEntitiesOfTypeInSetUrl(entityTypeFqn :Object, entitySetName :string, fileType :string) :?string {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn) || !isNonEmptyString(entitySetName)) {
-    return null;
-  }
-
-  const { namespace, name } = entityTypeFqn;
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}?fileType=${fileType}`;
-}
-
-/**
  * `POST /entitydata`
  *
  * Creates an entry for the given entity data.
@@ -219,9 +223,9 @@ export function getAllEntitiesOfTypeInSetUrl(entityTypeFqn :Object, entitySetNam
  * DataApi.createEntity({
  *   type: { namespace: "LOOM", name: "MyEntity" },
  *   entitySetName: "MyEntityCollection",
- *   properties: [{
- *     "LOOM.MyPropertyType": "value"
- *   }]
+ *   properties: [
+ *     { "LOOM.MyProperty": "value" }
+ *   ]
  * });
  *
  * @example
@@ -229,10 +233,10 @@ export function getAllEntitiesOfTypeInSetUrl(entityTypeFqn :Object, entitySetNam
  * DataApi.createEntity({
  *   type: { namespace: "LOOM", name: "MyEntity" },
  *   entitySetName: "MyEntityCollection",
- *   properties: [{
- *     { "LOOM.MyPropertyType": "value1" },
- *     { "LOOM.MyPropertyType": "value2" },
- *   }]
+ *   properties: [
+ *     { "LOOM.MyProperty": "value1" },
+ *     { "LOOM.MyProperty": "value2" },
+ *   ]
  * });
  */
 export function createEntity(createEntityRequest :Object) :Promise<> {

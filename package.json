@@ -1,6 +1,6 @@
 {
   "name": "loom-data",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "homepage": "https://github.com/kryptnostic/loom-data-js",
   "description": "JavaScript SDK for all Loom REST APIs",
   "author": {
@@ -25,7 +25,7 @@
   "main": "build/loom-data.node.js",
   "browser": "build/loom-data.js",
   "dependencies": {
-    "axios": "^0.14.0",
+    "axios": "^0.15.0",
     "bluebird": "^3.4.6",
     "immutable": "^3.8.1",
     "lodash": "^4.16.4",
@@ -49,10 +49,21 @@
     "eslint-loader": "^1.5.0",
     "eslint-plugin-flowtype": "^2.20.0",
     "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-jasmine": "^1.8.1",
     "flow-bin": "^0.33.0",
-    "iflow-lodash": "^1.1.27",
+    "jasmine": "^2.5.2",
+    "jasmine-core": "^2.5.2",
     "json-loader": "^0.5.4",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-jasmine-diff-reporter": "^0.6.2",
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-spec-reporter": "0.0.26",
+    "karma-webpack": "^1.8.0",
     "npm-run-all": "^3.1.0",
+    "phantomjs-prebuilt": "^2.1.13",
     "rimraf": "2.5.4",
     "webpack": "^2.1.0-beta",
     "webpack-dev-server": "^2.1.0-beta"
@@ -72,12 +83,16 @@
     "release:patch": "npm version patch -m \"releasing v%s\"",
     "version": "npm-run-all clean lint --parallel build build:min && git add -A package.json build/",
     "postversion": "git push && git push --tags",
-    "test": "echo \"Error: test task not implemented\" && exit 1",
+    "test": "better-npm-run test",
+    "test:karma:run": "better-npm-run test:karma:run",
+    "test:karma:start": "better-npm-run test:karma:start",
+    "test:karma:watch": "better-npm-run test:karma:watch",
+    "test:karma:browser": "better-npm-run test:karma:browser",
     "webpack-dev-server": "better-npm-run webpack-dev-server"
   },
   "betterScripts": {
     "build:prod": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "false",
@@ -85,7 +100,7 @@
       }
     },
     "build:prod:min": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "true",
@@ -93,7 +108,7 @@
       }
     },
     "build:prod:node": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "false",
@@ -101,15 +116,45 @@
       }
     },
     "build:prod:node:min": {
-      "command": "webpack --config config/webpack.config.babel.js",
+      "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "true",
         "TARGET_ENV": "node"
       }
     },
+    "test": {
+      "command": "karma start config/karma/karma.config.js",
+      "env": {
+        "BUILD": "test"
+      }
+    },
+    "test:karma:run": {
+      "command": "karma run config/karma/karma.config.js --",
+      "env": {
+        "BUILD": "development"
+      }
+    },
+    "test:karma:start": {
+      "command": "karma start config/karma/karma.config.js --singleRun=false",
+      "env": {
+        "BUILD": "development"
+      }
+    },
+    "test:karma:watch": {
+      "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true",
+      "env": {
+        "BUILD": "development"
+      }
+    },
+    "test:karma:browser": {
+      "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true --browsers=Chrome --reporters=kjhtml",
+      "env": {
+        "BUILD": "development"
+      }
+    },
     "webpack-dev-server": {
-      "command": "webpack-dev-server --config config/webpack.config.babel.js --port 9000 --content-base build/",
+      "command": "webpack-dev-server --config config/webpack/webpack.config.babel.js --port 9000 --content-base build/",
       "env": {
         "BUILD": "development"
       }

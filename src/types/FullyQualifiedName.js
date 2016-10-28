@@ -40,13 +40,9 @@
 
 import * as _ from 'lodash';
 
-import Logger from '../utils/Logger';
-
 import {
   isNonEmptyString
 } from '../utils/LangUtils';
-
-const LOG = new Logger('FullyQualifiedName');
 
 export type FqnObjectLiteral = {
   namespace :string,

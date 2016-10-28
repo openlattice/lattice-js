@@ -21,9 +21,12 @@ import FullyQualifiedName from './types/FullyQualifiedName';
 import Logger from './utils/Logger';
 
 import {
-  getApiBaseUrl,
-  EDM_API
+  getApiBaseUrl
 } from './config/ApiEndpoints';
+
+import {
+  EDM_API
+} from './constants/ApiNames';
 
 import {
   getAxiosInstance
@@ -139,13 +142,13 @@ export function getAllSchemas() :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @param {string} namespace - the substring before the dot in a FullyQualifiedName String
  * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
- * EntityDataModelApi.getSchemasInNamespace("LOOM");
+ * EntityDataModelApi.getAllSchemasInNamespace("LOOM");
  */
-export function getSchemasInNamespace(namespace :string) :Promise<> {
+export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 
   if (!isNonEmptyString(namespace)) {
     return Promise.reject('invalid parameter: namespace must be a non-empty string');
@@ -520,12 +523,12 @@ export function getAllEntityTypes() :Promise<> {
  *     namespace: "LOOM",
  *     type: "MyEntity",
  *     key: [
- *       { namespace: "LOOM", name: "MyProperty1" }
+ *       { namespace: "LOOM", name: "MyProperty1" },
  *       { namespace: "LOOM", name: "MyProperty2" }
  *     ],
  *     properties: [
- *       { namespace: "LOOM", name: "MyProperty1" }
- *       { namespace: "LOOM", name: "MyProperty2" }
+ *       { namespace: "LOOM", name: "MyProperty1" },
+ *       { namespace: "LOOM", name: "MyProperty2" },
  *       { namespace: "LOOM", name: "MyProperty3" }
  *     ]
  *   }
@@ -740,13 +743,13 @@ export function getAllPropertyTypes() :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @param {string} namespace - the substring before the dot in a FullyQualifiedName String
  * @return {Promise<Object[]>} - a Promise that will resolve with all PropertyType definitions as its fulfillment value
  *
  * @example
- * EntityDataModelApi.getPropertyTypesInNamespace("LOOM");
+ * EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
  */
-export function getPropertyTypesInNamespace(namespace :string) :Promise<> {
+export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
 
   if (!isNonEmptyString(namespace)) {
     return Promise.reject('invalid parameter: namespace must be a non-empty string');

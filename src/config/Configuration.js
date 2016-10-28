@@ -2,60 +2,95 @@
  * @flow
  */
 
+/**
+ * @module Configuration
+ * @memberof loom-data
+ */
+
 import Immutable from 'immutable';
 
+import {
+  isEmpty
+} from 'lodash';
+
+import EnvToUrlMap from '../constants/EnvToUrlMap';
 import Logger from '../utils/Logger';
 
 import {
   isNonEmptyString
 } from '../utils/LangUtils';
 
-declare var __DEV__ :boolean;
 declare var __PROD__ :boolean;
 
 const LOG = new Logger('Configuration');
 
-const BACKEND_URLS :Map<string, string> = Immutable.Map({
-  DEV: 'http://localhost:8080',
-  STG: 'http://test.loom.digital',
-  PROD: 'http://api.loom.digital'
+let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string, any>) => {
+
+  if (__PROD__) {
+    map.set('baseUrl', EnvToUrlMap.get('PROD'));
+  }
+  else {
+    map.set('baseUrl', EnvToUrlMap.get('LOCAL'));
+  }
 });
 
-let baseUrl :string = BACKEND_URLS.get('DEV');
-if (__PROD__) {
-  baseUrl = BACKEND_URLS.get('PROD');
-}
-
-function getBaseUrl() :string {
-
-  return baseUrl;
-}
-
 type ConfigurationObject = {
+  authToken :string,
   baseUrl :string
 };
 
+/**
+ * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
+ * result in the same base URL:
+ *   - "http://api.loom.digital"
+ *   - "api.loom.digital"
+ *   - "loom.digital"
+ *   - "api"
+ *
+ * @memberof loom-data.Configuration
+ * @param {Object} config - an object literal containing all configuration options
+ * @param {String} config.authToken - a Base64-encoded JWT auth token
+ * @param {String} config.baseUrl - (optional) a full URL, or a simple URL identifier, defaults to http://api.loom.digital
+ */
 function configure(config :ConfigurationObject) {
 
-  if (isNonEmptyString(config.baseUrl)) {
+  if (isEmpty(config)) {
+    const errorMsg = 'invalid parameter - config must be a non-empty object';
+    LOG.error(errorMsg, config);
+    throw new Error(errorMsg);
+  }
 
-    if (BACKEND_URLS.get('PROD').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('PROD');
-    }
-    else if (BACKEND_URLS.get('STG').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('STG');
-    }
-    else if (BACKEND_URLS.get('DEV').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('DEV');
-    }
+  if (isNonEmptyString(config.authToken)) {
+    configObj = configObj.set('authToken', config.authToken);
   }
   else {
-    LOG.warn('invalid configuration option: "baseUrl" must be a non-empty string');
+    const errorMsg = 'invalid parameter - authToken must be a non-empty string';
+    LOG.error(errorMsg, config.authToken);
+    throw new Error(errorMsg);
+  }
+
+  if (isNonEmptyString(config.baseUrl)) {
+    if (EnvToUrlMap.get('PROD').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('PROD'));
+    }
+    else if (EnvToUrlMap.get('STG').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('STG'));
+    }
+    else if (EnvToUrlMap.get('DEV').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('DEV'));
+    }
+    else if (EnvToUrlMap.get('LOCAL').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('LOCAL'));
+    }
   }
 }
 
+function getConfig() :Map<string, any> {
+
+  return configObj;
+}
+
 export {
-  BACKEND_URLS,
   configure,
-  getBaseUrl
+  getConfig
 };

@@ -2,24 +2,25 @@
  * @flow
  */
 
-/* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies */
+/* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies, import/extensions */
 
 import Webpack from 'webpack';
 
-import PACKAGE from '../package.json';
+import PACKAGE from '../../package.json';
 
-import LIB_CONFIG from './lib.config.js';
-import LIB_PATHS from './lib.paths.js';
+import LIB_CONFIG from '../lib.config.js';
+import LIB_PATHS from '../lib.paths.js';
 
 import {
   isDev,
   isProd,
+  isTest,
   ifDev,
   ifProd,
   ifMin,
   ifNode,
   TARGET_ENV
-} from './env.js';
+} from '../env.js';
 
 function compact(arr :Array<any>) :Array<any> {
   return arr.filter((element :any) => {
@@ -57,6 +58,7 @@ const BANNER_PLUGIN = new Webpack.BannerPlugin({
 const DEFINE_PLUGIN = new Webpack.DefinePlugin({
   __DEV__: JSON.stringify(isDev),
   __PROD__: JSON.stringify(isProd),
+  __TEST__: JSON.stringify(isTest),
   __VERSION__: JSON.stringify(`v${PACKAGE.version}`)
 });
 
