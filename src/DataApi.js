@@ -21,15 +21,12 @@ import FullyQualifiedName from './types/FullyQualifiedName';
 import Logger from './utils/Logger';
 
 import {
-  getApiBaseUrl
-} from './config/ApiEndpoints';
-
-import {
   DATA_API
 } from './constants/ApiNames';
 
 import {
-  getAxiosInstance
+  getApiBaseUrl,
+  getApiAxiosInstance
 } from './utils/AxiosUtils';
 
 import {
@@ -70,7 +67,7 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 
   const { namespace, name } = entityTypeFqn;
 
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
+  return getApiAxiosInstance(DATA_API)
     .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
@@ -134,7 +131,7 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
 
   const { namespace, name } = entityTypeFqn;
 
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
+  return getApiAxiosInstance(DATA_API)
     .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
@@ -198,7 +195,7 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
     return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
   }
 
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
+  return getApiAxiosInstance(DATA_API)
     .put(`/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypeFqns)
     .then((axiosResponse) => {
       return axiosResponse.data;
@@ -241,7 +238,7 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
  */
 export function createEntity(createEntityRequest :Object) :Promise<> {
 
-  return getAxiosInstance(getApiBaseUrl(DATA_API))
+  return getApiAxiosInstance(DATA_API)
     .post(`/${ENTITY_DATA_PATH}`, createEntityRequest)
     .then((axiosResponse) => {
       return axiosResponse.data;

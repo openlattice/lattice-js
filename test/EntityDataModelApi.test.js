@@ -1,9 +1,9 @@
-import * as ApiEndpoints from '../src/config/ApiEndpoints';
 import * as AxiosUtils from '../src/utils/AxiosUtils';
 import * as EntityDataModelApi from '../src/EntityDataModelApi';
 
-const EDM_API = 'EntityDataModelApi';
-const EDM_API_URL = 'http://localhost:8080/ontology';
+import {
+  EDM_API
+} from '../src/constants/ApiNames';
 
 const MOCK_SCHEMA_FQN = {
   namespace: 'LOOM',
@@ -53,14 +53,9 @@ let requestPromise = null;
 
 function runCommonTests() {
 
-  it('should invoke getApiBaseUrl() with the correct API', () => {
-    expect(ApiEndpoints.getApiBaseUrl).toHaveBeenCalledTimes(1);
-    expect(ApiEndpoints.getApiBaseUrl).toHaveBeenCalledWith(EDM_API);
-  });
-
-  it('should invoke getAxiosInstance() with the correct base URL', () => {
-    expect(AxiosUtils.getAxiosInstance).toHaveBeenCalledTimes(1);
-    expect(AxiosUtils.getAxiosInstance).toHaveBeenCalledWith(EDM_API_URL);
+  it('should invoke getApiAxiosInstance() with the correct API', () => {
+    expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledTimes(1);
+    expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledWith(EDM_API);
   });
 
   it('should return a Promise', () => {
@@ -699,8 +694,7 @@ describe('EntityDataModelApi', () => {
     mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.delete.and.returnValue(MOCK_PROMISE);
 
-    spyOn(AxiosUtils, 'getAxiosInstance').and.returnValue(mockAxiosInstance);
-    spyOn(ApiEndpoints, 'getApiBaseUrl').and.callThrough();
+    spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
   });
 
   afterEach(() => {
