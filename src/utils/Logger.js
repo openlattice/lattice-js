@@ -8,6 +8,7 @@ import moment from 'moment';
 import * as _ from 'lodash';
 
 declare var __DEV__;
+declare var __TEST__;
 
 const LOG_LEVELS = {
   TRACE: 'trace',
@@ -21,6 +22,9 @@ const TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 if (__DEV__) {
   log.setLevel(log.levels.TRACE);
+}
+else if (__TEST__) {
+  log.setLevel(log.levels.SILENT);
 }
 else {
   log.setLevel(log.levels.INFO);
