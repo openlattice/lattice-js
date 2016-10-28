@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.5.1
+ * loom-data - v0.6.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 142);
+/******/ 	return __webpack_require__(__webpack_require__.s = 147);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1883,7 +1883,7 @@ return /******/ (function(modules) { // webpackBootstrap
                 module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
-                __webpack_require__(140)("./" + name);
+                __webpack_require__(145)("./" + name);
                 // because defineLocale currently also sets the global locale, we
                 // want to undo that for lazy loaded locales
                 locale_locales__getSetGlobalLocale(oldLocale);
@@ -4321,7 +4321,7 @@ return /******/ (function(modules) { // webpackBootstrap
     return _moment;
 
 }));
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(118)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(123)(module)))
 
 /***/ },
 /* 1 */
@@ -4330,7 +4330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 'use strict';
 
-var bind = __webpack_require__(8);
+var bind = __webpack_require__(13);
 
 /*global toString:true*/
 
@@ -4547,7 +4547,7 @@ function forEach(obj, fn) {
   } else {
     // Iterate over object keys
     for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         fn.call(null, obj[key], key, obj);
       }
     }
@@ -4641,7 +4641,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.isNonEmptyString = isNonEmptyString;
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(3);
 
 var _ = _interopRequireWildcard(_lodash);
 
@@ -4655,150 +4655,6 @@ function isNonEmptyString(value) {
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _loglevel = __webpack_require__(139);
-
-var _loglevel2 = _interopRequireDefault(_loglevel);
-
-var _moment = __webpack_require__(0);
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _lodash = __webpack_require__(4);
-
-var _ = _interopRequireWildcard(_lodash);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var LOG_LEVELS = {
-  TRACE: 'trace',
-  DEBUG: 'debug',
-  INFO: 'info',
-  WARN: 'warn',
-  ERROR: 'error'
-};
-
-var TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-
-if (false) {
-  _loglevel2.default.setLevel(_loglevel2.default.levels.TRACE);
-} else {
-  _loglevel2.default.setLevel(_loglevel2.default.levels.INFO);
-}
-
-function isNonEmptyString(value) {
-
-  return _.isString(value) && !_.isEmpty(value);
-}
-
-function getMessagePrefix(loggerLevel, loggerName) {
-
-  return '[' + (0, _moment2.default)().format(TIMESTAMP_FORMAT) + ' ' + loggerLevel.toUpperCase() + ' ' + loggerName + ']';
-}
-
-var Logger = function () {
-  function Logger(name) {
-    _classCallCheck(this, Logger);
-
-    this.name = name;
-    this.logger = _loglevel2.default.getLogger(name);
-  }
-
-  _createClass(Logger, [{
-    key: 'log',
-    value: function log(logLevel, message) {
-
-      var messagePrefix = getMessagePrefix(logLevel, this.name);
-
-      if (isNonEmptyString(message)) {
-        this.logger[logLevel](messagePrefix + ' - ' + message);
-      } else {
-        this.logger[logLevel](messagePrefix);
-        if (logLevel !== LOG_LEVELS.TRACE) {
-          if (_.isError(message) || !_.isEmpty(message)) {
-            this.logger[logLevel](message);
-          }
-        }
-      }
-
-      for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-        args[_key - 2] = arguments[_key];
-      }
-
-      if (args.length > 0) {
-        var _logger;
-
-        (_logger = this.logger)[logLevel].apply(_logger, _toConsumableArray(args));
-      }
-    }
-  }, {
-    key: 'trace',
-    value: function trace(message) {
-
-      this.log(LOG_LEVELS.TRACE, message);
-    }
-  }, {
-    key: 'debug',
-    value: function debug(message) {
-      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        args[_key2 - 1] = arguments[_key2];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.DEBUG, message].concat(_toConsumableArray(args)));
-    }
-  }, {
-    key: 'info',
-    value: function info(message) {
-      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.INFO, message].concat(_toConsumableArray(args)));
-    }
-  }, {
-    key: 'warn',
-    value: function warn(message) {
-      for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        args[_key4 - 1] = arguments[_key4];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.WARN, message].concat(_toConsumableArray(args)));
-    }
-  }, {
-    key: 'error',
-    value: function error(message) {
-      for (var _len5 = arguments.length, args = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-        args[_key5 - 1] = arguments[_key5];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.ERROR, message].concat(_toConsumableArray(args)));
-    }
-  }]);
-
-  return Logger;
-}();
-
-exports.default = Logger;
-module.exports = exports['default'];
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -21784,10 +21640,10 @@ module.exports = exports['default'];
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(141), __webpack_require__(118)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(146), __webpack_require__(123)(module)))
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21796,13 +21652,19 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getBaseUrl = exports.configure = exports.BACKEND_URLS = undefined;
+exports.getConfig = exports.configure = undefined;
 
-var _immutable = __webpack_require__(12);
+var _immutable = __webpack_require__(7);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _Logger = __webpack_require__(3);
+var _lodash = __webpack_require__(3);
+
+var _EnvToUrlMap = __webpack_require__(15);
+
+var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
+
+var _Logger = __webpack_require__(6);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
@@ -21812,257 +21674,73 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var LOG = new _Logger2.default('Configuration');
 
-var BACKEND_URLS = _immutable2.default.Map({
-  DEV: 'http://localhost:8080',
-  STG: 'http://test.loom.digital',
-  PROD: 'http://api.loom.digital'
+/**
+ * @module Configuration
+ * @memberof loom-data
+ */
+
+var configObj = _immutable2.default.Map().withMutations(function (map) {
+
+  if (true) {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+  } else {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+  }
 });
 
-var baseUrl = BACKEND_URLS.get('DEV');
-if (true) {
-  baseUrl = BACKEND_URLS.get('PROD');
-}
-
-function getBaseUrl() {
-
-  return baseUrl;
-}
-
+/**
+ * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
+ * result in the same base URL:
+ *   - "http://api.loom.digital"
+ *   - "api.loom.digital"
+ *   - "loom.digital"
+ *   - "api"
+ *
+ * @memberof loom-data.Configuration
+ * @param {Object} config - an object literal containing all configuration options
+ * @param {String} config.authToken - a Base64-encoded JWT auth token
+ * @param {String} config.baseUrl - (optional) a full URL, or a simple URL identifier, defaults to http://api.loom.digital
+ */
 function configure(config) {
 
-  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
+  if ((0, _lodash.isEmpty)(config)) {
+    var errorMsg = 'invalid parameter - config must be a non-empty object';
+    LOG.error(errorMsg, config);
+    throw new Error(errorMsg);
+  }
 
-    if (BACKEND_URLS.get('PROD').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('PROD');
-    } else if (BACKEND_URLS.get('STG').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('STG');
-    } else if (BACKEND_URLS.get('DEV').includes(config.baseUrl)) {
-      baseUrl = BACKEND_URLS.get('DEV');
-    }
+  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
+    configObj = configObj.set('authToken', config.authToken);
   } else {
-    LOG.warn('invalid configuration option: "baseUrl" must be a non-empty string');
+    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
+    LOG.error(_errorMsg, config.authToken);
+    throw new Error(_errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
+    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+    } else if (_EnvToUrlMap2.default.get('STG').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('STG'));
+    } else if (_EnvToUrlMap2.default.get('DEV').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('DEV'));
+    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+    }
   }
 }
 
-exports.BACKEND_URLS = BACKEND_URLS;
+function getConfig() {
+
+  return configObj;
+}
+
 exports.configure = configure;
-exports.getBaseUrl = getBaseUrl;
+exports.getConfig = getConfig;
 
 /***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-var utils = __webpack_require__(1);
-var settle = __webpack_require__(127);
-var buildURL = __webpack_require__(131);
-var parseHeaders = __webpack_require__(137);
-var isURLSameOrigin = __webpack_require__(135);
-var createError = __webpack_require__(7);
-var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(130);
-
-module.exports = function xhrAdapter(config) {
-  return new Promise(function dispatchXhrRequest(resolve, reject) {
-    var requestData = config.data;
-    var requestHeaders = config.headers;
-
-    if (utils.isFormData(requestData)) {
-      delete requestHeaders['Content-Type']; // Let the browser set it
-    }
-
-    var request = new XMLHttpRequest();
-    var loadEvent = 'onreadystatechange';
-    var xDomain = false;
-
-    // For IE 8/9 CORS support
-    // Only supports POST and GET calls and doesn't returns the response headers.
-    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if (process.env.NODE_ENV !== 'test' &&
-        typeof window !== 'undefined' &&
-        window.XDomainRequest && !('withCredentials' in request) &&
-        !isURLSameOrigin(config.url)) {
-      request = new window.XDomainRequest();
-      loadEvent = 'onload';
-      xDomain = true;
-      request.onprogress = function handleProgress() {};
-      request.ontimeout = function handleTimeout() {};
-    }
-
-    // HTTP basic authentication
-    if (config.auth) {
-      var username = config.auth.username || '';
-      var password = config.auth.password || '';
-      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
-    }
-
-    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
-
-    // Set the request timeout in MS
-    request.timeout = config.timeout;
-
-    // Listen for ready state
-    request[loadEvent] = function handleLoad() {
-      if (!request || (request.readyState !== 4 && !xDomain)) {
-        return;
-      }
-
-      // The request errored out and we didn't get a response, this will be
-      // handled by onerror instead
-      if (request.status === 0) {
-        return;
-      }
-
-      // Prepare the response
-      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
-      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
-      var response = {
-        data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
-        status: request.status === 1223 ? 204 : request.status,
-        statusText: request.status === 1223 ? 'No Content' : request.statusText,
-        headers: responseHeaders,
-        config: config,
-        request: request
-      };
-
-      settle(resolve, reject, response);
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle low level network errors
-    request.onerror = function handleError() {
-      // Real errors are hidden from us by the browser
-      // onerror should only fire if it's a network error
-      reject(createError('Network Error', config));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle timeout
-    request.ontimeout = function handleTimeout() {
-      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED'));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Add xsrf header
-    // This is only done if running in a standard browser environment.
-    // Specifically not if we're in a web worker, or react-native.
-    if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(133);
-
-      // Add xsrf header
-      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
-          cookies.read(config.xsrfCookieName) :
-          undefined;
-
-      if (xsrfValue) {
-        requestHeaders[config.xsrfHeaderName] = xsrfValue;
-      }
-    }
-
-    // Add headers to the request
-    if ('setRequestHeader' in request) {
-      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
-        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
-          // Remove Content-Type if data is undefined
-          delete requestHeaders[key];
-        } else {
-          // Otherwise add header to the request
-          request.setRequestHeader(key, val);
-        }
-      });
-    }
-
-    // Add withCredentials to request if needed
-    if (config.withCredentials) {
-      request.withCredentials = true;
-    }
-
-    // Add responseType to request if needed
-    if (config.responseType) {
-      try {
-        request.responseType = config.responseType;
-      } catch (e) {
-        if (request.responseType !== 'json') {
-          throw e;
-        }
-      }
-    }
-
-    // Handle progress if needed
-    if (typeof config.onDownloadProgress === 'function') {
-      request.addEventListener('progress', config.onDownloadProgress);
-    }
-
-    // Not all browsers support upload events
-    if (typeof config.onUploadProgress === 'function' && request.upload) {
-      request.upload.addEventListener('progress', config.onUploadProgress);
-    }
-
-
-    if (requestData === undefined) {
-      requestData = null;
-    }
-
-    // Send the request
-    request.send(requestData);
-  });
-};
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(117)))
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-var enhanceError = __webpack_require__(126);
-
-/**
- * Create an Error with the specified message, config, error code, and response.
- *
- * @param {string} message The error message.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- @ @param {Object} [response] The response.
- * @returns {Error} The created error.
- */
-module.exports = function createError(message, config, code, response) {
-  var error = new Error(message);
-  return enhanceError(error, config, code, response);
-};
-
-
-/***/ },
-/* 8 */
+/* 5 */
 /***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 'use strict';
@@ -22070,46 +21748,11 @@ module.exports = function bind(fn, thisArg) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getApiBaseUrl = exports.EDM_API = exports.DATA_API = undefined;
-
-var _Configuration = __webpack_require__(5);
-
-var DATA_PATH = 'data';
-
-var ONTOLOGY_PATH = 'ontology';
-
-var DATA_API = 'DataApi';
-var EDM_API = 'EntityDataModelApi';
-
-function getDataStoreUrl() {
-
-  var baseUrl = (0, _Configuration.getBaseUrl)();
-
-  if (_Configuration.BACKEND_URLS.get('DEV').includes(baseUrl)) {
-    return baseUrl;
-  }
-
-  return baseUrl + '/datastore';
-}
-
-function getApiBaseUrl(api) {
-
-  switch (api) {
-    case DATA_API:
-      return getDataStoreUrl() + '/' + ONTOLOGY_PATH + '/' + DATA_PATH;
-    case EDM_API:
-      return getDataStoreUrl() + '/' + ONTOLOGY_PATH;
-    default:
-      return (0, _Configuration.getBaseUrl)();
-  }
-}
-
-exports.DATA_API = DATA_API;
-exports.EDM_API = EDM_API;
-exports.getApiBaseUrl = getApiBaseUrl;
+var DATA_API = exports.DATA_API = 'DataApi';
+var EDM_API = exports.EDM_API = 'EntityDataModelApi';
 
 /***/ },
-/* 10 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22121,258 +21764,141 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-/**
- * A class to represent a fully qualified name, which is simply an object literal of the following form:
- *
- * ```
- * {
- *   namespace :string,
- *   name :string
- * }
- * ```
- *
- * @class FullyQualifiedName
- * @memberof loom-data
- * @private
- *
- * @example
- * // create from an object literal
- * const fqn = new FullyQualifiedName({
- *   namespace: "LOOM",
- *   name: "Data"
- * });
- *
- * @example
- * // create from separate "namespace" and "name" parameters
- * const fqn = new FullyQualifiedName("LOOM", "Data");
- *
- * @example
- * // create from a fully qualified name string, from which "namespace" and "name" will be parsed
- * const fqn = new FullyQualifiedName("LOOM.Data");
- *
- * @example
- * // usage:
- * fqn.getNamespace(); // "LOOM"
- * fqn.getName(); // "Data"
- * fqn.getFullyQualifiedName(); // "LOOM.Data"
- */
+var _loglevel = __webpack_require__(144);
 
-var _lodash = __webpack_require__(4);
+var _loglevel2 = _interopRequireDefault(_loglevel);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _lodash = __webpack_require__(3);
 
 var _ = _interopRequireWildcard(_lodash);
 
-var _Logger = __webpack_require__(3);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LangUtils = __webpack_require__(2);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LOG = new _Logger2.default('FullyQualifiedName');
-
-var EMPTY_FQN = {
-  namespace: '',
-  name: ''
+var LOG_LEVELS = {
+  TRACE: 'trace',
+  DEBUG: 'debug',
+  INFO: 'info',
+  WARN: 'warn',
+  ERROR: 'error'
 };
 
-function parseFqnString(fullyQualifiedName) {
+var TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-  if (!(0, _LangUtils.isNonEmptyString)(fullyQualifiedName)) {
-    return EMPTY_FQN;
-  }
-
-  var dotIndex = fullyQualifiedName.lastIndexOf('.');
-
-  if (dotIndex === -1 || dotIndex === 0 || dotIndex === fullyQualifiedName.length - 1) {
-    return EMPTY_FQN;
-  }
-
-  var namespace = fullyQualifiedName.substring(0, dotIndex);
-  var name = fullyQualifiedName.substring(dotIndex + 1);
-
-  return {
-    namespace: namespace,
-    name: name
-  };
+if (false) {
+  _loglevel2.default.setLevel(_loglevel2.default.levels.TRACE);
+} else if (false) {
+  _loglevel2.default.setLevel(_loglevel2.default.levels.SILENT);
+} else {
+  _loglevel2.default.setLevel(_loglevel2.default.levels.INFO);
 }
 
-function processArgs() {
+function isNonEmptyString(value) {
 
-  var namespace = '';
-  var name = '';
-
-  /*
-   * case 1: a single parameter which can be either:
-   *   - an object literal to represent a FullyQualifiedName
-   *   - a FullyQualifiedName as a string
-   */
-  if (arguments.length === 1) {
-
-    var fqnObj = EMPTY_FQN;
-    if (_.isPlainObject(arguments.length <= 0 ? undefined : arguments[0])) {
-
-      // if it's an object literal, it must have valid "namespace" and "name" properties
-      var fqnArg = arguments.length <= 0 ? undefined : arguments[0];
-      if ((0, _LangUtils.isNonEmptyString)(fqnArg.namespace) && (0, _LangUtils.isNonEmptyString)(fqnArg.name)) {
-        fqnObj = fqnArg;
-      }
-    } else if ((0, _LangUtils.isNonEmptyString)(arguments.length <= 0 ? undefined : arguments[0])) {
-
-      // if it's a string, it must be a properly formatted FullyQualifiedName string
-      var fqnStr = arguments.length <= 0 ? undefined : arguments[0];
-      fqnObj = parseFqnString(fqnStr);
-    } else {
-      return EMPTY_FQN;
-    }
-
-    namespace = fqnObj.namespace;
-    name = fqnObj.name;
-  }
-  /*
-   * caes 2: two parameters
-   *   - namespace
-   *   - name
-   */
-  else if (arguments.length === 2) {
-      namespace = arguments.length <= 0 ? undefined : arguments[0];
-      name = arguments.length <= 1 ? undefined : arguments[1];
-    } else {
-      return EMPTY_FQN;
-    }
-
-  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
-    return EMPTY_FQN;
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(name)) {
-    return EMPTY_FQN;
-  }
-
-  return {
-    namespace: namespace,
-    name: name
-  };
+  return _.isString(value) && !_.isEmpty(value);
 }
 
-var FullyQualifiedName = function () {
-  function FullyQualifiedName() {
-    _classCallCheck(this, FullyQualifiedName);
+function getMessagePrefix(loggerLevel, loggerName) {
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+  return '[' + (0, _moment2.default)().format(TIMESTAMP_FORMAT) + ' ' + loggerLevel.toUpperCase() + ' ' + loggerName + ']';
+}
 
-    var _processArgs = processArgs(args);
+var Logger = function () {
+  function Logger(name) {
+    _classCallCheck(this, Logger);
 
-    var namespace = _processArgs.namespace;
-    var name = _processArgs.name;
-
-
-    this.namespace = namespace;
     this.name = name;
-    this.fqn = namespace + '.' + name;
+    this.logger = _loglevel2.default.getLogger(name);
   }
 
-  _createClass(FullyQualifiedName, [{
-    key: 'getNamespace',
-    value: function getNamespace() {
+  _createClass(Logger, [{
+    key: 'log',
+    value: function log(logLevel, message) {
 
-      return this.namespace;
+      var messagePrefix = getMessagePrefix(logLevel, this.name);
+
+      if (isNonEmptyString(message)) {
+        this.logger[logLevel](messagePrefix + ' - ' + message);
+      } else {
+        this.logger[logLevel](messagePrefix);
+        if (logLevel !== LOG_LEVELS.TRACE) {
+          if (_.isError(message) || !_.isEmpty(message)) {
+            this.logger[logLevel](message);
+          }
+        }
+      }
+
+      for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        args[_key - 2] = arguments[_key];
+      }
+
+      if (args.length > 0) {
+        var _logger;
+
+        (_logger = this.logger)[logLevel].apply(_logger, _toConsumableArray(args));
+      }
     }
   }, {
-    key: 'getName',
-    value: function getName() {
+    key: 'trace',
+    value: function trace(message) {
 
-      return this.name;
+      this.log(LOG_LEVELS.TRACE, message);
     }
   }, {
-    key: 'getFullyQualifiedName',
-    value: function getFullyQualifiedName() {
+    key: 'debug',
+    value: function debug(message) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        args[_key2 - 1] = arguments[_key2];
+      }
 
-      return this.fqn;
+      this.log.apply(this, [LOG_LEVELS.DEBUG, message].concat(_toConsumableArray(args)));
+    }
+  }, {
+    key: 'info',
+    value: function info(message) {
+      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
+      this.log.apply(this, [LOG_LEVELS.INFO, message].concat(_toConsumableArray(args)));
+    }
+  }, {
+    key: 'warn',
+    value: function warn(message) {
+      for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        args[_key4 - 1] = arguments[_key4];
+      }
+
+      this.log.apply(this, [LOG_LEVELS.WARN, message].concat(_toConsumableArray(args)));
+    }
+  }, {
+    key: 'error',
+    value: function error(message) {
+      for (var _len5 = arguments.length, args = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+        args[_key5 - 1] = arguments[_key5];
+      }
+
+      this.log.apply(this, [LOG_LEVELS.ERROR, message].concat(_toConsumableArray(args)));
     }
   }]);
 
-  return FullyQualifiedName;
+  return Logger;
 }();
 
-FullyQualifiedName.isValidFqn = function () {
-  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    args[_key2] = arguments[_key2];
-  }
-
-  var _processArgs2 = processArgs(args);
-
-  var namespace = _processArgs2.namespace;
-  var name = _processArgs2.name;
-
-  return (0, _LangUtils.isNonEmptyString)(namespace) && (0, _LangUtils.isNonEmptyString)(name);
-};
-
-FullyQualifiedName.isValidFqnObjectLiteral = function (fqnObjectLiteral) {
-
-  return _.isPlainObject(fqnObjectLiteral) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.namespace) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.name);
-};
-
-exports.default = FullyQualifiedName;
+exports.default = Logger;
 module.exports = exports['default'];
 
 /***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.newAxiosInstance = exports.getAxiosInstance = undefined;
-
-var _axios = __webpack_require__(121);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _immutable = __webpack_require__(12);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var baseUrlToAxiosInstanceMap = _immutable2.default.Map();
-
-function newAxiosInstance(baseUrl) {
-
-  var axiosInstance = _axios2.default.create({
-    baseURL: baseUrl,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  var newMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
-  baseUrlToAxiosInstanceMap = newMap;
-}
-
-function getAxiosInstance(baseUrl) {
-
-  if (!baseUrlToAxiosInstanceMap.has(baseUrl)) {
-    newAxiosInstance(baseUrl);
-  }
-
-  return baseUrlToAxiosInstanceMap.get(baseUrl);
-}
-
-exports.getAxiosInstance = getAxiosInstance;
-exports.newAxiosInstance = newAxiosInstance;
-
-/***/ },
-/* 12 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 /**
@@ -27356,7 +26882,714 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+var utils = __webpack_require__(1);
+var settle = __webpack_require__(133);
+var buildURL = __webpack_require__(136);
+var parseHeaders = __webpack_require__(142);
+var isURLSameOrigin = __webpack_require__(140);
+var createError = __webpack_require__(11);
+var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(135);
+
+module.exports = function xhrAdapter(config) {
+  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    var requestData = config.data;
+    var requestHeaders = config.headers;
+
+    if (utils.isFormData(requestData)) {
+      delete requestHeaders['Content-Type']; // Let the browser set it
+    }
+
+    var request = new XMLHttpRequest();
+    var loadEvent = 'onreadystatechange';
+    var xDomain = false;
+
+    // For IE 8/9 CORS support
+    // Only supports POST and GET calls and doesn't returns the response headers.
+    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
+    if (process.env.NODE_ENV !== 'test' &&
+        typeof window !== 'undefined' &&
+        window.XDomainRequest && !('withCredentials' in request) &&
+        !isURLSameOrigin(config.url)) {
+      request = new window.XDomainRequest();
+      loadEvent = 'onload';
+      xDomain = true;
+      request.onprogress = function handleProgress() {};
+      request.ontimeout = function handleTimeout() {};
+    }
+
+    // HTTP basic authentication
+    if (config.auth) {
+      var username = config.auth.username || '';
+      var password = config.auth.password || '';
+      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    }
+
+    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+
+    // Set the request timeout in MS
+    request.timeout = config.timeout;
+
+    // Listen for ready state
+    request[loadEvent] = function handleLoad() {
+      if (!request || (request.readyState !== 4 && !xDomain)) {
+        return;
+      }
+
+      // The request errored out and we didn't get a response, this will be
+      // handled by onerror instead
+      // With one exception: request that using file: protocol, most browsers
+      // will return status as 0 even though it's a successful request
+      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+        return;
+      }
+
+      // Prepare the response
+      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var response = {
+        data: responseData,
+        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
+        status: request.status === 1223 ? 204 : request.status,
+        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        headers: responseHeaders,
+        config: config,
+        request: request
+      };
+
+      settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle low level network errors
+    request.onerror = function handleError() {
+      // Real errors are hidden from us by the browser
+      // onerror should only fire if it's a network error
+      reject(createError('Network Error', config));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle timeout
+    request.ontimeout = function handleTimeout() {
+      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED'));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Add xsrf header
+    // This is only done if running in a standard browser environment.
+    // Specifically not if we're in a web worker, or react-native.
+    if (utils.isStandardBrowserEnv()) {
+      var cookies = __webpack_require__(138);
+
+      // Add xsrf header
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
+          cookies.read(config.xsrfCookieName) :
+          undefined;
+
+      if (xsrfValue) {
+        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // Add headers to the request
+    if ('setRequestHeader' in request) {
+      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+          // Remove Content-Type if data is undefined
+          delete requestHeaders[key];
+        } else {
+          // Otherwise add header to the request
+          request.setRequestHeader(key, val);
+        }
+      });
+    }
+
+    // Add withCredentials to request if needed
+    if (config.withCredentials) {
+      request.withCredentials = true;
+    }
+
+    // Add responseType to request if needed
+    if (config.responseType) {
+      try {
+        request.responseType = config.responseType;
+      } catch (e) {
+        if (request.responseType !== 'json') {
+          throw e;
+        }
+      }
+    }
+
+    // Handle progress if needed
+    if (typeof config.onDownloadProgress === 'function') {
+      request.addEventListener('progress', config.onDownloadProgress);
+    }
+
+    // Not all browsers support upload events
+    if (typeof config.onUploadProgress === 'function' && request.upload) {
+      request.upload.addEventListener('progress', config.onUploadProgress);
+    }
+
+    if (config.cancelToken) {
+      // Handle cancellation
+      config.cancelToken.promise.then(function onCanceled(cancel) {
+        if (!request) {
+          return;
+        }
+
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
+    }
+
+    if (requestData === undefined) {
+      requestData = null;
+    }
+
+    // Send the request
+    request.send(requestData);
+  });
+};
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(122)))
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+var enhanceError = __webpack_require__(132);
+
+/**
+ * Create an Error with the specified message, config, error code, and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ @ @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, response);
+};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+var utils = __webpack_require__(1);
+var normalizeHeaderName = __webpack_require__(141);
+
+var PROTECTION_PREFIX = /^\)\]\}',?\n/;
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(8);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(8);
+  }
+  return adapter;
+}
+
+module.exports = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      data = data.replace(PROTECTION_PREFIX, '');
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  headers: {
+    common: {
+      'Accept': 'application/json, text/plain, */*'
+    },
+    patch: utils.merge(DEFAULT_CONTENT_TYPE),
+    post: utils.merge(DEFAULT_CONTENT_TYPE),
+    put: utils.merge(DEFAULT_CONTENT_TYPE)
+  },
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(122)))
+
+/***/ },
 /* 13 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getApiBaseUrl = undefined;
+
+var _EnvToUrlMap = __webpack_require__(15);
+
+var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
+
+var _Configuration = __webpack_require__(4);
+
+var _ApiNames = __webpack_require__(5);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DATA_PATH = 'data';
+
+/* eslint-disable import/prefer-default-export */
+
+var ONTOLOGY_PATH = 'ontology';
+
+function getDataStoreUrl() {
+
+  var baseUrl = (0, _Configuration.getConfig)().get('baseUrl');
+
+  if (_EnvToUrlMap2.default.get('LOCAL').includes(baseUrl)) {
+    return baseUrl;
+  }
+
+  return baseUrl + '/datastore';
+}
+
+function getApiBaseUrl(api) {
+
+  switch (api) {
+    case _ApiNames.DATA_API:
+      return getDataStoreUrl() + '/' + ONTOLOGY_PATH + '/' + DATA_PATH;
+    case _ApiNames.EDM_API:
+      return getDataStoreUrl() + '/' + ONTOLOGY_PATH;
+    default:
+      return (0, _Configuration.getConfig)().get('baseUrl');
+  }
+}
+
+exports.getApiBaseUrl = getApiBaseUrl;
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _immutable = __webpack_require__(7);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ENVIRONMENT_URLS = _immutable2.default.Map({
+  LOCAL: 'http://localhost:8080',
+  DEV: 'http://dev.loom.digital',
+  STG: 'http://staging.loom.digital',
+  PROD: 'http://api.loom.digital'
+});
+
+/* eslint-disable import/prefer-default-export */
+
+exports.default = ENVIRONMENT_URLS;
+module.exports = exports['default'];
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+/**
+ * A class to represent a fully qualified name, which is simply an object literal of the following form:
+ *
+ * ```
+ * {
+ *   namespace :string,
+ *   name :string
+ * }
+ * ```
+ *
+ * @class FullyQualifiedName
+ * @memberof loom-data
+ * @private
+ *
+ * @example
+ * // create from an object literal
+ * const fqn = new FullyQualifiedName({
+ *   namespace: "LOOM",
+ *   name: "Data"
+ * });
+ *
+ * @example
+ * // create from separate "namespace" and "name" parameters
+ * const fqn = new FullyQualifiedName("LOOM", "Data");
+ *
+ * @example
+ * // create from a fully qualified name string, from which "namespace" and "name" will be parsed
+ * const fqn = new FullyQualifiedName("LOOM.Data");
+ *
+ * @example
+ * // usage:
+ * fqn.getNamespace(); // "LOOM"
+ * fqn.getName(); // "Data"
+ * fqn.getFullyQualifiedName(); // "LOOM.Data"
+ */
+
+var _lodash = __webpack_require__(3);
+
+var _ = _interopRequireWildcard(_lodash);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var EMPTY_FQN = {
+  namespace: '',
+  name: ''
+};
+
+function parseFqnString(fullyQualifiedName) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(fullyQualifiedName)) {
+    return EMPTY_FQN;
+  }
+
+  var dotIndex = fullyQualifiedName.lastIndexOf('.');
+
+  if (dotIndex === -1 || dotIndex === 0 || dotIndex === fullyQualifiedName.length - 1) {
+    return EMPTY_FQN;
+  }
+
+  var namespace = fullyQualifiedName.substring(0, dotIndex);
+  var name = fullyQualifiedName.substring(dotIndex + 1);
+
+  return {
+    namespace: namespace,
+    name: name
+  };
+}
+
+function processArgs() {
+
+  var namespace = '';
+  var name = '';
+
+  /*
+   * case 1: a single parameter which can be either:
+   *   - an object literal to represent a FullyQualifiedName
+   *   - a FullyQualifiedName as a string
+   */
+  if (arguments.length === 1) {
+
+    var fqnObj = EMPTY_FQN;
+    if (_.isPlainObject(arguments.length <= 0 ? undefined : arguments[0])) {
+
+      // if it's an object literal, it must have valid "namespace" and "name" properties
+      var fqnArg = arguments.length <= 0 ? undefined : arguments[0];
+      if ((0, _LangUtils.isNonEmptyString)(fqnArg.namespace) && (0, _LangUtils.isNonEmptyString)(fqnArg.name)) {
+        fqnObj = fqnArg;
+      }
+    } else if ((0, _LangUtils.isNonEmptyString)(arguments.length <= 0 ? undefined : arguments[0])) {
+
+      // if it's a string, it must be a properly formatted FullyQualifiedName string
+      var fqnStr = arguments.length <= 0 ? undefined : arguments[0];
+      fqnObj = parseFqnString(fqnStr);
+    } else {
+      return EMPTY_FQN;
+    }
+
+    namespace = fqnObj.namespace;
+    name = fqnObj.name;
+  }
+  /*
+   * caes 2: two parameters
+   *   - namespace
+   *   - name
+   */
+  else if (arguments.length === 2) {
+      namespace = arguments.length <= 0 ? undefined : arguments[0];
+      name = arguments.length <= 1 ? undefined : arguments[1];
+    } else {
+      return EMPTY_FQN;
+    }
+
+  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
+    return EMPTY_FQN;
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(name)) {
+    return EMPTY_FQN;
+  }
+
+  return {
+    namespace: namespace,
+    name: name
+  };
+}
+
+var FullyQualifiedName = function () {
+  function FullyQualifiedName() {
+    _classCallCheck(this, FullyQualifiedName);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _processArgs = processArgs(args);
+
+    var namespace = _processArgs.namespace;
+    var name = _processArgs.name;
+
+
+    this.namespace = namespace;
+    this.name = name;
+    this.fqn = namespace + '.' + name;
+  }
+
+  _createClass(FullyQualifiedName, [{
+    key: 'getNamespace',
+    value: function getNamespace() {
+
+      return this.namespace;
+    }
+  }, {
+    key: 'getName',
+    value: function getName() {
+
+      return this.name;
+    }
+  }, {
+    key: 'getFullyQualifiedName',
+    value: function getFullyQualifiedName() {
+
+      return this.fqn;
+    }
+  }]);
+
+  return FullyQualifiedName;
+}();
+
+FullyQualifiedName.isValidFqn = function () {
+  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    args[_key2] = arguments[_key2];
+  }
+
+  var _processArgs2 = processArgs(args);
+
+  var namespace = _processArgs2.namespace;
+  var name = _processArgs2.name;
+
+  return (0, _LangUtils.isNonEmptyString)(namespace) && (0, _LangUtils.isNonEmptyString)(name);
+};
+
+FullyQualifiedName.isValidFqnObjectLiteral = function (fqnObjectLiteral) {
+
+  return _.isPlainObject(fqnObjectLiteral) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.namespace) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.name);
+};
+
+exports.default = FullyQualifiedName;
+module.exports = exports['default'];
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.newAxiosInstance = exports.getAxiosInstance = undefined;
+
+var _axios = __webpack_require__(126);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _immutable = __webpack_require__(7);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _Configuration = __webpack_require__(4);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var baseUrlToAxiosInstanceMap = _immutable2.default.Map();
+
+function newAxiosInstance(baseUrl) {
+
+  var axiosInstance = _axios2.default.create({
+    baseURL: baseUrl,
+    headers: {
+      common: {
+        Authorization: (0, _Configuration.getConfig)().get('authToken'),
+        'Content-Type': 'application/json'
+      }
+    }
+  });
+
+  var newMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
+  baseUrlToAxiosInstanceMap = newMap;
+}
+
+function getAxiosInstance(baseUrl) {
+
+  if (!baseUrlToAxiosInstanceMap.has(baseUrl)) {
+    newAxiosInstance(baseUrl);
+  }
+
+  var axiosInstance = baseUrlToAxiosInstanceMap.get(baseUrl);
+  var axiosInstanceAuthToken = axiosInstance.defaults.headers.common.Authorization;
+  if (axiosInstanceAuthToken !== (0, _Configuration.getConfig)().get('authToken')) {
+    newAxiosInstance(baseUrl);
+  }
+
+  return baseUrlToAxiosInstanceMap.get(baseUrl);
+}
+
+exports.getAxiosInstance = getAxiosInstance;
+exports.newAxiosInstance = newAxiosInstance;
+
+/***/ },
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27433,7 +27666,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 14 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27559,7 +27792,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 15 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27623,7 +27856,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 16 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27731,7 +27964,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 17 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27794,7 +28027,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 18 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27935,7 +28168,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 19 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28044,7 +28277,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 20 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28182,7 +28415,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 21 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28276,7 +28509,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 22 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28399,7 +28632,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 23 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28522,7 +28755,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 24 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28634,7 +28867,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 25 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28781,7 +29014,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 26 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28866,7 +29099,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 27 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29042,7 +29275,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 28 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29109,7 +29342,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 29 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29194,7 +29427,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 30 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29258,7 +29491,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 31 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29341,7 +29574,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 32 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29423,7 +29656,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 33 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29526,7 +29759,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 34 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29628,7 +29861,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 35 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29699,7 +29932,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 36 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29766,7 +29999,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 37 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29837,7 +30070,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 38 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29908,7 +30141,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 39 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29979,7 +30212,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 40 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30056,7 +30289,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 41 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30140,7 +30373,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 42 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30225,7 +30458,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 43 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30309,7 +30542,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 44 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30379,7 +30612,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 45 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30489,7 +30722,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 46 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30600,7 +30833,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 47 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30664,7 +30897,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 48 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30728,7 +30961,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 49 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30796,7 +31029,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 50 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30864,7 +31097,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 51 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30941,7 +31174,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 52 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31021,7 +31254,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 53 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31102,7 +31335,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 54 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31205,7 +31438,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 55 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31333,7 +31566,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 56 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31482,7 +31715,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 57 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31595,7 +31828,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 58 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31694,7 +31927,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 59 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31781,7 +32014,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 60 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31912,7 +32145,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 61 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31986,7 +32219,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 62 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32066,7 +32299,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 63 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32153,7 +32386,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 64 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32246,7 +32479,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 65 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32337,7 +32570,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 66 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32399,7 +32632,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 67 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32468,7 +32701,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 68 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32560,7 +32793,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 69 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32701,7 +32934,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 70 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32775,7 +33008,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 71 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32896,7 +33129,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 72 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32997,7 +33230,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 73 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33112,7 +33345,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 74 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33180,7 +33413,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 75 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33274,7 +33507,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 76 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33359,7 +33592,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 77 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33522,7 +33755,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 78 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33609,7 +33842,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 79 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33695,7 +33928,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 80 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33794,7 +34027,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 81 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33861,7 +34094,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 82 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33988,7 +34221,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 83 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34078,7 +34311,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 84 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34142,7 +34375,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 85 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34270,7 +34503,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 86 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34379,7 +34612,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 87 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34444,7 +34677,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 88 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34513,7 +34746,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 89 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34592,7 +34825,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 90 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34779,7 +35012,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 91 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34844,7 +35077,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 92 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34919,7 +35152,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 93 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35073,7 +35306,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 94 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35239,7 +35472,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 95 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35313,7 +35546,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 96 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35427,7 +35660,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 97 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35541,7 +35774,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 98 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35634,7 +35867,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 99 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35707,7 +35940,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 100 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35770,7 +36003,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 101 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35903,7 +36136,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 102 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35996,7 +36229,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 103 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36067,7 +36300,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 104 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36133,7 +36366,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 105 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36257,7 +36490,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 106 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36351,7 +36584,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 107 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36446,7 +36679,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 108 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36508,7 +36741,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 109 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36570,7 +36803,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 110 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36720,7 +36953,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 111 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36782,7 +37015,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 112 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36865,7 +37098,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 113 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36937,7 +37170,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 114 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37068,7 +37301,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 115 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37177,7 +37410,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 116 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37285,7 +37518,7 @@ exports.newAxiosInstance = newAxiosInstance;
 }));
 
 /***/ },
-/* 117 */
+/* 122 */
 /***/ function(module, exports) {
 
 // shim for using process in browser
@@ -37471,7 +37704,7 @@ process.umask = function() { return 0; };
 
 
 /***/ },
-/* 118 */
+/* 123 */
 /***/ function(module, exports) {
 
 module.exports = function(module) {
@@ -37497,7 +37730,7 @@ module.exports = function(module) {
 
 
 /***/ },
-/* 119 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37507,35 +37740,29 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getAllEntitiesOfType = getAllEntitiesOfType;
-exports.getAllEntitiesOfTypeUrl = getAllEntitiesOfTypeUrl;
-exports.getAllEntitiesOfTypes = getAllEntitiesOfTypes;
+exports.getAllEntitiesOfTypeFileUrl = getAllEntitiesOfTypeFileUrl;
 exports.getAllEntitiesOfTypeInSet = getAllEntitiesOfTypeInSet;
-exports.getAllEntitiesOfTypeInSetUrl = getAllEntitiesOfTypeInSetUrl;
+exports.getAllEntitiesOfTypeInSetFileUrl = getAllEntitiesOfTypeInSetFileUrl;
+exports.getAllEntitiesOfTypes = getAllEntitiesOfTypes;
 exports.createEntity = createEntity;
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(16);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Logger = __webpack_require__(3);
+var _Logger = __webpack_require__(6);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiEndpoints = __webpack_require__(9);
+var _ApiEndpoints = __webpack_require__(14);
 
-var _AxiosUtils = __webpack_require__(11);
+var _ApiNames = __webpack_require__(5);
+
+var _AxiosUtils = __webpack_require__(17);
 
 var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('DataApi');
-
-/*
- *
- * constants
- *
- */
 
 /**
  * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
@@ -37550,6 +37777,14 @@ var LOG = new _Logger2.default('DataApi');
  * @example
  * import { DataApi } from 'loom-data';
  * // DataApi.get...
+ */
+
+var LOG = new _Logger2.default('DataApi');
+
+/*
+ *
+ * constants
+ *
  */
 
 var ENTITY_DATA_PATH = 'entitydata';
@@ -37580,7 +37815,7 @@ function getAllEntitiesOfType(entityTypeFqn) {
   var name = entityTypeFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).get('/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.DATA_API)).get('/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -37593,16 +37828,16 @@ function getAllEntitiesOfType(entityTypeFqn) {
  * @static
  * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} fileType - the format in which to download the data
- * @returns {String} - the file download URL
+ * @param {string} fileType - the format in which to download the data
+ * @returns {string} - the file download URL
  *
  * @example
- * DataApi.getAllEntitiesOfTypeUrl(
+ * DataApi.getAllEntitiesOfTypeFileUrl(
  *   { namespace: "LOOM", name: "MyEntity" },
  *   "json"
  * );
  */
-function getAllEntitiesOfTypeUrl(entityTypeFqn, fileType) {
+function getAllEntitiesOfTypeFileUrl(entityTypeFqn, fileType) {
 
   if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
     return null;
@@ -37611,7 +37846,74 @@ function getAllEntitiesOfTypeUrl(entityTypeFqn, fileType) {
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
-  return (0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API) + '/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType;
+  return (0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType;
+}
+
+/**
+ * `GET /entitydata/{namespace}/{name}/{name}`
+ *
+ * Gets all entity data in the EntitySet defined by the given EntityType FQN.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @returns {Promise}
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeInSet({
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "MyEntityCollection"
+ * });
+ */
+function getAllEntitiesOfTypeInSet(entityTypeFqn, entitySetName) {
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  var namespace = entityTypeFqn.namespace;
+  var name = entityTypeFqn.name;
+
+
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.DATA_API)).get('/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
+ * EntityType FQN.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @returns {string} - the file download URL
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeInSetFileUrl({
+ *   { namespace: "LOOM", name: "MyEntity" },
+ *   "MyEntityCollection",
+ *   "json"
+ * });
+ */
+function getAllEntitiesOfTypeInSetFileUrl(entityTypeFqn, entitySetName, fileType) {
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn) || !(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return null;
+  }
+
+  var namespace = entityTypeFqn.namespace;
+  var name = entityTypeFqn.name;
+
+  return (0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + fileType;
 }
 
 /**
@@ -37640,78 +37942,11 @@ function getAllEntitiesOfTypes(entityTypeFqns) {
     return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
   }
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).put('/' + ENTITY_DATA_PATH + '/' + MULTIPLE_PATH, entityTypeFqns).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.DATA_API)).put('/' + ENTITY_DATA_PATH + '/' + MULTIPLE_PATH, entityTypeFqns).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
   });
-}
-
-/**
- * `GET /entitydata/{namespace}/{name}/{name}`
- *
- * Gets all entity data in the EntitySet defined by the given EntityType FQN.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} entitySetName - the value of the "name" field of the EntitySet
- * @returns {Promise}
- *
- * @example
- * DataApi.getAllEntitiesOfTypeInSet({
- *   { namespace: "LOOM", name: "MyEntity" },
- *   "MyEntityCollection"
- * });
- */
-function getAllEntitiesOfTypeInSet(entityTypeFqn, entitySetName) {
-
-  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  var namespace = entityTypeFqn.namespace;
-  var name = entityTypeFqn.name;
-
-
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).get('/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
-  });
-}
-
-/**
- * Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
- * EntityType FQN.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {String} entitySetName - the value of the "name" field of the EntitySet
- * @returns {String} - the file download URL
- *
- * @example
- * DataApi.getAllEntitiesOfTypeInSetUrl({
- *   { namespace: "LOOM", name: "MyEntity" },
- *   "MyEntityCollection",
- *   "json"
- * });
- */
-function getAllEntitiesOfTypeInSetUrl(entityTypeFqn, entitySetName, fileType) {
-
-  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn) || !(0, _LangUtils.isNonEmptyString)(entitySetName)) {
-    return null;
-  }
-
-  var namespace = entityTypeFqn.namespace;
-  var name = entityTypeFqn.name;
-
-  return (0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API) + '/' + ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + fileType;
 }
 
 /**
@@ -37729,9 +37964,9 @@ function getAllEntitiesOfTypeInSetUrl(entityTypeFqn, entitySetName, fileType) {
  * DataApi.createEntity({
  *   type: { namespace: "LOOM", name: "MyEntity" },
  *   entitySetName: "MyEntityCollection",
- *   properties: [{
- *     "LOOM.MyPropertyType": "value"
- *   }]
+ *   properties: [
+ *     { "LOOM.MyProperty": "value" }
+ *   ]
  * });
  *
  * @example
@@ -37739,15 +37974,15 @@ function getAllEntitiesOfTypeInSetUrl(entityTypeFqn, entitySetName, fileType) {
  * DataApi.createEntity({
  *   type: { namespace: "LOOM", name: "MyEntity" },
  *   entitySetName: "MyEntityCollection",
- *   properties: [{
- *     { "LOOM.MyPropertyType": "value1" },
- *     { "LOOM.MyPropertyType": "value2" },
- *   }]
+ *   properties: [
+ *     { "LOOM.MyProperty": "value1" },
+ *     { "LOOM.MyProperty": "value2" },
+ *   ]
  * });
  */
 function createEntity(createEntityRequest) {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.DATA_API)).post('/' + ENTITY_DATA_PATH, createEntityRequest).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.DATA_API)).post('/' + ENTITY_DATA_PATH, createEntityRequest).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -37755,7 +37990,7 @@ function createEntity(createEntityRequest) {
 }
 
 /***/ },
-/* 120 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37767,7 +38002,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.getEntityDataModel = getEntityDataModel;
 exports.getSchema = getSchema;
 exports.getAllSchemas = getAllSchemas;
-exports.getSchemasInNamespace = getSchemasInNamespace;
+exports.getAllSchemasInNamespace = getAllSchemasInNamespace;
 exports.createSchema = createSchema;
 exports.addEntityTypesToSchema = addEntityTypesToSchema;
 exports.removeEntityTypesFromSchema = removeEntityTypesFromSchema;
@@ -37783,27 +38018,27 @@ exports.addPropertyTypesToEntityType = addPropertyTypesToEntityType;
 exports.removePropertyTypesFromEntityType = removePropertyTypesFromEntityType;
 exports.getPropertyType = getPropertyType;
 exports.getAllPropertyTypes = getAllPropertyTypes;
-exports.getPropertyTypesInNamespace = getPropertyTypesInNamespace;
+exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
 exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(16);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Logger = __webpack_require__(3);
+var _Logger = __webpack_require__(6);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiEndpoints = __webpack_require__(9);
+var _ApiEndpoints = __webpack_require__(14);
 
-var _AxiosUtils = __webpack_require__(11);
+var _ApiNames = __webpack_require__(5);
+
+var _AxiosUtils = __webpack_require__(17);
 
 var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('EntityDataModelApi');
 
 /**
  * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
@@ -37819,6 +38054,8 @@ var LOG = new _Logger2.default('EntityDataModelApi');
  * import { EntityDataModelApi } from 'loom-data';
  * // EntityDataModelApi.get...
  */
+
+var LOG = new _Logger2.default('EntityDataModelApi');
 
 var SCHEMA_PATH = 'schema';
 var ENTITY_SET_PATH = 'entity/set';
@@ -37844,7 +38081,7 @@ var DELETE_PROPERTY_TYPES_PATH = 'deletePropertyTypes';
  */
 function getEntityDataModel() {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/').then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/').then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -37882,7 +38119,7 @@ function getSchema(schemaFqn) {
   var name = schemaFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -37903,7 +38140,7 @@ function getSchema(schemaFqn) {
  */
 function getAllSchemas() {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + SCHEMA_PATH).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + SCHEMA_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -37917,19 +38154,19 @@ function getAllSchemas() {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @param {string} namespace - the substring before the dot in a FullyQualifiedName String
  * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
  *
  * @example
- * EntityDataModelApi.getSchemasInNamespace("LOOM");
+ * EntityDataModelApi.getAllSchemasInNamespace("LOOM");
  */
-function getSchemasInNamespace(namespace) {
+function getAllSchemasInNamespace(namespace) {
 
   if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
     return Promise.reject('invalid parameter: namespace must be a non-empty string');
   }
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -37957,7 +38194,7 @@ function createSchema(schemaFqn) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).put('/' + SCHEMA_PATH, schemaFqn).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).put('/' + SCHEMA_PATH, schemaFqn).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38002,7 +38239,7 @@ function addEntityTypesToSchema(schemaFqn, entityTypeFqns) {
   var name = schemaFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).put('/' + SCHEMA_PATH + '/' + namespace + '/' + name, entityTypeFqns).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).put('/' + SCHEMA_PATH + '/' + namespace + '/' + name, entityTypeFqns).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38047,7 +38284,7 @@ function removeEntityTypesFromSchema(schemaFqn, entityTypeFqns) {
   var name = schemaFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).delete('/' + SCHEMA_PATH + '/' + namespace + '/' + name, {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).delete('/' + SCHEMA_PATH + '/' + namespace + '/' + name, {
     data: entityTypeFqns
   }).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -38094,7 +38331,7 @@ function addPropertyTypesToSchema(schemaFqn, propertyTypeFqns) {
   var name = schemaFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).put('/' + SCHEMA_PATH + '/' + namespace + '/' + name + '/' + ADD_PROPERTY_TYPES_PATH, propertyTypeFqns).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).put('/' + SCHEMA_PATH + '/' + namespace + '/' + name + '/' + ADD_PROPERTY_TYPES_PATH, propertyTypeFqns).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38139,7 +38376,7 @@ function removePropertyTypesFromSchema(schemaFqn, propertyTypeFqns) {
   var name = schemaFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).delete('/' + SCHEMA_PATH + '/' + namespace + '/' + name + '/' + DELETE_PROPERTY_TYPES_PATH, {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).delete('/' + SCHEMA_PATH + '/' + namespace + '/' + name + '/' + DELETE_PROPERTY_TYPES_PATH, {
     data: propertyTypeFqns
   }).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -38168,7 +38405,7 @@ function removePropertyTypesFromSchema(schemaFqn, propertyTypeFqns) {
  */
 function getAllEntitySets() {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + ENTITY_SET_PATH).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + ENTITY_SET_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38196,7 +38433,7 @@ function getAllEntitySets() {
  */
 function createEntitySets(entitySets) {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).post('/' + ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).post('/' + ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38234,7 +38471,7 @@ function getEntityType(entityTypeFqn) {
   var name = entityTypeFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38255,7 +38492,7 @@ function getEntityType(entityTypeFqn) {
  */
 function getAllEntityTypes() {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + ENTITY_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + ENTITY_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38278,12 +38515,12 @@ function getAllEntityTypes() {
  *     namespace: "LOOM",
  *     type: "MyEntity",
  *     key: [
- *       { namespace: "LOOM", name: "MyProperty1" }
+ *       { namespace: "LOOM", name: "MyProperty1" },
  *       { namespace: "LOOM", name: "MyProperty2" }
  *     ],
  *     properties: [
- *       { namespace: "LOOM", name: "MyProperty1" }
- *       { namespace: "LOOM", name: "MyProperty2" }
+ *       { namespace: "LOOM", name: "MyProperty1" },
+ *       { namespace: "LOOM", name: "MyProperty2" },
  *       { namespace: "LOOM", name: "MyProperty3" }
  *     ]
  *   }
@@ -38291,7 +38528,7 @@ function getAllEntityTypes() {
  */
 function createEntityType(entityType) {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).post('/' + ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).post('/' + ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38323,7 +38560,7 @@ function deleteEntityType(entityTypeFqn) {
   var name = entityTypeFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).delete('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).delete('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38368,7 +38605,7 @@ function addPropertyTypesToEntityType(entityTypeFqn, propertyTypeFqns) {
   var name = entityTypeFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).put('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name + '/' + ADD_PROPERTY_TYPES_PATH, propertyTypeFqns).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).put('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name + '/' + ADD_PROPERTY_TYPES_PATH, propertyTypeFqns).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38413,7 +38650,7 @@ function removePropertyTypesFromEntityType(entityTypeFqn, propertyTypeFqns) {
   var name = entityTypeFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).delete('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name + '/' + DELETE_PROPERTY_TYPES_PATH, {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).delete('/' + ENTITY_TYPE_PATH + '/' + namespace + '/' + name + '/' + DELETE_PROPERTY_TYPES_PATH, {
     data: propertyTypeFqns
   }).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -38453,7 +38690,7 @@ function getPropertyType(propertyTypeFqn) {
   var name = propertyTypeFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38474,7 +38711,7 @@ function getPropertyType(propertyTypeFqn) {
  */
 function getAllPropertyTypes() {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + PROPERTY_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + PROPERTY_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38488,19 +38725,19 @@ function getAllPropertyTypes() {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {String} namespace - the substring before the dot in a FullyQualifiedName String
+ * @param {string} namespace - the substring before the dot in a FullyQualifiedName String
  * @return {Promise<Object[]>} - a Promise that will resolve with all PropertyType definitions as its fulfillment value
  *
  * @example
- * EntityDataModelApi.getPropertyTypesInNamespace("LOOM");
+ * EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
  */
-function getPropertyTypesInNamespace(namespace) {
+function getAllPropertyTypesInNamespace(namespace) {
 
   if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
     return Promise.reject('invalid parameter: namespace must be a non-empty string');
   }
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).get('/' + PROPERTY_TYPE_PATH + '/' + namespace).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).get('/' + PROPERTY_TYPE_PATH + '/' + namespace).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38529,7 +38766,7 @@ function getPropertyTypesInNamespace(namespace) {
  */
 function createPropertyType(propertyType) {
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).post('/' + PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).post('/' + PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38561,7 +38798,7 @@ function deletePropertyType(propertyTypeFqn) {
   var name = propertyTypeFqn.name;
 
 
-  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiEndpoints.EDM_API)).delete('/' + PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getAxiosInstance)((0, _ApiEndpoints.getApiBaseUrl)(_ApiNames.EDM_API)).delete('/' + PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38569,21 +38806,21 @@ function deletePropertyType(propertyTypeFqn) {
 }
 
 /***/ },
-/* 121 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(122);
+module.exports = __webpack_require__(127);
 
 /***/ },
-/* 122 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 'use strict';
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(8);
-var Axios = __webpack_require__(123);
+var bind = __webpack_require__(13);
+var Axios = __webpack_require__(129);
 
 /**
  * Create an instance of Axios
@@ -38615,11 +38852,16 @@ axios.create = function create(defaultConfig) {
   return createInstance(defaultConfig);
 };
 
+// Expose Cancel & CancelToken
+axios.Cancel = __webpack_require__(9);
+axios.CancelToken = __webpack_require__(128);
+axios.isCancel = __webpack_require__(10);
+
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(138);
+axios.spread = __webpack_require__(143);
 
 module.exports = axios;
 
@@ -38628,18 +38870,82 @@ module.exports.default = axios;
 
 
 /***/ },
-/* 123 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 'use strict';
 
-var defaults = __webpack_require__(129);
+var Cancel = __webpack_require__(9);
+
+/**
+ * A `CancelToken` is an object that can be used to request cancellation of an operation.
+ *
+ * @class
+ * @param {Function} executor The executor function.
+ */
+function CancelToken(executor) {
+  if (typeof executor !== 'function') {
+    throw new TypeError('executor must be a function.');
+  }
+
+  var resolvePromise;
+  this.promise = new Promise(function promiseExecutor(resolve) {
+    resolvePromise = resolve;
+  });
+
+  var token = this;
+  executor(function cancel(message) {
+    if (token.reason) {
+      // Cancellation has already been requested
+      return;
+    }
+
+    token.reason = new Cancel(message);
+    resolvePromise(token.reason);
+  });
+}
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+  if (this.reason) {
+    throw this.reason;
+  }
+};
+
+/**
+ * Returns an object that contains a new `CancelToken` and a function that, when called,
+ * cancels the `CancelToken`.
+ */
+CancelToken.source = function source() {
+  var cancel;
+  var token = new CancelToken(function executor(c) {
+    cancel = c;
+  });
+  return {
+    token: token,
+    cancel: cancel
+  };
+};
+
+module.exports = CancelToken;
+
+
+/***/ },
+/* 129 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+var defaults = __webpack_require__(12);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(124);
-var dispatchRequest = __webpack_require__(125);
-var isAbsoluteURL = __webpack_require__(134);
-var combineURLs = __webpack_require__(132);
+var InterceptorManager = __webpack_require__(130);
+var dispatchRequest = __webpack_require__(131);
+var isAbsoluteURL = __webpack_require__(139);
+var combineURLs = __webpack_require__(137);
 
 /**
  * Create a new instance of Axios
@@ -38720,7 +39026,7 @@ module.exports = Axios;
 
 
 /***/ },
-/* 124 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38779,23 +39085,35 @@ module.exports = InterceptorManager;
 
 
 /***/ },
-/* 125 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+'use strict';
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(128);
+var transformData = __webpack_require__(134);
+var isCancel = __webpack_require__(10);
+var defaults = __webpack_require__(12);
 
 /**
- * Dispatch a request to the server using whichever adapter
- * is supported by the current environment.
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+function throwIfCancellationRequested(config) {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested();
+  }
+}
+
+/**
+ * Dispatch a request to the server using the configured adapter.
  *
  * @param {object} config The config that is to be used for the request
  * @returns {Promise} The Promise to be fulfilled
  */
 module.exports = function dispatchRequest(config) {
+  throwIfCancellationRequested(config);
+
   // Ensure headers exist
   config.headers = config.headers || {};
 
@@ -38820,49 +39138,40 @@ module.exports = function dispatchRequest(config) {
     }
   );
 
-  var adapter;
+  var adapter = config.adapter || defaults.adapter;
 
-  if (typeof config.adapter === 'function') {
-    // For custom adapter support
-    adapter = config.adapter;
-  } else if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(6);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(6);
-  }
+  return adapter(config).then(function onAdapterResolution(response) {
+    throwIfCancellationRequested(config);
 
-  return Promise.resolve(config)
-    // Wrap synchronous adapter errors and pass configuration
-    .then(adapter)
-    .then(function onFulfilled(response) {
+    // Transform response data
+    response.data = transformData(
+      response.data,
+      response.headers,
+      config.transformResponse
+    );
+
+    return response;
+  }, function onAdapterRejection(reason) {
+    if (!isCancel(reason)) {
+      throwIfCancellationRequested(config);
+
       // Transform response data
-      response.data = transformData(
-        response.data,
-        response.headers,
-        config.transformResponse
-      );
-
-      return response;
-    }, function onRejected(error) {
-      // Transform response data
-      if (error && error.response) {
-        error.response.data = transformData(
-          error.response.data,
-          error.response.headers,
+      if (reason && reason.response) {
+        reason.response.data = transformData(
+          reason.response.data,
+          reason.response.headers,
           config.transformResponse
         );
       }
+    }
 
-      return Promise.reject(error);
-    });
+    return Promise.reject(reason);
+  });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(117)))
 
 /***/ },
-/* 126 */
+/* 132 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -38888,13 +39197,13 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ },
-/* 127 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 'use strict';
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(11);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -38920,7 +39229,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ },
-/* 128 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38947,86 +39256,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ },
-/* 129 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(136);
-
-var PROTECTION_PREFIX = /^\)\]\}',?\n/;
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-module.exports = {
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      data = data.replace(PROTECTION_PREFIX, '');
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  headers: {
-    common: {
-      'Accept': 'application/json, text/plain, */*'
-    },
-    patch: utils.merge(DEFAULT_CONTENT_TYPE),
-    post: utils.merge(DEFAULT_CONTENT_TYPE),
-    put: utils.merge(DEFAULT_CONTENT_TYPE)
-  },
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-
-/***/ },
-/* 130 */
+/* 135 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -39069,7 +39299,7 @@ module.exports = btoa;
 
 
 /***/ },
-/* 131 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39144,7 +39374,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ },
-/* 132 */
+/* 137 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -39163,7 +39393,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ },
-/* 133 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39223,7 +39453,7 @@ module.exports = (
 
 
 /***/ },
-/* 134 */
+/* 139 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -39244,7 +39474,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ },
-/* 135 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39319,7 +39549,7 @@ module.exports = (
 
 
 /***/ },
-/* 136 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39338,7 +39568,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ },
-/* 137 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39382,7 +39612,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ },
-/* 138 */
+/* 143 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -39416,7 +39646,7 @@ module.exports = function spread(callback) {
 
 
 /***/ },
-/* 139 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -39645,218 +39875,218 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 /***/ },
-/* 140 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 13,
-	"./af.js": 13,
-	"./ar": 18,
-	"./ar-ly": 14,
-	"./ar-ly.js": 14,
-	"./ar-ma": 15,
-	"./ar-ma.js": 15,
-	"./ar-sa": 16,
-	"./ar-sa.js": 16,
-	"./ar-tn": 17,
-	"./ar-tn.js": 17,
-	"./ar.js": 18,
-	"./az": 19,
-	"./az.js": 19,
-	"./be": 20,
-	"./be.js": 20,
-	"./bg": 21,
-	"./bg.js": 21,
-	"./bn": 22,
-	"./bn.js": 22,
-	"./bo": 23,
-	"./bo.js": 23,
-	"./br": 24,
-	"./br.js": 24,
-	"./bs": 25,
-	"./bs.js": 25,
-	"./ca": 26,
-	"./ca.js": 26,
-	"./cs": 27,
-	"./cs.js": 27,
-	"./cv": 28,
-	"./cv.js": 28,
-	"./cy": 29,
-	"./cy.js": 29,
-	"./da": 30,
-	"./da.js": 30,
-	"./de": 32,
-	"./de-at": 31,
-	"./de-at.js": 31,
-	"./de.js": 32,
-	"./dv": 33,
-	"./dv.js": 33,
-	"./el": 34,
-	"./el.js": 34,
-	"./en-au": 35,
-	"./en-au.js": 35,
-	"./en-ca": 36,
-	"./en-ca.js": 36,
-	"./en-gb": 37,
-	"./en-gb.js": 37,
-	"./en-ie": 38,
-	"./en-ie.js": 38,
-	"./en-nz": 39,
-	"./en-nz.js": 39,
-	"./eo": 40,
-	"./eo.js": 40,
-	"./es": 42,
-	"./es-do": 41,
-	"./es-do.js": 41,
-	"./es.js": 42,
-	"./et": 43,
-	"./et.js": 43,
-	"./eu": 44,
-	"./eu.js": 44,
-	"./fa": 45,
-	"./fa.js": 45,
-	"./fi": 46,
-	"./fi.js": 46,
-	"./fo": 47,
-	"./fo.js": 47,
-	"./fr": 50,
-	"./fr-ca": 48,
-	"./fr-ca.js": 48,
-	"./fr-ch": 49,
-	"./fr-ch.js": 49,
-	"./fr.js": 50,
-	"./fy": 51,
-	"./fy.js": 51,
-	"./gd": 52,
-	"./gd.js": 52,
-	"./gl": 53,
-	"./gl.js": 53,
-	"./he": 54,
-	"./he.js": 54,
-	"./hi": 55,
-	"./hi.js": 55,
-	"./hr": 56,
-	"./hr.js": 56,
-	"./hu": 57,
-	"./hu.js": 57,
-	"./hy-am": 58,
-	"./hy-am.js": 58,
-	"./id": 59,
-	"./id.js": 59,
-	"./is": 60,
-	"./is.js": 60,
-	"./it": 61,
-	"./it.js": 61,
-	"./ja": 62,
-	"./ja.js": 62,
-	"./jv": 63,
-	"./jv.js": 63,
-	"./ka": 64,
-	"./ka.js": 64,
-	"./kk": 65,
-	"./kk.js": 65,
-	"./km": 66,
-	"./km.js": 66,
-	"./ko": 67,
-	"./ko.js": 67,
-	"./ky": 68,
-	"./ky.js": 68,
-	"./lb": 69,
-	"./lb.js": 69,
-	"./lo": 70,
-	"./lo.js": 70,
-	"./lt": 71,
-	"./lt.js": 71,
-	"./lv": 72,
-	"./lv.js": 72,
-	"./me": 73,
-	"./me.js": 73,
-	"./mi": 74,
-	"./mi.js": 74,
-	"./mk": 75,
-	"./mk.js": 75,
-	"./ml": 76,
-	"./ml.js": 76,
-	"./mr": 77,
-	"./mr.js": 77,
-	"./ms": 79,
-	"./ms-my": 78,
-	"./ms-my.js": 78,
-	"./ms.js": 79,
-	"./my": 80,
-	"./my.js": 80,
-	"./nb": 81,
-	"./nb.js": 81,
-	"./ne": 82,
-	"./ne.js": 82,
-	"./nl": 83,
-	"./nl.js": 83,
-	"./nn": 84,
-	"./nn.js": 84,
-	"./pa-in": 85,
-	"./pa-in.js": 85,
-	"./pl": 86,
-	"./pl.js": 86,
-	"./pt": 88,
-	"./pt-br": 87,
-	"./pt-br.js": 87,
-	"./pt.js": 88,
-	"./ro": 89,
-	"./ro.js": 89,
-	"./ru": 90,
-	"./ru.js": 90,
-	"./se": 91,
-	"./se.js": 91,
-	"./si": 92,
-	"./si.js": 92,
-	"./sk": 93,
-	"./sk.js": 93,
-	"./sl": 94,
-	"./sl.js": 94,
-	"./sq": 95,
-	"./sq.js": 95,
-	"./sr": 97,
-	"./sr-cyrl": 96,
-	"./sr-cyrl.js": 96,
-	"./sr.js": 97,
-	"./ss": 98,
-	"./ss.js": 98,
-	"./sv": 99,
-	"./sv.js": 99,
-	"./sw": 100,
-	"./sw.js": 100,
-	"./ta": 101,
-	"./ta.js": 101,
-	"./te": 102,
-	"./te.js": 102,
-	"./th": 103,
-	"./th.js": 103,
-	"./tl-ph": 104,
-	"./tl-ph.js": 104,
-	"./tlh": 105,
-	"./tlh.js": 105,
-	"./tr": 106,
-	"./tr.js": 106,
-	"./tzl": 107,
-	"./tzl.js": 107,
-	"./tzm": 109,
-	"./tzm-latn": 108,
-	"./tzm-latn.js": 108,
-	"./tzm.js": 109,
-	"./uk": 110,
-	"./uk.js": 110,
-	"./uz": 111,
-	"./uz.js": 111,
-	"./vi": 112,
-	"./vi.js": 112,
-	"./x-pseudo": 113,
-	"./x-pseudo.js": 113,
-	"./zh-cn": 114,
-	"./zh-cn.js": 114,
-	"./zh-hk": 115,
-	"./zh-hk.js": 115,
-	"./zh-tw": 116,
-	"./zh-tw.js": 116
+	"./af": 18,
+	"./af.js": 18,
+	"./ar": 23,
+	"./ar-ly": 19,
+	"./ar-ly.js": 19,
+	"./ar-ma": 20,
+	"./ar-ma.js": 20,
+	"./ar-sa": 21,
+	"./ar-sa.js": 21,
+	"./ar-tn": 22,
+	"./ar-tn.js": 22,
+	"./ar.js": 23,
+	"./az": 24,
+	"./az.js": 24,
+	"./be": 25,
+	"./be.js": 25,
+	"./bg": 26,
+	"./bg.js": 26,
+	"./bn": 27,
+	"./bn.js": 27,
+	"./bo": 28,
+	"./bo.js": 28,
+	"./br": 29,
+	"./br.js": 29,
+	"./bs": 30,
+	"./bs.js": 30,
+	"./ca": 31,
+	"./ca.js": 31,
+	"./cs": 32,
+	"./cs.js": 32,
+	"./cv": 33,
+	"./cv.js": 33,
+	"./cy": 34,
+	"./cy.js": 34,
+	"./da": 35,
+	"./da.js": 35,
+	"./de": 37,
+	"./de-at": 36,
+	"./de-at.js": 36,
+	"./de.js": 37,
+	"./dv": 38,
+	"./dv.js": 38,
+	"./el": 39,
+	"./el.js": 39,
+	"./en-au": 40,
+	"./en-au.js": 40,
+	"./en-ca": 41,
+	"./en-ca.js": 41,
+	"./en-gb": 42,
+	"./en-gb.js": 42,
+	"./en-ie": 43,
+	"./en-ie.js": 43,
+	"./en-nz": 44,
+	"./en-nz.js": 44,
+	"./eo": 45,
+	"./eo.js": 45,
+	"./es": 47,
+	"./es-do": 46,
+	"./es-do.js": 46,
+	"./es.js": 47,
+	"./et": 48,
+	"./et.js": 48,
+	"./eu": 49,
+	"./eu.js": 49,
+	"./fa": 50,
+	"./fa.js": 50,
+	"./fi": 51,
+	"./fi.js": 51,
+	"./fo": 52,
+	"./fo.js": 52,
+	"./fr": 55,
+	"./fr-ca": 53,
+	"./fr-ca.js": 53,
+	"./fr-ch": 54,
+	"./fr-ch.js": 54,
+	"./fr.js": 55,
+	"./fy": 56,
+	"./fy.js": 56,
+	"./gd": 57,
+	"./gd.js": 57,
+	"./gl": 58,
+	"./gl.js": 58,
+	"./he": 59,
+	"./he.js": 59,
+	"./hi": 60,
+	"./hi.js": 60,
+	"./hr": 61,
+	"./hr.js": 61,
+	"./hu": 62,
+	"./hu.js": 62,
+	"./hy-am": 63,
+	"./hy-am.js": 63,
+	"./id": 64,
+	"./id.js": 64,
+	"./is": 65,
+	"./is.js": 65,
+	"./it": 66,
+	"./it.js": 66,
+	"./ja": 67,
+	"./ja.js": 67,
+	"./jv": 68,
+	"./jv.js": 68,
+	"./ka": 69,
+	"./ka.js": 69,
+	"./kk": 70,
+	"./kk.js": 70,
+	"./km": 71,
+	"./km.js": 71,
+	"./ko": 72,
+	"./ko.js": 72,
+	"./ky": 73,
+	"./ky.js": 73,
+	"./lb": 74,
+	"./lb.js": 74,
+	"./lo": 75,
+	"./lo.js": 75,
+	"./lt": 76,
+	"./lt.js": 76,
+	"./lv": 77,
+	"./lv.js": 77,
+	"./me": 78,
+	"./me.js": 78,
+	"./mi": 79,
+	"./mi.js": 79,
+	"./mk": 80,
+	"./mk.js": 80,
+	"./ml": 81,
+	"./ml.js": 81,
+	"./mr": 82,
+	"./mr.js": 82,
+	"./ms": 84,
+	"./ms-my": 83,
+	"./ms-my.js": 83,
+	"./ms.js": 84,
+	"./my": 85,
+	"./my.js": 85,
+	"./nb": 86,
+	"./nb.js": 86,
+	"./ne": 87,
+	"./ne.js": 87,
+	"./nl": 88,
+	"./nl.js": 88,
+	"./nn": 89,
+	"./nn.js": 89,
+	"./pa-in": 90,
+	"./pa-in.js": 90,
+	"./pl": 91,
+	"./pl.js": 91,
+	"./pt": 93,
+	"./pt-br": 92,
+	"./pt-br.js": 92,
+	"./pt.js": 93,
+	"./ro": 94,
+	"./ro.js": 94,
+	"./ru": 95,
+	"./ru.js": 95,
+	"./se": 96,
+	"./se.js": 96,
+	"./si": 97,
+	"./si.js": 97,
+	"./sk": 98,
+	"./sk.js": 98,
+	"./sl": 99,
+	"./sl.js": 99,
+	"./sq": 100,
+	"./sq.js": 100,
+	"./sr": 102,
+	"./sr-cyrl": 101,
+	"./sr-cyrl.js": 101,
+	"./sr.js": 102,
+	"./ss": 103,
+	"./ss.js": 103,
+	"./sv": 104,
+	"./sv.js": 104,
+	"./sw": 105,
+	"./sw.js": 105,
+	"./ta": 106,
+	"./ta.js": 106,
+	"./te": 107,
+	"./te.js": 107,
+	"./th": 108,
+	"./th.js": 108,
+	"./tl-ph": 109,
+	"./tl-ph.js": 109,
+	"./tlh": 110,
+	"./tlh.js": 110,
+	"./tr": 111,
+	"./tr.js": 111,
+	"./tzl": 112,
+	"./tzl.js": 112,
+	"./tzm": 114,
+	"./tzm-latn": 113,
+	"./tzm-latn.js": 113,
+	"./tzm.js": 114,
+	"./uk": 115,
+	"./uk.js": 115,
+	"./uz": 116,
+	"./uz.js": 116,
+	"./vi": 117,
+	"./vi.js": 117,
+	"./x-pseudo": 118,
+	"./x-pseudo.js": 118,
+	"./zh-cn": 119,
+	"./zh-cn.js": 119,
+	"./zh-hk": 120,
+	"./zh-hk.js": 120,
+	"./zh-tw": 121,
+	"./zh-tw.js": 121
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -39872,11 +40102,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 140;
+webpackContext.id = 145;
 
 
 /***/ },
-/* 141 */
+/* 146 */
 /***/ function(module, exports) {
 
 var g;
@@ -39901,7 +40131,7 @@ module.exports = g;
 
 
 /***/ },
-/* 142 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39912,19 +40142,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.EntityDataModelApi = exports.DataApi = exports.configure = exports.version = undefined;
 
-var _DataApi = __webpack_require__(119);
+var _DataApi = __webpack_require__(124);
 
 var DataApi = _interopRequireWildcard(_DataApi);
 
-var _EntityDataModelApi = __webpack_require__(120);
+var _EntityDataModelApi = __webpack_require__(125);
 
 var EntityDataModelApi = _interopRequireWildcard(_EntityDataModelApi);
 
-var _Configuration = __webpack_require__(5);
+var _Configuration = __webpack_require__(4);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.5.1";
+var version = "v0.6.0";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
