@@ -2,6 +2,10 @@
 
 import webpackConfig from '../webpack/webpack.config.babel.js';
 
+import {
+  ifTest
+} from '../env.js';
+
 export default function getBaseKarmaConfig(theKarmaConfigObject :Object) {
 
   return {
@@ -105,6 +109,6 @@ export default function getBaseKarmaConfig(theKarmaConfigObject :Object) {
      *   config.LOG_INFO
      *   config.LOG_DEBUG
      */
-    logLevel: theKarmaConfigObject.LOG_DEBUG
+    logLevel: ifTest(theKarmaConfigObject.LOG_WARN, theKarmaConfigObject.LOG_DEBUG)
   };
 }
