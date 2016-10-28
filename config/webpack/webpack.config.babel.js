@@ -14,6 +14,7 @@ import LIB_PATHS from '../lib.paths.js';
 import {
   isDev,
   isProd,
+  isTest,
   ifDev,
   ifProd,
   ifMin,
@@ -57,6 +58,7 @@ const BANNER_PLUGIN = new Webpack.BannerPlugin({
 const DEFINE_PLUGIN = new Webpack.DefinePlugin({
   __DEV__: JSON.stringify(isDev),
   __PROD__: JSON.stringify(isProd),
+  __TEST__: JSON.stringify(isTest),
   __VERSION__: JSON.stringify(`v${PACKAGE.version}`)
 });
 
