@@ -40,16 +40,17 @@ type ConfigurationObject = {
 };
 
 /**
+ * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
+ * result in the same base URL:
+ *   - "http://api.loom.digital"
+ *   - "api.loom.digital"
+ *   - "loom.digital"
+ *   - "api"
+ *
  * @memberof loom-data.Configuration
- * @param {Object} config
+ * @param {Object} config - an object literal containing all configuration options
  * @param {String} config.authToken - a Base64-encoded JWT auth token
  * @param {String} config.baseUrl - (optional) a full URL, or a simple URL identifier, defaults to http://api.loom.digital
- *
- * @example
- * // baseUrl can be a full URL, or a simple URL identifier (substring)
- * {
- *   baseUrl: "http://api.loom.digital" || "api.loom.digital" || "loom.digital" || "api"
- * }
  */
 function configure(config :ConfigurationObject) {
 

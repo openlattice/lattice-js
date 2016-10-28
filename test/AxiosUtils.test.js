@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+
 import Axios from 'axios';
 
 import * as Config from '../src/config/Configuration';
@@ -22,7 +24,7 @@ beforeEach(() => {
   spyOn(Axios, 'create').and.callThrough();
 });
 
-fdescribe('AxiosUtils', () => {
+describe('AxiosUtils', () => {
 
   describe('getAxiosInstance()', () => {
 
