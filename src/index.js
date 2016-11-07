@@ -12,6 +12,7 @@
 
 import * as DataApi from './DataApi';
 import * as EntityDataModelApi from './EntityDataModelApi';
+import * as PermissionsApi from './PermissionsApi';
 
 import {
   configure
@@ -24,12 +25,14 @@ export {
   version,
   configure,
   DataApi,
-  EntityDataModelApi
+  EntityDataModelApi,
+  PermissionsApi
 };
 
 export default {
   version,
   configure,
   DataApi,
-  EntityDataModelApi
+  EntityDataModelApi,
+  PermissionsApi
 };

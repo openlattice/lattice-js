@@ -25,6 +25,15 @@ import {
 } from './constants/ApiNames';
 
 import {
+  SCHEMA_PATH,
+  ENTITY_SET_PATH,
+  ENTITY_TYPE_PATH,
+  PROPERTY_TYPE_PATH,
+  ADD_PROPERTY_TYPES_PATH,
+  DELETE_PROPERTY_TYPES_PATH
+} from './constants/ApiPaths';
+
+import {
   getApiAxiosInstance
 } from './utils/AxiosUtils';
 
@@ -33,13 +42,6 @@ import {
 } from './utils/LangUtils';
 
 const LOG = new Logger('EntityDataModelApi');
-
-const SCHEMA_PATH = 'schema';
-const ENTITY_SET_PATH = 'entity/set';
-const ENTITY_TYPE_PATH = 'entity/type';
-const PROPERTY_TYPE_PATH = 'property/type';
-const ADD_PROPERTY_TYPES_PATH = 'addPropertyTypes';
-const DELETE_PROPERTY_TYPES_PATH = 'deletePropertyTypes';
 
 /*
  *
@@ -517,7 +519,7 @@ export function getAllEntityTypes() :Promise<> {
  * EntityDataModelApi.createEntityType(
  *   {
  *     namespace: "LOOM",
- *     type: "MyEntity",
+ *     name: "MyEntity",
  *     key: [
  *       { namespace: "LOOM", name: "MyProperty1" },
  *       { namespace: "LOOM", name: "MyProperty2" }

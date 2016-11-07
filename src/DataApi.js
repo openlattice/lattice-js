@@ -25,6 +25,11 @@ import {
 } from './constants/ApiNames';
 
 import {
+  ENTITY_DATA_PATH,
+  MULTIPLE_PATH
+} from './constants/ApiPaths';
+
+import {
   getApiBaseUrl,
   getApiAxiosInstance
 } from './utils/AxiosUtils';
@@ -34,15 +39,6 @@ import {
 } from './utils/LangUtils';
 
 const LOG = new Logger('DataApi');
-
-/*
- *
- * constants
- *
- */
-
-const ENTITY_DATA_PATH = 'entitydata';
-const MULTIPLE_PATH = 'multiple';
 
 /**
  * `GET /entitydata/{namespace}/{name}`
