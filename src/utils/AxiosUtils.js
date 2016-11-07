@@ -13,12 +13,16 @@ import {
 
 import {
   DATA_API,
-  EDM_API
+  EDM_API,
+  PERMISSIONS_API
 } from '../constants/ApiNames';
 
-const DATA_PATH :string = 'data';
-const ONTOLOGY_PATH :string = 'ontology';
-const DATASTORE_PATH :string = 'datastore';
+import {
+  ACL_PATH,
+  DATA_PATH,
+  DATASTORE_PATH,
+  ONTOLOGY_PATH
+} from '../constants/ApiPaths';
 
 let baseUrlToAxiosInstanceMap :Map<string, Object> = Immutable.Map();
 
@@ -36,6 +40,8 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${ONTOLOGY_PATH}/${DATA_PATH}`;
     case EDM_API:
       return `${baseUrl}/${ONTOLOGY_PATH}`;
+    case PERMISSIONS_API:
+      return `${baseUrl}/${ACL_PATH}`;
     default:
       return baseUrl;
   }
