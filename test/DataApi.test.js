@@ -1,9 +1,11 @@
-import * as ApiEndpoints from '../src/config/ApiEndpoints';
 import * as AxiosUtils from '../src/utils/AxiosUtils';
 import * as DataApi from '../src/DataApi';
 
-const DATA_API = 'DataApi';
-const DATA_API_URL = 'http://localhost:8080/ontology/data';
+import {
+  DATA_API
+} from '../src/constants/ApiNames';
+
+const DATA_API_BASE_URL = 'http://localhost:8080/ontology/data';
 
 const MOCK_FQN = {
   namespace: 'LOOM',
@@ -29,14 +31,9 @@ let requestPromise = null;
 
 function runCommonTests() {
 
-  it('should invoke getApiBaseUrl() with the correct API', () => {
-    expect(ApiEndpoints.getApiBaseUrl).toHaveBeenCalledTimes(1);
-    expect(ApiEndpoints.getApiBaseUrl).toHaveBeenCalledWith(DATA_API);
-  });
-
-  it('should invoke getAxiosInstance() with the correct base URL', () => {
-    expect(AxiosUtils.getAxiosInstance).toHaveBeenCalledTimes(1);
-    expect(AxiosUtils.getAxiosInstance).toHaveBeenCalledWith(DATA_API_URL);
+  it('should invoke getApiAxiosInstance() with the correct API', () => {
+    expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledTimes(1);
+    expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledWith(DATA_API);
   });
 
   it('should return a Promise', () => {
@@ -97,7 +94,7 @@ function testGetAllEntitiesOfTypeFileUrl() {
 
     it('should return the correct URL', () => {
       expect(DataApi.getAllEntitiesOfTypeFileUrl(MOCK_FQN, 'json')).toEqual(
-        `${DATA_API_URL}/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}?fileType=json`
+        `${DATA_API_BASE_URL}/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}?fileType=json`
       );
     });
 
@@ -136,7 +133,7 @@ function testGetAllEntitiesOfTypeInSetFileUrl() {
 
       const url = DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, MOCK_ENTITY_SET_NAME, 'json');
       expect(url).toEqual(
-        `${DATA_API_URL}/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ENTITY_SET_NAME}?fileType=json`
+        `${DATA_API_BASE_URL}/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ENTITY_SET_NAME}?fileType=json`
       );
     });
 
@@ -204,8 +201,7 @@ describe('DataApi', () => {
     mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.delete.and.returnValue(MOCK_PROMISE);
 
-    spyOn(AxiosUtils, 'getAxiosInstance').and.returnValue(mockAxiosInstance);
-    spyOn(ApiEndpoints, 'getApiBaseUrl').and.callThrough();
+    spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
   });
 
   afterEach(() => {

@@ -2,7 +2,14 @@
 
 import Axios from 'axios';
 
-import * as Config from '../src/config/Configuration';
+import EnvToUrlMap from '../src/constants/EnvToUrlMap';
+
+import {
+  DATA_API,
+  EDM_API
+} from '../src/constants/ApiNames';
+
+const MOCK_AUTH_TOKEN = 'hello_world';
 
 /*
  * a hack to reset the AxiosUtils module for each test
@@ -10,32 +17,145 @@ import * as Config from '../src/config/Configuration';
  * https://kentor.me/posts/testing-react-and-flux-applications-with-karma-and-webpack/
  */
 let AxiosUtils = null;
+let Config = null;
 
-const moduleId = './src/utils/AxiosUtils.js';
-const context = require.context('../src', true, /AxiosUtils\.js$/);
-context.keys().forEach(context);
-
-beforeEach(() => {
-
-  delete require.cache[moduleId];
-
-  AxiosUtils = require('../src/utils/AxiosUtils');
-
-  spyOn(Axios, 'create').and.callThrough();
+const context = require.context('../src', true, /\.js$/);
+const moduleIds = context.keys().map((module) => {
+  return String(context.resolve(module));
 });
 
 describe('AxiosUtils', () => {
 
-  describe('getAxiosInstance()', () => {
+  beforeEach(() => {
+
+    spyOn(Axios, 'create').and.callThrough();
+
+    moduleIds.forEach((id) => {
+      delete require.cache[id];
+    });
+
+    AxiosUtils = require('../src/utils/AxiosUtils');
+    Config = require('../src/config/Configuration');
+
+    Config.configure({
+      authToken: MOCK_AUTH_TOKEN,
+      baseUrl: 'localhost'
+    });
+  });
+
+  describe('getApiBaseUrl()', () => {
+
+    describe('DataApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/ontology/data`
+        );
+      });
+
+      it('should return the correct DEV URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'dev'
+        });
+        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
+          `${EnvToUrlMap.get('DEV')}/datastore/ontology/data`
+        );
+      });
+
+      it('should return the correct STG URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'staging'
+        });
+        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
+          `${EnvToUrlMap.get('STG')}/datastore/ontology/data`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/datastore/ontology/data`
+        );
+      });
+
+    });
+
+    describe('EntityDataModelApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/ontology`
+        );
+      });
+
+      it('should return the correct DEV URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'dev'
+        });
+        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
+          `${EnvToUrlMap.get('DEV')}/datastore/ontology`
+        );
+      });
+
+      it('should return the correct STG URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'staging'
+        });
+        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
+          `${EnvToUrlMap.get('STG')}/datastore/ontology`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/datastore/ontology`
+        );
+      });
+
+    });
+
+  });
+
+  describe('getApiAxiosInstance()', () => {
+
+    const DATA_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/ontology/data`;
+    const EDM_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/ontology`;
 
     it('should create a new Axios instance for each distinct URL', () => {
 
-      const axiosInstance1 = AxiosUtils.getAxiosInstance('localhost-1');
-      const axiosInstance2 = AxiosUtils.getAxiosInstance('localhost-2');
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(DATA_API);
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(EDM_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(2);
-      expect(axiosInstance1.defaults.baseURL).toEqual('localhost-1');
-      expect(axiosInstance2.defaults.baseURL).toEqual('localhost-2');
+      expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance2.defaults.baseURL).toEqual(EDM_API_BASE_URL);
 
       expect(axiosInstance1).not.toBe(axiosInstance2);
       expect(axiosInstance1).not.toEqual(axiosInstance2);
@@ -43,17 +163,17 @@ describe('AxiosUtils', () => {
 
     it('should reuse the existing Axios instance for the same URL', () => {
 
-      const axiosInstance1 = AxiosUtils.getAxiosInstance('localhost');
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(DATA_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
-      expect(axiosInstance1.defaults.baseURL).toEqual('localhost');
+      expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
 
       Axios.create.calls.reset();
 
-      const axiosInstance2 = AxiosUtils.getAxiosInstance('localhost');
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(DATA_API);
       expect(Axios.create).not.toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(0);
-      expect(axiosInstance2.defaults.baseURL).toEqual('localhost');
+      expect(axiosInstance2.defaults.baseURL).toEqual(DATA_API_BASE_URL);
 
       expect(axiosInstance1).toBe(axiosInstance2);
       expect(axiosInstance1).toEqual(axiosInstance2);
@@ -61,22 +181,20 @@ describe('AxiosUtils', () => {
 
     it('should create a new Axios instance for the same URL if the authToken changes', () => {
 
-      Config.configure({ authToken: 'foo_bar' });
-
-      const axiosInstance1 = AxiosUtils.getAxiosInstance('localhost');
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(DATA_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
-      expect(axiosInstance1.defaults.baseURL).toEqual('localhost');
-      expect(axiosInstance1.defaults.headers.common.Authorization).toEqual('foo_bar');
+      expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance1.defaults.headers.common.Authorization).toEqual(MOCK_AUTH_TOKEN);
 
       Axios.create.calls.reset();
-      Config.configure({ authToken: 'hello_world' });
+      Config.configure({ authToken: 'foo_bar' });
 
-      const axiosInstance2 = AxiosUtils.getAxiosInstance('localhost');
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(DATA_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
-      expect(axiosInstance2.defaults.baseURL).toEqual('localhost');
-      expect(axiosInstance2.defaults.headers.common.Authorization).toEqual('hello_world');
+      expect(axiosInstance2.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance2.defaults.headers.common.Authorization).toEqual('foo_bar');
 
       expect(axiosInstance1).not.toBe(axiosInstance2);
       expect(axiosInstance1).not.toEqual(axiosInstance2);

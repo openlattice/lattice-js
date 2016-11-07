@@ -26,4 +26,10 @@ describe('loom-data-js', () => {
     expect(Object.keys(Loom.EntityDataModelApi).length).toBeGreaterThan(0);
   });
 
+  it('should expose PermissionsApi', () => {
+    expect(Loom.PermissionsApi).toBeDefined();
+    expect(Loom.PermissionsApi).toEqual(jasmine.any(Object));
+    expect(Object.keys(Loom.PermissionsApi).length).toBeGreaterThan(0);
+  });
+
 });
