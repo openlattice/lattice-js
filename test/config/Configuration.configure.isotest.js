@@ -44,7 +44,7 @@ describe('Configuration.configure()', () => {
     it('should correctly set the auth token', () => {
 
       Config.configure({ authToken: MOCK_JWT, baseUrl: 'localhost' });
-      expect(Config.getConfig().get('authToken')).toEqual(MOCK_JWT);
+      expect(Config.getConfig().get('authToken')).toEqual(`Bearer ${MOCK_JWT}`);
     });
 
   });
