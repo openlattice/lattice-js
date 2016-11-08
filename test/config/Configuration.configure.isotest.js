@@ -23,33 +23,86 @@ describe('Configuration.configure()', () => {
     it('should throw if authToken is missing', () => {
 
       expect(() => {
-        Config.configure({ hello: 'world' });
+        Config.configure({ baseUrl: 'localhost' });
       }).toThrow();
     });
 
     it('should throw if authToken is invalid', () => {
 
       expect(() => {
-        Config.configure({ authToken: 123 });
+        Config.configure({ authToken: 123, baseUrl: 'localhost' });
       }).toThrow();
     });
 
     it('should not throw if authToken is valid', () => {
 
       expect(() => {
-        Config.configure({ authToken: MOCK_JWT });
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'localhost' });
       }).not.toThrow();
     });
 
     it('should correctly set the auth token', () => {
 
-      Config.configure({ authToken: MOCK_JWT });
+      Config.configure({ authToken: MOCK_JWT, baseUrl: 'localhost' });
       expect(Config.getConfig().get('authToken')).toEqual(MOCK_JWT);
     });
 
   });
 
   describe('baseUrl', () => {
+
+    it('should throw if baseUrl is missing', () => {
+
+      expect(() => {
+        Config.configure({ authToken: MOCK_JWT });
+      }).toThrow();
+    });
+
+    it('should throw if baseUrl is invalid', () => {
+
+      expect(() => {
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 123 });
+      }).toThrow();
+    });
+
+    it('should throw if baseUrl is not https', () => {
+
+      expect(() => {
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'http://api.loom.digital' });
+      }).toThrow();
+
+      expect(() => {
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'http://api.thedataloom.com' });
+      }).toThrow();
+
+    });
+
+    it('should throw if baseUrl does not match known URLs', () => {
+
+      expect(() => {
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'google.com' });
+      }).toThrow();
+
+      expect(() => {
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://www.google.com' });
+      }).toThrow();
+
+    });
+
+    it('should correctly set the base URL to the URL that is passed in', () => {
+
+      Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.loom.digital' });
+      expect(Config.getConfig().get('baseUrl')).toEqual('https://api.loom.digital');
+
+      Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.loom.digital' });
+      expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.loom.digital');
+
+      Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.thedataloom.com' });
+      expect(Config.getConfig().get('baseUrl')).toEqual('https://api.thedataloom.com');
+
+      Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.thedataloom.com' });
+      expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.thedataloom.com');
+    });
 
     it(`should correctly set the base URL to ${EnvToUrlMap.get('LOCAL')}`, () => {
 
@@ -61,30 +114,6 @@ describe('Configuration.configure()', () => {
 
       Config.configure({ authToken: MOCK_JWT, baseUrl: EnvToUrlMap.get('LOCAL') });
       expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('LOCAL'));
-    });
-
-    it(`should correctly set the base URL to ${EnvToUrlMap.get('DEV')}`, () => {
-
-      Config.configure({ authToken: MOCK_JWT, baseUrl: 'dev' });
-      expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('DEV'));
-
-      Config.configure({ authToken: MOCK_JWT, baseUrl: 'dev.loom.digital' });
-      expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('DEV'));
-
-      Config.configure({ authToken: MOCK_JWT, baseUrl: EnvToUrlMap.get('DEV') });
-      expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('DEV'));
-    });
-
-    it(`should correctly set the base URL to ${EnvToUrlMap.get('STG')}`, () => {
-
-      Config.configure({ authToken: MOCK_JWT, baseUrl: 'staging' });
-      expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('STG'));
-
-      Config.configure({ authToken: MOCK_JWT, baseUrl: 'staging.loom.digital' });
-      expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('STG'));
-
-      Config.configure({ authToken: MOCK_JWT, baseUrl: EnvToUrlMap.get('STG') });
-      expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('STG'));
     });
 
     it(`should correctly set the base URL to ${EnvToUrlMap.get('PROD')}`, () => {

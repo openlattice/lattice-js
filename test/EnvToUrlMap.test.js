@@ -4,9 +4,7 @@ import EnvToUrlMap from '../src/constants/EnvToUrlMap';
 
 const URLS = {
   LOCAL: 'http://localhost:8080',
-  DEV: 'http://dev.loom.digital',
-  STG: 'http://staging.loom.digital',
-  PROD: 'http://api.loom.digital'
+  PROD: 'https://api.loom.digital'
 };
 
 describe('EnvToUrlMap', () => {
@@ -30,14 +28,6 @@ describe('EnvToUrlMap', () => {
 
   it('should have the correct LOCAL URL', () => {
     expect(EnvToUrlMap.get('LOCAL')).toEqual(URLS.LOCAL);
-  });
-
-  it('should have the correct DEV URL', () => {
-    expect(EnvToUrlMap.get('DEV')).toEqual(URLS.DEV);
-  });
-
-  it('should have the correct STG URL', () => {
-    expect(EnvToUrlMap.get('STG')).toEqual(URLS.STG);
   });
 
   it('should have the correct PROD URL', () => {

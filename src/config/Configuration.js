@@ -34,15 +34,10 @@ let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string
   }
 });
 
-type ConfigurationObject = {
-  authToken :string,
-  baseUrl :string
-};
-
 /**
  * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
  * result in the same base URL:
- *   - "http://api.loom.digital"
+ *   - "https://api.loom.digital"
  *   - "api.loom.digital"
  *   - "loom.digital"
  *   - "api"
@@ -50,9 +45,9 @@ type ConfigurationObject = {
  * @memberof loom-data.Configuration
  * @param {Object} config - an object literal containing all configuration options
  * @param {String} config.authToken - a Base64-encoded JWT auth token
- * @param {String} config.baseUrl - (optional) a full URL, or a simple URL identifier, defaults to http://api.loom.digital
+ * @param {String} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
  */
-function configure(config :ConfigurationObject) {
+function configure(config :Object) {
 
   if (isEmpty(config)) {
     const errorMsg = 'invalid parameter - config must be a non-empty object';
@@ -73,15 +68,24 @@ function configure(config :ConfigurationObject) {
     if (EnvToUrlMap.get('PROD').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', EnvToUrlMap.get('PROD'));
     }
-    else if (EnvToUrlMap.get('STG').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', EnvToUrlMap.get('STG'));
-    }
-    else if (EnvToUrlMap.get('DEV').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', EnvToUrlMap.get('DEV'));
-    }
     else if (EnvToUrlMap.get('LOCAL').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', EnvToUrlMap.get('LOCAL'));
     }
+    // mild url validation to at least check the protocol and domain
+    else if (config.baseUrl.startsWith('https://') &&
+        (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+      configObj = configObj.set('baseUrl', config.baseUrl);
+    }
+    else {
+      const errorMsg = 'invalid parameter - baseUrl must be a valid URL';
+      LOG.error(errorMsg, config.baseUrl);
+      throw new Error(errorMsg);
+    }
+  }
+  else {
+    const errorMsg = 'invalid parameter - baseUrl must be a non-empty string';
+    LOG.error(errorMsg, config.baseUrl);
+    throw new Error(errorMsg);
   }
 }
 

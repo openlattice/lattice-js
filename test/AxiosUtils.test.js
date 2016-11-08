@@ -58,28 +58,6 @@ describe('AxiosUtils', () => {
         );
       });
 
-      it('should return the correct DEV URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'dev'
-        });
-        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
-          `${EnvToUrlMap.get('DEV')}/datastore/ontology/data`
-        );
-      });
-
-      it('should return the correct STG URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'staging'
-        });
-        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
-          `${EnvToUrlMap.get('STG')}/datastore/ontology/data`
-        );
-      });
-
       it('should return the correct PROD URL', () => {
 
         Config.configure({
@@ -103,28 +81,6 @@ describe('AxiosUtils', () => {
         });
         expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
           `${EnvToUrlMap.get('LOCAL')}/ontology`
-        );
-      });
-
-      it('should return the correct DEV URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'dev'
-        });
-        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
-          `${EnvToUrlMap.get('DEV')}/datastore/ontology`
-        );
-      });
-
-      it('should return the correct STG URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'staging'
-        });
-        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
-          `${EnvToUrlMap.get('STG')}/datastore/ontology`
         );
       });
 
@@ -188,7 +144,10 @@ describe('AxiosUtils', () => {
       expect(axiosInstance1.defaults.headers.common.Authorization).toEqual(MOCK_AUTH_TOKEN);
 
       Axios.create.calls.reset();
-      Config.configure({ authToken: 'foo_bar' });
+      Config.configure({
+        authToken: 'foo_bar',
+        baseUrl: 'localhost'
+      });
 
       const axiosInstance2 = AxiosUtils.getApiAxiosInstance(DATA_API);
       expect(Axios.create).toHaveBeenCalled();
