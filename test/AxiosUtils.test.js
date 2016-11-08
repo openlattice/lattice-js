@@ -141,7 +141,7 @@ describe('AxiosUtils', () => {
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
       expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
-      expect(axiosInstance1.defaults.headers.common.Authorization).toEqual(MOCK_AUTH_TOKEN);
+      expect(axiosInstance1.defaults.headers.common.Authorization).toEqual(`Bearer ${MOCK_AUTH_TOKEN}`);
 
       Axios.create.calls.reset();
       Config.configure({
@@ -153,7 +153,7 @@ describe('AxiosUtils', () => {
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
       expect(axiosInstance2.defaults.baseURL).toEqual(DATA_API_BASE_URL);
-      expect(axiosInstance2.defaults.headers.common.Authorization).toEqual('foo_bar');
+      expect(axiosInstance2.defaults.headers.common.Authorization).toEqual('Bearer foo_bar');
 
       expect(axiosInstance1).not.toBe(axiosInstance2);
       expect(axiosInstance1).not.toEqual(axiosInstance2);

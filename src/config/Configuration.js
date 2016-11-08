@@ -56,7 +56,7 @@ function configure(config :Object) {
   }
 
   if (isNonEmptyString(config.authToken)) {
-    configObj = configObj.set('authToken', config.authToken);
+    configObj = configObj.set('authToken', `Bearer ${config.authToken}`);
   }
   else {
     const errorMsg = 'invalid parameter - authToken must be a non-empty string';
