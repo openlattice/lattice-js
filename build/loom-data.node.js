@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.7.1
+ * loom-data - v0.7.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -27020,7 +27020,7 @@ function configure(config) {
   }
 
   if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
-    configObj = configObj.set('authToken', config.authToken);
+    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
   } else {
     var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
     LOG.error(_errorMsg, config.authToken);
@@ -41356,7 +41356,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.7.1";
+var version = "v0.7.2";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
