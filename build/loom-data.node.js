@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.7.0
+ * loom-data - v0.7.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -27001,7 +27001,7 @@ var configObj = _immutable2.default.Map().withMutations(function (map) {
 /**
  * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
  * result in the same base URL:
- *   - "http://api.loom.digital"
+ *   - "https://api.loom.digital"
  *   - "api.loom.digital"
  *   - "loom.digital"
  *   - "api"
@@ -27009,7 +27009,7 @@ var configObj = _immutable2.default.Map().withMutations(function (map) {
  * @memberof loom-data.Configuration
  * @param {Object} config - an object literal containing all configuration options
  * @param {String} config.authToken - a Base64-encoded JWT auth token
- * @param {String} config.baseUrl - (optional) a full URL, or a simple URL identifier, defaults to http://api.loom.digital
+ * @param {String} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
  */
 function configure(config) {
 
@@ -27030,13 +27030,21 @@ function configure(config) {
   if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
     if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-    } else if (_EnvToUrlMap2.default.get('STG').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('STG'));
-    } else if (_EnvToUrlMap2.default.get('DEV').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('DEV'));
     } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
     }
+    // mild url validation to at least check the protocol and domain
+    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+        configObj = configObj.set('baseUrl', config.baseUrl);
+      } else {
+        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
+        LOG.error(_errorMsg2, config.baseUrl);
+        throw new Error(_errorMsg2);
+      }
+  } else {
+    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
+    LOG.error(_errorMsg3, config.baseUrl);
+    throw new Error(_errorMsg3);
   }
 }
 
@@ -27349,9 +27357,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var ENVIRONMENT_URLS = _immutable2.default.Map({
   LOCAL: 'http://localhost:8080',
-  DEV: 'http://dev.loom.digital',
-  STG: 'http://staging.loom.digital',
-  PROD: 'http://api.loom.digital'
+  PROD: 'https://api.loom.digital'
 });
 
 /* eslint-disable import/prefer-default-export */
@@ -41350,7 +41356,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.7.0";
+var version = "v0.7.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
