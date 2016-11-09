@@ -41,7 +41,7 @@ function getApiBaseUrl(api :string) :string {
     case EDM_API:
       return `${baseUrl}/${ONTOLOGY_PATH}`;
     case PERMISSIONS_API:
-      return `${baseUrl}/${ACL_PATH}`;
+      return `${baseUrl}/${ONTOLOGY_PATH}/${ACL_PATH}`;
     default:
       return baseUrl;
   }
