@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.7.2
+ * loom-data - v0.7.3
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -21926,7 +21926,7 @@ function getApiBaseUrl(api) {
     case _ApiNames.EDM_API:
       return baseUrl + '/' + _ApiPaths.ONTOLOGY_PATH;
     case _ApiNames.PERMISSIONS_API:
-      return baseUrl + '/' + _ApiPaths.ACL_PATH;
+      return baseUrl + '/' + _ApiPaths.ONTOLOGY_PATH + '/' + _ApiPaths.ACL_PATH;
     default:
       return baseUrl;
   }
@@ -41356,7 +41356,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.7.2";
+var version = "v0.7.3";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
