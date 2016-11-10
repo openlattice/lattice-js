@@ -48,3 +48,5 @@ export const DELETE_PROPERTY_TYPES_PATH :string = 'deletePropertyTypes';
 
 export const ACL_PATH :string = 'acl';
 export const ALL_PATH :string = 'all';
+export const OWNER_PATH :string = 'owner';
+export const REQUESTS_PATH :string = 'requests';

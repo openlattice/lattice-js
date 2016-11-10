@@ -76,6 +76,46 @@ function testApiMethods() {
   it('should expose removeAllAclsForPropertyTypesInEntitySets()', () => {
     expect(PermissionsApi.removeAllAclsForPropertyTypesInEntitySets).toEqual(jasmine.any(Function));
   });
+
+  it('should expose getAclsForEntityType()', () => {
+    expect(PermissionsApi.getAclsForEntityType).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getAclsForEntitySet()', () => {
+    expect(PermissionsApi.getAclsForEntitySet).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getAclsForPropertyTypesInEntityType()', () => {
+    expect(PermissionsApi.getAclsForPropertyTypesInEntityType).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getAclsForPropertyTypesInEntitySet()', () => {
+    expect(PermissionsApi.getAclsForPropertyTypesInEntitySet).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getOwnerAclsForEntitySet()', () => {
+    expect(PermissionsApi.getOwnerAclsForEntitySet).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getOwnerAclsForPropertyTypesInEntitySet()', () => {
+    expect(PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getAllReceivedRequestsForPermissions()', () => {
+    expect(PermissionsApi.getAllReceivedRequestsForPermissions).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getAllSentRequestsForPermissions()', () => {
+    expect(PermissionsApi.getAllSentRequestsForPermissions).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose addPermissionsRequestForPropertyTypesInEntitySet()', () => {
+    expect(PermissionsApi.addPermissionsRequestForPropertyTypesInEntitySet).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose removePermissionsRequestForEntitySet()', () => {
+    expect(PermissionsApi.removePermissionsRequestForEntitySet).toEqual(jasmine.any(Function));
+  });
 }
 
 function testUpdateAclsForEntityTypes() {
@@ -138,6 +178,46 @@ function testRemoveAllAclsForPropertyTypesInEntitySets() {
 
 }
 
+function testGetAclsForEntityType() {
+
+}
+
+function testGetAclsForEntitySet() {
+
+}
+
+function testGetAclsForPropertyTypesInEntityType() {
+
+}
+
+function testGetAclsForPropertyTypesInEntitySet() {
+
+}
+
+function testGetOwnerAclsForEntitySet() {
+
+}
+
+function testGetOwnerAclsForPropertyTypesInEntitySet() {
+
+}
+
+function testGetAllReceivedRequestsForPermissions() {
+
+}
+
+function testGetAllSentRequestsForPermissions() {
+
+}
+
+function testAddPermissionsRequestForPropertyTypesInEntitySet() {
+
+}
+
+function testRemovePermissionsRequestForEntitySet() {
+
+}
+
 describe('PermissionsApi', () => {
 
   beforeEach(() => {
@@ -166,5 +246,14 @@ describe('PermissionsApi', () => {
   testRemoveAclsForPropertyTypesInEntitySets();
   testRemoveAllAclsForPropertyTypesInEntityTypes();
   testRemoveAllAclsForPropertyTypesInEntitySets();
-
+  testGetAclsForEntityType();
+  testGetAclsForEntitySet();
+  testGetAclsForPropertyTypesInEntityType();
+  testGetAclsForPropertyTypesInEntitySet();
+  testGetOwnerAclsForEntitySet();
+  testGetOwnerAclsForPropertyTypesInEntitySet();
+  testGetAllReceivedRequestsForPermissions();
+  testGetAllSentRequestsForPermissions();
+  testAddPermissionsRequestForPropertyTypesInEntitySet();
+  testRemovePermissionsRequestForEntitySet();
 });
