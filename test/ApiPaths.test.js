@@ -22,6 +22,8 @@ const DELETE_PROPERTY_TYPES_PATH :string = 'deletePropertyTypes';
 // PermissionsApi specific paths
 const ACL_PATH :string = 'acl';
 const ALL_PATH :string = 'all';
+const OWNER_PATH :string = 'owner';
+const REQUESTS_PATH :string = 'requests';
 
 describe('ApiPaths', () => {
 
@@ -106,6 +108,16 @@ describe('ApiPaths', () => {
     it(`should expose "${ALL_PATH}"`, () => {
       expect(ApiPaths.ALL_PATH).toBeDefined();
       expect(ApiPaths.ALL_PATH).toEqual(ALL_PATH);
+    });
+
+    it(`should expose "${OWNER_PATH}"`, () => {
+      expect(ApiPaths.OWNER_PATH).toBeDefined();
+      expect(ApiPaths.OWNER_PATH).toEqual(OWNER_PATH);
+    });
+
+    it(`should expose "${REQUESTS_PATH}"`, () => {
+      expect(ApiPaths.REQUESTS_PATH).toBeDefined();
+      expect(ApiPaths.REQUESTS_PATH).toEqual(REQUESTS_PATH);
     });
 
   });

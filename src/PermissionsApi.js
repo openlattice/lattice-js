@@ -27,20 +27,28 @@ import {
   ALL_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
-  PROPERTY_TYPE_PATH
+  PROPERTY_TYPE_PATH,
+  OWNER_PATH,
+  REQUESTS_PATH
 } from './constants/ApiPaths';
 
 import {
   getApiAxiosInstance
 } from './utils/AxiosUtils';
 
+import {
+  isNonEmptyString
+} from './utils/LangUtils';
+
 const LOG = new Logger('PermissionsApi');
 
 /**
  * `POST /entity/type`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} updateRequests
- * @return {Promise}
+ * @returns {Promise}
  */
 export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
 
@@ -57,8 +65,10 @@ export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
 /**
  * `DELETE /entity/type`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} entityTypeFqns
- * @return {Promise}
+ * @returns {Promise}
  */
 export function removeAclsForEntityTypes(entityTypeFqns :Object[]) :Promise<> {
 
@@ -77,8 +87,10 @@ export function removeAclsForEntityTypes(entityTypeFqns :Object[]) :Promise<> {
 /**
  * `POST /entity/set`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} updateRequests
- * @return {Promise}
+ * @returns {Promise}
  */
 export function updateAclsForEntitySets(updateRequests :Object[]) :Promise<> {
 
@@ -95,8 +107,10 @@ export function updateAclsForEntitySets(updateRequests :Object[]) :Promise<> {
 /**
  * `DELETE /entity/set`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {string[]} entitySetNames
- * @return {Promise}
+ * @returns {Promise}
  */
 export function removeAclsForEntitySets(entitySetNames :string[]) :Promise<> {
 
@@ -115,8 +129,10 @@ export function removeAclsForEntitySets(entitySetNames :string[]) :Promise<> {
 /**
  * `POST /entity/type/property/type`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} updateRequests
- * @return {Promise}
+ * @returns {Promise}
  */
 export function updateAclsForPropertyTypesInEntityTypes(updateRequests :Object[]) :Promise<> {
 
@@ -133,8 +149,10 @@ export function updateAclsForPropertyTypesInEntityTypes(updateRequests :Object[]
 /**
  * `DELETE /entity/type/property/type`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} removeRequests
- * @return {Promise}
+ * @returns {Promise}
  */
 export function removeAclsForPropertyTypesInEntityTypes(removeRequests :Object[]) :Promise<> {
 
@@ -153,8 +171,10 @@ export function removeAclsForPropertyTypesInEntityTypes(removeRequests :Object[]
 /**
  * `POST /entity/set/property/type`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} updateRequests
- * @return {Promise}
+ * @returns {Promise}
  */
 export function updateAclsForPropertyTypesInEntitySets(updateRequests :Object[]) :Promise<> {
 
@@ -171,8 +191,10 @@ export function updateAclsForPropertyTypesInEntitySets(updateRequests :Object[])
 /**
  * `DELETE /entity/set/property/type`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} removeRequests
- * @return {Promise}
+ * @returns {Promise}
  */
 export function removeAclsForPropertyTypesInEntitySets(removeRequests :Object[]) :Promise<> {
 
@@ -191,8 +213,10 @@ export function removeAclsForPropertyTypesInEntitySets(removeRequests :Object[])
 /**
  * `DELETE /entity/type/property/type/all`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {Object[]} entityTypeFqns
- * @return {Promise}
+ * @returns {Promise}
  */
 export function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns :Object[]) :Promise<> {
 
@@ -211,8 +235,10 @@ export function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns :Objec
 /**
  * `DELETE /entity/set/property/type/all`
  *
+ * @static
+ * @memberof loom-data.PermissionsApi
  * @param {string[]} entitySetNames
- * @return {Promise}
+ * @returns {Promise}
  */
 export function removeAllAclsForPropertyTypesInEntitySets(entitySetNames :string[]) :Promise<> {
 
@@ -220,6 +246,220 @@ export function removeAllAclsForPropertyTypesInEntitySets(entitySetNames :string
     .delete(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}/${ALL_PATH}`, {
       data: entitySetNames
     })
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /entity/type?namespace=entityTypeNamespace&name=entityTypeName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @returns {Promise}
+ */
+export function getAclsForEntityType(entityTypeFqn :Object) :Promise<> {
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .get(`/${ENTITY_TYPE_PATH}?namespace=${namespace}&name=${name}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /entity/set?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @returns {Promise}
+ */
+export function getAclsForEntitySet(entitySetName :string) :Promise<> {
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .get(`/${ENTITY_SET_PATH}?name=${entitySetName}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /entity/type/property/type?namespace=entityTypeNamespace&name=entityTypeName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @returns {Promise}
+ */
+export function getAclsForPropertyTypesInEntityType(entityTypeFqn :Object) :Promise<> {
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .get(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}?namespace=${namespace}&name=${name}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /entity/set/property/type?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @returns {Promise}
+ */
+export function getAclsForPropertyTypesInEntitySet(entitySetName :string) :Promise<> {
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .get(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}?name=${entitySetName}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /entity/set/owner?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @returns {Promise}
+ */
+export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .get(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `POST /entity/set/owner?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @param {Object} principal - an object literal representing com.kryptnostic.datastore.Principal
+ * @returns {Promise}
+ */
+export function getOwnerAclsForPropertyTypesInEntitySet(entitySetName :string, principal :string) :Promise<> {
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .post(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`, principal)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /entity/set/owner/requests?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName - (optional)
+ * @returns {Promise}
+ */
+export function getAllReceivedRequestsForPermissions(entitySetName :?string) :Promise<> {
+
+  const queryString = (isNonEmptyString(entitySetName))
+    ? `?name=${entitySetName}`
+    : '';
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .get(`/${ENTITY_SET_PATH}/${OWNER_PATH}/${REQUESTS_PATH}${queryString}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /entity/set/requests?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName - (optional)
+ * @returns {Promise}
+ */
+export function getAllSentRequestsForPermissions(entitySetName :?string) :Promise<> {
+
+  let queryString = '';
+  if (isNonEmptyString(entitySetName)) {
+    queryString = `?name=${entitySetName}`;
+  }
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .get(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}${queryString}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `POST /entity/set/requests`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {Object[]} permissionsRequests
+ * @returns {Promise}
+ */
+export function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests :Object[]) :Promise<> {
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .post(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}`, permissionsRequests)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `DELETE /entity/set/requests?id=requestId`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} requestId - UUID
+ * @returns {Promise}
+ */
+export function removePermissionsRequestForEntitySet(requestId :string) :Promise<> {
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .delete(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}?id=${requestId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
