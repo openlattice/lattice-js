@@ -17,6 +17,10 @@
  * // EntityDataModelApi.get...
  */
 
+import {
+  isNil
+} from 'lodash';
+
 import FullyQualifiedName from './types/FullyQualifiedName';
 import Logger from './utils/Logger';
 
@@ -394,15 +398,20 @@ export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqn
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
+ * @param {boolean} isOwner - (optional)
  * @return {Promise<Object[]>} - a Promise that will resolve with all EntitySet definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllEntitySets();
  */
-export function getAllEntitySets() :Promise<> {
+export function getAllEntitySets(isOwner :boolean) :Promise<> {
+
+  const queryString = (isNil(isOwner))
+    ? ''
+    : `?isOwner=${!!isOwner}`;
 
   return getApiAxiosInstance(EDM_API)
-    .get(`/${ENTITY_SET_PATH}`)
+    .get(`/${ENTITY_SET_PATH}${queryString}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
