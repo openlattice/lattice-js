@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.8.0
+ * loom-data - v0.9.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -21655,6 +21655,7 @@ Object.defineProperty(exports, "__esModule", {
 var DATA_API = exports.DATA_API = 'DataApi';
 var EDM_API = exports.EDM_API = 'EntityDataModelApi';
 var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
+var USERS_API = exports.USERS_API = 'UsersApi';
 
 /***/ },
 /* 5 */
@@ -21708,6 +21709,17 @@ var ACL_PATH = exports.ACL_PATH = 'acl';
 var ALL_PATH = exports.ALL_PATH = 'all';
 var OWNER_PATH = exports.OWNER_PATH = 'owner';
 var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
+
+/*
+ *
+ * UsersApi specific paths
+ *
+ */
+
+var ADMIN_PATH = exports.ADMIN_PATH = 'admin';
+var RESET_PATH = exports.RESET_PATH = 'reset';
+var ROLES_PATH = exports.ROLES_PATH = 'roles';
+var USERS_PATH = exports.USERS_PATH = 'users';
 
 /***/ },
 /* 6 */
@@ -21929,6 +21941,8 @@ function getApiBaseUrl(api) {
       return baseUrl + '/' + _ApiPaths.ONTOLOGY_PATH;
     case _ApiNames.PERMISSIONS_API:
       return baseUrl + '/' + _ApiPaths.ONTOLOGY_PATH + '/' + _ApiPaths.ACL_PATH;
+    case _ApiNames.USERS_API:
+      return baseUrl + '/' + _ApiPaths.ONTOLOGY_PATH + '/' + _ApiPaths.ADMIN_PATH;
     default:
       return baseUrl;
   }
@@ -27485,7 +27499,7 @@ function processArgs() {
     name = fqnObj.name;
   }
   /*
-   * caes 2: two parameters
+   * case 2: two parameters
    *   - namespace
    *   - name
    */
@@ -41583,7 +41597,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.8.0";
+var version = "v0.9.0";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
