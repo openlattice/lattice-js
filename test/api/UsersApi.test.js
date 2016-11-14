@@ -1,9 +1,9 @@
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
 import * as UsersApi from '../../src/api/UsersApi';
 
-import {
-  USERS_API
-} from '../../src/constants/ApiNames';
+// import {
+//   USERS_API
+// } from '../../src/constants/ApiNames';
 
 const MOCK_PROMISE = new Promise((resolve) => {
   resolve({ data: {} });
