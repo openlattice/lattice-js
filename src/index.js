@@ -10,9 +10,9 @@
  * @module loom-data
  */
 
-import * as DataApi from './DataApi';
-import * as EntityDataModelApi from './EntityDataModelApi';
-import * as PermissionsApi from './PermissionsApi';
+import * as DataApi from './api/DataApi';
+import * as EntityDataModelApi from './api/EntityDataModelApi';
+import * as PermissionsApi from './api/PermissionsApi';
 
 import {
   configure

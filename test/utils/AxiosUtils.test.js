@@ -2,12 +2,12 @@
 
 import Axios from 'axios';
 
-import EnvToUrlMap from '../src/constants/EnvToUrlMap';
+import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 
 import {
   DATA_API,
   EDM_API
-} from '../src/constants/ApiNames';
+} from '../../src/constants/ApiNames';
 
 const MOCK_AUTH_TOKEN = 'hello_world';
 
@@ -19,7 +19,7 @@ const MOCK_AUTH_TOKEN = 'hello_world';
 let AxiosUtils = null;
 let Config = null;
 
-const context = require.context('../src', true, /\.js$/);
+const context = require.context('../../src', true, /\.js$/);
 const moduleIds = context.keys().map((module) => {
   return String(context.resolve(module));
 });
@@ -34,8 +34,8 @@ describe('AxiosUtils', () => {
       delete require.cache[id];
     });
 
-    AxiosUtils = require('../src/utils/AxiosUtils');
-    Config = require('../src/config/Configuration');
+    AxiosUtils = require('../../src/utils/AxiosUtils');
+    Config = require('../../src/config/Configuration');
 
     Config.configure({
       authToken: MOCK_AUTH_TOKEN,

@@ -110,7 +110,7 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
     name = fqnObj.name;
   }
   /*
-   * caes 2: two parameters
+   * case 2: two parameters
    *   - namespace
    *   - name
    */

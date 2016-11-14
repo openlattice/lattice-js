@@ -1,9 +1,9 @@
-import * as AxiosUtils from '../src/utils/AxiosUtils';
-import * as DataApi from '../src/DataApi';
+import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as DataApi from '../../src/api/DataApi';
 
 import {
   DATA_API
-} from '../src/constants/ApiNames';
+} from '../../src/constants/ApiNames';
 
 const DATA_API_BASE_URL = 'http://localhost:8080/ontology/data';
 
@@ -195,7 +195,7 @@ describe('DataApi', () => {
 
   beforeEach(() => {
 
-    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'delete']);
+    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'patch', 'delete']);
     mockAxiosInstance.get.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.post.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);

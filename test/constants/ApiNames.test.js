@@ -1,4 +1,4 @@
-import * as ApiNames from '../src/constants/ApiNames';
+import * as ApiNames from '../../src/constants/ApiNames';
 
 const DATA_API = 'DataApi';
 const EDM_API = 'EntityDataModelApi';

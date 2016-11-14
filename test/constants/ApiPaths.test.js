@@ -1,4 +1,4 @@
-import * as ApiPaths from '../src/constants/ApiPaths';
+import * as ApiPaths from '../../src/constants/ApiPaths';
 
 // base paths
 const DATA_PATH :string = 'data';

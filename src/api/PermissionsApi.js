@@ -17,11 +17,11 @@
  * // PermissionsApi.update...
  */
 
-import Logger from './utils/Logger';
+import Logger from '../utils/Logger';
 
 import {
   PERMISSIONS_API
-} from './constants/ApiNames';
+} from '../constants/ApiNames';
 
 import {
   ALL_PATH,
@@ -30,15 +30,15 @@ import {
   PROPERTY_TYPE_PATH,
   OWNER_PATH,
   REQUESTS_PATH
-} from './constants/ApiPaths';
+} from '../constants/ApiPaths';
 
 import {
   getApiAxiosInstance
-} from './utils/AxiosUtils';
+} from '../utils/AxiosUtils';
 
 import {
   isNonEmptyString
-} from './utils/LangUtils';
+} from '../utils/LangUtils';
 
 const LOG = new Logger('PermissionsApi');
 

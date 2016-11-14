@@ -17,26 +17,26 @@
  * // DataApi.get...
  */
 
-import FullyQualifiedName from './types/FullyQualifiedName';
-import Logger from './utils/Logger';
+import FullyQualifiedName from '../types/FullyQualifiedName';
+import Logger from '../utils/Logger';
 
 import {
   DATA_API
-} from './constants/ApiNames';
+} from '../constants/ApiNames';
 
 import {
   ENTITY_DATA_PATH,
   MULTIPLE_PATH
-} from './constants/ApiPaths';
+} from '../constants/ApiPaths';
 
 import {
   getApiBaseUrl,
   getApiAxiosInstance
-} from './utils/AxiosUtils';
+} from '../utils/AxiosUtils';
 
 import {
   isNonEmptyString
-} from './utils/LangUtils';
+} from '../utils/LangUtils';
 
 const LOG = new Logger('DataApi');
 
