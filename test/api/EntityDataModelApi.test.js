@@ -1,9 +1,9 @@
-import * as AxiosUtils from '../src/utils/AxiosUtils';
-import * as EntityDataModelApi from '../src/EntityDataModelApi';
+import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as EntityDataModelApi from '../../src/api/EntityDataModelApi';
 
 import {
   EDM_API
-} from '../src/constants/ApiNames';
+} from '../../src/constants/ApiNames';
 
 const MOCK_SCHEMA_FQN = {
   namespace: 'LOOM',
@@ -688,7 +688,7 @@ describe('EntityDataModelApi', () => {
 
   beforeEach(() => {
 
-    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'delete']);
+    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'patch', 'delete']);
     mockAxiosInstance.get.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.post.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);

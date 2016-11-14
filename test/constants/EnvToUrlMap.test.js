@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import EnvToUrlMap from '../src/constants/EnvToUrlMap';
+import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 
 const URLS = {
   LOCAL: 'http://localhost:8080',

@@ -50,3 +50,14 @@ export const ACL_PATH :string = 'acl';
 export const ALL_PATH :string = 'all';
 export const OWNER_PATH :string = 'owner';
 export const REQUESTS_PATH :string = 'requests';
+
+/*
+ *
+ * UsersApi specific paths
+ *
+ */
+
+export const ADMIN_PATH :string = 'admin';
+export const RESET_PATH :string = 'reset';
+export const ROLES_PATH :string = 'roles';
+export const USERS_PATH :string = 'users';

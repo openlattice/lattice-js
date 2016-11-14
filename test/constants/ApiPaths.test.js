@@ -1,4 +1,4 @@
-import * as ApiPaths from '../src/constants/ApiPaths';
+import * as ApiPaths from '../../src/constants/ApiPaths';
 
 // base paths
 const DATA_PATH :string = 'data';
@@ -24,6 +24,12 @@ const ACL_PATH :string = 'acl';
 const ALL_PATH :string = 'all';
 const OWNER_PATH :string = 'owner';
 const REQUESTS_PATH :string = 'requests';
+
+// UsersApi specific paths
+const ADMIN_PATH :string = 'admin';
+const RESET_PATH :string = 'reset';
+const ROLES_PATH :string = 'roles';
+const USERS_PATH :string = 'users';
 
 describe('ApiPaths', () => {
 
@@ -118,6 +124,30 @@ describe('ApiPaths', () => {
     it(`should expose "${REQUESTS_PATH}"`, () => {
       expect(ApiPaths.REQUESTS_PATH).toBeDefined();
       expect(ApiPaths.REQUESTS_PATH).toEqual(REQUESTS_PATH);
+    });
+
+  });
+
+  describe('UsersApi specific paths', () => {
+
+    it(`should expose "${ADMIN_PATH}"`, () => {
+      expect(ApiPaths.ADMIN_PATH).toBeDefined();
+      expect(ApiPaths.ADMIN_PATH).toEqual(ADMIN_PATH);
+    });
+
+    it(`should expose "${RESET_PATH}"`, () => {
+      expect(ApiPaths.RESET_PATH).toBeDefined();
+      expect(ApiPaths.RESET_PATH).toEqual(RESET_PATH);
+    });
+
+    it(`should expose "${ROLES_PATH}"`, () => {
+      expect(ApiPaths.ROLES_PATH).toBeDefined();
+      expect(ApiPaths.ROLES_PATH).toEqual(ROLES_PATH);
+    });
+
+    it(`should expose "${USERS_PATH}"`, () => {
+      expect(ApiPaths.USERS_PATH).toBeDefined();
+      expect(ApiPaths.USERS_PATH).toEqual(USERS_PATH);
     });
 
   });
