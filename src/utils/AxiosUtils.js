@@ -14,11 +14,13 @@ import {
 import {
   DATA_API,
   EDM_API,
-  PERMISSIONS_API
+  PERMISSIONS_API,
+  USERS_API
 } from '../constants/ApiNames';
 
 import {
   ACL_PATH,
+  ADMIN_PATH,
   DATA_PATH,
   DATASTORE_PATH,
   ONTOLOGY_PATH
@@ -42,6 +44,8 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${ONTOLOGY_PATH}`;
     case PERMISSIONS_API:
       return `${baseUrl}/${ONTOLOGY_PATH}/${ACL_PATH}`;
+    case USERS_API:
+      return `${baseUrl}/${ONTOLOGY_PATH}/${ADMIN_PATH}`;
     default:
       return baseUrl;
   }

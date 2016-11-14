@@ -1,10 +1,10 @@
-import * as ApiPaths from '../src/constants/ApiPaths';
-import * as AxiosUtils from '../src/utils/AxiosUtils';
-import * as PermissionsApi from '../src/PermissionsApi';
+import * as ApiPaths from '../../src/constants/ApiPaths';
+import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as PermissionsApi from '../../src/api/PermissionsApi';
 
 import {
   PERMISSIONS_API
-} from '../src/constants/ApiNames';
+} from '../../src/constants/ApiNames';
 
 const MOCK_PROMISE = new Promise((resolve) => {
   resolve({ data: {} });
@@ -222,7 +222,7 @@ describe('PermissionsApi', () => {
 
   beforeEach(() => {
 
-    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'delete']);
+    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'patch', 'delete']);
     mockAxiosInstance.get.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.post.and.returnValue(MOCK_PROMISE);
     mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);
