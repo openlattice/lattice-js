@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.9.0
+ * loom-data - v0.9.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -16,7 +16,7 @@
 		exports["Loom"] = factory(require("assert"), require("buffer"), require("fs"), require("http"), require("https"), require("net"), require("tty"), require("url"), require("util"), require("zlib"));
 	else
 		root["Loom"] = factory(root["assert"], root["buffer"], root["fs"], root["http"], root["https"], root["net"], root["tty"], root["url"], root["util"], root["zlib"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_157__, __WEBPACK_EXTERNAL_MODULE_158__, __WEBPACK_EXTERNAL_MODULE_159__, __WEBPACK_EXTERNAL_MODULE_126__, __WEBPACK_EXTERNAL_MODULE_127__, __WEBPACK_EXTERNAL_MODULE_160__, __WEBPACK_EXTERNAL_MODULE_161__, __WEBPACK_EXTERNAL_MODULE_128__, __WEBPACK_EXTERNAL_MODULE_162__, __WEBPACK_EXTERNAL_MODULE_163__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_158__, __WEBPACK_EXTERNAL_MODULE_159__, __WEBPACK_EXTERNAL_MODULE_160__, __WEBPACK_EXTERNAL_MODULE_126__, __WEBPACK_EXTERNAL_MODULE_127__, __WEBPACK_EXTERNAL_MODULE_161__, __WEBPACK_EXTERNAL_MODULE_162__, __WEBPACK_EXTERNAL_MODULE_128__, __WEBPACK_EXTERNAL_MODULE_163__, __WEBPACK_EXTERNAL_MODULE_164__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 164);
+/******/ 	return __webpack_require__(__webpack_require__.s = 165);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1883,7 +1883,7 @@ return /******/ (function(modules) { // webpackBootstrap
                 module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
-                __webpack_require__(154)("./" + name);
+                __webpack_require__(155)("./" + name);
                 // because defineLocale currently also sets the global locale, we
                 // want to undo that for lazy loaded locales
                 locale_locales__getSetGlobalLocale(oldLocale);
@@ -4631,6 +4631,85 @@ module.exports = {
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var DATA_API = exports.DATA_API = 'DataApi';
+var EDM_API = exports.EDM_API = 'EntityDataModelApi';
+var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
+var USERS_API = exports.USERS_API = 'UsersApi';
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var DATA_PATH = exports.DATA_PATH = 'data';
+var DATASTORE_PATH = exports.DATASTORE_PATH = 'datastore';
+var ONTOLOGY_PATH = exports.ONTOLOGY_PATH = 'ontology';
+
+/*
+ *
+ * shared paths
+ *
+ */
+var ENTITY_SET_PATH = exports.ENTITY_SET_PATH = 'entity/set';
+var ENTITY_TYPE_PATH = exports.ENTITY_TYPE_PATH = 'entity/type';
+var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
+
+/*
+ *
+ * DataApi specific paths
+ *
+ */
+
+var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
+var MULTIPLE_PATH = exports.MULTIPLE_PATH = 'multiple';
+
+/*
+ *
+ * EntityDataModelApi specific paths
+ *
+ */
+
+var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
+var ADD_PROPERTY_TYPES_PATH = exports.ADD_PROPERTY_TYPES_PATH = 'addPropertyTypes';
+var DELETE_PROPERTY_TYPES_PATH = exports.DELETE_PROPERTY_TYPES_PATH = 'deletePropertyTypes';
+
+/*
+ *
+ * PermissionsApi specific paths
+ *
+ */
+
+var ACL_PATH = exports.ACL_PATH = 'acl';
+var ALL_PATH = exports.ALL_PATH = 'all';
+var OWNER_PATH = exports.OWNER_PATH = 'owner';
+var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
+
+/*
+ *
+ * UsersApi specific paths
+ *
+ */
+
+var ADMIN_PATH = exports.ADMIN_PATH = 'admin';
+var RESET_PATH = exports.RESET_PATH = 'reset';
+var ROLES_PATH = exports.ROLES_PATH = 'roles';
+var USERS_PATH = exports.USERS_PATH = 'users';
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4641,7 +4720,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.isNonEmptyString = isNonEmptyString;
 
-var _lodash = __webpack_require__(3);
+var _lodash = __webpack_require__(6);
 
 var _ = _interopRequireWildcard(_lodash);
 
@@ -4654,7 +4733,153 @@ function isNonEmptyString(value) {
 }
 
 /***/ },
-/* 3 */
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _loglevel = __webpack_require__(154);
+
+var _loglevel2 = _interopRequireDefault(_loglevel);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _lodash = __webpack_require__(6);
+
+var _ = _interopRequireWildcard(_lodash);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LOG_LEVELS = {
+  TRACE: 'trace',
+  DEBUG: 'debug',
+  INFO: 'info',
+  WARN: 'warn',
+  ERROR: 'error'
+};
+
+var TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
+if (false) {
+  _loglevel2.default.setLevel(_loglevel2.default.levels.TRACE);
+} else if (false) {
+  _loglevel2.default.setLevel(_loglevel2.default.levels.SILENT);
+} else {
+  _loglevel2.default.setLevel(_loglevel2.default.levels.INFO);
+}
+
+function isNonEmptyString(value) {
+
+  return _.isString(value) && !_.isEmpty(value);
+}
+
+function getMessagePrefix(loggerLevel, loggerName) {
+
+  return '[' + (0, _moment2.default)().format(TIMESTAMP_FORMAT) + ' ' + loggerLevel.toUpperCase() + ' ' + loggerName + ']';
+}
+
+var Logger = function () {
+  function Logger(name) {
+    _classCallCheck(this, Logger);
+
+    this.name = name;
+    this.logger = _loglevel2.default.getLogger(name);
+  }
+
+  _createClass(Logger, [{
+    key: 'log',
+    value: function log(logLevel, message) {
+
+      var messagePrefix = getMessagePrefix(logLevel, this.name);
+
+      if (isNonEmptyString(message)) {
+        this.logger[logLevel](messagePrefix + ' - ' + message);
+      } else {
+        this.logger[logLevel](messagePrefix);
+        if (logLevel !== LOG_LEVELS.TRACE) {
+          if (_.isError(message) || !_.isEmpty(message)) {
+            this.logger[logLevel](message);
+          }
+        }
+      }
+
+      for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        args[_key - 2] = arguments[_key];
+      }
+
+      if (args.length > 0) {
+        var _logger;
+
+        (_logger = this.logger)[logLevel].apply(_logger, _toConsumableArray(args));
+      }
+    }
+  }, {
+    key: 'trace',
+    value: function trace(message) {
+
+      this.log(LOG_LEVELS.TRACE, message);
+    }
+  }, {
+    key: 'debug',
+    value: function debug(message) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        args[_key2 - 1] = arguments[_key2];
+      }
+
+      this.log.apply(this, [LOG_LEVELS.DEBUG, message].concat(_toConsumableArray(args)));
+    }
+  }, {
+    key: 'info',
+    value: function info(message) {
+      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
+      this.log.apply(this, [LOG_LEVELS.INFO, message].concat(_toConsumableArray(args)));
+    }
+  }, {
+    key: 'warn',
+    value: function warn(message) {
+      for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        args[_key4 - 1] = arguments[_key4];
+      }
+
+      this.log.apply(this, [LOG_LEVELS.WARN, message].concat(_toConsumableArray(args)));
+    }
+  }, {
+    key: 'error',
+    value: function error(message) {
+      for (var _len5 = arguments.length, args = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+        args[_key5 - 1] = arguments[_key5];
+      }
+
+      this.log.apply(this, [LOG_LEVELS.ERROR, message].concat(_toConsumableArray(args)));
+    }
+  }]);
+
+  return Logger;
+}();
+
+exports.default = Logger;
+module.exports = exports['default'];
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -21643,256 +21868,7 @@ function isNonEmptyString(value) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(125)(module)))
 
 /***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var DATA_API = exports.DATA_API = 'DataApi';
-var EDM_API = exports.EDM_API = 'EntityDataModelApi';
-var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
-var USERS_API = exports.USERS_API = 'UsersApi';
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var DATA_PATH = exports.DATA_PATH = 'data';
-var DATASTORE_PATH = exports.DATASTORE_PATH = 'datastore';
-var ONTOLOGY_PATH = exports.ONTOLOGY_PATH = 'ontology';
-
-/*
- *
- * shared paths
- *
- */
-var ENTITY_SET_PATH = exports.ENTITY_SET_PATH = 'entity/set';
-var ENTITY_TYPE_PATH = exports.ENTITY_TYPE_PATH = 'entity/type';
-var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
-
-/*
- *
- * DataApi specific paths
- *
- */
-
-var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
-var MULTIPLE_PATH = exports.MULTIPLE_PATH = 'multiple';
-
-/*
- *
- * EntityDataModelApi specific paths
- *
- */
-
-var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
-var ADD_PROPERTY_TYPES_PATH = exports.ADD_PROPERTY_TYPES_PATH = 'addPropertyTypes';
-var DELETE_PROPERTY_TYPES_PATH = exports.DELETE_PROPERTY_TYPES_PATH = 'deletePropertyTypes';
-
-/*
- *
- * PermissionsApi specific paths
- *
- */
-
-var ACL_PATH = exports.ACL_PATH = 'acl';
-var ALL_PATH = exports.ALL_PATH = 'all';
-var OWNER_PATH = exports.OWNER_PATH = 'owner';
-var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
-
-/*
- *
- * UsersApi specific paths
- *
- */
-
-var ADMIN_PATH = exports.ADMIN_PATH = 'admin';
-var RESET_PATH = exports.RESET_PATH = 'reset';
-var ROLES_PATH = exports.ROLES_PATH = 'roles';
-var USERS_PATH = exports.USERS_PATH = 'users';
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _loglevel = __webpack_require__(153);
-
-var _loglevel2 = _interopRequireDefault(_loglevel);
-
-var _moment = __webpack_require__(0);
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _lodash = __webpack_require__(3);
-
-var _ = _interopRequireWildcard(_lodash);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var LOG_LEVELS = {
-  TRACE: 'trace',
-  DEBUG: 'debug',
-  INFO: 'info',
-  WARN: 'warn',
-  ERROR: 'error'
-};
-
-var TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-
-if (false) {
-  _loglevel2.default.setLevel(_loglevel2.default.levels.TRACE);
-} else if (false) {
-  _loglevel2.default.setLevel(_loglevel2.default.levels.SILENT);
-} else {
-  _loglevel2.default.setLevel(_loglevel2.default.levels.INFO);
-}
-
-function isNonEmptyString(value) {
-
-  return _.isString(value) && !_.isEmpty(value);
-}
-
-function getMessagePrefix(loggerLevel, loggerName) {
-
-  return '[' + (0, _moment2.default)().format(TIMESTAMP_FORMAT) + ' ' + loggerLevel.toUpperCase() + ' ' + loggerName + ']';
-}
-
-var Logger = function () {
-  function Logger(name) {
-    _classCallCheck(this, Logger);
-
-    this.name = name;
-    this.logger = _loglevel2.default.getLogger(name);
-  }
-
-  _createClass(Logger, [{
-    key: 'log',
-    value: function log(logLevel, message) {
-
-      var messagePrefix = getMessagePrefix(logLevel, this.name);
-
-      if (isNonEmptyString(message)) {
-        this.logger[logLevel](messagePrefix + ' - ' + message);
-      } else {
-        this.logger[logLevel](messagePrefix);
-        if (logLevel !== LOG_LEVELS.TRACE) {
-          if (_.isError(message) || !_.isEmpty(message)) {
-            this.logger[logLevel](message);
-          }
-        }
-      }
-
-      for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-        args[_key - 2] = arguments[_key];
-      }
-
-      if (args.length > 0) {
-        var _logger;
-
-        (_logger = this.logger)[logLevel].apply(_logger, _toConsumableArray(args));
-      }
-    }
-  }, {
-    key: 'trace',
-    value: function trace(message) {
-
-      this.log(LOG_LEVELS.TRACE, message);
-    }
-  }, {
-    key: 'debug',
-    value: function debug(message) {
-      for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        args[_key2 - 1] = arguments[_key2];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.DEBUG, message].concat(_toConsumableArray(args)));
-    }
-  }, {
-    key: 'info',
-    value: function info(message) {
-      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.INFO, message].concat(_toConsumableArray(args)));
-    }
-  }, {
-    key: 'warn',
-    value: function warn(message) {
-      for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        args[_key4 - 1] = arguments[_key4];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.WARN, message].concat(_toConsumableArray(args)));
-    }
-  }, {
-    key: 'error',
-    value: function error(message) {
-      for (var _len5 = arguments.length, args = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-        args[_key5 - 1] = arguments[_key5];
-      }
-
-      this.log.apply(this, [LOG_LEVELS.ERROR, message].concat(_toConsumableArray(args)));
-    }
-  }]);
-
-  return Logger;
-}();
-
-exports.default = Logger;
-module.exports = exports['default'];
-
-/***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-var enhanceError = __webpack_require__(13);
-
-/**
- * Create an Error with the specified message, config, error code, and response.
- *
- * @param {string} message The error message.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- @ @param {Object} [response] The response.
- * @returns {Error} The created error.
- */
-module.exports = function createError(message, config, code, response) {
-  var error = new Error(message);
-  return enhanceError(error, config, code, response);
-};
-
-
-/***/ },
-/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21903,7 +21879,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getApiAxiosInstance = exports.getApiBaseUrl = undefined;
 
-var _axios = __webpack_require__(132);
+var _axios = __webpack_require__(133);
 
 var _axios2 = _interopRequireDefault(_axios);
 
@@ -21917,9 +21893,9 @@ var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
 
 var _Configuration = __webpack_require__(10);
 
-var _ApiNames = __webpack_require__(4);
+var _ApiNames = __webpack_require__(2);
 
-var _ApiPaths = __webpack_require__(5);
+var _ApiPaths = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21983,6 +21959,30 @@ function getApiAxiosInstance(api) {
 
 exports.getApiBaseUrl = getApiBaseUrl;
 exports.getApiAxiosInstance = getApiAxiosInstance;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+var enhanceError = __webpack_require__(13);
+
+/**
+ * Create an Error with the specified message, config, error code, and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ @ @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, response);
+};
+
 
 /***/ },
 /* 9 */
@@ -26984,17 +26984,17 @@ var _immutable = __webpack_require__(9);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _lodash = __webpack_require__(3);
+var _lodash = __webpack_require__(6);
 
 var _EnvToUrlMap = __webpack_require__(18);
 
 var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
 
-var _Logger = __webpack_require__(6);
+var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _LangUtils = __webpack_require__(2);
+var _LangUtils = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27143,7 +27143,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 'use strict';
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(8);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -27176,7 +27176,7 @@ module.exports = function settle(resolve, reject, response) {
 'use strict';
 
 var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(146);
+var normalizeHeaderName = __webpack_require__(147);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -27193,10 +27193,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(134);
+    adapter = __webpack_require__(135);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(133);
+    adapter = __webpack_require__(134);
   }
   return adapter;
 }
@@ -27430,11 +27430,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
  * fqn.getFullyQualifiedName(); // "LOOM.Data"
  */
 
-var _lodash = __webpack_require__(3);
+var _lodash = __webpack_require__(6);
 
 var _ = _interopRequireWildcard(_lodash);
 
-var _LangUtils = __webpack_require__(2);
+var _LangUtils = __webpack_require__(4);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -27591,7 +27591,7 @@ module.exports = exports['default'];
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(151)({
+module.exports = __webpack_require__(152)({
   'http': __webpack_require__(126),
   'https': __webpack_require__(127)
 });
@@ -37591,17 +37591,17 @@ var _FullyQualifiedName = __webpack_require__(19);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Logger = __webpack_require__(6);
+var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(4);
+var _ApiNames = __webpack_require__(2);
 
-var _ApiPaths = __webpack_require__(5);
+var _ApiPaths = __webpack_require__(3);
 
-var _AxiosUtils = __webpack_require__(8);
+var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(2);
+var _LangUtils = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37854,23 +37854,23 @@ exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
 exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
 
-var _lodash = __webpack_require__(3);
+var _lodash = __webpack_require__(6);
 
 var _FullyQualifiedName = __webpack_require__(19);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Logger = __webpack_require__(6);
+var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(4);
+var _ApiNames = __webpack_require__(2);
 
-var _ApiPaths = __webpack_require__(5);
+var _ApiPaths = __webpack_require__(3);
 
-var _AxiosUtils = __webpack_require__(8);
+var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(2);
+var _LangUtils = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38668,17 +38668,17 @@ exports.getAllSentRequestsForPermissions = getAllSentRequestsForPermissions;
 exports.addPermissionsRequestForPropertyTypesInEntitySet = addPermissionsRequestForPropertyTypesInEntitySet;
 exports.removePermissionsRequestForEntitySet = removePermissionsRequestForEntitySet;
 
-var _Logger = __webpack_require__(6);
+var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(4);
+var _ApiNames = __webpack_require__(2);
 
-var _ApiPaths = __webpack_require__(5);
+var _ApiPaths = __webpack_require__(3);
 
-var _AxiosUtils = __webpack_require__(8);
+var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(2);
+var _LangUtils = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39071,10 +39071,138 @@ function removePermissionsRequestForEntitySet(requestId) {
 /* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(135);
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getUser = getUser;
+exports.getAllUsers = getAllUsers;
+exports.getAllUsersForRole = getAllUsersForRole;
+exports.getAllUsersForAllRoles = getAllUsersForAllRoles;
+exports.resetUserRoles = resetUserRoles;
+
+var _Logger = __webpack_require__(5);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _ApiNames = __webpack_require__(2);
+
+var _ApiPaths = __webpack_require__(3);
+
+var _AxiosUtils = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * UsersApi gives access to Loom's REST API for getting user data.
+ *
+ * @module UsersApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.UsersApi.get...
+ *
+ * @example
+ * import { UsersApi } from 'loom-data';
+ * // UsersApi.get...
+ */
+
+var LOG = new _Logger2.default('UsersApi');
+
+/**
+ * `GET /users/{userId}`
+ *
+ * @static
+ * @memberof loom-data.UsersApi
+ * @param {string} userId - user UUID
+ * @return {Promise}
+ */
+function getUser(userId) {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `GET /users`
+ *
+ * @static
+ * @memberof loom-data.UsersApi
+ * @return {Promise}
+ */
+function getAllUsers() {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `GET /users/roles/{role}`
+ *
+ * @static
+ * @memberof loom-data.UsersApi
+ * @return {Promise}
+ */
+function getAllUsersForRole(role) {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `GET /users/roles`
+ *
+ * @static
+ * @memberof loom-data.UsersApi
+ * @return {Promise}
+ */
+function getAllUsersForAllRoles() {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `PATCH /users/roles/reset/{userId}`
+ *
+ * @static
+ * @memberof loom-data.UsersApi
+ * @param {string} userId - user UUID
+ * @param {string[]} roles - a list of roles to be reset
+ * @return {Promise}
+ */
+function resetUserRoles(userId, roles) {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).patch('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + _ApiPaths.RESET_PATH + '/' + userId, roles).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
 
 /***/ },
 /* 133 */
+/***/ function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(136);
+
+/***/ },
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39088,10 +39216,10 @@ var https = __webpack_require__(127);
 var httpFollow = __webpack_require__(20).http;
 var httpsFollow = __webpack_require__(20).https;
 var url = __webpack_require__(128);
-var zlib = __webpack_require__(163);
-var pkg = __webpack_require__(152);
-var Buffer = __webpack_require__(158).Buffer;
-var createError = __webpack_require__(7);
+var zlib = __webpack_require__(164);
+var pkg = __webpack_require__(153);
+var Buffer = __webpack_require__(159).Buffer;
+var createError = __webpack_require__(8);
 var enhanceError = __webpack_require__(13);
 
 /*eslint consistent-return:0*/
@@ -39289,7 +39417,7 @@ module.exports = function httpAdapter(config) {
 
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39298,10 +39426,10 @@ module.exports = function httpAdapter(config) {
 var utils = __webpack_require__(1);
 var settle = __webpack_require__(14);
 var buildURL = __webpack_require__(17);
-var parseHeaders = __webpack_require__(147);
-var isURLSameOrigin = __webpack_require__(145);
-var createError = __webpack_require__(7);
-var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(141);
+var parseHeaders = __webpack_require__(148);
+var isURLSameOrigin = __webpack_require__(146);
+var createError = __webpack_require__(8);
+var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(142);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -39397,7 +39525,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(143);
+      var cookies = __webpack_require__(144);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -39473,7 +39601,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39481,7 +39609,7 @@ module.exports = function xhrAdapter(config) {
 
 var utils = __webpack_require__(1);
 var bind = __webpack_require__(16);
-var Axios = __webpack_require__(137);
+var Axios = __webpack_require__(138);
 
 /**
  * Create an instance of Axios
@@ -39515,14 +39643,14 @@ axios.create = function create(defaultConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(11);
-axios.CancelToken = __webpack_require__(136);
+axios.CancelToken = __webpack_require__(137);
 axios.isCancel = __webpack_require__(12);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(148);
+axios.spread = __webpack_require__(149);
 
 module.exports = axios;
 
@@ -39531,7 +39659,7 @@ module.exports.default = axios;
 
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39595,7 +39723,7 @@ module.exports = CancelToken;
 
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39603,10 +39731,10 @@ module.exports = CancelToken;
 
 var defaults = __webpack_require__(15);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(138);
-var dispatchRequest = __webpack_require__(139);
-var isAbsoluteURL = __webpack_require__(144);
-var combineURLs = __webpack_require__(142);
+var InterceptorManager = __webpack_require__(139);
+var dispatchRequest = __webpack_require__(140);
+var isAbsoluteURL = __webpack_require__(145);
+var combineURLs = __webpack_require__(143);
 
 /**
  * Create a new instance of Axios
@@ -39687,7 +39815,7 @@ module.exports = Axios;
 
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39746,14 +39874,14 @@ module.exports = InterceptorManager;
 
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 'use strict';
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(140);
+var transformData = __webpack_require__(141);
 var isCancel = __webpack_require__(12);
 var defaults = __webpack_require__(15);
 
@@ -39832,7 +39960,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39859,7 +39987,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -39902,7 +40030,7 @@ module.exports = btoa;
 
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -39921,7 +40049,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39981,7 +40109,7 @@ module.exports = (
 
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -40002,7 +40130,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40077,7 +40205,7 @@ module.exports = (
 
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40096,7 +40224,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40140,7 +40268,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -40174,7 +40302,7 @@ module.exports = function spread(callback) {
 
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 
@@ -40190,7 +40318,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(155);
+exports.humanize = __webpack_require__(156);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -40377,7 +40505,7 @@ function coerce(val) {
 
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 
@@ -40385,8 +40513,8 @@ function coerce(val) {
  * Module dependencies.
  */
 
-var tty = __webpack_require__(161);
-var util = __webpack_require__(162);
+var tty = __webpack_require__(162);
+var util = __webpack_require__(163);
 
 /**
  * This is the Node.js implementation of `debug()`.
@@ -40394,7 +40522,7 @@ var util = __webpack_require__(162);
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(149);
+exports = module.exports = __webpack_require__(150);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -40542,14 +40670,14 @@ function createWritableStdioStream (fd) {
       break;
 
     case 'FILE':
-      var fs = __webpack_require__(159);
+      var fs = __webpack_require__(160);
       stream = new fs.SyncWriteStream(fd, { autoClose: false });
       stream._type = 'fs';
       break;
 
     case 'PIPE':
     case 'TCP':
-      var net = __webpack_require__(160);
+      var net = __webpack_require__(161);
       stream = new net.Socket({
         fd: fd,
         readable: false,
@@ -40592,15 +40720,15 @@ exports.enable(load());
 
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 'use strict';
 var url = __webpack_require__(128);
-var debug = __webpack_require__(150)('follow-redirects');
-var assert = __webpack_require__(157);
-var consume = __webpack_require__(156);
+var debug = __webpack_require__(151)('follow-redirects');
+var assert = __webpack_require__(158);
+var consume = __webpack_require__(157);
 
 module.exports = function(_nativeProtocols) {
   var nativeProtocols = {};
@@ -40761,7 +40889,7 @@ var urlProps = ['protocol', 'slashes', 'auth', 'host', 'port', 'hostname',
 
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports) {
 
 module.exports = {
@@ -40909,7 +41037,7 @@ module.exports = {
 };
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -41138,7 +41266,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 var map = {
@@ -41365,11 +41493,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 154;
+webpackContext.id = 155;
 
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports) {
 
 /**
@@ -41500,7 +41628,7 @@ function plural(ms, n, name) {
 
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports) {
 
 module.exports = function(stream) {
@@ -41520,49 +41648,49 @@ module.exports = function(stream) {
 
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports) {
 
 module.exports = require("assert");
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports) {
 
 module.exports = require("buffer");
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports) {
 
 module.exports = require("net");
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports) {
 
 module.exports = require("tty");
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports) {
 
 module.exports = require("util");
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports) {
 
 module.exports = require("zlib");
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41571,7 +41699,7 @@ module.exports = require("zlib");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PermissionsApi = exports.EntityDataModelApi = exports.DataApi = exports.configure = exports.version = undefined;
+exports.UsersApi = exports.PermissionsApi = exports.EntityDataModelApi = exports.DataApi = exports.configure = exports.version = undefined;
 
 var _DataApi = __webpack_require__(129);
 
@@ -41585,9 +41713,15 @@ var _PermissionsApi = __webpack_require__(131);
 
 var PermissionsApi = _interopRequireWildcard(_PermissionsApi);
 
+var _UsersApi = __webpack_require__(132);
+
+var UsersApi = _interopRequireWildcard(_UsersApi);
+
 var _Configuration = __webpack_require__(10);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var version = "v0.9.1";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
@@ -41597,19 +41731,19 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.9.0";
-
 exports.version = version;
 exports.configure = _Configuration.configure;
 exports.DataApi = DataApi;
 exports.EntityDataModelApi = EntityDataModelApi;
 exports.PermissionsApi = PermissionsApi;
+exports.UsersApi = UsersApi;
 exports.default = {
   version: version,
   configure: _Configuration.configure,
   DataApi: DataApi,
   EntityDataModelApi: EntityDataModelApi,
-  PermissionsApi: PermissionsApi
+  PermissionsApi: PermissionsApi,
+  UsersApi: UsersApi
 };
 
 /***/ }
