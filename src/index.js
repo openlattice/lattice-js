@@ -13,6 +13,7 @@
 import * as DataApi from './api/DataApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as PermissionsApi from './api/PermissionsApi';
+import * as UsersApi from './api/UsersApi';
 
 import {
   configure
@@ -26,7 +27,8 @@ export {
   configure,
   DataApi,
   EntityDataModelApi,
-  PermissionsApi
+  PermissionsApi,
+  UsersApi
 };
 
 export default {
@@ -34,5 +36,6 @@ export default {
   configure,
   DataApi,
   EntityDataModelApi,
-  PermissionsApi
+  PermissionsApi,
+  UsersApi
 };
