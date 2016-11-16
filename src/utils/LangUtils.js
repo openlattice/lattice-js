@@ -5,6 +5,7 @@
 import {
   isArray,
   isEmpty,
+  isPlainObject,
   isString,
   trim
 } from 'lodash';
@@ -12,6 +13,11 @@ import {
 export function isNonEmptyArray(value :any) :boolean {
 
   return isArray(value) && !isEmpty(value);
+}
+
+export function isNonEmptyObject(value :any) :boolean {
+
+  return isPlainObject(value) && !isEmpty(value);
 }
 
 export function isNonEmptyString(value :any) :boolean {

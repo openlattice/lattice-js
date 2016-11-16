@@ -17,6 +17,8 @@
  * // DataApi.get...
  */
 
+import Immutable from 'immutable';
+
 import FullyQualifiedName from '../types/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
@@ -35,10 +37,19 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
+  isNonEmptyArray,
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
 const LOG = new Logger('DataApi');
+
+const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
+  map.set('csv', 'csv');
+  map.set('CSV', 'csv');
+  map.set('json', 'json');
+  map.set('JSON', 'json');
+});
 
 /**
  * `GET /entitydata/{namespace}/{name}`
@@ -91,11 +102,17 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :Object, fileType :string) :?string {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
     return null;
   }
 
   const { namespace, name } = entityTypeFqn;
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}?fileType=${fileType}`;
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}?fileType=${FILE_TYPES.get(fileType)}`;
 }
 
 /**
@@ -157,12 +174,25 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
 export function getAllEntitiesOfTypeInSetFileUrl(
     entityTypeFqn :Object, entitySetName :string, fileType :string) :?string {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn) || !isNonEmptyString(entitySetName)) {
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
+    return null;
+  }
+
+  if (!isNonEmptyString(entitySetName)) {
+    LOG.warn('invalid parameter: entitySetName must be a non-empty string', entitySetName);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
     return null;
   }
 
   const { namespace, name } = entityTypeFqn;
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}?fileType=${fileType}`;
+  /* eslint-disable max-len */
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}?fileType=${FILE_TYPES.get(fileType)}`;
+  /* eslint-enable */
 }
 
 /**
@@ -182,6 +212,10 @@ export function getAllEntitiesOfTypeInSetFileUrl(
  * ]);
  */
 export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty FQN array');
+  }
 
   const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
     return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
@@ -233,6 +267,10 @@ export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
  * });
  */
 export function createEntity(createEntityRequest :Object) :Promise<> {
+
+  if (!isNonEmptyObject(createEntityRequest)) {
+    return Promise.reject('invalid parameter: createEntityRequest must be a valid object literal');
+  }
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${ENTITY_DATA_PATH}`, createEntityRequest)

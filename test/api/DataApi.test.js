@@ -1,3 +1,5 @@
+import BBPromise from 'bluebird';
+
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
 import * as DataApi from '../../src/api/DataApi';
 
@@ -6,38 +8,57 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  ENTITY_DATA_PATH,
+  MULTIPLE_PATH
+} from '../../src/constants/ApiPaths';
+
+import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
 
-const DATA_API_BASE_URL = 'http://localhost:8080/ontology/data';
+const DATA_API_BASE_URL = AxiosUtils.getApiBaseUrl(DATA_API);
 
 const MOCK_FQN = {
   namespace: 'LOOM',
   name: 'DATA_API'
 };
 
-const MOCK_ENTITY_SET_NAME = 'LoomDataApis';
+const MOCK_ES_NAME = 'LoomDataApis';
 
 const MOCK_CREATE_ENTITY_DATA = {
   type: MOCK_FQN,
-  entitySetName: MOCK_ENTITY_SET_NAME,
+  entitySetName: MOCK_ES_NAME,
   properties: [
     { 'LOOM.MY_PROPERTY': 'testing' }
   ]
 };
 
+/* eslint-disable no-array-constructor, no-new-object */
+const INVALID_INPUT = [
+  undefined,
+  null,
+  [],
+  new Array(),
+  {},
+  new Object(),
+  true,
+  false,
+  -1,
+  0,
+  1,
+  '',
+  ' ',
+  /regex/
+];
+/* eslint-enable */
+
 let mockAxiosInstance = null;
-let requestPromise = null;
 
-function runCommonTests() {
+function testApiAxiosInstanceInvocation() {
 
-  it('should invoke getApiAxiosInstance() with the correct API', () => {
+  it('should invoke getApiAxiosInstance() once with the correct API', () => {
     expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledTimes(1);
     expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledWith(DATA_API);
-  });
-
-  it('should return a Promise', () => {
-    expect(requestPromise).toEqual(jasmine.any(Promise));
   });
 }
 
@@ -69,20 +90,50 @@ function testGetAllEntitiesOfType() {
   describe('getAllEntitiesOfType()', () => {
 
     beforeEach(() => {
-      requestPromise = DataApi.getAllEntitiesOfType(MOCK_FQN);
+      DataApi.getAllEntitiesOfType(MOCK_FQN);
     });
 
-    afterEach(() => {
-      requestPromise = null;
-    });
+    testApiAxiosInstanceInvocation();
 
-    runCommonTests();
+    it('should return a Promise', () => {
+
+      const returnValue = DataApi.getAllEntitiesOfType(MOCK_FQN);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
 
     it('should send a GET request with the correct URL path', () => {
+
       expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        `/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}`
+        `/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`
       );
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          DataApi.getAllEntitiesOfType(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          DataApi.getAllEntitiesOfType(invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
     });
 
   });
@@ -93,9 +144,33 @@ function testGetAllEntitiesOfTypeFileUrl() {
   describe('getAllEntitiesOfTypeFileUrl()', () => {
 
     it('should return the correct URL', () => {
+
       expect(DataApi.getAllEntitiesOfTypeFileUrl(MOCK_FQN, 'json')).toEqual(
-        `${DATA_API_BASE_URL}/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}?fileType=json`
+        `${DATA_API_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}?fileType=json`
       );
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypeFileUrl(invalidInput, 'json');
+        }).not.toThrow();
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypeFileUrl(MOCK_FQN, invalidInput);
+        }).not.toThrow();
+      });
+    });
+
+    it('should return null when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(DataApi.getAllEntitiesOfTypeFileUrl(invalidInput, 'json')).toEqual(null);
+        expect(DataApi.getAllEntitiesOfTypeFileUrl(MOCK_FQN, invalidInput)).toEqual(null);
+      });
     });
 
   });
@@ -106,20 +181,58 @@ function testGetAllEntitiesOfTypeInSet() {
   describe('getAllEntitiesOfTypeInSet()', () => {
 
     beforeEach(() => {
-      requestPromise = DataApi.getAllEntitiesOfTypeInSet(MOCK_FQN, MOCK_ENTITY_SET_NAME);
+      DataApi.getAllEntitiesOfTypeInSet(MOCK_FQN, MOCK_ES_NAME);
     });
 
-    afterEach(() => {
-      requestPromise = null;
-    });
+    testApiAxiosInstanceInvocation();
 
-    runCommonTests();
+    it('should return a Promise', () => {
+
+      const returnValue = DataApi.getAllEntitiesOfTypeInSet(MOCK_FQN, MOCK_ES_NAME);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
 
     it('should send a GET request with the correct URL path', () => {
+
       expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        `/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ENTITY_SET_NAME}`
+        `/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ES_NAME}`
       );
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypeInSet(invalidInput, MOCK_ES_NAME).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypeInSet(MOCK_FQN, invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          DataApi.getAllEntitiesOfTypeInSet(invalidInput, MOCK_ES_NAME)
+        );
+        promises.push(
+          DataApi.getAllEntitiesOfTypeInSet(MOCK_FQN, invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
     });
 
   });
@@ -131,10 +244,37 @@ function testGetAllEntitiesOfTypeInSetFileUrl() {
 
     it('should return the correct URL', () => {
 
-      const url = DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, MOCK_ENTITY_SET_NAME, 'json');
+      const url = DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, MOCK_ES_NAME, 'json');
       expect(url).toEqual(
-        `${DATA_API_BASE_URL}/entitydata/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ENTITY_SET_NAME}?fileType=json`
+        `${DATA_API_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ES_NAME}?fileType=json`
       );
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypeInSetFileUrl(invalidInput, MOCK_ES_NAME, 'json');
+        }).not.toThrow();
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, invalidInput, 'json');
+        }).not.toThrow();
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, MOCK_ES_NAME, invalidInput);
+        }).not.toThrow();
+      });
+    });
+
+    it('should return null when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(DataApi.getAllEntitiesOfTypeInSetFileUrl(invalidInput, MOCK_ES_NAME, 'json')).toEqual(null);
+        expect(DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, invalidInput, 'json')).toEqual(null);
+        expect(DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, MOCK_ES_NAME, invalidInput)).toEqual(null);
+      });
     });
 
   });
@@ -145,22 +285,59 @@ function testGetAllEntitiesOfTypes() {
   describe('getAllEntitiesOfTypes()', () => {
 
     beforeEach(() => {
-      requestPromise = DataApi.getAllEntitiesOfTypes([MOCK_FQN]);
+      DataApi.getAllEntitiesOfTypes([MOCK_FQN]);
     });
 
-    afterEach(() => {
-      requestPromise = null;
+    testApiAxiosInstanceInvocation();
+
+    it('should return a Promise', () => {
+
+      const returnValue = DataApi.getAllEntitiesOfTypes([MOCK_FQN]);
+      expect(returnValue).toEqual(jasmine.any(Promise));
     });
-
-    runCommonTests();
-
 
     it('should send a PUT request with the correct URL path and data', () => {
+
       expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-        '/entitydata/multiple',
+        `/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`,
         [MOCK_FQN]
       );
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypes(invalidInput).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          DataApi.getAllEntitiesOfTypes([invalidInput]).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          DataApi.getAllEntitiesOfTypes(invalidInput)
+        );
+        promises.push(
+          DataApi.getAllEntitiesOfTypes([invalidInput])
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
     });
 
   });
@@ -171,21 +348,50 @@ function testCreateEntity() {
   describe('createEntity()', () => {
 
     beforeEach(() => {
-      requestPromise = DataApi.createEntity(MOCK_CREATE_ENTITY_DATA);
+      DataApi.createEntity(MOCK_CREATE_ENTITY_DATA);
     });
 
-    afterEach(() => {
-      requestPromise = null;
-    });
+    testApiAxiosInstanceInvocation();
 
-    runCommonTests();
+    it('should return a Promise', () => {
+
+      const returnValue = DataApi.createEntity(MOCK_CREATE_ENTITY_DATA);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
 
     it('should send a POST request with the correct URL path and data', () => {
       expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/entitydata',
+        `/${ENTITY_DATA_PATH}`,
         MOCK_CREATE_ENTITY_DATA
       );
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          DataApi.createEntity(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          DataApi.createEntity(invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
     });
 
   });
