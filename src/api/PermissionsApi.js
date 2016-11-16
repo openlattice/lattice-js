@@ -285,6 +285,18 @@ export function updateAclsForPropertyTypesInEntitySets(updateRequests :Object[])
  */
 export function removeAclsForPropertyTypesInEntitySets(removeRequests :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(removeRequests)) {
+    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
+  }
+
+  const allValid = removeRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}`, {
       data: removeRequests

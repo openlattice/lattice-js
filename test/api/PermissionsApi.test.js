@@ -592,6 +592,66 @@ function testUpdateAclsForPropertyTypesInEntitySets() {
 
 function testRemoveAclsForPropertyTypesInEntitySets() {
 
+  describe('removeAclsForPropertyTypesInEntitySets()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.removeAclsForPropertyTypesInEntitySets([MOCK_DATA]);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a DELETE request with the correct URL path and data', () => {
+
+      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}`,
+        { data: [MOCK_DATA] }
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.removeAclsForPropertyTypesInEntitySets([MOCK_DATA]);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          PermissionsApi.removeAclsForPropertyTypesInEntitySets(invalidInput).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          PermissionsApi.removeAclsForPropertyTypesInEntitySets([invalidInput]).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        promises.push(
+          PermissionsApi.removeAclsForPropertyTypesInEntitySets(invalidInput)
+        );
+
+        promises.push(
+          PermissionsApi.removeAclsForPropertyTypesInEntitySets([invalidInput])
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testRemoveAllAclsForPropertyTypesInEntityTypes() {
