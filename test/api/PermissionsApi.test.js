@@ -9,7 +9,8 @@ import {
 
 import {
   ENTITY_TYPE_PATH,
-  ENTITY_SET_PATH
+  ENTITY_SET_PATH,
+  PROPERTY_TYPE_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -26,16 +27,6 @@ const MOCK_ES_NAME = 'LoomDataApis';
 const MOCK_DATA = {
   type: MOCK_FQN
 };
-
-const MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES = [{
-  role: 'role',
-  action: 'add',
-  type: {
-    namespace: 'LOOM',
-    name: 'MyEntity'
-  },
-  permissions: ['read', 'write']
-}];
 
 /* eslint-disable no-array-constructor, no-new-object */
 const INVALID_INPUT = [
@@ -154,7 +145,7 @@ function testUpdateAclsForEntityTypes() {
   describe('updateAclsForEntityTypes()', () => {
 
     beforeEach(() => {
-      PermissionsApi.updateAclsForEntityTypes(MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES);
+      PermissionsApi.updateAclsForEntityTypes([MOCK_DATA]);
     });
 
     testApiAxiosInstanceInvocation();
@@ -164,13 +155,13 @@ function testUpdateAclsForEntityTypes() {
       expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.post).toHaveBeenCalledWith(
         `/${ENTITY_TYPE_PATH}`,
-        MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES
+        [MOCK_DATA]
       );
     });
 
     it('should return a Promise', () => {
 
-      const returnValue = PermissionsApi.updateAclsForEntityTypes(MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES);
+      const returnValue = PermissionsApi.updateAclsForEntityTypes([MOCK_DATA]);
       expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
@@ -409,6 +400,66 @@ function testRemoveAclsForEntitySets() {
 
 function testUpdateAclsForPropertyTypesInEntityTypes() {
 
+  describe('updateAclsForPropertyTypesInEntityTypes()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.updateAclsForPropertyTypesInEntityTypes([MOCK_DATA]);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a POST request with the correct URL path and data', () => {
+
+      expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+        `/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}`,
+        [MOCK_DATA]
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.updateAclsForPropertyTypesInEntityTypes([MOCK_DATA]);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          PermissionsApi.updateAclsForPropertyTypesInEntityTypes(invalidInput).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          PermissionsApi.updateAclsForPropertyTypesInEntityTypes([invalidInput]).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        promises.push(
+          PermissionsApi.updateAclsForPropertyTypesInEntityTypes(invalidInput)
+        );
+
+        promises.push(
+          PermissionsApi.updateAclsForPropertyTypesInEntityTypes([invalidInput])
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testRemoveAclsForPropertyTypesInEntityTypes() {
@@ -471,7 +522,7 @@ function testRemovePermissionsRequestForEntitySet() {
 
 }
 
-describe('PermissionsApi', () => {
+fdescribe('PermissionsApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
