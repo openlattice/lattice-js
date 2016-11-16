@@ -83,11 +83,13 @@ function testGetUser() {
     testApiAxiosInstanceInvocation();
 
     it('should return a Promise', () => {
+
       const returnValue = UsersApi.getUser(MOCK_USER_ID);
       expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
     it('should send a GET request with the correct URL path', () => {
+
       expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.get).toHaveBeenCalledWith(
         `/${USERS_PATH}/${MOCK_USER_ID}`
@@ -135,11 +137,13 @@ function testGetAllUsers() {
     testApiAxiosInstanceInvocation();
 
     it('should return a Promise', () => {
+
       const returnValue = UsersApi.getAllUsers();
       expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
     it('should send a GET request with the correct URL path', () => {
+
       expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.get).toHaveBeenCalledWith(
         `/${USERS_PATH}`
@@ -160,11 +164,13 @@ function testGetAllUsersForRole() {
     testApiAxiosInstanceInvocation();
 
     it('should return a Promise', () => {
+
       const returnValue = UsersApi.getAllUsersForRole(MOCK_ROLE);
       expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
     it('should send a GET request with the correct URL path', () => {
+
       expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.get).toHaveBeenCalledWith(
         `/${USERS_PATH}/${ROLES_PATH}/${MOCK_ROLE}`
@@ -212,11 +218,13 @@ function testGetAllUsersForAllRoles() {
     testApiAxiosInstanceInvocation();
 
     it('should return a Promise', () => {
+
       const returnValue = UsersApi.getAllUsersForAllRoles();
       expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
     it('should send a GET request with the correct URL path', () => {
+
       expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.get).toHaveBeenCalledWith(
         `/${USERS_PATH}/${ROLES_PATH}`
@@ -237,11 +245,13 @@ function testResetUserRoles() {
     testApiAxiosInstanceInvocation();
 
     it('should return a Promise', () => {
+
       const returnValue = UsersApi.resetUserRoles(MOCK_USER_ID, [MOCK_ROLE]);
       expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
     it('should send a PATCH request with the correct URL path', () => {
+
       expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
         `/${USERS_PATH}/${ROLES_PATH}/${RESET_PATH}/${MOCK_USER_ID}`,
@@ -267,9 +277,11 @@ function testResetUserRoles() {
 
       const promises = [];
       INVALID_INPUT.forEach((invalidInput) => {
+
         promises.push(
           UsersApi.resetUserRoles(invalidInput, [MOCK_ROLE])
         );
+
         promises.push(
           UsersApi.resetUserRoles(MOCK_USER_ID, invalidInput)
         );

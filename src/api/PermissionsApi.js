@@ -17,6 +17,7 @@
  * // PermissionsApi.update...
  */
 
+import FullyQualifiedName from '../types/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
@@ -55,7 +56,7 @@ const LOG = new Logger('PermissionsApi');
 export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
 
   if (!isNonEmptyArray(updateRequests)) {
-    return Promise.reject('invalid parameter: updateRequests must be a non-empty array of objects literals');
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
   }
 
   const allValid = updateRequests.reduce((isValid, request) => {
@@ -65,7 +66,6 @@ export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
   if (!allValid) {
     return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
   }
-
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_TYPE_PATH}`, updateRequests)
@@ -86,6 +86,18 @@ export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
  * @returns {Promise}
  */
 export function removeAclsForEntityTypes(entityTypeFqns :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_TYPE_PATH}`, {

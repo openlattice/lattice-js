@@ -8,12 +8,24 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  ENTITY_TYPE_PATH
+  ENTITY_TYPE_PATH,
+  ENTITY_SET_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
+
+const MOCK_FQN = {
+  namespace: 'LOOM',
+  name: 'PERMISSIONS_API'
+};
+
+const MOCK_ES_NAME = 'LoomDataApis';
+
+const MOCK_DATA = {
+  type: MOCK_FQN
+};
 
 const MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES = [{
   role: 'role',
@@ -147,12 +159,6 @@ function testUpdateAclsForEntityTypes() {
 
     testApiAxiosInstanceInvocation();
 
-    it('should return a Promise', () => {
-
-      const returnValue = PermissionsApi.updateAclsForEntityTypes(MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES);
-      expect(returnValue).toEqual(jasmine.any(Promise));
-    });
-
     it('should send a POST request with the correct URL path and data', () => {
 
       expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
@@ -160,6 +166,12 @@ function testUpdateAclsForEntityTypes() {
         `/${ENTITY_TYPE_PATH}`,
         MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES
       );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.updateAclsForEntityTypes(MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES);
+      expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
     it('should not throw when given invalid parameters', () => {
@@ -175,7 +187,6 @@ function testUpdateAclsForEntityTypes() {
         }).not.toThrow();
       });
     });
-
 
     it('should reject when given invalid parameters', (done) => {
 
@@ -205,6 +216,67 @@ function testUpdateAclsForEntityTypes() {
 
 function testRemoveAclsForEntityTypes() {
 
+  describe('removeAclsForEntityTypes()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.removeAclsForEntityTypes([MOCK_FQN]);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a DELETE request with the correct URL path and data', () => {
+
+      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+        `/${ENTITY_TYPE_PATH}`,
+        { data: [MOCK_FQN] }
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.removeAclsForEntityTypes([MOCK_FQN]);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          PermissionsApi.removeAclsForEntityTypes(invalidInput).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          PermissionsApi.removeAclsForEntityTypes([invalidInput]).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        promises.push(
+          PermissionsApi.removeAclsForEntityTypes(invalidInput)
+        );
+
+        promises.push(
+          PermissionsApi.removeAclsForEntityTypes([invalidInput])
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testUpdateAclsForEntitySets() {
