@@ -8,6 +8,7 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  ALL_PATH,
   ENTITY_TYPE_PATH,
   ENTITY_SET_PATH,
   PROPERTY_TYPE_PATH
@@ -656,6 +657,66 @@ function testRemoveAclsForPropertyTypesInEntitySets() {
 
 function testRemoveAllAclsForPropertyTypesInEntityTypes() {
 
+  describe('removeAllAclsForPropertyTypesInEntityTypes()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.removeAllAclsForPropertyTypesInEntityTypes([MOCK_FQN]);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a DELETE request with the correct URL path and data', () => {
+
+      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+        `/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}/${ALL_PATH}`,
+        { data: [MOCK_FQN] }
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.removeAllAclsForPropertyTypesInEntityTypes([MOCK_FQN]);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          PermissionsApi.removeAllAclsForPropertyTypesInEntityTypes(invalidInput).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          PermissionsApi.removeAllAclsForPropertyTypesInEntityTypes([invalidInput]).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        promises.push(
+          PermissionsApi.removeAllAclsForPropertyTypesInEntityTypes(invalidInput)
+        );
+
+        promises.push(
+          PermissionsApi.removeAllAclsForPropertyTypesInEntityTypes([invalidInput])
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testRemoveAllAclsForPropertyTypesInEntitySets() {

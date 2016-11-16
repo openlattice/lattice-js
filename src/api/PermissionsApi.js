@@ -319,6 +319,18 @@ export function removeAclsForPropertyTypesInEntitySets(removeRequests :Object[])
  */
 export function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}/${ALL_PATH}`, {
       data: entityTypeFqns
