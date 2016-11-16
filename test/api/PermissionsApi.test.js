@@ -6,9 +6,9 @@ import {
   PERMISSIONS_API
 } from '../../src/constants/ApiNames';
 
-const MOCK_PROMISE = new Promise((resolve) => {
-  resolve({ data: {} });
-});
+import {
+  getMockAxiosInstance
+} from '../utils/MockDataUtils';
 
 const MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES = [{
   role: 'role',
@@ -221,13 +221,7 @@ function testRemovePermissionsRequestForEntitySet() {
 describe('PermissionsApi', () => {
 
   beforeEach(() => {
-
-    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'patch', 'delete']);
-    mockAxiosInstance.get.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.post.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.delete.and.returnValue(MOCK_PROMISE);
-
+    mockAxiosInstance = getMockAxiosInstance();
     spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
   });
 

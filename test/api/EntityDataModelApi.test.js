@@ -5,6 +5,10 @@ import {
   EDM_API
 } from '../../src/constants/ApiNames';
 
+import {
+  getMockAxiosInstance
+} from '../utils/MockDataUtils';
+
 const MOCK_SCHEMA_FQN = {
   namespace: 'LOOM',
   name: 'EDM_API'
@@ -43,10 +47,6 @@ const MOCK_PROPERTY_TYPE = {
   datatype: 'String',
   properties: 0
 };
-
-const MOCK_PROMISE = new Promise((resolve) => {
-  resolve({ data: {} });
-});
 
 let mockAxiosInstance = null;
 let requestPromise = null;
@@ -687,13 +687,7 @@ function testDeletePropertyType() {
 describe('EntityDataModelApi', () => {
 
   beforeEach(() => {
-
-    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'patch', 'delete']);
-    mockAxiosInstance.get.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.post.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.delete.and.returnValue(MOCK_PROMISE);
-
+    mockAxiosInstance = getMockAxiosInstance();
     spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
   });
 

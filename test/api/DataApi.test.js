@@ -5,6 +5,10 @@ import {
   DATA_API
 } from '../../src/constants/ApiNames';
 
+import {
+  getMockAxiosInstance
+} from '../utils/MockDataUtils';
+
 const DATA_API_BASE_URL = 'http://localhost:8080/ontology/data';
 
 const MOCK_FQN = {
@@ -21,10 +25,6 @@ const MOCK_CREATE_ENTITY_DATA = {
     { 'LOOM.MY_PROPERTY': 'testing' }
   ]
 };
-
-const MOCK_PROMISE = new Promise((resolve) => {
-  resolve({ data: {} });
-});
 
 let mockAxiosInstance = null;
 let requestPromise = null;
@@ -194,13 +194,7 @@ function testCreateEntity() {
 describe('DataApi', () => {
 
   beforeEach(() => {
-
-    mockAxiosInstance = jasmine.createSpyObj('mockAxiosInstance', ['get', 'post', 'put', 'patch', 'delete']);
-    mockAxiosInstance.get.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.post.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.put.and.returnValue(MOCK_PROMISE);
-    mockAxiosInstance.delete.and.returnValue(MOCK_PROMISE);
-
+    mockAxiosInstance = getMockAxiosInstance();
     spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
   });
 

@@ -33,6 +33,11 @@ import {
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
+import {
+  isNonEmptyArray,
+  isNonEmptyString
+} from '../utils/LangUtils';
+
 const LOG = new Logger('UsersApi');
 
 /**
@@ -44,6 +49,10 @@ const LOG = new Logger('UsersApi');
  * @return {Promise}
  */
 export function getUser(userId :string) :Promise<> {
+
+  if (!isNonEmptyString(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
 
   return getApiAxiosInstance(USERS_API)
     .get(`/${USERS_PATH}/${userId}`)
@@ -82,6 +91,10 @@ export function getAllUsers() :Promise<> {
  * @return {Promise}
  */
 export function getAllUsersForRole(role :string) :Promise<> {
+
+  if (!isNonEmptyString(role)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
 
   return getApiAxiosInstance(USERS_API)
     .get(`/${USERS_PATH}/${ROLES_PATH}/${role}`)
@@ -122,6 +135,14 @@ export function getAllUsersForAllRoles() :Promise<> {
  * @return {Promise}
  */
 export function resetUserRoles(userId :string, roles :string[]) :Promise<> {
+
+  if (!isNonEmptyString(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
+
+  if (!isNonEmptyArray(roles)) {
+    return Promise.reject('invalid parameter: roles must be a non-empty string array');
+  }
 
   return getApiAxiosInstance(USERS_API)
     .patch(`/${USERS_PATH}/${ROLES_PATH}/${RESET_PATH}/${userId}`, roles)
