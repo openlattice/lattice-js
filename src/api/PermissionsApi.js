@@ -37,6 +37,8 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
+  isNonEmptyArray,
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -51,6 +53,19 @@ const LOG = new Logger('PermissionsApi');
  * @returns {Promise}
  */
 export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array of objects literals');
+  }
+
+  const allValid = updateRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_TYPE_PATH}`, updateRequests)

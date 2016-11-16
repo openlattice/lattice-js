@@ -1,10 +1,15 @@
-import * as ApiPaths from '../../src/constants/ApiPaths';
+import BBPromise from 'bluebird';
+
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
 import * as PermissionsApi from '../../src/api/PermissionsApi';
 
 import {
   PERMISSIONS_API
 } from '../../src/constants/ApiNames';
+
+import {
+  ENTITY_TYPE_PATH
+} from '../../src/constants/ApiPaths';
 
 import {
   getMockAxiosInstance
@@ -20,18 +25,32 @@ const MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES = [{
   permissions: ['read', 'write']
 }];
 
+/* eslint-disable no-array-constructor, no-new-object */
+const INVALID_INPUT = [
+  undefined,
+  null,
+  [],
+  new Array(),
+  {},
+  new Object(),
+  true,
+  false,
+  -1,
+  0,
+  1,
+  '',
+  ' ',
+  /regex/
+];
+/* eslint-enable */
+
 let mockAxiosInstance = null;
-let requestPromise = null;
 
-function runCommonTests() {
+function testApiAxiosInstanceInvocation() {
 
-  it('should invoke getApiAxiosInstance() with the correct API', () => {
+  it('should invoke getApiAxiosInstance() once with the correct API', () => {
     expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledTimes(1);
     expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledWith(PERMISSIONS_API);
-  });
-
-  it('should return a Promise', () => {
-    expect(requestPromise).toEqual(jasmine.any(Promise));
   });
 }
 
@@ -123,22 +142,64 @@ function testUpdateAclsForEntityTypes() {
   describe('updateAclsForEntityTypes()', () => {
 
     beforeEach(() => {
-      requestPromise = PermissionsApi.updateAclsForEntityTypes(MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES);
+      PermissionsApi.updateAclsForEntityTypes(MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES);
     });
 
-    afterEach(() => {
-      requestPromise = null;
-    });
+    testApiAxiosInstanceInvocation();
 
-    runCommonTests();
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.updateAclsForEntityTypes(MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
 
     it('should send a POST request with the correct URL path and data', () => {
+
       expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        `/${ApiPaths.ENTITY_TYPE_PATH}`,
+        `/${ENTITY_TYPE_PATH}`,
         MOCK_UPDATE_ACLS_FOR_ENTITY_TYPES
       );
     });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          PermissionsApi.updateAclsForEntityTypes(invalidInput).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          PermissionsApi.updateAclsForEntityTypes([invalidInput]).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        promises.push(
+          PermissionsApi.updateAclsForEntityTypes(invalidInput)
+        );
+
+        promises.push(
+          PermissionsApi.updateAclsForEntityTypes([invalidInput])
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
   });
 }
 

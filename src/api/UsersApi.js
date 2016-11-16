@@ -141,7 +141,7 @@ export function resetUserRoles(userId :string, roles :string[]) :Promise<> {
   }
 
   if (!isNonEmptyArray(roles)) {
-    return Promise.reject('invalid parameter: roles must be a non-empty string array');
+    return Promise.reject('invalid parameter: roles must be a non-empty array of strings');
   }
 
   return getApiAxiosInstance(USERS_API)
