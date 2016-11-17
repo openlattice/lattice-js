@@ -785,6 +785,56 @@ function testRemoveAllAclsForPropertyTypesInEntitySets() {
 
 function testGetAclsForEntityType() {
 
+  describe('getAclsForEntityType()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.getAclsForEntityType(MOCK_FQN);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a GET request with the correct URL path', () => {
+
+      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+        `/${ENTITY_TYPE_PATH}?namespace=${MOCK_FQN.namespace}&name=${MOCK_FQN.name}`,
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.getAclsForEntityType(MOCK_FQN);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          PermissionsApi.getAclsForEntityType(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          PermissionsApi.getAclsForEntityType(invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testGetAclsForEntitySet() {
