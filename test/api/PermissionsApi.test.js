@@ -1181,6 +1181,56 @@ function testGetAllReceivedRequestsForPermissions() {
 
 function testGetAllSentRequestsForPermissions() {
 
+  describe('getAllSentRequestsForPermissions()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.getAllSentRequestsForPermissions(MOCK_ES_NAME);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a GET request with the correct URL path', () => {
+
+      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}/${REQUESTS_PATH}?name=${MOCK_ES_NAME}`
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.getAllSentRequestsForPermissions(MOCK_ES_NAME);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          PermissionsApi.getAllSentRequestsForPermissions(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should not reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          PermissionsApi.getAllSentRequestsForPermissions(invalidInput)
+        );
+      });
+
+      BBPromise.all(promises)
+        .then(() => {
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+  });
 }
 
 function testAddPermissionsRequestForPropertyTypesInEntitySet() {
