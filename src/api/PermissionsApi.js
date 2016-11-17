@@ -510,7 +510,15 @@ export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
  * @param {Object} principal - an object literal representing com.kryptnostic.datastore.Principal
  * @returns {Promise}
  */
-export function getOwnerAclsForPropertyTypesInEntitySet(entitySetName :string, principal :string) :Promise<> {
+export function getOwnerAclsForPropertyTypesInEntitySet(entitySetName :string, principal :Object) :Promise<> {
+
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!isNonEmptyObject(principal)) {
+    return Promise.reject('invalid parameter: principal must be a non-empty object literal');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`, principal)

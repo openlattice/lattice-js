@@ -24,6 +24,11 @@ const MOCK_FQN = {
   name: 'PERMISSIONS_API'
 };
 
+const MOCK_PRINCIPAL = {
+  type: 'hello',
+  name: 'world'
+};
+
 const MOCK_ES_NAME = 'LoomDataApis';
 
 const MOCK_DATA = {
@@ -1056,6 +1061,67 @@ function testGetOwnerAclsForEntitySet() {
 
 function testGetOwnerAclsForPropertyTypesInEntitySet() {
 
+  describe('getOwnerAclsForPropertyTypesInEntitySet()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, MOCK_PRINCIPAL);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a POST request with the correct URL path and data', () => {
+
+      expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${MOCK_ES_NAME}`,
+        MOCK_PRINCIPAL
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, MOCK_PRINCIPAL);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(invalidInput, MOCK_PRINCIPAL).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        promises.push(
+          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(invalidInput, MOCK_PRINCIPAL)
+        );
+
+        promises.push(
+          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testGetAllReceivedRequestsForPermissions() {
