@@ -797,7 +797,7 @@ function testGetAclsForEntityType() {
 
       expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        `/${ENTITY_TYPE_PATH}?namespace=${MOCK_FQN.namespace}&name=${MOCK_FQN.name}`,
+        `/${ENTITY_TYPE_PATH}?namespace=${MOCK_FQN.namespace}&name=${MOCK_FQN.name}`
       );
     });
 
@@ -839,6 +839,56 @@ function testGetAclsForEntityType() {
 
 function testGetAclsForEntitySet() {
 
+  describe('getAclsForEntitySet()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.getAclsForEntitySet(MOCK_ES_NAME);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a GET request with the correct URL path', () => {
+
+      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}?name=${MOCK_ES_NAME}`
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.getAclsForEntitySet(MOCK_ES_NAME);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          PermissionsApi.getAclsForEntitySet(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          PermissionsApi.getAclsForEntitySet(invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testGetAclsForPropertyTypesInEntityType() {

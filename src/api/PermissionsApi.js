@@ -413,6 +413,10 @@ export function getAclsForEntityType(entityTypeFqn :Object) :Promise<> {
  */
 export function getAclsForEntitySet(entitySetName :string) :Promise<> {
 
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .get(`/${ENTITY_SET_PATH}?name=${entitySetName}`)
     .then((axiosResponse) => {
