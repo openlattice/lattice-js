@@ -487,6 +487,10 @@ export function getAclsForPropertyTypesInEntitySet(entitySetName :string) :Promi
  */
 export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
 
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .get(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`)
     .then((axiosResponse) => {
