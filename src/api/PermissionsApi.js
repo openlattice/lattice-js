@@ -621,6 +621,10 @@ export function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequ
  */
 export function removePermissionsRequestForEntitySet(requestId :string) :Promise<> {
 
+  if (!isNonEmptyString(requestId)) {
+    return Promise.reject('invalid parameter: requestId must be a non-empty string');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}?id=${requestId}`)
     .then((axiosResponse) => {

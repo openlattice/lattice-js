@@ -31,6 +31,7 @@ const MOCK_PRINCIPAL = {
 };
 
 const MOCK_ES_NAME = 'LoomDataApis';
+const MOCK_REQUEST_ID = 'requestId';
 
 const MOCK_DATA = {
   type: MOCK_FQN
@@ -1300,6 +1301,56 @@ function testAddPermissionsRequestForPropertyTypesInEntitySet() {
 
 function testRemovePermissionsRequestForEntitySet() {
 
+  describe('removePermissionsRequestForEntitySet()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.removePermissionsRequestForEntitySet(MOCK_REQUEST_ID);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a DELETE request with the correct URL path and data', () => {
+
+      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}/${REQUESTS_PATH}?id=${MOCK_REQUEST_ID}`
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.removePermissionsRequestForEntitySet(MOCK_REQUEST_ID);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          PermissionsApi.removePermissionsRequestForEntitySet(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          PermissionsApi.removePermissionsRequestForEntitySet(invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 fdescribe('PermissionsApi', () => {
