@@ -12,7 +12,8 @@ import {
   ENTITY_TYPE_PATH,
   ENTITY_SET_PATH,
   OWNER_PATH,
-  PROPERTY_TYPE_PATH
+  PROPERTY_TYPE_PATH,
+  REQUESTS_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -1126,6 +1127,56 @@ function testGetOwnerAclsForPropertyTypesInEntitySet() {
 
 function testGetAllReceivedRequestsForPermissions() {
 
+  describe('getAllReceivedRequestsForPermissions()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.getAllReceivedRequestsForPermissions(MOCK_ES_NAME);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a GET request with the correct URL path', () => {
+
+      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}/${OWNER_PATH}/${REQUESTS_PATH}?name=${MOCK_ES_NAME}`
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.getAllReceivedRequestsForPermissions(MOCK_ES_NAME);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          PermissionsApi.getAllReceivedRequestsForPermissions(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should not reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          PermissionsApi.getAllReceivedRequestsForPermissions(invalidInput)
+        );
+      });
+
+      BBPromise.all(promises)
+        .then(() => {
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+  });
 }
 
 function testGetAllSentRequestsForPermissions() {
