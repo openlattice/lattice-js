@@ -463,6 +463,10 @@ export function getAclsForPropertyTypesInEntityType(entityTypeFqn :Object) :Prom
  */
 export function getAclsForPropertyTypesInEntitySet(entitySetName :string) :Promise<> {
 
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .get(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}?name=${entitySetName}`)
     .then((axiosResponse) => {

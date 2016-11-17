@@ -947,6 +947,56 @@ function testGetAclsForPropertyTypesInEntityType() {
 
 function testGetAclsForPropertyTypesInEntitySet() {
 
+  describe('getAclsForPropertyTypesInEntitySet()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.getAclsForPropertyTypesInEntitySet(MOCK_ES_NAME);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a GET request with the correct URL path', () => {
+
+      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}?name=${MOCK_ES_NAME}`
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.getAclsForPropertyTypesInEntitySet(MOCK_ES_NAME);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+        expect(() => {
+          PermissionsApi.getAclsForPropertyTypesInEntitySet(invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+        promises.push(
+          PermissionsApi.getAclsForPropertyTypesInEntitySet(invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
 }
 
 function testGetOwnerAclsForEntitySet() {
