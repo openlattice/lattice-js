@@ -589,6 +589,18 @@ export function getAllSentRequestsForPermissions(entitySetName :?string) :Promis
  */
 export function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(permissionsRequests)) {
+    return Promise.reject('invalid parameter: permissionsRequests must be a non-empty array');
+  }
+
+  const allValid = permissionsRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: permissionsRequests must be an array of valid object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}`, permissionsRequests)
     .then((axiosResponse) => {
