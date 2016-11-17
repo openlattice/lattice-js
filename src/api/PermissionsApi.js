@@ -437,6 +437,10 @@ export function getAclsForEntitySet(entitySetName :string) :Promise<> {
  */
 export function getAclsForPropertyTypesInEntityType(entityTypeFqn :Object) :Promise<> {
 
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
   const { namespace, name } = entityTypeFqn;
 
   return getApiAxiosInstance(PERMISSIONS_API)
