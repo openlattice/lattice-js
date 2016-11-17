@@ -1353,7 +1353,7 @@ function testRemovePermissionsRequestForEntitySet() {
   });
 }
 
-fdescribe('PermissionsApi', () => {
+describe('PermissionsApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
