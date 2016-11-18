@@ -51,6 +51,24 @@ export function testApiFunctionShouldReturnPromiseOnValidParameters(functionToTe
   });
 }
 
+export function testApiFunctionShouldReturnNullOnInvalidParameters(functionToTest, ...validParameters) {
+
+  it('should return null when given invalid parameters', () => {
+
+    for (let i = 0; i < validParameters.length; i += 1) {
+
+      const invocationParameters = validParameters.slice(0);
+      INVALID_PARAMS.forEach((invalidInput) => {
+
+        invocationParameters[i] = invalidInput;
+
+        expect(functionToTest(...invocationParameters)).toEqual(null);
+        expect(functionToTest([...invocationParameters])).toEqual(null);
+      });
+    }
+  });
+}
+
 export function testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, ...validParameters) {
 
   it('should not throw when given invalid parameters', () => {
@@ -63,11 +81,17 @@ export function testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest,
         invocationParameters[i] = invalidInput;
 
         expect(() => {
-          functionToTest(...invocationParameters).catch(() => {});
+          const result = functionToTest(...invocationParameters);
+          if (result instanceof Promise) {
+            result.catch(() => {});
+          }
         }).not.toThrow();
 
         expect(() => {
-          functionToTest([...invocationParameters]).catch(() => {});
+          const result = functionToTest([...invocationParameters]);
+          if (result instanceof Promise) {
+            result.catch(() => {});
+          }
         }).not.toThrow();
       });
     }
