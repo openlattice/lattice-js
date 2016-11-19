@@ -128,8 +128,12 @@ function testApiMethods() {
     expect(PermissionsApi.getOwnerAclsForEntitySet).toEqual(jasmine.any(Function));
   });
 
-  it('should expose getOwnerAclsForPropertyTypesInEntitySet()', () => {
-    expect(PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet).toEqual(jasmine.any(Function));
+  it('should expose getOwnerAclsForPropertyTypeInEntitySet()', () => {
+    expect(PermissionsApi.getOwnerAclsForPropertyTypeInEntitySet).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose getOwnerAclsForAllPropertyTypesInEntitySet()', () => {
+    expect(PermissionsApi.getOwnerAclsForAllPropertyTypesInEntitySet).toEqual(jasmine.any(Function));
   });
 
   it('should expose getAllReceivedRequestsForPermissions()', () => {
@@ -1061,12 +1065,77 @@ function testGetOwnerAclsForEntitySet() {
   });
 }
 
-function testGetOwnerAclsForPropertyTypesInEntitySet() {
+function testGetOwnerAclsForPropertyTypeInEntitySet() {
 
-  describe('getOwnerAclsForPropertyTypesInEntitySet()', () => {
+  describe('getOwnerAclsForPropertyTypeInEntitySet()', () => {
 
     beforeEach(() => {
-      PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, MOCK_PRINCIPAL);
+      PermissionsApi.getOwnerAclsForPropertyTypeInEntitySet(MOCK_ES_NAME, MOCK_FQN);
+    });
+
+    testApiAxiosInstanceInvocation();
+
+    it('should send a POST request with the correct URL path and data', () => {
+
+      expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+        `/${ENTITY_SET_PATH}/${OWNER_PATH}/${PROPERTY_TYPE_PATH}?name=${MOCK_ES_NAME}`,
+        MOCK_FQN
+      );
+    });
+
+    it('should return a Promise', () => {
+
+      const returnValue = PermissionsApi.getOwnerAclsForPropertyTypeInEntitySet(MOCK_ES_NAME, MOCK_FQN);
+      expect(returnValue).toEqual(jasmine.any(Promise));
+    });
+
+    it('should not throw when given invalid parameters', () => {
+
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        expect(() => {
+          PermissionsApi.getOwnerAclsForPropertyTypeInEntitySet(invalidInput, MOCK_FQN).catch(() => {});
+        }).not.toThrow();
+
+        expect(() => {
+          PermissionsApi.getOwnerAclsForPropertyTypeInEntitySet(MOCK_ES_NAME, invalidInput).catch(() => {});
+        }).not.toThrow();
+      });
+    });
+
+    it('should reject when given invalid parameters', (done) => {
+
+      const promises = [];
+      INVALID_INPUT.forEach((invalidInput) => {
+
+        promises.push(
+          PermissionsApi.getOwnerAclsForPropertyTypeInEntitySet(invalidInput, MOCK_FQN)
+        );
+
+        promises.push(
+          PermissionsApi.getOwnerAclsForPropertyTypeInEntitySet(MOCK_ES_NAME, invalidInput)
+        );
+      });
+
+      BBPromise.any(promises)
+        .then(() => {
+          done.fail();
+        })
+        .catch(() => {
+          done();
+        });
+    });
+
+  });
+}
+
+function testGetOwnerAclsForAllPropertyTypesInEntitySet() {
+
+  describe('getOwnerAclsForAllPropertyTypesInEntitySet()', () => {
+
+    beforeEach(() => {
+      PermissionsApi.getOwnerAclsForAllPropertyTypesInEntitySet(MOCK_ES_NAME, MOCK_PRINCIPAL);
     });
 
     testApiAxiosInstanceInvocation();
@@ -1082,7 +1151,7 @@ function testGetOwnerAclsForPropertyTypesInEntitySet() {
 
     it('should return a Promise', () => {
 
-      const returnValue = PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, MOCK_PRINCIPAL);
+      const returnValue = PermissionsApi.getOwnerAclsForAllPropertyTypesInEntitySet(MOCK_ES_NAME, MOCK_PRINCIPAL);
       expect(returnValue).toEqual(jasmine.any(Promise));
     });
 
@@ -1091,11 +1160,11 @@ function testGetOwnerAclsForPropertyTypesInEntitySet() {
       INVALID_INPUT.forEach((invalidInput) => {
 
         expect(() => {
-          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(invalidInput, MOCK_PRINCIPAL).catch(() => {});
+          PermissionsApi.getOwnerAclsForAllPropertyTypesInEntitySet(invalidInput, MOCK_PRINCIPAL).catch(() => {});
         }).not.toThrow();
 
         expect(() => {
-          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, invalidInput).catch(() => {});
+          PermissionsApi.getOwnerAclsForAllPropertyTypesInEntitySet(MOCK_ES_NAME, invalidInput).catch(() => {});
         }).not.toThrow();
       });
     });
@@ -1106,11 +1175,11 @@ function testGetOwnerAclsForPropertyTypesInEntitySet() {
       INVALID_INPUT.forEach((invalidInput) => {
 
         promises.push(
-          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(invalidInput, MOCK_PRINCIPAL)
+          PermissionsApi.getOwnerAclsForAllPropertyTypesInEntitySet(invalidInput, MOCK_PRINCIPAL)
         );
 
         promises.push(
-          PermissionsApi.getOwnerAclsForPropertyTypesInEntitySet(MOCK_ES_NAME, invalidInput)
+          PermissionsApi.getOwnerAclsForAllPropertyTypesInEntitySet(MOCK_ES_NAME, invalidInput)
         );
       });
 
@@ -1380,7 +1449,8 @@ describe('PermissionsApi', () => {
   testGetAclsForPropertyTypesInEntityType();
   testGetAclsForPropertyTypesInEntitySet();
   testGetOwnerAclsForEntitySet();
-  testGetOwnerAclsForPropertyTypesInEntitySet();
+  testGetOwnerAclsForPropertyTypeInEntitySet();
+  testGetOwnerAclsForAllPropertyTypesInEntitySet();
   testGetAllReceivedRequestsForPermissions();
   testGetAllSentRequestsForPermissions();
   testAddPermissionsRequestForPropertyTypesInEntitySet();
