@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.9.1
+ * loom-data - v0.9.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4330,7 +4330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 'use strict';
 
-var bind = __webpack_require__(15);
+var bind = __webpack_require__(16);
 
 /*global toString:true*/
 
@@ -4631,6 +4631,37 @@ module.exports = {
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isNonEmptyArray = isNonEmptyArray;
+exports.isNonEmptyObject = isNonEmptyObject;
+exports.isNonEmptyString = isNonEmptyString;
+
+var _lodash = __webpack_require__(6);
+
+function isNonEmptyArray(value) {
+
+  return (0, _lodash.isArray)(value) && !(0, _lodash.isEmpty)(value);
+}
+
+function isNonEmptyObject(value) {
+
+  return (0, _lodash.isPlainObject)(value) && !(0, _lodash.isEmpty)(value);
+}
+
+function isNonEmptyString(value) {
+
+  return (0, _lodash.isString)(value) && !(0, _lodash.isEmpty)((0, _lodash.trim)(value));
+}
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -4645,7 +4676,7 @@ var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
 var USERS_API = exports.USERS_API = 'UsersApi';
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -4707,30 +4738,6 @@ var ADMIN_PATH = exports.ADMIN_PATH = 'admin';
 var RESET_PATH = exports.RESET_PATH = 'reset';
 var ROLES_PATH = exports.ROLES_PATH = 'roles';
 var USERS_PATH = exports.USERS_PATH = 'users';
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isNonEmptyString = isNonEmptyString;
-
-var _lodash = __webpack_require__(6);
-
-var _ = _interopRequireWildcard(_lodash);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function isNonEmptyString(value) {
-  // eslint-disable-line
-
-  return _.isString(value) && !_.isEmpty(value);
-}
 
 /***/ },
 /* 5 */
@@ -21887,15 +21894,15 @@ var _immutable = __webpack_require__(8);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _EnvToUrlMap = __webpack_require__(16);
+var _EnvToUrlMap = __webpack_require__(17);
 
 var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
 
-var _Configuration = __webpack_require__(9);
+var _Configuration = __webpack_require__(10);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26954,6 +26961,212 @@ exports.getApiAxiosInstance = getApiAxiosInstance;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+/**
+ * A class to represent a fully qualified name, which is simply an object literal of the following form:
+ *
+ * ```
+ * {
+ *   namespace :string,
+ *   name :string
+ * }
+ * ```
+ *
+ * @class FullyQualifiedName
+ * @memberof loom-data
+ * @private
+ *
+ * @example
+ * // create from an object literal
+ * const fqn = new FullyQualifiedName({
+ *   namespace: "LOOM",
+ *   name: "Data"
+ * });
+ *
+ * @example
+ * // create from separate "namespace" and "name" parameters
+ * const fqn = new FullyQualifiedName("LOOM", "Data");
+ *
+ * @example
+ * // create from a fully qualified name string, from which "namespace" and "name" will be parsed
+ * const fqn = new FullyQualifiedName("LOOM.Data");
+ *
+ * @example
+ * // usage:
+ * fqn.getNamespace(); // "LOOM"
+ * fqn.getName(); // "Data"
+ * fqn.getFullyQualifiedName(); // "LOOM.Data"
+ */
+
+var _lodash = __webpack_require__(6);
+
+var _ = _interopRequireWildcard(_lodash);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var EMPTY_FQN = {
+  namespace: '',
+  name: ''
+};
+
+function parseFqnString(fullyQualifiedName) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(fullyQualifiedName)) {
+    return EMPTY_FQN;
+  }
+
+  var dotIndex = fullyQualifiedName.lastIndexOf('.');
+
+  if (dotIndex === -1 || dotIndex === 0 || dotIndex === fullyQualifiedName.length - 1) {
+    return EMPTY_FQN;
+  }
+
+  var namespace = fullyQualifiedName.substring(0, dotIndex);
+  var name = fullyQualifiedName.substring(dotIndex + 1);
+
+  return {
+    namespace: namespace,
+    name: name
+  };
+}
+
+function processArgs() {
+
+  var namespace = '';
+  var name = '';
+
+  /*
+   * case 1: a single parameter which can be either:
+   *   - an object literal to represent a FullyQualifiedName
+   *   - a FullyQualifiedName as a string
+   */
+  if (arguments.length === 1) {
+
+    var fqnObj = EMPTY_FQN;
+    if (_.isPlainObject(arguments.length <= 0 ? undefined : arguments[0])) {
+
+      // if it's an object literal, it must have valid "namespace" and "name" properties
+      var fqnArg = arguments.length <= 0 ? undefined : arguments[0];
+      if ((0, _LangUtils.isNonEmptyString)(fqnArg.namespace) && (0, _LangUtils.isNonEmptyString)(fqnArg.name)) {
+        fqnObj = fqnArg;
+      }
+    } else if ((0, _LangUtils.isNonEmptyString)(arguments.length <= 0 ? undefined : arguments[0])) {
+
+      // if it's a string, it must be a properly formatted FullyQualifiedName string
+      var fqnStr = arguments.length <= 0 ? undefined : arguments[0];
+      fqnObj = parseFqnString(fqnStr);
+    } else {
+      return EMPTY_FQN;
+    }
+
+    namespace = fqnObj.namespace;
+    name = fqnObj.name;
+  }
+  /*
+   * case 2: two parameters
+   *   - namespace
+   *   - name
+   */
+  else if (arguments.length === 2) {
+      namespace = arguments.length <= 0 ? undefined : arguments[0];
+      name = arguments.length <= 1 ? undefined : arguments[1];
+    } else {
+      return EMPTY_FQN;
+    }
+
+  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
+    return EMPTY_FQN;
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(name)) {
+    return EMPTY_FQN;
+  }
+
+  return {
+    namespace: namespace,
+    name: name
+  };
+}
+
+var FullyQualifiedName = function () {
+  function FullyQualifiedName() {
+    _classCallCheck(this, FullyQualifiedName);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var _processArgs = processArgs(args);
+
+    var namespace = _processArgs.namespace;
+    var name = _processArgs.name;
+
+
+    this.namespace = namespace;
+    this.name = name;
+    this.fqn = namespace + '.' + name;
+  }
+
+  _createClass(FullyQualifiedName, [{
+    key: 'getNamespace',
+    value: function getNamespace() {
+
+      return this.namespace;
+    }
+  }, {
+    key: 'getName',
+    value: function getName() {
+
+      return this.name;
+    }
+  }, {
+    key: 'getFullyQualifiedName',
+    value: function getFullyQualifiedName() {
+
+      return this.fqn;
+    }
+  }]);
+
+  return FullyQualifiedName;
+}();
+
+FullyQualifiedName.isValidFqn = function () {
+  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    args[_key2] = arguments[_key2];
+  }
+
+  var _processArgs2 = processArgs(args);
+
+  var namespace = _processArgs2.namespace;
+  var name = _processArgs2.name;
+
+  return (0, _LangUtils.isNonEmptyString)(namespace) && (0, _LangUtils.isNonEmptyString)(name);
+};
+
+FullyQualifiedName.isValidFqnObjectLiteral = function (fqnObjectLiteral) {
+
+  return _.isPlainObject(fqnObjectLiteral) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.namespace) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.name);
+};
+
+exports.default = FullyQualifiedName;
+module.exports = exports['default'];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.getConfig = exports.configure = undefined;
 
 var _immutable = __webpack_require__(8);
@@ -26962,7 +27175,7 @@ var _immutable2 = _interopRequireDefault(_immutable);
 
 var _lodash = __webpack_require__(6);
 
-var _EnvToUrlMap = __webpack_require__(16);
+var _EnvToUrlMap = __webpack_require__(17);
 
 var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
 
@@ -26970,7 +27183,7 @@ var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27049,7 +27262,7 @@ exports.configure = configure;
 exports.getConfig = getConfig;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27060,7 +27273,7 @@ var settle = __webpack_require__(135);
 var buildURL = __webpack_require__(138);
 var parseHeaders = __webpack_require__(144);
 var isURLSameOrigin = __webpack_require__(142);
-var createError = __webpack_require__(13);
+var createError = __webpack_require__(14);
 var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(137);
 
 module.exports = function xhrAdapter(config) {
@@ -27234,7 +27447,7 @@ module.exports = function xhrAdapter(config) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(122)))
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -27260,7 +27473,7 @@ module.exports = Cancel;
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -27272,7 +27485,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27296,7 +27509,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27320,10 +27533,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(10);
+    adapter = __webpack_require__(11);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(10);
+    adapter = __webpack_require__(11);
   }
   return adapter;
 }
@@ -27390,7 +27603,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(122)))
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -27408,7 +27621,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27432,212 +27645,6 @@ var ENVIRONMENT_URLS = _immutable2.default.Map({
 /* eslint-disable import/prefer-default-export */
 
 exports.default = ENVIRONMENT_URLS;
-module.exports = exports['default'];
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-/**
- * A class to represent a fully qualified name, which is simply an object literal of the following form:
- *
- * ```
- * {
- *   namespace :string,
- *   name :string
- * }
- * ```
- *
- * @class FullyQualifiedName
- * @memberof loom-data
- * @private
- *
- * @example
- * // create from an object literal
- * const fqn = new FullyQualifiedName({
- *   namespace: "LOOM",
- *   name: "Data"
- * });
- *
- * @example
- * // create from separate "namespace" and "name" parameters
- * const fqn = new FullyQualifiedName("LOOM", "Data");
- *
- * @example
- * // create from a fully qualified name string, from which "namespace" and "name" will be parsed
- * const fqn = new FullyQualifiedName("LOOM.Data");
- *
- * @example
- * // usage:
- * fqn.getNamespace(); // "LOOM"
- * fqn.getName(); // "Data"
- * fqn.getFullyQualifiedName(); // "LOOM.Data"
- */
-
-var _lodash = __webpack_require__(6);
-
-var _ = _interopRequireWildcard(_lodash);
-
-var _LangUtils = __webpack_require__(4);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var EMPTY_FQN = {
-  namespace: '',
-  name: ''
-};
-
-function parseFqnString(fullyQualifiedName) {
-
-  if (!(0, _LangUtils.isNonEmptyString)(fullyQualifiedName)) {
-    return EMPTY_FQN;
-  }
-
-  var dotIndex = fullyQualifiedName.lastIndexOf('.');
-
-  if (dotIndex === -1 || dotIndex === 0 || dotIndex === fullyQualifiedName.length - 1) {
-    return EMPTY_FQN;
-  }
-
-  var namespace = fullyQualifiedName.substring(0, dotIndex);
-  var name = fullyQualifiedName.substring(dotIndex + 1);
-
-  return {
-    namespace: namespace,
-    name: name
-  };
-}
-
-function processArgs() {
-
-  var namespace = '';
-  var name = '';
-
-  /*
-   * case 1: a single parameter which can be either:
-   *   - an object literal to represent a FullyQualifiedName
-   *   - a FullyQualifiedName as a string
-   */
-  if (arguments.length === 1) {
-
-    var fqnObj = EMPTY_FQN;
-    if (_.isPlainObject(arguments.length <= 0 ? undefined : arguments[0])) {
-
-      // if it's an object literal, it must have valid "namespace" and "name" properties
-      var fqnArg = arguments.length <= 0 ? undefined : arguments[0];
-      if ((0, _LangUtils.isNonEmptyString)(fqnArg.namespace) && (0, _LangUtils.isNonEmptyString)(fqnArg.name)) {
-        fqnObj = fqnArg;
-      }
-    } else if ((0, _LangUtils.isNonEmptyString)(arguments.length <= 0 ? undefined : arguments[0])) {
-
-      // if it's a string, it must be a properly formatted FullyQualifiedName string
-      var fqnStr = arguments.length <= 0 ? undefined : arguments[0];
-      fqnObj = parseFqnString(fqnStr);
-    } else {
-      return EMPTY_FQN;
-    }
-
-    namespace = fqnObj.namespace;
-    name = fqnObj.name;
-  }
-  /*
-   * case 2: two parameters
-   *   - namespace
-   *   - name
-   */
-  else if (arguments.length === 2) {
-      namespace = arguments.length <= 0 ? undefined : arguments[0];
-      name = arguments.length <= 1 ? undefined : arguments[1];
-    } else {
-      return EMPTY_FQN;
-    }
-
-  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
-    return EMPTY_FQN;
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(name)) {
-    return EMPTY_FQN;
-  }
-
-  return {
-    namespace: namespace,
-    name: name
-  };
-}
-
-var FullyQualifiedName = function () {
-  function FullyQualifiedName() {
-    _classCallCheck(this, FullyQualifiedName);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    var _processArgs = processArgs(args);
-
-    var namespace = _processArgs.namespace;
-    var name = _processArgs.name;
-
-
-    this.namespace = namespace;
-    this.name = name;
-    this.fqn = namespace + '.' + name;
-  }
-
-  _createClass(FullyQualifiedName, [{
-    key: 'getNamespace',
-    value: function getNamespace() {
-
-      return this.namespace;
-    }
-  }, {
-    key: 'getName',
-    value: function getName() {
-
-      return this.name;
-    }
-  }, {
-    key: 'getFullyQualifiedName',
-    value: function getFullyQualifiedName() {
-
-      return this.fqn;
-    }
-  }]);
-
-  return FullyQualifiedName;
-}();
-
-FullyQualifiedName.isValidFqn = function () {
-  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    args[_key2] = arguments[_key2];
-  }
-
-  var _processArgs2 = processArgs(args);
-
-  var namespace = _processArgs2.namespace;
-  var name = _processArgs2.name;
-
-  return (0, _LangUtils.isNonEmptyString)(namespace) && (0, _LangUtils.isNonEmptyString)(name);
-};
-
-FullyQualifiedName.isValidFqnObjectLiteral = function (fqnObjectLiteral) {
-
-  return _.isPlainObject(fqnObjectLiteral) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.namespace) && (0, _LangUtils.isNonEmptyString)(fqnObjectLiteral.name);
-};
-
-exports.default = FullyQualifiedName;
 module.exports = exports['default'];
 
 /***/ },
@@ -37798,7 +37805,11 @@ exports.getAllEntitiesOfTypeInSetFileUrl = getAllEntitiesOfTypeInSetFileUrl;
 exports.getAllEntitiesOfTypes = getAllEntitiesOfTypes;
 exports.createEntity = createEntity;
 
-var _FullyQualifiedName = __webpack_require__(17);
+var _immutable = __webpack_require__(8);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -37806,15 +37817,17 @@ var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('DataApi');
 
 /**
  * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
@@ -37831,7 +37844,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * // DataApi.get...
  */
 
-var LOG = new _Logger2.default('DataApi');
+var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
+  map.set('csv', 'csv');
+  map.set('CSV', 'csv');
+  map.set('json', 'json');
+  map.set('JSON', 'json');
+});
 
 /**
  * `GET /entitydata/{namespace}/{name}`
@@ -37883,13 +37901,19 @@ function getAllEntitiesOfType(entityTypeFqn) {
 function getAllEntitiesOfTypeFileUrl(entityTypeFqn, fileType) {
 
   if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
     return null;
   }
 
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType;
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '?fileType=' + FILE_TYPES.get(fileType);
 }
 
 /**
@@ -37949,14 +37973,27 @@ function getAllEntitiesOfTypeInSet(entityTypeFqn, entitySetName) {
  */
 function getAllEntitiesOfTypeInSetFileUrl(entityTypeFqn, entitySetName, fileType) {
 
-  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn) || !(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
+    return null;
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    LOG.warn('invalid parameter: entitySetName must be a non-empty string', entitySetName);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
     return null;
   }
 
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
+  /* eslint-disable max-len */
 
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + fileType;
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + FILE_TYPES.get(fileType);
+  /* eslint-enable */
 }
 
 /**
@@ -37976,6 +38013,10 @@ function getAllEntitiesOfTypeInSetFileUrl(entityTypeFqn, entitySetName, fileType
  * ]);
  */
 function getAllEntitiesOfTypes(entityTypeFqns) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty FQN array');
+  }
 
   var allValidFqns = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
@@ -38025,6 +38066,10 @@ function getAllEntitiesOfTypes(entityTypeFqns) {
  */
 function createEntity(createEntityRequest) {
 
+  if (!(0, _LangUtils.isNonEmptyObject)(createEntityRequest)) {
+    return Promise.reject('invalid parameter: createEntityRequest must be a valid object literal');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH, createEntityRequest).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38067,7 +38112,7 @@ exports.deletePropertyType = deletePropertyType;
 
 var _lodash = __webpack_require__(6);
 
-var _FullyQualifiedName = __webpack_require__(17);
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -38075,13 +38120,13 @@ var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38873,37 +38918,30 @@ exports.getAclsForEntitySet = getAclsForEntitySet;
 exports.getAclsForPropertyTypesInEntityType = getAclsForPropertyTypesInEntityType;
 exports.getAclsForPropertyTypesInEntitySet = getAclsForPropertyTypesInEntitySet;
 exports.getOwnerAclsForEntitySet = getOwnerAclsForEntitySet;
-exports.getOwnerAclsForPropertyTypesInEntitySet = getOwnerAclsForPropertyTypesInEntitySet;
+exports.getOwnerAclsForPropertyTypeInEntitySet = getOwnerAclsForPropertyTypeInEntitySet;
+exports.getOwnerAclsForAllPropertyTypesInEntitySet = getOwnerAclsForAllPropertyTypesInEntitySet;
 exports.getAllReceivedRequestsForPermissions = getAllReceivedRequestsForPermissions;
 exports.getAllSentRequestsForPermissions = getAllSentRequestsForPermissions;
 exports.addPermissionsRequestForPropertyTypesInEntitySet = addPermissionsRequestForPropertyTypesInEntitySet;
 exports.removePermissionsRequestForEntitySet = removePermissionsRequestForEntitySet;
 
+var _FullyQualifiedName = __webpack_require__(9);
+
+var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
+
 var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('PermissionsApi');
-
-/**
- * `POST /entity/type`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} updateRequests
- * @returns {Promise}
- */
-
 
 /**
  * PermissionsApi gives access to Loom's REST API for managing ACLs on existing EntityDataModel schemas.
@@ -38920,7 +38958,29 @@ var LOG = new _Logger2.default('PermissionsApi');
  * // PermissionsApi.update...
  */
 
+var LOG = new _Logger2.default('PermissionsApi');
+
+/**
+ * `POST /entity/type`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {Object[]} updateRequests
+ * @returns {Promise}
+ */
 function updateAclsForEntityTypes(updateRequests) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -38938,6 +38998,18 @@ function updateAclsForEntityTypes(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForEntityTypes(entityTypeFqns) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  var allValid = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
+    return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH, {
     data: entityTypeFqns
@@ -38958,6 +39030,18 @@ function removeAclsForEntityTypes(entityTypeFqns) {
  */
 function updateAclsForEntitySets(updateRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38974,6 +39058,18 @@ function updateAclsForEntitySets(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForEntitySets(entitySetNames) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(entitySetNames)) {
+    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
+  }
+
+  var allValid = entitySetNames.reduce(function (isValid, name) {
+    return isValid && (0, _LangUtils.isNonEmptyString)(name);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH, {
     data: entitySetNames
@@ -38994,6 +39090,18 @@ function removeAclsForEntitySets(entitySetNames) {
  */
 function updateAclsForPropertyTypesInEntityTypes(updateRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39010,6 +39118,18 @@ function updateAclsForPropertyTypesInEntityTypes(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForPropertyTypesInEntityTypes(removeRequests) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(removeRequests)) {
+    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
+  }
+
+  var allValid = removeRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, {
     data: removeRequests
@@ -39030,6 +39150,18 @@ function removeAclsForPropertyTypesInEntityTypes(removeRequests) {
  */
 function updateAclsForPropertyTypesInEntitySets(updateRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39046,6 +39178,18 @@ function updateAclsForPropertyTypesInEntitySets(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForPropertyTypesInEntitySets(removeRequests) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(removeRequests)) {
+    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
+  }
+
+  var allValid = removeRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, {
     data: removeRequests
@@ -39066,6 +39210,18 @@ function removeAclsForPropertyTypesInEntitySets(removeRequests) {
  */
 function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  var allValid = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
+    return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.ALL_PATH, {
     data: entityTypeFqns
   }).then(function (axiosResponse) {
@@ -39085,6 +39241,18 @@ function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns) {
  */
 function removeAllAclsForPropertyTypesInEntitySets(entitySetNames) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(entitySetNames)) {
+    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
+  }
+
+  var allValid = entitySetNames.reduce(function (isValid, name) {
+    return isValid && (0, _LangUtils.isNonEmptyString)(name);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.ALL_PATH, {
     data: entitySetNames
   }).then(function (axiosResponse) {
@@ -39103,6 +39271,11 @@ function removeAllAclsForPropertyTypesInEntitySets(entitySetNames) {
  * @returns {Promise}
  */
 function getAclsForEntityType(entityTypeFqn) {
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
@@ -39124,6 +39297,10 @@ function getAclsForEntityType(entityTypeFqn) {
  */
 function getAclsForEntitySet(entitySetName) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '?name=' + entitySetName).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39140,6 +39317,11 @@ function getAclsForEntitySet(entitySetName) {
  * @returns {Promise}
  */
 function getAclsForPropertyTypesInEntityType(entityTypeFqn) {
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
@@ -39161,6 +39343,10 @@ function getAclsForPropertyTypesInEntityType(entityTypeFqn) {
  */
 function getAclsForPropertyTypesInEntitySet(entitySetName) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '?name=' + entitySetName).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39178,7 +39364,37 @@ function getAclsForPropertyTypesInEntitySet(entitySetName) {
  */
 function getOwnerAclsForEntitySet(entitySetName) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.OWNER_PATH + '?name=' + entitySetName).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `POST /entity/set/owner/property/type?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
+ * @returns {Promise}
+ */
+function getOwnerAclsForPropertyTypeInEntitySet(entitySetName, propertyTypeFqn) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(propertyTypeFqn)) {
+    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.OWNER_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '?name=' + entitySetName, propertyTypeFqn).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -39194,7 +39410,15 @@ function getOwnerAclsForEntitySet(entitySetName) {
  * @param {Object} principal - an object literal representing com.kryptnostic.datastore.Principal
  * @returns {Promise}
  */
-function getOwnerAclsForPropertyTypesInEntitySet(entitySetName, principal) {
+function getOwnerAclsForAllPropertyTypesInEntitySet(entitySetName, principal) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(principal)) {
+    return Promise.reject('invalid parameter: principal must be a non-empty object literal');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.OWNER_PATH + '?name=' + entitySetName, principal).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39254,6 +39478,18 @@ function getAllSentRequestsForPermissions(entitySetName) {
  */
 function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(permissionsRequests)) {
+    return Promise.reject('invalid parameter: permissionsRequests must be a non-empty array');
+  }
+
+  var allValid = permissionsRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: permissionsRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.REQUESTS_PATH, permissionsRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39270,6 +39506,10 @@ function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests) {
  * @returns {Promise}
  */
 function removePermissionsRequestForEntitySet(requestId) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(requestId)) {
+    return Promise.reject('invalid parameter: requestId must be a non-empty string');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.REQUESTS_PATH + '?id=' + requestId).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39298,13 +39538,27 @@ var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
+var _LangUtils = __webpack_require__(2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('UsersApi');
+
+/**
+ * `GET /users/{userId}`
+ *
+ * @static
+ * @memberof loom-data.UsersApi
+ * @param {string} userId - user UUID
+ * @return {Promise}
+ */
+
 
 /**
  * UsersApi gives access to Loom's REST API for getting user data.
@@ -39321,17 +39575,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * // UsersApi.get...
  */
 
-var LOG = new _Logger2.default('UsersApi');
-
-/**
- * `GET /users/{userId}`
- *
- * @static
- * @memberof loom-data.UsersApi
- * @param {string} userId - user UUID
- * @return {Promise}
- */
 function getUser(userId) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39364,6 +39612,10 @@ function getAllUsers() {
  * @return {Promise}
  */
 function getAllUsersForRole(role) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(role)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39399,6 +39651,14 @@ function getAllUsersForAllRoles() {
  */
 function resetUserRoles(userId, roles) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyArray)(roles)) {
+    return Promise.reject('invalid parameter: roles must be a non-empty array of strings');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).patch('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + _ApiPaths.RESET_PATH + '/' + userId, roles).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39420,7 +39680,7 @@ module.exports = __webpack_require__(129);
 'use strict';
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(15);
+var bind = __webpack_require__(16);
 var Axios = __webpack_require__(131);
 
 /**
@@ -39454,9 +39714,9 @@ axios.create = function create(defaultConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(11);
+axios.Cancel = __webpack_require__(12);
 axios.CancelToken = __webpack_require__(130);
-axios.isCancel = __webpack_require__(12);
+axios.isCancel = __webpack_require__(13);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -39477,7 +39737,7 @@ module.exports.default = axios;
 "use strict";
 'use strict';
 
-var Cancel = __webpack_require__(11);
+var Cancel = __webpack_require__(12);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -39541,7 +39801,7 @@ module.exports = CancelToken;
 "use strict";
 'use strict';
 
-var defaults = __webpack_require__(14);
+var defaults = __webpack_require__(15);
 var utils = __webpack_require__(1);
 var InterceptorManager = __webpack_require__(132);
 var dispatchRequest = __webpack_require__(133);
@@ -39694,8 +39954,8 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(136);
-var isCancel = __webpack_require__(12);
-var defaults = __webpack_require__(14);
+var isCancel = __webpack_require__(13);
+var defaults = __webpack_require__(15);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -39804,7 +40064,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 'use strict';
 
-var createError = __webpack_require__(13);
+var createError = __webpack_require__(14);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -40759,11 +41019,11 @@ var _UsersApi = __webpack_require__(127);
 
 var UsersApi = _interopRequireWildcard(_UsersApi);
 
-var _Configuration = __webpack_require__(9);
+var _Configuration = __webpack_require__(10);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.9.1";
+var version = "v0.9.2";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
@@ -40789,6 +41049,5 @@ exports.default = {
 };
 
 /***/ }
-/******/ ])
+/******/ ]);
 });
-;
