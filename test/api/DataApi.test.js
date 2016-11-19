@@ -43,7 +43,7 @@ const MOCK_CREATE_ENTITY_DATA = {
 
 let mockAxiosInstance = null;
 
-fdescribe('DataApi', () => {
+describe('DataApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
