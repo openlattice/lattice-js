@@ -33,7 +33,7 @@ function compact(arr :Array<any>) :Array<any> {
  */
 
 const BABEL_LOADER = {
-  loader: 'babel',
+  loader: 'babel-loader',
   test: /\.js$/,
   include: [
     LIB_PATHS.SOURCE,
@@ -42,7 +42,7 @@ const BABEL_LOADER = {
 };
 
 const JSON_LOADER = {
-  loader: 'json',
+  loader: 'json-loader',
   test: /\.json$/
 };
 
@@ -67,7 +67,6 @@ const DEV_PLUGINS = [
 ];
 
 const PROD_PLUGINS = [
-  new Webpack.optimize.DedupePlugin(),
   new Webpack.optimize.OccurrenceOrderPlugin(),
   new Webpack.LoaderOptionsPlugin({
     minimize: ifMin(true, false),
@@ -101,8 +100,7 @@ export default {
     rules: [
       BABEL_LOADER,
       JSON_LOADER
-    ],
-    noParse: []
+    ]
   },
   plugins: compact([
     ...ifDev(DEV_PLUGINS, []),

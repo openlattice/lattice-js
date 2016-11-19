@@ -17,6 +17,7 @@
  * // PermissionsApi.update...
  */
 
+import FullyQualifiedName from '../types/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
@@ -37,6 +38,8 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
+  isNonEmptyArray,
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -51,6 +54,18 @@ const LOG = new Logger('PermissionsApi');
  * @returns {Promise}
  */
 export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  const allValid = updateRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_TYPE_PATH}`, updateRequests)
@@ -71,6 +86,18 @@ export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
  * @returns {Promise}
  */
 export function removeAclsForEntityTypes(entityTypeFqns :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_TYPE_PATH}`, {
@@ -94,6 +121,18 @@ export function removeAclsForEntityTypes(entityTypeFqns :Object[]) :Promise<> {
  */
 export function updateAclsForEntitySets(updateRequests :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  const allValid = updateRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_SET_PATH}`, updateRequests)
     .then((axiosResponse) => {
@@ -113,6 +152,18 @@ export function updateAclsForEntitySets(updateRequests :Object[]) :Promise<> {
  * @returns {Promise}
  */
 export function removeAclsForEntitySets(entitySetNames :string[]) :Promise<> {
+
+  if (!isNonEmptyArray(entitySetNames)) {
+    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
+  }
+
+  const allValid = entitySetNames.reduce((isValid, name) => {
+    return isValid && isNonEmptyString(name);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_SET_PATH}`, {
@@ -136,6 +187,18 @@ export function removeAclsForEntitySets(entitySetNames :string[]) :Promise<> {
  */
 export function updateAclsForPropertyTypesInEntityTypes(updateRequests :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  const allValid = updateRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}`, updateRequests)
     .then((axiosResponse) => {
@@ -155,6 +218,18 @@ export function updateAclsForPropertyTypesInEntityTypes(updateRequests :Object[]
  * @returns {Promise}
  */
 export function removeAclsForPropertyTypesInEntityTypes(removeRequests :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(removeRequests)) {
+    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
+  }
+
+  const allValid = removeRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}`, {
@@ -178,6 +253,18 @@ export function removeAclsForPropertyTypesInEntityTypes(removeRequests :Object[]
  */
 export function updateAclsForPropertyTypesInEntitySets(updateRequests :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  const allValid = updateRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}`, updateRequests)
     .then((axiosResponse) => {
@@ -197,6 +284,18 @@ export function updateAclsForPropertyTypesInEntitySets(updateRequests :Object[])
  * @returns {Promise}
  */
 export function removeAclsForPropertyTypesInEntitySets(removeRequests :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(removeRequests)) {
+    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
+  }
+
+  const allValid = removeRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}`, {
@@ -220,6 +319,18 @@ export function removeAclsForPropertyTypesInEntitySets(removeRequests :Object[])
  */
 export function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}/${ALL_PATH}`, {
       data: entityTypeFqns
@@ -241,6 +352,18 @@ export function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns :Objec
  * @returns {Promise}
  */
 export function removeAllAclsForPropertyTypesInEntitySets(entitySetNames :string[]) :Promise<> {
+
+  if (!isNonEmptyArray(entitySetNames)) {
+    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
+  }
+
+  const allValid = entitySetNames.reduce((isValid, name) => {
+    return isValid && isNonEmptyString(name);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}/${ALL_PATH}`, {
@@ -264,6 +387,10 @@ export function removeAllAclsForPropertyTypesInEntitySets(entitySetNames :string
  */
 export function getAclsForEntityType(entityTypeFqn :Object) :Promise<> {
 
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
   const { namespace, name } = entityTypeFqn;
 
   return getApiAxiosInstance(PERMISSIONS_API)
@@ -286,6 +413,10 @@ export function getAclsForEntityType(entityTypeFqn :Object) :Promise<> {
  */
 export function getAclsForEntitySet(entitySetName :string) :Promise<> {
 
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .get(`/${ENTITY_SET_PATH}?name=${entitySetName}`)
     .then((axiosResponse) => {
@@ -305,6 +436,10 @@ export function getAclsForEntitySet(entitySetName :string) :Promise<> {
  * @returns {Promise}
  */
 export function getAclsForPropertyTypesInEntityType(entityTypeFqn :Object) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
 
   const { namespace, name } = entityTypeFqn;
 
@@ -328,6 +463,10 @@ export function getAclsForPropertyTypesInEntityType(entityTypeFqn :Object) :Prom
  */
 export function getAclsForPropertyTypesInEntitySet(entitySetName :string) :Promise<> {
 
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .get(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}?name=${entitySetName}`)
     .then((axiosResponse) => {
@@ -348,8 +487,41 @@ export function getAclsForPropertyTypesInEntitySet(entitySetName :string) :Promi
  */
 export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
 
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .get(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `POST /entity/set/owner/property/type?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
+ * @returns {Promise}
+ */
+export function getOwnerAclsForPropertyTypeInEntitySet(entitySetName :string, propertyTypeFqn :Object) :Promise<> {
+
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn)) {
+    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
+  }
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .post(`/${ENTITY_SET_PATH}/${OWNER_PATH}/${PROPERTY_TYPE_PATH}?name=${entitySetName}`, propertyTypeFqn)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -367,7 +539,15 @@ export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
  * @param {Object} principal - an object literal representing com.kryptnostic.datastore.Principal
  * @returns {Promise}
  */
-export function getOwnerAclsForPropertyTypesInEntitySet(entitySetName :string, principal :string) :Promise<> {
+export function getOwnerAclsForAllPropertyTypesInEntitySet(entitySetName :string, principal :Object) :Promise<> {
+
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!isNonEmptyObject(principal)) {
+    return Promise.reject('invalid parameter: principal must be a non-empty object literal');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`, principal)
@@ -438,6 +618,18 @@ export function getAllSentRequestsForPermissions(entitySetName :?string) :Promis
  */
 export function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests :Object[]) :Promise<> {
 
+  if (!isNonEmptyArray(permissionsRequests)) {
+    return Promise.reject('invalid parameter: permissionsRequests must be a non-empty array');
+  }
+
+  const allValid = permissionsRequests.reduce((isValid, request) => {
+    return isValid && isNonEmptyObject(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: permissionsRequests must be an array of valid object literals');
+  }
+
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}`, permissionsRequests)
     .then((axiosResponse) => {
@@ -457,6 +649,10 @@ export function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequ
  * @returns {Promise}
  */
 export function removePermissionsRequestForEntitySet(requestId :string) :Promise<> {
+
+  if (!isNonEmptyString(requestId)) {
+    return Promise.reject('invalid parameter: requestId must be a non-empty string');
+  }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .delete(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}?id=${requestId}`)
