@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.9.1
+ * loom-data - v0.9.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4330,7 +4330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 'use strict';
 
-var bind = __webpack_require__(16);
+var bind = __webpack_require__(17);
 
 /*global toString:true*/
 
@@ -4631,6 +4631,37 @@ module.exports = {
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isNonEmptyArray = isNonEmptyArray;
+exports.isNonEmptyObject = isNonEmptyObject;
+exports.isNonEmptyString = isNonEmptyString;
+
+var _lodash = __webpack_require__(6);
+
+function isNonEmptyArray(value) {
+
+  return (0, _lodash.isArray)(value) && !(0, _lodash.isEmpty)(value);
+}
+
+function isNonEmptyObject(value) {
+
+  return (0, _lodash.isPlainObject)(value) && !(0, _lodash.isEmpty)(value);
+}
+
+function isNonEmptyString(value) {
+
+  return (0, _lodash.isString)(value) && !(0, _lodash.isEmpty)((0, _lodash.trim)(value));
+}
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -4645,7 +4676,7 @@ var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
 var USERS_API = exports.USERS_API = 'UsersApi';
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -4707,30 +4738,6 @@ var ADMIN_PATH = exports.ADMIN_PATH = 'admin';
 var RESET_PATH = exports.RESET_PATH = 'reset';
 var ROLES_PATH = exports.ROLES_PATH = 'roles';
 var USERS_PATH = exports.USERS_PATH = 'users';
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isNonEmptyString = isNonEmptyString;
-
-var _lodash = __webpack_require__(6);
-
-var _ = _interopRequireWildcard(_lodash);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function isNonEmptyString(value) {
-  // eslint-disable-line
-
-  return _.isString(value) && !_.isEmpty(value);
-}
 
 /***/ },
 /* 5 */
@@ -21883,19 +21890,19 @@ var _axios = __webpack_require__(133);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _immutable = __webpack_require__(9);
+var _immutable = __webpack_require__(8);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _EnvToUrlMap = __webpack_require__(18);
+var _EnvToUrlMap = __webpack_require__(19);
 
 var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
 
-var _Configuration = __webpack_require__(10);
+var _Configuration = __webpack_require__(11);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21962,30 +21969,6 @@ exports.getApiAxiosInstance = getApiAxiosInstance;
 
 /***/ },
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-var enhanceError = __webpack_require__(13);
-
-/**
- * Create an Error with the specified message, config, error code, and response.
- *
- * @param {string} message The error message.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- @ @param {Object} [response] The response.
- * @returns {Error} The created error.
- */
-module.exports = function createError(message, config, code, response) {
-  var error = new Error(message);
-  return enhanceError(error, config, code, response);
-};
-
-
-/***/ },
-/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 /**
@@ -26969,420 +26952,31 @@ module.exports = function createError(message, config, code, response) {
 }));
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getConfig = exports.configure = undefined;
-
-var _immutable = __webpack_require__(9);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _lodash = __webpack_require__(6);
-
-var _EnvToUrlMap = __webpack_require__(18);
-
-var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
-
-var _Logger = __webpack_require__(5);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LangUtils = __webpack_require__(4);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('Configuration');
+var enhanceError = __webpack_require__(14);
 
 /**
- * @module Configuration
- * @memberof loom-data
- */
-
-var configObj = _immutable2.default.Map().withMutations(function (map) {
-
-  if (true) {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-  } else {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-  }
-});
-
-/**
- * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
- * result in the same base URL:
- *   - "https://api.loom.digital"
- *   - "api.loom.digital"
- *   - "loom.digital"
- *   - "api"
+ * Create an Error with the specified message, config, error code, and response.
  *
- * @memberof loom-data.Configuration
- * @param {Object} config - an object literal containing all configuration options
- * @param {String} config.authToken - a Base64-encoded JWT auth token
- * @param {String} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
- */
-function configure(config) {
-
-  if ((0, _lodash.isEmpty)(config)) {
-    var errorMsg = 'invalid parameter - config must be a non-empty object';
-    LOG.error(errorMsg, config);
-    throw new Error(errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
-    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
-  } else {
-    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
-    LOG.error(_errorMsg, config.authToken);
-    throw new Error(_errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
-    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-    }
-    // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
-        configObj = configObj.set('baseUrl', config.baseUrl);
-      } else {
-        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
-        LOG.error(_errorMsg2, config.baseUrl);
-        throw new Error(_errorMsg2);
-      }
-  } else {
-    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
-    LOG.error(_errorMsg3, config.baseUrl);
-    throw new Error(_errorMsg3);
-  }
-}
-
-function getConfig() {
-
-  return configObj;
-}
-
-exports.configure = configure;
-exports.getConfig = getConfig;
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-module.exports = function isCancel(value) {
-  return !!(value && value.__CANCEL__);
-};
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-/**
- * Update an Error with the specified config, error code, and response.
- *
- * @param {Error} error The error to update.
+ * @param {string} message The error message.
  * @param {Object} config The config.
  * @param {string} [code] The error code (for example, 'ECONNABORTED').
  @ @param {Object} [response] The response.
- * @returns {Error} The error.
+ * @returns {Error} The created error.
  */
-module.exports = function enhanceError(error, config, code, response) {
-  error.config = config;
-  if (code) {
-    error.code = code;
-  }
-  error.response = response;
-  return error;
+module.exports = function createError(message, config, code, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, response);
 };
 
 
 /***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-var createError = __webpack_require__(8);
-
-/**
- * Resolve or reject a Promise based on response status.
- *
- * @param {Function} resolve A function that resolves the promise.
- * @param {Function} reject A function that rejects the promise.
- * @param {object} response The response.
- */
-module.exports = function settle(resolve, reject, response) {
-  var validateStatus = response.config.validateStatus;
-  // Note: status is not exposed by XDomainRequest
-  if (!response.status || !validateStatus || validateStatus(response.status)) {
-    resolve(response);
-  } else {
-    reject(createError(
-      'Request failed with status code ' + response.status,
-      response.config,
-      null,
-      response
-    ));
-  }
-};
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(147);
-
-var PROTECTION_PREFIX = /^\)\]\}',?\n/;
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(135);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(134);
-  }
-  return adapter;
-}
-
-module.exports = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      data = data.replace(PROTECTION_PREFIX, '');
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  headers: {
-    common: {
-      'Accept': 'application/json, text/plain, */*'
-    },
-    patch: utils.merge(DEFAULT_CONTENT_TYPE),
-    post: utils.merge(DEFAULT_CONTENT_TYPE),
-    put: utils.merge(DEFAULT_CONTENT_TYPE)
-  },
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-"use strict";
-'use strict';
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-var utils = __webpack_require__(1);
-
-function encode(val) {
-  return encodeURIComponent(val).
-    replace(/%40/gi, '@').
-    replace(/%3A/gi, ':').
-    replace(/%24/g, '$').
-    replace(/%2C/gi, ',').
-    replace(/%20/g, '+').
-    replace(/%5B/gi, '[').
-    replace(/%5D/gi, ']');
-}
-
-/**
- * Build a URL by appending params to the end
- *
- * @param {string} url The base of the url (e.g., http://www.google.com)
- * @param {object} [params] The params to be appended
- * @returns {string} The formatted url
- */
-module.exports = function buildURL(url, params, paramsSerializer) {
-  /*eslint no-param-reassign:0*/
-  if (!params) {
-    return url;
-  }
-
-  var serializedParams;
-  if (paramsSerializer) {
-    serializedParams = paramsSerializer(params);
-  } else if (utils.isURLSearchParams(params)) {
-    serializedParams = params.toString();
-  } else {
-    var parts = [];
-
-    utils.forEach(params, function serialize(val, key) {
-      if (val === null || typeof val === 'undefined') {
-        return;
-      }
-
-      if (utils.isArray(val)) {
-        key = key + '[]';
-      }
-
-      if (!utils.isArray(val)) {
-        val = [val];
-      }
-
-      utils.forEach(val, function parseValue(v) {
-        if (utils.isDate(v)) {
-          v = v.toISOString();
-        } else if (utils.isObject(v)) {
-          v = JSON.stringify(v);
-        }
-        parts.push(encode(key) + '=' + encode(v));
-      });
-    });
-
-    serializedParams = parts.join('&');
-  }
-
-  if (serializedParams) {
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-  }
-
-  return url;
-};
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _immutable = __webpack_require__(9);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ENVIRONMENT_URLS = _immutable2.default.Map({
-  LOCAL: 'http://localhost:8080',
-  PROD: 'https://api.loom.digital'
-});
-
-/* eslint-disable import/prefer-default-export */
-
-exports.default = ENVIRONMENT_URLS;
-module.exports = exports['default'];
-
-/***/ },
-/* 19 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27434,7 +27028,7 @@ var _lodash = __webpack_require__(6);
 
 var _ = _interopRequireWildcard(_lodash);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -27585,6 +27179,419 @@ FullyQualifiedName.isValidFqnObjectLiteral = function (fqnObjectLiteral) {
 };
 
 exports.default = FullyQualifiedName;
+module.exports = exports['default'];
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getConfig = exports.configure = undefined;
+
+var _immutable = __webpack_require__(8);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _lodash = __webpack_require__(6);
+
+var _EnvToUrlMap = __webpack_require__(19);
+
+var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
+
+var _Logger = __webpack_require__(5);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('Configuration');
+
+/**
+ * @module Configuration
+ * @memberof loom-data
+ */
+
+var configObj = _immutable2.default.Map().withMutations(function (map) {
+
+  if (true) {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+  } else {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+  }
+});
+
+/**
+ * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
+ * result in the same base URL:
+ *   - "https://api.loom.digital"
+ *   - "api.loom.digital"
+ *   - "loom.digital"
+ *   - "api"
+ *
+ * @memberof loom-data.Configuration
+ * @param {Object} config - an object literal containing all configuration options
+ * @param {String} config.authToken - a Base64-encoded JWT auth token
+ * @param {String} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
+ */
+function configure(config) {
+
+  if ((0, _lodash.isEmpty)(config)) {
+    var errorMsg = 'invalid parameter - config must be a non-empty object';
+    LOG.error(errorMsg, config);
+    throw new Error(errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
+    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
+  } else {
+    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
+    LOG.error(_errorMsg, config.authToken);
+    throw new Error(_errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
+    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+    }
+    // mild url validation to at least check the protocol and domain
+    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+        configObj = configObj.set('baseUrl', config.baseUrl);
+      } else {
+        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
+        LOG.error(_errorMsg2, config.baseUrl);
+        throw new Error(_errorMsg2);
+      }
+  } else {
+    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
+    LOG.error(_errorMsg3, config.baseUrl);
+    throw new Error(_errorMsg3);
+  }
+}
+
+function getConfig() {
+
+  return configObj;
+}
+
+exports.configure = configure;
+exports.getConfig = getConfig;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+/**
+ * Update an Error with the specified config, error code, and response.
+ *
+ * @param {Error} error The error to update.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ @ @param {Object} [response] The response.
+ * @returns {Error} The error.
+ */
+module.exports = function enhanceError(error, config, code, response) {
+  error.config = config;
+  if (code) {
+    error.code = code;
+  }
+  error.response = response;
+  return error;
+};
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+var createError = __webpack_require__(9);
+
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */
+module.exports = function settle(resolve, reject, response) {
+  var validateStatus = response.config.validateStatus;
+  // Note: status is not exposed by XDomainRequest
+  if (!response.status || !validateStatus || validateStatus(response.status)) {
+    resolve(response);
+  } else {
+    reject(createError(
+      'Request failed with status code ' + response.status,
+      response.config,
+      null,
+      response
+    ));
+  }
+};
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+var utils = __webpack_require__(1);
+var normalizeHeaderName = __webpack_require__(147);
+
+var PROTECTION_PREFIX = /^\)\]\}',?\n/;
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(135);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(134);
+  }
+  return adapter;
+}
+
+module.exports = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      data = data.replace(PROTECTION_PREFIX, '');
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  headers: {
+    common: {
+      'Accept': 'application/json, text/plain, */*'
+    },
+    patch: utils.merge(DEFAULT_CONTENT_TYPE),
+    post: utils.merge(DEFAULT_CONTENT_TYPE),
+    put: utils.merge(DEFAULT_CONTENT_TYPE)
+  },
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+"use strict";
+'use strict';
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+var utils = __webpack_require__(1);
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      }
+
+      if (!utils.isArray(val)) {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _immutable = __webpack_require__(8);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ENVIRONMENT_URLS = _immutable2.default.Map({
+  LOCAL: 'http://localhost:8080',
+  PROD: 'https://api.loom.digital'
+});
+
+/* eslint-disable import/prefer-default-export */
+
+exports.default = ENVIRONMENT_URLS;
 module.exports = exports['default'];
 
 /***/ },
@@ -37587,7 +37594,11 @@ exports.getAllEntitiesOfTypeInSetFileUrl = getAllEntitiesOfTypeInSetFileUrl;
 exports.getAllEntitiesOfTypes = getAllEntitiesOfTypes;
 exports.createEntity = createEntity;
 
-var _FullyQualifiedName = __webpack_require__(19);
+var _immutable = __webpack_require__(8);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -37595,15 +37606,17 @@ var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('DataApi');
 
 /**
  * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
@@ -37620,7 +37633,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * // DataApi.get...
  */
 
-var LOG = new _Logger2.default('DataApi');
+var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
+  map.set('csv', 'csv');
+  map.set('CSV', 'csv');
+  map.set('json', 'json');
+  map.set('JSON', 'json');
+});
 
 /**
  * `GET /entitydata/{namespace}/{name}`
@@ -37672,13 +37690,19 @@ function getAllEntitiesOfType(entityTypeFqn) {
 function getAllEntitiesOfTypeFileUrl(entityTypeFqn, fileType) {
 
   if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
     return null;
   }
 
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType;
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '?fileType=' + FILE_TYPES.get(fileType);
 }
 
 /**
@@ -37738,14 +37762,27 @@ function getAllEntitiesOfTypeInSet(entityTypeFqn, entitySetName) {
  */
 function getAllEntitiesOfTypeInSetFileUrl(entityTypeFqn, entitySetName, fileType) {
 
-  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn) || !(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
+    return null;
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    LOG.warn('invalid parameter: entitySetName must be a non-empty string', entitySetName);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
     return null;
   }
 
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
+  /* eslint-disable max-len */
 
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + fileType;
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + FILE_TYPES.get(fileType);
+  /* eslint-enable */
 }
 
 /**
@@ -37765,6 +37802,10 @@ function getAllEntitiesOfTypeInSetFileUrl(entityTypeFqn, entitySetName, fileType
  * ]);
  */
 function getAllEntitiesOfTypes(entityTypeFqns) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty FQN array');
+  }
 
   var allValidFqns = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
@@ -37814,6 +37855,10 @@ function getAllEntitiesOfTypes(entityTypeFqns) {
  */
 function createEntity(createEntityRequest) {
 
+  if (!(0, _LangUtils.isNonEmptyObject)(createEntityRequest)) {
+    return Promise.reject('invalid parameter: createEntityRequest must be a valid object literal');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH, createEntityRequest).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -37856,7 +37901,7 @@ exports.deletePropertyType = deletePropertyType;
 
 var _lodash = __webpack_require__(6);
 
-var _FullyQualifiedName = __webpack_require__(19);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -37864,13 +37909,13 @@ var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38662,37 +38707,30 @@ exports.getAclsForEntitySet = getAclsForEntitySet;
 exports.getAclsForPropertyTypesInEntityType = getAclsForPropertyTypesInEntityType;
 exports.getAclsForPropertyTypesInEntitySet = getAclsForPropertyTypesInEntitySet;
 exports.getOwnerAclsForEntitySet = getOwnerAclsForEntitySet;
-exports.getOwnerAclsForPropertyTypesInEntitySet = getOwnerAclsForPropertyTypesInEntitySet;
+exports.getOwnerAclsForPropertyTypeInEntitySet = getOwnerAclsForPropertyTypeInEntitySet;
+exports.getOwnerAclsForAllPropertyTypesInEntitySet = getOwnerAclsForAllPropertyTypesInEntitySet;
 exports.getAllReceivedRequestsForPermissions = getAllReceivedRequestsForPermissions;
 exports.getAllSentRequestsForPermissions = getAllSentRequestsForPermissions;
 exports.addPermissionsRequestForPropertyTypesInEntitySet = addPermissionsRequestForPropertyTypesInEntitySet;
 exports.removePermissionsRequestForEntitySet = removePermissionsRequestForEntitySet;
 
+var _FullyQualifiedName = __webpack_require__(10);
+
+var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
+
 var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
-var _LangUtils = __webpack_require__(4);
+var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('PermissionsApi');
-
-/**
- * `POST /entity/type`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} updateRequests
- * @returns {Promise}
- */
-
 
 /**
  * PermissionsApi gives access to Loom's REST API for managing ACLs on existing EntityDataModel schemas.
@@ -38709,7 +38747,29 @@ var LOG = new _Logger2.default('PermissionsApi');
  * // PermissionsApi.update...
  */
 
+var LOG = new _Logger2.default('PermissionsApi');
+
+/**
+ * `POST /entity/type`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {Object[]} updateRequests
+ * @returns {Promise}
+ */
 function updateAclsForEntityTypes(updateRequests) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -38727,6 +38787,18 @@ function updateAclsForEntityTypes(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForEntityTypes(entityTypeFqns) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  var allValid = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
+    return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH, {
     data: entityTypeFqns
@@ -38747,6 +38819,18 @@ function removeAclsForEntityTypes(entityTypeFqns) {
  */
 function updateAclsForEntitySets(updateRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38763,6 +38847,18 @@ function updateAclsForEntitySets(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForEntitySets(entitySetNames) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(entitySetNames)) {
+    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
+  }
+
+  var allValid = entitySetNames.reduce(function (isValid, name) {
+    return isValid && (0, _LangUtils.isNonEmptyString)(name);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH, {
     data: entitySetNames
@@ -38783,6 +38879,18 @@ function removeAclsForEntitySets(entitySetNames) {
  */
 function updateAclsForPropertyTypesInEntityTypes(updateRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38799,6 +38907,18 @@ function updateAclsForPropertyTypesInEntityTypes(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForPropertyTypesInEntityTypes(removeRequests) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(removeRequests)) {
+    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
+  }
+
+  var allValid = removeRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, {
     data: removeRequests
@@ -38819,6 +38939,18 @@ function removeAclsForPropertyTypesInEntityTypes(removeRequests) {
  */
 function updateAclsForPropertyTypesInEntitySets(updateRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(updateRequests)) {
+    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  }
+
+  var allValid = updateRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, updateRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38835,6 +38967,18 @@ function updateAclsForPropertyTypesInEntitySets(updateRequests) {
  * @returns {Promise}
  */
 function removeAclsForPropertyTypesInEntitySets(removeRequests) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(removeRequests)) {
+    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
+  }
+
+  var allValid = removeRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH, {
     data: removeRequests
@@ -38855,6 +38999,18 @@ function removeAclsForPropertyTypesInEntitySets(removeRequests) {
  */
 function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  var allValid = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
+    return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.ALL_PATH, {
     data: entityTypeFqns
   }).then(function (axiosResponse) {
@@ -38874,6 +39030,18 @@ function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns) {
  */
 function removeAllAclsForPropertyTypesInEntitySets(entitySetNames) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(entitySetNames)) {
+    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
+  }
+
+  var allValid = entitySetNames.reduce(function (isValid, name) {
+    return isValid && (0, _LangUtils.isNonEmptyString)(name);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.ALL_PATH, {
     data: entitySetNames
   }).then(function (axiosResponse) {
@@ -38892,6 +39060,11 @@ function removeAllAclsForPropertyTypesInEntitySets(entitySetNames) {
  * @returns {Promise}
  */
 function getAclsForEntityType(entityTypeFqn) {
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
@@ -38913,6 +39086,10 @@ function getAclsForEntityType(entityTypeFqn) {
  */
 function getAclsForEntitySet(entitySetName) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '?name=' + entitySetName).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38929,6 +39106,11 @@ function getAclsForEntitySet(entitySetName) {
  * @returns {Promise}
  */
 function getAclsForPropertyTypesInEntityType(entityTypeFqn) {
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
   var namespace = entityTypeFqn.namespace;
   var name = entityTypeFqn.name;
 
@@ -38950,6 +39132,10 @@ function getAclsForPropertyTypesInEntityType(entityTypeFqn) {
  */
 function getAclsForPropertyTypesInEntitySet(entitySetName) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '?name=' + entitySetName).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38967,7 +39153,37 @@ function getAclsForPropertyTypesInEntitySet(entitySetName) {
  */
 function getOwnerAclsForEntitySet(entitySetName) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.OWNER_PATH + '?name=' + entitySetName).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `POST /entity/set/owner/property/type?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
+ * @returns {Promise}
+ */
+function getOwnerAclsForPropertyTypeInEntitySet(entitySetName, propertyTypeFqn) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(propertyTypeFqn)) {
+    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.OWNER_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '?name=' + entitySetName, propertyTypeFqn).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -38983,7 +39199,15 @@ function getOwnerAclsForEntitySet(entitySetName) {
  * @param {Object} principal - an object literal representing com.kryptnostic.datastore.Principal
  * @returns {Promise}
  */
-function getOwnerAclsForPropertyTypesInEntitySet(entitySetName, principal) {
+function getOwnerAclsForAllPropertyTypesInEntitySet(entitySetName, principal) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(principal)) {
+    return Promise.reject('invalid parameter: principal must be a non-empty object literal');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.OWNER_PATH + '?name=' + entitySetName, principal).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39043,6 +39267,18 @@ function getAllSentRequestsForPermissions(entitySetName) {
  */
 function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests) {
 
+  if (!(0, _LangUtils.isNonEmptyArray)(permissionsRequests)) {
+    return Promise.reject('invalid parameter: permissionsRequests must be a non-empty array');
+  }
+
+  var allValid = permissionsRequests.reduce(function (isValid, request) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(request);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: permissionsRequests must be an array of valid object literals');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.REQUESTS_PATH, permissionsRequests).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39059,6 +39295,10 @@ function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests) {
  * @returns {Promise}
  */
 function removePermissionsRequestForEntitySet(requestId) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(requestId)) {
+    return Promise.reject('invalid parameter: requestId must be a non-empty string');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + _ApiPaths.REQUESTS_PATH + '?id=' + requestId).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39087,13 +39327,27 @@ var _Logger = __webpack_require__(5);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(2);
+var _ApiNames = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(3);
+var _ApiPaths = __webpack_require__(4);
 
 var _AxiosUtils = __webpack_require__(7);
 
+var _LangUtils = __webpack_require__(2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('UsersApi');
+
+/**
+ * `GET /users/{userId}`
+ *
+ * @static
+ * @memberof loom-data.UsersApi
+ * @param {string} userId - user UUID
+ * @return {Promise}
+ */
+
 
 /**
  * UsersApi gives access to Loom's REST API for getting user data.
@@ -39110,17 +39364,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * // UsersApi.get...
  */
 
-var LOG = new _Logger2.default('UsersApi');
-
-/**
- * `GET /users/{userId}`
- *
- * @static
- * @memberof loom-data.UsersApi
- * @param {string} userId - user UUID
- * @return {Promise}
- */
 function getUser(userId) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39153,6 +39401,10 @@ function getAllUsers() {
  * @return {Promise}
  */
 function getAllUsersForRole(role) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(role)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -39188,6 +39440,14 @@ function getAllUsersForAllRoles() {
  */
 function resetUserRoles(userId, roles) {
 
+  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyArray)(roles)) {
+    return Promise.reject('invalid parameter: roles must be a non-empty array of strings');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).patch('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + _ApiPaths.RESET_PATH + '/' + userId, roles).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -39209,8 +39469,8 @@ module.exports = __webpack_require__(136);
 'use strict';
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(14);
-var buildURL = __webpack_require__(17);
+var settle = __webpack_require__(15);
+var buildURL = __webpack_require__(18);
 var http = __webpack_require__(126);
 var https = __webpack_require__(127);
 var httpFollow = __webpack_require__(20).http;
@@ -39219,8 +39479,8 @@ var url = __webpack_require__(128);
 var zlib = __webpack_require__(164);
 var pkg = __webpack_require__(153);
 var Buffer = __webpack_require__(159).Buffer;
-var createError = __webpack_require__(8);
-var enhanceError = __webpack_require__(13);
+var createError = __webpack_require__(9);
+var enhanceError = __webpack_require__(14);
 
 /*eslint consistent-return:0*/
 module.exports = function httpAdapter(config) {
@@ -39424,11 +39684,11 @@ module.exports = function httpAdapter(config) {
 'use strict';
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(14);
-var buildURL = __webpack_require__(17);
+var settle = __webpack_require__(15);
+var buildURL = __webpack_require__(18);
 var parseHeaders = __webpack_require__(148);
 var isURLSameOrigin = __webpack_require__(146);
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(9);
 var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(142);
 
 module.exports = function xhrAdapter(config) {
@@ -39608,7 +39868,7 @@ module.exports = function xhrAdapter(config) {
 'use strict';
 
 var utils = __webpack_require__(1);
-var bind = __webpack_require__(16);
+var bind = __webpack_require__(17);
 var Axios = __webpack_require__(138);
 
 /**
@@ -39642,9 +39902,9 @@ axios.create = function create(defaultConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(11);
+axios.Cancel = __webpack_require__(12);
 axios.CancelToken = __webpack_require__(137);
-axios.isCancel = __webpack_require__(12);
+axios.isCancel = __webpack_require__(13);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -39665,7 +39925,7 @@ module.exports.default = axios;
 "use strict";
 'use strict';
 
-var Cancel = __webpack_require__(11);
+var Cancel = __webpack_require__(12);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -39729,7 +39989,7 @@ module.exports = CancelToken;
 "use strict";
 'use strict';
 
-var defaults = __webpack_require__(15);
+var defaults = __webpack_require__(16);
 var utils = __webpack_require__(1);
 var InterceptorManager = __webpack_require__(139);
 var dispatchRequest = __webpack_require__(140);
@@ -39882,8 +40142,8 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(141);
-var isCancel = __webpack_require__(12);
-var defaults = __webpack_require__(15);
+var isCancel = __webpack_require__(13);
+var defaults = __webpack_require__(16);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -41717,11 +41977,11 @@ var _UsersApi = __webpack_require__(132);
 
 var UsersApi = _interopRequireWildcard(_UsersApi);
 
-var _Configuration = __webpack_require__(10);
+var _Configuration = __webpack_require__(11);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.9.1";
+var version = "v0.9.2";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
@@ -41747,6 +42007,5 @@ exports.default = {
 };
 
 /***/ }
-/******/ ])
+/******/ ]);
 });
-;

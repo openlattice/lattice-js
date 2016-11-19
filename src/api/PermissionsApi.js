@@ -502,6 +502,35 @@ export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
 }
 
 /**
+ * `POST /entity/set/owner/property/type?name=entitySetName`
+ *
+ * @static
+ * @memberof loom-data.PermissionsApi
+ * @param {string} entitySetName
+ * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
+ * @returns {Promise}
+ */
+export function getOwnerAclsForPropertyTypeInEntitySet(entitySetName :string, propertyTypeFqn :Object) :Promise<> {
+
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn)) {
+    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
+  }
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .post(`/${ENTITY_SET_PATH}/${OWNER_PATH}/${PROPERTY_TYPE_PATH}?name=${entitySetName}`, propertyTypeFqn)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
  * `POST /entity/set/owner?name=entitySetName`
  *
  * @static
@@ -510,7 +539,7 @@ export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
  * @param {Object} principal - an object literal representing com.kryptnostic.datastore.Principal
  * @returns {Promise}
  */
-export function getOwnerAclsForPropertyTypesInEntitySet(entitySetName :string, principal :Object) :Promise<> {
+export function getOwnerAclsForAllPropertyTypesInEntitySet(entitySetName :string, principal :Object) :Promise<> {
 
   if (!isNonEmptyString(entitySetName)) {
     return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
