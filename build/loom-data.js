@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.9.2
+ * loom-data - v0.9.3
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -38312,11 +38312,15 @@ function addEntityTypesToSchema(schemaFqn, entityTypeFqns) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  var allValidFqns = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  var allValid = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -38357,11 +38361,15 @@ function removeEntityTypesFromSchema(schemaFqn, entityTypeFqns) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  var allValidFqns = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
+  if (!(0, _LangUtils.isNonEmptyArray)(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  var allValid = entityTypeFqns.reduce(function (isValid, entityTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -38404,11 +38412,15 @@ function addPropertyTypesToSchema(schemaFqn, propertyTypeFqns) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  var allValidFqns = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
+  if (!(0, _LangUtils.isNonEmptyArray)(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  var allValid = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -38449,11 +38461,15 @@ function removePropertyTypesFromSchema(schemaFqn, propertyTypeFqns) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  var allValidFqns = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
+  if (!(0, _LangUtils.isNonEmptyArray)(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  var allValid = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -38520,6 +38536,18 @@ function getAllEntitySets(isOwner) {
  * );
  */
 function createEntitySets(entitySets) {
+
+  if (!(0, _LangUtils.isNonEmptyArray)(entitySets)) {
+    return Promise.reject('invalid parameter: entitySets must be a non-empty array');
+  }
+
+  var allValid = entitySets.reduce(function (isValid, entitySet) {
+    return isValid && (0, _LangUtils.isNonEmptyObject)(entitySet);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySets must be an array of valid FQN object literals');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -38616,6 +38644,10 @@ function getAllEntityTypes() {
  */
 function createEntityType(entityType) {
 
+  if (!(0, _LangUtils.isNonEmptyObject)(entityType)) {
+    return Promise.reject('invalid parameter: entityType must be a non-empty object literal');
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
@@ -38681,11 +38713,15 @@ function addPropertyTypesToEntityType(entityTypeFqn, propertyTypeFqns) {
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  var allValidFqns = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
+  if (!(0, _LangUtils.isNonEmptyArray)(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  var allValid = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -38726,11 +38762,15 @@ function removePropertyTypesFromEntityType(entityTypeFqn, propertyTypeFqns) {
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  var allValidFqns = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
+  if (!(0, _LangUtils.isNonEmptyArray)(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  var allValid = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
     return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -38853,6 +38893,10 @@ function getAllPropertyTypesInNamespace(namespace) {
  * );
  */
 function createPropertyType(propertyType) {
+
+  if (!(0, _LangUtils.isNonEmptyObject)(propertyType)) {
+    return Promise.reject('invalid parameter: propertyType must be a non-empty object literal');
+  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -41023,7 +41067,7 @@ var _Configuration = __webpack_require__(10);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.9.2";
+var version = "v0.9.3";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
