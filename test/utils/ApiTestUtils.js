@@ -2,10 +2,6 @@ import BBPromise from 'bluebird';
 
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
 
-import {
-  getMockAxiosInstance
-} from '../utils/MockDataUtils';
-
 /* eslint-disable no-array-constructor, no-new-object */
 const INVALID_PARAMS = [
   undefined,

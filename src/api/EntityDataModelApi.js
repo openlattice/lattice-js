@@ -464,7 +464,7 @@ export function createEntitySets(entitySets :Object[]) :Promise<> {
   }
 
   const allValid = entitySets.reduce((isValid, entitySet) => {
-    return isValid && isNonEmptyObject(entitySet)
+    return isValid && isNonEmptyObject(entitySet);
   }, true);
 
   if (!allValid) {
