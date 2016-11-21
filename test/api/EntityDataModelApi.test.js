@@ -1,9 +1,27 @@
+/* eslint-disable no-use-before-define */
+
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
 import * as EntityDataModelApi from '../../src/api/EntityDataModelApi';
 
 import {
   EDM_API
 } from '../../src/constants/ApiNames';
+
+import {
+  ADD_PROPERTY_TYPES_PATH,
+  DELETE_PROPERTY_TYPES_PATH,
+  ENTITY_SET_PATH,
+  ENTITY_TYPE_PATH,
+  PROPERTY_TYPE_PATH,
+  SCHEMA_PATH
+} from '../../src/constants/ApiPaths';
+
+import {
+  testApiFunctionShouldGetCorrectAxiosInstance,
+  testApiFunctionShouldNotThrowOnInvalidParameters,
+  testApiFunctionShouldRejectOnInvalidParameters,
+  testApiFunctionShouldReturnPromiseOnValidParameters
+} from '../utils/ApiTestUtils';
 
 import {
   getMockAxiosInstance
@@ -49,640 +67,6 @@ const MOCK_PROPERTY_TYPE = {
 };
 
 let mockAxiosInstance = null;
-let requestPromise = null;
-
-function runCommonTests() {
-
-  it('should invoke getApiAxiosInstance() with the correct API', () => {
-    expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledTimes(1);
-    expect(AxiosUtils.getApiAxiosInstance).toHaveBeenCalledWith(EDM_API);
-  });
-
-  it('should return a Promise', () => {
-    expect(requestPromise).toEqual(jasmine.any(Promise));
-  });
-}
-
-function testApiMethods() {
-
-  it('should expose getEntityDataModel()', () => {
-    expect(EntityDataModelApi.getEntityDataModel).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getSchema()', () => {
-    expect(EntityDataModelApi.getSchema).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getAllSchemas()', () => {
-    expect(EntityDataModelApi.getAllSchemas).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getAllSchemasInNamespace()', () => {
-    expect(EntityDataModelApi.getAllSchemasInNamespace).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose createSchema()', () => {
-    expect(EntityDataModelApi.createSchema).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose addEntityTypesToSchema()', () => {
-    expect(EntityDataModelApi.addEntityTypesToSchema).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose removeEntityTypesFromSchema()', () => {
-    expect(EntityDataModelApi.removeEntityTypesFromSchema).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose addPropertyTypesToSchema()', () => {
-    expect(EntityDataModelApi.addPropertyTypesToSchema).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose removePropertyTypesFromSchema()', () => {
-    expect(EntityDataModelApi.removePropertyTypesFromSchema).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getAllEntitySets()', () => {
-    expect(EntityDataModelApi.getAllEntitySets).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose createEntitySets()', () => {
-    expect(EntityDataModelApi.createEntitySets).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getEntityType()', () => {
-    expect(EntityDataModelApi.getEntityType).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getAllEntityTypes()', () => {
-    expect(EntityDataModelApi.getAllEntityTypes).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose createEntityType()', () => {
-    expect(EntityDataModelApi.createEntityType).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose deleteEntityType()', () => {
-    expect(EntityDataModelApi.deleteEntityType).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose addPropertyTypesToEntityType()', () => {
-    expect(EntityDataModelApi.addPropertyTypesToEntityType).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose removePropertyTypesFromEntityType()', () => {
-    expect(EntityDataModelApi.removePropertyTypesFromEntityType).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getPropertyType()', () => {
-    expect(EntityDataModelApi.getPropertyType).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getAllPropertyTypes()', () => {
-    expect(EntityDataModelApi.getAllPropertyTypes).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose getAllPropertyTypesInNamespace()', () => {
-    expect(EntityDataModelApi.getAllPropertyTypesInNamespace).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose createPropertyType()', () => {
-    expect(EntityDataModelApi.createPropertyType).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose deletePropertyType()', () => {
-    expect(EntityDataModelApi.deletePropertyType).toEqual(jasmine.any(Function));
-  });
-}
-
-function testGetEntityDataModel() {
-
-  describe('getEntityDataModel()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getEntityDataModel();
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/');
-    });
-
-  });
-}
-
-function testGetSchema() {
-
-  describe('getSchema()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getSchema(MOCK_SCHEMA_FQN);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        `/schema/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`
-      );
-    });
-
-  });
-}
-
-function testGetAllSchemas() {
-
-  describe('getAllSchemas()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getAllSchemas();
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/schema');
-    });
-
-  });
-}
-
-function testGetAllSchemasInNamespace() {
-
-  describe('getAllSchemasInNamespace()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getAllSchemasInNamespace(MOCK_SCHEMA_FQN.namespace);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith(`/schema/${MOCK_SCHEMA_FQN.namespace}`);
-    });
-
-  });
-}
-
-function testCreateSchema() {
-
-  describe('createSchema()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.createSchema(MOCK_SCHEMA_FQN);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a PUT request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-        '/schema',
-        MOCK_SCHEMA_FQN
-      );
-    });
-
-  });
-}
-
-function testAddEntityTypesToSchema() {
-
-  describe('addEntityTypesToSchema()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.addEntityTypesToSchema(MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN]);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a PUT request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-        `/schema/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
-        [MOCK_ENTITY_TYPE_FQN]
-      );
-    });
-
-  });
-}
-
-function testRemoveEntityTypesFromSchema() {
-
-  describe('removeEntityTypesFromSchema()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.removeEntityTypesFromSchema(MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN]);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a DELETE request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-        `/schema/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
-        { data: [MOCK_ENTITY_TYPE_FQN] }
-      );
-    });
-
-  });
-}
-
-function testAddPropertyTypesToSchema() {
-
-  describe('addPropertyTypesToSchema()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.addPropertyTypesToSchema(MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN]);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a PUT request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-        `/schema/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}/addPropertyTypes`,
-        [MOCK_PROPERTY_TYPE_FQN]
-      );
-    });
-
-  });
-}
-
-function testRemovePropertyTypesFromSchema() {
-
-  describe('removePropertyTypesFromSchema()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.removePropertyTypesFromSchema(MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN]);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a DELETE request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-        `/schema/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}/deletePropertyTypes`,
-        { data: [MOCK_PROPERTY_TYPE_FQN] }
-      );
-    });
-
-  });
-}
-
-function testGetAllEntitySets() {
-
-  describe('getAllEntitySets()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getAllEntitySets();
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/entity/set');
-    });
-
-  });
-}
-
-function testCreateEntitySets() {
-
-  describe('createEntitySets()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.createEntitySets([MOCK_ENTITY_SET]);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a POST request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/entity/set',
-        [MOCK_ENTITY_SET]
-      );
-    });
-
-  });
-}
-
-function testGetEntityType() {
-
-  describe('getEntityType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getEntityType(MOCK_ENTITY_TYPE_FQN);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        `/entity/type/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}`
-      );
-    });
-
-  });
-}
-
-function testGetAllEntityTypes() {
-
-  describe('getAllEntityTypes()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getAllEntityTypes();
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/entity/type');
-    });
-
-  });
-}
-
-function testCreateEntityType() {
-
-  describe('createEntityType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.createEntityType(MOCK_ENTITY_TYPE);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a POST request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/entity/type',
-        MOCK_ENTITY_TYPE
-      );
-    });
-
-  });
-}
-
-function testDeleteEntityType() {
-
-  describe('deleteEntityType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.deleteEntityType(MOCK_ENTITY_TYPE_FQN);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a DELETE request with the correct URL path', () => {
-      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-        `/entity/type/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}`
-      );
-    });
-
-  });
-}
-
-function testAddPropertyTypesToEntityType() {
-
-  describe('addPropertyTypesToEntityType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.addPropertyTypesToEntityType(
-        MOCK_ENTITY_TYPE_FQN,
-        [MOCK_PROPERTY_TYPE_FQN]
-      );
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a PUT request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-        `/entity/type/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}/addPropertyTypes`,
-        [MOCK_PROPERTY_TYPE_FQN]
-      );
-    });
-
-  });
-}
-
-function testRemovePropertyTypesFromEntityType() {
-
-  describe('removePropertyTypesFromEntityType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.removePropertyTypesFromEntityType(
-        MOCK_ENTITY_TYPE_FQN,
-        [MOCK_PROPERTY_TYPE_FQN]
-      );
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a DELETE request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-        `/entity/type/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}/deletePropertyTypes`,
-        { data: [MOCK_PROPERTY_TYPE_FQN] }
-      );
-    });
-
-  });
-}
-
-function testGetPropertyType() {
-
-  describe('getPropertyType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getPropertyType(MOCK_PROPERTY_TYPE_FQN);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-        `/property/type/${MOCK_PROPERTY_TYPE_FQN.namespace}/${MOCK_PROPERTY_TYPE_FQN.name}`
-      );
-    });
-
-  });
-}
-
-function testGetAllPropertyTypes() {
-
-  describe('getAllPropertyTypes()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getAllPropertyTypes();
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/property/type');
-    });
-
-  });
-}
-
-function testGetAllPropertyTypesInNamespace() {
-
-  describe('getAllPropertyTypesInNamespace()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.getAllPropertyTypesInNamespace(MOCK_PROPERTY_TYPE_FQN.namespace);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a GET request with the correct URL path', () => {
-      expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith(`/property/type/${MOCK_PROPERTY_TYPE_FQN.namespace}`);
-    });
-
-  });
-}
-
-function testCreatePropertyType() {
-
-  describe('createPropertyType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.createPropertyType(MOCK_PROPERTY_TYPE);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a POST request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/property/type',
-        MOCK_PROPERTY_TYPE
-      );
-    });
-
-  });
-}
-
-function testDeletePropertyType() {
-
-  describe('deletePropertyType()', () => {
-
-    beforeEach(() => {
-      requestPromise = EntityDataModelApi.deletePropertyType(MOCK_PROPERTY_TYPE_FQN);
-    });
-
-    afterEach(() => {
-      requestPromise = null;
-    });
-
-    runCommonTests();
-
-    it('should send a DELETE request with the correct URL path and data', () => {
-      expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-        `/property/type/${MOCK_PROPERTY_TYPE_FQN.namespace}/${MOCK_PROPERTY_TYPE_FQN.name}`
-      );
-    });
-
-  });
-}
 
 describe('EntityDataModelApi', () => {
 
@@ -695,7 +79,6 @@ describe('EntityDataModelApi', () => {
     mockAxiosInstance = null;
   });
 
-  testApiMethods();
   testGetEntityDataModel();
   testGetSchema();
   testGetAllSchemas();
@@ -719,3 +102,688 @@ describe('EntityDataModelApi', () => {
   testCreatePropertyType();
   testDeletePropertyType();
 });
+
+function testGetEntityDataModel() {
+
+  describe('getEntityDataModel()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getEntityDataModel
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getEntityDataModel()
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith('/');
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetSchema() {
+
+  describe('getSchema()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getSchema, MOCK_SCHEMA_FQN
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getSchema(MOCK_SCHEMA_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetAllSchemas() {
+
+  describe('getAllSchemas()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getAllSchemas
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getAllSchemas()
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetAllSchemasInNamespace() {
+
+  describe('getAllSchemasInNamespace()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getAllSchemasInNamespace, MOCK_SCHEMA_FQN.namespace
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getAllSchemasInNamespace(MOCK_SCHEMA_FQN.namespace)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testCreateSchema() {
+
+  describe('createSchema()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.createSchema, MOCK_SCHEMA_FQN
+    ];
+
+    it('should send a PUT request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.createSchema(MOCK_SCHEMA_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}`,
+            MOCK_SCHEMA_FQN
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testAddEntityTypesToSchema() {
+
+  describe('addEntityTypesToSchema()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.addEntityTypesToSchema, MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN]
+    ];
+
+    it('should send a PUT request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.addEntityTypesToSchema(MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN])
+        .then(() => {
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
+            [MOCK_ENTITY_TYPE_FQN]
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testRemoveEntityTypesFromSchema() {
+
+  describe('removeEntityTypesFromSchema()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.removeEntityTypesFromSchema, MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN]
+    ];
+
+    it('should send a DELETE request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.removeEntityTypesFromSchema(MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN])
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
+            { data: [MOCK_ENTITY_TYPE_FQN] }
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testAddPropertyTypesToSchema() {
+
+  describe('addPropertyTypesToSchema()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.addPropertyTypesToSchema, MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN]
+    ];
+
+    it('should send a PUT request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.addPropertyTypesToSchema(MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN])
+        .then(() => {
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}/${ADD_PROPERTY_TYPES_PATH}`,
+            [MOCK_PROPERTY_TYPE_FQN]
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testRemovePropertyTypesFromSchema() {
+
+  describe('removePropertyTypesFromSchema()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.removePropertyTypesFromSchema, MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN]
+    ];
+
+    it('should send a DELETE request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.removePropertyTypesFromSchema(MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN])
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}/${DELETE_PROPERTY_TYPES_PATH}`,
+            { data: [MOCK_PROPERTY_TYPE_FQN] }
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetAllEntitySets() {
+
+  describe('getAllEntitySets()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getAllEntitySets
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getAllEntitySets()
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${ENTITY_SET_PATH}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testCreateEntitySets() {
+
+  describe('createEntitySets()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.createEntitySets, [MOCK_ENTITY_SET]
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.createEntitySets([MOCK_ENTITY_SET])
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${ENTITY_SET_PATH}`,
+            [MOCK_ENTITY_SET]
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetEntityType() {
+
+  describe('getEntityType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getEntityType, MOCK_ENTITY_TYPE_FQN
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getEntityType(MOCK_ENTITY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetAllEntityTypes() {
+
+  describe('getAllEntityTypes()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getAllEntityTypes
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getAllEntityTypes()
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testCreateEntityType() {
+
+  describe('createEntityType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.createEntityType, MOCK_ENTITY_TYPE
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.createEntityType(MOCK_ENTITY_TYPE)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}`,
+            MOCK_ENTITY_TYPE
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testDeleteEntityType() {
+
+  describe('deleteEntityType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.deleteEntityType, MOCK_ENTITY_TYPE_FQN
+    ];
+
+    it('should send a DELETE request with the correct URL path', (done) => {
+
+      EntityDataModelApi.deleteEntityType(MOCK_ENTITY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testAddPropertyTypesToEntityType() {
+
+  describe('addPropertyTypesToEntityType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.addPropertyTypesToEntityType, MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN]
+    ];
+
+    it('should send a PUT request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.addPropertyTypesToEntityType(MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN])
+        .then(() => {
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}/${ADD_PROPERTY_TYPES_PATH}`, // eslint-disable-line
+            [MOCK_PROPERTY_TYPE_FQN]
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testRemovePropertyTypesFromEntityType() {
+
+  describe('removePropertyTypesFromEntityType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.removePropertyTypesFromEntityType, MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN]
+    ];
+
+    it('should send a DELETE request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.removePropertyTypesFromEntityType(MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN])
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}/${DELETE_PROPERTY_TYPES_PATH}`, // eslint-disable-line
+            { data: [MOCK_PROPERTY_TYPE_FQN] }
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetPropertyType() {
+
+  describe('getPropertyType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getPropertyType, MOCK_PROPERTY_TYPE_FQN
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getPropertyType(MOCK_PROPERTY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}/${MOCK_PROPERTY_TYPE_FQN.name}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetAllPropertyTypes() {
+
+  describe('getAllPropertyTypes()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getAllPropertyTypes
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getAllPropertyTypes()
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${PROPERTY_TYPE_PATH}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetAllPropertyTypesInNamespace() {
+
+  describe('getAllPropertyTypesInNamespace()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getAllPropertyTypesInNamespace, MOCK_PROPERTY_TYPE_FQN.namespace
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getAllPropertyTypesInNamespace(MOCK_PROPERTY_TYPE_FQN.namespace)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testCreatePropertyType() {
+
+  describe('createPropertyType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.createPropertyType, MOCK_PROPERTY_TYPE
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.createPropertyType(MOCK_PROPERTY_TYPE)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${PROPERTY_TYPE_PATH}`,
+            MOCK_PROPERTY_TYPE
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testDeletePropertyType() {
+
+  describe('deletePropertyType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.deletePropertyType, MOCK_PROPERTY_TYPE_FQN
+    ];
+
+    it('should send a DELETE request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.deletePropertyType(MOCK_PROPERTY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}/${MOCK_PROPERTY_TYPE_FQN.name}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+  });
+}
