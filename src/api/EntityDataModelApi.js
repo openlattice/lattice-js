@@ -42,6 +42,8 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
+  isNonEmptyArray,
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -223,11 +225,15 @@ export function addEntityTypesToSchema(schemaFqn :Object, entityTypeFqns :Object
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+  if (!isNonEmptyArray(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
     return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -269,11 +275,15 @@ export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypeFqns :O
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
+  if (!isNonEmptyArray(entityTypeFqns)) {
+    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  }
+
+  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
     return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -317,11 +327,15 @@ export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Ob
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+  if (!isNonEmptyArray(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
     return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -363,11 +377,15 @@ export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqn
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+  if (!isNonEmptyArray(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
     return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -440,6 +458,18 @@ export function getAllEntitySets(isOwner :boolean) :Promise<> {
  * );
  */
 export function createEntitySets(entitySets :Object[]) :Promise<> {
+
+  if (!isNonEmptyArray(entitySets)) {
+    return Promise.reject('invalid parameter: entitySets must be a non-empty array');
+  }
+
+  const allValid = entitySets.reduce((isValid, entitySet) => {
+    return isValid && isNonEmptyObject(entitySet);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: entitySets must be an array of valid FQN object literals');
+  }
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${ENTITY_SET_PATH}`, entitySets)
@@ -543,6 +573,10 @@ export function getAllEntityTypes() :Promise<> {
  */
 export function createEntityType(entityType :Object) :Promise<> {
 
+  if (!isNonEmptyObject(entityType)) {
+    return Promise.reject('invalid parameter: entityType must be a non-empty object literal');
+  }
+
   return getApiAxiosInstance(EDM_API)
     .post(`/${ENTITY_TYPE_PATH}`, entityType)
     .then((axiosResponse) => {
@@ -612,11 +646,15 @@ export function addPropertyTypesToEntityType(entityTypeFqn :Object, propertyType
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+  if (!isNonEmptyArray(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
     return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -658,11 +696,15 @@ export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propert
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
-  const allValidFqns = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+  if (!isNonEmptyArray(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
     return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
   }, true);
 
-  if (!allValidFqns) {
+  if (!allValid) {
     return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
   }
 
@@ -793,6 +835,10 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  * );
  */
 export function createPropertyType(propertyType :Object) :Promise<> {
+
+  if (!isNonEmptyObject(propertyType)) {
+    return Promise.reject('invalid parameter: propertyType must be a non-empty object literal');
+  }
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${PROPERTY_TYPE_PATH}`, propertyType)
