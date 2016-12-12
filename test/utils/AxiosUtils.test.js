@@ -25,6 +25,10 @@ const MOCK_AUTH_TOKEN = 'hello_world';
  * a hack to reset the AxiosUtils module for each test
  *
  * https://kentor.me/posts/testing-react-and-flux-applications-with-karma-and-webpack/
+ *
+ * useful links for future reference:
+ * https://github.com/webpack/webpack/issues/118
+ * https://github.com/webpack/webpack/issues/894
  */
 let AxiosUtils = null;
 let Config = null;
