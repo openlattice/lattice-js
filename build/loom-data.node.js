@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.9.4
+ * loom-data - v0.9.5
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4706,6 +4706,7 @@ var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
 
 var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
 var MULTIPLE_PATH = exports.MULTIPLE_PATH = 'multiple';
+var SELECTED_PATH = exports.SELECTED_PATH = 'selected';
 
 /*
  *
@@ -37591,6 +37592,7 @@ exports.getAllEntitiesOfType = getAllEntitiesOfType;
 exports.getAllEntitiesOfTypeFileUrl = getAllEntitiesOfTypeFileUrl;
 exports.getAllEntitiesOfTypeInSet = getAllEntitiesOfTypeInSet;
 exports.getAllEntitiesOfTypeInSetFileUrl = getAllEntitiesOfTypeInSetFileUrl;
+exports.getSelectedEntitiesOfTypeInSet = getSelectedEntitiesOfTypeInSet;
 exports.getAllEntitiesOfTypes = getAllEntitiesOfTypes;
 exports.createEntity = createEntity;
 
@@ -37783,6 +37785,49 @@ function getAllEntitiesOfTypeInSetFileUrl(entityTypeFqn, entitySetName, fileType
 
   return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '?fileType=' + FILE_TYPES.get(fileType);
   /* eslint-enable */
+}
+
+/**
+ * `PUT /entitydata/{namespace}/{name}/{name}/selected`
+ *
+ * Gets all entity data in the given EntitySet for the given EntityType FQN, filtered by the given PropertyType FQNs.
+ *
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @returns {Promise}
+ */
+function getSelectedEntitiesOfTypeInSet(entityTypeFqn, entitySetName, propertyTypeFqns) {
+
+  if (!_FullyQualifiedName2.default.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyArray)(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  var allValid = propertyTypeFqns.reduce(function (isValid, propertyTypeFqn) {
+    return isValid && _FullyQualifiedName2.default.isValidFqnObjectLiteral(propertyTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
+  }
+
+  var namespace = entityTypeFqn.namespace;
+  var name = entityTypeFqn.name;
+
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + namespace + '/' + name + '/' + entitySetName + '/' + _ApiPaths.SELECTED_PATH, propertyTypeFqns).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
 }
 
 /**
@@ -42025,7 +42070,7 @@ var _Configuration = __webpack_require__(11);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.9.4";
+var version = "v0.9.5";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
