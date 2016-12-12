@@ -19,7 +19,7 @@
     },
     "import/resolver": {
       "webpack": {
-        "config": "config/webpack.config.babel.js"
+        "config": "config/webpack/webpack.config.babel.js"
       }
     }
   },

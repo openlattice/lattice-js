@@ -84,7 +84,7 @@ export function getAllUsers() :Promise<> {
 }
 
 /**
- * `GET /users/roles/{role}`
+ * `GET /roles/{role}`
  *
  * @static
  * @memberof loom-data.UsersApi
@@ -97,7 +97,7 @@ export function getAllUsersForRole(role :string) :Promise<> {
   }
 
   return getApiAxiosInstance(USERS_API)
-    .get(`/${USERS_PATH}/${ROLES_PATH}/${role}`)
+    .get(`/${ROLES_PATH}/${role}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -107,7 +107,7 @@ export function getAllUsersForRole(role :string) :Promise<> {
 }
 
 /**
- * `GET /users/roles`
+ * `GET /roles`
  *
  * @static
  * @memberof loom-data.UsersApi
@@ -116,7 +116,7 @@ export function getAllUsersForRole(role :string) :Promise<> {
 export function getAllUsersForAllRoles() :Promise<> {
 
   return getApiAxiosInstance(USERS_API)
-    .get(`/${USERS_PATH}/${ROLES_PATH}`)
+    .get(`/${ROLES_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -126,7 +126,7 @@ export function getAllUsersForAllRoles() :Promise<> {
 }
 
 /**
- * `PATCH /users/roles/reset/{userId}`
+ * `PATCH /roles/reset/{userId}`
  *
  * @static
  * @memberof loom-data.UsersApi
@@ -145,7 +145,7 @@ export function resetUserRoles(userId :string, roles :string[]) :Promise<> {
   }
 
   return getApiAxiosInstance(USERS_API)
-    .patch(`/${USERS_PATH}/${ROLES_PATH}/${RESET_PATH}/${userId}`, roles)
+    .patch(`/${ROLES_PATH}/${RESET_PATH}/${userId}`, roles)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
