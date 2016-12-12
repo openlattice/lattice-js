@@ -29,6 +29,7 @@ export const PROPERTY_TYPE_PATH :string = 'property/type';
 
 export const ENTITY_DATA_PATH :string = 'entitydata';
 export const MULTIPLE_PATH :string = 'multiple';
+export const SELECTED_PATH :string = 'selected';
 
 /*
  *
