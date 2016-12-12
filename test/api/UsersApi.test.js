@@ -121,7 +121,7 @@ function testGetAllUsersForRole() {
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${USERS_PATH}/${ROLES_PATH}/${MOCK_ROLE}`
+            `/${ROLES_PATH}/${MOCK_ROLE}`
           );
           done();
         })
@@ -152,7 +152,7 @@ function testGetAllUsersForAllRoles() {
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${USERS_PATH}/${ROLES_PATH}`
+            `/${ROLES_PATH}`
           );
           done();
         })
@@ -181,7 +181,7 @@ function testResetUserRoles() {
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
-            `/${USERS_PATH}/${ROLES_PATH}/${RESET_PATH}/${MOCK_USER_ID}`,
+            `/${ROLES_PATH}/${RESET_PATH}/${MOCK_USER_ID}`,
             [MOCK_ROLE]
           );
           done();
