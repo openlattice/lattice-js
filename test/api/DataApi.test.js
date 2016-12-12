@@ -171,7 +171,7 @@ function testGetAllEntitiesOfTypeInSetFileUrl() {
 
 function testGetSelectedEntitiesOfTypeInSet() {
 
-  fdescribe('getSelectedEntitiesOfTypeInSet()', () => {
+  describe('getSelectedEntitiesOfTypeInSet()', () => {
 
     const functionInvocation = [
       DataApi.getSelectedEntitiesOfTypeInSet, MOCK_FQN, MOCK_ES_NAME, [MOCK_FQN]
