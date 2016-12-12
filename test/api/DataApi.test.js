@@ -9,7 +9,8 @@ import {
 
 import {
   ENTITY_DATA_PATH,
-  MULTIPLE_PATH
+  MULTIPLE_PATH,
+  SELECTED_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -58,6 +59,7 @@ describe('DataApi', () => {
   testGetAllEntitiesOfTypeFileUrl();
   testGetAllEntitiesOfTypeInSet();
   testGetAllEntitiesOfTypeInSetFileUrl();
+  testGetSelectedEntitiesOfTypeInSet();
   testGetAllEntitiesOfTypes();
   testCreateEntity();
 });
@@ -163,6 +165,38 @@ function testGetAllEntitiesOfTypeInSetFileUrl() {
 
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
     testApiFunctionShouldReturnNullOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetSelectedEntitiesOfTypeInSet() {
+
+  fdescribe('getSelectedEntitiesOfTypeInSet()', () => {
+
+    const functionInvocation = [
+      DataApi.getSelectedEntitiesOfTypeInSet, MOCK_FQN, MOCK_ES_NAME, [MOCK_FQN]
+    ];
+
+    it('should send a PUT request with the correct URL path and data', (done) => {
+
+      DataApi.getSelectedEntitiesOfTypeInSet(MOCK_FQN, MOCK_ES_NAME, [MOCK_FQN])
+        .then(() => {
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ES_NAME}/${SELECTED_PATH}`,
+            [MOCK_FQN]
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });
 }

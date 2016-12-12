@@ -28,7 +28,8 @@ import {
 
 import {
   ENTITY_DATA_PATH,
-  MULTIPLE_PATH
+  MULTIPLE_PATH,
+  SELECTED_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -193,6 +194,51 @@ export function getAllEntitiesOfTypeInSetFileUrl(
   /* eslint-disable max-len */
   return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}?fileType=${FILE_TYPES.get(fileType)}`;
   /* eslint-enable */
+}
+
+/**
+ * `PUT /entitydata/{namespace}/{name}/{name}/selected`
+ *
+ * Gets all entity data in the given EntitySet for the given EntityType FQN, filtered by the given PropertyType FQNs.
+ *
+ * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @returns {Promise}
+ */
+export function getSelectedEntitiesOfTypeInSet(
+    entityTypeFqn :Object, entitySetName :string, propertyTypeFqns :Object[]) {
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  }
+
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  if (!isNonEmptyArray(propertyTypeFqns)) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
+  }
+
+  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
+  }
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getApiAxiosInstance(DATA_API)
+    .put(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}/${SELECTED_PATH}`, propertyTypeFqns)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
 }
 
 /**
