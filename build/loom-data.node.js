@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.9.3
+ * loom-data - v0.9.4
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -39438,7 +39438,7 @@ function getAllUsers() {
 }
 
 /**
- * `GET /users/roles/{role}`
+ * `GET /roles/{role}`
  *
  * @static
  * @memberof loom-data.UsersApi
@@ -39450,7 +39450,7 @@ function getAllUsersForRole(role) {
     return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -39458,7 +39458,7 @@ function getAllUsersForRole(role) {
 }
 
 /**
- * `GET /users/roles`
+ * `GET /roles`
  *
  * @static
  * @memberof loom-data.UsersApi
@@ -39466,7 +39466,7 @@ function getAllUsersForRole(role) {
  */
 function getAllUsersForAllRoles() {
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).get('/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -39474,7 +39474,7 @@ function getAllUsersForAllRoles() {
 }
 
 /**
- * `PATCH /users/roles/reset/{userId}`
+ * `PATCH /roles/reset/{userId}`
  *
  * @static
  * @memberof loom-data.UsersApi
@@ -39492,7 +39492,7 @@ function resetUserRoles(userId, roles) {
     return Promise.reject('invalid parameter: roles must be a non-empty array of strings');
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).patch('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + _ApiPaths.RESET_PATH + '/' + userId, roles).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.USERS_API).patch('/' + _ApiPaths.ROLES_PATH + '/' + _ApiPaths.RESET_PATH + '/' + userId, roles).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -42025,7 +42025,7 @@ var _Configuration = __webpack_require__(11);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.9.3";
+var version = "v0.9.4";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
