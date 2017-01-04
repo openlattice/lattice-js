@@ -65,8 +65,8 @@
     "npm-run-all": "^3.1.0",
     "phantomjs-prebuilt": "^2.1.13",
     "rimraf": "2.5.4",
-    "webpack": "^2.1.0-beta",
-    "webpack-dev-server": "^2.1.0-beta"
+    "webpack": "^2.2.0-rc",
+    "webpack-dev-server": "^2.2.0-rc"
   },
   "scripts": {
     "build": "npm-run-all --parallel build:prod build:prod:node",
