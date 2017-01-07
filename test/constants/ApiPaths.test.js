@@ -22,10 +22,7 @@ const ADD_PROPERTY_TYPES_PATH :string = 'addPropertyTypes';
 const DELETE_PROPERTY_TYPES_PATH :string = 'deletePropertyTypes';
 
 // PermissionsApi specific paths
-const ACL_PATH :string = 'acl';
-const ALL_PATH :string = 'all';
-const OWNER_PATH :string = 'owner';
-const REQUESTS_PATH :string = 'requests';
+const PERMISSIONS_PATH :string = 'permissions';
 
 // UsersApi specific paths
 const ADMIN_PATH :string = 'admin';
@@ -118,24 +115,9 @@ describe('ApiPaths', () => {
 
   describe('PermissionsApi specific paths', () => {
 
-    it(`should expose "${ACL_PATH}"`, () => {
-      expect(ApiPaths.ACL_PATH).toBeDefined();
-      expect(ApiPaths.ACL_PATH).toEqual(ACL_PATH);
-    });
-
-    it(`should expose "${ALL_PATH}"`, () => {
-      expect(ApiPaths.ALL_PATH).toBeDefined();
-      expect(ApiPaths.ALL_PATH).toEqual(ALL_PATH);
-    });
-
-    it(`should expose "${OWNER_PATH}"`, () => {
-      expect(ApiPaths.OWNER_PATH).toBeDefined();
-      expect(ApiPaths.OWNER_PATH).toEqual(OWNER_PATH);
-    });
-
-    it(`should expose "${REQUESTS_PATH}"`, () => {
-      expect(ApiPaths.REQUESTS_PATH).toBeDefined();
-      expect(ApiPaths.REQUESTS_PATH).toEqual(REQUESTS_PATH);
+    it(`should expose "${PERMISSIONS_PATH}"`, () => {
+      expect(ApiPaths.PERMISSIONS_PATH).toBeDefined();
+      expect(ApiPaths.PERMISSIONS_PATH).toEqual(PERMISSIONS_PATH);
     });
 
   });

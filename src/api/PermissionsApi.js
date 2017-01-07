@@ -10,11 +10,11 @@
  *
  * @example
  * import Loom from 'loom-data';
- * // Loom.PermissionsApi.update...
+ * // Loom.PermissionsApi.get...
  *
  * @example
  * import { PermissionsApi } from 'loom-data';
- * // PermissionsApi.update...
+ * // PermissionsApi.get...
  */
 
 import FullyQualifiedName from '../types/FullyQualifiedName';
@@ -25,12 +25,7 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  ALL_PATH,
-  ENTITY_SET_PATH,
-  ENTITY_TYPE_PATH,
-  PROPERTY_TYPE_PATH,
-  OWNER_PATH,
-  REQUESTS_PATH
+  PERMISSIONS_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -46,29 +41,40 @@ import {
 const LOG = new Logger('PermissionsApi');
 
 /**
- * `POST /entity/type`
+ * `POST /permissions`
+ *
+ * Gets the ACL for the given ACL Key, only if the user is the owner of the ACL Key.
  *
  * @static
  * @memberof loom-data.PermissionsApi
- * @param {Object[]} updateRequests
+ * @param {Object[]} aclKeys
  * @returns {Promise}
+ *
+ * @example
+ * PermissionsApi.getAcl(
+ *   [
+ *     {}
+ *   ]
+ * );
  */
-export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
+export function getAcl(aclKeys :Object[]) :Promise<> {
 
-  if (!isNonEmptyArray(updateRequests)) {
-    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  if (!isNonEmptyArray(aclKeys)) {
+    return Promise.reject('invalid parameter: aclKeys must be a non-empty array');
   }
 
-  const allValid = updateRequests.reduce((isValid, request) => {
-    return isValid && isNonEmptyObject(request);
+  // TODO: validate aclKeys
+
+  const allValid = aclKeys.reduce((isValid, key) => {
+    return isValid && isNonEmptyObject(key);
   }, true);
 
   if (!allValid) {
-    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
+    return Promise.reject('invalid parameter: aclKeys must be an array of valid object literals');
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${ENTITY_TYPE_PATH}`, updateRequests)
+    .post(`/${PERMISSIONS_PATH}`, aclKeys)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -78,584 +84,30 @@ export function updateAclsForEntityTypes(updateRequests :Object[]) :Promise<> {
 }
 
 /**
- * `DELETE /entity/type`
+ * `PATCH /permissions`
+ *
+ * Updates the Ace for a particular ACL Key, only if the user is the owner of the ACL Key.
  *
  * @static
  * @memberof loom-data.PermissionsApi
- * @param {Object[]} entityTypeFqns
+ * @param {Object[]} aclKeys
  * @returns {Promise}
- */
-export function removeAclsForEntityTypes(entityTypeFqns :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(entityTypeFqns)) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
-  }
-
-  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .delete(`/${ENTITY_TYPE_PATH}`, {
-      data: entityTypeFqns
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `POST /entity/set`
  *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} updateRequests
- * @returns {Promise}
+ * @example
+ * PermissionsApi.updateAcl(
+ *   {}
+ * );
  */
-export function updateAclsForEntitySets(updateRequests :Object[]) :Promise<> {
+export function updateAcl(aclData :Object) :Promise<> {
 
-  if (!isNonEmptyArray(updateRequests)) {
-    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
+  if (!isNonEmptyObject(aclData)) {
+    return Promise.reject('invalid parameter: aclData must be a non-empty object literal');
   }
 
-  const allValid = updateRequests.reduce((isValid, request) => {
-    return isValid && isNonEmptyObject(request);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
-  }
+  // TODO: validate aclData
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${ENTITY_SET_PATH}`, updateRequests)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `DELETE /entity/set`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string[]} entitySetNames
- * @returns {Promise}
- */
-export function removeAclsForEntitySets(entitySetNames :string[]) :Promise<> {
-
-  if (!isNonEmptyArray(entitySetNames)) {
-    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
-  }
-
-  const allValid = entitySetNames.reduce((isValid, name) => {
-    return isValid && isNonEmptyString(name);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .delete(`/${ENTITY_SET_PATH}`, {
-      data: entitySetNames
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `POST /entity/type/property/type`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} updateRequests
- * @returns {Promise}
- */
-export function updateAclsForPropertyTypesInEntityTypes(updateRequests :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(updateRequests)) {
-    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
-  }
-
-  const allValid = updateRequests.reduce((isValid, request) => {
-    return isValid && isNonEmptyObject(request);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}`, updateRequests)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `DELETE /entity/type/property/type`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} removeRequests
- * @returns {Promise}
- */
-export function removeAclsForPropertyTypesInEntityTypes(removeRequests :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(removeRequests)) {
-    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
-  }
-
-  const allValid = removeRequests.reduce((isValid, request) => {
-    return isValid && isNonEmptyObject(request);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .delete(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}`, {
-      data: removeRequests
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `POST /entity/set/property/type`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} updateRequests
- * @returns {Promise}
- */
-export function updateAclsForPropertyTypesInEntitySets(updateRequests :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(updateRequests)) {
-    return Promise.reject('invalid parameter: updateRequests must be a non-empty array');
-  }
-
-  const allValid = updateRequests.reduce((isValid, request) => {
-    return isValid && isNonEmptyObject(request);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: updateRequests must be an array of valid object literals');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}`, updateRequests)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `DELETE /entity/set/property/type`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} removeRequests
- * @returns {Promise}
- */
-export function removeAclsForPropertyTypesInEntitySets(removeRequests :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(removeRequests)) {
-    return Promise.reject('invalid parameter: removeRequests must be a non-empty array');
-  }
-
-  const allValid = removeRequests.reduce((isValid, request) => {
-    return isValid && isNonEmptyObject(request);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: removeRequests must be an array of valid object literals');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .delete(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}`, {
-      data: removeRequests
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `DELETE /entity/type/property/type/all`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} entityTypeFqns
- * @returns {Promise}
- */
-export function removeAllAclsForPropertyTypesInEntityTypes(entityTypeFqns :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(entityTypeFqns)) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
-  }
-
-  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .delete(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}/${ALL_PATH}`, {
-      data: entityTypeFqns
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `DELETE /entity/set/property/type/all`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string[]} entitySetNames
- * @returns {Promise}
- */
-export function removeAllAclsForPropertyTypesInEntitySets(entitySetNames :string[]) :Promise<> {
-
-  if (!isNonEmptyArray(entitySetNames)) {
-    return Promise.reject('invalid parameter: entitySetNames must be a non-empty array');
-  }
-
-  const allValid = entitySetNames.reduce((isValid, name) => {
-    return isValid && isNonEmptyString(name);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: entitySetNames must be an array of non-empty strings');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .delete(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}/${ALL_PATH}`, {
-      data: entitySetNames
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `GET /entity/type?namespace=entityTypeNamespace&name=entityTypeName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @returns {Promise}
- */
-export function getAclsForEntityType(entityTypeFqn :Object) :Promise<> {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
-  }
-
-  const { namespace, name } = entityTypeFqn;
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .get(`/${ENTITY_TYPE_PATH}?namespace=${namespace}&name=${name}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `GET /entity/set?name=entitySetName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} entitySetName
- * @returns {Promise}
- */
-export function getAclsForEntitySet(entitySetName :string) :Promise<> {
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .get(`/${ENTITY_SET_PATH}?name=${entitySetName}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `GET /entity/type/property/type?namespace=entityTypeNamespace&name=entityTypeName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @returns {Promise}
- */
-export function getAclsForPropertyTypesInEntityType(entityTypeFqn :Object) :Promise<> {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
-  }
-
-  const { namespace, name } = entityTypeFqn;
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .get(`/${ENTITY_TYPE_PATH}/${PROPERTY_TYPE_PATH}?namespace=${namespace}&name=${name}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `GET /entity/set/property/type?name=entitySetName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} entitySetName
- * @returns {Promise}
- */
-export function getAclsForPropertyTypesInEntitySet(entitySetName :string) :Promise<> {
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .get(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}?name=${entitySetName}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `GET /entity/set/owner?name=entitySetName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} entitySetName
- * @returns {Promise}
- */
-export function getOwnerAclsForEntitySet(entitySetName :string) :Promise<> {
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .get(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `POST /entity/set/owner/property/type?name=entitySetName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} entitySetName
- * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
- * @returns {Promise}
- */
-export function getOwnerAclsForPropertyTypeInEntitySet(entitySetName :string, propertyTypeFqn :Object) :Promise<> {
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn)) {
-    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${ENTITY_SET_PATH}/${OWNER_PATH}/${PROPERTY_TYPE_PATH}?name=${entitySetName}`, propertyTypeFqn)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `POST /entity/set/owner?name=entitySetName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} entitySetName
- * @param {Object} principal - an object literal representing com.kryptnostic.datastore.Principal
- * @returns {Promise}
- */
-export function getOwnerAclsForAllPropertyTypesInEntitySet(entitySetName :string, principal :Object) :Promise<> {
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  if (!isNonEmptyObject(principal)) {
-    return Promise.reject('invalid parameter: principal must be a non-empty object literal');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${ENTITY_SET_PATH}/${OWNER_PATH}?name=${entitySetName}`, principal)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `GET /entity/set/owner/requests?name=entitySetName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} entitySetName - (optional)
- * @returns {Promise}
- */
-export function getAllReceivedRequestsForPermissions(entitySetName :?string) :Promise<> {
-
-  const queryString = (isNonEmptyString(entitySetName))
-    ? `?name=${entitySetName}`
-    : '';
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .get(`/${ENTITY_SET_PATH}/${OWNER_PATH}/${REQUESTS_PATH}${queryString}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `GET /entity/set/requests?name=entitySetName`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} entitySetName - (optional)
- * @returns {Promise}
- */
-export function getAllSentRequestsForPermissions(entitySetName :?string) :Promise<> {
-
-  let queryString = '';
-  if (isNonEmptyString(entitySetName)) {
-    queryString = `?name=${entitySetName}`;
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .get(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}${queryString}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `POST /entity/set/requests`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {Object[]} permissionsRequests
- * @returns {Promise}
- */
-export function addPermissionsRequestForPropertyTypesInEntitySet(permissionsRequests :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(permissionsRequests)) {
-    return Promise.reject('invalid parameter: permissionsRequests must be a non-empty array');
-  }
-
-  const allValid = permissionsRequests.reduce((isValid, request) => {
-    return isValid && isNonEmptyObject(request);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: permissionsRequests must be an array of valid object literals');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}`, permissionsRequests)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `DELETE /entity/set/requests?id=requestId`
- *
- * @static
- * @memberof loom-data.PermissionsApi
- * @param {string} requestId - UUID
- * @returns {Promise}
- */
-export function removePermissionsRequestForEntitySet(requestId :string) :Promise<> {
-
-  if (!isNonEmptyString(requestId)) {
-    return Promise.reject('invalid parameter: requestId must be a non-empty string');
-  }
-
-  return getApiAxiosInstance(PERMISSIONS_API)
-    .delete(`/${ENTITY_SET_PATH}/${REQUESTS_PATH}?id=${requestId}`)
+    .post(`/${PERMISSIONS_PATH}`, aclData)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
