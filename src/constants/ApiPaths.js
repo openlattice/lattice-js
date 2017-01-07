@@ -20,6 +20,7 @@ export const ONTOLOGY_PATH :string = 'ontology';
 export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const PROPERTY_TYPE_PATH :string = 'property/type';
+export const NAMESPACE_PATH :string = 'namespace';
 
 /*
  *

@@ -9,6 +9,7 @@ const ONTOLOGY_PATH :string = 'ontology';
 const ENTITY_SET_PATH :string = 'entity/set';
 const ENTITY_TYPE_PATH :string = 'entity/type';
 const PROPERTY_TYPE_PATH :string = 'property/type';
+const NAMESPACE_PATH :string = 'namespace';
 
 // DataApi specific paths
 const ENTITY_DATA_PATH :string = 'entitydata';
@@ -68,6 +69,11 @@ describe('ApiPaths', () => {
     it(`should expose "${PROPERTY_TYPE_PATH}"`, () => {
       expect(ApiPaths.PROPERTY_TYPE_PATH).toBeDefined();
       expect(ApiPaths.PROPERTY_TYPE_PATH).toEqual(PROPERTY_TYPE_PATH);
+    });
+
+    it(`should expose "${NAMESPACE_PATH}"`, () => {
+      expect(ApiPaths.NAMESPACE_PATH).toBeDefined();
+      expect(ApiPaths.NAMESPACE_PATH).toEqual(NAMESPACE_PATH);
     });
 
   });

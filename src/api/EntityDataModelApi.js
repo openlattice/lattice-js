@@ -33,6 +33,7 @@ import {
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
   PROPERTY_TYPE_PATH,
+  NAMESPACE_PATH,
   ADD_PROPERTY_TYPES_PATH,
   DELETE_PROPERTY_TYPES_PATH
 } from '../constants/ApiPaths';
@@ -44,10 +45,15 @@ import {
 import {
   isNonEmptyArray,
   isNonEmptyObject,
-  isNonEmptyString
+  isNonEmptyString,
+  isValidUUID
 } from '../utils/LangUtils';
 
 const LOG = new Logger('EntityDataModelApi');
+
+/**
+ * @typedef {string} UUID
+ */
 
 /*
  *
@@ -729,30 +735,26 @@ export function removePropertyTypesFromEntityType(entityTypeFqn :Object, propert
  */
 
 /**
- * `GET /property/type/{namespace}/{name}`
+ * `GET /property/type/{uuid}`
  *
- * Gets the PropertyType definition for the given PropertyType FQN.
+ * Gets the PropertyType definition for the given PropertyType UUID.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
+ * @param {UUID} propertyTypeId - the PropertyType UUID
  * @return {Promise<Object>} - a Promise that will resolve with the PropertyType definition as its fulfillment value
  *
  * @example
- * EntityDataModelApi.getPropertyType(
- *   { namespace: "LOOM", name: "MyProperty" }
- * );
+ * EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getPropertyType(propertyTypeFqn :Object) :Promise<> {
+export function getPropertyType(propertyTypeId :string) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn)) {
-    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
+  if (!isValidUUID(propertyTypeId)) {
+    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
   }
 
-  const { namespace, name } = propertyTypeFqn;
-
   return getApiAxiosInstance(EDM_API)
-    .get(`/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
+    .get(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -786,7 +788,7 @@ export function getAllPropertyTypes() :Promise<> {
 }
 
 /**
- * `GET /property/type/{namespace}`
+ * `GET /namespace/{namespace}/property/type`
  *
  * Gets all PropertyType definitions under the given namespace.
  *
@@ -805,7 +807,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
   }
 
   return getApiAxiosInstance(EDM_API)
-    .get(`/${PROPERTY_TYPE_PATH}/${namespace}`)
+    .get(`/${NAMESPACE_PATH}/${namespace}/${PROPERTY_TYPE_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -822,15 +824,18 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} propertyType
- * @return {Promise}
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created PropertyType UUID
  *
  * @example
  * EntityDataModelApi.createPropertyType(
  *   {
+ *     id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
  *     namespace: "LOOM",
  *     name: "MyProperty",
  *     datatype: "String",
- *     properties: 0
+ *     schemas: [
+ *       { namespace: "LOOM", name: "MySchema" }
+ *     ]
  *   }
  * );
  */
@@ -838,6 +843,31 @@ export function createPropertyType(propertyType :Object) :Promise<> {
 
   if (!isNonEmptyObject(propertyType)) {
     return Promise.reject('invalid parameter: propertyType must be a non-empty object literal');
+  }
+
+  if (propertyType.id !== undefined && !isValidUUID(propertyType.id)) {
+    return Promise.reject('invalid parameter: propertyType.id must be a valid UUID');
+  }
+
+  const propertyTypeFqn = new FullyQualifiedName(propertyType.namespace, propertyType.name);
+  if (!propertyTypeFqn.isValid()) {
+    return Promise.reject('invalid parameters: propertyType.namespace and propertyType.name must form a valid FQN');
+  }
+
+  if (!isNonEmptyString(propertyType.datatype)) {
+    return Promise.reject('invalid parameter: propertyType.datatype must be a non-empty string');
+  }
+
+  if (!isNonEmptyArray(propertyType.schemas)) {
+    return Promise.reject('invalid parameter: propertyType.schemas must be a non-empty array');
+  }
+
+  const allValid = propertyType.schemas.reduce((isValid, shemaFqn) => {
+    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(shemaFqn);
+  }, true);
+
+  if (!allValid) {
+    return Promise.reject('invalid parameter: propertyType.schemas must be an array of valid FQN object literals');
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -857,15 +887,21 @@ export function createPropertyType(propertyType :Object) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} propertyTypeId - the PropertyType UUID
  * @param {Object} propertyTypeFqn - an object literal representing a fully qualified name
  * @return {Promise}
  *
  * @example
  * EntityDataModelApi.deletePropertyType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   { namespace: "LOOM", name: "MyProperty" }
  * );
  */
-export function deletePropertyType(propertyTypeFqn :Object) :Promise<> {
+export function deletePropertyType(propertyTypeId :string, propertyTypeFqn :Object) :Promise<> {
+
+  if (!isValidUUID(propertyTypeId)) {
+    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+  }
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn)) {
     return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN object literal');
@@ -874,7 +910,7 @@ export function deletePropertyType(propertyTypeFqn :Object) :Promise<> {
   const { namespace, name } = propertyTypeFqn;
 
   return getApiAxiosInstance(EDM_API)
-    .delete(`/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
+    .delete(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

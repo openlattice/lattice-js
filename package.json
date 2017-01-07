@@ -29,7 +29,8 @@
     "immutable": "^3.8.1",
     "lodash": "^4.16.4",
     "loglevel": "^1.4.1",
-    "moment": "^2.15.1"
+    "moment": "^2.15.1",
+    "uuid-validate": "0.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

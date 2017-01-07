@@ -178,4 +178,9 @@ export default class FullyQualifiedName {
 
     return this.fqn;
   }
+
+  isValid() {
+
+    return FullyQualifiedName.isValidFqn(this.fqn);
+  }
 }
