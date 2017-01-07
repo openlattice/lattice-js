@@ -51,10 +51,6 @@ import {
 
 const LOG = new Logger('EntityDataModelApi');
 
-/**
- * @typedef {string} UUID
- */
-
 /*
  *
  * EntityDataModel APIs
@@ -69,6 +65,9 @@ const LOG = new Logger('EntityDataModelApi');
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @return {Promise} - a Promise that will resolve with the Entity Data Model schema as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityDataModel();
  */
 export function getEntityDataModel() :Promise<> {
 
