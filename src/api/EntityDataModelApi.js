@@ -91,12 +91,12 @@ export function getEntityDataModel() :Promise<> {
 /**
  * `GET /schema/{namespace}/{name}`
  *
- * Gets the schema definition for the given schema FQN.
+ * Gets the Schema definition for the given Schema FQN.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @return {Promise<Object>} - a Promise that will resolve with the schema definition as its fulfillment value
+ * @return {Promise<Object>} - a Promise that will resolve with the Schema definition as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getSchema(
@@ -124,11 +124,11 @@ export function getSchema(schemaFqn :Object) :Promise<> {
 /**
  * `GET /schema`
  *
- * Gets all schema definitions.
+ * Gets all Schema definitions.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
+ * @return {Promise<Object[]>} - a Promise that will resolve with all Schema definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllSchemas();
@@ -148,12 +148,12 @@ export function getAllSchemas() :Promise<> {
 /**
  * `GET /schema/{namespace}`
  *
- * Gets all schema definitions under the given namespace.
+ * Gets all Schema definitions under the given namespace.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {string} namespace - the substring before the dot in a FullyQualifiedName String
- * @return {Promise<Object[]>} - a Promise that will resolve with all schema definitions as its fulfillment value
+ * @return {Promise<Object[]>} - a Promise that will resolve with all Schema definitions as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllSchemasInNamespace("LOOM");
@@ -175,28 +175,44 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 }
 
 /**
- * `PUT /schema`
+ * `POST /schema`
  *
- * Creates a new schema definition for the given schema FQN, it it does not already exist.
+ * Creates a new Schema definition, it it does not already exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {Object} schemaFqn - an object literal representing a fully qualified name
+ * @param {Object} schema
  * @return {Promise}
  *
  * @example
  * EntityDataModelApi.createSchema(
- *   { namespace: "LOOM", name: "MySchema" }
+ *   fqn: { namespace: "LOOM", name: "MySchema" },
+ *   propertyTypes: [],
+ *   entityTypes: []
  * );
  */
-export function createSchema(schemaFqn :Object) :Promise<> {
+export function createSchema(schema :Object) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
+  if (!isNonEmptyObject(schema)) {
+    return Promise.reject('invalid parameter: schema must be a non-empty object literal');
+  }
+
+  if (!FullyQualifiedName.isValidFqnObjectLiteral(schema.fqn)) {
+    return Promise.reject('invalid parameter: schema.fqn must be a valid FQN object literal');
+  }
+
+  // TODO: validate schema.propertyTypes and schema.entityTypes
+
+  if (!isNonEmptyArray(schema.propertyTypes)) {
+    return Promise.reject('invalid parameter: schema.propertyTypes must be a non-empty array');
+  }
+
+  if (!isNonEmptyArray(schema.entityTypes)) {
+    return Promise.reject('invalid parameter: schema.entityTypes must be a non-empty array');
   }
 
   return getApiAxiosInstance(EDM_API)
-    .put(`/${SCHEMA_PATH}`, schemaFqn)
+    .post(`/${SCHEMA_PATH}`, schema)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -208,45 +224,28 @@ export function createSchema(schemaFqn :Object) :Promise<> {
 /**
  * `PUT /schema/{namespace}/{name}`
  *
- * Updates the schema definition for the given schema FQN with the addition of the given EntityType FQNs.
+ * Creates a new empty Schema definition for the given Schema FQN.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Object[]} entityTypeFqns - an array of object literals representing fully qualified names
  * @return {Promise}
  *
  * @example
- * EntityDataModelApi.addEntityTypesToSchema(
- *   { namespace: "LOOM", name: "MySchema" },
- *   [
- *     { namespace: "LOOM", name: "MyEntity1" },
- *     { namespace: "LOOM", name: "MyEntity2" }
- *   ]
+ * EntityDataModelApi.createEmptySchema(
+ *   { namespace: "LOOM", name: "MySchema" }
  * );
  */
-export function addEntityTypesToSchema(schemaFqn :Object, entityTypeFqns :Object[]) :Promise<> {
+export function createEmptySchema(schemaFqn :Object) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  if (!isNonEmptyArray(entityTypeFqns)) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
-  }
-
-  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
-  }
-
   const { namespace, name } = schemaFqn;
 
   return getApiAxiosInstance(EDM_API)
-    .put(`/${SCHEMA_PATH}/${namespace}/${name}`, entityTypeFqns)
+    .put(`/${SCHEMA_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -256,151 +255,54 @@ export function addEntityTypesToSchema(schemaFqn :Object, entityTypeFqns :Object
 }
 
 /**
- * `DELETE /schema/{namespace}/{name}`
+ * `PATCH /schema/{namespace}/{name}`
  *
- * Updates the schema definition for the given schema FQN with the removal of the given EntityType FQNs.
+ * Updates the Schema definition for the given Schema FQN.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Object[]} entityTypeFqns - an array of object literals representing fully qualified names
+ * @param {Object} updateRequest
  * @return {Promise}
  *
  * @example
- * EntityDataModelApi.removeEntityTypesFromSchema(
+ * EntityDataModelApi.updateSchema(
  *   { namespace: "LOOM", name: "MySchema" },
- *   [
- *     { namespace: "LOOM", name: "MyEntity1" },
- *     { namespace: "LOOM", name: "MyEntity2" }
- *   ]
- * );
+ *   {
+ *     action: "ADD", // or REMOVE, or REPLACE,
+ *     propertyTypes: [],
+ *     entityTypes: []
+ *   }
+ * )
  */
-export function removeEntityTypesFromSchema(schemaFqn :Object, entityTypeFqns :Object[]) :Promise<> {
+export function updateSchema(schemaFqn :Object, updateRequest :Object) :Promise<> {
 
   if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
-  if (!isNonEmptyArray(entityTypeFqns)) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty array');
+  if (!isNonEmptyObject(updateRequest)) {
+    return Promise.reject('invalid parameter: updateRequest must be a non-empty object literal');
   }
 
-  const allValid = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
+  if (!isNonEmptyString(updateRequest.action)) {
+    return Promise.reject('invalid parameter: updateRequest.action must be a non-empty string');
   }
 
-  const { namespace, name } = schemaFqn;
+  // TODO - validate updateRequest.propertyTypes and updateRequest.entityTypes
 
-  return getApiAxiosInstance(EDM_API)
-    .delete(`/${SCHEMA_PATH}/${namespace}/${name}`, {
-      data: entityTypeFqns
-    })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `PUT /schema/{namespace}/{name}/addPropertyTypes`
- *
- * Updates the schema definition for the given schema FQN with the addition of the given PropertyType FQNs.
- *
- * @static
- * @memberof loom-data.EntityDataModelApi
- * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.addPropertyTypesToSchema(
- *   { namespace: "LOOM", name: "MySchema" },
- *   [
- *     { namespace: "LOOM", name: "MyProperty1" },
- *     { namespace: "LOOM", name: "MyProperty2" }
- *   ]
- * );
- */
-export function addPropertyTypesToSchema(schemaFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
+  if (!isNonEmptyArray(updateRequest.propertyTypes)) {
+    return Promise.reject('invalid parameter: updateRequest.propertyTypes must be a non-empty array');
   }
 
-  if (!isNonEmptyArray(propertyTypeFqns)) {
-    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
-  }
-
-  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
+  if (!isNonEmptyArray(updateRequest.entityTypes)) {
+    return Promise.reject('invalid parameter: updateRequest.entityTypes must be a non-empty array');
   }
 
   const { namespace, name } = schemaFqn;
 
   return getApiAxiosInstance(EDM_API)
-    .put(`/${SCHEMA_PATH}/${namespace}/${name}/${ADD_PROPERTY_TYPES_PATH}`, propertyTypeFqns)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `DELETE /schema/{namespace}/{name}/deletePropertyTypes`
- *
- * Updates the schema definition for the given schema FQN with the removal of the given PropertyType FQNs.
- *
- * @static
- * @memberof loom-data.EntityDataModelApi
- * @param {Object} schemaFqn - an object literal representing a fully qualified name
- * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.removePropertyTypesFromSchema(
- *   { namespace: "LOOM", name: "MySchema" },
- *   [
- *     { namespace: "LOOM", name: "MyProperty1" },
- *     { namespace: "LOOM", name: "MyProperty2" }
- *   ]
- * );
- */
-export function removePropertyTypesFromSchema(schemaFqn :Object, propertyTypeFqns :Object[]) :Promise<> {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
-  }
-
-  if (!isNonEmptyArray(propertyTypeFqns)) {
-    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
-  }
-
-  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
-  }
-
-  const { namespace, name } = schemaFqn;
-
-  return getApiAxiosInstance(EDM_API)
-    .delete(`/${SCHEMA_PATH}/${namespace}/${name}/${DELETE_PROPERTY_TYPES_PATH}`, {
-      data: propertyTypeFqns
-    })
+    .patch(`/${SCHEMA_PATH}/${namespace}/${name}`, updateRequest)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
