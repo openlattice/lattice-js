@@ -39,8 +39,6 @@ export const SELECTED_PATH :string = 'selected';
  */
 
 export const SCHEMA_PATH :string = 'schema';
-export const ADD_PROPERTY_TYPES_PATH :string = 'addPropertyTypes';
-export const DELETE_PROPERTY_TYPES_PATH :string = 'deletePropertyTypes';
 
 /*
  *

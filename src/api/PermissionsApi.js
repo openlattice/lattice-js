@@ -17,7 +17,6 @@
  * // PermissionsApi.get...
  */
 
-import FullyQualifiedName from '../types/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
@@ -34,8 +33,7 @@ import {
 
 import {
   isNonEmptyArray,
-  isNonEmptyObject,
-  isNonEmptyString
+  isNonEmptyObject
 } from '../utils/LangUtils';
 
 const LOG = new Logger('PermissionsApi');
@@ -107,7 +105,7 @@ export function updateAcl(aclData :Object) :Promise<> {
   // TODO: validate aclData
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${PERMISSIONS_PATH}`, aclData)
+    .patch(`/${PERMISSIONS_PATH}`, aclData)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

@@ -18,8 +18,6 @@ const SELECTED_PATH :string = 'selected';
 
 // EntityDataModelApi specific paths
 const SCHEMA_PATH :string = 'schema';
-const ADD_PROPERTY_TYPES_PATH :string = 'addPropertyTypes';
-const DELETE_PROPERTY_TYPES_PATH :string = 'deletePropertyTypes';
 
 // PermissionsApi specific paths
 const PERMISSIONS_PATH :string = 'permissions';
@@ -99,16 +97,6 @@ describe('ApiPaths', () => {
     it(`should expose "${SCHEMA_PATH}"`, () => {
       expect(ApiPaths.SCHEMA_PATH).toBeDefined();
       expect(ApiPaths.SCHEMA_PATH).toEqual(SCHEMA_PATH);
-    });
-
-    it(`should expose "${ADD_PROPERTY_TYPES_PATH}"`, () => {
-      expect(ApiPaths.ADD_PROPERTY_TYPES_PATH).toBeDefined();
-      expect(ApiPaths.ADD_PROPERTY_TYPES_PATH).toEqual(ADD_PROPERTY_TYPES_PATH);
-    });
-
-    it(`should expose "${DELETE_PROPERTY_TYPES_PATH}"`, () => {
-      expect(ApiPaths.DELETE_PROPERTY_TYPES_PATH).toBeDefined();
-      expect(ApiPaths.DELETE_PROPERTY_TYPES_PATH).toEqual(DELETE_PROPERTY_TYPES_PATH);
     });
 
   });

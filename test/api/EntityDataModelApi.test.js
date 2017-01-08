@@ -8,8 +8,7 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  ADD_PROPERTY_TYPES_PATH,
-  DELETE_PROPERTY_TYPES_PATH,
+  NAMESPACE_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
   PROPERTY_TYPE_PATH,
@@ -32,38 +31,68 @@ const MOCK_SCHEMA_FQN = {
   name: 'EDM_API'
 };
 
+const MOCK_ENTITY_TYPE_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
+
 const MOCK_ENTITY_TYPE_FQN = {
   namespace: 'LOOM',
   name: 'ENTITY_TYPE'
 };
+
+const MOCK_PROPERTY_TYPE_UUID = '8f79e123-3411-4099-a41f-88e5d22d0e8d';
 
 const MOCK_PROPERTY_TYPE_FQN = {
   namespace: 'LOOM',
   name: 'PROPERTY_TYPE'
 };
 
+const MOCK_ENTITY_SET_UUID = '4b08e1f9-4a00-4169-92ea-10e377070220';
+
 const MOCK_ENTITY_SET = {
-  name: 'EntityTypes',
   type: MOCK_ENTITY_TYPE_FQN,
-  title: 'a collection EntityTypes'
+  name: 'EntityTypes',
+  title: 'a collection EntityTypes',
+  description: 'a collection EntityTypes'
 };
 
 const MOCK_ENTITY_TYPE = {
-  namespace: 'LOOM',
-  type: 'ENTITY_TYPE',
+  type: MOCK_ENTITY_TYPE_FQN,
+  schemas: [
+    MOCK_SCHEMA_FQN
+  ],
   key: [
-    { namespace: 'LOOM', name: 'PROPERTY_TYPE' }
+    MOCK_PROPERTY_TYPE_UUID
   ],
   properties: [
-    { namespace: 'LOOM', name: 'PROPERTY_TYPE' }
+    MOCK_PROPERTY_TYPE_UUID
   ]
 };
 
 const MOCK_PROPERTY_TYPE = {
-  namespace: MOCK_PROPERTY_TYPE_FQN.namespace,
-  name: MOCK_PROPERTY_TYPE_FQN.name,
+  type: MOCK_PROPERTY_TYPE_FQN,
   datatype: 'String',
-  properties: 0
+  schemas: [
+    MOCK_SCHEMA_FQN
+  ]
+};
+
+const MOCK_SCHEMA = {
+  fqn: MOCK_SCHEMA_FQN,
+  entityTypes: [
+    MOCK_ENTITY_TYPE
+  ],
+  propertyTypes: [
+    MOCK_PROPERTY_TYPE
+  ]
+};
+
+const MOCK_SCHEMA_UPDATE_REQUEST = {
+  action: 'ADD',
+  entityTypes: [
+    MOCK_ENTITY_TYPE
+  ],
+  propertyTypes: [
+    MOCK_PROPERTY_TYPE
+  ]
 };
 
 let mockAxiosInstance = null;
@@ -84,18 +113,17 @@ describe('EntityDataModelApi', () => {
   testGetAllSchemas();
   testGetAllSchemasInNamespace();
   testCreateSchema();
-  testAddEntityTypesToSchema();
-  testRemoveEntityTypesFromSchema();
-  testAddPropertyTypesToSchema();
-  testRemovePropertyTypesFromSchema();
+  testCreateEmptySchema();
+  testUpdateSchema();
+  testGetEntitySet();
   testGetAllEntitySets();
   testCreateEntitySets();
+  testDeleteEntitySet();
   testGetEntityType();
   testGetAllEntityTypes();
   testCreateEntityType();
   testDeleteEntityType();
-  testAddPropertyTypesToEntityType();
-  testRemovePropertyTypesFromEntityType();
+  testUpdatePropertyTypesForEntityType();
   testGetPropertyType();
   testGetAllPropertyTypes();
   testGetAllPropertyTypesInNamespace();
@@ -226,17 +254,17 @@ function testCreateSchema() {
   describe('createSchema()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.createSchema, MOCK_SCHEMA_FQN
+      EntityDataModelApi.createSchema, MOCK_SCHEMA
     ];
 
-    it('should send a PUT request with the correct URL path and data', (done) => {
+    it('should send a POST request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.createSchema(MOCK_SCHEMA_FQN)
+      EntityDataModelApi.createSchema(MOCK_SCHEMA)
         .then(() => {
-          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
             `/${SCHEMA_PATH}`,
-            MOCK_SCHEMA_FQN
+            MOCK_SCHEMA
           );
           done();
         })
@@ -253,22 +281,53 @@ function testCreateSchema() {
   });
 }
 
-function testAddEntityTypesToSchema() {
+function testCreateEmptySchema() {
 
-  describe('addEntityTypesToSchema()', () => {
+  describe('createEmptySchema()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.addEntityTypesToSchema, MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN]
+      EntityDataModelApi.createEmptySchema, MOCK_SCHEMA_FQN
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.addEntityTypesToSchema(MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN])
+      EntityDataModelApi.createEmptySchema(MOCK_SCHEMA_FQN)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testUpdateSchema() {
+
+  describe('updateSchema()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.updateSchema, MOCK_SCHEMA_FQN, MOCK_SCHEMA_UPDATE_REQUEST
+    ];
+
+    it('should send a PATCH request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.updateSchema(MOCK_SCHEMA_FQN, MOCK_SCHEMA_UPDATE_REQUEST)
+        .then(() => {
+          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
             `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
-            [MOCK_ENTITY_TYPE_FQN]
+            MOCK_SCHEMA_UPDATE_REQUEST
           );
           done();
         })
@@ -285,86 +344,21 @@ function testAddEntityTypesToSchema() {
   });
 }
 
-function testRemoveEntityTypesFromSchema() {
+function testGetEntitySet() {
 
-  describe('removeEntityTypesFromSchema()', () => {
-
-    const functionInvocation = [
-      EntityDataModelApi.removeEntityTypesFromSchema, MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN]
-    ];
-
-    it('should send a DELETE request with the correct URL path and data', (done) => {
-
-      EntityDataModelApi.removeEntityTypesFromSchema(MOCK_SCHEMA_FQN, [MOCK_ENTITY_TYPE_FQN])
-        .then(() => {
-          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
-            { data: [MOCK_ENTITY_TYPE_FQN] }
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-
-  });
-}
-
-function testAddPropertyTypesToSchema() {
-
-  describe('addPropertyTypesToSchema()', () => {
+  describe('getEntitySet()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.addPropertyTypesToSchema, MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN]
+      EntityDataModelApi.getEntitySet, MOCK_ENTITY_SET_UUID
     ];
 
-    it('should send a PUT request with the correct URL path and data', (done) => {
+    it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.addPropertyTypesToSchema(MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN])
+      EntityDataModelApi.getEntitySet(MOCK_ENTITY_SET_UUID)
         .then(() => {
-          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}/${ADD_PROPERTY_TYPES_PATH}`,
-            [MOCK_PROPERTY_TYPE_FQN]
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-
-  });
-}
-
-function testRemovePropertyTypesFromSchema() {
-
-  describe('removePropertyTypesFromSchema()', () => {
-
-    const functionInvocation = [
-      EntityDataModelApi.removePropertyTypesFromSchema, MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN]
-    ];
-
-    it('should send a DELETE request with the correct URL path and data', (done) => {
-
-      EntityDataModelApi.removePropertyTypesFromSchema(MOCK_SCHEMA_FQN, [MOCK_PROPERTY_TYPE_FQN])
-        .then(() => {
-          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}/${DELETE_PROPERTY_TYPES_PATH}`,
-            { data: [MOCK_PROPERTY_TYPE_FQN] }
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
           );
           done();
         })
@@ -444,21 +438,52 @@ function testCreateEntitySets() {
   });
 }
 
+function testDeleteEntitySet() {
+
+  describe('deleteEntitySet()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.deleteEntitySet, MOCK_ENTITY_SET_UUID
+    ];
+
+    it('should send a DELETE request with the correct URL path', (done) => {
+
+      EntityDataModelApi.deleteEntitySet(MOCK_ENTITY_SET_UUID)
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_UUID}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
 function testGetEntityType() {
 
   describe('getEntityType()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.getEntityType, MOCK_ENTITY_TYPE_FQN
+      EntityDataModelApi.getEntityType, MOCK_ENTITY_TYPE_UUID
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getEntityType(MOCK_ENTITY_TYPE_FQN)
+      EntityDataModelApi.getEntityType(MOCK_ENTITY_TYPE_UUID)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}`
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_UUID}`
           );
           done();
         })
@@ -543,16 +568,16 @@ function testDeleteEntityType() {
   describe('deleteEntityType()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.deleteEntityType, MOCK_ENTITY_TYPE_FQN
+      EntityDataModelApi.deleteEntityType, MOCK_ENTITY_TYPE_UUID
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      EntityDataModelApi.deleteEntityType(MOCK_ENTITY_TYPE_FQN)
+      EntityDataModelApi.deleteEntityType(MOCK_ENTITY_TYPE_UUID)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}`
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_UUID}`
           );
           done();
         })
@@ -569,54 +594,22 @@ function testDeleteEntityType() {
   });
 }
 
-function testAddPropertyTypesToEntityType() {
+function testUpdatePropertyTypesForEntityType() {
 
-  describe('addPropertyTypesToEntityType()', () => {
+  describe('updatePropertyTypesForEntityType()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.addPropertyTypesToEntityType, MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN]
+      EntityDataModelApi.updatePropertyTypesForEntityType, MOCK_ENTITY_TYPE_UUID, [MOCK_PROPERTY_TYPE_UUID]
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.addPropertyTypesToEntityType(MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN])
+      EntityDataModelApi.updatePropertyTypesForEntityType(MOCK_ENTITY_TYPE_UUID, [MOCK_PROPERTY_TYPE_UUID])
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}/${ADD_PROPERTY_TYPES_PATH}`, // eslint-disable-line
-            [MOCK_PROPERTY_TYPE_FQN]
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-
-  });
-}
-
-function testRemovePropertyTypesFromEntityType() {
-
-  describe('removePropertyTypesFromEntityType()', () => {
-
-    const functionInvocation = [
-      EntityDataModelApi.removePropertyTypesFromEntityType, MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN]
-    ];
-
-    it('should send a DELETE request with the correct URL path and data', (done) => {
-
-      EntityDataModelApi.removePropertyTypesFromEntityType(MOCK_ENTITY_TYPE_FQN, [MOCK_PROPERTY_TYPE_FQN])
-        .then(() => {
-          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}/${DELETE_PROPERTY_TYPES_PATH}`, // eslint-disable-line
-            { data: [MOCK_PROPERTY_TYPE_FQN] }
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_UUID}`,
+            [MOCK_PROPERTY_TYPE_UUID]
           );
           done();
         })
@@ -638,16 +631,16 @@ function testGetPropertyType() {
   describe('getPropertyType()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.getPropertyType, MOCK_PROPERTY_TYPE_FQN
+      EntityDataModelApi.getPropertyType, MOCK_PROPERTY_TYPE_UUID
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getPropertyType(MOCK_PROPERTY_TYPE_FQN)
+      EntityDataModelApi.getPropertyType(MOCK_PROPERTY_TYPE_UUID)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}/${MOCK_PROPERTY_TYPE_FQN.name}`
+            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_UUID}`
           );
           done();
         })
@@ -709,7 +702,7 @@ function testGetAllPropertyTypesInNamespace() {
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}`
+            `/${NAMESPACE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}/${PROPERTY_TYPE_PATH}`
           );
           done();
         })
@@ -763,16 +756,16 @@ function testDeletePropertyType() {
   describe('deletePropertyType()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.deletePropertyType, MOCK_PROPERTY_TYPE_FQN
+      EntityDataModelApi.deletePropertyType, MOCK_PROPERTY_TYPE_UUID
     ];
 
     it('should send a DELETE request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.deletePropertyType(MOCK_PROPERTY_TYPE_FQN)
+      EntityDataModelApi.deletePropertyType(MOCK_PROPERTY_TYPE_UUID)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}/${MOCK_PROPERTY_TYPE_FQN.name}`
+            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_UUID}`
           );
           done();
         })

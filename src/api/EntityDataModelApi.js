@@ -17,10 +17,6 @@
  * // EntityDataModelApi.get...
  */
 
-import {
-  isNil
-} from 'lodash';
-
 import FullyQualifiedName from '../types/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
@@ -33,9 +29,7 @@ import {
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
   PROPERTY_TYPE_PATH,
-  NAMESPACE_PATH,
-  ADD_PROPERTY_TYPES_PATH,
-  DELETE_PROPERTY_TYPES_PATH
+  NAMESPACE_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -185,9 +179,11 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
  *
  * @example
  * EntityDataModelApi.createSchema(
- *   fqn: { namespace: "LOOM", name: "MySchema" },
- *   propertyTypes: [],
- *   entityTypes: []
+ *   {
+ *     fqn: { namespace: "LOOM", name: "MySchema" },
+ *     propertyTypes: [],
+ *     entityTypes: []
+ *   }
  * );
  */
 export function createSchema(schema :Object) :Promise<> {
@@ -381,13 +377,15 @@ export function getAllEntitySets() :Promise<> {
  *
  * @example
  * EntityDataModelApi.createEntitySets(
- *   [{
- *     id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
- *     type: { namespace: "LOOM", name: "MyEntity" },
- *     name: "MyEntities",
- *     title: "My Entities",
- *     description: "a collection of MyEntity EntityTypes",
- *   }]
+ *   [
+ *     {
+ *       id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
+ *       type: { namespace: "LOOM", name: "MyEntity" },
+ *       name: "MyEntities",
+ *       title: "My Entities",
+ *       description: "a collection of MyEntity EntityTypes",
+ *     }
+ *   ]
  * );
  */
 export function createEntitySets(entitySets :Object[]) :Promise<> {
@@ -402,6 +400,11 @@ export function createEntitySets(entitySets :Object[]) :Promise<> {
 
     // short-circuit break so that the correct error message is returned by the Promise.reject()
     if (!isValid) {
+      return false;
+    }
+
+    if (!isNonEmptyObject(entitySet)) {
+      errorMessage = `invalid property: entitySets[${index}] must be a non-empty object literal`;
       return false;
     }
 
