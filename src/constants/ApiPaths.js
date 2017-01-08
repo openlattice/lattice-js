@@ -20,6 +20,7 @@ export const ONTOLOGY_PATH :string = 'ontology';
 export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const PROPERTY_TYPE_PATH :string = 'property/type';
+export const NAMESPACE_PATH :string = 'namespace';
 
 /*
  *
@@ -38,8 +39,6 @@ export const SELECTED_PATH :string = 'selected';
  */
 
 export const SCHEMA_PATH :string = 'schema';
-export const ADD_PROPERTY_TYPES_PATH :string = 'addPropertyTypes';
-export const DELETE_PROPERTY_TYPES_PATH :string = 'deletePropertyTypes';
 
 /*
  *
@@ -47,10 +46,7 @@ export const DELETE_PROPERTY_TYPES_PATH :string = 'deletePropertyTypes';
  *
  */
 
-export const ACL_PATH :string = 'acl';
-export const ALL_PATH :string = 'all';
-export const OWNER_PATH :string = 'owner';
-export const REQUESTS_PATH :string = 'requests';
+export const PERMISSIONS_PATH :string = 'permissions';
 
 /*
  *

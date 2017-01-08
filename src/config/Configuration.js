@@ -44,8 +44,8 @@ let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string
  *
  * @memberof loom-data.Configuration
  * @param {Object} config - an object literal containing all configuration options
- * @param {String} config.authToken - a Base64-encoded JWT auth token
- * @param {String} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
+ * @param {string} config.authToken - a Base64-encoded JWT auth token
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
  */
 function configure(config :Object) {
 

@@ -201,6 +201,8 @@ export function getAllEntitiesOfTypeInSetFileUrl(
  *
  * Gets all entity data in the given EntitySet for the given EntityType FQN, filtered by the given PropertyType FQNs.
  *
+ * @static
+ * @memberof loom-data.DataApi
  * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
  * @param {string} entitySetName - the value of the "name" field of the EntitySet
  * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names

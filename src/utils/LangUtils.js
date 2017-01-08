@@ -2,6 +2,8 @@
  * @flow
  */
 
+import validateUUID from 'uuid-validate';
+
 import {
   isArray,
   isEmpty,
@@ -23,4 +25,9 @@ export function isNonEmptyObject(value :any) :boolean {
 export function isNonEmptyString(value :any) :boolean {
 
   return isString(value) && !isEmpty(trim(value));
+}
+
+export function isValidUUID(value :any) :boolean {
+
+  return validateUUID(value);
 }
