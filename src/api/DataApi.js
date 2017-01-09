@@ -19,7 +19,7 @@
 
 import Immutable from 'immutable';
 
-import FullyQualifiedName from '../types/FullyQualifiedName';
+import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {

@@ -38,16 +38,11 @@
  * fqn.getFullyQualifiedName(); // "LOOM.Data"
  */
 
-import * as _ from 'lodash';
+import isPlainObject from 'lodash/isPlainObject';
 
 import {
   isNonEmptyString
 } from '../utils/LangUtils';
-
-export type FqnObjectLiteral = {
-  namespace :string,
-  name :string
-};
 
 const EMPTY_FQN :FqnObjectLiteral = {
   namespace: '',
@@ -88,7 +83,7 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
   if (args.length === 1) {
 
     let fqnObj :FqnObjectLiteral = EMPTY_FQN;
-    if (_.isPlainObject(args[0])) {
+    if (isPlainObject(args[0])) {
 
       // if it's an object literal, it must have valid "namespace" and "name" properties
       const fqnArg :FqnObjectLiteral = args[0];
@@ -144,20 +139,20 @@ export default class FullyQualifiedName {
 
   static isValidFqn = (...args :any[]) :boolean => {
 
-    const { namespace, name } = processArgs(args);
+    const { namespace, name } = processArgs(...args);
     return isNonEmptyString(namespace) && isNonEmptyString(name);
   }
 
   static isValidFqnObjectLiteral = (fqnObjectLiteral :FqnObjectLiteral) :boolean => {
 
-    return _.isPlainObject(fqnObjectLiteral) &&
+    return isPlainObject(fqnObjectLiteral) &&
       isNonEmptyString(fqnObjectLiteral.namespace) &&
       isNonEmptyString(fqnObjectLiteral.name);
   }
 
   constructor(...args :any[]) {
 
-    const { namespace, name } = processArgs(args);
+    const { namespace, name } = processArgs(...args);
 
     this.namespace = namespace;
     this.name = name;
@@ -179,8 +174,9 @@ export default class FullyQualifiedName {
     return this.fqn;
   }
 
-  isValid() {
+  // for Immutable.js equality
+  valueOf() {
 
-    return FullyQualifiedName.isValidFqn(this.fqn);
+    return this.fqn;
   }
 }

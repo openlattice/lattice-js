@@ -4,13 +4,11 @@
 
 import validateUUID from 'uuid-validate';
 
-import {
-  isArray,
-  isEmpty,
-  isPlainObject,
-  isString,
-  trim
-} from 'lodash';
+import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
+import isPlainObject from 'lodash/isPlainObject';
+import isString from 'lodash/isString';
+import trim from 'lodash/trim';
 
 export function isNonEmptyArray(value :any) :boolean {
 
