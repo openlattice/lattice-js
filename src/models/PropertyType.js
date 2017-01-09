@@ -15,13 +15,14 @@ import {
 /**
  * @class PropertyType
  * @memberof loom-data
+ * @private
  */
 class PropertyType {
 
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :string;
+  description :?string;
   datatype :string;
   schemas :Set<FullyQualifiedName>;
 
@@ -29,7 +30,7 @@ class PropertyType {
       id :?UUID,
       type :FullyQualifiedName,
       title :string,
-      description :string,
+      description :?string,
       datatype :string,
       schemas :Set<FullyQualifiedName>) {
 
@@ -51,7 +52,7 @@ export default class PropertyTypeBuilder {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :string;
+  description :?string;
   datatype :string;
   schemas :Set<FullyQualifiedName>;
 
@@ -137,6 +138,22 @@ export default class PropertyTypeBuilder {
   }
 
   build() :PropertyType {
+
+    if (!this.type) {
+      throw new Error('missing property: type is a required property');
+    }
+
+    if (!this.title) {
+      throw new Error('missing property: title is a required property');
+    }
+
+    if (!this.datatype) {
+      throw new Error('missing property: datatype is a required property');
+    }
+
+    if (!this.schemas) {
+      throw new Error('missing property: schemas is a required property');
+    }
 
     return new PropertyType(
       this.id,
