@@ -39,7 +39,6 @@
  */
 
 import isObject from 'lodash/isObject';
-import isPlainObject from 'lodash/isPlainObject';
 
 import {
   isNonEmptyString
