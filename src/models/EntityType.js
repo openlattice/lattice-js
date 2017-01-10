@@ -164,10 +164,6 @@ export class EntityTypeBuilder {
       throw new Error('missing property: title is a required property');
     }
 
-    if (!this.datatype) {
-      throw new Error('missing property: datatype is a required property');
-    }
-
     if (!this.schemas) {
       throw new Error('missing property: schemas is a required property');
     }

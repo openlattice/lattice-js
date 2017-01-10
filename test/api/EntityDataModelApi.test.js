@@ -8,6 +8,7 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  IDS_PATH,
   NAMESPACE_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
@@ -49,12 +50,15 @@ const MOCK_ENTITY_SET_UUID = '4b08e1f9-4a00-4169-92ea-10e377070220';
 
 const MOCK_ENTITY_SET = {
   type: MOCK_ENTITY_TYPE_FQN,
+  entityTypeId: MOCK_ENTITY_TYPE_UUID,
   name: 'EntityTypes',
   title: 'a collection EntityTypes',
   description: 'a collection EntityTypes'
 };
 
 const MOCK_ENTITY_TYPE = {
+  title: 'MyEntity',
+  description: 'so this is an EntityType',
   type: MOCK_ENTITY_TYPE_FQN,
   schemas: [
     MOCK_SCHEMA_FQN
@@ -68,6 +72,8 @@ const MOCK_ENTITY_TYPE = {
 };
 
 const MOCK_PROPERTY_TYPE = {
+  title: 'MyProperty',
+  description: 'so this is a PropertyType',
   type: MOCK_PROPERTY_TYPE_FQN,
   datatype: 'String',
   schemas: [
@@ -85,15 +91,7 @@ const MOCK_SCHEMA = {
   ]
 };
 
-const MOCK_SCHEMA_UPDATE_REQUEST = {
-  action: 'ADD',
-  entityTypes: [
-    MOCK_ENTITY_TYPE
-  ],
-  propertyTypes: [
-    MOCK_PROPERTY_TYPE
-  ]
-};
+const MOCK_ACTION = 'ADD';
 
 let mockAxiosInstance = null;
 
@@ -116,15 +114,18 @@ describe('EntityDataModelApi', () => {
   testCreateEmptySchema();
   testUpdateSchema();
   testGetEntitySet();
+  testGetEntitySetId();
   testGetAllEntitySets();
   testCreateEntitySets();
   testDeleteEntitySet();
   testGetEntityType();
+  testGetEntityTypeId();
   testGetAllEntityTypes();
   testCreateEntityType();
   testDeleteEntityType();
   testUpdatePropertyTypesForEntityType();
   testGetPropertyType();
+  testGetPropertyTypeId();
   testGetAllPropertyTypes();
   testGetAllPropertyTypesInNamespace();
   testCreatePropertyType();
@@ -317,17 +318,21 @@ function testUpdateSchema() {
   describe('updateSchema()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.updateSchema, MOCK_SCHEMA_FQN, MOCK_SCHEMA_UPDATE_REQUEST
+      EntityDataModelApi.updateSchema, MOCK_SCHEMA_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE], [MOCK_PROPERTY_TYPE]
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.updateSchema(MOCK_SCHEMA_FQN, MOCK_SCHEMA_UPDATE_REQUEST)
+      EntityDataModelApi.updateSchema(MOCK_SCHEMA_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE], [MOCK_PROPERTY_TYPE])
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
             `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
-            MOCK_SCHEMA_UPDATE_REQUEST
+            {
+              action: MOCK_ACTION,
+              entityTypes: [MOCK_ENTITY_TYPE],
+              propertyTypes: [MOCK_PROPERTY_TYPE]
+            }
           );
           done();
         })
@@ -359,6 +364,37 @@ function testGetEntitySet() {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
             `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetEntitySetId() {
+
+  describe('getEntitySetId()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getEntitySetId, MOCK_ENTITY_SET.name
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getEntitySetId(MOCK_ENTITY_SET.name)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${IDS_PATH}/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET.name}`,
           );
           done();
         })
@@ -484,6 +520,37 @@ function testGetEntityType() {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
             `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_UUID}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetEntityTypeId() {
+
+  describe('getEntityTypeId()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getEntityTypeId, MOCK_ENTITY_TYPE_FQN
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getEntityTypeId(MOCK_ENTITY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${IDS_PATH}/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_FQN.namespace}/${MOCK_ENTITY_TYPE_FQN.name}`,
           );
           done();
         })
@@ -641,6 +708,37 @@ function testGetPropertyType() {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
             `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_UUID}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetPropertyTypeId() {
+
+  describe('getPropertyTypeId()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getPropertyTypeId, MOCK_PROPERTY_TYPE_FQN
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getPropertyTypeId(MOCK_PROPERTY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${IDS_PATH}/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_FQN.namespace}/${MOCK_PROPERTY_TYPE_FQN.name}`,
           );
           done();
         })

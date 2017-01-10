@@ -4,6 +4,8 @@
 
 import validateUUID from 'uuid-validate';
 
+import FullyQualifiedName from '../models/FullyQualifiedName';
+
 import * as EntitySet from '../models/EntitySet';
 import * as EntityType from '../models/EntityType';
 import * as PropertyType from '../models/PropertyType';
