@@ -7,10 +7,13 @@ import FullyQualifiedName from './FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
-  isNotDefined,
-  isNonEmptyString,
-  isValidUUID
+  isDefined,
+  isNonEmptyString
 } from '../utils/LangUtils';
+
+import {
+  isValidUuid
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntitySet');
 
@@ -60,7 +63,7 @@ export class EntitySetBuilder {
 
   setId(entitySetId :UUID) :EntitySetBuilder {
 
-    if (!isValidUUID(entitySetId)) {
+    if (!isValidUuid(entitySetId)) {
       throw new Error('invalid parameter: entitySetId must be a valid UUID');
     }
 
@@ -70,7 +73,7 @@ export class EntitySetBuilder {
 
   setType(entitySetFqn :FullyQualifiedName) :EntitySetBuilder {
 
-    if (!FullyQualifiedName.isValidFqn(entitySetFqn.getFullyQualifiedName())) {
+    if (!FullyQualifiedName.isValidFqn(entitySetFqn)) {
       throw new Error('invalid parameter: entitySetFqn must be a valid FQN');
     }
 
@@ -80,7 +83,7 @@ export class EntitySetBuilder {
 
   setEntityTypeId(entityTypeId :UUID) :EntitySetBuilder {
 
-    if (!isValidUUID(entityTypeId)) {
+    if (!isValidUuid(entityTypeId)) {
       throw new Error('invalid parameter: entityTypeId must be a valid UUID');
     }
 
@@ -149,7 +152,7 @@ export class EntitySetBuilder {
 
 export function isValid(entitySet :any) :boolean {
 
-  if (isNotDefined(entitySet)) {
+  if (!isDefined(entitySet)) {
 
     LOG.error('invalid parameter: entitySet must be defined', entitySet);
     return false;
@@ -157,14 +160,25 @@ export function isValid(entitySet :any) :boolean {
 
   try {
 
-    (new EntitySetBuilder())
-      .setId(entitySet.id)
+    const entitySetBuilder = new EntitySetBuilder();
+
+    // required properties
+    entitySetBuilder
       .setType(entitySet.type)
       .setEntityTypeId(entitySet.entityTypeId)
       .setName(entitySet.name)
-      .setTitle(entitySet.title)
-      .setDescription(entitySet.description)
-      .build();
+      .setTitle(entitySet.title);
+
+    // optional properties
+    if (isDefined(entitySet.id)) {
+      entitySetBuilder.setId(entitySet.id);
+    }
+
+    if (isDefined(entitySet.description)) {
+      entitySetBuilder.setDescription(entitySet.description);
+    }
+
+    entitySetBuilder.build();
 
     return true;
   }

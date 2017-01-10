@@ -9,11 +9,14 @@ import FullyQualifiedName from './FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
-  isNotDefined,
-  isNonEmptyArray,
-  isNonEmptyString,
-  isValidUUID
+  isDefined,
+  isNonEmptyString
 } from '../utils/LangUtils';
+
+import {
+  isValidUuid,
+  isValidFqnArray
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('PropertyType');
 
@@ -63,7 +66,7 @@ export class PropertyTypeBuilder {
 
   setId(propertyTypeId :UUID) :PropertyTypeBuilder {
 
-    if (!isValidUUID(propertyTypeId)) {
+    if (!isValidUuid(propertyTypeId)) {
       throw new Error('invalid parameter: propertyTypeId must be a valid UUID');
     }
 
@@ -73,7 +76,7 @@ export class PropertyTypeBuilder {
 
   setType(propertyTypeFqn :FullyQualifiedName) :PropertyTypeBuilder {
 
-    if (!FullyQualifiedName.isValidFqn(propertyTypeFqn.getFullyQualifiedName())) {
+    if (!FullyQualifiedName.isValidFqn(propertyTypeFqn)) {
       throw new Error('invalid parameter: propertyTypeFqn must be a valid FQN');
     }
 
@@ -113,24 +116,8 @@ export class PropertyTypeBuilder {
 
   setSchemas(schemas :FullyQualifiedName[]) :PropertyTypeBuilder {
 
-    if (!isNonEmptyArray(schemas)) {
-      throw new Error('invalid parameter: schemas must be a non-empty array');
-    }
-
-    let errorMessage = '';
-    const allValid = schemas.reduce((valid, shemaFqn, index) => {
-      if (!valid) {
-        return false;
-      }
-      if (!FullyQualifiedName.isValidFqn(shemaFqn.getFullyQualifiedName())) {
-        errorMessage = `invalid parameter: schemas[${index}] must be a valid FQN`;
-        return false;
-      }
-      return valid;
-    }, true);
-
-    if (!allValid) {
-      throw new Error(errorMessage);
+    if (!isValidFqnArray(schemas)) {
+      throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 
     this.schemas = Immutable.Set().withMutations((set :Set<FullyQualifiedName>) => {
@@ -173,7 +160,7 @@ export class PropertyTypeBuilder {
 
 export function isValid(propertyType :any) :boolean {
 
-  if (isNotDefined(propertyType)) {
+  if (!isDefined(propertyType)) {
 
     LOG.error('invalid parameter: propertyType must be defined', propertyType);
     return false;
@@ -181,14 +168,25 @@ export function isValid(propertyType :any) :boolean {
 
   try {
 
-    (new PropertyTypeBuilder())
-      .setId(propertyType.id)
+    const propertyTypeBuilder = new PropertyTypeBuilder();
+
+    // required properties
+    propertyTypeBuilder
       .setType(propertyType.type)
       .setTitle(propertyType.title)
-      .setDescription(propertyType.description)
       .setDataType(propertyType.datatype)
-      .setSchemas(propertyType.schemas)
-      .build();
+      .setSchemas(propertyType.schemas);
+
+    // optional properties
+    if (isDefined(propertyType.id)) {
+      propertyTypeBuilder.setId(propertyType.id);
+    }
+
+    if (isDefined(propertyType.description)) {
+      propertyTypeBuilder.setDescription(propertyType.description);
+    }
+
+    propertyTypeBuilder.build();
 
     return true;
   }

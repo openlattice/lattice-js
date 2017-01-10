@@ -12,9 +12,13 @@ import * as EntityType from './EntityType';
 import * as PropertyType from './PropertyType';
 
 import {
-  isNotDefined,
-  isNonEmptyArray
+  isDefined
 } from '../utils/LangUtils';
+
+import {
+  isValidEntityTypeArray,
+  isValidPropertyTypeArray
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('Schema');
 
@@ -51,7 +55,7 @@ export class SchemaBuilder {
 
   setFullyQualifiedName(fqn :FullyQualifiedName) :SchemaBuilder {
 
-    if (!FullyQualifiedName.isValidFqn(fqn.getFullyQualifiedName())) {
+    if (!FullyQualifiedName.isValidFqn(fqn)) {
       throw new Error('invalid parameter: fqn must be a valid FQN');
     }
 
@@ -61,24 +65,8 @@ export class SchemaBuilder {
 
   setEntityTypes(entityTypes :EntityType[]) :SchemaBuilder {
 
-    if (!isNonEmptyArray(entityTypes)) {
-      throw new Error('invalid parameter: entityTypes must be a non-empty array');
-    }
-
-    let errorMessage = '';
-    const allValid = entityTypes.reduce((valid, entityType, index) => {
-      if (!valid) {
-        return false;
-      }
-      if (!EntityType.isValid(entityType)) {
-        errorMessage = `invalid parameter: entityTypes[${index}] must be a valid EntityType`;
-        return false;
-      }
-      return valid;
-    }, true);
-
-    if (!allValid) {
-      throw new Error(errorMessage);
+    if (!isValidEntityTypeArray(entityTypes)) {
+      throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
     }
 
     this.entityTypes = Immutable.List().withMutations((list :List<EntityType>) => {
@@ -92,24 +80,8 @@ export class SchemaBuilder {
 
   setPropertyTypes(propertyTypes :PropertyType[]) :SchemaBuilder {
 
-    if (!isNonEmptyArray(propertyTypes)) {
-      throw new Error('invalid parameter: propertyTypes must be a non-empty array');
-    }
-
-    let errorMessage = '';
-    const allValid = propertyTypes.reduce((valid, propertyType, index) => {
-      if (!valid) {
-        return false;
-      }
-      if (!PropertyType.isValid(propertyType)) {
-        errorMessage = `invalid parameter: propertyTypes[${index}] must be a valid PropertyType`;
-        return false;
-      }
-      return valid;
-    }, true);
-
-    if (!allValid) {
-      throw new Error(errorMessage);
+    if (!isValidPropertyTypeArray(propertyTypes)) {
+      throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
     }
 
     this.propertyTypes = Immutable.List().withMutations((list :List<PropertyType>) => {
@@ -133,7 +105,7 @@ export class SchemaBuilder {
 
 export function isValid(schema :any) :boolean {
 
-  if (isNotDefined(schema)) {
+  if (!isDefined(schema)) {
 
     LOG.error('invalid parameter: schema must be defined', schema);
     return false;

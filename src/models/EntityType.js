@@ -9,11 +9,15 @@ import FullyQualifiedName from './FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
-  isNotDefined,
-  isNonEmptyArray,
-  isNonEmptyString,
-  isValidUUID
+  isDefined,
+  isNonEmptyString
 } from '../utils/LangUtils';
+
+import {
+  isValidFqnArray,
+  isValidUuid,
+  isValidUuidArray
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntityType');
 
@@ -67,7 +71,7 @@ export class EntityTypeBuilder {
 
   setId(entityTypeId :UUID) :EntityTypeBuilder {
 
-    if (!isValidUUID(entityTypeId)) {
+    if (!isValidUuid(entityTypeId)) {
       throw new Error('invalid parameter: entityTypeId must be a valid UUID');
     }
 
@@ -77,7 +81,7 @@ export class EntityTypeBuilder {
 
   setType(entityTypeFqn :FullyQualifiedName) :EntityTypeBuilder {
 
-    if (!FullyQualifiedName.isValidFqn(entityTypeFqn.getFullyQualifiedName())) {
+    if (!FullyQualifiedName.isValidFqn(entityTypeFqn)) {
       throw new Error('invalid parameter: entityTypeFqn must be a valid FQN');
     }
 
@@ -107,24 +111,8 @@ export class EntityTypeBuilder {
 
   setSchemas(schemas :FullyQualifiedName[]) :EntityTypeBuilder {
 
-    if (!isNonEmptyArray(schemas)) {
-      throw new Error('invalid parameter: schemas must be a non-empty array');
-    }
-
-    let errorMessage = '';
-    const allValid = schemas.reduce((valid, shemaFqn, index) => {
-      if (!valid) {
-        return false;
-      }
-      if (!FullyQualifiedName.isValidFqn(shemaFqn.getFullyQualifiedName())) {
-        errorMessage = `invalid parameter: schemas[${index}] must be a valid FQN`;
-        return false;
-      }
-      return valid;
-    }, true);
-
-    if (!allValid) {
-      throw new Error(errorMessage);
+    if (!isValidFqnArray(schemas)) {
+      throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 
     this.schemas = Immutable.Set().withMutations((set :Set<FullyQualifiedName>) => {
@@ -138,24 +126,8 @@ export class EntityTypeBuilder {
 
   setKey(key :UUID[]) :EntityTypeBuilder {
 
-    if (!isNonEmptyArray(key)) {
-      throw new Error('invalid parameter: key must be a non-empty array');
-    }
-
-    let errorMessage = '';
-    const allValid = key.reduce((valid, keyId, index) => {
-      if (!valid) {
-        return false;
-      }
-      if (!isValidUUID(keyId)) {
-        errorMessage = `invalid parameter: key[${index}] must be a valid UUID`;
-        return false;
-      }
-      return valid;
-    }, true);
-
-    if (!allValid) {
-      throw new Error(errorMessage);
+    if (!isValidUuidArray(key)) {
+      throw new Error('invalid parameter: key must be a non-empty array of valid UUIDs');
     }
 
     this.key = Immutable.Set().withMutations((set :Set<UUID>) => {
@@ -169,24 +141,8 @@ export class EntityTypeBuilder {
 
   setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder {
 
-    if (!isNonEmptyArray(propertyTypes)) {
-      throw new Error('invalid parameter: propertyTypes must be a non-empty array');
-    }
-
-    let errorMessage = '';
-    const allValid = propertyTypes.reduce((valid, propertyTypeId, index) => {
-      if (!valid) {
-        return false;
-      }
-      if (!isValidUUID(propertyTypeId)) {
-        errorMessage = `invalid parameter: propertyTypes[${index}] must be a valid UUID`;
-        return false;
-      }
-      return valid;
-    }, true);
-
-    if (!allValid) {
-      throw new Error(errorMessage);
+    if (!isValidUuidArray(propertyTypes)) {
+      throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
     }
 
     this.properties = Immutable.Set().withMutations((set :Set<UUID>) => {
@@ -238,7 +194,7 @@ export class EntityTypeBuilder {
 
 export function isValid(entityType :any) :boolean {
 
-  if (isNotDefined(entityType)) {
+  if (!isDefined(entityType)) {
 
     LOG.error('invalid parameter: entityType must be defined', entityType);
     return false;
@@ -246,15 +202,26 @@ export function isValid(entityType :any) :boolean {
 
   try {
 
-    (new EntityTypeBuilder())
-      .setId(entityType.id)
+    const entityTypeBuilder = new EntityTypeBuilder();
+
+    // required properties
+    entityTypeBuilder
       .setType(entityType.type)
       .setTitle(entityType.title)
-      .setDescription(entityType.description)
       .setSchemas(entityType.schemas)
       .setKey(entityType.key)
-      .setPropertyTypes(entityType.properties)
-      .build();
+      .setPropertyTypes(entityType.properties);
+
+    // optional properties
+    if (isDefined(entityType.id)) {
+      entityTypeBuilder.setId(entityType.id);
+    }
+
+    if (isDefined(entityType.description)) {
+      entityTypeBuilder.setDescription(entityType.description);
+    }
+
+    entityTypeBuilder.build();
 
     return true;
   }

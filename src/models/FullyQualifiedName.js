@@ -38,6 +38,7 @@
  * fqn.getFullyQualifiedName(); // "LOOM.Data"
  */
 
+import isObject from 'lodash/isObject';
 import isPlainObject from 'lodash/isPlainObject';
 
 import {
@@ -77,13 +78,14 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
 
   /*
    * case 1: a single parameter which can be either:
+   *   - an instance of FullyQualifiedName
    *   - an object literal to represent a FullyQualifiedName
    *   - a FullyQualifiedName as a string
    */
   if (args.length === 1) {
 
     let fqnObj :FqnObjectLiteral = EMPTY_FQN;
-    if (isPlainObject(args[0])) {
+    if (isObject(args[0])) {
 
       // if it's an object literal, it must have valid "namespace" and "name" properties
       const fqnArg :FqnObjectLiteral = args[0];
@@ -156,7 +158,9 @@ export default class FullyQualifiedName {
 
     this.namespace = namespace;
     this.name = name;
-    this.fqn = `${namespace}.${name}`;
+    this.fqn = (isNonEmptyString(namespace) && isNonEmptyString(name))
+      ? `${namespace}.${name}`
+      : '';
   }
 
   getNamespace() {
