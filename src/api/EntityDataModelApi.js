@@ -30,6 +30,7 @@ import {
 } from '../constants/ApiNames';
 
 import {
+  IDS_PATH,
   SCHEMA_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
@@ -343,6 +344,35 @@ export function getEntitySet(entitySetId :string) :Promise<> {
 }
 
 /**
+ * `GET /ids/entity/set/{name}`
+ *
+ * Gets the EntitySet UUID for the given EntitySet name.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {string} entitySetName
+ * @return {Promise<UUID>}
+ *
+ * @example
+ * EntityDataModelApi.getEntitySetId("MyEntitySet");
+ */
+export function getEntitySetId(entitySetName :string) :Promise<> {
+
+  if (!isNonEmptyString(entitySetName)) {
+    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${IDS_PATH}/${ENTITY_SET_PATH}/${entitySetName}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
  * `GET /entity/set`
  *
  * Gets all EntitySet definitions.
@@ -461,6 +491,39 @@ export function getEntityType(entityTypeId :string) :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_TYPE_PATH}/${entityTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /ids/entity/type/{namespace}/{name}`
+ *
+ * Gets the EntityType UUID for the given EntityType FQN.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {FullyQualifiedName} entityTypeFqn
+ * @return {Promise<UUID>}
+ *
+ * @example
+ * EntityDataModelApi.getEntityTypeId(
+ *   { namespace: "LOOM", name: "MyProperty" }
+ * );
+ */
+export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqn(entityTypeFqn)) {
+    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN');
+  }
+
+  const { namespace, name } = entityTypeFqn;
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${IDS_PATH}/${ENTITY_TYPE_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -636,6 +699,39 @@ export function getPropertyType(propertyTypeId :string) :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /ids/property/type/{namespace}/{name}`
+ *
+ * Gets the PropertyType UUID for the given PropertyType FQN.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {FullyQualifiedName} propertyTypeFqn
+ * @return {Promise<UUID>}
+ *
+ * @example
+ * EntityDataModelApi.getPropertyTypeId(
+ *   { namespace: "LOOM", name: "MyProperty" }
+ * );
+ */
+export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<> {
+
+  if (!FullyQualifiedName.isValidFqn(propertyTypeFqn)) {
+    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN');
+  }
+
+  const { namespace, name } = propertyTypeFqn;
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${IDS_PATH}/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

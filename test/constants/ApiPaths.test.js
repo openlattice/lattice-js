@@ -6,6 +6,7 @@ const DATASTORE_PATH :string = 'datastore';
 const ONTOLOGY_PATH :string = 'ontology';
 
 // shared paths
+const IDS_PATH :string = 'ids';
 const ENTITY_SET_PATH :string = 'entity/set';
 const ENTITY_TYPE_PATH :string = 'entity/type';
 const PROPERTY_TYPE_PATH :string = 'property/type';
@@ -50,6 +51,11 @@ describe('ApiPaths', () => {
   });
 
   describe('shared paths', () => {
+
+    it(`should expose "${IDS_PATH}"`, () => {
+      expect(ApiPaths.IDS_PATH).toBeDefined();
+      expect(ApiPaths.IDS_PATH).toEqual(IDS_PATH);
+    });
 
     it(`should expose "${ENTITY_SET_PATH}"`, () => {
       expect(ApiPaths.ENTITY_SET_PATH).toBeDefined();
