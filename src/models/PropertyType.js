@@ -6,18 +6,23 @@ import Immutable from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
+import Logger from '../utils/Logger';
+
 import {
+  isNotDefined,
   isNonEmptyArray,
   isNonEmptyString,
   isValidUUID
 } from '../utils/LangUtils';
+
+const LOG = new Logger('PropertyType');
 
 /**
  * @class PropertyType
  * @memberof loom-data
  * @private
  */
-class PropertyType {
+export default class PropertyType {
 
   id :?UUID;
   type :FullyQualifiedName;
@@ -47,7 +52,7 @@ class PropertyType {
  * @class PropertyTypeBuilder
  * @memberof loom-data
  */
-export default class PropertyTypeBuilder {
+export class PropertyTypeBuilder {
 
   id :?UUID;
   type :FullyQualifiedName;
@@ -113,15 +118,15 @@ export default class PropertyTypeBuilder {
     }
 
     let errorMessage = '';
-    const allValid = schemas.reduce((isValid, shemaFqn, index) => {
-      if (!isValid) {
+    const allValid = schemas.reduce((valid, shemaFqn, index) => {
+      if (!valid) {
         return false;
       }
       if (!FullyQualifiedName.isValidFqn(shemaFqn.getFullyQualifiedName())) {
         errorMessage = `invalid parameter: schemas[${index}] must be a valid FQN`;
         return false;
       }
-      return isValid;
+      return valid;
     }, true);
 
     if (!allValid) {
@@ -163,5 +168,33 @@ export default class PropertyTypeBuilder {
       this.datatype,
       this.schemas
     );
+  }
+}
+
+export function isValid(propertyType :any) :boolean {
+
+  if (isNotDefined(propertyType)) {
+
+    LOG.error('invalid parameter: propertyType must be defined', propertyType);
+    return false;
+  }
+
+  try {
+
+    (new PropertyTypeBuilder())
+      .setId(propertyType.id)
+      .setType(propertyType.type)
+      .setTitle(propertyType.title)
+      .setDescription(propertyType.description)
+      .setDataType(propertyType.datatype)
+      .setSchemas(propertyType.schemas)
+      .build();
+
+    return true;
+  }
+  catch (e) {
+
+    LOG.error(e, propertyType);
+    return false;
   }
 }

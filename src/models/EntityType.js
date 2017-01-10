@@ -6,17 +6,22 @@ import Immutable from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
+import Logger from '../utils/Logger';
+
 import {
+  isNotDefined,
   isNonEmptyArray,
   isNonEmptyString,
   isValidUUID
 } from '../utils/LangUtils';
 
+const LOG = new Logger('EntityType');
+
 /**
  * @class EntityType
  * @memberof loom-data
  */
-class EntityType {
+export default class EntityType {
 
   id :?UUID;
   type :FullyQualifiedName;
@@ -50,7 +55,7 @@ class EntityType {
  * @memberof loom-data
  * @private
  */
-export default class EntityTypeBuilder {
+export class EntityTypeBuilder {
 
   id :?UUID;
   type :FullyQualifiedName;
@@ -69,7 +74,6 @@ export default class EntityTypeBuilder {
     this.id = entityTypeId;
     return this;
   }
-
 
   setType(entityTypeFqn :FullyQualifiedName) :EntityTypeBuilder {
 
@@ -108,15 +112,15 @@ export default class EntityTypeBuilder {
     }
 
     let errorMessage = '';
-    const allValid = schemas.reduce((isValid, shemaFqn, index) => {
-      if (!isValid) {
+    const allValid = schemas.reduce((valid, shemaFqn, index) => {
+      if (!valid) {
         return false;
       }
       if (!FullyQualifiedName.isValidFqn(shemaFqn.getFullyQualifiedName())) {
         errorMessage = `invalid parameter: schemas[${index}] must be a valid FQN`;
         return false;
       }
-      return isValid;
+      return valid;
     }, true);
 
     if (!allValid) {
@@ -139,15 +143,15 @@ export default class EntityTypeBuilder {
     }
 
     let errorMessage = '';
-    const allValid = key.reduce((isValid, keyId, index) => {
-      if (!isValid) {
+    const allValid = key.reduce((valid, keyId, index) => {
+      if (!valid) {
         return false;
       }
       if (!isValidUUID(keyId)) {
         errorMessage = `invalid parameter: key[${index}] must be a valid UUID`;
         return false;
       }
-      return isValid;
+      return valid;
     }, true);
 
     if (!allValid) {
@@ -170,15 +174,15 @@ export default class EntityTypeBuilder {
     }
 
     let errorMessage = '';
-    const allValid = propertyTypes.reduce((isValid, propertyTypeId, index) => {
-      if (!isValid) {
+    const allValid = propertyTypes.reduce((valid, propertyTypeId, index) => {
+      if (!valid) {
         return false;
       }
       if (!isValidUUID(propertyTypeId)) {
         errorMessage = `invalid parameter: propertyTypes[${index}] must be a valid UUID`;
         return false;
       }
-      return isValid;
+      return valid;
     }, true);
 
     if (!allValid) {
@@ -229,5 +233,34 @@ export default class EntityTypeBuilder {
       this.key,
       this.properties
     );
+  }
+}
+
+export function isValid(entityType :any) :boolean {
+
+  if (isNotDefined(entityType)) {
+
+    LOG.error('invalid parameter: entityType must be defined', entityType);
+    return false;
+  }
+
+  try {
+
+    (new EntityTypeBuilder())
+      .setId(entityType.id)
+      .setType(entityType.type)
+      .setTitle(entityType.title)
+      .setDescription(entityType.description)
+      .setSchemas(entityType.schemas)
+      .setKey(entityType.key)
+      .setPropertyTypes(entityType.properties)
+      .build();
+
+    return true;
+  }
+  catch (e) {
+
+    LOG.error(e, entityType);
+    return false;
   }
 }

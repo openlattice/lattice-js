@@ -6,9 +6,16 @@ import validateUUID from 'uuid-validate';
 
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
+import isNull from 'lodash/isNull';
 import isPlainObject from 'lodash/isPlainObject';
 import isString from 'lodash/isString';
+import isUndefined from 'lodash/isUndefined';
 import trim from 'lodash/trim';
+
+export function isNotDefined(value :any) :boolean {
+
+  return isNull(value) || isUndefined(value);
+}
 
 export function isNonEmptyArray(value :any) :boolean {
 

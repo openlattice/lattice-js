@@ -4,16 +4,21 @@
 
 import FullyQualifiedName from './FullyQualifiedName';
 
+import Logger from '../utils/Logger';
+
 import {
+  isNotDefined,
   isNonEmptyString,
   isValidUUID
 } from '../utils/LangUtils';
+
+const LOG = new Logger('EntitySet');
 
 /**
  * @class EntitySet
  * @memberof loom-data
  */
-class EntitySet {
+export default class EntitySet {
 
   id :?UUID;
   type :FullyQualifiedName;
@@ -44,7 +49,7 @@ class EntitySet {
  * @memberof loom-data
  * @private
  */
-export default class EntitySetBuilder {
+export class EntitySetBuilder {
 
   id :?UUID;
   type :FullyQualifiedName;
@@ -139,5 +144,33 @@ export default class EntitySetBuilder {
       this.title,
       this.description
     );
+  }
+}
+
+export function isValid(entitySet :any) :boolean {
+
+  if (isNotDefined(entitySet)) {
+
+    LOG.error('invalid parameter: entitySet must be defined', entitySet);
+    return false;
+  }
+
+  try {
+
+    (new EntitySetBuilder())
+      .setId(entitySet.id)
+      .setType(entitySet.type)
+      .setEntityTypeId(entitySet.entityTypeId)
+      .setName(entitySet.name)
+      .setTitle(entitySet.title)
+      .setDescription(entitySet.description)
+      .build();
+
+    return true;
+  }
+  catch (e) {
+
+    LOG.error(e, entitySet);
+    return false;
   }
 }
