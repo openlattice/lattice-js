@@ -8,6 +8,9 @@ import FullyQualifiedName from './FullyQualifiedName';
 
 import Logger from '../utils/Logger';
 
+import * as EntityType from './EntityType';
+import * as PropertyType from './PropertyType';
+
 import {
   isNotDefined,
   isNonEmptyArray
