@@ -76,7 +76,7 @@ export class PropertyTypeBuilder {
 
   setType(propertyTypeFqn :FullyQualifiedName) :PropertyTypeBuilder {
 
-    if (!FullyQualifiedName.isValidFqn(propertyTypeFqn)) {
+    if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
       throw new Error('invalid parameter: propertyTypeFqn must be a valid FQN');
     }
 

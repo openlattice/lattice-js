@@ -44,7 +44,7 @@ export function isValidUuidArray(uuids :UUID[]) :boolean {
 export function isValidFqnArray(fqns :FullyQualifiedName[]) :boolean {
 
   return validateNonEmptyArray(fqns, (fqn :FullyQualifiedName) => {
-    return FullyQualifiedName.isValidFqn(fqn);
+    return FullyQualifiedName.isValid(fqn);
   });
 }
 

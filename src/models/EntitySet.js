@@ -73,7 +73,7 @@ export class EntitySetBuilder {
 
   setType(entitySetFqn :FullyQualifiedName) :EntitySetBuilder {
 
-    if (!FullyQualifiedName.isValidFqn(entitySetFqn)) {
+    if (!FullyQualifiedName.isValid(entitySetFqn)) {
       throw new Error('invalid parameter: entitySetFqn must be a valid FQN');
     }
 

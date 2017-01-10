@@ -137,30 +137,31 @@ export default class FullyQualifiedName {
 
   namespace :string;
   name :string;
-  fqn :string;
 
-  static isValidFqn = (...args :any[]) :boolean => {
+  static isValid = (...args :any[]) :boolean => {
 
     const { namespace, name } = processArgs(...args);
     return isNonEmptyString(namespace) && isNonEmptyString(name);
   }
 
-  static isValidFqnObjectLiteral = (fqnObjectLiteral :FqnObjectLiteral) :boolean => {
-
-    return isPlainObject(fqnObjectLiteral) &&
-      isNonEmptyString(fqnObjectLiteral.namespace) &&
-      isNonEmptyString(fqnObjectLiteral.name);
-  }
-
   constructor(...args :any[]) {
+
+    if (args.length !== 1 && args.length !== 2) {
+      throw new Error(`invalid parameter count: FullyQualifiedName takes only 1 or 2 parameters, got ${args.length}`);
+    }
 
     const { namespace, name } = processArgs(...args);
 
+    if (!isNonEmptyString(namespace)) {
+      throw new Error('invalid FQN: namespace must be a non-empty string');
+    }
+
+    if (!isNonEmptyString(name)) {
+      throw new Error('invalid FQN: name must be a non-empty string');
+    }
+
     this.namespace = namespace;
     this.name = name;
-    this.fqn = (isNonEmptyString(namespace) && isNonEmptyString(name))
-      ? `${namespace}.${name}`
-      : '';
   }
 
   getNamespace() {
@@ -175,12 +176,14 @@ export default class FullyQualifiedName {
 
   getFullyQualifiedName() {
 
-    return this.fqn;
+    return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
+      ? `${this.namespace}.${this.name}`
+      : '';
   }
 
   // for Immutable.js equality
   valueOf() {
 
-    return this.fqn;
+    return this.getFullyQualifiedName();
   }
 }

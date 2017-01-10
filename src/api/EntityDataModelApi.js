@@ -98,7 +98,7 @@ export function getEntityDataModel() :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {Object} schemaFqn - an object literal representing a fully qualified name
+ * @param {FullyQualifiedName} schemaFqn - an object literal representing a fully qualified name
  * @return {Promise<Object>} - a Promise that will resolve with the Schema definition as its fulfillment value
  *
  * @example
@@ -106,9 +106,9 @@ export function getEntityDataModel() :Promise<> {
  *   { namespace: "LOOM", name: "MySchema" }
  * );
  */
-export function getSchema(schemaFqn :Object) :Promise<> {
+export function getSchema(schemaFqn :FullyQualifiedName) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+  if (!FullyQualifiedName.isValid(schemaFqn)) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
@@ -229,7 +229,7 @@ export function createSchema(schema :Schema) :Promise<> {
  */
 export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+  if (!FullyQualifiedName.isValid(schemaFqn)) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
@@ -274,7 +274,7 @@ export function updateSchema(
     entityTypes :UUID[],
     propertyTypes :UUID[]) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(schemaFqn)) {
+  if (!FullyQualifiedName.isValid(schemaFqn)) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN object literal');
   }
 
@@ -516,7 +516,7 @@ export function getEntityType(entityTypeId :string) :Promise<> {
  */
 export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqn(entityTypeFqn)) {
+  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN');
   }
 
@@ -724,7 +724,7 @@ export function getPropertyType(propertyTypeId :string) :Promise<> {
  */
 export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqn(propertyTypeFqn)) {
+  if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
     return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN');
   }
 

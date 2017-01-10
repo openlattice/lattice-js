@@ -59,7 +59,7 @@ const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {FullyQualifiedName} entityTypeFqn
  * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
  *
  * @example
@@ -67,9 +67,9 @@ const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<
  *   { namespace: "LOOM", name: "MyEntity" }
  * );
  */
-export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
+export function getAllEntitiesOfType(entityTypeFqn :FullyQualifiedName) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
@@ -90,7 +90,7 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {FullyQualifiedName} entityTypeFqn
  * @param {string} fileType - the format in which to download the data
  * @returns {string} - the file download URL
  *
@@ -100,9 +100,9 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
  *   "json"
  * );
  */
-export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :Object, fileType :string) :?string {
+export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :FullyQualifiedName, fileType :string) :?string {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
     LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
     return null;
   }
@@ -123,7 +123,7 @@ export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :Object, fileType :str
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {FullyQualifiedName} entityTypeFqn
  * @param {string} entitySetName - the value of the "name" field of the EntitySet
  * @returns {Promise}
  *
@@ -133,9 +133,9 @@ export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :Object, fileType :str
  *   "MyEntityCollection"
  * });
  */
-export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
+export function getAllEntitiesOfTypeInSet(entityTypeFqn :FullyQualifiedName, entitySetName :string) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
@@ -161,7 +161,7 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {FullyQualifiedName} entityTypeFqn
  * @param {string} entitySetName - the value of the "name" field of the EntitySet
  * @returns {string} - the file download URL
  *
@@ -173,9 +173,9 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
  * });
  */
 export function getAllEntitiesOfTypeInSetFileUrl(
-    entityTypeFqn :Object, entitySetName :string, fileType :string) :?string {
+    entityTypeFqn :FullyQualifiedName, entitySetName :string, fileType :string) :?string {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
     LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
     return null;
   }
@@ -203,15 +203,15 @@ export function getAllEntitiesOfTypeInSetFileUrl(
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
+ * @param {FullyQualifiedName} entityTypeFqn
  * @param {string} entitySetName - the value of the "name" field of the EntitySet
- * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
+ * @param {FullyQualifiedName[]} propertyTypeFqns
  * @returns {Promise}
  */
 export function getSelectedEntitiesOfTypeInSet(
-    entityTypeFqn :Object, entitySetName :string, propertyTypeFqns :Object[]) {
+    entityTypeFqn :FullyQualifiedName, entitySetName :string, propertyTypeFqns :FullyQualifiedName[]) {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
+  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
     return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
   }
 
@@ -223,8 +223,8 @@ export function getSelectedEntitiesOfTypeInSet(
     return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
   }
 
-  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
+  const allValid = propertyTypeFqns.reduce((valid, propertyTypeFqn :FullyQualifiedName) => {
+    return valid && FullyQualifiedName.isValid(propertyTypeFqn);
   }, true);
 
   if (!allValid) {
@@ -250,7 +250,7 @@ export function getSelectedEntitiesOfTypeInSet(
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
+ * @param {FullyQualifiedName[]} entityTypeFqns
  * @returns {Promise<Array<Array<Object>>>} - a Promise that will resolve with the entity data as its fulfillment value
  *
  * @example
@@ -259,14 +259,14 @@ export function getSelectedEntitiesOfTypeInSet(
  *   { namespace: "LOOM", name: "MyEntity2" }
  * ]);
  */
-export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
+export function getAllEntitiesOfTypes(entityTypeFqns :FullyQualifiedName[]) :Promise<> {
 
   if (!isNonEmptyArray(entityTypeFqns)) {
     return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty FQN array');
   }
 
-  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
+  const allValidFqns = entityTypeFqns.reduce((valid, entityTypeFqn :FullyQualifiedName) => {
+    return valid && FullyQualifiedName.isValid(entityTypeFqn);
   }, true);
 
   if (!allValidFqns) {

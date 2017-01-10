@@ -55,7 +55,7 @@ export class SchemaBuilder {
 
   setFullyQualifiedName(fqn :FullyQualifiedName) :SchemaBuilder {
 
-    if (!FullyQualifiedName.isValidFqn(fqn)) {
+    if (!FullyQualifiedName.isValid(fqn)) {
       throw new Error('invalid parameter: fqn must be a valid FQN');
     }
 
