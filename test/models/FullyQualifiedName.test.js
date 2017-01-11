@@ -2,24 +2,9 @@
 
 import FullyQualifiedName from '../../src/models/FullyQualifiedName';
 
-/* eslint-disable no-array-constructor, no-new-object */
-const INVALID_PARAMS = [
-  undefined,
-  null,
-  [],
-  new Array(),
-  {},
-  new Object(),
-  true,
-  false,
-  -1,
-  0,
-  1,
-  '',
-  ' ',
-  /regex/
-];
-/* eslint-enable */
+import {
+  INVALID_PARAMS
+} from '../constants/TestConstants';
 
 const MOCK_NAMESPACE = 'LOOM';
 const MOCK_NAME = 'DATA';
@@ -112,7 +97,7 @@ describe('FullyQualifiedName', () => {
         expect(FullyQualifiedName.isValid({ namespace: MOCK_NAMESPACE, name: MOCK_NAME })).toEqual(true);
       });
 
-      it('should return true when given a valid instance of FullyQualifiedName', () => {
+      it('should return true when given a valid FullyQualifiedName instance', () => {
         expect(FullyQualifiedName.isValid(new FullyQualifiedName(MOCK_NAMESPACE, MOCK_NAME))).toEqual(true);
       });
 
