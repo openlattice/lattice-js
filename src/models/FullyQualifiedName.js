@@ -44,6 +44,11 @@ import {
   isNonEmptyString
 } from '../utils/LangUtils';
 
+type FqnObjectLiteral = {
+  namespace :string,
+  name :string
+};
+
 const EMPTY_FQN :FqnObjectLiteral = {
   namespace: '',
   name: ''

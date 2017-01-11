@@ -17,13 +17,21 @@
  * // EntityDataModelApi.get...
  */
 
+import EntitySet from '../models/EntitySet';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
-import * as EntitySet from '../models/EntitySet';
-import * as EntityType from '../models/EntityType';
-import * as PropertyType from '../models/PropertyType';
-import * as Schema from '../models/Schema';
+import EntityType, {
+  isValid as isValidEntityType
+} from '../models/EntityType';
+
+import PropertyType, {
+  isValid as isValidPropertyType
+} from '../models/PropertyType';
+
+import Schema, {
+  isValid as isValidSchema
+} from '../models/Schema';
 
 import {
   EDM_API
@@ -198,7 +206,7 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
  */
 export function createSchema(schema :Schema) :Promise<> {
 
-  if (!Schema.isValid(schema)) {
+  if (!isValidSchema(schema)) {
     return Promise.reject('invalid parameter: schema must be a valid Schema');
   }
 
@@ -588,7 +596,7 @@ export function getAllEntityTypes() :Promise<> {
  */
 export function createEntityType(entityType :EntityType) :Promise<> {
 
-  if (!EntityType.isValid(entityType)) {
+  if (!isValidEntityType(entityType)) {
     return Promise.reject('invalid parameter: entityType must be a valid EntityType');
   }
 
@@ -817,7 +825,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  */
 export function createPropertyType(propertyType :PropertyType) :Promise<> {
 
-  if (!PropertyType.isValid(propertyType)) {
+  if (!isValidPropertyType(propertyType)) {
     return Promise.reject('invalid parameter: propertyType must be a valid PropertyType');
   }
 

@@ -4,12 +4,10 @@
 
 import Immutable from 'immutable';
 
+import EntityType from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
-
+import PropertyType from './PropertyType';
 import Logger from '../utils/Logger';
-
-import * as EntityType from './EntityType';
-import * as PropertyType from './PropertyType';
 
 import {
   isDefined
@@ -29,13 +27,13 @@ const LOG = new Logger('Schema');
 export default class Schema {
 
   fqn :FullyQualifiedName;
-  entityTypes :EntityType[];
-  propertyTypes :PropertyType[];
+  entityTypes :List<EntityType>;
+  propertyTypes :List<PropertyType>;
 
   constructor(
       fqn :FullyQualifiedName,
-      entityTypes :EntityType[],
-      propertyTypes :PropertyType[]) {
+      entityTypes :List<EntityType>,
+      propertyTypes :List<PropertyType>) {
 
     this.fqn = fqn;
     this.entityTypes = entityTypes;

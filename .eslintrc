@@ -74,6 +74,8 @@
       }
     ],
 
+    "import/prefer-default-export": "warn",
+
     "jasmine/no-focused-tests": "error",
     "jasmine/no-disabled-tests": "error",
     "jasmine/no-spec-dupes": ["error", "branch"],

@@ -3,7 +3,7 @@
 .*/node_modules/.*
 
 [libs]
-./src
+./config/flow
 ./node_modules/immutable/dist/immutable.js.flow
 
 [options]
