@@ -29,9 +29,8 @@ export const NAMESPACE_PATH :string = 'namespace';
  *
  */
 
+export const GET_DATA_PATH :string = 'getData';
 export const ENTITY_DATA_PATH :string = 'entitydata';
-export const MULTIPLE_PATH :string = 'multiple';
-export const SELECTED_PATH :string = 'selected';
 
 /*
  *

@@ -13,9 +13,8 @@ const PROPERTY_TYPE_PATH :string = 'property/type';
 const NAMESPACE_PATH :string = 'namespace';
 
 // DataApi specific paths
+const GET_DATA_PATH :string = 'getData';
 const ENTITY_DATA_PATH :string = 'entitydata';
-const MULTIPLE_PATH :string = 'multiple';
-const SELECTED_PATH :string = 'selected';
 
 // EntityDataModelApi specific paths
 const SCHEMA_PATH :string = 'schema';
@@ -81,19 +80,14 @@ describe('ApiPaths', () => {
 
   describe('DataApi specific paths', () => {
 
+    it(`should expose "${GET_DATA_PATH}"`, () => {
+      expect(ApiPaths.GET_DATA_PATH).toBeDefined();
+      expect(ApiPaths.GET_DATA_PATH).toEqual(GET_DATA_PATH);
+    });
+
     it(`should expose "${ENTITY_DATA_PATH}"`, () => {
       expect(ApiPaths.ENTITY_DATA_PATH).toBeDefined();
       expect(ApiPaths.ENTITY_DATA_PATH).toEqual(ENTITY_DATA_PATH);
-    });
-
-    it(`should expose "${MULTIPLE_PATH}"`, () => {
-      expect(ApiPaths.MULTIPLE_PATH).toBeDefined();
-      expect(ApiPaths.MULTIPLE_PATH).toEqual(MULTIPLE_PATH);
-    });
-
-    it(`should expose "${SELECTED_PATH}"`, () => {
-      expect(ApiPaths.SELECTED_PATH).toBeDefined();
-      expect(ApiPaths.SELECTED_PATH).toEqual(SELECTED_PATH);
     });
 
   });
