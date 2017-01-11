@@ -3,8 +3,8 @@
  */
 
 const SecurableObjectTypes = {
-  EntityType: 'EntityType',
   EntitySet: 'EntitySet',
+  EntityType: 'EntityType',
   PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
   DataSource: 'Datasource',
   Organization: 'Organization'
