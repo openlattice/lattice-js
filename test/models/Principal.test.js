@@ -83,6 +83,21 @@ describe('Principal', () => {
 
     describe('build()', () => {
 
+      it('should throw when a required property has not been set', () => {
+
+        expect(() => {
+          (new PrincipalBuilder())
+            .setType(MOCK_TYPE)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new PrincipalBuilder())
+            .setId(MOCK_ID)
+            .build();
+        }).toThrow();
+      });
+
       it('should return a Principal instance with the correct properties', () => {
 
         const principal = builder
@@ -117,7 +132,7 @@ describe('Principal', () => {
 
       it('should return true when given a Principal instance constructed by the builder', () => {
 
-        const principal = new PrincipalBuilder()
+        const principal = (new PrincipalBuilder())
           .setType(MOCK_TYPE)
           .setId(MOCK_ID)
           .build();

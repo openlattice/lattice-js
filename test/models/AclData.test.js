@@ -36,7 +36,7 @@ const MOCK_ACL_DATA_OBJ = {
   action: MOCK_ACTION
 };
 
-fdescribe('AclData', () => {
+describe('AclData', () => {
 
   describe('AclDataBuilder', () => {
 
@@ -102,6 +102,21 @@ fdescribe('AclData', () => {
 
     describe('build()', () => {
 
+      it('should throw when a required property has not been set', () => {
+
+        expect(() => {
+          (new AclDataBuilder())
+            .setAcl(MOCK_ACL)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AclDataBuilder())
+            .setAction(MOCK_ACTION)
+            .build();
+        }).toThrow();
+      });
+
       it('should return a valid AclData instance', () => {
 
         const acl = builder
@@ -136,7 +151,7 @@ fdescribe('AclData', () => {
 
       it('should return true when given an AclData instance constructed by the builder', () => {
 
-        const acl = new AclDataBuilder()
+        const acl = (new AclDataBuilder())
           .setAcl(MOCK_ACL)
           .setAction(MOCK_ACTION)
           .build();

@@ -117,6 +117,21 @@ describe('Acl', () => {
 
     describe('build()', () => {
 
+      it('should throw when a required property has not been set', () => {
+
+        expect(() => {
+          (new AclBuilder())
+            .setAclKey(MOCK_ACL_KEY)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AclBuilder())
+            .setAces(MOCK_ACES)
+            .build();
+        }).toThrow();
+      });
+
       it('should return a valid Acl instance', () => {
 
         const acl = builder
@@ -151,7 +166,7 @@ describe('Acl', () => {
 
       it('should return true when given an Acl instance constructed by the builder', () => {
 
-        const acl = new AclBuilder()
+        const acl = (new AclBuilder())
           .setAclKey(MOCK_ACL_KEY)
           .setAces(MOCK_ACES)
           .build();

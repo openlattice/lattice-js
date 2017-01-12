@@ -100,6 +100,21 @@ describe('Ace', () => {
 
     describe('build()', () => {
 
+      it('should throw when a required property has not been set', () => {
+
+        expect(() => {
+          (new AceBuilder())
+            .setPrincipal(MOCK_PRINCIPAL)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AceBuilder())
+            .setPermissions(MOCK_PERMISSIONS)
+            .build();
+        }).toThrow();
+      });
+
       it('should return a valid Ace instance', () => {
 
         const ace = builder
@@ -134,7 +149,7 @@ describe('Ace', () => {
 
       it('should return true when given an Ace instance constructed by the builder', () => {
 
-        const ace = new AceBuilder()
+        const ace = (new AceBuilder())
           .setPrincipal(MOCK_PRINCIPAL)
           .setPermissions(MOCK_PERMISSIONS)
           .build();

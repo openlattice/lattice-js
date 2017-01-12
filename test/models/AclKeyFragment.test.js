@@ -83,6 +83,21 @@ describe('AclKeyFragment', () => {
 
     describe('build()', () => {
 
+      it('should throw when a required property has not been set', () => {
+
+        expect(() => {
+          (new AclKeyFragmentBuilder())
+            .setType(MOCK_TYPE)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AclKeyFragmentBuilder())
+            .setId(MOCK_ID)
+            .build();
+        }).toThrow();
+      });
+
       it('should return a valid AclKeyFragment instance', () => {
 
         const frag = builder
@@ -117,7 +132,7 @@ describe('AclKeyFragment', () => {
 
       it('should return true when given an AclKeyFragment instance constructed by the builder', () => {
 
-        const acl = new AclKeyFragmentBuilder()
+        const acl = (new AclKeyFragmentBuilder())
           .setType(MOCK_TYPE)
           .setId(MOCK_ID)
           .build();
