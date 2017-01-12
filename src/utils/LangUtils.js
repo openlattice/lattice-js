@@ -2,15 +2,18 @@
  * @flow
  */
 
-import validateUUID from 'uuid-validate';
+import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
+import isNull from 'lodash/isNull';
+import isPlainObject from 'lodash/isPlainObject';
+import isString from 'lodash/isString';
+import isUndefined from 'lodash/isUndefined';
+import trim from 'lodash/trim';
 
-import {
-  isArray,
-  isEmpty,
-  isPlainObject,
-  isString,
-  trim
-} from 'lodash';
+export function isDefined(value :any) :boolean {
+
+  return !isNull(value) && !isUndefined(value);
+}
 
 export function isNonEmptyArray(value :any) :boolean {
 
@@ -25,9 +28,4 @@ export function isNonEmptyObject(value :any) :boolean {
 export function isNonEmptyString(value :any) :boolean {
 
   return isString(value) && !isEmpty(trim(value));
-}
-
-export function isValidUUID(value :any) :boolean {
-
-  return validateUUID(value);
 }

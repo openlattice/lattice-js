@@ -17,7 +17,12 @@
  * // PermissionsApi.get...
  */
 
+import AclKeyFragment from '../models/AclKeyFragment';
 import Logger from '../utils/Logger';
+
+import AclData, {
+  isValid as isValidAclData
+} from '../models/AclData';
 
 import {
   PERMISSIONS_API
@@ -32,9 +37,8 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isNonEmptyArray,
-  isNonEmptyObject
-} from '../utils/LangUtils';
+  isValidAclKey
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('PermissionsApi');
 
@@ -45,7 +49,7 @@ const LOG = new Logger('PermissionsApi');
  *
  * @static
  * @memberof loom-data.PermissionsApi
- * @param {Object[]} aclKeys
+ * @param {AclKeyFragment[]} aclKey
  * @returns {Promise}
  *
  * @example
@@ -55,24 +59,14 @@ const LOG = new Logger('PermissionsApi');
  *   ]
  * );
  */
-export function getAcl(aclKeys :Object[]) :Promise<> {
+export function getAcl(aclKey :AclKeyFragment[]) :Promise<> {
 
-  if (!isNonEmptyArray(aclKeys)) {
-    return Promise.reject('invalid parameter: aclKeys must be a non-empty array');
-  }
-
-  // TODO: validate aclKeys
-
-  const allValid = aclKeys.reduce((isValid, key) => {
-    return isValid && isNonEmptyObject(key);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: aclKeys must be an array of valid object literals');
+  if (!isValidAclKey(aclKey)) {
+    return Promise.reject('invalid parameter: aclKey must be a non-empty array of valid AclKeyFragments');
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${PERMISSIONS_PATH}`, aclKeys)
+    .post(`/${PERMISSIONS_PATH}`, aclKey)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -88,7 +82,7 @@ export function getAcl(aclKeys :Object[]) :Promise<> {
  *
  * @static
  * @memberof loom-data.PermissionsApi
- * @param {Object[]} aclKeys
+ * @param {AclData} aclData
  * @returns {Promise}
  *
  * @example
@@ -96,13 +90,11 @@ export function getAcl(aclKeys :Object[]) :Promise<> {
  *   {}
  * );
  */
-export function updateAcl(aclData :Object) :Promise<> {
+export function updateAcl(aclData :AclData) :Promise<> {
 
-  if (!isNonEmptyObject(aclData)) {
-    return Promise.reject('invalid parameter: aclData must be a non-empty object literal');
+  if (!isValidAclData(aclData)) {
+    return Promise.reject('invalid parameter: aclData must be a valid AclData object');
   }
-
-  // TODO: validate aclData
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .patch(`/${PERMISSIONS_PATH}`, aclData)

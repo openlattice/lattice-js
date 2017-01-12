@@ -38,4 +38,10 @@ describe('loom-data-js', () => {
     expect(Object.keys(Loom.UsersApi).length).toBeGreaterThan(0);
   });
 
+  it('should expose DataModels', () => {
+    expect(Loom.DataModels).toBeDefined();
+    expect(Loom.DataModels).toEqual(jasmine.any(Object));
+    expect(Object.keys(Loom.DataModels).length).toBeGreaterThan(0);
+  });
+
 });

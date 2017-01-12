@@ -8,9 +8,8 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  ENTITY_DATA_PATH,
-  MULTIPLE_PATH,
-  SELECTED_PATH
+  GET_DATA_PATH,
+  ENTITY_DATA_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -27,18 +26,17 @@ import {
 
 const DATA_API_BASE_URL = AxiosUtils.getApiBaseUrl(DATA_API);
 
-const MOCK_FQN = {
-  namespace: 'LOOM',
-  name: 'DATA_API'
-};
+const MOCK_FILE_TYPE = 'json';
+const MOCK_ENTITY_SET_UUID = '4b08e1f9-4a00-4169-92ea-10e377070220';
+const MOCK_SYNC_UUID = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
+const MOCK_PROPERTY_TYPE_UUID = '8f79e123-3411-4099-a41f-88e5d22d0e8d';
 
-const MOCK_ES_NAME = 'LoomDataApis';
-
-const MOCK_CREATE_ENTITY_DATA = {
-  type: MOCK_FQN,
-  entitySetName: MOCK_ES_NAME,
-  properties: [
-    { 'LOOM.MY_PROPERTY': 'testing' }
+const MOCK_ENTITIES = {
+  entityId_1: [
+    {
+      'ec6865e6-e60e-424b-a071-6a9c1603d735': ['value_1', 'value_2'],
+      '3ada2cec-0e3a-48b1-ba4f-72be7a81169e': ['value_3', 'value_4']
+    }
   ]
 };
 
@@ -55,30 +53,27 @@ describe('DataApi', () => {
     mockAxiosInstance = null;
   });
 
-  testGetAllEntitiesOfType();
-  testGetAllEntitiesOfTypeFileUrl();
-  testGetAllEntitiesOfTypeInSet();
-  testGetAllEntitiesOfTypeInSetFileUrl();
-  testGetSelectedEntitiesOfTypeInSet();
-  testGetAllEntitiesOfTypes();
-  testCreateEntity();
+  testGetEntitySetData();
+  testGetEntitySetDataFileUrl();
+  testGetSelectedEntitySetData();
+  testCreateEntityData();
 });
 
-function testGetAllEntitiesOfType() {
+function testGetEntitySetData() {
 
-  describe('getAllEntitiesOfType()', () => {
+  describe('getEntitySetData()', () => {
 
     const functionInvocation = [
-      DataApi.getAllEntitiesOfType, MOCK_FQN
+      DataApi.getEntitySetData, MOCK_ENTITY_SET_UUID
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      DataApi.getAllEntitiesOfType(MOCK_FQN)
+      DataApi.getEntitySetData(MOCK_ENTITY_SET_UUID)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`
+            `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`
           );
           done();
         })
@@ -95,18 +90,18 @@ function testGetAllEntitiesOfType() {
   });
 }
 
-function testGetAllEntitiesOfTypeFileUrl() {
+function testGetEntitySetDataFileUrl() {
 
-  describe('getAllEntitiesOfTypeFileUrl()', () => {
+  describe('getEntitySetDataFileUrl()', () => {
 
     const functionInvocation = [
-      DataApi.getAllEntitiesOfTypeFileUrl, MOCK_FQN
+      DataApi.getEntitySetDataFileUrl, MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE
     ];
 
     it('should return the correct URL', () => {
 
-      expect(DataApi.getAllEntitiesOfTypeFileUrl(MOCK_FQN, 'json')).toEqual(
-        `${DATA_API_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}?fileType=json`
+      expect(DataApi.getEntitySetDataFileUrl(MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE)).toEqual(
+        `${DATA_API_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
       );
     });
 
@@ -116,139 +111,57 @@ function testGetAllEntitiesOfTypeFileUrl() {
   });
 }
 
-function testGetAllEntitiesOfTypeInSet() {
+function testGetSelectedEntitySetData() {
 
-  describe('getAllEntitiesOfTypeInSet()', () => {
-
-    const functionInvocation = [
-      DataApi.getAllEntitiesOfTypeInSet, MOCK_FQN, MOCK_ES_NAME
-    ];
-
-    it('should send a GET request with the correct URL path', (done) => {
-
-      DataApi.getAllEntitiesOfTypeInSet(MOCK_FQN, MOCK_ES_NAME)
-        .then(() => {
-          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ES_NAME}`
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-
-  });
-}
-
-function testGetAllEntitiesOfTypeInSetFileUrl() {
-
-  describe('getAllEntitiesOfTypeInSetFileUrl()', () => {
+  describe('getSelectedEntitySetData()', () => {
 
     const functionInvocation = [
-      DataApi.getAllEntitiesOfTypeInSetFileUrl, MOCK_FQN, MOCK_ES_NAME, 'json'
-    ];
-
-    it('should return the correct URL', () => {
-
-      const url = DataApi.getAllEntitiesOfTypeInSetFileUrl(MOCK_FQN, MOCK_ES_NAME, 'json');
-      expect(url).toEqual(
-        `${DATA_API_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ES_NAME}?fileType=json`
-      );
-    });
-
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldReturnNullOnInvalidParameters(...functionInvocation);
-
-  });
-}
-
-function testGetSelectedEntitiesOfTypeInSet() {
-
-  describe('getSelectedEntitiesOfTypeInSet()', () => {
-
-    const functionInvocation = [
-      DataApi.getSelectedEntitiesOfTypeInSet, MOCK_FQN, MOCK_ES_NAME, [MOCK_FQN]
-    ];
-
-    it('should send a PUT request with the correct URL path and data', (done) => {
-
-      DataApi.getSelectedEntitiesOfTypeInSet(MOCK_FQN, MOCK_ES_NAME, [MOCK_FQN])
-        .then(() => {
-          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}/${MOCK_ES_NAME}/${SELECTED_PATH}`,
-            [MOCK_FQN]
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-
-  });
-}
-
-function testGetAllEntitiesOfTypes() {
-
-  describe('getAllEntitiesOfTypes()', () => {
-
-    const functionInvocation = [
-      DataApi.getAllEntitiesOfTypes, [MOCK_FQN]
-    ];
-
-    it('should send a PUT request with the correct URL path and data', (done) => {
-
-      DataApi.getAllEntitiesOfTypes([MOCK_FQN])
-        .then(() => {
-          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`,
-            [MOCK_FQN]
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-
-  });
-}
-
-function testCreateEntity() {
-
-  describe('createEntity()', () => {
-
-    const functionInvocation = [
-      DataApi.createEntity, MOCK_CREATE_ENTITY_DATA
+      DataApi.getSelectedEntitySetData, MOCK_ENTITY_SET_UUID, [MOCK_SYNC_UUID], [MOCK_PROPERTY_TYPE_UUID]
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      DataApi.createEntity(MOCK_CREATE_ENTITY_DATA)
+      DataApi.getSelectedEntitySetData(MOCK_ENTITY_SET_UUID, [MOCK_SYNC_UUID], [MOCK_PROPERTY_TYPE_UUID])
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}`,
-            MOCK_CREATE_ENTITY_DATA
+            `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${GET_DATA_PATH}`,
+            {
+              syncIds: [MOCK_SYNC_UUID],
+              properties: [MOCK_PROPERTY_TYPE_UUID]
+            }
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testCreateEntityData() {
+
+  describe('createEntityData()', () => {
+
+    const functionInvocation = [
+      DataApi.createEntityData, MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      DataApi.createEntityData(MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`,
+            MOCK_ENTITIES
           );
           done();
         })
