@@ -32,7 +32,7 @@ export default class PropertyType {
   title :string;
   description :?string;
   datatype :string;
-  schemas :Set<FullyQualifiedName>;
+  schemas :FullyQualifiedName[];
 
   constructor(
       id :?UUID,
@@ -40,7 +40,7 @@ export default class PropertyType {
       title :string,
       description :?string,
       datatype :string,
-      schemas :Set<FullyQualifiedName>) {
+      schemas :FullyQualifiedName[]) {
 
     this.id = id;
     this.type = type;
@@ -62,7 +62,7 @@ export class PropertyTypeBuilder {
   title :string;
   description :?string;
   datatype :string;
-  schemas :Set<FullyQualifiedName>;
+  schemas :FullyQualifiedName[];
 
   setId(propertyTypeId :UUID) :PropertyTypeBuilder {
 
@@ -124,7 +124,7 @@ export class PropertyTypeBuilder {
       schemas.forEach((schemaFqn :FullyQualifiedName) => {
         set.add(schemaFqn);
       });
-    });
+    }).toJS();
 
     return this;
   }

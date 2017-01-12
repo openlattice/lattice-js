@@ -27,13 +27,13 @@ const LOG = new Logger('Schema');
 export default class Schema {
 
   fqn :FullyQualifiedName;
-  entityTypes :List<EntityType>;
-  propertyTypes :List<PropertyType>;
+  entityTypes :EntityType[];
+  propertyTypes :PropertyType[];
 
   constructor(
       fqn :FullyQualifiedName,
-      entityTypes :List<EntityType>,
-      propertyTypes :List<PropertyType>) {
+      entityTypes :EntityType[],
+      propertyTypes :PropertyType[]) {
 
     this.fqn = fqn;
     this.entityTypes = entityTypes;
@@ -48,8 +48,8 @@ export default class Schema {
 export class SchemaBuilder {
 
   fqn :FullyQualifiedName;
-  entityTypes :List<EntityType>;
-  propertyTypes :List<PropertyType>;
+  entityTypes :EntityType[];
+  propertyTypes :PropertyType[];
 
   setFullyQualifiedName(fqn :FullyQualifiedName) :SchemaBuilder {
 
@@ -67,12 +67,7 @@ export class SchemaBuilder {
       throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
     }
 
-    this.entityTypes = Immutable.List().withMutations((list :List<EntityType>) => {
-      entityTypes.forEach((entityType :EntityType) => {
-        list.push(entityType);
-      });
-    });
-
+    this.entityTypes = entityTypes;
     return this;
   }
 
@@ -82,16 +77,23 @@ export class SchemaBuilder {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
     }
 
-    this.propertyTypes = Immutable.List().withMutations((list :List<PropertyType>) => {
-      propertyTypes.forEach((propertyType :PropertyType) => {
-        list.push(propertyType);
-      });
-    });
-
+    this.propertyTypes = propertyTypes;
     return this;
   }
 
   build() :Schema {
+
+    if (!this.fqn) {
+      throw new Error('missing property: fqn is a required property');
+    }
+
+    if (!this.entityTypes) {
+      throw new Error('missing property: entityTypes is a required property');
+    }
+
+    if (!this.propertyTypes) {
+      throw new Error('missing property: propertyTypes is a required property');
+    }
 
     return new Schema(
       this.fqn,

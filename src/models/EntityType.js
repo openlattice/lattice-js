@@ -31,18 +31,18 @@ export default class EntityType {
   type :FullyQualifiedName;
   title :string;
   description :?string;
-  schemas :Set<FullyQualifiedName>;
-  key :Set<UUID>;
-  properties :Set<UUID>;
+  schemas :FullyQualifiedName[];
+  key :UUID[];
+  properties :UUID[];
 
   constructor(
       id :?UUID,
       type :FullyQualifiedName,
       title :string,
       description :?string,
-      schemas :Set<FullyQualifiedName>,
-      key :Set<UUID>,
-      properties :Set<UUID>) {
+      schemas :FullyQualifiedName[],
+      key :UUID[],
+      properties :UUID[]) {
 
     this.id = id;
     this.type = type;
@@ -65,9 +65,9 @@ export class EntityTypeBuilder {
   type :FullyQualifiedName;
   title :string;
   description :?string;
-  schemas :Set<FullyQualifiedName>;
-  key :Set<UUID>;
-  properties :Set<UUID>;
+  schemas :FullyQualifiedName[];
+  key :UUID[];
+  properties :UUID[];
 
   setId(entityTypeId :UUID) :EntityTypeBuilder {
 
@@ -119,7 +119,7 @@ export class EntityTypeBuilder {
       schemas.forEach((schemaFqn :FullyQualifiedName) => {
         set.add(schemaFqn);
       });
-    });
+    }).toJS();
 
     return this;
   }
@@ -134,7 +134,7 @@ export class EntityTypeBuilder {
       key.forEach((keyId :UUID) => {
         set.add(keyId);
       });
-    });
+    }).toJS();
 
     return this;
   }
@@ -149,7 +149,7 @@ export class EntityTypeBuilder {
       propertyTypes.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
       });
-    });
+    }).toJS();
 
     return this;
   }

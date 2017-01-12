@@ -588,7 +588,7 @@ export function getAllEntityTypes() :Promise<> {
  *     ],
  *     properties: [
  *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
- *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
  *     ]
  *   }
