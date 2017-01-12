@@ -9,14 +9,11 @@
 
 import Immutable from 'immutable';
 
-import {
-  isEmpty
-} from 'lodash';
-
 import EnvToUrlMap from '../constants/EnvToUrlMap';
 import Logger from '../utils/Logger';
 
 import {
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -44,13 +41,13 @@ let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string
  *
  * @memberof loom-data.Configuration
  * @param {Object} config - an object literal containing all configuration options
- * @param {String} config.authToken - a Base64-encoded JWT auth token
- * @param {String} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
+ * @param {string} config.authToken - a Base64-encoded JWT auth token
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
  */
 function configure(config :Object) {
 
-  if (isEmpty(config)) {
-    const errorMsg = 'invalid parameter - config must be a non-empty object';
+  if (!isNonEmptyObject(config)) {
+    const errorMsg = 'invalid parameter - config must be a non-empty configuration object';
     LOG.error(errorMsg, config);
     throw new Error(errorMsg);
   }

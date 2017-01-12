@@ -2,24 +2,9 @@ import BBPromise from 'bluebird';
 
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
 
-/* eslint-disable no-array-constructor, no-new-object */
-const INVALID_PARAMS = [
-  undefined,
-  null,
-  [],
-  new Array(),
-  {},
-  new Object(),
-  true,
-  false,
-  -1,
-  0,
-  1,
-  '',
-  ' ',
-  /regex/
-];
-/* eslint-enable */
+import {
+  INVALID_PARAMS
+} from '../constants/TestConstants';
 
 export function testApiFunctionShouldGetCorrectAxiosInstance(apiName, functionToTest, ...validParameters) {
 

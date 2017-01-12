@@ -12,11 +12,11 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  ADMIN_PATH,
   DATA_PATH,
   DATASTORE_PATH,
   ONTOLOGY_PATH,
-  ACL_PATH,
-  ADMIN_PATH
+  PERMISSIONS_PATH
 } from '../../src/constants/ApiPaths';
 
 const MOCK_AUTH_TOKEN = 'hello_world';
@@ -120,7 +120,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'localhost'
         });
         expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}/${ACL_PATH}`
+          `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}/${PERMISSIONS_PATH}`
         );
       });
 
@@ -131,7 +131,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ONTOLOGY_PATH}/${ACL_PATH}`
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ONTOLOGY_PATH}/${PERMISSIONS_PATH}`
         );
       });
 

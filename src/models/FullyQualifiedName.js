@@ -38,13 +38,13 @@
  * fqn.getFullyQualifiedName(); // "LOOM.Data"
  */
 
-import * as _ from 'lodash';
+import isObject from 'lodash/isObject';
 
 import {
   isNonEmptyString
 } from '../utils/LangUtils';
 
-export type FqnObjectLiteral = {
+type FqnObjectLiteral = {
   namespace :string,
   name :string
 };
@@ -82,13 +82,14 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
 
   /*
    * case 1: a single parameter which can be either:
+   *   - an instance of FullyQualifiedName
    *   - an object literal to represent a FullyQualifiedName
    *   - a FullyQualifiedName as a string
    */
   if (args.length === 1) {
 
     let fqnObj :FqnObjectLiteral = EMPTY_FQN;
-    if (_.isPlainObject(args[0])) {
+    if (isObject(args[0])) {
 
       // if it's an object literal, it must have valid "namespace" and "name" properties
       const fqnArg :FqnObjectLiteral = args[0];
@@ -140,28 +141,31 @@ export default class FullyQualifiedName {
 
   namespace :string;
   name :string;
-  fqn :string;
 
-  static isValidFqn = (...args :any[]) :boolean => {
+  static isValid = (...args :any[]) :boolean => {
 
-    const { namespace, name } = processArgs(args);
+    const { namespace, name } = processArgs(...args);
     return isNonEmptyString(namespace) && isNonEmptyString(name);
-  }
-
-  static isValidFqnObjectLiteral = (fqnObjectLiteral :FqnObjectLiteral) :boolean => {
-
-    return _.isPlainObject(fqnObjectLiteral) &&
-      isNonEmptyString(fqnObjectLiteral.namespace) &&
-      isNonEmptyString(fqnObjectLiteral.name);
   }
 
   constructor(...args :any[]) {
 
-    const { namespace, name } = processArgs(args);
+    if (args.length !== 1 && args.length !== 2) {
+      throw new Error(`invalid parameter count: FullyQualifiedName takes only 1 or 2 parameters, got ${args.length}`);
+    }
+
+    const { namespace, name } = processArgs(...args);
+
+    if (!isNonEmptyString(namespace)) {
+      throw new Error('invalid FQN: namespace must be a non-empty string');
+    }
+
+    if (!isNonEmptyString(name)) {
+      throw new Error('invalid FQN: name must be a non-empty string');
+    }
 
     this.namespace = namespace;
     this.name = name;
-    this.fqn = `${namespace}.${name}`;
   }
 
   getNamespace() {
@@ -176,6 +180,14 @@ export default class FullyQualifiedName {
 
   getFullyQualifiedName() {
 
-    return this.fqn;
+    return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
+      ? `${this.namespace}.${this.name}`
+      : '';
+  }
+
+  // for Immutable.js equality
+  valueOf() {
+
+    return this.getFullyQualifiedName();
   }
 }
