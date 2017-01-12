@@ -17,7 +17,7 @@ const MOCK_PRINCIPAL_OBJ = {
   id: MOCK_ID
 };
 
-fdescribe('Principal', () => {
+describe('Principal', () => {
 
   describe('PrincipalBuilder', () => {
 
@@ -71,6 +71,12 @@ fdescribe('Principal', () => {
             builder.setId(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should not throw when given a valid ID', () => {
+        expect(() => {
+          builder.setId(MOCK_ID);
+        }).not.toThrow();
       });
 
     });

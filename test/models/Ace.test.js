@@ -23,7 +23,7 @@ const MOCK_ACE_OBJ = {
   permissions: MOCK_PERMISSIONS
 };
 
-fdescribe('Ace', () => {
+describe('Ace', () => {
 
   describe('AceBuilder', () => {
 
@@ -51,6 +51,12 @@ fdescribe('Ace', () => {
             builder.setPrincipal(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should not throw when given a valid Principal', () => {
+        expect(() => {
+          builder.setPrincipal(MOCK_PRINCIPAL);
+        }).not.toThrow();
       });
 
     });
@@ -154,6 +160,7 @@ fdescribe('Ace', () => {
         INVALID_PARAMS.forEach((invalidInput1) => {
           INVALID_PARAMS.forEach((invalidInput2) => {
             expect(isValid({ principal: invalidInput1, permissions: invalidInput2 })).toEqual(false);
+            expect(isValid({ principal: invalidInput1, permissions: [invalidInput2] })).toEqual(false);
           });
         });
       });
@@ -167,6 +174,7 @@ fdescribe('Ace', () => {
       it('should return false when given an Ace object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid({ principal: MOCK_PRINCIPAL, permissions: invalidInput })).toEqual(false);
+          expect(isValid({ principal: MOCK_PRINCIPAL, permissions: [invalidInput] })).toEqual(false);
         });
       });
 
@@ -182,6 +190,8 @@ fdescribe('Ace', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           const ace = new Ace(MOCK_PRINCIPAL, MOCK_PERMISSIONS);
           ace.permissions = invalidInput;
+          expect(isValid(ace)).toEqual(false);
+          ace.permissions = [invalidInput];
           expect(isValid(ace)).toEqual(false);
         });
       });

@@ -21,10 +21,10 @@ const LOG = new Logger('Acl');
  */
 export default class Acl {
 
-  aclKey :List<AclKeyFragment>;
-  aces :List<Ace>;
+  aclKey :AclKeyFragment[];
+  aces :Ace[];
 
-  constructor(aclKey :List<AclKeyFragment>, aces :List<Ace>) {
+  constructor(aclKey :AclKeyFragment[], aces :Ace[]) {
 
     this.aclKey = aclKey;
     this.aces = aces;
@@ -37,8 +37,8 @@ export default class Acl {
  */
 export class AclBuilder {
 
-  aclKey :List<AclKeyFragment>;
-  aces :List<Ace>;
+  aclKey :AclKeyFragment[];
+  aces :Ace[];
 
   setAclKey(aclKey :AclKeyFragment[]) :AclBuilder {
 
@@ -46,12 +46,7 @@ export class AclBuilder {
       throw new Error('invalid parameter: aclKey must be a non-empty array of valid AclKeyFragments');
     }
 
-    this.aclKey = Immutable.List().withMutations((list :List<AclKeyFragment>) => {
-      aclKey.forEach((frag :AclKeyFragment) => {
-        list.push(frag);
-      });
-    });
-
+    this.aclKey = aclKey;
     return this;
   }
 
@@ -61,12 +56,7 @@ export class AclBuilder {
       throw new Error('invalid parameter: aces must be a non-empty array of valid Aces');
     }
 
-    this.aces = Immutable.List().withMutations((list :List<Ace>) => {
-      aces.forEach((ace :Ace) => {
-        list.push(ace);
-      });
-    });
-
+    this.aces = aces;
     return this;
   }
 
