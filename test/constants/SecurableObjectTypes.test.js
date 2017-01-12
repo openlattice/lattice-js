@@ -1,4 +1,4 @@
-import SecurableObjectTypes from '../../src/constants/SecurableObjectTypes';
+import SecurableTypes from '../../src/constants/SecurableTypes';
 
 const EntitySet :string = 'EntitySet';
 const EntityType :string = 'EntityType';
@@ -6,31 +6,31 @@ const PropertyTypeInEntitySet :string = 'PropertyTypeInEntitySet';
 const DataSource :string = 'Datasource';
 const Organization :string = 'Organization';
 
-describe('SecurableObjectTypes', () => {
+describe('SecurableTypes', () => {
 
   it(`should expose "${EntityType}"`, () => {
-    expect(SecurableObjectTypes.EntityType).toBeDefined();
-    expect(SecurableObjectTypes.EntityType).toEqual(EntityType);
+    expect(SecurableTypes.EntityType).toBeDefined();
+    expect(SecurableTypes.EntityType).toEqual(EntityType);
   });
 
   it(`should expose "${EntitySet}"`, () => {
-    expect(SecurableObjectTypes.EntitySet).toBeDefined();
-    expect(SecurableObjectTypes.EntitySet).toEqual(EntitySet);
+    expect(SecurableTypes.EntitySet).toBeDefined();
+    expect(SecurableTypes.EntitySet).toEqual(EntitySet);
   });
 
   it(`should expose "${PropertyTypeInEntitySet}"`, () => {
-    expect(SecurableObjectTypes.PropertyTypeInEntitySet).toBeDefined();
-    expect(SecurableObjectTypes.PropertyTypeInEntitySet).toEqual(PropertyTypeInEntitySet);
+    expect(SecurableTypes.PropertyTypeInEntitySet).toBeDefined();
+    expect(SecurableTypes.PropertyTypeInEntitySet).toEqual(PropertyTypeInEntitySet);
   });
 
   it(`should expose "${DataSource}"`, () => {
-    expect(SecurableObjectTypes.DataSource).toBeDefined();
-    expect(SecurableObjectTypes.DataSource).toEqual(DataSource);
+    expect(SecurableTypes.DataSource).toBeDefined();
+    expect(SecurableTypes.DataSource).toEqual(DataSource);
   });
 
   it(`should expose "${Organization}"`, () => {
-    expect(SecurableObjectTypes.Organization).toBeDefined();
-    expect(SecurableObjectTypes.Organization).toEqual(Organization);
+    expect(SecurableTypes.Organization).toBeDefined();
+    expect(SecurableTypes.Organization).toEqual(Organization);
   });
 
 });

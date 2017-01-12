@@ -1,4 +1,4 @@
-import SecurableObjectTypes from '../../src/constants/SecurableObjectTypes';
+import SecurableTypes from '../../src/constants/SecurableTypes';
 
 import AclKeyFragment, {
   AclKeyFragmentBuilder,
@@ -47,8 +47,8 @@ describe('AclKeyFragment', () => {
         });
       });
 
-      it('should not throw when given valid SecurableObjectTypes', () => {
-        Object.values(SecurableObjectTypes).forEach((type) => {
+      it('should not throw when given valid SecurableTypes', () => {
+        Object.values(SecurableTypes).forEach((type) => {
           expect(() => {
             builder.setType(type);
           }).not.toThrow();

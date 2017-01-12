@@ -2,7 +2,7 @@
  * @flow
  */
 
-const SecurableObjectTypes = {
+const SecurableTypes = {
   EntitySet: 'EntitySet',
   EntityType: 'EntityType',
   PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
@@ -10,8 +10,8 @@ const SecurableObjectTypes = {
   Organization: 'Organization'
 };
 
-export type SecurableObjectType = $Keys<typeof SecurableObjectTypes>;
+export type SecurableType = $Keys<typeof SecurableTypes>;
 
 export {
-  SecurableObjectTypes as default
+  SecurableTypes as default
 };

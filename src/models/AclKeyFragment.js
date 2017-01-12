@@ -3,7 +3,7 @@
  */
 
 import Logger from '../utils/Logger';
-import SecurableObjectTypes from '../constants/SecurableObjectTypes';
+import SecurableTypes from '../constants/SecurableTypes';
 
 import {
   isNonEmptyString
@@ -14,8 +14,8 @@ import {
 } from '../utils/ValidationUtils';
 
 import type {
-  SecurableObjectType
-} from '../constants/SecurableObjectTypes';
+  SecurableType
+} from '../constants/SecurableTypes';
 
 const LOG = new Logger('AclKeyFragment');
 
@@ -25,10 +25,10 @@ const LOG = new Logger('AclKeyFragment');
  */
 export default class AclKeyFragment {
 
-  type :SecurableObjectType;
+  type :SecurableType;
   id :UUID;
 
-  constructor(type :SecurableObjectType, id :UUID) {
+  constructor(type :SecurableType, id :UUID) {
 
     this.type = type;
     this.id = id;
@@ -41,13 +41,13 @@ export default class AclKeyFragment {
  */
 export class AclKeyFragmentBuilder {
 
-  type :SecurableObjectType;
+  type :SecurableType;
   id :UUID;
 
-  setType(type :SecurableObjectType) :AclKeyFragmentBuilder {
+  setType(type :SecurableType) :AclKeyFragmentBuilder {
 
-    if (!isNonEmptyString(type) && !SecurableObjectTypes[type]) {
-      throw new Error('invalid parameter: type must be a valid SecurableObjectType string');
+    if (!isNonEmptyString(type) && !SecurableTypes[type]) {
+      throw new Error('invalid parameter: type must be a valid SecurableType string');
     }
 
     this.type = type;
