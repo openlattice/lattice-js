@@ -3,7 +3,6 @@
  */
 
 const PermissionTypes = {
-  ALTER: 'ALTER',
   DISCOVER: 'DISCOVER',
   LINK: 'LINK',
   OWNER: 'OWNER',

@@ -22,6 +22,9 @@ const SCHEMA_PATH :string = 'schema';
 // PermissionsApi specific paths
 const PERMISSIONS_PATH :string = 'permissions';
 
+// SearchApi specific paths
+const SEARCH_PATH :string = 'search';
+
 // UsersApi specific paths
 const ADMIN_PATH :string = 'admin';
 const RESET_PATH :string = 'reset';
@@ -106,6 +109,15 @@ describe('ApiPaths', () => {
     it(`should expose "${PERMISSIONS_PATH}"`, () => {
       expect(ApiPaths.PERMISSIONS_PATH).toBeDefined();
       expect(ApiPaths.PERMISSIONS_PATH).toEqual(PERMISSIONS_PATH);
+    });
+
+  });
+
+  describe('SearchApi specific paths', () => {
+
+    it(`should expose "${SEARCH_PATH}"`, () => {
+      expect(ApiPaths.SEARCH_PATH).toBeDefined();
+      expect(ApiPaths.SEARCH_PATH).toEqual(SEARCH_PATH);
     });
 
   });

@@ -1,6 +1,5 @@
 import PermissionTypes from '../../src/constants/PermissionTypes';
 
-const ALTER :string = 'ALTER';
 const DISCOVER :string = 'DISCOVER';
 const LINK :string = 'LINK';
 const OWNER :string = 'OWNER';
@@ -8,11 +7,6 @@ const READ :string = 'READ';
 const WRITE :string = 'WRITE';
 
 describe('PermissionTypes', () => {
-
-  it(`should expose "${ALTER}"`, () => {
-    expect(PermissionTypes.ALTER).toBeDefined();
-    expect(PermissionTypes.ALTER).toEqual(ALTER);
-  });
 
   it(`should expose "${DISCOVER}"`, () => {
     expect(PermissionTypes.DISCOVER).toBeDefined();

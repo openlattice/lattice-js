@@ -50,6 +50,14 @@ export const PERMISSIONS_PATH :string = 'permissions';
 
 /*
  *
+ * SearchApi specific paths
+ *
+ */
+
+export const SEARCH_PATH :string = 'search';
+
+/*
+ *
  * UsersApi specific paths
  *
  */

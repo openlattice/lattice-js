@@ -1,9 +1,10 @@
 import * as ApiNames from '../../src/constants/ApiNames';
 
-const DATA_API = 'DataApi';
-const EDM_API = 'EntityDataModelApi';
-const PERMISSIONS_API = 'PermissionsApi';
-const USERS_API = 'UsersApi';
+const DATA_API :string = 'DataApi';
+const EDM_API :string = 'EntityDataModelApi';
+const PERMISSIONS_API :string = 'PermissionsApi';
+const SEARCH_API :string = 'SearchApi';
+const USERS_API :string = 'UsersApi';
 
 describe('ApiNames', () => {
 
@@ -20,6 +21,11 @@ describe('ApiNames', () => {
   it(`should expose "${PERMISSIONS_API}"`, () => {
     expect(ApiNames.PERMISSIONS_API).toBeDefined();
     expect(ApiNames.PERMISSIONS_API).toEqual(PERMISSIONS_API);
+  });
+
+  it(`should expose "${SEARCH_API}"`, () => {
+    expect(ApiNames.SEARCH_API).toBeDefined();
+    expect(ApiNames.SEARCH_API).toEqual(SEARCH_API);
   });
 
   it(`should expose "${USERS_API}"`, () => {
