@@ -19,7 +19,6 @@
 
 import Immutable from 'immutable';
 
-import FullyQualifiedName from '../types/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
@@ -27,9 +26,8 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  ENTITY_DATA_PATH,
-  MULTIPLE_PATH,
-  SELECTED_PATH
+  GET_DATA_PATH,
+  ENTITY_DATA_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -38,10 +36,13 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isNonEmptyArray,
-  isNonEmptyObject,
-  isNonEmptyString
+  isNonEmptyObject
 } from '../utils/LangUtils';
+
+import {
+  isValidUuid,
+  isValidUuidArray
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataApi');
 
@@ -53,30 +54,26 @@ const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<
 });
 
 /**
- * `GET /entitydata/{namespace}/{name}`
+ * `GET /data/entitydata/{uuid}`
  *
- * Gets all entity data for the given EntityType FQN.
+ * Gets all data for the given EntitySet UUID.
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @returns {Promise<Array<Object>>} - a Promise that will resolve with the entity data as its fulfillment value
+ * @param {UUID} entitySetId
+ * @returns {Promise}
  *
  * @example
- * DataApi.getAllEntitiesOfType(
- *   { namespace: "LOOM", name: "MyEntity" }
- * );
+ * DataApi.getEntitySetData("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
+export function getEntitySetData(entitySetId :UUID) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  if (!isValidUuid(entitySetId)) {
+    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
   }
 
-  const { namespace, name } = entityTypeFqn;
-
   return getApiAxiosInstance(DATA_API)
-    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}`)
+    .get(`/${ENTITY_DATA_PATH}/${entitySetId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -86,24 +83,21 @@ export function getAllEntitiesOfType(entityTypeFqn :Object) :Promise<> {
 }
 
 /**
- * Returns the URL to be used for a direct file download for all entity data for the given EntityType FQN.
+ * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {string} fileType - the format in which to download the data
- * @returns {string} - the file download URL
+ * @param {UUID} entitySetId
+ * @param {string} fileType
+ * @returns {string}
  *
  * @example
- * DataApi.getAllEntitiesOfTypeFileUrl(
- *   { namespace: "LOOM", name: "MyEntity" },
- *   "json"
- * );
+ * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
  */
-export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :Object, fileType :string) :?string {
+export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?string {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
+  if (!isValidUuid(entitySetId)) {
+    LOG.warn('invalid parameter: entitySetId must be a valid UUID', entitySetId);
     return null;
   }
 
@@ -112,41 +106,49 @@ export function getAllEntitiesOfTypeFileUrl(entityTypeFqn :Object, fileType :str
     return null;
   }
 
-  const { namespace, name } = entityTypeFqn;
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}?fileType=${FILE_TYPES.get(fileType)}`;
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${entitySetId}?fileType=${FILE_TYPES.get(fileType)}`;
 }
 
 /**
- * `GET /entitydata/{namespace}/{name}/{name}`
+ * `POST /data/entitydata/{uuid}/getData`
  *
- * Gets all entity data in the EntitySet defined by the given EntityType FQN.
+ * Gets all data for the given EntitySet UUID with respect to the given filters.
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {string} entitySetName - the value of the "name" field of the EntitySet
+ * @param {UUID} entitySetId
+ * @param {UUID[]} syncIds
+ * @param {UUID[]} propertyTypeIds
  * @returns {Promise}
  *
  * @example
- * DataApi.getAllEntitiesOfTypeInSet({
- *   { namespace: "LOOM", name: "MyEntity" },
- *   "MyEntityCollection"
- * });
+ * DataApi.getSelectedEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
+ *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
+ * );
  */
-export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :string) :Promise<> {
+export function getSelectedEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTypeIds :UUID[]) :Promise<> {
 
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
+  if (!isValidUuid(entitySetId)) {
+    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
   }
 
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+  if (!isValidUuidArray(syncIds)) {
+    return Promise.reject('invalid parameter: syncIds must be a non-empty array of valid UUID');
   }
 
-  const { namespace, name } = entityTypeFqn;
+  if (!isValidUuidArray(propertyTypeIds)) {
+    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUID');
+  }
+
+  const data = {
+    syncIds,
+    properties: propertyTypeIds
+  };
 
   return getApiAxiosInstance(DATA_API)
-    .get(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}`)
+    .post(`/${ENTITY_DATA_PATH}/${entitySetId}/${GET_DATA_PATH}`, data)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -156,172 +158,49 @@ export function getAllEntitiesOfTypeInSet(entityTypeFqn :Object, entitySetName :
 }
 
 /**
- * Returns the URL to be used for a direct file download for all entity data in the EntitySet defined by the given
- * EntityType FQN.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {string} entitySetName - the value of the "name" field of the EntitySet
- * @returns {string} - the file download URL
- *
- * @example
- * DataApi.getAllEntitiesOfTypeInSetFileUrl({
- *   { namespace: "LOOM", name: "MyEntity" },
- *   "MyEntityCollection",
- *   "json"
- * });
- */
-export function getAllEntitiesOfTypeInSetFileUrl(
-    entityTypeFqn :Object, entitySetName :string, fileType :string) :?string {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    LOG.warn('invalid parameter: entityTypeFqn must be a valid FQN object literal', entityTypeFqn);
-    return null;
-  }
-
-  if (!isNonEmptyString(entitySetName)) {
-    LOG.warn('invalid parameter: entitySetName must be a non-empty string', entitySetName);
-    return null;
-  }
-
-  if (!FILE_TYPES.contains(fileType)) {
-    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
-    return null;
-  }
-
-  const { namespace, name } = entityTypeFqn;
-  /* eslint-disable max-len */
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}?fileType=${FILE_TYPES.get(fileType)}`;
-  /* eslint-enable */
-}
-
-/**
- * `PUT /entitydata/{namespace}/{name}/{name}/selected`
- *
- * Gets all entity data in the given EntitySet for the given EntityType FQN, filtered by the given PropertyType FQNs.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Object} entityTypeFqn - an object literal representing a fully qualified name
- * @param {string} entitySetName - the value of the "name" field of the EntitySet
- * @param {Object[]} propertyTypeFqns - an array of object literals representing fully qualified names
- * @returns {Promise}
- */
-export function getSelectedEntitiesOfTypeInSet(
-    entityTypeFqn :Object, entitySetName :string, propertyTypeFqns :Object[]) {
-
-  if (!FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN object literal');
-  }
-
-  if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
-  }
-
-  if (!isNonEmptyArray(propertyTypeFqns)) {
-    return Promise.reject('invalid parameter: propertyTypeFqns must be a non-empty array');
-  }
-
-  const allValid = propertyTypeFqns.reduce((isValid, propertyTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(propertyTypeFqn);
-  }, true);
-
-  if (!allValid) {
-    return Promise.reject('invalid parameter: propertyTypeFqns must be an array of valid FQN object literals');
-  }
-
-  const { namespace, name } = entityTypeFqn;
-
-  return getApiAxiosInstance(DATA_API)
-    .put(`/${ENTITY_DATA_PATH}/${namespace}/${name}/${entitySetName}/${SELECTED_PATH}`, propertyTypeFqns)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `PUT /entitydata/multiple`
- *
- * Gets all entity data for the given EntityType FQNs.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {Array<Object>} entityTypeFqns - an array of object literals representing fully qualified names
- * @returns {Promise<Array<Array<Object>>>} - a Promise that will resolve with the entity data as its fulfillment value
- *
- * @example
- * DataApi.getAllEntitiesOfTypes([
- *   { namespace: "LOOM", name: "MyEntity1" },
- *   { namespace: "LOOM", name: "MyEntity2" }
- * ]);
- */
-export function getAllEntitiesOfTypes(entityTypeFqns :Object[]) :Promise<> {
-
-  if (!isNonEmptyArray(entityTypeFqns)) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be a non-empty FQN array');
-  }
-
-  const allValidFqns = entityTypeFqns.reduce((isValid, entityTypeFqn) => {
-    return isValid && FullyQualifiedName.isValidFqnObjectLiteral(entityTypeFqn);
-  }, true);
-
-  if (!allValidFqns) {
-    return Promise.reject('invalid parameter: entityTypeFqns must be an array of valid FQN object literals');
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .put(`/${ENTITY_DATA_PATH}/${MULTIPLE_PATH}`, entityTypeFqns)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
-
-/**
- * `POST /entitydata`
+ * `POST /data/entitydata/{uuid}/{uuid}`
  *
  * Creates an entry for the given entity data.
  *
  * @static
  * @memberof loom-data.DataApi
- * @param {Object} createEntityRequest
- * @returns {Promise}
+ * @param {UUID} entitySetId
+ * @param {UUID} syncId
+ * @param {Object} entities
+ * @return {Promise}
  *
  * @example
- * // creating a single entity
- * DataApi.createEntity({
- *   type: { namespace: "LOOM", name: "MyEntity" },
- *   entitySetName: "MyEntityCollection",
- *   properties: [
- *     { "LOOM.MyProperty": "value" }
- *   ]
- * });
- *
- * @example
- * // creating multiple entities of the same EntityType
- * DataApi.createEntity({
- *   type: { namespace: "LOOM", name: "MyEntity" },
- *   entitySetName: "MyEntityCollection",
- *   properties: [
- *     { "LOOM.MyProperty": "value1" },
- *     { "LOOM.MyProperty": "value2" },
- *   ]
+ * DataApi.createEntityData({
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "entityId_1": [
+ *       {
+ *         "uuid_1": ["value_1", "value_2"],
+ *         "uuid_2": ["value_3", "value_4"]
+ *       }
+ *     ]
+ *   }
  * });
  */
-export function createEntity(createEntityRequest :Object) :Promise<> {
+export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Object) :Promise<> {
 
-  if (!isNonEmptyObject(createEntityRequest)) {
-    return Promise.reject('invalid parameter: createEntityRequest must be a valid object literal');
+  if (!isValidUuid(entitySetId)) {
+    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+  }
+
+  if (!isValidUuid(syncId)) {
+    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  }
+
+  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
+
+  if (!isNonEmptyObject(entities)) {
+    return Promise.reject('invalid parameter: entities must be a non-empty object');
   }
 
   return getApiAxiosInstance(DATA_API)
-    .post(`/${ENTITY_DATA_PATH}`, createEntityRequest)
+    .post(`/${ENTITY_DATA_PATH}/${entitySetId}/${syncId}`, entities)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

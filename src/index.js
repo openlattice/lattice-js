@@ -10,6 +10,8 @@
  * @module loom-data
  */
 
+import * as DataModels from './models';
+
 import * as DataApi from './api/DataApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as PermissionsApi from './api/PermissionsApi';
@@ -25,6 +27,7 @@ const version :string = __VERSION__;
 export {
   version,
   configure,
+  DataModels,
   DataApi,
   EntityDataModelApi,
   PermissionsApi,
@@ -34,6 +37,7 @@ export {
 export default {
   version,
   configure,
+  DataModels,
   DataApi,
   EntityDataModelApi,
   PermissionsApi,

@@ -22,13 +22,25 @@ import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
 
-const MOCK_FQN = {
-  namespace: 'LOOM',
-  name: 'PERMISSIONS_API'
-};
+const MOCK_ACL_KEY = [
+  {
+    type: 'EntityType',
+    id: 'ec6865e6-e60e-424b-a071-6a9c1603d735'
+  }
+];
 
-const MOCK_DATA = {
-  type: MOCK_FQN
+const MOCK_ACL_DATA = {
+  acl: {
+    aclKey: MOCK_ACL_KEY,
+    aces: [{
+      principal: {
+        type: 'USER',
+        id: 'some_id'
+      },
+      permissions: ['READ', 'WRITE']
+    }]
+  },
+  action: 'ADD'
 };
 
 let mockAxiosInstance = null;
@@ -53,22 +65,22 @@ function testGetAcl() {
   describe('getAcl()', () => {
 
     const functionInvocation = [
-      PermissionsApi.getAcl, [MOCK_DATA]
+      PermissionsApi.getAcl, MOCK_ACL_KEY
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      PermissionsApi.getAcl([MOCK_DATA])
+      PermissionsApi.getAcl(MOCK_ACL_KEY)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
             `/${PERMISSIONS_PATH}`,
-            [MOCK_DATA]
+            MOCK_ACL_KEY
           );
           done();
         })
-        .catch(() => {
-          done.fail();
+        .catch((e) => {
+          done.fail(e);
         });
     });
 
@@ -85,22 +97,22 @@ function testUpdateAcl() {
   describe('updateAcl()', () => {
 
     const functionInvocation = [
-      PermissionsApi.updateAcl, MOCK_DATA
+      PermissionsApi.updateAcl, MOCK_ACL_DATA
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      PermissionsApi.updateAcl(MOCK_DATA)
+      PermissionsApi.updateAcl(MOCK_ACL_DATA)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
             `/${PERMISSIONS_PATH}`,
-            MOCK_DATA
+            MOCK_ACL_DATA
           );
           done();
         })
-        .catch(() => {
-          done.fail();
+        .catch((e) => {
+          done.fail(e);
         });
     });
 

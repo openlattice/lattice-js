@@ -6,15 +6,15 @@ const DATASTORE_PATH :string = 'datastore';
 const ONTOLOGY_PATH :string = 'ontology';
 
 // shared paths
+const IDS_PATH :string = 'ids';
 const ENTITY_SET_PATH :string = 'entity/set';
 const ENTITY_TYPE_PATH :string = 'entity/type';
 const PROPERTY_TYPE_PATH :string = 'property/type';
 const NAMESPACE_PATH :string = 'namespace';
 
 // DataApi specific paths
+const GET_DATA_PATH :string = 'getData';
 const ENTITY_DATA_PATH :string = 'entitydata';
-const MULTIPLE_PATH :string = 'multiple';
-const SELECTED_PATH :string = 'selected';
 
 // EntityDataModelApi specific paths
 const SCHEMA_PATH :string = 'schema';
@@ -51,6 +51,11 @@ describe('ApiPaths', () => {
 
   describe('shared paths', () => {
 
+    it(`should expose "${IDS_PATH}"`, () => {
+      expect(ApiPaths.IDS_PATH).toBeDefined();
+      expect(ApiPaths.IDS_PATH).toEqual(IDS_PATH);
+    });
+
     it(`should expose "${ENTITY_SET_PATH}"`, () => {
       expect(ApiPaths.ENTITY_SET_PATH).toBeDefined();
       expect(ApiPaths.ENTITY_SET_PATH).toEqual(ENTITY_SET_PATH);
@@ -75,19 +80,14 @@ describe('ApiPaths', () => {
 
   describe('DataApi specific paths', () => {
 
+    it(`should expose "${GET_DATA_PATH}"`, () => {
+      expect(ApiPaths.GET_DATA_PATH).toBeDefined();
+      expect(ApiPaths.GET_DATA_PATH).toEqual(GET_DATA_PATH);
+    });
+
     it(`should expose "${ENTITY_DATA_PATH}"`, () => {
       expect(ApiPaths.ENTITY_DATA_PATH).toBeDefined();
       expect(ApiPaths.ENTITY_DATA_PATH).toEqual(ENTITY_DATA_PATH);
-    });
-
-    it(`should expose "${MULTIPLE_PATH}"`, () => {
-      expect(ApiPaths.MULTIPLE_PATH).toBeDefined();
-      expect(ApiPaths.MULTIPLE_PATH).toEqual(MULTIPLE_PATH);
-    });
-
-    it(`should expose "${SELECTED_PATH}"`, () => {
-      expect(ApiPaths.SELECTED_PATH).toBeDefined();
-      expect(ApiPaths.SELECTED_PATH).toEqual(SELECTED_PATH);
     });
 
   });

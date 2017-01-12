@@ -17,6 +17,7 @@ export const ONTOLOGY_PATH :string = 'ontology';
  * shared paths
  *
  */
+export const IDS_PATH :string = 'ids';
 export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const PROPERTY_TYPE_PATH :string = 'property/type';
@@ -28,9 +29,8 @@ export const NAMESPACE_PATH :string = 'namespace';
  *
  */
 
+export const GET_DATA_PATH :string = 'getData';
 export const ENTITY_DATA_PATH :string = 'entitydata';
-export const MULTIPLE_PATH :string = 'multiple';
-export const SELECTED_PATH :string = 'selected';
 
 /*
  *

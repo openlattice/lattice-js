@@ -9,14 +9,11 @@
 
 import Immutable from 'immutable';
 
-import {
-  isEmpty
-} from 'lodash';
-
 import EnvToUrlMap from '../constants/EnvToUrlMap';
 import Logger from '../utils/Logger';
 
 import {
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -49,8 +46,8 @@ let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string
  */
 function configure(config :Object) {
 
-  if (isEmpty(config)) {
-    const errorMsg = 'invalid parameter - config must be a non-empty object';
+  if (!isNonEmptyObject(config)) {
+    const errorMsg = 'invalid parameter - config must be a non-empty configuration object';
     LOG.error(errorMsg, config);
     throw new Error(errorMsg);
   }
