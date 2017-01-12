@@ -2,8 +2,6 @@
  * @flow
  */
 
-import Immutable from 'immutable';
-
 import Ace from './Ace';
 import AclKeyFragment from './AclKeyFragment';
 import Logger from '../utils/Logger';

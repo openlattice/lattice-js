@@ -16,3 +16,7 @@ export const INVALID_PARAMS = [
   /regex/
 ];
 /* eslint-enable */
+
+export default {
+  INVALID_PARAMS
+};

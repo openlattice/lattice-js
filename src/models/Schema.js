@@ -2,8 +2,6 @@
  * @flow
  */
 
-import Immutable from 'immutable';
-
 import EntityType from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
 import PropertyType from './PropertyType';

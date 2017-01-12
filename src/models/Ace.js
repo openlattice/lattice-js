@@ -5,15 +5,10 @@
 import Immutable from 'immutable';
 
 import Logger from '../utils/Logger';
-import PermissionTypes from '../constants/PermissionTypes';
 
 import Principal, {
   isValid as isValidPrincipal
 } from './Principal';
-
-import {
-  isNonEmptyString
-} from '../utils/LangUtils';
 
 import {
   isValidPermissionArray
