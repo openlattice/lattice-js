@@ -11,15 +11,18 @@
     -   [createEmptySchema](#createemptyschema)
     -   [updateSchema](#updateschema)
     -   [getEntitySet](#getentityset)
+    -   [getEntitySetId](#getentitysetid)
     -   [getAllEntitySets](#getallentitysets)
     -   [createEntitySets](#createentitysets)
     -   [deleteEntitySet](#deleteentityset)
     -   [getEntityType](#getentitytype)
+    -   [getEntityTypeId](#getentitytypeid)
     -   [getAllEntityTypes](#getallentitytypes)
     -   [createEntityType](#createentitytype)
     -   [deleteEntityType](#deleteentitytype)
     -   [updatePropertyTypesForEntityType](#updatepropertytypesforentitytype)
     -   [getPropertyType](#getpropertytype)
+    -   [getPropertyTypeId](#getpropertytypeid)
     -   [getAllPropertyTypes](#getallpropertytypes)
     -   [getAllPropertyTypesInNamespace](#getallpropertytypesinnamespace)
     -   [createPropertyType](#createpropertytype)
@@ -63,7 +66,7 @@ Gets the Schema definition for the given Schema FQN.
 
 **Parameters**
 
--   `schemaFqn` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object literal representing a fully qualified name
+-   `schemaFqn` **FullyQualifiedName** 
 
 **Examples**
 
@@ -73,7 +76,7 @@ EntityDataModelApi.getSchema(
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Promise that will resolve with the Schema definition as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;Schema>** 
 
 ### getAllSchemas
 
@@ -87,7 +90,7 @@ Gets all Schema definitions.
 EntityDataModelApi.getAllSchemas();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with all Schema definitions as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Schema>>** 
 
 ### getAllSchemasInNamespace
 
@@ -97,7 +100,7 @@ Gets all Schema definitions under the given namespace.
 
 **Parameters**
 
--   `namespace` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the substring before the dot in a FullyQualifiedName String
+-   `namespace` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 **Examples**
 
@@ -105,7 +108,7 @@ Gets all Schema definitions under the given namespace.
 EntityDataModelApi.getAllSchemasInNamespace("LOOM");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with all Schema definitions as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Schema>>** 
 
 ### createSchema
 
@@ -115,15 +118,17 @@ Creates a new Schema definition, it it does not already exist.
 
 **Parameters**
 
--   `schema` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `schema` **Schema** 
 
 **Examples**
 
 ```javascript
 EntityDataModelApi.createSchema(
-  fqn: { namespace: "LOOM", name: "MySchema" },
-  propertyTypes: [],
-  entityTypes: []
+  {
+    fqn: { namespace: "LOOM", name: "MySchema" },
+    propertyTypes: [],
+    entityTypes: []
+  }
 );
 ```
 
@@ -137,7 +142,7 @@ Creates a new empty Schema definition for the given Schema FQN.
 
 **Parameters**
 
--   `schemaFqn` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object literal representing a fully qualified name
+-   `schemaFqn` **FullyQualifiedName** 
 
 **Examples**
 
@@ -157,8 +162,10 @@ Updates the Schema definition for the given Schema FQN.
 
 **Parameters**
 
--   `schemaFqn` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object literal representing a fully qualified name
--   `updateRequest` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `schemaFqn` **FullyQualifiedName** 
+-   `action` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `entityTypes` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;UUID>** 
+-   `propertyTypes` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;UUID>** 
 
 **Examples**
 
@@ -183,7 +190,7 @@ Gets the EntitySet definition for the given EntitySet UUID.
 
 **Parameters**
 
--   `entitySetId` **UUID** the EntitySet UUID
+-   `entitySetId` **UUID** 
 
 **Examples**
 
@@ -191,7 +198,25 @@ Gets the EntitySet definition for the given EntitySet UUID.
 EntityDataModelApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Promise that will resolve with the EntitySet definition as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;EntitySet>** 
+
+### getEntitySetId
+
+`GET /ids/entity/set/{name}`
+
+Gets the EntitySet UUID for the given EntitySet name.
+
+**Parameters**
+
+-   `entitySetName` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getEntitySetId("MyEntitySet");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** 
 
 ### getAllEntitySets
 
@@ -205,7 +230,7 @@ Gets all EntitySet definitions.
 EntityDataModelApi.getAllEntitySets();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with all EntitySet definitions as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntitySet>>** 
 
 ### createEntitySets
 
@@ -215,23 +240,25 @@ Creates a new EntitySet definition.
 
 **Parameters**
 
--   `entitySets` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `entitySets` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntitySet>** 
 
 **Examples**
 
 ```javascript
 EntityDataModelApi.createEntitySets(
-  [{
-    id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
-    type: { namespace: "LOOM", name: "MyEntity" },
-    name: "MyEntities",
-    title: "My Entities",
-    description: "a collection of MyEntity EntityTypes",
-  }]
+  [
+    {
+      id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
+      type: { namespace: "LOOM", name: "MyEntity" },
+      name: "MyEntities",
+      title: "My Entities",
+      description: "a collection of MyEntity EntityTypes",
+    }
+  ]
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), UUID>>** 
 
 ### deleteEntitySet
 
@@ -267,7 +294,27 @@ Gets the EntityType definition for the given EntityType UUID.
 EntityDataModelApi.getEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Promise that will resolve with the EntityType definition as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;EntityType>** a Promise that will resolve with the EntityType definition as its fulfillment value
+
+### getEntityTypeId
+
+`GET /ids/entity/type/{namespace}/{name}`
+
+Gets the EntityType UUID for the given EntityType FQN.
+
+**Parameters**
+
+-   `entityTypeFqn` **FullyQualifiedName** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getEntityTypeId(
+  { namespace: "LOOM", name: "MyProperty" }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** 
 
 ### getAllEntityTypes
 
@@ -281,7 +328,7 @@ Gets all EntityType definitions.
 EntityDataModelApi.getAllEntityTypes();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with all EntityType definitions as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntityType>>** 
 
 ### createEntityType
 
@@ -291,7 +338,7 @@ Creates a new EntityType definition.
 
 **Parameters**
 
--   `entityType` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `entityType` **EntityType** 
 
 **Examples**
 
@@ -309,7 +356,7 @@ EntityDataModelApi.createEntityType(
     ],
     properties: [
       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
-      "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
+      "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
       "fae6af98-2675-45bd-9a5b-1619a87235a8"
     ]
   }
@@ -369,7 +416,7 @@ Gets the PropertyType definition for the given PropertyType UUID.
 
 **Parameters**
 
--   `propertyTypeId` **UUID** the PropertyType UUID
+-   `propertyTypeId` **UUID** 
 
 **Examples**
 
@@ -377,7 +424,27 @@ Gets the PropertyType definition for the given PropertyType UUID.
 EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Promise that will resolve with the PropertyType definition as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;PropertyType>** 
+
+### getPropertyTypeId
+
+`GET /ids/property/type/{namespace}/{name}`
+
+Gets the PropertyType UUID for the given PropertyType FQN.
+
+**Parameters**
+
+-   `propertyTypeFqn` **FullyQualifiedName** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getPropertyTypeId(
+  { namespace: "LOOM", name: "MyProperty" }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** 
 
 ### getAllPropertyTypes
 
@@ -391,7 +458,7 @@ Gets all PropertyType definitions.
 EntityDataModelApi.getAllPropertyTypes();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with all PropertyType definitions as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;PropertyType>>** 
 
 ### getAllPropertyTypesInNamespace
 
@@ -401,7 +468,7 @@ Gets all PropertyType definitions under the given namespace.
 
 **Parameters**
 
--   `namespace` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the substring before the dot in a FullyQualifiedName String
+-   `namespace` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 **Examples**
 
@@ -409,7 +476,7 @@ Gets all PropertyType definitions under the given namespace.
 EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** a Promise that will resolve with all PropertyType definitions as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;PropertyType>>** 
 
 ### createPropertyType
 
@@ -419,7 +486,7 @@ Creates a new PropertyType definition.
 
 **Parameters**
 
--   `propertyType` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `propertyType` **PropertyType** 
 
 **Examples**
 
@@ -446,8 +513,8 @@ Deletes the PropertyType definition for the given PropertyType UUID.
 
 **Parameters**
 
--   `propertyTypeId` **UUID** the PropertyType UUID
--   `propertyTypeFqn` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** an object literal representing a fully qualified name
+-   `propertyTypeId` **UUID** 
+-   `propertyTypeFqn` **FullyQualifiedName** 
 
 **Examples**
 
