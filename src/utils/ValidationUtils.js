@@ -4,6 +4,7 @@
 
 import validateUUID from 'uuid-validate';
 
+import PermissionTypes from '../constants/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 
 import Ace, {
@@ -27,8 +28,13 @@ import PropertyType, {
  } from '../models/PropertyType';
 
 import {
-  isNonEmptyArray
+  isNonEmptyArray,
+  isNonEmptyString
 } from './LangUtils';
+
+import type {
+  Permission
+} from '../constants/PermissionTypes';
 
 export function validateNonEmptyArray(list :any[], validatorFn :Function) :boolean {
 
@@ -96,5 +102,12 @@ export function isValidAclKey(aclKey :AclKeyFragment[]) :boolean {
 
   return validateNonEmptyArray(aclKey, (frag :AclKeyFragment) => {
     return isValidAclKeyFragment(frag);
+  });
+}
+
+export function isValidPermissionArray(permissions :Permission[]) :boolean {
+
+  return validateNonEmptyArray(permissions, (permission :Permission) => {
+    return isNonEmptyString(permission) && PermissionTypes[permission];
   });
 }

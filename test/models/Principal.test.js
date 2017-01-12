@@ -1,3 +1,5 @@
+import PrincipalTypes from '../../src/constants/PrincipalTypes';
+
 import Principal, {
   PrincipalBuilder,
   isValid
@@ -7,12 +9,15 @@ import {
   INVALID_PARAMS
 } from '../constants/TestConstants';
 
-const MOCK_PRINCIPAL = {
-  type: 'USER',
-  id: 'principalId'
+const MOCK_TYPE = 'USER';
+const MOCK_ID = 'principalId';
+
+const MOCK_PRINCIPAL_OBJ = {
+  type: MOCK_TYPE,
+  id: MOCK_ID
 };
 
-describe('Principal', () => {
+fdescribe('Principal', () => {
 
   describe('PrincipalBuilder', () => {
 
@@ -42,6 +47,14 @@ describe('Principal', () => {
         });
       });
 
+      it('should not throw when given a valid PrincipalType', () => {
+        Object.values(PrincipalTypes).forEach((type) => {
+          expect(() => {
+            builder.setType(type);
+          }).not.toThrow();
+        });
+      });
+
     });
 
     describe('setId()', () => {
@@ -64,16 +77,20 @@ describe('Principal', () => {
 
     describe('build()', () => {
 
-      it('should return a valid Principal instance', () => {
+      it('should return a Principal instance with the correct properties', () => {
 
-        const principal = builder.setType(MOCK_PRINCIPAL.type).setId(MOCK_PRINCIPAL.id).build();
+        const principal = builder
+          .setType(MOCK_TYPE)
+          .setId(MOCK_ID)
+          .build();
+
         expect(principal).toEqual(jasmine.any(Principal));
 
         expect(principal.type).toBeDefined();
-        expect(principal.type).toEqual(MOCK_PRINCIPAL.type);
+        expect(principal.type).toEqual(MOCK_TYPE);
 
         expect(principal.id).toBeDefined();
-        expect(principal.id).toEqual(MOCK_PRINCIPAL.id);
+        expect(principal.id).toEqual(MOCK_ID);
       });
 
     });
@@ -85,11 +102,21 @@ describe('Principal', () => {
     describe('valid', () => {
 
       it('should return true when given a valid Principal object literal', () => {
-        expect(isValid(MOCK_PRINCIPAL)).toEqual(true);
+        expect(isValid(MOCK_PRINCIPAL_OBJ)).toEqual(true);
       });
 
       it('should return true when given a valid Principal instance ', () => {
-        expect(isValid(new Principal(MOCK_PRINCIPAL.type, MOCK_PRINCIPAL.id))).toEqual(true);
+        expect(isValid(new Principal(MOCK_TYPE, MOCK_ID))).toEqual(true);
+      });
+
+      it('should return true when given a Principal instance constructed by the builder', () => {
+
+        const principal = new PrincipalBuilder()
+          .setType(MOCK_TYPE)
+          .setId(MOCK_ID)
+          .build();
+
+        expect(isValid(principal)).toEqual(true);
       });
 
     });
@@ -114,29 +141,29 @@ describe('Principal', () => {
         });
       });
 
-      it('should return false when given a Principal object literal with an invalid type', () => {
+      it('should return false when given a Principal object literal with an invalid "type" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ type: invalidInput, id: MOCK_PRINCIPAL.id })).toEqual(false);
+          expect(isValid({ type: invalidInput, id: MOCK_ID })).toEqual(false);
         });
       });
 
-      it('should return false when given a Principal object literal with an invalid id', () => {
+      it('should return false when given a Principal object literal with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ type: MOCK_PRINCIPAL.type, id: invalidInput })).toEqual(false);
+          expect(isValid({ type: MOCK_TYPE, id: invalidInput })).toEqual(false);
         });
       });
 
-      it('should return false when given an instance of Principal with an invalid type', () => {
+      it('should return false when given a Principal instance with an invalid "type" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          const principal = new Principal(MOCK_PRINCIPAL.type, MOCK_PRINCIPAL.id);
+          const principal = new Principal(MOCK_TYPE, MOCK_ID);
           principal.type = invalidInput;
           expect(isValid(principal)).toEqual(false);
         });
       });
 
-      it('should return false when given an instance of Principal with an invalid id', () => {
+      it('should return false when given a Principal instance with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          const principal = new Principal(MOCK_PRINCIPAL.type, MOCK_PRINCIPAL.id);
+          const principal = new Principal(MOCK_TYPE, MOCK_ID);
           principal.id = invalidInput;
           expect(isValid(principal)).toEqual(false);
         });

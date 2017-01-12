@@ -16,7 +16,7 @@ import {
 } from '../utils/LangUtils';
 
 import {
-  validateNonEmptyArray
+  isValidPermissionArray
 } from '../utils/ValidationUtils';
 
 import type {
@@ -32,9 +32,9 @@ const LOG = new Logger('Ace');
 export default class Ace {
 
   principal :Principal;
-  permissions :Set<Permission>;
+  permissions :Permission[];
 
-  constructor(principal :Principal, permissions :Set<Permission>) {
+  constructor(principal :Principal, permissions :Permission[]) {
 
     this.principal = principal;
     this.permissions = permissions;
@@ -48,7 +48,7 @@ export default class Ace {
 export class AceBuilder {
 
   principal :Principal;
-  permissions :Set<Permission>;
+  permissions :Permission[];
 
   setPrincipal(principal :Principal) :AceBuilder {
 
@@ -62,11 +62,7 @@ export class AceBuilder {
 
   setPermissions(permissions :Permission[]) :AceBuilder {
 
-    const valid = validateNonEmptyArray(permissions, (permission :Permission) => {
-      return isNonEmptyString(permission) && PermissionTypes[permission];
-    });
-
-    if (!valid) {
+    if (!isValidPermissionArray(permissions)) {
       throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
     }
 
@@ -74,7 +70,7 @@ export class AceBuilder {
       permissions.forEach((permission :Permission) => {
         set.add(permission);
       });
-    });
+    }).toJS();
 
     return this;
   }
