@@ -16,11 +16,12 @@ export const ONTOLOGY_PATH :string = 'ontology';
  * shared paths
  *
  */
-export const IDS_PATH :string = 'ids';
 export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
-export const PROPERTY_TYPE_PATH :string = 'property/type';
+export const IDS_PATH :string = 'ids';
 export const NAMESPACE_PATH :string = 'namespace';
+export const PROPERTY_TYPE_PATH :string = 'property/type';
+export const ROLES_PATH :string = 'roles';
 
 /*
  *
@@ -48,7 +49,10 @@ export const SCHEMA_PATH :string = 'schema';
 
 export const DESCRIPTION_PATH :string = 'description';
 export const EMAIL_DOMAINS_PATH :string = 'email-domains';
+export const MEMBERS_PATH :string = 'members';
 export const ORGANIZATIONS_PATH :string = 'organizations';
+export const PRINCIPALS_PATH :string = 'principals';
+
 export const TITLE_PATH :string = 'title';
 
 /*
@@ -67,5 +71,4 @@ export const PERMISSIONS_PATH :string = 'permissions';
 
 export const ADMIN_PATH :string = 'admin';
 export const RESET_PATH :string = 'reset';
-export const ROLES_PATH :string = 'roles';
 export const USERS_PATH :string = 'users';

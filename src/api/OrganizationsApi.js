@@ -19,6 +19,8 @@
 
 import Immutable from 'immutable';
 
+import PrincipalTypes from '../constants/PrincipalTypes';
+import Principal from '../models/Principal';
 import Logger from '../utils/Logger';
 
 import Organization, {
@@ -32,6 +34,9 @@ import {
 import {
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
+  MEMBERS_PATH,
+  PRINCIPALS_PATH,
+  ROLES_PATH,
   TITLE_PATH
 } from '../constants/ApiPaths';
 
@@ -46,8 +51,12 @@ import {
 
 import {
   isValidUuid,
-  isValidUuidArray
+  isValidPrincipalArray
 } from '../utils/ValidationUtils';
+
+import type {
+  PrincipalType
+} from '../constants/PrincipalTypes';
 
 const LOG = new Logger('OrganizationsApi');
 
@@ -117,6 +126,13 @@ export function getAllOrganizations() {
  * @example
  * OrganizationsApi.createOrganization(
  *   {
+ *     id: "",
+ *     title: "MyOrganization"
+ *     description: "what an organization"
+ *     principals: [
+ *       { type: "USER", id: "principalId_0" },
+ *       { type: "ROLE", id: "principalId_1" }
+ *     ]
  *   }
  * );
  */
@@ -139,7 +155,7 @@ export function createOrganization(organization :Organization) :Promise<> {
 /**
  * `DELETE /organization/{uuid}`
  *
- * Deletes the information for the given Organization UUID.
+ * Deletes the Organization for the given Organization UUID.
  *
  * @static
  * @memberof loom-data.OrganizationsApi
@@ -269,42 +285,34 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
 }
 
 /**
- * `PUT /organizations/{uuid}/email-domains`
+ * `PUT /organizations/{uuid}/email-domains/{domain}`
  *
- * Sets the auto-approved email domains for the given Organization UUID.
+ * Adds the given email domain to the auto-approved email domains for the given Organization UUID.
  *
  * @static
  * @memberof loom-data.OrganizationsApi
  * @param {UUID} organizationId
- * @param {string[]} emailDomains
- * @returns {Promise<string[]>}
+ * @param {string} emailDomain
+ * @returns {Promise}
  *
  * @example
- * OrganizationsApi.setAutoApprovedEmailDomains(
+ * OrganizationsApi.addAutoApprovedEmailDomains(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   [
- *     "kryptnostic.com"
- *   ]
+ *   "kryptnostic.com"
  * );
  */
-export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
+export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
 
   if (!isValidUuid(organizationId)) {
     return Promise.reject('invalid parameter: organizationId must be a valid UUID');
   }
 
-  if (!isNonEmptyStringArray(emailDomains)) {
-    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+  if (!isNonEmptyString(emailDomain)) {
+    return Promise.reject('invalid parameter: emailDomain must be a non-empty string');
   }
 
-  const data = Immutable.Set().withMutations((set :Set<string>) => {
-    emailDomains.forEach((emailDomain :string) => {
-      set.add(emailDomain);
-    });
-  }).toJS();
-
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .put(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, data)
+    .put(`/${organizationId}/${EMAIL_DOMAINS_PATH}/${emailDomain}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -316,13 +324,13 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 /**
  * `POST /organizations/{uuid}/email-domains`
  *
- * Adds the given auto-approved email domains to the given Organization UUID.
+ * Adds the given email domains to the auto-approved email domains for the given Organization UUID.
  *
  * @static
  * @memberof loom-data.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string[]} emailDomains
- * @returns {Promise<string[]>}
+ * @returns {Promise}
  *
  * @example
  * OrganizationsApi.addAutoApprovedEmailDomains(
@@ -342,19 +350,96 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
     return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
   }
 
-  let data = Immutable.Set().withMutations((set :Set<string>) => {
+  const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
     emailDomains.forEach((emailDomain :string) => {
       set.add(emailDomain);
     });
   }).toJS();
 
-  // unify the endpoints for single and multiple
-  if (data.length === 1) {
-    data = data[0];
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, emailDomainSet)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `PUT /organizations/{uuid}/email-domains`
+ *
+ * Sets the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} emailDomains
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.setAutoApprovedEmailDomains(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     "kryptnostic.com"
+ *   ]
+ * );
+ */
+export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  if (!isNonEmptyStringArray(emailDomains)) {
+    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+  }
+
+  const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
+    emailDomains.forEach((emailDomain :string) => {
+      set.add(emailDomain);
+    });
+  }).toJS();
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, emailDomainSet)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `DELETE /organizations/{uuid}/email-domains/{domain}`
+ *
+ * Removes the given email domain from the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} emailDomains
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.removeAutoApprovedEmailDomains(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "kryptnostic.com"
+ * );
+ */
+export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  if (!isNonEmptyString(emailDomain)) {
+    return Promise.reject('invalid parameter: emailDomain must be a non-empty string');
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, data)
+    .delete(`${organizationId}/${EMAIL_DOMAINS_PATH}/${emailDomain}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -366,13 +451,13 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 /**
  * `DELETE /organizations/{uuid}/email-domains`
  *
- * REmoves the given auto-approved email domains to the given Organization UUID.
+ * Removes the given email domains from the auto-approved email domains for the given Organization UUID.
  *
  * @static
  * @memberof loom-data.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string[]} emailDomains
- * @returns {Promise<string[]>}
+ * @returns {Promise}
  *
  * @example
  * OrganizationsApi.removeAutoApprovedEmailDomains(
@@ -392,19 +477,330 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
     return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
   }
 
-  let data = Immutable.Set().withMutations((set :Set<string>) => {
+  const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
     emailDomains.forEach((emailDomain :string) => {
       set.add(emailDomain);
     });
   }).toJS();
 
-  // unify the endpoints for single and multiple
-  if (data.length === 1) {
-    data = data[0];
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .request({
+      url: `/${organizationId}/${EMAIL_DOMAINS_PATH}`,
+      method: 'delete',
+      data: emailDomainSet
+    })
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /organizations/{uuid}/principals`
+ *
+ * Gets all Principals for the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllPrincipals("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAllPrincipals(organizationId :UUID) {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .delete(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, data)
+    .get(`${organizationId}/${PRINCIPALS_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `PUT /organizations/{uuid}/principals/{type}/{id}`
+ *
+ * Adds the given Principal to the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {PrincipalType} principalType
+ * @param {string} principalId
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.addPrincipal(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "USER",
+ *   "principalId"
+ * );
+ */
+export function addPrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<> {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  if (!isNonEmptyString(principalType) && !PrincipalTypes[principalType]) {
+    return Promise.reject('invalid parameter: principalType must be a valid PrincipalType');
+  }
+
+  if (!isNonEmptyString(principalId)) {
+    return Promise.reject('invalid parameter: principalId must be a non-empty string');
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${PRINCIPALS_PATH}/${principalType}/${principalId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `POST /organizations/{uuid}/principals`
+ *
+ * Adds the given Principals to the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Principal[]} principals
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.addPrincipals(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     { type: "USER", id: "principalId" }
+ *   ]
+ * );
+ */
+export function addPrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  if (!isValidPrincipalArray(principals)) {
+    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+  }
+
+  const data = Immutable.Set().withMutations((set :Set<Principal>) => {
+    principals.forEach((principal :Principal) => {
+      set.add(new Principal(principal.type, principal.id));
+    });
+  }).toJS();
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${PRINCIPALS_PATH}`, data)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `PUT /organizations/{uuid}/principals`
+ *
+ * Sets the given Principals for the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Principal[]} principals
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.setPrincipals(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     { type: "USER", id: "principalId" }
+ *   ]
+ * );
+ */
+export function setPrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  if (!isValidPrincipalArray(principals)) {
+    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+  }
+
+  const data = Immutable.Set().withMutations((set :Set<Principal>) => {
+    principals.forEach((principal :Principal) => {
+      set.add(new Principal(principal.type, principal.id));
+    });
+  }).toJS();
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${PRINCIPALS_PATH}`, data)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `DELETE /organizations/{uuid}/principals/{type}/{id}`
+ *
+ * Removes the given Principal from the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {PrincipalType} principalType
+ * @param {string} principalId
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.removePrincipal(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "USER",
+ *   "principalId"
+ * );
+ */
+export function removePrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<> {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  if (!isNonEmptyString(principalType) && !PrincipalTypes[principalType]) {
+    return Promise.reject('invalid parameter: principalType must be a valid PrincipalType');
+  }
+
+  if (!isNonEmptyString(principalId)) {
+    return Promise.reject('invalid parameter: principalId must be a non-empty string');
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .delete(`/${organizationId}/${PRINCIPALS_PATH}/${principalType}/${principalId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `DELETE /organizations/{uuid}/principals`
+ *
+ * Removes the given Principals from the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Principal[]} principals
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.removePrincipals(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     { type: "USER", id: "principalId" }
+ *   ]
+ * );
+ */
+export function removePrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  if (!isValidPrincipalArray(principals)) {
+    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+  }
+
+  const data = Immutable.Set().withMutations((set :Set<Principal>) => {
+    principals.forEach((principal :Principal) => {
+      set.add(new Principal(principal.type, principal.id));
+    });
+  }).toJS();
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .request({
+      url: `/${organizationId}/${PRINCIPALS_PATH}`,
+      method: 'delete',
+      data
+    })
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /organizations/{uuid}/principals/roles`
+ *
+ * Gets all Roles for the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllRoles("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAllRoles(organizationId :UUID) {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /organizations/{uuid}/principals/members`
+ *
+ * Gets all Roles for the given Organization UUID.
+ *
+ * @static
+ * @memberof loom-data.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAllMembers(organizationId :UUID) {
+
+  if (!isValidUuid(organizationId)) {
+    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

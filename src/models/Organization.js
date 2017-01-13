@@ -3,6 +3,7 @@
  */
 
 import Principal from './Principal';
+import PrincipalTypes from '../constants/PrincipalTypes';
 import Logger from '../utils/Logger';
 
 import {
@@ -22,26 +23,23 @@ const LOG = new Logger('Organization');
  */
 export default class Organization {
 
-  id :UUID;
+  id :?UUID;
   title :string;
-  description :string;
+  description :?string;
   members :Principal[];
-  principals :Principal[];
   roles :Principal[];
 
   constructor(
-      id :UUID,
+      id :?UUID,
       title :string,
-      description :string,
+      description :?string,
       members :Principal[],
-      principals :Principal[],
       roles :Principal[]) {
 
     this.id = id;
     this.title = title;
     this.description = description;
     this.members = members;
-    this.principals = principals;
     this.roles = roles;
   }
 }
@@ -52,11 +50,10 @@ export default class Organization {
  */
 export class OrganizationBuilder {
 
-  id :UUID;
+  id :?UUID;
   title :string;
-  description :string;
+  description :?string;
   members :Principal[];
-  principals :Principal[];
   roles :Principal[];
 
   setId(id :UUID) :OrganizationBuilder {
@@ -89,44 +86,54 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setMembers(members :Principal[]) :OrganizationBuilder {
-
-    if (!isValidPrincipalArray(members)) {
-      throw new Error('invalid parameter: members must be a non-empty array of valid Principals');
-    }
-
-    this.members = members;
-    return this;
-  }
-
   setPrincipals(principals :Principal[]) :OrganizationBuilder {
 
     if (!isValidPrincipalArray(principals)) {
       throw new Error('invalid parameter: principals must be a non-empty array of valid Principals');
     }
 
-    this.principals = principals;
-    return this;
-  }
+    this.members = [];
+    this.roles = [];
 
-  setRoles(roles :Principal[]) :OrganizationBuilder {
+    principals.forEach((principal :Principal) => {
 
-    if (!isValidPrincipalArray(roles)) {
-      throw new Error('invalid parameter: roles must be a non-empty array of valid Principals');
-    }
+      switch (principal.type) {
 
-    this.roles = roles;
+        case PrincipalTypes.USER:
+          this.members.push(principal);
+          break;
+
+        case PrincipalTypes.ROLE:
+          this.roles.push(principal);
+          break;
+
+        default:
+          break;
+      }
+    })
+
     return this;
   }
 
   build() :Organization {
+
+    if (!this.title) {
+      throw new Error('missing property: title is a required property');
+    }
+
+    if (!this.members) {
+      throw new Error('missing property: members is a required property');
+    }
+
+    if (!this.roles) {
+      throw new Error('missing property: roles is a required property');
+    }
 
     return new Organization(
       this.id,
       this.title,
       this.description,
       this.members,
-      this.principals,
       this.roles
     );
   }
@@ -140,9 +147,7 @@ export function isValid(organization :any) :boolean {
       .setId(organization.id)
       .setTitle(organization.title)
       .setDescription(organization.description)
-      .setMembers(organization.members)
       .setPrincipals(organization.principals)
-      .setRoles(organization.roles)
       .build();
 
     return true;
