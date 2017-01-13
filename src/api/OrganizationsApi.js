@@ -342,11 +342,16 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
     return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
   }
 
-  const data = Immutable.Set().withMutations((set :Set<string>) => {
+  let data = Immutable.Set().withMutations((set :Set<string>) => {
     emailDomains.forEach((emailDomain :string) => {
       set.add(emailDomain);
     });
   }).toJS();
+
+  // unify the endpoints for single and multiple
+  if (data.length === 1) {
+    data = data[0];
+  }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .post(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, data)
@@ -387,11 +392,16 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
     return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
   }
 
-  const data = Immutable.Set().withMutations((set :Set<string>) => {
+  let data = Immutable.Set().withMutations((set :Set<string>) => {
     emailDomains.forEach((emailDomain :string) => {
       set.add(emailDomain);
     });
   }).toJS();
+
+  // unify the endpoints for single and multiple
+  if (data.length === 1) {
+    data = data[0];
+  }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, data)
