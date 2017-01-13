@@ -29,3 +29,18 @@ export function isNonEmptyString(value :any) :boolean {
 
   return isString(value) && !isEmpty(trim(value));
 }
+
+export function isNonEmptyStringArray(value :string[]) {
+
+  if (!isNonEmptyArray(value)) {
+    return false;
+  }
+
+  for (let index = 0; index < value.length; index += 1) {
+    if (!isNonEmptyString(value[index])) {
+      return false;
+    }
+  }
+
+  return true;
+}

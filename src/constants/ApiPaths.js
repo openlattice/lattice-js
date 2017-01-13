@@ -46,7 +46,10 @@ export const SCHEMA_PATH :string = 'schema';
  *
  */
 
+export const DESCRIPTION_PATH :string = 'description';
+export const EMAIL_DOMAINS_PATH :string = 'email-domains';
 export const ORGANIZATIONS_PATH :string = 'organizations';
+export const TITLE_PATH :string = 'title';
 
 /*
  *

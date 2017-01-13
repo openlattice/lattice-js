@@ -20,7 +20,10 @@ const ENTITY_DATA_PATH :string = 'entitydata';
 const SCHEMA_PATH :string = 'schema';
 
 // OrganizationsApi specific paths
+const DESCRIPTION_PATH :string = 'description';
+const EMAIL_DOMAINS_PATH :string = 'email-domains';
 const ORGANIZATIONS_PATH :string = 'organizations';
+const TITLE_PATH :string = 'title';
 
 // PermissionsApi specific paths
 const PERMISSIONS_PATH :string = 'permissions';
@@ -106,9 +109,24 @@ describe('ApiPaths', () => {
 
   describe('OrganizationsApi specific paths', () => {
 
+    it(`should expose "${DESCRIPTION_PATH}"`, () => {
+      expect(ApiPaths.DESCRIPTION_PATH).toBeDefined();
+      expect(ApiPaths.DESCRIPTION_PATH).toEqual(DESCRIPTION_PATH);
+    });
+
+    it(`should expose "${EMAIL_DOMAINS_PATH}"`, () => {
+      expect(ApiPaths.EMAIL_DOMAINS_PATH).toBeDefined();
+      expect(ApiPaths.EMAIL_DOMAINS_PATH).toEqual(EMAIL_DOMAINS_PATH);
+    });
+
     it(`should expose "${ORGANIZATIONS_PATH}"`, () => {
       expect(ApiPaths.ORGANIZATIONS_PATH).toBeDefined();
       expect(ApiPaths.ORGANIZATIONS_PATH).toEqual(ORGANIZATIONS_PATH);
+    });
+
+    it(`should expose "${TITLE_PATH}"`, () => {
+      expect(ApiPaths.TITLE_PATH).toBeDefined();
+      expect(ApiPaths.TITLE_PATH).toEqual(TITLE_PATH);
     });
 
   });

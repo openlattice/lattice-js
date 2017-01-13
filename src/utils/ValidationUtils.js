@@ -40,14 +40,14 @@ import type {
   Permission
 } from '../constants/PermissionTypes';
 
-export function validateNonEmptyArray(list :any[], validatorFn :Function) :boolean {
+export function validateNonEmptyArray(value :any[], validatorFn :Function) :boolean {
 
-  if (!isNonEmptyArray(list)) {
+  if (!isNonEmptyArray(value)) {
     return false;
   }
 
-  for (let index = 0; index < list.length; index += 1) {
-    if (!validatorFn(list[index])) {
+  for (let index = 0; index < value.length; index += 1) {
+    if (!validatorFn(value[index])) {
       return false;
     }
   }
