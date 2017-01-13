@@ -74,7 +74,7 @@ function testGetAcl() {
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${PERMISSIONS_PATH}`,
+            '/',
             MOCK_ACL_KEY
           );
           done();
@@ -106,7 +106,7 @@ function testUpdateAcl() {
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
-            `/${PERMISSIONS_PATH}`,
+            '/',
             MOCK_ACL_DATA
           );
           done();

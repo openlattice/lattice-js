@@ -51,7 +51,7 @@ const LOG = new Logger('PermissionsApi');
  * @example
  * PermissionsApi.getAcl(
  *   [
- *     {}
+ *     { type: 'EntityType', id: 'ec6865e6-e60e-424b-a071-6a9c1603d735' }
  *   ]
  * );
  */
@@ -83,7 +83,28 @@ export function getAcl(aclKey :AclKeyFragment[]) :Promise<> {
  *
  * @example
  * PermissionsApi.updateAcl(
- *   {}
+ *   {
+ *     action: 'ADD',
+ *     acl: {
+ *       aclKey: [
+ *         {
+ *           type: 'EntityType',
+ *           id: 'ec6865e6-e60e-424b-a071-6a9c1603d735'
+ *         }
+ *       ],
+ *       aces: [
+ *         {
+ *           principal: {
+ *             type: 'USER',
+ *             id: 'principalId'
+ *           },
+ *           permissions: [
+ *             'READ'
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *   }
  * );
  */
 export function updateAcl(aclData :AclData) :Promise<> {

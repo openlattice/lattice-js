@@ -57,7 +57,7 @@ export class AclKeyFragmentBuilder {
   setId(id :UUID) :AclKeyFragmentBuilder {
 
     if (!isValidUuid(id)) {
-      throw new Error('invalid parameter: type must be a valid UUID');
+      throw new Error('invalid parameter: id must be a valid UUID');
     }
 
     this.id = id;
