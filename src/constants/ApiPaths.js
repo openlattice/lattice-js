@@ -8,7 +8,6 @@
  *
  */
 
-export const DATA_PATH :string = 'data';
 export const DATASTORE_PATH :string = 'datastore';
 export const ONTOLOGY_PATH :string = 'ontology';
 
@@ -29,6 +28,7 @@ export const NAMESPACE_PATH :string = 'namespace';
  *
  */
 
+export const DATA_PATH :string = 'data';
 export const GET_DATA_PATH :string = 'getData';
 export const ENTITY_DATA_PATH :string = 'entitydata';
 
@@ -39,6 +39,14 @@ export const ENTITY_DATA_PATH :string = 'entitydata';
  */
 
 export const SCHEMA_PATH :string = 'schema';
+
+/*
+ *
+ * OrganizationsApi specific paths
+ *
+ */
+
+export const ORGANIZATIONS_PATH :string = 'organizations';
 
 /*
  *

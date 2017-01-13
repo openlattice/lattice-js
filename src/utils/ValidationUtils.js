@@ -16,16 +16,20 @@ import AclKeyFragment, {
 } from '../models/AclKeyFragment';
 
 import EntitySet, {
-   isValid as isValidEntitySet
- } from '../models/EntitySet';
+  isValid as isValidEntitySet
+} from '../models/EntitySet';
 
 import EntityType, {
-   isValid as isValidEntityType
- } from '../models/EntityType';
+  isValid as isValidEntityType
+} from '../models/EntityType';
+
+import Principal, {
+  isValid as isValidPrincipal
+} from '../models/Principal';
 
 import PropertyType, {
-   isValid as isValidPropertyType
- } from '../models/PropertyType';
+  isValid as isValidPropertyType
+} from '../models/PropertyType';
 
 import {
   isNonEmptyArray,
@@ -109,5 +113,12 @@ export function isValidPermissionArray(permissions :Permission[]) :boolean {
 
   return validateNonEmptyArray(permissions, (permission :Permission) => {
     return isNonEmptyString(permission) && PermissionTypes[permission];
+  });
+}
+
+export function isValidPrincipalArray(principals :Principal[]) :boolean {
+
+  return validateNonEmptyArray(principals, (principal :Principal) => {
+    return isValidPrincipal(principal);
   });
 }

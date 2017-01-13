@@ -19,6 +19,9 @@ const ENTITY_DATA_PATH :string = 'entitydata';
 // EntityDataModelApi specific paths
 const SCHEMA_PATH :string = 'schema';
 
+// OrganizationsApi specific paths
+const ORGANIZATIONS_PATH :string = 'organizations';
+
 // PermissionsApi specific paths
 const PERMISSIONS_PATH :string = 'permissions';
 
@@ -97,6 +100,15 @@ describe('ApiPaths', () => {
     it(`should expose "${SCHEMA_PATH}"`, () => {
       expect(ApiPaths.SCHEMA_PATH).toBeDefined();
       expect(ApiPaths.SCHEMA_PATH).toEqual(SCHEMA_PATH);
+    });
+
+  });
+
+  describe('OrganizationsApi specific paths', () => {
+
+    it(`should expose "${ORGANIZATIONS_PATH}"`, () => {
+      expect(ApiPaths.ORGANIZATIONS_PATH).toBeDefined();
+      expect(ApiPaths.ORGANIZATIONS_PATH).toEqual(ORGANIZATIONS_PATH);
     });
 
   });

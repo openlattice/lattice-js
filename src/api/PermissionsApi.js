@@ -29,10 +29,6 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  PERMISSIONS_PATH
-} from '../constants/ApiPaths';
-
-import {
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
@@ -66,7 +62,7 @@ export function getAcl(aclKey :AclKeyFragment[]) :Promise<> {
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${PERMISSIONS_PATH}`, aclKey)
+    .post('/', aclKey)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -97,7 +93,7 @@ export function updateAcl(aclData :AclData) :Promise<> {
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .patch(`/${PERMISSIONS_PATH}`, aclData)
+    .patch('/', aclData)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
