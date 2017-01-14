@@ -127,10 +127,12 @@ export function getAllOrganizations() {
  * OrganizationsApi.createOrganization(
  *   {
  *     id: "",
- *     title: "MyOrganization"
- *     description: "what an organization"
- *     principals: [
- *       { type: "USER", id: "principalId_0" },
+ *     title: "MyOrganization",
+ *     description: "what an organization",
+ *     members: [
+ *       { type: "USER", id: "principalId_0" }
+ *     ],
+ *     roles: [
  *       { type: "ROLE", id: "principalId_1" }
  *     ]
  *   }
@@ -296,7 +298,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
  * @returns {Promise}
  *
  * @example
- * OrganizationsApi.addAutoApprovedEmailDomains(
+ * OrganizationsApi.addAutoApprovedEmailDomain(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "kryptnostic.com"
  * );
@@ -419,11 +421,11 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  * @static
  * @memberof loom-data.OrganizationsApi
  * @param {UUID} organizationId
- * @param {string[]} emailDomains
+ * @param {string} emailDomain
  * @returns {Promise}
  *
  * @example
- * OrganizationsApi.removeAutoApprovedEmailDomains(
+ * OrganizationsApi.removeAutoApprovedEmailDomain(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "kryptnostic.com"
  * );
@@ -439,7 +441,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .delete(`${organizationId}/${EMAIL_DOMAINS_PATH}/${emailDomain}`)
+    .delete(`/${organizationId}/${EMAIL_DOMAINS_PATH}/${emailDomain}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -517,7 +519,7 @@ export function getAllPrincipals(organizationId :UUID) {
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .get(`${organizationId}/${PRINCIPALS_PATH}`)
+    .get(`/${organizationId}/${PRINCIPALS_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -598,6 +600,7 @@ export function addPrincipals(organizationId :UUID, principals :Principal[]) :Pr
     return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
   }
 
+  // TODO: alternative way to dedupe
   const data = Immutable.Set().withMutations((set :Set<Principal>) => {
     principals.forEach((principal :Principal) => {
       set.add(new Principal(principal.type, principal.id));
@@ -771,7 +774,7 @@ export function getAllRoles(organizationId :UUID) {
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .get(`${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}`)
+    .get(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -800,7 +803,7 @@ export function getAllMembers(organizationId :UUID) {
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .get(`${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`)
+    .get(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

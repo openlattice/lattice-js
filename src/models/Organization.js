@@ -2,8 +2,9 @@
  * @flow
  */
 
+import Immutable from 'immutable';
+
 import Principal from './Principal';
-import PrincipalTypes from '../constants/PrincipalTypes';
 import Logger from '../utils/Logger';
 
 import {
@@ -86,31 +87,32 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setPrincipals(principals :Principal[]) :OrganizationBuilder {
+  setMembers(members :Principal[]) :OrganizationBuilder {
 
-    if (!isValidPrincipalArray(principals)) {
-      throw new Error('invalid parameter: principals must be a non-empty array of valid Principals');
+    if (!isValidPrincipalArray(members)) {
+      throw new Error('invalid parameter: members must be a non-empty array of valid Principals');
     }
 
-    this.members = [];
-    this.roles = [];
+    this.members = Immutable.Set().withMutations((set :Set<Principal>) => {
+      members.forEach((member :Principal) => {
+        set.add(member);
+      });
+    }).toJS();
 
-    principals.forEach((principal :Principal) => {
+    return this;
+  }
 
-      switch (principal.type) {
+  setRoles(roles :Principal[]) :OrganizationBuilder {
 
-        case PrincipalTypes.USER:
-          this.members.push(principal);
-          break;
+    if (!isValidPrincipalArray(roles)) {
+      throw new Error('invalid parameter: roles must be a non-empty array of valid Principals');
+    }
 
-        case PrincipalTypes.ROLE:
-          this.roles.push(principal);
-          break;
-
-        default:
-          break;
-      }
-    })
+    this.roles = Immutable.Set().withMutations((set :Set<Principal>) => {
+      roles.forEach((role :Principal) => {
+        set.add(role);
+      });
+    }).toJS();
 
     return this;
   }
@@ -147,7 +149,8 @@ export function isValid(organization :any) :boolean {
       .setId(organization.id)
       .setTitle(organization.title)
       .setDescription(organization.description)
-      .setPrincipals(organization.principals)
+      .setMembers(organization.members)
+      .setRoles(organization.roles)
       .build();
 
     return true;
