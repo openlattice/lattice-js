@@ -2,7 +2,7 @@
  * @flow
  */
 
-import ActionTypes from '../constants/ActionTypes';
+import ActionTypes from '../constants/types/ActionTypes';
 import Logger from '../utils/Logger';
 
 import Acl, {
@@ -15,7 +15,7 @@ import {
 
 import type {
   Action
-} from '../constants/ActionTypes';
+} from '../constants/types/ActionTypes';
 
 const LOG = new Logger('AclData');
 

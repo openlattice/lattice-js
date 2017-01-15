@@ -16,6 +16,7 @@ import {
   EDM_API,
   ORGANIZATIONS_API,
   PERMISSIONS_API,
+  SEARCH_API,
   USERS_API
 } from '../constants/ApiNames';
 
@@ -25,7 +26,8 @@ import {
   DATASTORE_PATH,
   ONTOLOGY_PATH,
   ORGANIZATIONS_PATH,
-  PERMISSIONS_PATH
+  PERMISSIONS_PATH,
+  SEARCH_PATH
 } from '../constants/ApiPaths';
 
 let baseUrlToAxiosInstanceMap :Map<string, Object> = Immutable.Map();
@@ -48,6 +50,8 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${ONTOLOGY_PATH}/${ORGANIZATIONS_PATH}`;
     case PERMISSIONS_API:
       return `${baseUrl}/${ONTOLOGY_PATH}/${PERMISSIONS_PATH}`;
+    case SEARCH_API:
+      return `${baseUrl}/${ONTOLOGY_PATH}/${SEARCH_PATH}`;
     case USERS_API:
       return `${baseUrl}/${ONTOLOGY_PATH}/${ADMIN_PATH}`;
     default:

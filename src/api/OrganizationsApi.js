@@ -19,7 +19,7 @@
 
 import Immutable from 'immutable';
 
-import PrincipalTypes from '../constants/PrincipalTypes';
+import PrincipalTypes from '../constants/types/PrincipalTypes';
 import Principal from '../models/Principal';
 import Logger from '../utils/Logger';
 
@@ -56,7 +56,7 @@ import {
 
 import type {
   PrincipalType
-} from '../constants/PrincipalTypes';
+} from '../constants/types/PrincipalTypes';
 
 const LOG = new Logger('OrganizationsApi');
 

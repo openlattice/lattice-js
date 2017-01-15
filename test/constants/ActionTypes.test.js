@@ -1,4 +1,4 @@
-import ActionTypes from '../../src/constants/ActionTypes';
+import ActionTypes from '../../src/constants/types/ActionTypes';
 
 const ADD :string = 'ADD';
 const REMOVE :string = 'REMOVE';
