@@ -14,6 +14,7 @@ import {
 import {
   DATA_API,
   EDM_API,
+  ORGANIZATIONS_API,
   PERMISSIONS_API,
   USERS_API
 } from '../constants/ApiNames';
@@ -23,6 +24,7 @@ import {
   DATA_PATH,
   DATASTORE_PATH,
   ONTOLOGY_PATH,
+  ORGANIZATIONS_PATH,
   PERMISSIONS_PATH
 } from '../constants/ApiPaths';
 
@@ -42,6 +44,8 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${ONTOLOGY_PATH}/${DATA_PATH}`;
     case EDM_API:
       return `${baseUrl}/${ONTOLOGY_PATH}`;
+    case ORGANIZATIONS_API:
+      return `${baseUrl}/${ONTOLOGY_PATH}/${ORGANIZATIONS_PATH}`;
     case PERMISSIONS_API:
       return `${baseUrl}/${ONTOLOGY_PATH}/${PERMISSIONS_PATH}`;
     case USERS_API:

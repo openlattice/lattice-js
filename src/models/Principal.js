@@ -29,6 +29,16 @@ export default class Principal {
     this.type = type;
     this.id = id;
   }
+
+  // for immutable.js equality
+  // TODO: need a better way to evaluate equality for models
+  valueOf() :string {
+
+    return JSON.stringify({
+      type: this.type,
+      id: this.id
+    });
+  }
 }
 
 /**

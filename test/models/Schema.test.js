@@ -98,7 +98,7 @@ describe('Schema', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setFullyQualifiedName(MOCK_FQN);
         }).not.toThrow();
@@ -133,7 +133,7 @@ describe('Schema', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setEntityTypes(MOCK_ENTITY_TYPES);
         }).not.toThrow();
@@ -168,7 +168,7 @@ describe('Schema', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setPropertyTypes(MOCK_PROPERTY_TYPES);
         }).not.toThrow();
@@ -203,7 +203,7 @@ describe('Schema', () => {
 
       });
 
-      it('should return a valid Schema instance', () => {
+      it('should return a valid instance', () => {
 
         const schema = builder
           .setFullyQualifiedName(MOCK_FQN)
@@ -231,11 +231,11 @@ describe('Schema', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid Schema object literal', () => {
+      it('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_SCHEMA_OBJ)).toEqual(true);
       });
 
-      it('should return true when given a valid Schema instance ', () => {
+      it('should return true when given a valid instance ', () => {
         expect(isValid(
           new Schema(
             MOCK_FQN, MOCK_ENTITY_TYPES, MOCK_PROPERTY_TYPES
@@ -243,7 +243,7 @@ describe('Schema', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an Schema instance constructed by the builder', () => {
+      it('should return true when given an instance constructed by the builder', () => {
 
         const schema = (new SchemaBuilder())
           .setFullyQualifiedName(MOCK_FQN)
@@ -268,7 +268,7 @@ describe('Schema', () => {
         });
       });
 
-      it('should return false when given an Schema object literal with an invalid "fqn" property', () => {
+      it('should return false when given an object literal with an invalid "fqn" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(Object.assign({}, MOCK_SCHEMA_OBJ, { fqn: invalidInput }))).toEqual(false);
@@ -276,21 +276,21 @@ describe('Schema', () => {
         });
       });
 
-      it('should return false when given an Schema object literal with an invalid "entityTypes" property', () => {
+      it('should return false when given an object literal with an invalid "entityTypes" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_SCHEMA_OBJ, { entityTypes: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_SCHEMA_OBJ, { entityTypes: [invalidInput] }))).toEqual(false);
         });
       });
 
-      it('should return false when given an Schema object literal with an invalid "propertyTypes" property', () => {
+      it('should return false when given an object literal with an invalid "propertyTypes" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_SCHEMA_OBJ, { propertyTypes: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_SCHEMA_OBJ, { propertyTypes: [invalidInput] }))).toEqual(false);
         });
       });
 
-      it('should return false when given an Schema instance with an invalid "fqn" property', () => {
+      it('should return false when given an instance with an invalid "fqn" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Schema(
@@ -300,7 +300,7 @@ describe('Schema', () => {
         });
       });
 
-      it('should return false when given an Schema instance with an invalid "entityTypes" property', () => {
+      it('should return false when given an instance with an invalid "entityTypes" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Schema(
@@ -315,7 +315,7 @@ describe('Schema', () => {
         });
       });
 
-      it('should return false when given an Schema instance with an invalid "propertyTypes" property', () => {
+      it('should return false when given an instance with an invalid "propertyTypes" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Schema(

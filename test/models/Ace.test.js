@@ -53,7 +53,7 @@ describe('Ace', () => {
         });
       });
 
-      it('should not throw when given a valid Principal', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setPrincipal(MOCK_PRINCIPAL);
         }).not.toThrow();
@@ -80,7 +80,7 @@ describe('Ace', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid PermissionTypes', () => {
+      it('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
@@ -88,7 +88,7 @@ describe('Ace', () => {
         });
       });
 
-      it('should not throw when given valid PermissionTypes', () => {
+      it('should not throw when given valid parameters', () => {
         Object.values(PermissionTypes).forEach((type) => {
           expect(() => {
             builder.setPermissions([type]);
@@ -115,7 +115,7 @@ describe('Ace', () => {
         }).toThrow();
       });
 
-      it('should return a valid Ace instance', () => {
+      it('should return a valid instance', () => {
 
         const ace = builder
           .setPrincipal(MOCK_PRINCIPAL)
@@ -139,15 +139,19 @@ describe('Ace', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid Ace object literal', () => {
+      it('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_ACE_OBJ)).toEqual(true);
       });
 
-      it('should return true when given a valid Ace instance ', () => {
-        expect(isValid(new Ace(MOCK_PRINCIPAL, MOCK_PERMISSIONS))).toEqual(true);
+      it('should return true when given a valid object instance ', () => {
+        expect(isValid(
+          new Ace(
+            MOCK_PRINCIPAL, MOCK_PERMISSIONS
+          )
+        )).toEqual(true);
       });
 
-      it('should return true when given an Ace instance constructed by the builder', () => {
+      it('should return true when given an instance constructed by the builder', () => {
 
         const ace = (new AceBuilder())
           .setPrincipal(MOCK_PRINCIPAL)
@@ -171,43 +175,41 @@ describe('Ace', () => {
         });
       });
 
-      it('should return false when given an invalid Ace object literal', () => {
-        INVALID_PARAMS.forEach((invalidInput1) => {
-          INVALID_PARAMS.forEach((invalidInput2) => {
-            expect(isValid({ principal: invalidInput1, permissions: invalidInput2 })).toEqual(false);
-            expect(isValid({ principal: invalidInput1, permissions: [invalidInput2] })).toEqual(false);
-          });
+      it('should return false when given an object literal with an invalid "principal" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { principal: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an Ace object literal with an invalid "principal" property', () => {
+      it('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ principal: invalidInput, permissions: MOCK_PERMISSIONS })).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { permissions: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { permissions: [invalidInput] }))).toEqual(false);
         });
       });
 
-      it('should return false when given an Ace object literal with an invalid "permissions" property', () => {
+      it('should return false when given an instance with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ principal: MOCK_PRINCIPAL, permissions: invalidInput })).toEqual(false);
-          expect(isValid({ principal: MOCK_PRINCIPAL, permissions: [invalidInput] })).toEqual(false);
+          expect(isValid(
+            new Ace(
+              invalidInput, MOCK_PERMISSIONS
+            )
+          )).toEqual(false);
         });
       });
 
-      it('should return false when given an Ace instance with an invalid "principal" property', () => {
+      it('should return false when given an instance with an invalid "permissions" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          const ace = new Ace(MOCK_PRINCIPAL, MOCK_PERMISSIONS);
-          ace.principal = invalidInput;
-          expect(isValid(ace)).toEqual(false);
-        });
-      });
-
-      it('should return false when given an Ace instance with an invalid "permissions" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          const ace = new Ace(MOCK_PRINCIPAL, MOCK_PERMISSIONS);
-          ace.permissions = invalidInput;
-          expect(isValid(ace)).toEqual(false);
-          ace.permissions = [invalidInput];
-          expect(isValid(ace)).toEqual(false);
+          expect(isValid(
+            new Ace(
+              MOCK_PRINCIPAL, invalidInput
+            )
+          )).toEqual(false);
+          expect(isValid(
+            new Ace(
+              MOCK_PRINCIPAL, [invalidInput]
+            )
+          )).toEqual(false);
         });
       });
 
