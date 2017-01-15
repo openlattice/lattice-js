@@ -25,7 +25,7 @@ const MOCK_ROLE_PRINCIPAL = {
   id: 'principalId_1'
 };
 
-const MOCK_ORG = {
+const MOCK_ORG_OBJ = {
   id: MOCK_ORG_UUID,
   title: MOCK_TITLE,
   description: MOCK_DESCRIPTION,
@@ -63,7 +63,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setId(MOCK_ORG_UUID);
         }).not.toThrow();
@@ -87,7 +87,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setTitle(MOCK_TITLE);
         }).not.toThrow();
@@ -111,7 +111,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setDescription(MOCK_DESCRIPTION);
         }).not.toThrow();
@@ -143,7 +143,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setMembers([MOCK_USER_PRINCIPAL]);
         }).not.toThrow();
@@ -175,7 +175,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setRoles([MOCK_ROLE_PRINCIPAL]);
         }).not.toThrow();
@@ -231,7 +231,7 @@ describe('Organization', () => {
         }).not.toThrow();
       });
 
-      it('should return a valid Organization instance', () => {
+      it('should return a valid instance', () => {
 
         const org = builder
           .setId(MOCK_ORG_UUID)
@@ -267,11 +267,11 @@ describe('Organization', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid Organization object literal', () => {
-        expect(isValid(MOCK_ORG)).toEqual(true);
+      it('should return true when given a valid object literal', () => {
+        expect(isValid(MOCK_ORG_OBJ)).toEqual(true);
       });
 
-      it('should return true when given a valid Organization instance ', () => {
+      it('should return true when given a valid object instance ', () => {
         expect(isValid(
           new Organization(
             MOCK_ORG_UUID, MOCK_TITLE, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
@@ -279,7 +279,7 @@ describe('Organization', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an Organization instance constructed by the builder', () => {
+      it('should return true when given an instance constructed by the builder', () => {
 
         const org = (new OrganizationBuilder())
           .setId(MOCK_ORG_UUID)
@@ -306,41 +306,41 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an EntityType object literal with an invalid "id" property', () => {
+      it('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_ORG, { id: invalidInput }))).toEqual(false);
+            expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { id: invalidInput }))).toEqual(false);
           }
         });
       });
 
-      it('should return false when given an EntityType object literal with an invalid "title" property', () => {
+      it('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORG, { title: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { title: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an EntityType object literal with an invalid "description" property', () => {
+      it('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_ORG, { description: invalidInput }))).toEqual(false);
+            expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { description: invalidInput }))).toEqual(false);
           }
         });
       });
 
-      it('should return false when given an EntityType object literal with an invalid "members" property', () => {
+      it('should return false when given an object literal with an invalid "members" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORG, { members: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { members: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an EntityType object literal with an invalid "roles" property', () => {
+      it('should return false when given an object literal with an invalid "roles" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORG, { roles: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { roles: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an EntityType instance with an invalid "id" property', () => {
+      it('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(
@@ -352,7 +352,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an EntityType instance with an invalid "title" property', () => {
+      it('should return false when given an instance with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -362,7 +362,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an EntityType instance with an invalid "description" property', () => {
+      it('should return false when given an instance with an invalid "description" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(
@@ -374,7 +374,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an EntityType instance with an invalid "members" property', () => {
+      it('should return false when given an instance with an invalid "members" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -384,7 +384,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an EntityType instance with an invalid "roles" property', () => {
+      it('should return false when given an instance with an invalid "roles" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
