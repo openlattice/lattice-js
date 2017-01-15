@@ -3,7 +3,7 @@
  */
 
 import Logger from '../utils/Logger';
-import SecurableTypes from '../constants/SecurableTypes';
+import SecurableTypes from '../constants/types/SecurableTypes';
 
 import {
   isNonEmptyString
@@ -15,7 +15,7 @@ import {
 
 import type {
   SecurableType
-} from '../constants/SecurableTypes';
+} from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('AclKeyFragment');
 

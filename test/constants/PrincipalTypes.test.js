@@ -1,4 +1,4 @@
-import PrincipalTypes from '../../src/constants/PrincipalTypes';
+import PrincipalTypes from '../../src/constants/types/PrincipalTypes';
 
 const ORGANIZATION :string = 'ORGANIZATION';
 const ROLE :string = 'ROLE';

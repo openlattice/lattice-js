@@ -1,4 +1,4 @@
-import PermissionTypes from '../../src/constants/PermissionTypes';
+import PermissionTypes from '../../src/constants/types/PermissionTypes';
 
 const DISCOVER :string = 'DISCOVER';
 const LINK :string = 'LINK';

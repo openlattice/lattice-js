@@ -10,6 +10,7 @@
  * @module loom-data
  */
 
+import * as Types from './constants/types';
 import * as DataModels from './models';
 
 import * as DataApi from './api/DataApi';
@@ -30,6 +31,7 @@ export {
   version,
   configure,
   DataModels,
+  Types,
   DataApi,
   EntityDataModelApi,
   OrganizationsApi,
@@ -42,6 +44,7 @@ export default {
   version,
   configure,
   DataModels,
+  Types,
   DataApi,
   EntityDataModelApi,
   OrganizationsApi,

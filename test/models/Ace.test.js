@@ -1,4 +1,4 @@
-import PermissionTypes from '../../src/constants/PermissionTypes';
+import PermissionTypes from '../../src/constants/types/PermissionTypes';
 
 import Ace, {
   AceBuilder,

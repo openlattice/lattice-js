@@ -1,4 +1,4 @@
-import ActionTypes from '../../src/constants/ActionTypes';
+import ActionTypes from '../../src/constants/types/ActionTypes';
 
 import AclData, {
   AclDataBuilder,

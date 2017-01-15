@@ -4,7 +4,7 @@
 
 import validateUUID from 'uuid-validate';
 
-import PermissionTypes from '../constants/PermissionTypes';
+import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 
 import Ace, {
@@ -38,7 +38,7 @@ import {
 
 import type {
   Permission
-} from '../constants/PermissionTypes';
+} from '../constants/types/PermissionTypes';
 
 export function validateNonEmptyArray(value :any[], validatorFn :Function) :boolean {
 
