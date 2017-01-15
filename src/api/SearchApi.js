@@ -10,11 +10,11 @@
  *
  * @example
  * import Loom from 'loom-data';
- * // Loom.SearchApi.get...
+ * // Loom.SearchApi.search...
  *
  * @example
  * import { SearchApi } from 'loom-data';
- * // SearchApi.get...
+ * // SearchApi.search...
  */
 
 import Immutable from 'immutable';
@@ -26,14 +26,12 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  SEARCH_PATH
-} from '../constants/ApiPaths';
-
-import {
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
 import {
+  isDefined,
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -46,71 +44,87 @@ const LOG = new Logger('SearchApi');
 
 const KEYWORD = 'kw';
 const ENTITY_TYPE_ID = 'eid';
-const PROPERTY_TYPE_IDS = 'pid';
-
-/**
- * `GET /search`
- */
-export function searchGET(keyword :string, entityTypeId :UUID, propertyTypeIds :UUID[]) :Promise<> {
-
-  if (!isNonEmptyString(keyword)) {
-    return Promise.reject('invalid parameter: keyword must be a non-empty string');
-  }
-
-  if (!isValidUuid(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
-  }
-
-  if (!isValidUuidArray(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
-  }
-
-  const ids = Immutable.Set().withMutations((set :Set<UUID>) => {
-    propertyTypeIds.forEach((id :UUID) => {
-      set.add(id);
-    });
-  }).toJS();
-
-  const config = {
-    params: {
-      [KEYWORD]: keyword,
-      [ENTITY_TYPE_ID]: entityTypeId,
-      [PROPERTY_TYPE_IDS]: ids
-    }
-  };
-
-  return getApiAxiosInstance(SEARCH_API)
-    .get('/', config)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
 
 /**
  * `POST /search`
+ *
+ * Executes a search query with the given parameters.
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {Object} searchOptions
+ * @property {string} keyword (optional)
+ * @property {UUID} entityTypeId (optional)
+ * @property {UUID[]} propertyTypeIds (optional)
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.search(
+ *   {
+ *     keyword: "test",
+ *   }
+ * );
+ *
+ * SearchApi.searchGET(
+ *   {
+ *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   }
+ * );
+ *
+ * SearchApi.searchGET(
+ *   {
+ *     propertyTypeIds: [
+ *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     ]
+ *   }
+ * );
+ *
+ * SearchApi.searchGET(
+ *   {
+ *     keyword: "test",
+ *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ *   }
+ * );
+ *
+ * SearchApi.searchGET(
+ *   {
+ *     keyword: "test",
+ *     propertyTypeIds: [
+ *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     ]
+ *   }
+ * );
  */
-export function search(keyword :string, entityTypeId :UUID, propertyTypeIds :UUID[]) :Promise<> {
+export function search(searchOptions :Object) :Promise<> {
 
-  if (!isNonEmptyString(keyword)) {
+  if (!isNonEmptyObject(searchOptions)) {
+    return Promise.reject('invalid parameter: at least one search parameter must be defined');
+  }
+
+  const { keyword, entityTypeId, propertyTypeIds } = searchOptions;
+
+  if (isDefined(keyword) && !isNonEmptyString(keyword)) {
     return Promise.reject('invalid parameter: keyword must be a non-empty string');
   }
 
-  if (!isValidUuid(entityTypeId)) {
+  if (isDefined(entityTypeId) && !isValidUuid(entityTypeId)) {
     return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
   }
 
-  if (!isValidUuidArray(propertyTypeIds)) {
+  if (isDefined(propertyTypeIds) && !isValidUuidArray(propertyTypeIds)) {
     return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
   }
 
-  const data = Immutable.Set().withMutations((set :Set<UUID>) => {
-    propertyTypeIds.forEach((id :UUID) => {
-      set.add(id);
-    });
-  }).toJS();
+  let data = [];
+  if (isDefined(propertyTypeIds)) {
+    data = Immutable.Set().withMutations((set :Set<UUID>) => {
+      propertyTypeIds.forEach((id :UUID) => {
+        set.add(id);
+      });
+    }).toJS();
+  }
 
   const config = {
     params: {
