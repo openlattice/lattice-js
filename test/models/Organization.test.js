@@ -1,7 +1,7 @@
-import PropertyType, {
-  PropertyTypeBuilder,
+import Organization, {
+  OrganizationBuilder,
   isValid
-} from '../../src/models/PropertyType';
+} from '../../src/models/Organization';
 
 import {
   isDefined
@@ -11,40 +11,36 @@ import {
   INVALID_PARAMS
 } from '../constants/TestConstants';
 
-const MOCK_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
-const MOCK_TITLE = 'title';
-const MOCK_DESCRIPTION = 'description';
-const MOCK_DATATYPE = 'GeographyPoint';
+const MOCK_ORG_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
+const MOCK_TITLE = 'MyOrganization';
+const MOCK_DESCRIPTION = 'what an organization';
 
-const MOCK_TYPE_FQN = {
-  namespace: 'LOOM',
-  name: 'Data'
+const MOCK_USER_PRINCIPAL = {
+  type: 'USER',
+  id: 'principalId_0'
 };
 
-const MOCK_SCHEMAS = [
-  {
-    namespace: 'LOOM',
-    name: 'Schema'
-  }
-];
+const MOCK_ROLE_PRINCIPAL = {
+  type: 'ROLE',
+  id: 'principalId_1'
+};
 
-const MOCK_PT_OBJ = {
-  id: MOCK_UUID,
-  type: MOCK_TYPE_FQN,
+const MOCK_ORG_OBJ = {
+  id: MOCK_ORG_UUID,
   title: MOCK_TITLE,
   description: MOCK_DESCRIPTION,
-  datatype: MOCK_DATATYPE,
-  schemas: MOCK_SCHEMAS
+  members: [MOCK_USER_PRINCIPAL],
+  roles: [MOCK_ROLE_PRINCIPAL]
 };
 
-describe('PropertyType', () => {
+describe('Organization', () => {
 
-  describe('PropertyTypeBuilder', () => {
+  describe('OrganizationBuilder', () => {
 
-    let builder :PropertyTypeBuilder = null;
+    let builder :OrganizationBuilder = null;
 
     beforeEach(() => {
-      builder = new PropertyTypeBuilder();
+      builder = new OrganizationBuilder();
     });
 
     afterEach(() => {
@@ -69,31 +65,7 @@ describe('PropertyType', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setId(MOCK_UUID);
-        }).not.toThrow();
-      });
-
-    });
-
-    describe('setType()', () => {
-
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setType();
-        }).toThrow();
-      });
-
-      it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            builder.setType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      it('should not throw when given valid parameters', () => {
-        expect(() => {
-          builder.setType(MOCK_TYPE_FQN);
+          builder.setId(MOCK_ORG_UUID);
         }).not.toThrow();
       });
 
@@ -147,45 +119,18 @@ describe('PropertyType', () => {
 
     });
 
-    describe('setDataType()', () => {
+    describe('setMembers()', () => {
 
       it('should throw when not given any parameters', () => {
         expect(() => {
-          builder.setDataType();
+          builder.setMembers();
         }).toThrow();
       });
 
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setDataType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      it('should not throw when given valid parameters', () => {
-        expect(() => {
-          builder.setDataType(MOCK_DATATYPE);
-        }).not.toThrow();
-      });
-
-    });
-
-    describe('setSchemas()', () => {
-
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setSchemas();
-        }).toThrow();
-      });
-
-      it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            builder.setSchemas(invalidInput);
-          }).toThrow();
-          expect(() => {
-            builder.setSchemas([invalidInput]);
+            builder.setMembers(invalidInput);
           }).toThrow();
         });
       });
@@ -193,14 +138,46 @@ describe('PropertyType', () => {
       it('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setSchemas([...MOCK_SCHEMAS, invalidInput]);
+            builder.setMembers([MOCK_USER_PRINCIPAL, invalidInput]);
           }).toThrow();
         });
       });
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setSchemas(MOCK_SCHEMAS);
+          builder.setMembers([MOCK_USER_PRINCIPAL]);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setRoles()', () => {
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setRoles();
+        }).toThrow();
+      });
+
+      it('should throw when given invalid parameters', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(() => {
+            builder.setRoles(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      it('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(() => {
+            builder.setRoles([MOCK_ROLE_PRINCIPAL, invalidInput]);
+          }).toThrow();
+        });
+      });
+
+      it('should not throw when given valid parameters', () => {
+        expect(() => {
+          builder.setRoles([MOCK_ROLE_PRINCIPAL]);
         }).not.toThrow();
       });
 
@@ -211,34 +188,23 @@ describe('PropertyType', () => {
       it('should throw when a required property has not been set', () => {
 
         expect(() => {
-          (new PropertyTypeBuilder())
-            .setTitle(MOCK_TITLE)
-            .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
+          (new OrganizationBuilder())
+            .setMembers([MOCK_USER_PRINCIPAL])
+            .setRoles([MOCK_ROLE_PRINCIPAL])
             .build();
         }).toThrow();
 
         expect(() => {
-          (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
-            .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
+          (new OrganizationBuilder())
+            .setTitle(MOCK_TITLE)
+            .setRoles([MOCK_ROLE_PRINCIPAL])
             .build();
         }).toThrow();
 
         expect(() => {
-          (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
+          (new OrganizationBuilder())
             .setTitle(MOCK_TITLE)
-            .setSchemas(MOCK_SCHEMAS)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
-            .setTitle(MOCK_TITLE)
-            .setDataType(MOCK_DATATYPE)
+            .setMembers([MOCK_USER_PRINCIPAL])
             .build();
         }).toThrow();
 
@@ -247,56 +213,50 @@ describe('PropertyType', () => {
       it('should not throw when an optional property has not been set', () => {
 
         expect(() => {
-          (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
+          (new OrganizationBuilder())
             .setTitle(MOCK_TITLE)
             .setDescription(MOCK_DESCRIPTION)
-            .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
+            .setMembers([MOCK_USER_PRINCIPAL])
+            .setRoles([MOCK_ROLE_PRINCIPAL])
             .build();
         }).not.toThrow();
 
         expect(() => {
-          (new PropertyTypeBuilder())
-            .setId(MOCK_UUID)
-            .setType(MOCK_TYPE_FQN)
+          (new OrganizationBuilder())
+            .setId(MOCK_ORG_UUID)
             .setTitle(MOCK_TITLE)
-            .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
+            .setMembers([MOCK_USER_PRINCIPAL])
+            .setRoles([MOCK_ROLE_PRINCIPAL])
             .build();
         }).not.toThrow();
       });
 
       it('should return a valid instance', () => {
 
-        const propertyType = builder
-          .setId(MOCK_UUID)
-          .setType(MOCK_TYPE_FQN)
+        const org = builder
+          .setId(MOCK_ORG_UUID)
           .setTitle(MOCK_TITLE)
           .setDescription(MOCK_DESCRIPTION)
-          .setDataType(MOCK_DATATYPE)
-          .setSchemas(MOCK_SCHEMAS)
+          .setMembers([MOCK_USER_PRINCIPAL])
+          .setRoles([MOCK_ROLE_PRINCIPAL])
           .build();
 
-        expect(propertyType).toEqual(jasmine.any(PropertyType));
+        expect(org).toEqual(jasmine.any(Organization));
 
-        expect(propertyType.id).toBeDefined();
-        expect(propertyType.id).toEqual(MOCK_UUID);
+        expect(org.id).toBeDefined();
+        expect(org.id).toEqual(MOCK_ORG_UUID);
 
-        expect(propertyType.type).toBeDefined();
-        expect(propertyType.type).toEqual(MOCK_TYPE_FQN);
+        expect(org.title).toBeDefined();
+        expect(org.title).toEqual(MOCK_TITLE);
 
-        expect(propertyType.title).toBeDefined();
-        expect(propertyType.title).toEqual(MOCK_TITLE);
+        expect(org.description).toBeDefined();
+        expect(org.description).toEqual(MOCK_DESCRIPTION);
 
-        expect(propertyType.description).toBeDefined();
-        expect(propertyType.description).toEqual(MOCK_DESCRIPTION);
+        expect(org.members).toBeDefined();
+        expect(org.members).toEqual([MOCK_USER_PRINCIPAL]);
 
-        expect(propertyType.datatype).toBeDefined();
-        expect(propertyType.datatype).toEqual(MOCK_DATATYPE);
-
-        expect(propertyType.schemas).toBeDefined();
-        expect(propertyType.schemas).toEqual(MOCK_SCHEMAS);
+        expect(org.roles).toBeDefined();
+        expect(org.roles).toEqual([MOCK_ROLE_PRINCIPAL]);
       });
 
     });
@@ -308,29 +268,28 @@ describe('PropertyType', () => {
     describe('valid', () => {
 
       it('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_PT_OBJ)).toEqual(true);
+        expect(isValid(MOCK_ORG_OBJ)).toEqual(true);
       });
 
-      it('should return true when given a valid instance ', () => {
+      it('should return true when given a valid object instance ', () => {
         expect(isValid(
-          new PropertyType(
-            MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
+          new Organization(
+            MOCK_ORG_UUID, MOCK_TITLE, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
           )
         )).toEqual(true);
       });
 
       it('should return true when given an instance constructed by the builder', () => {
 
-        const propertyType = (new PropertyTypeBuilder())
-          .setId(MOCK_UUID)
-          .setType(MOCK_TYPE_FQN)
+        const org = (new OrganizationBuilder())
+          .setId(MOCK_ORG_UUID)
           .setTitle(MOCK_TITLE)
           .setDescription(MOCK_DESCRIPTION)
-          .setDataType(MOCK_DATATYPE)
-          .setSchemas(MOCK_SCHEMAS)
+          .setMembers([MOCK_USER_PRINCIPAL])
+          .setRoles([MOCK_ROLE_PRINCIPAL])
           .build();
 
-        expect(isValid(propertyType)).toEqual(true);
+        expect(isValid(org)).toEqual(true);
       });
 
     });
@@ -350,40 +309,34 @@ describe('PropertyType', () => {
       it('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_PT_OBJ, { id: invalidInput }))).toEqual(false);
+            expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { id: invalidInput }))).toEqual(false);
           }
-        });
-      });
-
-      it('should return false when given an object literal with an invalid "type" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { type: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { title: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { title: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_PT_OBJ, { description: invalidInput }))).toEqual(false);
+            expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { description: invalidInput }))).toEqual(false);
           }
         });
       });
 
-      it('should return false when given an object literal with an invalid "datatype" property', () => {
+      it('should return false when given an object literal with an invalid "members" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { datatype: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { members: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "schemas" property', () => {
+      it('should return false when given an object literal with an invalid "roles" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { schemas: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { roles: invalidInput }))).toEqual(false);
         });
       });
 
@@ -391,29 +344,19 @@ describe('PropertyType', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(
-              new PropertyType(
-                invalidInput, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
+              new Organization(
+                invalidInput, MOCK_TITLE, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
               )
             )).toEqual(false);
           }
         });
       });
 
-      it('should return false when given an instance with an invalid "type" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(
-            new PropertyType(
-              MOCK_UUID, invalidInput, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
-            )
-          )).toEqual(false);
-        });
-      });
-
       it('should return false when given an instance with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
-            new PropertyType(
-              MOCK_UUID, MOCK_TYPE_FQN, invalidInput, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
+            new Organization(
+              MOCK_ORG_UUID, invalidInput, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
             )
           )).toEqual(false);
         });
@@ -423,29 +366,29 @@ describe('PropertyType', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(
-              new PropertyType(
-                MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, invalidInput, MOCK_DATATYPE, MOCK_SCHEMAS
+              new Organization(
+                MOCK_ORG_UUID, MOCK_TITLE, invalidInput, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
               )
             )).toEqual(false);
           }
         });
       });
 
-      it('should return false when given an instance with an invalid "datatype" property', () => {
+      it('should return false when given an instance with an invalid "members" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
-            new PropertyType(
-              MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, invalidInput, MOCK_SCHEMAS
+            new Organization(
+              MOCK_ORG_UUID, MOCK_TITLE, MOCK_DESCRIPTION, invalidInput, [MOCK_ROLE_PRINCIPAL]
             )
           )).toEqual(false);
         });
       });
 
-      it('should return false when given an instance with an invalid "schemas" property', () => {
+      it('should return false when given an instance with an invalid "roles" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
-            new PropertyType(
-              MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, invalidInput
+            new Organization(
+              MOCK_ORG_UUID, MOCK_TITLE, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], invalidInput
             )
           )).toEqual(false);
         });

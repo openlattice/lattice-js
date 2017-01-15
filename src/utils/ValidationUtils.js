@@ -16,16 +16,20 @@ import AclKeyFragment, {
 } from '../models/AclKeyFragment';
 
 import EntitySet, {
-   isValid as isValidEntitySet
- } from '../models/EntitySet';
+  isValid as isValidEntitySet
+} from '../models/EntitySet';
 
 import EntityType, {
-   isValid as isValidEntityType
- } from '../models/EntityType';
+  isValid as isValidEntityType
+} from '../models/EntityType';
+
+import Principal, {
+  isValid as isValidPrincipal
+} from '../models/Principal';
 
 import PropertyType, {
-   isValid as isValidPropertyType
- } from '../models/PropertyType';
+  isValid as isValidPropertyType
+} from '../models/PropertyType';
 
 import {
   isNonEmptyArray,
@@ -36,14 +40,14 @@ import type {
   Permission
 } from '../constants/PermissionTypes';
 
-export function validateNonEmptyArray(list :any[], validatorFn :Function) :boolean {
+export function validateNonEmptyArray(value :any[], validatorFn :Function) :boolean {
 
-  if (!isNonEmptyArray(list)) {
+  if (!isNonEmptyArray(value)) {
     return false;
   }
 
-  for (let index = 0; index < list.length; index += 1) {
-    if (!validatorFn(list[index])) {
+  for (let index = 0; index < value.length; index += 1) {
+    if (!validatorFn(value[index])) {
       return false;
     }
   }
@@ -109,5 +113,12 @@ export function isValidPermissionArray(permissions :Permission[]) :boolean {
 
   return validateNonEmptyArray(permissions, (permission :Permission) => {
     return isNonEmptyString(permission) && PermissionTypes[permission];
+  });
+}
+
+export function isValidPrincipalArray(principals :Principal[]) :boolean {
+
+  return validateNonEmptyArray(principals, (principal :Principal) => {
+    return isValidPrincipal(principal);
   });
 }

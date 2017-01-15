@@ -14,6 +14,7 @@ import * as DataModels from './models';
 
 import * as DataApi from './api/DataApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
+import * as OrganizationsApi from './api/OrganizationsApi';
 import * as PermissionsApi from './api/PermissionsApi';
 import * as SearchApi from './api/SearchApi';
 import * as UsersApi from './api/UsersApi';
@@ -31,6 +32,7 @@ export {
   DataModels,
   DataApi,
   EntityDataModelApi,
+  OrganizationsApi,
   PermissionsApi,
   SearchApi,
   UsersApi
@@ -42,6 +44,7 @@ export default {
   DataModels,
   DataApi,
   EntityDataModelApi,
+  OrganizationsApi,
   PermissionsApi,
   SearchApi,
   UsersApi

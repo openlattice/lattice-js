@@ -61,7 +61,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setId(MOCK_UUID);
         }).not.toThrow();
@@ -85,7 +85,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setType(MOCK_TYPE_FQN);
         }).not.toThrow();
@@ -109,7 +109,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setEntityTypeId(MOCK_UUID);
         }).not.toThrow();
@@ -133,7 +133,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setName(MOCK_NAME);
         }).not.toThrow();
@@ -157,7 +157,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setTitle(MOCK_TITLE);
         }).not.toThrow();
@@ -181,7 +181,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should not throw when given a valid parameter', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setDescription(MOCK_DESCRIPTION);
         }).not.toThrow();
@@ -249,7 +249,7 @@ describe('EntitySet', () => {
         }).not.toThrow();
       });
 
-      it('should return a valid EntitySet instance', () => {
+      it('should return a valid instance', () => {
 
         const entitySet = builder
           .setId(MOCK_UUID)
@@ -289,11 +289,11 @@ describe('EntitySet', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid EntitySet object literal', () => {
+      it('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_ES_OBJ)).toEqual(true);
       });
 
-      it('should return true when given a valid EntitySet instance ', () => {
+      it('should return true when given a valid instance ', () => {
         expect(isValid(
           new EntitySet(
             MOCK_UUID, MOCK_TYPE_FQN, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
@@ -301,7 +301,7 @@ describe('EntitySet', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an EntitySet instance constructed by the builder', () => {
+      it('should return true when given an instance constructed by the builder', () => {
 
         const entitySet = (new EntitySetBuilder())
           .setId(MOCK_UUID)
@@ -329,7 +329,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet object literal with an invalid "id" property', () => {
+      it('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(Object.assign({}, MOCK_ES_OBJ, { id: invalidInput }))).toEqual(false);
@@ -337,31 +337,31 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet object literal with an invalid "type" property', () => {
+      it('should return false when given an object literal with an invalid "type" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ES_OBJ, { type: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an EntitySet object literal with an invalid "entityTypeId" property', () => {
+      it('should return false when given an object literal with an invalid "entityTypeId" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ES_OBJ, { entityTypeId: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an EntitySet object literal with an invalid "name" property', () => {
+      it('should return false when given an object literal with an invalid "name" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ES_OBJ, { name: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an EntitySet object literal with an invalid "title" property', () => {
+      it('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ES_OBJ, { title: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an EntitySet object literal with an invalid "description" property', () => {
+      it('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(Object.assign({}, MOCK_ES_OBJ, { description: invalidInput }))).toEqual(false);
@@ -369,7 +369,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet instance with an invalid "id" property', () => {
+      it('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(
@@ -381,7 +381,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet instance with an invalid "type" property', () => {
+      it('should return false when given an instance with an invalid "type" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
@@ -391,7 +391,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet instance with an invalid "entityTypeId" property', () => {
+      it('should return false when given an instance with an invalid "entityTypeId" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
@@ -401,7 +401,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet instance with an invalid "name" property', () => {
+      it('should return false when given an instance with an invalid "name" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
@@ -411,7 +411,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet instance with an invalid "title" property', () => {
+      it('should return false when given an instance with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
@@ -421,7 +421,7 @@ describe('EntitySet', () => {
         });
       });
 
-      it('should return false when given an EntitySet instance with an invalid "description" property', () => {
+      it('should return false when given an instance with an invalid "description" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(
