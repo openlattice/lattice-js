@@ -103,35 +103,34 @@ export function search(searchOptions :Object) :Promise<> {
     return Promise.reject('invalid parameter: at least one search parameter must be defined');
   }
 
+  let data = [];
+  const config = { params: {} };
   const { keyword, entityTypeId, propertyTypeIds } = searchOptions;
 
-  if (isDefined(keyword) && !isNonEmptyString(keyword)) {
-    return Promise.reject('invalid parameter: keyword must be a non-empty string');
+  if (isDefined(keyword)) {
+    if (!isNonEmptyString(keyword)) {
+      return Promise.reject('invalid parameter: keyword must be a non-empty string');
+    }
+    config.params[KEYWORD] = keyword;
   }
 
-  if (isDefined(entityTypeId) && !isValidUuid(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+  if (isDefined(entityTypeId)) {
+    if (!isValidUuid(entityTypeId)) {
+      return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    }
+    config.params[ENTITY_TYPE_ID] = entityTypeId;
   }
 
-  if (isDefined(propertyTypeIds) && !isValidUuidArray(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
-  }
-
-  let data = [];
   if (isDefined(propertyTypeIds)) {
+    if (!isValidUuidArray(propertyTypeIds)) {
+      return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+    }
     data = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((id :UUID) => {
         set.add(id);
       });
     }).toJS();
   }
-
-  const config = {
-    params: {
-      [KEYWORD]: keyword,
-      [ENTITY_TYPE_ID]: entityTypeId
-    }
-  };
 
   return getApiAxiosInstance(SEARCH_API)
     .post('/', data, config)
