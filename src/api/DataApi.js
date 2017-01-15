@@ -135,11 +135,11 @@ export function getSelectedEntitySetData(entitySetId :UUID, syncIds :UUID[], pro
   }
 
   if (!isValidUuidArray(syncIds)) {
-    return Promise.reject('invalid parameter: syncIds must be a non-empty array of valid UUID');
+    return Promise.reject('invalid parameter: syncIds must be a non-empty array of valid UUIDs');
   }
 
   if (!isValidUuidArray(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUID');
+    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
   }
 
   const data = {

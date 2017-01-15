@@ -10,6 +10,7 @@ import AclData, { AclDataBuilder } from './AclData';
 import AclKeyFragment, { AclKeyFragmentBuilder } from './AclKeyFragment';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
+import Organization, { OrganizationBuilder } from './Organization';
 import Principal, { PrincipalBuilder } from './Principal';
 import PropertyType, { PropertyTypeBuilder } from './PropertyType';
 import Schema, { SchemaBuilder } from './Schema';
@@ -28,6 +29,8 @@ export {
   EntitySetBuilder,
   EntityType,
   EntityTypeBuilder,
+  Organization,
+  OrganizationBuilder,
   Principal,
   PrincipalBuilder,
   PropertyType,

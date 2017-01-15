@@ -29,10 +29,6 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  PERMISSIONS_PATH
-} from '../constants/ApiPaths';
-
-import {
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
@@ -55,7 +51,7 @@ const LOG = new Logger('PermissionsApi');
  * @example
  * PermissionsApi.getAcl(
  *   [
- *     {}
+ *     { type: 'EntityType', id: 'ec6865e6-e60e-424b-a071-6a9c1603d735' }
  *   ]
  * );
  */
@@ -66,7 +62,7 @@ export function getAcl(aclKey :AclKeyFragment[]) :Promise<> {
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${PERMISSIONS_PATH}`, aclKey)
+    .post('/', aclKey)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -87,7 +83,28 @@ export function getAcl(aclKey :AclKeyFragment[]) :Promise<> {
  *
  * @example
  * PermissionsApi.updateAcl(
- *   {}
+ *   {
+ *     action: 'ADD',
+ *     acl: {
+ *       aclKey: [
+ *         {
+ *           type: 'EntityType',
+ *           id: 'ec6865e6-e60e-424b-a071-6a9c1603d735'
+ *         }
+ *       ],
+ *       aces: [
+ *         {
+ *           principal: {
+ *             type: 'USER',
+ *             id: 'principalId'
+ *           },
+ *           permissions: [
+ *             'READ'
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *   }
  * );
  */
 export function updateAcl(aclData :AclData) :Promise<> {
@@ -97,7 +114,7 @@ export function updateAcl(aclData :AclData) :Promise<> {
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .patch(`/${PERMISSIONS_PATH}`, aclData)
+    .patch('/', aclData)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

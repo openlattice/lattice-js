@@ -1,4 +1,4 @@
-import SecurableTypes from '../../src/constants/SecurableTypes';
+import SecurableTypes from '../../src/constants/types/SecurableTypes';
 
 const EntitySet :string = 'EntitySet';
 const EntityType :string = 'EntityType';

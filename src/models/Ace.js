@@ -16,7 +16,7 @@ import {
 
 import type {
   Permission
-} from '../constants/PermissionTypes';
+} from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('Ace');
 

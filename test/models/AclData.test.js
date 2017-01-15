@@ -1,4 +1,4 @@
-import ActionTypes from '../../src/constants/ActionTypes';
+import ActionTypes from '../../src/constants/types/ActionTypes';
 
 import AclData, {
   AclDataBuilder,
@@ -66,7 +66,7 @@ describe('AclData', () => {
         });
       });
 
-      it('should not throw when given a valid Acl', () => {
+      it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setAcl(MOCK_ACL);
         }).not.toThrow();
@@ -90,7 +90,7 @@ describe('AclData', () => {
         });
       });
 
-      it('should not throw when given a valid Action', () => {
+      it('should not throw when given valid parameters', () => {
         Object.values(ActionTypes).forEach((type) => {
           expect(() => {
             builder.setAction([type]);
@@ -117,7 +117,7 @@ describe('AclData', () => {
         }).toThrow();
       });
 
-      it('should return a valid AclData instance', () => {
+      it('should return a valid instance', () => {
 
         const acl = builder
           .setAcl(MOCK_ACL)
@@ -141,15 +141,19 @@ describe('AclData', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid AclData object literal', () => {
+      it('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_ACL_DATA_OBJ)).toEqual(true);
       });
 
-      it('should return true when given a valid AclData instance ', () => {
-        expect(isValid(new AclData(MOCK_ACL, MOCK_ACTION))).toEqual(true);
+      it('should return true when given a valid instance ', () => {
+        expect(isValid(
+          new AclData(
+            MOCK_ACL, MOCK_ACTION
+          )
+        )).toEqual(true);
       });
 
-      it('should return true when given an AclData instance constructed by the builder', () => {
+      it('should return true when given an instance constructed by the builder', () => {
 
         const acl = (new AclDataBuilder())
           .setAcl(MOCK_ACL)
@@ -173,39 +177,35 @@ describe('AclData', () => {
         });
       });
 
-      it('should return false when given an invalid AclData object literal', () => {
-        INVALID_PARAMS.forEach((invalidInput1) => {
-          INVALID_PARAMS.forEach((invalidInput2) => {
-            expect(isValid({ acl: invalidInput1, action: invalidInput2 })).toEqual(false);
-          });
+      it('should return false when given an object literal with an invalid "acl" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ACL_DATA_OBJ, { acl: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an AclData object literal with an invalid "acl" property', () => {
+      it('should return false when given an object literal with an invalid "action" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ acl: invalidInput, action: MOCK_ACTION })).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ACL_DATA_OBJ, { action: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an AclData object literal with an invalid "action" property', () => {
+      it('should return false when given an instance with an invalid "acl" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ acl: MOCK_ACL, action: invalidInput })).toEqual(false);
+          expect(isValid(
+            new AclData(
+              invalidInput, MOCK_ACTION
+            )
+          )).toEqual(false);
         });
       });
 
-      it('should return false when given an AclData instance with an invalid "acl" property', () => {
+      it('should return false when given an instance with an invalid "action" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          const aclData = new AclData(MOCK_ACL, MOCK_ACTION);
-          aclData.acl = invalidInput;
-          expect(isValid(aclData)).toEqual(false);
-        });
-      });
-
-      it('should return false when given an AclData instance with an invalid "action" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          const aclData = new AclData(MOCK_ACL, MOCK_ACTION);
-          aclData.action = invalidInput;
-          expect(isValid(aclData)).toEqual(false);
+          expect(isValid(
+            new AclData(
+              MOCK_ACL, invalidInput
+            )
+          )).toEqual(false);
         });
       });
 

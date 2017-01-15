@@ -3,7 +3,7 @@
  */
 
 import Logger from '../utils/Logger';
-import PrincipalTypes from '../constants/PrincipalTypes';
+import PrincipalTypes from '../constants/types/PrincipalTypes';
 
 import {
   isNonEmptyString
@@ -11,7 +11,7 @@ import {
 
 import type {
   PrincipalType
-} from '../constants/PrincipalTypes';
+} from '../constants/types/PrincipalTypes';
 
 const LOG = new Logger('Principal');
 
@@ -28,6 +28,16 @@ export default class Principal {
 
     this.type = type;
     this.id = id;
+  }
+
+  // for immutable.js equality
+  // TODO: need a better way to evaluate equality for models
+  valueOf() :string {
+
+    return JSON.stringify({
+      type: this.type,
+      id: this.id
+    });
   }
 }
 

@@ -3,6 +3,7 @@
  */
 
 const PrincipalTypes = {
+  ORGANIZATION: 'ORGANIZATION',
   ROLE: 'ROLE',
   USER: 'USER'
 };

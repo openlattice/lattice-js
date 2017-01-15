@@ -3,7 +3,7 @@
  */
 
 import Logger from '../utils/Logger';
-import SecurableTypes from '../constants/SecurableTypes';
+import SecurableTypes from '../constants/types/SecurableTypes';
 
 import {
   isNonEmptyString
@@ -15,7 +15,7 @@ import {
 
 import type {
   SecurableType
-} from '../constants/SecurableTypes';
+} from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('AclKeyFragment');
 
@@ -57,7 +57,7 @@ export class AclKeyFragmentBuilder {
   setId(id :UUID) :AclKeyFragmentBuilder {
 
     if (!isValidUuid(id)) {
-      throw new Error('invalid parameter: type must be a valid UUID');
+      throw new Error('invalid parameter: id must be a valid UUID');
     }
 
     this.id = id;

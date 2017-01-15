@@ -8,10 +8,6 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  PERMISSIONS_PATH
-} from '../../src/constants/ApiPaths';
-
-import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
@@ -74,7 +70,7 @@ function testGetAcl() {
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${PERMISSIONS_PATH}`,
+            '/',
             MOCK_ACL_KEY
           );
           done();
@@ -106,7 +102,7 @@ function testUpdateAcl() {
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
-            `/${PERMISSIONS_PATH}`,
+            '/',
             MOCK_ACL_DATA
           );
           done();
