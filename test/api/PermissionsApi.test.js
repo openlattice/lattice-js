@@ -8,10 +8,6 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  PERMISSIONS_PATH
-} from '../../src/constants/ApiPaths';
-
-import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
