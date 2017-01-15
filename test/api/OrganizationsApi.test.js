@@ -57,7 +57,7 @@ const MOCK_ORG = {
 
 let mockAxiosInstance = null;
 
-fdescribe('OrganizationsApi', () => {
+describe('OrganizationsApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();

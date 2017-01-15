@@ -73,7 +73,7 @@ describe('AclKeyFragment', () => {
         });
       });
 
-      it('should not throw when given valid Aces', () => {
+      it('should not throw when given a valid UUID', () => {
         expect(() => {
           builder.setId(MOCK_ID);
         }).not.toThrow();
