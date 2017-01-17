@@ -51,12 +51,12 @@ function testSearch() {
         SearchApi.search, searchOptions
       ];
 
-      it('should send a POST request with the correct URL path and data', (done) => {
+      it('should send a GET request with the correct URL path and data', (done) => {
 
         SearchApi.search(searchOptions)
           .then(() => {
-            expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-            expect(mockAxiosInstance.post).toHaveBeenCalledWith(...expectedParameters);
+            expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+            expect(mockAxiosInstance.get).toHaveBeenCalledWith(...expectedParameters);
             done();
           })
           .catch((e) => {
@@ -78,8 +78,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        [],
         {
+          data: [],
           params: {
             kw: MOCK_KEYWORD
           }
@@ -98,8 +98,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        [],
         {
+          data: [],
           params: {
             kw: MOCK_KEYWORD,
             eid: MOCK_ENTITY_TYPE_UUID
@@ -119,8 +119,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        MOCK_PROPERTY_TYPE_UUIDS,
         {
+          data: MOCK_PROPERTY_TYPE_UUIDS,
           params: {
             kw: MOCK_KEYWORD
           }
@@ -138,8 +138,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        [],
         {
+          data: [],
           params: {
             eid: MOCK_ENTITY_TYPE_UUID
           }
@@ -157,8 +157,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        MOCK_PROPERTY_TYPE_UUIDS,
         {
+          data: MOCK_PROPERTY_TYPE_UUIDS,
           params: {}
         }
       ];

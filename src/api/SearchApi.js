@@ -46,7 +46,7 @@ const KEYWORD = 'kw';
 const ENTITY_TYPE_ID = 'eid';
 
 /**
- * `POST /search`
+ * `GET /search`
  *
  * Executes a search query with the given parameters.
  *
@@ -65,13 +65,13 @@ const ENTITY_TYPE_ID = 'eid';
  *   }
  * );
  *
- * SearchApi.searchGET(
+ * SearchApi.search(
  *   {
  *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   }
  * );
  *
- * SearchApi.searchGET(
+ * SearchApi.search(
  *   {
  *     propertyTypeIds: [
  *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
@@ -80,14 +80,14 @@ const ENTITY_TYPE_ID = 'eid';
  *   }
  * );
  *
- * SearchApi.searchGET(
+ * SearchApi.search(
  *   {
  *     keyword: "test",
  *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735"
  *   }
  * );
  *
- * SearchApi.searchGET(
+ * SearchApi.search(
  *   {
  *     keyword: "test",
  *     propertyTypeIds: [
@@ -103,8 +103,11 @@ export function search(searchOptions :Object) :Promise<> {
     return Promise.reject('invalid parameter: at least one search parameter must be defined');
   }
 
-  let data = [];
-  const config = { params: {} };
+  const config = {
+    data: [],
+    params: {}
+  };
+
   const { keyword, entityTypeId, propertyTypeIds } = searchOptions;
 
   if (isDefined(keyword)) {
@@ -125,7 +128,7 @@ export function search(searchOptions :Object) :Promise<> {
     if (!isValidUuidArray(propertyTypeIds)) {
       return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
     }
-    data = Immutable.Set().withMutations((set :Set<UUID>) => {
+    config.data = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((id :UUID) => {
         set.add(id);
       });
@@ -133,7 +136,7 @@ export function search(searchOptions :Object) :Promise<> {
   }
 
   return getApiAxiosInstance(SEARCH_API)
-    .post('/', data, config)
+    .get('/', config)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
