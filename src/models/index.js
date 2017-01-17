@@ -7,7 +7,6 @@ import FullyQualifiedName from './FullyQualifiedName';
 import Ace, { AceBuilder } from './Ace';
 import Acl, { AclBuilder } from './Acl';
 import AclData, { AclDataBuilder } from './AclData';
-import AclKeyFragment, { AclKeyFragmentBuilder } from './AclKeyFragment';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
 import Organization, { OrganizationBuilder } from './Organization';
@@ -23,8 +22,6 @@ export {
   AclBuilder,
   AclData,
   AclDataBuilder,
-  AclKeyFragment,
-  AclKeyFragmentBuilder,
   EntitySet,
   EntitySetBuilder,
   EntityType,

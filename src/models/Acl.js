@@ -3,12 +3,11 @@
  */
 
 import Ace from './Ace';
-import AclKeyFragment from './AclKeyFragment';
 import Logger from '../utils/Logger';
 
 import {
   isValidAceArray,
-  isValidAclKey
+  isValidUuidArray
 } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Acl');
@@ -19,10 +18,10 @@ const LOG = new Logger('Acl');
  */
 export default class Acl {
 
-  aclKey :AclKeyFragment[];
+  aclKey :UUID[];
   aces :Ace[];
 
-  constructor(aclKey :AclKeyFragment[], aces :Ace[]) {
+  constructor(aclKey :UUID[], aces :Ace[]) {
 
     this.aclKey = aclKey;
     this.aces = aces;
@@ -35,13 +34,13 @@ export default class Acl {
  */
 export class AclBuilder {
 
-  aclKey :AclKeyFragment[];
+  aclKey :UUID[];
   aces :Ace[];
 
-  setAclKey(aclKey :AclKeyFragment[]) :AclBuilder {
+  setAclKey(aclKey :UUID[]) :AclBuilder {
 
-    if (!isValidAclKey(aclKey)) {
-      throw new Error('invalid parameter: aclKey must be a non-empty array of valid AclKeyFragments');
+    if (!isValidUuidArray(aclKey)) {
+      throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
     }
 
     this.aclKey = aclKey;

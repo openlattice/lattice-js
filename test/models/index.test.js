@@ -37,16 +37,6 @@ describe('Loom.DataModels', () => {
     expect(DataModels.AclDataBuilder).toEqual(jasmine.any(Function));
   });
 
-  it('should expose AclKeyFragment', () => {
-    expect(DataModels.AclKeyFragment).toBeDefined();
-    expect(DataModels.AclKeyFragment).toEqual(jasmine.any(Function));
-  });
-
-  it('should expose AclKeyFragmentBuilder', () => {
-    expect(DataModels.AclKeyFragmentBuilder).toBeDefined();
-    expect(DataModels.AclKeyFragmentBuilder).toEqual(jasmine.any(Function));
-  });
-
   it('should expose EntitySet', () => {
     expect(DataModels.EntitySet).toBeDefined();
     expect(DataModels.EntitySet).toEqual(jasmine.any(Function));

@@ -11,10 +11,6 @@ import Ace, {
   isValid as isValidAce
 } from '../models/Ace';
 
-import AclKeyFragment, {
-  isValid as isValidAclKeyFragment
-} from '../models/AclKeyFragment';
-
 import EntitySet, {
   isValid as isValidEntitySet
 } from '../models/EntitySet';
@@ -99,13 +95,6 @@ export function isValidAceArray(aces :Ace[]) :boolean {
 
   return validateNonEmptyArray(aces, (ace :Ace) => {
     return isValidAce(ace);
-  });
-}
-
-export function isValidAclKey(aclKey :AclKeyFragment[]) :boolean {
-
-  return validateNonEmptyArray(aclKey, (frag :AclKeyFragment) => {
-    return isValidAclKeyFragment(frag);
   });
 }
 
