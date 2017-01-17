@@ -17,7 +17,6 @@
  * // PermissionsApi.get...
  */
 
-import AclKeyFragment from '../models/AclKeyFragment';
 import Logger from '../utils/Logger';
 
 import AclData, {
@@ -33,7 +32,7 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isValidAclKey
+  isValidUuidArray
 } from '../utils/ValidationUtils';
 
 const LOG = new Logger('PermissionsApi');
@@ -45,7 +44,7 @@ const LOG = new Logger('PermissionsApi');
  *
  * @static
  * @memberof loom-data.PermissionsApi
- * @param {AclKeyFragment[]} aclKey
+ * @param {UUID[]} aclKey
  * @returns {Promise}
  *
  * @example
@@ -55,10 +54,10 @@ const LOG = new Logger('PermissionsApi');
  *   ]
  * );
  */
-export function getAcl(aclKey :AclKeyFragment[]) :Promise<> {
+export function getAcl(aclKey :UUID[]) :Promise<> {
 
-  if (!isValidAclKey(aclKey)) {
-    return Promise.reject('invalid parameter: aclKey must be a non-empty array of valid AclKeyFragments');
+  if (!isValidUuidArray(aclKey)) {
+    return Promise.reject('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
