@@ -8,15 +8,17 @@ import {
   DATA_API,
   EDM_API,
   PERMISSIONS_API,
+  SEARCH_API,
   USERS_API
 } from '../../src/constants/ApiNames';
 
 import {
-  ADMIN_PATH,
+  EDM_PATH,
   DATA_PATH,
   DATASTORE_PATH,
-  ONTOLOGY_PATH,
-  PERMISSIONS_PATH
+  PERMISSIONS_PATH,
+  PRINCIPALS_PATH,
+  SEARCH_PATH
 } from '../../src/constants/ApiPaths';
 
 const MOCK_AUTH_TOKEN = 'hello_world';
@@ -68,7 +70,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'localhost'
         });
         expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}/${DATA_PATH}`
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${DATA_PATH}`
         );
       });
 
@@ -79,7 +81,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ONTOLOGY_PATH}/${DATA_PATH}`
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${DATA_PATH}`
         );
       });
 
@@ -94,7 +96,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'localhost'
         });
         expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}`
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${EDM_PATH}`
         );
       });
 
@@ -105,7 +107,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ONTOLOGY_PATH}`
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${EDM_PATH}`
         );
       });
 
@@ -120,7 +122,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'localhost'
         });
         expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}/${PERMISSIONS_PATH}`
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${PERMISSIONS_PATH}`
         );
       });
 
@@ -131,7 +133,33 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ONTOLOGY_PATH}/${PERMISSIONS_PATH}`
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${PERMISSIONS_PATH}`
+        );
+      });
+
+    });
+
+    describe('SearchApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(SEARCH_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${SEARCH_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(SEARCH_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${SEARCH_PATH}`
         );
       });
 
@@ -146,7 +174,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'localhost'
         });
         expect(AxiosUtils.getApiBaseUrl(USERS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}/${ADMIN_PATH}`
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
         );
       });
 
@@ -157,7 +185,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(USERS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ONTOLOGY_PATH}/${ADMIN_PATH}`
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
         );
       });
 
@@ -167,8 +195,8 @@ describe('AxiosUtils', () => {
 
   describe('getApiAxiosInstance()', () => {
 
-    const DATA_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}/${DATA_PATH}`;
-    const EDM_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${ONTOLOGY_PATH}`;
+    const DATA_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${DATA_PATH}`;
+    const EDM_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${EDM_PATH}`;
 
     it('should create a new Axios instance for each distinct URL', () => {
 

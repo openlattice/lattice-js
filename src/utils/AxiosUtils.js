@@ -5,8 +5,6 @@
 import Axios from 'axios';
 import Immutable from 'immutable';
 
-import EnvToUrlMap from '../constants/EnvToUrlMap';
-
 import {
   getConfig
 } from '../config/Configuration';
@@ -21,12 +19,12 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  ADMIN_PATH,
   DATA_PATH,
   DATASTORE_PATH,
-  ONTOLOGY_PATH,
+  EDM_PATH,
   ORGANIZATIONS_PATH,
   PERMISSIONS_PATH,
+  PRINCIPALS_PATH,
   SEARCH_PATH
 } from '../constants/ApiPaths';
 
@@ -34,26 +32,21 @@ let baseUrlToAxiosInstanceMap :Map<string, Object> = Immutable.Map();
 
 function getApiBaseUrl(api :string) :string {
 
-  let baseUrl :string = getConfig().get('baseUrl');
-
-  // currently, only localhost does not have /datastore in the path
-  if (!EnvToUrlMap.get('LOCAL').includes(baseUrl)) {
-    baseUrl = `${baseUrl}/${DATASTORE_PATH}`;
-  }
+  const baseUrl :string = getConfig().get('baseUrl');
 
   switch (api) {
     case DATA_API:
-      return `${baseUrl}/${ONTOLOGY_PATH}/${DATA_PATH}`;
+      return `${baseUrl}/${DATASTORE_PATH}/${DATA_PATH}`;
     case EDM_API:
-      return `${baseUrl}/${ONTOLOGY_PATH}`;
+      return `${baseUrl}/${DATASTORE_PATH}/${EDM_PATH}`;
     case ORGANIZATIONS_API:
-      return `${baseUrl}/${ONTOLOGY_PATH}/${ORGANIZATIONS_PATH}`;
+      return `${baseUrl}/${DATASTORE_PATH}/${ORGANIZATIONS_PATH}`;
     case PERMISSIONS_API:
-      return `${baseUrl}/${ONTOLOGY_PATH}/${PERMISSIONS_PATH}`;
+      return `${baseUrl}/${DATASTORE_PATH}/${PERMISSIONS_PATH}`;
     case SEARCH_API:
-      return `${baseUrl}/${ONTOLOGY_PATH}/${SEARCH_PATH}`;
+      return `${baseUrl}/${DATASTORE_PATH}/${SEARCH_PATH}`;
     case USERS_API:
-      return `${baseUrl}/${ONTOLOGY_PATH}/${ADMIN_PATH}`;
+      return `${baseUrl}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`;
     default:
       return baseUrl;
   }

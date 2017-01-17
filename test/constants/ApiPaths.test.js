@@ -1,23 +1,24 @@
 import * as ApiPaths from '../../src/constants/ApiPaths';
 
 // base paths
-const DATA_PATH :string = 'data';
 const DATASTORE_PATH :string = 'datastore';
-const ONTOLOGY_PATH :string = 'ontology';
 
 // shared paths
 const ENTITY_SET_PATH :string = 'entity/set';
 const ENTITY_TYPE_PATH :string = 'entity/type';
 const IDS_PATH :string = 'ids';
 const NAMESPACE_PATH :string = 'namespace';
+const PRINCIPALS_PATH :string = 'principals';
 const PROPERTY_TYPE_PATH :string = 'property/type';
 const ROLES_PATH :string = 'roles';
 
 // DataApi specific paths
+const DATA_PATH :string = 'data';
 const GET_DATA_PATH :string = 'getData';
 const ENTITY_DATA_PATH :string = 'entitydata';
 
 // EntityDataModelApi specific paths
+const EDM_PATH :string = 'edm';
 const SCHEMA_PATH :string = 'schema';
 
 // OrganizationsApi specific paths
@@ -25,7 +26,6 @@ const DESCRIPTION_PATH :string = 'description';
 const EMAIL_DOMAINS_PATH :string = 'email-domains';
 const MEMBERS_PATH :string = 'members';
 const ORGANIZATIONS_PATH :string = 'organizations';
-const PRINCIPALS_PATH :string = 'principals';
 const TITLE_PATH :string = 'title';
 
 // PermissionsApi specific paths
@@ -35,7 +35,6 @@ const PERMISSIONS_PATH :string = 'permissions';
 const SEARCH_PATH :string = 'search';
 
 // UsersApi specific paths
-const ADMIN_PATH :string = 'admin';
 const RESET_PATH :string = 'reset';
 const USERS_PATH :string = 'users';
 
@@ -43,19 +42,9 @@ describe('ApiPaths', () => {
 
   describe('base paths', () => {
 
-    it(`should expose "${DATA_PATH}"`, () => {
-      expect(ApiPaths.DATA_PATH).toBeDefined();
-      expect(ApiPaths.DATA_PATH).toEqual(DATA_PATH);
-    });
-
     it(`should expose "${DATASTORE_PATH}"`, () => {
       expect(ApiPaths.DATASTORE_PATH).toBeDefined();
       expect(ApiPaths.DATASTORE_PATH).toEqual(DATASTORE_PATH);
-    });
-
-    it(`should expose "${ONTOLOGY_PATH}"`, () => {
-      expect(ApiPaths.ONTOLOGY_PATH).toBeDefined();
-      expect(ApiPaths.ONTOLOGY_PATH).toEqual(ONTOLOGY_PATH);
     });
 
   });
@@ -82,6 +71,11 @@ describe('ApiPaths', () => {
       expect(ApiPaths.NAMESPACE_PATH).toEqual(NAMESPACE_PATH);
     });
 
+    it(`should expose "${PRINCIPALS_PATH}"`, () => {
+      expect(ApiPaths.PRINCIPALS_PATH).toBeDefined();
+      expect(ApiPaths.PRINCIPALS_PATH).toEqual(PRINCIPALS_PATH);
+    });
+
     it(`should expose "${PROPERTY_TYPE_PATH}"`, () => {
       expect(ApiPaths.PROPERTY_TYPE_PATH).toBeDefined();
       expect(ApiPaths.PROPERTY_TYPE_PATH).toEqual(PROPERTY_TYPE_PATH);
@@ -96,6 +90,11 @@ describe('ApiPaths', () => {
 
   describe('DataApi specific paths', () => {
 
+    it(`should expose "${DATA_PATH}"`, () => {
+      expect(ApiPaths.DATA_PATH).toBeDefined();
+      expect(ApiPaths.DATA_PATH).toEqual(DATA_PATH);
+    });
+
     it(`should expose "${GET_DATA_PATH}"`, () => {
       expect(ApiPaths.GET_DATA_PATH).toBeDefined();
       expect(ApiPaths.GET_DATA_PATH).toEqual(GET_DATA_PATH);
@@ -109,6 +108,11 @@ describe('ApiPaths', () => {
   });
 
   describe('EntityDataModelApi specific paths', () => {
+
+    it(`should expose "${EDM_PATH}"`, () => {
+      expect(ApiPaths.EDM_PATH).toBeDefined();
+      expect(ApiPaths.EDM_PATH).toEqual(EDM_PATH);
+    });
 
     it(`should expose "${SCHEMA_PATH}"`, () => {
       expect(ApiPaths.SCHEMA_PATH).toBeDefined();
@@ -139,11 +143,6 @@ describe('ApiPaths', () => {
       expect(ApiPaths.ORGANIZATIONS_PATH).toEqual(ORGANIZATIONS_PATH);
     });
 
-    it(`should expose "${PRINCIPALS_PATH}"`, () => {
-      expect(ApiPaths.PRINCIPALS_PATH).toBeDefined();
-      expect(ApiPaths.PRINCIPALS_PATH).toEqual(PRINCIPALS_PATH);
-    });
-
     it(`should expose "${TITLE_PATH}"`, () => {
       expect(ApiPaths.TITLE_PATH).toBeDefined();
       expect(ApiPaths.TITLE_PATH).toEqual(TITLE_PATH);
@@ -170,11 +169,6 @@ describe('ApiPaths', () => {
   });
 
   describe('UsersApi specific paths', () => {
-
-    it(`should expose "${ADMIN_PATH}"`, () => {
-      expect(ApiPaths.ADMIN_PATH).toBeDefined();
-      expect(ApiPaths.ADMIN_PATH).toEqual(ADMIN_PATH);
-    });
 
     it(`should expose "${RESET_PATH}"`, () => {
       expect(ApiPaths.RESET_PATH).toBeDefined();
