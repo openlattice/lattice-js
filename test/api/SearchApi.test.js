@@ -78,11 +78,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        [],
         {
-          params: {
-            kw: MOCK_KEYWORD
-          }
+          kw: MOCK_KEYWORD
         }
       ];
 
@@ -98,12 +95,9 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        [],
         {
-          params: {
-            kw: MOCK_KEYWORD,
-            eid: MOCK_ENTITY_TYPE_UUID
-          }
+          kw: MOCK_KEYWORD,
+          eid: MOCK_ENTITY_TYPE_UUID
         }
       ];
 
@@ -119,11 +113,9 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        MOCK_PROPERTY_TYPE_UUIDS,
         {
-          params: {
-            kw: MOCK_KEYWORD
-          }
+          kw: MOCK_KEYWORD,
+          pid: MOCK_PROPERTY_TYPE_UUIDS
         }
       ];
 
@@ -138,11 +130,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        [],
         {
-          params: {
-            eid: MOCK_ENTITY_TYPE_UUID
-          }
+          eid: MOCK_ENTITY_TYPE_UUID
         }
       ];
 
@@ -157,9 +146,8 @@ function testSearch() {
 
       const expectedParameters = [
         '/',
-        MOCK_PROPERTY_TYPE_UUIDS,
         {
-          params: {}
+          pid: MOCK_PROPERTY_TYPE_UUIDS
         }
       ];
 

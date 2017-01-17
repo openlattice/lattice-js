@@ -44,6 +44,7 @@ const LOG = new Logger('SearchApi');
 
 const KEYWORD = 'kw';
 const ENTITY_TYPE_ID = 'eid';
+const PROPERTY_TYPE_IDS = 'pid';
 
 /**
  * `POST /search`
@@ -103,29 +104,28 @@ export function search(searchOptions :Object) :Promise<> {
     return Promise.reject('invalid parameter: at least one search parameter must be defined');
   }
 
-  let data = [];
-  const config = { params: {} };
+  const data = {};
   const { keyword, entityTypeId, propertyTypeIds } = searchOptions;
 
   if (isDefined(keyword)) {
     if (!isNonEmptyString(keyword)) {
       return Promise.reject('invalid parameter: keyword must be a non-empty string');
     }
-    config.params[KEYWORD] = keyword;
+    data[KEYWORD] = keyword;
   }
 
   if (isDefined(entityTypeId)) {
     if (!isValidUuid(entityTypeId)) {
       return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
     }
-    config.params[ENTITY_TYPE_ID] = entityTypeId;
+    data[ENTITY_TYPE_ID] = entityTypeId;
   }
 
   if (isDefined(propertyTypeIds)) {
     if (!isValidUuidArray(propertyTypeIds)) {
       return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
     }
-    data = Immutable.Set().withMutations((set :Set<UUID>) => {
+    data[PROPERTY_TYPE_IDS] = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((id :UUID) => {
         set.add(id);
       });
@@ -133,7 +133,7 @@ export function search(searchOptions :Object) :Promise<> {
   }
 
   return getApiAxiosInstance(SEARCH_API)
-    .post('/', data, config)
+    .post('/', data)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
