@@ -46,7 +46,7 @@ const KEYWORD = 'kw';
 const ENTITY_TYPE_ID = 'eid';
 
 /**
- * `GET /search`
+ * `POST /search`
  *
  * Executes a search query with the given parameters.
  *
@@ -103,11 +103,8 @@ export function search(searchOptions :Object) :Promise<> {
     return Promise.reject('invalid parameter: at least one search parameter must be defined');
   }
 
-  const config = {
-    data: [],
-    params: {}
-  };
-
+  let data = [];
+  const config = { params: {} };
   const { keyword, entityTypeId, propertyTypeIds } = searchOptions;
 
   if (isDefined(keyword)) {
@@ -128,7 +125,7 @@ export function search(searchOptions :Object) :Promise<> {
     if (!isValidUuidArray(propertyTypeIds)) {
       return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
     }
-    config.data = Immutable.Set().withMutations((set :Set<UUID>) => {
+    data = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((id :UUID) => {
         set.add(id);
       });
@@ -136,7 +133,7 @@ export function search(searchOptions :Object) :Promise<> {
   }
 
   return getApiAxiosInstance(SEARCH_API)
-    .get('/', config)
+    .post('/', data, config)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
