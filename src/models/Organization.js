@@ -8,6 +8,7 @@ import Principal from './Principal';
 import Logger from '../utils/Logger';
 
 import {
+  isDefined,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -145,13 +146,25 @@ export function isValid(organization :any) :boolean {
 
   try {
 
-    (new OrganizationBuilder())
-      .setId(organization.id)
+    const organizationBuilder = new OrganizationBuilder();
+
+    // required properties
+    organizationBuilder
       .setTitle(organization.title)
-      .setDescription(organization.description)
       .setMembers(organization.members)
       .setRoles(organization.roles)
       .build();
+
+    // optional properties
+    if (isDefined(organization.id)) {
+      organizationBuilder.setId(organization.id);
+    }
+
+    if (isDefined(organization.description)) {
+      organizationBuilder.setDescription(organization.description);
+    }
+
+    organizationBuilder.build();
 
     return true;
   }
