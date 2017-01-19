@@ -15,6 +15,11 @@ export function isDefined(value :any) :boolean {
   return !isNull(value) && !isUndefined(value);
 }
 
+export function isEmptyArray(value :any) :boolean {
+
+  return isArray(value) && isEmpty(value);
+}
+
 export function isNonEmptyArray(value :any) :boolean {
 
   return isArray(value) && !isEmpty(value);

@@ -86,10 +86,7 @@ export function getAcl(aclKey :UUID[]) :Promise<> {
  *     action: 'ADD',
  *     acl: {
  *       aclKey: [
- *         {
- *           type: 'EntityType',
- *           id: 'ec6865e6-e60e-424b-a071-6a9c1603d735'
- *         }
+ *         'ec6865e6-e60e-424b-a071-6a9c1603d735'
  *       ],
  *       aces: [
  *         {
