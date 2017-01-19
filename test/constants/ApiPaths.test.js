@@ -40,12 +40,11 @@ const REQUESTS_PATH :string = 'requests';
 const RESOLVED_PATH :string = 'resolved';
 const UNRESOLVED_PATH :string = 'unresolved';
 
+// PrincipalsApi specific paths
+const USERS_PATH :string = 'users';
+
 // SearchApi specific paths
 const SEARCH_PATH :string = 'search';
-
-// UsersApi specific paths
-const RESET_PATH :string = 'reset';
-const USERS_PATH :string = 'users';
 
 describe('ApiPaths', () => {
 
@@ -201,25 +200,20 @@ describe('ApiPaths', () => {
 
   });
 
+  describe('PrincipalsApi specific paths', () => {
+
+    it(`should expose "${USERS_PATH}"`, () => {
+      expect(ApiPaths.USERS_PATH).toBeDefined();
+      expect(ApiPaths.USERS_PATH).toEqual(USERS_PATH);
+    });
+
+  });
+
   describe('SearchApi specific paths', () => {
 
     it(`should expose "${SEARCH_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_PATH).toEqual(SEARCH_PATH);
-    });
-
-  });
-
-  describe('UsersApi specific paths', () => {
-
-    it(`should expose "${RESET_PATH}"`, () => {
-      expect(ApiPaths.RESET_PATH).toBeDefined();
-      expect(ApiPaths.RESET_PATH).toEqual(RESET_PATH);
-    });
-
-    it(`should expose "${USERS_PATH}"`, () => {
-      expect(ApiPaths.USERS_PATH).toBeDefined();
-      expect(ApiPaths.USERS_PATH).toEqual(USERS_PATH);
     });
 
   });

@@ -16,8 +16,8 @@ import {
   ORGANIZATIONS_API,
   PERMISSIONS_API,
   PERMISSIONS_REQUESTS_API,
-  SEARCH_API,
-  USERS_API
+  PRINCIPALS_API,
+  SEARCH_API
 } from '../constants/ApiNames';
 
 import {
@@ -53,7 +53,7 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${DATASTORE_PATH}/${REQUESTS_PATH}`;
     case SEARCH_API:
       return `${baseUrl}/${DATASTORE_PATH}/${SEARCH_PATH}`;
-    case USERS_API:
+    case PRINCIPALS_API:
       return `${baseUrl}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`;
     default:
       return baseUrl;

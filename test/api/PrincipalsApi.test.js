@@ -1,14 +1,13 @@
 /* eslint-disable no-use-before-define */
 
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
-import * as UsersApi from '../../src/api/UsersApi';
+import * as PrincipalsApi from '../../src/api/PrincipalsApi';
 
 import {
-  USERS_API
+  PRINCIPALS_API
 } from '../../src/constants/ApiNames';
 
 import {
-  RESET_PATH,
   ROLES_PATH,
   USERS_PATH
 } from '../../src/constants/ApiPaths';
@@ -29,7 +28,7 @@ const MOCK_ROLE = 'admin';
 
 let mockAxiosInstance = null;
 
-describe('UsersApi', () => {
+describe('PrincipalsApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
@@ -44,7 +43,6 @@ describe('UsersApi', () => {
   testGetAllUsers();
   testGetAllUsersForRole();
   testGetAllUsersForAllRoles();
-  testResetUserRoles();
 });
 
 function testGetUser() {
@@ -52,12 +50,12 @@ function testGetUser() {
   describe('getUser()', () => {
 
     const functionInvocation = [
-      UsersApi.getUser, MOCK_USER_ID
+      PrincipalsApi.getUser, MOCK_USER_ID
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      UsersApi.getUser(MOCK_USER_ID)
+      PrincipalsApi.getUser(MOCK_USER_ID)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -70,7 +68,7 @@ function testGetUser() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(USERS_API, ...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
     testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
@@ -83,12 +81,12 @@ function testGetAllUsers() {
   describe('getAllUsers()', () => {
 
     const functionInvocation = [
-      UsersApi.getAllUsers
+      PrincipalsApi.getAllUsers
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      UsersApi.getAllUsers()
+      PrincipalsApi.getAllUsers()
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -101,7 +99,7 @@ function testGetAllUsers() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(USERS_API, ...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
 
   });
@@ -112,12 +110,12 @@ function testGetAllUsersForRole() {
   describe('getAllUsersForRole()', () => {
 
     const functionInvocation = [
-      UsersApi.getAllUsersForRole, MOCK_ROLE
+      PrincipalsApi.getAllUsersForRole, MOCK_ROLE
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      UsersApi.getAllUsersForRole(MOCK_ROLE)
+      PrincipalsApi.getAllUsersForRole(MOCK_ROLE)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -130,7 +128,7 @@ function testGetAllUsersForRole() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(USERS_API, ...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
     testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
@@ -143,12 +141,12 @@ function testGetAllUsersForAllRoles() {
   describe('getAllUsersForAllRoles()', () => {
 
     const functionInvocation = [
-      UsersApi.getAllUsersForAllRoles
+      PrincipalsApi.getAllUsersForAllRoles
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      UsersApi.getAllUsersForAllRoles()
+      PrincipalsApi.getAllUsersForAllRoles()
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -161,40 +159,8 @@ function testGetAllUsersForAllRoles() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(USERS_API, ...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
-  });
-}
-
-function testResetUserRoles() {
-
-  describe('resetUserRoles()', () => {
-
-    const functionInvocation = [
-      UsersApi.resetUserRoles, MOCK_USER_ID, [MOCK_ROLE]
-    ];
-
-    it('should send a PATCH request with the correct URL path', (done) => {
-
-      UsersApi.resetUserRoles(MOCK_USER_ID, [MOCK_ROLE])
-        .then(() => {
-          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
-            `/${ROLES_PATH}/${RESET_PATH}/${MOCK_USER_ID}`,
-            [MOCK_ROLE]
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(USERS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });
 }

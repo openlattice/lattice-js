@@ -11,8 +11,8 @@ import {
   ORGANIZATIONS_API,
   PERMISSIONS_API,
   PERMISSIONS_REQUESTS_API,
-  SEARCH_API,
-  USERS_API
+  PRINCIPALS_API,
+  SEARCH_API
 } from '../../src/constants/ApiNames';
 
 import {
@@ -223,6 +223,32 @@ describe('AxiosUtils', () => {
 
     });
 
+    describe('PrincipalsApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(PRINCIPALS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(PRINCIPALS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
+        );
+      });
+
+    });
+
     describe('SearchApi', () => {
 
       it('should return the correct LOCAL URL', () => {
@@ -244,32 +270,6 @@ describe('AxiosUtils', () => {
         });
         expect(AxiosUtils.getApiBaseUrl(SEARCH_API)).toEqual(
           `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${SEARCH_PATH}`
-        );
-      });
-
-    });
-
-    describe('UsersApi', () => {
-
-      it('should return the correct LOCAL URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'localhost'
-        });
-        expect(AxiosUtils.getApiBaseUrl(USERS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
-        );
-      });
-
-      it('should return the correct PROD URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'api'
-        });
-        expect(AxiosUtils.getApiBaseUrl(USERS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
         );
       });
 

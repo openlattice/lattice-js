@@ -81,6 +81,15 @@ export const REQUESTS_PATH :string = 'requests';
 export const RESOLVED_PATH :string = 'resolved';
 export const UNRESOLVED_PATH :string = 'unresolved';
 
+
+/*
+ *
+ * PrincipalsApi specific paths
+ *
+ */
+
+export const USERS_PATH :string = 'users';
+
 /*
  *
  * SearchApi specific paths
@@ -88,12 +97,3 @@ export const UNRESOLVED_PATH :string = 'unresolved';
  */
 
 export const SEARCH_PATH :string = 'search';
-
-/*
- *
- * UsersApi specific paths
- *
- */
-
-export const RESET_PATH :string = 'reset';
-export const USERS_PATH :string = 'users';

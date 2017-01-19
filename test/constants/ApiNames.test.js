@@ -7,7 +7,7 @@ const ORGANIZATIONS_API :string = 'OrganizationsApi';
 const PERMISSIONS_API :string = 'PermissionsApi';
 const PERMISSIONS_REQUESTS_API :string = 'PermissionsRequestsApi';
 const SEARCH_API :string = 'SearchApi';
-const USERS_API :string = 'UsersApi';
+const PRINCIPALS_API :string = 'PrincipalsApi';
 
 describe('ApiNames', () => {
 
@@ -41,14 +41,14 @@ describe('ApiNames', () => {
     expect(ApiNames.PERMISSIONS_REQUESTS_API).toEqual(PERMISSIONS_REQUESTS_API);
   });
 
+  it(`should expose "${PRINCIPALS_API}"`, () => {
+    expect(ApiNames.PRINCIPALS_API).toBeDefined();
+    expect(ApiNames.PRINCIPALS_API).toEqual(PRINCIPALS_API);
+  });
+
   it(`should expose "${SEARCH_API}"`, () => {
     expect(ApiNames.SEARCH_API).toBeDefined();
     expect(ApiNames.SEARCH_API).toEqual(SEARCH_API);
-  });
-
-  it(`should expose "${USERS_API}"`, () => {
-    expect(ApiNames.USERS_API).toBeDefined();
-    expect(ApiNames.USERS_API).toEqual(USERS_API);
   });
 
 });
