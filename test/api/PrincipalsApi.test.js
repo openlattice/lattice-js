@@ -44,7 +44,6 @@ describe('PrincipalsApi', () => {
   testGetAllUsers();
   testGetAllUsersForRole();
   testGetAllUsersForAllRoles();
-  testResetUserRoles();
 });
 
 function testGetUser() {
@@ -163,38 +162,6 @@ function testGetAllUsersForAllRoles() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
-  });
-}
-
-function testResetUserRoles() {
-
-  describe('resetUserRoles()', () => {
-
-    const functionInvocation = [
-      PrincipalsApi.resetUserRoles, MOCK_USER_ID, [MOCK_ROLE]
-    ];
-
-    it('should send a PATCH request with the correct URL path', (done) => {
-
-      PrincipalsApi.resetUserRoles(MOCK_USER_ID, [MOCK_ROLE])
-        .then(() => {
-          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
-            `/${ROLES_PATH}/${RESET_PATH}/${MOCK_USER_ID}`,
-            [MOCK_ROLE]
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });
 }

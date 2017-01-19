@@ -17,6 +17,8 @@
  * // PrincipalsApi.get...
  */
 
+import isUndefined from 'lodash/isUndefined';
+
 import Logger from '../utils/Logger';
 
 import {
@@ -24,7 +26,6 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  RESET_PATH,
   ROLES_PATH,
   USERS_PATH
 } from '../constants/ApiPaths';
@@ -34,24 +35,25 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isNonEmptyArray,
-  isNonEmptyString
+  isEmptyArray,
+  isNonEmptyString,
+  isNonEmptyStringArray
 } from '../utils/LangUtils';
 
 const LOG = new Logger('PrincipalsApi');
 
 /**
- * `GET /users/{userId}`
+ * `GET /principals/users/{userId}`
  *
  * @static
  * @memberof loom-data.PrincipalsApi
- * @param {string} userId - user UUID
+ * @param {string} userId
  * @return {Promise}
  */
 export function getUser(userId :string) :Promise<> {
 
   if (!isNonEmptyString(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+    return Promise.reject('invalid parameter: userId must be a non-empty string');
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
@@ -65,7 +67,7 @@ export function getUser(userId :string) :Promise<> {
 }
 
 /**
- * `GET /users`
+ * `GET /principals/users`
  *
  * @static
  * @memberof loom-data.PrincipalsApi
@@ -84,7 +86,7 @@ export function getAllUsers() :Promise<> {
 }
 
 /**
- * `GET /roles/{role}`
+ * `GET /principals/roles/{role}`
  *
  * @static
  * @memberof loom-data.PrincipalsApi
@@ -107,7 +109,7 @@ export function getAllUsersForRole(role :string) :Promise<> {
 }
 
 /**
- * `GET /roles`
+ * `GET /principals/roles`
  *
  * @static
  * @memberof loom-data.PrincipalsApi
@@ -126,26 +128,94 @@ export function getAllUsersForAllRoles() :Promise<> {
 }
 
 /**
- * `PATCH /roles/reset/{userId}`
+ * `PUT /principals/users/{userId}/roles/{role}`
  *
  * @static
  * @memberof loom-data.PrincipalsApi
- * @param {string} userId - user UUID
- * @param {string[]} roles - a list of roles to be reset
+ * @param {string} userId
+ * @param {string} role
  * @return {Promise}
+ *
+ * TODO: add unit tests
  */
-export function resetUserRoles(userId :string, roles :string[]) :Promise<> {
+export function addRoleToUser(userId :string, role :string) :Promise<> {
 
   if (!isNonEmptyString(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+    return Promise.reject('invalid parameter: userId must be a non-empty string');
   }
 
-  if (!isNonEmptyArray(roles)) {
-    return Promise.reject('invalid parameter: roles must be a non-empty array of strings');
+  if (!isNonEmptyString(role)) {
+    return Promise.reject('invalid parameter: role must be a non-empty string');
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
-    .patch(`/${ROLES_PATH}/${RESET_PATH}/${userId}`, roles)
+    .put(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `PUT /principals/users/{userId}/roles`
+ *
+ * @static
+ * @memberof loom-data.PrincipalsApi
+ * @param {string} userId
+ * @param {string[]} roles
+ * @return {Promise}
+ *
+ * TODO: add unit tests
+ */
+export function setUserRoles(userId :string, roles :string[]) :Promise<> {
+
+  if (!isNonEmptyString(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty string');
+  }
+
+  let userRoles = roles;
+  if (isUndefined(roles) || isEmptyArray(roles)) {
+    userRoles = [];
+  }
+  else if (!isNonEmptyStringArray(roles)) {
+    return Promise.reject('invalid parameter: roles must be an array of strings');
+  }
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .put(`/${USERS_PATH}/${userId}/${ROLES_PATH}`, userRoles)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `DELETE /principals/users/{userId}/roles/{role}`
+ *
+ * @static
+ * @memberof loom-data.PrincipalsApi
+ * @param {string} userId
+ * @param {string} role
+ * @return {Promise}
+ *
+ * TODO: add unit tests
+ */
+export function removeRoleFromUser(userId :string, role :string) :Promise<> {
+
+  if (!isNonEmptyString(userId)) {
+    return Promise.reject('invalid parameter: userId must be a non-empty string');
+  }
+
+  if (!isNonEmptyString(role)) {
+    return Promise.reject('invalid parameter: role must be a non-empty string');
+  }
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .delete(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
