@@ -184,6 +184,12 @@ export class OrganizationBuilder {
 
 export function isValid(organization :any) :boolean {
 
+  if (!isDefined(organization)) {
+
+    LOG.error('invalid parameter: organization must be defined', organization);
+    return false;
+  }
+
   try {
 
     const organizationBuilder = new OrganizationBuilder();

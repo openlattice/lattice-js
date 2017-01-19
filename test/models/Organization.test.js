@@ -8,7 +8,8 @@ import {
 } from '../../src/utils/LangUtils';
 
 import {
-  INVALID_PARAMS
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
 } from '../constants/TestConstants';
 
 const MOCK_ORG_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
@@ -38,12 +39,6 @@ const MOCK_ORG_OBJ = {
 describe('Organization', () => {
 
   describe('OrganizationBuilder', () => {
-
-    // "undefined" and "[]" are allowed
-    const invalidParams = INVALID_PARAMS.slice(0);
-    invalidParams.splice(3, 1); // remove "new Array()"
-    invalidParams.splice(2, 1); // remove "[]"
-    invalidParams.splice(0, 1); // remove "undefined"
 
     let builder :OrganizationBuilder = null;
 
@@ -130,7 +125,7 @@ describe('Organization', () => {
     describe('setMembers()', () => {
 
       it('should throw when given invalid parameters', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setMembers(invalidInput);
           }).toThrow();
@@ -138,7 +133,7 @@ describe('Organization', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setMembers([MOCK_USER_PRINCIPAL, invalidInput]);
           }).toThrow();
@@ -162,7 +157,7 @@ describe('Organization', () => {
     describe('setRoles()', () => {
 
       it('should throw when given invalid parameters', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setRoles(invalidInput);
           }).toThrow();
@@ -170,7 +165,7 @@ describe('Organization', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setRoles([MOCK_ROLE_PRINCIPAL, invalidInput]);
           }).toThrow();
@@ -192,8 +187,9 @@ describe('Organization', () => {
     });
 
     describe('setAutoApprovedEmails()', () => {
+
       it('should throw when given invalid parameters', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setAutoApprovedEmails(invalidInput);
           }).toThrow();
@@ -201,7 +197,7 @@ describe('Organization', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setAutoApprovedEmails([MOCK_EMAIL_DOMAIN, invalidInput]);
           }).toThrow();
@@ -229,7 +225,6 @@ describe('Organization', () => {
         expect(() => {
           (new OrganizationBuilder()).build();
         }).toThrow();
-
       });
 
       it('should not throw when an optional property has not been set', () => {
@@ -253,10 +248,9 @@ describe('Organization', () => {
             .setAutoApprovedEmails([MOCK_EMAIL_DOMAIN])
             .build();
         }).not.toThrow();
-
       });
 
-      it('should correctly set required properties when the properties have not been set', () => {
+      it('should set required properties that are allowed to be empty', () => {
 
         const org = builder.setTitle(MOCK_TITLE).build();
 
@@ -334,12 +328,6 @@ describe('Organization', () => {
 
     describe('invalid', () => {
 
-      // "undefined" and "[]" are allowed
-      const invalidParams = INVALID_PARAMS.slice(0);
-      invalidParams.splice(3, 1); // remove "new Array()"
-      invalidParams.splice(2, 1); // remove "[]"
-      invalidParams.splice(0, 1); // remove "undefined"
-
       it('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
@@ -373,19 +361,19 @@ describe('Organization', () => {
       });
 
       it('should return false when given an object literal with an invalid "members" property', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { members: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "roles" property', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { roles: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "emails" property', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { emails: invalidInput }))).toEqual(false);
         });
       });
@@ -440,7 +428,7 @@ describe('Organization', () => {
       });
 
       it('should return false when given an instance with an invalid "members" property', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
               MOCK_ORG_UUID,
@@ -455,7 +443,7 @@ describe('Organization', () => {
       });
 
       it('should return false when given an instance with an invalid "roles" property', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
               MOCK_ORG_UUID,
@@ -470,7 +458,7 @@ describe('Organization', () => {
       });
 
       it('should return false when given an instance with an invalid "emails" property', () => {
-        invalidParams.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
               MOCK_ORG_UUID,
