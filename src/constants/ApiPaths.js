@@ -25,6 +25,14 @@ export const ROLES_PATH :string = 'roles';
 
 /*
  *
+ * AuthorizationApi specific paths
+ *
+ */
+
+export const AUTHORIZATIONS_PATH :string = 'authorizations';
+
+/*
+ *
  * DataApi specific paths
  *
  */

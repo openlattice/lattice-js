@@ -10,6 +10,7 @@ import {
 } from '../config/Configuration';
 
 import {
+  AUTHORIZATION_API,
   DATA_API,
   EDM_API,
   ORGANIZATIONS_API,
@@ -20,6 +21,7 @@ import {
 } from '../constants/ApiNames';
 
 import {
+  AUTHORIZATIONS_PATH,
   DATA_PATH,
   DATASTORE_PATH,
   EDM_PATH,
@@ -37,6 +39,8 @@ function getApiBaseUrl(api :string) :string {
   const baseUrl :string = getConfig().get('baseUrl');
 
   switch (api) {
+    case AUTHORIZATION_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`;
     case DATA_API:
       return `${baseUrl}/${DATASTORE_PATH}/${DATA_PATH}`;
     case EDM_API:
