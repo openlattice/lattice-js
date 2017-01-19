@@ -3,7 +3,7 @@
  */
 
 /**
- * PermissionsRequestsApi gives access to Loom's REST API for managing ACLs on existing EntityDataModel schemas.
+ * PermissionsRequestsApi ...
  *
  * @module PermissionsRequestsApi
  * @memberof loom-data

@@ -12,6 +12,9 @@ const PRINCIPALS_PATH :string = 'principals';
 const PROPERTY_TYPE_PATH :string = 'property/type';
 const ROLES_PATH :string = 'roles';
 
+// AuthorizationApi specific paths
+const AUTHORIZATIONS_PATH :string = 'authorizations';
+
 // DataApi specific paths
 const DATA_PATH :string = 'data';
 const GET_DATA_PATH :string = 'getData';
@@ -90,6 +93,15 @@ describe('ApiPaths', () => {
     it(`should expose "${ROLES_PATH}"`, () => {
       expect(ApiPaths.ROLES_PATH).toBeDefined();
       expect(ApiPaths.ROLES_PATH).toEqual(ROLES_PATH);
+    });
+
+  });
+
+  describe('AuthorizationApi specific paths', () => {
+
+    it(`should expose "${AUTHORIZATIONS_PATH}"`, () => {
+      expect(ApiPaths.AUTHORIZATIONS_PATH).toBeDefined();
+      expect(ApiPaths.AUTHORIZATIONS_PATH).toEqual(AUTHORIZATIONS_PATH);
     });
 
   });

@@ -5,19 +5,25 @@ import Axios from 'axios';
 import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 
 import {
+  AUTHORIZATION_API,
   DATA_API,
   EDM_API,
+  ORGANIZATIONS_API,
   PERMISSIONS_API,
+  PERMISSIONS_REQUESTS_API,
   SEARCH_API,
   USERS_API
 } from '../../src/constants/ApiNames';
 
 import {
-  EDM_PATH,
+  AUTHORIZATIONS_PATH,
   DATA_PATH,
   DATASTORE_PATH,
+  EDM_PATH,
+  ORGANIZATIONS_PATH,
   PERMISSIONS_PATH,
   PRINCIPALS_PATH,
+  REQUESTS_PATH,
   SEARCH_PATH
 } from '../../src/constants/ApiPaths';
 
@@ -60,6 +66,32 @@ describe('AxiosUtils', () => {
   });
 
   describe('getApiBaseUrl()', () => {
+
+    describe('AuthorizationApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(AUTHORIZATION_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(AUTHORIZATION_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`
+        );
+      });
+
+    });
 
     describe('DataApi', () => {
 
@@ -113,6 +145,32 @@ describe('AxiosUtils', () => {
 
     });
 
+    describe('OrganizationsApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ORGANIZATIONS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${ORGANIZATIONS_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ORGANIZATIONS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ORGANIZATIONS_PATH}`
+        );
+      });
+
+    });
+
     describe('PermissionsApi', () => {
 
       it('should return the correct LOCAL URL', () => {
@@ -134,6 +192,32 @@ describe('AxiosUtils', () => {
         });
         expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_API)).toEqual(
           `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${PERMISSIONS_PATH}`
+        );
+      });
+
+    });
+
+    describe('PermissionsRequestsApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_REQUESTS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${REQUESTS_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_REQUESTS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${REQUESTS_PATH}`
         );
       });
 
