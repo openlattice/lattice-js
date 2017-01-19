@@ -31,6 +31,12 @@ const TITLE_PATH :string = 'title';
 // PermissionsApi specific paths
 const PERMISSIONS_PATH :string = 'permissions';
 
+// PermissionsRequestsApi specific paths
+const ADMIN_PATH :string = 'admin';
+const REQUESTS_PATH :string = 'requests';
+const RESOLVED_PATH :string = 'resolved';
+const UNRESOLVED_PATH :string = 'unresolved';
+
 // SearchApi specific paths
 const SEARCH_PATH :string = 'search';
 
@@ -155,6 +161,30 @@ describe('ApiPaths', () => {
     it(`should expose "${PERMISSIONS_PATH}"`, () => {
       expect(ApiPaths.PERMISSIONS_PATH).toBeDefined();
       expect(ApiPaths.PERMISSIONS_PATH).toEqual(PERMISSIONS_PATH);
+    });
+
+  });
+
+  describe('PermissionsRequestsApi specific paths', () => {
+
+    it(`should expose "${ADMIN_PATH}"`, () => {
+      expect(ApiPaths.ADMIN_PATH).toBeDefined();
+      expect(ApiPaths.ADMIN_PATH).toEqual(ADMIN_PATH);
+    });
+
+    it(`should expose "${REQUESTS_PATH}"`, () => {
+      expect(ApiPaths.REQUESTS_PATH).toBeDefined();
+      expect(ApiPaths.REQUESTS_PATH).toEqual(REQUESTS_PATH);
+    });
+
+    it(`should expose "${RESOLVED_PATH}"`, () => {
+      expect(ApiPaths.RESOLVED_PATH).toBeDefined();
+      expect(ApiPaths.RESOLVED_PATH).toEqual(RESOLVED_PATH);
+    });
+
+    it(`should expose "${UNRESOLVED_PATH}"`, () => {
+      expect(ApiPaths.UNRESOLVED_PATH).toBeDefined();
+      expect(ApiPaths.UNRESOLVED_PATH).toEqual(UNRESOLVED_PATH);
     });
 
   });

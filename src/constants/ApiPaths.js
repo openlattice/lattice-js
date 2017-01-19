@@ -64,6 +64,17 @@ export const PERMISSIONS_PATH :string = 'permissions';
 
 /*
  *
+ * PermissionsRequestsApi specific paths
+ *
+ */
+
+export const ADMIN_PATH :string = 'admin';
+export const REQUESTS_PATH :string = 'requests';
+export const RESOLVED_PATH :string = 'resolved';
+export const UNRESOLVED_PATH :string = 'unresolved';
+
+/*
+ *
  * SearchApi specific paths
  *
  */
