@@ -10,6 +10,7 @@ import Acl, {
 } from './Acl';
 
 import {
+  isDefined,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -80,6 +81,12 @@ export class AclDataBuilder {
 }
 
 export function isValid(aclData :any) :boolean {
+
+  if (!isDefined(aclData)) {
+
+    LOG.error('invalid parameter: aclData must be defined', aclData);
+    return false;
+  }
 
   try {
 

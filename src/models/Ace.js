@@ -4,11 +4,18 @@
 
 import Immutable from 'immutable';
 
+import isUndefined from 'lodash/isUndefined';
+
 import Logger from '../utils/Logger';
 
 import Principal, {
   isValid as isValidPrincipal
 } from './Principal';
+
+import {
+  isDefined,
+  isEmptyArray
+} from '../utils/LangUtils';
 
 import {
   isValidPermissionArray
@@ -57,6 +64,10 @@ export class AceBuilder {
 
   setPermissions(permissions :Permission[]) :AceBuilder {
 
+    if (isUndefined(permissions) || isEmptyArray(permissions)) {
+      return this;
+    }
+
     if (!isValidPermissionArray(permissions)) {
       throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
     }
@@ -77,7 +88,7 @@ export class AceBuilder {
     }
 
     if (!this.permissions) {
-      throw new Error('missing property: permissions is a required property');
+      this.permissions = [];
     }
 
     return new Ace(this.principal, this.permissions);
@@ -85,6 +96,12 @@ export class AceBuilder {
 }
 
 export function isValid(ace :any) :boolean {
+
+  if (!isDefined(ace)) {
+
+    LOG.error('invalid parameter: ace must be defined', ace);
+    return false;
+  }
 
   try {
 

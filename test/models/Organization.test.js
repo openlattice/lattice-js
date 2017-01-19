@@ -8,12 +8,14 @@ import {
 } from '../../src/utils/LangUtils';
 
 import {
-  INVALID_PARAMS
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
 } from '../constants/TestConstants';
 
 const MOCK_ORG_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
 const MOCK_TITLE = 'MyOrganization';
 const MOCK_DESCRIPTION = 'what an organization';
+const MOCK_EMAIL_DOMAIN = 'kryptnostic.com';
 
 const MOCK_USER_PRINCIPAL = {
   type: 'USER',
@@ -30,7 +32,8 @@ const MOCK_ORG_OBJ = {
   title: MOCK_TITLE,
   description: MOCK_DESCRIPTION,
   members: [MOCK_USER_PRINCIPAL],
-  roles: [MOCK_ROLE_PRINCIPAL]
+  roles: [MOCK_ROLE_PRINCIPAL],
+  emails: [MOCK_EMAIL_DOMAIN]
 };
 
 describe('Organization', () => {
@@ -121,14 +124,8 @@ describe('Organization', () => {
 
     describe('setMembers()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setMembers();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setMembers(invalidInput);
           }).toThrow();
@@ -136,11 +133,17 @@ describe('Organization', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setMembers([MOCK_USER_PRINCIPAL, invalidInput]);
           }).toThrow();
         });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setMembers();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -153,14 +156,8 @@ describe('Organization', () => {
 
     describe('setRoles()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setRoles();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setRoles(invalidInput);
           }).toThrow();
@@ -168,11 +165,17 @@ describe('Organization', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setRoles([MOCK_ROLE_PRINCIPAL, invalidInput]);
           }).toThrow();
         });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setRoles();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -183,31 +186,45 @@ describe('Organization', () => {
 
     });
 
+    describe('setAutoApprovedEmails()', () => {
+
+      it('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+          expect(() => {
+            builder.setAutoApprovedEmails(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      it('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+          expect(() => {
+            builder.setAutoApprovedEmails([MOCK_EMAIL_DOMAIN, invalidInput]);
+          }).toThrow();
+        });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setAutoApprovedEmails();
+        }).not.toThrow();
+      });
+
+      it('should not throw when given valid parameters', () => {
+        expect(() => {
+          builder.setAutoApprovedEmails([MOCK_EMAIL_DOMAIN]);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('build()', () => {
 
       it('should throw when a required property has not been set', () => {
 
         expect(() => {
-          (new OrganizationBuilder())
-            .setMembers([MOCK_USER_PRINCIPAL])
-            .setRoles([MOCK_ROLE_PRINCIPAL])
-            .build();
+          (new OrganizationBuilder()).build();
         }).toThrow();
-
-        expect(() => {
-          (new OrganizationBuilder())
-            .setTitle(MOCK_TITLE)
-            .setRoles([MOCK_ROLE_PRINCIPAL])
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          (new OrganizationBuilder())
-            .setTitle(MOCK_TITLE)
-            .setMembers([MOCK_USER_PRINCIPAL])
-            .build();
-        }).toThrow();
-
       });
 
       it('should not throw when an optional property has not been set', () => {
@@ -218,6 +235,7 @@ describe('Organization', () => {
             .setDescription(MOCK_DESCRIPTION)
             .setMembers([MOCK_USER_PRINCIPAL])
             .setRoles([MOCK_ROLE_PRINCIPAL])
+            .setAutoApprovedEmails([MOCK_EMAIL_DOMAIN])
             .build();
         }).not.toThrow();
 
@@ -227,8 +245,18 @@ describe('Organization', () => {
             .setTitle(MOCK_TITLE)
             .setMembers([MOCK_USER_PRINCIPAL])
             .setRoles([MOCK_ROLE_PRINCIPAL])
+            .setAutoApprovedEmails([MOCK_EMAIL_DOMAIN])
             .build();
         }).not.toThrow();
+      });
+
+      it('should set required properties that are allowed to be empty', () => {
+
+        const org = builder.setTitle(MOCK_TITLE).build();
+
+        expect(org.members).toEqual([]);
+        expect(org.roles).toEqual([]);
+        expect(org.emails).toEqual([]);
       });
 
       it('should return a valid instance', () => {
@@ -239,6 +267,7 @@ describe('Organization', () => {
           .setDescription(MOCK_DESCRIPTION)
           .setMembers([MOCK_USER_PRINCIPAL])
           .setRoles([MOCK_ROLE_PRINCIPAL])
+          .setAutoApprovedEmails([MOCK_EMAIL_DOMAIN])
           .build();
 
         expect(org).toEqual(jasmine.any(Organization));
@@ -257,6 +286,9 @@ describe('Organization', () => {
 
         expect(org.roles).toBeDefined();
         expect(org.roles).toEqual([MOCK_ROLE_PRINCIPAL]);
+
+        expect(org.emails).toBeDefined();
+        expect(org.emails).toEqual([MOCK_EMAIL_DOMAIN]);
       });
 
     });
@@ -329,14 +361,20 @@ describe('Organization', () => {
       });
 
       it('should return false when given an object literal with an invalid "members" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { members: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "roles" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { roles: invalidInput }))).toEqual(false);
+        });
+      });
+
+      it('should return false when given an object literal with an invalid "emails" property', () => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ORG_OBJ, { emails: invalidInput }))).toEqual(false);
         });
       });
 
@@ -345,7 +383,12 @@ describe('Organization', () => {
           if (isDefined(invalidInput)) {
             expect(isValid(
               new Organization(
-                invalidInput, MOCK_TITLE, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
+                invalidInput,
+                MOCK_TITLE,
+                MOCK_DESCRIPTION,
+                [MOCK_USER_PRINCIPAL],
+                [MOCK_ROLE_PRINCIPAL],
+                [MOCK_EMAIL_DOMAIN]
               )
             )).toEqual(false);
           }
@@ -356,7 +399,12 @@ describe('Organization', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORG_UUID, invalidInput, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
+              MOCK_ORG_UUID,
+              invalidInput,
+              MOCK_DESCRIPTION,
+              [MOCK_USER_PRINCIPAL],
+              [MOCK_ROLE_PRINCIPAL],
+              [MOCK_EMAIL_DOMAIN]
             )
           )).toEqual(false);
         });
@@ -367,7 +415,12 @@ describe('Organization', () => {
           if (isDefined(invalidInput)) {
             expect(isValid(
               new Organization(
-                MOCK_ORG_UUID, MOCK_TITLE, invalidInput, [MOCK_USER_PRINCIPAL], [MOCK_ROLE_PRINCIPAL]
+                MOCK_ORG_UUID,
+                MOCK_TITLE,
+                invalidInput,
+                [MOCK_USER_PRINCIPAL],
+                [MOCK_ROLE_PRINCIPAL],
+                [MOCK_EMAIL_DOMAIN]
               )
             )).toEqual(false);
           }
@@ -375,20 +428,45 @@ describe('Organization', () => {
       });
 
       it('should return false when given an instance with an invalid "members" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORG_UUID, MOCK_TITLE, MOCK_DESCRIPTION, invalidInput, [MOCK_ROLE_PRINCIPAL]
+              MOCK_ORG_UUID,
+              MOCK_TITLE,
+              MOCK_DESCRIPTION,
+              invalidInput,
+              [MOCK_ROLE_PRINCIPAL],
+              [MOCK_EMAIL_DOMAIN]
             )
           )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "roles" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORG_UUID, MOCK_TITLE, MOCK_DESCRIPTION, [MOCK_USER_PRINCIPAL], invalidInput
+              MOCK_ORG_UUID,
+              MOCK_TITLE,
+              MOCK_DESCRIPTION,
+              [MOCK_USER_PRINCIPAL],
+              invalidInput,
+              [MOCK_EMAIL_DOMAIN]
+            )
+          )).toEqual(false);
+        });
+      });
+
+      it('should return false when given an instance with an invalid "emails" property', () => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(
+            new Organization(
+              MOCK_ORG_UUID,
+              MOCK_TITLE,
+              MOCK_DESCRIPTION,
+              [MOCK_USER_PRINCIPAL],
+              [MOCK_ROLE_PRINCIPAL],
+              invalidInput
             )
           )).toEqual(false);
         });

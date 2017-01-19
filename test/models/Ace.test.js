@@ -6,7 +6,8 @@ import Ace, {
 } from '../../src/models/Ace';
 
 import {
-  INVALID_PARAMS
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
 } from '../constants/TestConstants';
 
 const MOCK_PRINCIPAL = {
@@ -63,14 +64,8 @@ describe('Ace', () => {
 
     describe('setPermissions()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setPermissions();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(invalidInput);
           }).toThrow();
@@ -81,11 +76,17 @@ describe('Ace', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
           }).toThrow();
         });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setPermissions();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -103,16 +104,14 @@ describe('Ace', () => {
       it('should throw when a required property has not been set', () => {
 
         expect(() => {
-          (new AceBuilder())
-            .setPrincipal(MOCK_PRINCIPAL)
-            .build();
+          (new AceBuilder()).build();
         }).toThrow();
+      });
 
-        expect(() => {
-          (new AceBuilder())
-            .setPermissions(MOCK_PERMISSIONS)
-            .build();
-        }).toThrow();
+      it('should set required properties that are allowed to be empty', () => {
+
+        const org = builder.setPrincipal(MOCK_PRINCIPAL).build();
+        expect(org.permissions).toEqual([]);
       });
 
       it('should return a valid instance', () => {
@@ -182,7 +181,7 @@ describe('Ace', () => {
       });
 
       it('should return false when given an object literal with an invalid "permissions" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { permissions: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { permissions: [invalidInput] }))).toEqual(false);
         });
@@ -199,7 +198,7 @@ describe('Ace', () => {
       });
 
       it('should return false when given an instance with an invalid "permissions" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
               MOCK_PRINCIPAL, invalidInput
