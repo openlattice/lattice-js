@@ -88,7 +88,6 @@ export const UNRESOLVED_PATH :string = 'unresolved';
  *
  */
 
-export const RESET_PATH :string = 'reset';
 export const USERS_PATH :string = 'users';
 
 /*

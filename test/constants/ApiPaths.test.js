@@ -41,7 +41,6 @@ const RESOLVED_PATH :string = 'resolved';
 const UNRESOLVED_PATH :string = 'unresolved';
 
 // PrincipalsApi specific paths
-const RESET_PATH :string = 'reset';
 const USERS_PATH :string = 'users';
 
 // SearchApi specific paths
@@ -202,11 +201,6 @@ describe('ApiPaths', () => {
   });
 
   describe('PrincipalsApi specific paths', () => {
-
-    it(`should expose "${RESET_PATH}"`, () => {
-      expect(ApiPaths.RESET_PATH).toBeDefined();
-      expect(ApiPaths.RESET_PATH).toEqual(RESET_PATH);
-    });
 
     it(`should expose "${USERS_PATH}"`, () => {
       expect(ApiPaths.USERS_PATH).toBeDefined();

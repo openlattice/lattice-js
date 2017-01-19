@@ -8,7 +8,6 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  RESET_PATH,
   ROLES_PATH,
   USERS_PATH
 } from '../../src/constants/ApiPaths';
