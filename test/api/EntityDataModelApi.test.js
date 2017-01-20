@@ -17,9 +17,14 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+} from '../constants/TestConstants';
+
+import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
+  testApiFunctionShouldRejectOnGivenInvalidParameters,
   testApiFunctionShouldReturnPromiseOnValidParameters
 } from '../utils/ApiTestUtils';
 
@@ -319,20 +324,20 @@ function testUpdateSchema() {
   describe('updateSchema()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.updateSchema, MOCK_SCHEMA_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE], [MOCK_PROPERTY_TYPE]
+      EntityDataModelApi.updateSchema, MOCK_SCHEMA_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE_UUID], [MOCK_PROPERTY_TYPE_UUID]
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.updateSchema(MOCK_SCHEMA_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE], [MOCK_PROPERTY_TYPE])
+      EntityDataModelApi.updateSchema(MOCK_SCHEMA_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE_UUID], [MOCK_PROPERTY_TYPE_UUID])
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
             `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`,
             {
               action: MOCK_ACTION,
-              entityTypes: [MOCK_ENTITY_TYPE],
-              propertyTypes: [MOCK_PROPERTY_TYPE]
+              entityTypes: [MOCK_ENTITY_TYPE_UUID],
+              propertyTypes: [MOCK_PROPERTY_TYPE_UUID]
             }
           );
           done();
@@ -345,7 +350,10 @@ function testUpdateSchema() {
     testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnGivenInvalidParameters(
+      INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+      ...functionInvocation
+    );
 
   });
 }
