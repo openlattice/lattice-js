@@ -14,10 +14,15 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+} from '../constants/TestConstants';
+
+import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldReturnPromiseOnValidParameters,
   testApiFunctionShouldReturnNullOnInvalidParameters,
   testApiFunctionShouldNotThrowOnInvalidParameters,
+  testApiFunctionShouldRejectOnGivenInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters
 } from '../utils/ApiTestUtils';
 
@@ -142,7 +147,10 @@ function testGetSelectedEntitySetData() {
     testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnGivenInvalidParameters(
+      INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+      ...functionInvocation
+    );
 
   });
 }
