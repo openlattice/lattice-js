@@ -12,6 +12,9 @@ const PRINCIPALS_PATH :string = 'principals';
 const PROPERTY_TYPE_PATH :string = 'property/type';
 const ROLES_PATH :string = 'roles';
 
+// AuthorizationApi specific paths
+const AUTHORIZATIONS_PATH :string = 'authorizations';
+
 // DataApi specific paths
 const DATA_PATH :string = 'data';
 const GET_DATA_PATH :string = 'getData';
@@ -31,12 +34,17 @@ const TITLE_PATH :string = 'title';
 // PermissionsApi specific paths
 const PERMISSIONS_PATH :string = 'permissions';
 
+// PermissionsRequestsApi specific paths
+const ADMIN_PATH :string = 'admin';
+const REQUESTS_PATH :string = 'requests';
+const RESOLVED_PATH :string = 'resolved';
+const UNRESOLVED_PATH :string = 'unresolved';
+
+// PrincipalsApi specific paths
+const USERS_PATH :string = 'users';
+
 // SearchApi specific paths
 const SEARCH_PATH :string = 'search';
-
-// UsersApi specific paths
-const RESET_PATH :string = 'reset';
-const USERS_PATH :string = 'users';
 
 describe('ApiPaths', () => {
 
@@ -84,6 +92,15 @@ describe('ApiPaths', () => {
     it(`should expose "${ROLES_PATH}"`, () => {
       expect(ApiPaths.ROLES_PATH).toBeDefined();
       expect(ApiPaths.ROLES_PATH).toEqual(ROLES_PATH);
+    });
+
+  });
+
+  describe('AuthorizationApi specific paths', () => {
+
+    it(`should expose "${AUTHORIZATIONS_PATH}"`, () => {
+      expect(ApiPaths.AUTHORIZATIONS_PATH).toBeDefined();
+      expect(ApiPaths.AUTHORIZATIONS_PATH).toEqual(AUTHORIZATIONS_PATH);
     });
 
   });
@@ -159,25 +176,44 @@ describe('ApiPaths', () => {
 
   });
 
+  describe('PermissionsRequestsApi specific paths', () => {
+
+    it(`should expose "${ADMIN_PATH}"`, () => {
+      expect(ApiPaths.ADMIN_PATH).toBeDefined();
+      expect(ApiPaths.ADMIN_PATH).toEqual(ADMIN_PATH);
+    });
+
+    it(`should expose "${REQUESTS_PATH}"`, () => {
+      expect(ApiPaths.REQUESTS_PATH).toBeDefined();
+      expect(ApiPaths.REQUESTS_PATH).toEqual(REQUESTS_PATH);
+    });
+
+    it(`should expose "${RESOLVED_PATH}"`, () => {
+      expect(ApiPaths.RESOLVED_PATH).toBeDefined();
+      expect(ApiPaths.RESOLVED_PATH).toEqual(RESOLVED_PATH);
+    });
+
+    it(`should expose "${UNRESOLVED_PATH}"`, () => {
+      expect(ApiPaths.UNRESOLVED_PATH).toBeDefined();
+      expect(ApiPaths.UNRESOLVED_PATH).toEqual(UNRESOLVED_PATH);
+    });
+
+  });
+
+  describe('PrincipalsApi specific paths', () => {
+
+    it(`should expose "${USERS_PATH}"`, () => {
+      expect(ApiPaths.USERS_PATH).toBeDefined();
+      expect(ApiPaths.USERS_PATH).toEqual(USERS_PATH);
+    });
+
+  });
+
   describe('SearchApi specific paths', () => {
 
     it(`should expose "${SEARCH_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_PATH).toEqual(SEARCH_PATH);
-    });
-
-  });
-
-  describe('UsersApi specific paths', () => {
-
-    it(`should expose "${RESET_PATH}"`, () => {
-      expect(ApiPaths.RESET_PATH).toBeDefined();
-      expect(ApiPaths.RESET_PATH).toEqual(RESET_PATH);
-    });
-
-    it(`should expose "${USERS_PATH}"`, () => {
-      expect(ApiPaths.USERS_PATH).toBeDefined();
-      expect(ApiPaths.USERS_PATH).toEqual(USERS_PATH);
     });
 
   });

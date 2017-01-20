@@ -6,6 +6,7 @@ import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 
 import {
+  isDefined,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -85,6 +86,12 @@ export class PrincipalBuilder {
 }
 
 export function isValid(principal :any) :boolean {
+
+  if (!isDefined(principal)) {
+
+    LOG.error('invalid parameter: principal must be defined', principal);
+    return false;
+  }
 
   try {
 

@@ -70,7 +70,7 @@ const LOG = new Logger('EntityDataModelApi');
  */
 
 /**
- * `GET /`
+ * `GET /edm`
  *
  * Gets the entire Entity Data Model schema.
  *
@@ -93,6 +93,32 @@ export function getEntityDataModel() :Promise<> {
     });
 }
 
+/**
+ * `POST /edm`
+ *
+ * Gets the Entity Data Model schema, filtered by the given projection.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise}
+ *
+ * TODO: add documentation
+ * TODO: add validation
+ * TODO: add unit tests
+ * TODO: create data models
+ */
+export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
+
+  return getApiAxiosInstance(EDM_API)
+    .post('/', projection)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
 /*
  *
  * Schema APIs
@@ -100,7 +126,7 @@ export function getEntityDataModel() :Promise<> {
  */
 
 /**
- * `GET /schema/{namespace}/{name}`
+ * `GET /edm/schema/{namespace}/{name}`
  *
  * Gets the Schema definition for the given Schema FQN.
  *
@@ -133,7 +159,7 @@ export function getSchema(schemaFqn :FullyQualifiedName) :Promise<> {
 }
 
 /**
- * `GET /schema`
+ * `GET /edm/schema`
  *
  * Gets all Schema definitions.
  *
@@ -157,7 +183,7 @@ export function getAllSchemas() :Promise<> {
 }
 
 /**
- * `GET /schema/{namespace}`
+ * `GET /edm/schema/{namespace}`
  *
  * Gets all Schema definitions under the given namespace.
  *
@@ -186,7 +212,7 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 }
 
 /**
- * `POST /schema`
+ * `POST /edm/schema`
  *
  * Creates a new Schema definition, it it does not already exist.
  *
@@ -221,7 +247,7 @@ export function createSchema(schema :Schema) :Promise<> {
 }
 
 /**
- * `PUT /schema/{namespace}/{name}`
+ * `PUT /edm/schema/{namespace}/{name}`
  *
  * Creates a new empty Schema definition for the given Schema FQN.
  *
@@ -254,7 +280,7 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<> {
 }
 
 /**
- * `PATCH /schema/{namespace}/{name}`
+ * `PATCH /edm/schema/{namespace}/{name}`
  *
  * Updates the Schema definition for the given Schema FQN.
  *
@@ -323,7 +349,7 @@ export function updateSchema(
  */
 
 /**
- * `GET /entity/set/{uuid}`
+ * `GET /edm/entity/set/{uuid}`
  *
  * Gets the EntitySet definition for the given EntitySet UUID.
  *
@@ -352,7 +378,7 @@ export function getEntitySet(entitySetId :UUID) :Promise<> {
 }
 
 /**
- * `GET /ids/entity/set/{name}`
+ * `GET /edm/ids/entity/set/{name}`
  *
  * Gets the EntitySet UUID for the given EntitySet name.
  *
@@ -381,7 +407,7 @@ export function getEntitySetId(entitySetName :string) :Promise<> {
 }
 
 /**
- * `GET /entity/set`
+ * `GET /edm/entity/set`
  *
  * Gets all EntitySet definitions.
  *
@@ -405,7 +431,7 @@ export function getAllEntitySets() :Promise<> {
 }
 
 /**
- * `POST /entity/set`
+ * `POST /edm/entity/set`
  *
  * Creates a new EntitySet definition.
  *
@@ -444,7 +470,7 @@ export function createEntitySets(entitySets :EntitySet[]) :Promise<> {
 }
 
 /**
- * `DELETE /entity/set/{uuid}`
+ * `DELETE /edm/entity/set/{uuid}`
  *
  * Deletes the EntitySet definition for the given EntitySet UUID.
  *
@@ -479,7 +505,7 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<> {
  */
 
 /**
- * `GET /entity/type/{uuid}`
+ * `GET /edm/entity/type/{uuid}`
  *
  * Gets the EntityType definition for the given EntityType UUID.
  *
@@ -508,7 +534,7 @@ export function getEntityType(entityTypeId :UUID) :Promise<> {
 }
 
 /**
- * `GET /ids/entity/type/{namespace}/{name}`
+ * `GET /edm/ids/entity/type/{namespace}/{name}`
  *
  * Gets the EntityType UUID for the given EntityType FQN.
  *
@@ -541,7 +567,7 @@ export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
 }
 
 /**
- * `GET /entity/type`
+ * `GET /edm/entity/type`
  *
  * Gets all EntityType definitions.
  *
@@ -565,7 +591,7 @@ export function getAllEntityTypes() :Promise<> {
 }
 
 /**
- * `POST /entity/type`
+ * `POST /edm/entity/type`
  *
  * Creates a new EntityType definition.
  *
@@ -611,7 +637,7 @@ export function createEntityType(entityType :EntityType) :Promise<> {
 }
 
 /**
- * `DELETE /entity/type/{uuid}`
+ * `DELETE /edm/entity/type/{uuid}`
  *
  * Deletes the EntityType definition for the given EntityType UUID.
  *
@@ -640,7 +666,7 @@ export function deleteEntityType(entityTypeId :UUID) :Promise<> {
 }
 
 /**
- * `PUT /entity/type/{uuid}`
+ * `PUT /edm/entity/type/{uuid}`
  *
  * Updates the EntityType definition for the given EntityType UUID with the given PropertyType UUIDs.
  *
@@ -680,6 +706,80 @@ export function updatePropertyTypesForEntityType(entityTypeId :UUID, propertyTyp
     });
 }
 
+/**
+ * `PUT /edm/entity/type/{uuid}/{uuid}`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by adding the given PropertyType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.addPropertyTypeToEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
+
+  if (!isValidUuid(entityTypeId)) {
+    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+  }
+
+  if (!isValidUuid(propertyTypeId)) {
+    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .put(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${propertyTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `DELETE /edm/entity/type/{uuid}/{uuid}`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.removePropertyTypeFromEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
+
+  if (!isValidUuid(entityTypeId)) {
+    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+  }
+
+  if (!isValidUuid(propertyTypeId)) {
+    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${propertyTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
 /*
  *
  * PropertyType APIs
@@ -687,7 +787,7 @@ export function updatePropertyTypesForEntityType(entityTypeId :UUID, propertyTyp
  */
 
 /**
- * `GET /property/type/{uuid}`
+ * `GET /edm/property/type/{uuid}`
  *
  * Gets the PropertyType definition for the given PropertyType UUID.
  *
@@ -716,7 +816,7 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<> {
 }
 
 /**
- * `GET /ids/property/type/{namespace}/{name}`
+ * `GET /edm/ids/property/type/{namespace}/{name}`
  *
  * Gets the PropertyType UUID for the given PropertyType FQN.
  *
@@ -749,7 +849,7 @@ export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<
 }
 
 /**
- * `GET /property/type`
+ * `GET /edm/property/type`
  *
  * Gets all PropertyType definitions.
  *
@@ -773,7 +873,7 @@ export function getAllPropertyTypes() :Promise<> {
 }
 
 /**
- * `GET /namespace/{namespace}/property/type`
+ * `GET /edm/property/type/namespace/{namespace}`
  *
  * Gets all PropertyType definitions under the given namespace.
  *
@@ -792,7 +892,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
   }
 
   return getApiAxiosInstance(EDM_API)
-    .get(`/${NAMESPACE_PATH}/${namespace}/${PROPERTY_TYPE_PATH}`)
+    .get(`/${PROPERTY_TYPE_PATH}/${NAMESPACE_PATH}/${namespace}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -802,7 +902,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
 }
 
 /**
- * `POST /property/type`
+ * `POST /edm/property/type`
  *
  * Creates a new PropertyType definition.
  *
@@ -840,7 +940,7 @@ export function createPropertyType(propertyType :PropertyType) :Promise<> {
 }
 
 /**
- * `DELETE /property/type/{uuid}`
+ * `DELETE /edm/property/type/{uuid}`
  *
  * Deletes the PropertyType definition for the given PropertyType UUID.
  *

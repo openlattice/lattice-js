@@ -8,7 +8,8 @@ import {
 } from '../../src/utils/LangUtils';
 
 import {
-  INVALID_PARAMS
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
 } from '../constants/TestConstants';
 
 const MOCK_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
@@ -173,14 +174,8 @@ describe('PropertyType', () => {
 
     describe('setSchemas()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setSchemas();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setSchemas(invalidInput);
           }).toThrow();
@@ -191,11 +186,17 @@ describe('PropertyType', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setSchemas([...MOCK_SCHEMAS, invalidInput]);
           }).toThrow();
         });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setSchemas();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -214,7 +215,6 @@ describe('PropertyType', () => {
           (new PropertyTypeBuilder())
             .setTitle(MOCK_TITLE)
             .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
             .build();
         }).toThrow();
 
@@ -222,7 +222,6 @@ describe('PropertyType', () => {
           (new PropertyTypeBuilder())
             .setType(MOCK_TYPE_FQN)
             .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
             .build();
         }).toThrow();
 
@@ -230,18 +229,20 @@ describe('PropertyType', () => {
           (new PropertyTypeBuilder())
             .setType(MOCK_TYPE_FQN)
             .setTitle(MOCK_TITLE)
-            .setSchemas(MOCK_SCHEMAS)
             .build();
         }).toThrow();
 
-        expect(() => {
-          (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
-            .setTitle(MOCK_TITLE)
-            .setDataType(MOCK_DATATYPE)
-            .build();
-        }).toThrow();
+      });
 
+      it('should set required properties that are allowed to be empty', () => {
+
+        const org = builder
+          .setType(MOCK_TYPE_FQN)
+          .setTitle(MOCK_TITLE)
+          .setDataType(MOCK_DATATYPE)
+          .build();
+
+        expect(org.schemas).toEqual([]);
       });
 
       it('should not throw when an optional property has not been set', () => {
@@ -382,7 +383,7 @@ describe('PropertyType', () => {
       });
 
       it('should return false when given an object literal with an invalid "schemas" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PT_OBJ, { schemas: invalidInput }))).toEqual(false);
         });
       });
@@ -442,7 +443,7 @@ describe('PropertyType', () => {
       });
 
       it('should return false when given an instance with an invalid "schemas" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
               MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, invalidInput

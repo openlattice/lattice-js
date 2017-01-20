@@ -52,7 +52,7 @@
     "eslint-plugin-flowtype": "^2.29.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jasmine": "^2.2.0",
-    "flow-bin": "^0.37.4",
+    "flow-bin": "^0.38.0",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.5.2",
     "json-loader": "^0.5.4",
@@ -134,25 +134,25 @@
     "test:karma:run": {
       "command": "karma run config/karma/karma.config.js --",
       "env": {
-        "BUILD": "development"
+        "BUILD": "test"
       }
     },
     "test:karma:start": {
       "command": "karma start config/karma/karma.config.js --singleRun=false",
       "env": {
-        "BUILD": "development"
+        "BUILD": "test"
       }
     },
     "test:karma:watch": {
       "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true",
       "env": {
-        "BUILD": "development"
+        "BUILD": "test"
       }
     },
     "test:karma:browser": {
       "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true --browsers=Chrome --reporters=kjhtml",
       "env": {
-        "BUILD": "development"
+        "BUILD": "test"
       }
     },
     "webpack-dev-server": {

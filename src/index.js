@@ -13,12 +13,14 @@
 import * as Types from './constants/types';
 import * as DataModels from './models';
 
+import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as OrganizationsApi from './api/OrganizationsApi';
 import * as PermissionsApi from './api/PermissionsApi';
+import * as PermissionsRequestsApi from './api/PermissionsRequestsApi';
 import * as SearchApi from './api/SearchApi';
-import * as UsersApi from './api/UsersApi';
+import * as PrincipalsApi from './api/PrincipalsApi';
 
 import {
   configure
@@ -32,12 +34,14 @@ export {
   configure,
   DataModels,
   Types,
+  AuthorizationApi,
   DataApi,
   EntityDataModelApi,
   OrganizationsApi,
   PermissionsApi,
-  SearchApi,
-  UsersApi
+  PermissionsRequestsApi,
+  PrincipalsApi,
+  SearchApi
 };
 
 export default {
@@ -45,10 +49,12 @@ export default {
   configure,
   DataModels,
   Types,
+  AuthorizationApi,
   DataApi,
   EntityDataModelApi,
   OrganizationsApi,
   PermissionsApi,
-  SearchApi,
-  UsersApi
+  PermissionsRequestsApi,
+  PrincipalsApi,
+  SearchApi
 };

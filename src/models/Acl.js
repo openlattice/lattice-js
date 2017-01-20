@@ -2,8 +2,16 @@
  * @flow
  */
 
+import has from 'lodash/has';
+import isUndefined from 'lodash/isUndefined';
+
 import Ace from './Ace';
 import Logger from '../utils/Logger';
+
+import {
+  isDefined,
+  isEmptyArray
+} from '../utils/LangUtils';
 
 import {
   isValidAceArray,
@@ -39,6 +47,10 @@ export class AclBuilder {
 
   setAclKey(aclKey :UUID[]) :AclBuilder {
 
+    if (isUndefined(aclKey) || isEmptyArray(aclKey)) {
+      return this;
+    }
+
     if (!isValidUuidArray(aclKey)) {
       throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
     }
@@ -48,6 +60,10 @@ export class AclBuilder {
   }
 
   setAces(aces :Ace[]) :AclBuilder {
+
+    if (isUndefined(aces) || isEmptyArray(aces)) {
+      return this;
+    }
 
     if (!isValidAceArray(aces)) {
       throw new Error('invalid parameter: aces must be a non-empty array of valid Aces');
@@ -60,11 +76,11 @@ export class AclBuilder {
   build() {
 
     if (!this.aclKey) {
-      throw new Error('missing property: aclKey is a required property');
+      this.aclKey = [];
     }
 
     if (!this.aces) {
-      throw new Error('missing property: aces is a required property');
+      this.aces = [];
     }
 
     return new Acl(this.aclKey, this.aces);
@@ -72,6 +88,18 @@ export class AclBuilder {
 }
 
 export function isValid(acl :any) :boolean {
+
+  if (!isDefined(acl)) {
+
+    LOG.error('invalid parameter: acl must be defined', acl);
+    return false;
+  }
+
+  if (!has(acl, 'aclKey') || !has(acl, 'aces')) {
+
+    LOG.error('missing properties: acl is missing required properties');
+    return false;
+  }
 
   try {
 

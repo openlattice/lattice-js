@@ -4,12 +4,15 @@
 
 import Immutable from 'immutable';
 
+import isUndefined from 'lodash/isUndefined';
+
 import FullyQualifiedName from './FullyQualifiedName';
 
 import Logger from '../utils/Logger';
 
 import {
   isDefined,
+  isEmptyArray,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -116,6 +119,10 @@ export class PropertyTypeBuilder {
 
   setSchemas(schemas :FullyQualifiedName[]) :PropertyTypeBuilder {
 
+    if (isUndefined(schemas) || isEmptyArray(schemas)) {
+      return this;
+    }
+
     if (!isValidFqnArray(schemas)) {
       throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
@@ -144,7 +151,7 @@ export class PropertyTypeBuilder {
     }
 
     if (!this.schemas) {
-      throw new Error('missing property: schemas is a required property');
+      this.schemas = [];
     }
 
     return new PropertyType(

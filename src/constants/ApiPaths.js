@@ -25,6 +25,14 @@ export const ROLES_PATH :string = 'roles';
 
 /*
  *
+ * AuthorizationApi specific paths
+ *
+ */
+
+export const AUTHORIZATIONS_PATH :string = 'authorizations';
+
+/*
+ *
  * DataApi specific paths
  *
  */
@@ -64,17 +72,28 @@ export const PERMISSIONS_PATH :string = 'permissions';
 
 /*
  *
+ * PermissionsRequestsApi specific paths
+ *
+ */
+
+export const ADMIN_PATH :string = 'admin';
+export const REQUESTS_PATH :string = 'requests';
+export const RESOLVED_PATH :string = 'resolved';
+export const UNRESOLVED_PATH :string = 'unresolved';
+
+
+/*
+ *
+ * PrincipalsApi specific paths
+ *
+ */
+
+export const USERS_PATH :string = 'users';
+
+/*
+ *
  * SearchApi specific paths
  *
  */
 
 export const SEARCH_PATH :string = 'search';
-
-/*
- *
- * UsersApi specific paths
- *
- */
-
-export const RESET_PATH :string = 'reset';
-export const USERS_PATH :string = 'users';

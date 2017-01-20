@@ -4,12 +4,16 @@
 
 import Immutable from 'immutable';
 
+import isUndefined from 'lodash/isUndefined';
+
 import Principal from './Principal';
 import Logger from '../utils/Logger';
 
 import {
   isDefined,
-  isNonEmptyString
+  isEmptyArray,
+  isNonEmptyString,
+  isNonEmptyStringArray
 } from '../utils/LangUtils';
 
 import {
@@ -30,19 +34,22 @@ export default class Organization {
   description :?string;
   members :Principal[];
   roles :Principal[];
+  emails :string[];
 
   constructor(
       id :?UUID,
       title :string,
       description :?string,
       members :Principal[],
-      roles :Principal[]) {
+      roles :Principal[],
+      emails :string[]) {
 
     this.id = id;
     this.title = title;
     this.description = description;
     this.members = members;
     this.roles = roles;
+    this.emails = emails;
   }
 }
 
@@ -57,6 +64,7 @@ export class OrganizationBuilder {
   description :?string;
   members :Principal[];
   roles :Principal[];
+  emails :string[];
 
   setId(id :UUID) :OrganizationBuilder {
 
@@ -90,6 +98,10 @@ export class OrganizationBuilder {
 
   setMembers(members :Principal[]) :OrganizationBuilder {
 
+    if (isUndefined(members) || isEmptyArray(members)) {
+      return this;
+    }
+
     if (!isValidPrincipalArray(members)) {
       throw new Error('invalid parameter: members must be a non-empty array of valid Principals');
     }
@@ -105,6 +117,10 @@ export class OrganizationBuilder {
 
   setRoles(roles :Principal[]) :OrganizationBuilder {
 
+    if (isUndefined(roles) || isEmptyArray(roles)) {
+      return this;
+    }
+
     if (!isValidPrincipalArray(roles)) {
       throw new Error('invalid parameter: roles must be a non-empty array of valid Principals');
     }
@@ -118,6 +134,25 @@ export class OrganizationBuilder {
     return this;
   }
 
+  setAutoApprovedEmails(emails :string[]) :OrganizationBuilder {
+
+    if (isUndefined(emails) || isEmptyArray(emails)) {
+      return this;
+    }
+
+    if (!isNonEmptyStringArray(emails)) {
+      throw new Error('invalid parameter: emails must be a non-empty array of strings');
+    }
+
+    this.emails = Immutable.Set().withMutations((set :Set<Principal>) => {
+      emails.forEach((email :string) => {
+        set.add(email);
+      });
+    }).toJS();
+
+    return this;
+  }
+
   build() :Organization {
 
     if (!this.title) {
@@ -125,11 +160,15 @@ export class OrganizationBuilder {
     }
 
     if (!this.members) {
-      throw new Error('missing property: members is a required property');
+      this.members = [];
     }
 
     if (!this.roles) {
-      throw new Error('missing property: roles is a required property');
+      this.roles = [];
+    }
+
+    if (!this.emails) {
+      this.emails = [];
     }
 
     return new Organization(
@@ -137,12 +176,19 @@ export class OrganizationBuilder {
       this.title,
       this.description,
       this.members,
-      this.roles
+      this.roles,
+      this.emails
     );
   }
 }
 
 export function isValid(organization :any) :boolean {
+
+  if (!isDefined(organization)) {
+
+    LOG.error('invalid parameter: organization must be defined', organization);
+    return false;
+  }
 
   try {
 
@@ -153,6 +199,7 @@ export function isValid(organization :any) :boolean {
       .setTitle(organization.title)
       .setMembers(organization.members)
       .setRoles(organization.roles)
+      .setAutoApprovedEmails(organization.emails)
       .build();
 
     // optional properties
