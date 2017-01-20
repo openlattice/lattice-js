@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.13.1
+ * loom-data - v0.13.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -10520,8 +10520,9 @@ var AUTHORIZATIONS_PATH = exports.AUTHORIZATIONS_PATH = 'authorizations';
  */
 
 var DATA_PATH = exports.DATA_PATH = 'data';
-var GET_DATA_PATH = exports.GET_DATA_PATH = 'getData';
 var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
+var GET_DATA_PATH = exports.GET_DATA_PATH = 'getData';
+var HISTORICAL_PATH = exports.HISTORICAL_PATH = 'historical';
 
 /*
  *
@@ -11299,14 +11300,12 @@ module.exports = function(module) {
 		if(!module.children) module.children = [];
 		Object.defineProperty(module, "loaded", {
 			enumerable: true,
-			configurable: false,
 			get: function() {
 				return module.l;
 			}
 		});
 		Object.defineProperty(module, "id", {
 			enumerable: true,
-			configurable: false,
 			get: function() {
 				return module.i;
 			}
@@ -24112,7 +24111,7 @@ function getEntitySetDataFileUrl(entitySetId, fileType) {
 }
 
 /**
- * `POST /data/entitydata/{uuid}/getData`
+ * `POST /data/historical/entitydata/{uuid}/getData`
  *
  * Gets all data for the given EntitySet UUID with respect to the given filters.
  *
@@ -24149,7 +24148,7 @@ function getSelectedEntitySetData(entitySetId, syncIds, propertyTypeIds) {
     properties: propertyTypeIds
   };
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + _ApiPaths.GET_DATA_PATH, data).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.HISTORICAL_PATH + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + _ApiPaths.GET_DATA_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -48599,7 +48598,7 @@ var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.13.1";
+var version = "v0.13.2";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
