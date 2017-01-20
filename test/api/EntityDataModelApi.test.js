@@ -95,7 +95,7 @@ const MOCK_ACTION = 'ADD';
 
 let mockAxiosInstance = null;
 
-fdescribe('EntityDataModelApi', () => {
+describe('EntityDataModelApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
