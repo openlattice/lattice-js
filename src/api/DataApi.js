@@ -19,6 +19,8 @@
 
 import Immutable from 'immutable';
 
+import isUndefined from 'lodash/isUndefined';
+
 import Logger from '../utils/Logger';
 
 import {
@@ -37,6 +39,7 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
+  isEmptyArray,
   isNonEmptyObject
 } from '../utils/LangUtils';
 
@@ -135,17 +138,25 @@ export function getSelectedEntitySetData(entitySetId :UUID, syncIds :UUID[], pro
     return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
   }
 
-  if (!isValidUuidArray(syncIds)) {
-    return Promise.reject('invalid parameter: syncIds must be a non-empty array of valid UUIDs');
+  let syncIdsCollection = syncIds;
+  if (isUndefined(syncIds) || isEmptyArray(syncIds)) {
+    syncIdsCollection = [];
+  }
+  else if (!isValidUuidArray(syncIds)) {
+    return Promise.reject('invalid parameter: syncIds must be an array of valid UUIDs');
   }
 
-  if (!isValidUuidArray(propertyTypeIds)) {
+  let propertyTypeIdsCollection = propertyTypeIds;
+  if (isUndefined(propertyTypeIds) || isEmptyArray(propertyTypeIds)) {
+    propertyTypeIdsCollection = [];
+  }
+  else if (!isValidUuidArray(propertyTypeIds)) {
     return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
   }
 
   const data = {
-    syncIds,
-    properties: propertyTypeIds
+    syncIds: syncIdsCollection,
+    properties: propertyTypeIdsCollection
   };
 
   return getApiAxiosInstance(DATA_API)
