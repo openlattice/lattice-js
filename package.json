@@ -1,6 +1,6 @@
 {
   "name": "loom-data",
-  "version": "0.13.5",
+  "version": "0.13.6",
   "homepage": "https://github.com/kryptnostic/loom-data-js",
   "description": "JavaScript SDK for all Loom REST APIs",
   "author": {
