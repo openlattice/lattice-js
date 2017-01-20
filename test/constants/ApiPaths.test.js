@@ -18,7 +18,6 @@ const AUTHORIZATIONS_PATH :string = 'authorizations';
 // DataApi specific paths
 const DATA_PATH :string = 'data';
 const ENTITY_DATA_PATH :string = 'entitydata';
-const GET_DATA_PATH :string = 'getData';
 const HISTORICAL_PATH :string = 'historical';
 
 // EntityDataModelApi specific paths
@@ -116,11 +115,6 @@ describe('ApiPaths', () => {
     it(`should expose "${ENTITY_DATA_PATH}"`, () => {
       expect(ApiPaths.ENTITY_DATA_PATH).toBeDefined();
       expect(ApiPaths.ENTITY_DATA_PATH).toEqual(ENTITY_DATA_PATH);
-    });
-
-    it(`should expose "${GET_DATA_PATH}"`, () => {
-      expect(ApiPaths.GET_DATA_PATH).toBeDefined();
-      expect(ApiPaths.GET_DATA_PATH).toEqual(GET_DATA_PATH);
     });
 
     it(`should expose "${HISTORICAL_PATH}"`, () => {
