@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.13.2
+ * loom-data - v0.13.3
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4430,7 +4430,7 @@ var _isString = __webpack_require__(262);
 
 var _isString2 = _interopRequireDefault(_isString);
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -10070,6 +10070,34 @@ var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is `undefined`.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
+ * @example
+ *
+ * _.isUndefined(void 0);
+ * // => true
+ *
+ * _.isUndefined(null);
+ * // => false
+ */
+function isUndefined(value) {
+  return value === undefined;
+}
+
+module.exports = isUndefined;
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10161,7 +10189,7 @@ exports.getApiBaseUrl = getApiBaseUrl;
 exports.getApiAxiosInstance = getApiAxiosInstance;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var freeGlobal = __webpack_require__(48);
@@ -10173,34 +10201,6 @@ var freeSelf = typeof self == 'object' && self && self.Object === Object && self
 var root = freeGlobal || freeSelf || Function('return this')();
 
 module.exports = root;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is `undefined`.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
- * @example
- *
- * _.isUndefined(void 0);
- * // => true
- *
- * _.isUndefined(null);
- * // => false
- */
-function isUndefined(value) {
-  return value === undefined;
-}
-
-module.exports = isUndefined;
 
 
 /***/ }),
@@ -10795,7 +10795,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -11037,7 +11037,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -11456,7 +11456,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -11768,7 +11768,7 @@ function isValid(entitySet) {
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(8);
+var root = __webpack_require__(9);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -12363,7 +12363,7 @@ var _has = __webpack_require__(256);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -12628,7 +12628,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -12982,7 +12982,7 @@ function isValid(schema) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(8);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -23810,7 +23810,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23869,6 +23869,10 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
+var _isUndefined = __webpack_require__(7);
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
 var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
@@ -23877,15 +23881,13 @@ var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(13);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('DataApi');
 
 /**
  * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
@@ -23901,6 +23903,8 @@ var LOG = new _Logger2.default('DataApi');
  * import { DataApi } from 'loom-data';
  * // DataApi.get...
  */
+
+var LOG = new _Logger2.default('DataApi');
 
 var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
   map.set('csv', 'csv');
@@ -23987,17 +23991,23 @@ function getSelectedEntitySetData(entitySetId, syncIds, propertyTypeIds) {
     return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
   }
 
-  if (!(0, _ValidationUtils.isValidUuidArray)(syncIds)) {
-    return Promise.reject('invalid parameter: syncIds must be a non-empty array of valid UUIDs');
+  var syncIdsCollection = syncIds;
+  if ((0, _isUndefined2.default)(syncIds) || (0, _LangUtils.isEmptyArray)(syncIds)) {
+    syncIdsCollection = [];
+  } else if (!(0, _ValidationUtils.isValidUuidArray)(syncIds)) {
+    return Promise.reject('invalid parameter: syncIds must be an array of valid UUIDs');
   }
 
-  if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
+  var propertyTypeIdsCollection = propertyTypeIds;
+  if ((0, _isUndefined2.default)(propertyTypeIds) || (0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
+    propertyTypeIdsCollection = [];
+  } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
     return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
   }
 
   var data = {
-    syncIds: syncIds,
-    properties: propertyTypeIds
+    syncIds: syncIdsCollection,
+    properties: propertyTypeIdsCollection
   };
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.HISTORICAL_PATH + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + _ApiPaths.GET_DATA_PATH, data).then(function (axiosResponse) {
@@ -24094,7 +24104,7 @@ exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
 exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -24126,7 +24136,7 @@ var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(13);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -25045,7 +25055,7 @@ var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(13);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -25785,7 +25795,7 @@ var _AclData2 = _interopRequireDefault(_AclData);
 
 var _ApiNames = __webpack_require__(6);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 var _ValidationUtils = __webpack_require__(3);
 
@@ -25918,7 +25928,7 @@ var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(13);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -26093,7 +26103,7 @@ exports.addRoleToUser = addRoleToUser;
 exports.setUserRoles = setUserRoles;
 exports.removeRoleFromUser = removeRoleFromUser;
 
-var _isUndefined = __webpack_require__(9);
+var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -26105,7 +26115,7 @@ var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(13);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -26310,7 +26320,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _AxiosUtils = __webpack_require__(7);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -29462,7 +29472,7 @@ module.exports = Array.isArray || function (arr) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(8);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -29589,7 +29599,7 @@ module.exports = MapCache;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(8);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -29602,7 +29612,7 @@ module.exports = Promise;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(8);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -29615,7 +29625,7 @@ module.exports = Set;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(8);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -30083,7 +30093,7 @@ module.exports = charsStartIndex;
 /* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(8);
+var root = __webpack_require__(9);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -31213,7 +31223,7 @@ module.exports = isArrayLike;
 /* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(8),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(9),
     stubFalse = __webpack_require__(266);
 
 /** Detect free variable `exports`. */
@@ -49384,7 +49394,7 @@ var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.13.2";
+var version = "v0.13.3";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
