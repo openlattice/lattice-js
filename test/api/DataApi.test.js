@@ -8,8 +8,9 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  ENTITY_DATA_PATH,
   GET_DATA_PATH,
-  ENTITY_DATA_PATH
+  HISTORICAL_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -125,7 +126,7 @@ function testGetSelectedEntitySetData() {
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${GET_DATA_PATH}`,
+            `/${HISTORICAL_PATH}/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${GET_DATA_PATH}`,
             {
               syncIds: [MOCK_SYNC_UUID],
               properties: [MOCK_PROPERTY_TYPE_UUID]
