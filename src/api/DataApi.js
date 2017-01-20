@@ -29,7 +29,6 @@ import {
 
 import {
   ENTITY_DATA_PATH,
-  GET_DATA_PATH,
   HISTORICAL_PATH
 } from '../constants/ApiPaths';
 
@@ -114,7 +113,7 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
 }
 
 /**
- * `POST /data/historical/entitydata/{uuid}/getData`
+ * `POST /data/historical/entitydata/{uuid}`
  *
  * Gets all data for the given EntitySet UUID with respect to the given filters.
  *
@@ -160,7 +159,7 @@ export function getSelectedEntitySetData(entitySetId :UUID, syncIds :UUID[], pro
   };
 
   return getApiAxiosInstance(DATA_API)
-    .post(`/${HISTORICAL_PATH}/${ENTITY_DATA_PATH}/${entitySetId}/${GET_DATA_PATH}`, data)
+    .post(`/${HISTORICAL_PATH}/${ENTITY_DATA_PATH}/${entitySetId}`, data)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
