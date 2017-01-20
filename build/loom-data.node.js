@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.13.0
+ * loom-data - v0.13.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4410,7 +4410,7 @@ exports.isNonEmptyObject = isNonEmptyObject;
 exports.isNonEmptyString = isNonEmptyString;
 exports.isNonEmptyStringArray = isNonEmptyStringArray;
 
-var _isArray = __webpack_require__(11);
+var _isArray = __webpack_require__(12);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
@@ -4430,7 +4430,7 @@ var _isString = __webpack_require__(266);
 
 var _isString2 = _interopRequireDefault(_isString);
 
-var _isUndefined = __webpack_require__(12);
+var _isUndefined = __webpack_require__(9);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -4961,7 +4961,7 @@ var _PermissionTypes = __webpack_require__(40);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _FullyQualifiedName = __webpack_require__(9);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -10177,6 +10177,34 @@ module.exports = root;
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is `undefined`.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
+ * @example
+ *
+ * _.isUndefined(void 0);
+ * // => true
+ *
+ * _.isUndefined(null);
+ * // => false
+ */
+function isUndefined(value) {
+  return value === undefined;
+}
+
+module.exports = isUndefined;
+
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10387,7 +10415,7 @@ exports.default = FullyQualifiedName;
 module.exports = exports['default'];
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(28),
@@ -10421,7 +10449,7 @@ module.exports = baseGetTag;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -10450,34 +10478,6 @@ module.exports = baseGetTag;
 var isArray = Array.isArray;
 
 module.exports = isArray;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is `undefined`.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
- * @example
- *
- * _.isUndefined(void 0);
- * // => true
- *
- * _.isUndefined(null);
- * // => false
- */
-function isUndefined(value) {
-  return value === undefined;
-}
-
-module.exports = isUndefined;
 
 
 /***/ }),
@@ -10794,11 +10794,11 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(12);
+var _isUndefined = __webpack_require__(9);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _FullyQualifiedName = __webpack_require__(9);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11036,11 +11036,11 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(12);
+var _isUndefined = __webpack_require__(9);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _FullyQualifiedName = __webpack_require__(9);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11480,7 +11480,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(12);
+var _isUndefined = __webpack_require__(9);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -11613,7 +11613,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _FullyQualifiedName = __webpack_require__(9);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11882,7 +11882,7 @@ module.exports = isObject;
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -12284,7 +12284,7 @@ var _has = __webpack_require__(260);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isUndefined = __webpack_require__(12);
+var _isUndefined = __webpack_require__(9);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -12549,7 +12549,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(12);
+var _isUndefined = __webpack_require__(9);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -12774,7 +12774,7 @@ var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _FullyQualifiedName = __webpack_require__(9);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -13340,7 +13340,7 @@ module.exports = baseIndexOf;
 
 var Symbol = __webpack_require__(28),
     arrayMap = __webpack_require__(209),
-    isArray = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isSymbol = __webpack_require__(31);
 
 /** Used as references for various `Number` constants. */
@@ -13510,7 +13510,7 @@ module.exports = isArguments;
 /* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isObject = __webpack_require__(30);
 
 /** `Object#toString` result references. */
@@ -24243,11 +24243,15 @@ exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
 exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
 
+var _isUndefined = __webpack_require__(9);
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
 var _EntitySet = __webpack_require__(27);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _FullyQualifiedName = __webpack_require__(9);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -24279,6 +24283,21 @@ var _ValidationUtils = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
+ *
+ * @module EntityDataModelApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.EntityDataModelApi.get...
+ *
+ * @example
+ * import { EntityDataModelApi } from 'loom-data';
+ * // EntityDataModelApi.get...
+ */
+
 var LOG = new _Logger2.default('EntityDataModelApi');
 
 /*
@@ -24299,23 +24318,6 @@ var LOG = new _Logger2.default('EntityDataModelApi');
  * @example
  * EntityDataModelApi.getEntityDataModel();
  */
-
-
-/**
- * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
- *
- * @module EntityDataModelApi
- * @memberof loom-data
- *
- * @example
- * import Loom from 'loom-data';
- * // Loom.EntityDataModelApi.get...
- *
- * @example
- * import { EntityDataModelApi } from 'loom-data';
- * // EntityDataModelApi.get...
- */
-
 function getEntityDataModel() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/').then(function (axiosResponse) {
@@ -24506,21 +24508,23 @@ function createEmptySchema(schemaFqn) {
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
  * @param {string} action
- * @param {UUID[]} entityTypes
- * @param {UUID[]} propertyTypes
+ * @param {UUID[]} entityTypeIds
+ * @param {UUID[]} propertyTypeIds
  * @return {Promise}
  *
  * @example
  * EntityDataModelApi.updateSchema(
  *   { namespace: "LOOM", name: "MySchema" },
- *   {
- *     action: "ADD", // or REMOVE, or REPLACE,
- *     propertyTypes: [],
- *     entityTypes: []
- *   }
+ *   action: "ADD",
+ *   entityTypeIds: [
+ *     "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ *   ],
+ *   propertyTypeIds: [
+ *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ *   ]
  * )
  */
-function updateSchema(schemaFqn, action, entityTypes, propertyTypes) {
+function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
 
   if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
@@ -24530,12 +24534,18 @@ function updateSchema(schemaFqn, action, entityTypes, propertyTypes) {
     return Promise.reject('invalid parameter: action must be a non-empty string');
   }
 
-  if (!(0, _LangUtils.isNonEmptyArray)(entityTypes)) {
-    return Promise.reject('invalid parameter: updateRequest.entityTypes must be a non-empty array');
+  var entityTypes = entityTypeIds;
+  if ((0, _isUndefined2.default)(entityTypeIds) || (0, _LangUtils.isEmptyArray)(entityTypeIds)) {
+    entityTypes = [];
+  } else if (!(0, _ValidationUtils.isValidUuidArray)(entityTypeIds)) {
+    return Promise.reject('invalid parameter: entityTypeIds must be an array of valid UUIDs');
   }
 
-  if (!(0, _LangUtils.isNonEmptyArray)(propertyTypes)) {
-    return Promise.reject('invalid parameter: updateRequest.propertyTypes must be a non-empty array');
+  var propertyTypes = propertyTypeIds;
+  if ((0, _isUndefined2.default)(propertyTypeIds) || (0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
+    propertyTypes = [];
+  } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
+    return Promise.reject('invalid parameter: propertyTypeIds must be an array of valid UUIDs');
   }
 
   var namespace = schemaFqn.namespace,
@@ -26232,7 +26242,7 @@ exports.addRoleToUser = addRoleToUser;
 exports.setUserRoles = setUserRoles;
 exports.removeRoleFromUser = removeRoleFromUser;
 
-var _isUndefined = __webpack_require__(12);
+var _isUndefined = __webpack_require__(9);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -26626,7 +26636,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SchemaBuilder = exports.Schema = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.FullyQualifiedName = undefined;
 
-var _FullyQualifiedName = __webpack_require__(9);
+var _FullyQualifiedName = __webpack_require__(10);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -28730,7 +28740,7 @@ module.exports = baseHas;
 /* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -28825,7 +28835,7 @@ module.exports = baseIsNative;
 /* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isLength = __webpack_require__(29),
     isObjectLike = __webpack_require__(16);
 
@@ -28984,7 +28994,7 @@ module.exports = baseUnary;
 /* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(11),
+var isArray = __webpack_require__(12),
     isKey = __webpack_require__(237),
     stringToPath = __webpack_require__(256),
     toString = __webpack_require__(57);
@@ -29167,7 +29177,7 @@ var DataView = __webpack_require__(202),
     Promise = __webpack_require__(206),
     Set = __webpack_require__(207),
     WeakMap = __webpack_require__(208),
-    baseGetTag = __webpack_require__(10),
+    baseGetTag = __webpack_require__(11),
     toSource = __webpack_require__(54);
 
 /** `Object#toString` result references. */
@@ -29247,7 +29257,7 @@ module.exports = getValue;
 
 var castPath = __webpack_require__(220),
     isArguments = __webpack_require__(55),
-    isArray = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isIndex = __webpack_require__(236),
     isLength = __webpack_require__(29),
     toKey = __webpack_require__(257);
@@ -29488,7 +29498,7 @@ module.exports = isIndex;
 /* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(11),
+var isArray = __webpack_require__(12),
     isSymbol = __webpack_require__(31);
 
 /** Used to match property names within property paths. */
@@ -30264,7 +30274,7 @@ module.exports = isBuffer;
 var baseKeys = __webpack_require__(217),
     getTag = __webpack_require__(227),
     isArguments = __webpack_require__(55),
-    isArray = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isArrayLike = __webpack_require__(261),
     isBuffer = __webpack_require__(262),
     isPrototype = __webpack_require__(52),
@@ -30372,7 +30382,7 @@ module.exports = isNull;
 /* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     getPrototype = __webpack_require__(225),
     isObjectLike = __webpack_require__(16);
 
@@ -30440,8 +30450,8 @@ module.exports = isPlainObject;
 /* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isArray = __webpack_require__(11),
+var baseGetTag = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -48589,7 +48599,7 @@ var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.13.0";
+var version = "v0.13.1";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
