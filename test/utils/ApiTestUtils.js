@@ -111,6 +111,38 @@ export function testApiFunctionShouldRejectOnInvalidParameters(functionToTest, .
   });
 }
 
+export function testApiFunctionShouldRejectOnGivenInvalidParameters(invalidParams, functionToTest, ...validParams) {
+
+  it('should reject when given specific invalid parameters', (done) => {
+
+    const promises = [];
+    for (let i = 0; i < validParams.length; i += 1) {
+
+      const invocationParameters = validParams.slice(0);
+      invalidParams.forEach((invalidInput) => {
+
+        invocationParameters[i] = invalidInput;
+
+        promises.push(
+          functionToTest(...invocationParameters)
+        );
+
+        promises.push(
+          functionToTest([...invocationParameters])
+        );
+      });
+    }
+
+    BBPromise.any(promises)
+      .then(() => {
+        done.fail();
+      })
+      .catch(() => {
+        done();
+      });
+  });
+}
+
 export function testApiFunctionShouldNotRejectOnInvalidParameters(functionToTest, ...validParameters) {
 
   it('should not reject when given invalid parameters', (done) => {
