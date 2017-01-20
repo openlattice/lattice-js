@@ -17,6 +17,8 @@
  * // EntityDataModelApi.get...
  */
 
+import isUndefined from 'lodash/isUndefined';
+
 import EntitySet from '../models/EntitySet';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
@@ -51,7 +53,7 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isNonEmptyArray,
+  isEmptyArray,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -288,25 +290,27 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<> {
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
  * @param {string} action
- * @param {UUID[]} entityTypes
- * @param {UUID[]} propertyTypes
+ * @param {UUID[]} entityTypeIds
+ * @param {UUID[]} propertyTypeIds
  * @return {Promise}
  *
  * @example
  * EntityDataModelApi.updateSchema(
  *   { namespace: "LOOM", name: "MySchema" },
- *   {
- *     action: "ADD", // or REMOVE, or REPLACE,
- *     propertyTypes: [],
- *     entityTypes: []
- *   }
+ *   action: "ADD",
+ *   entityTypeIds: [
+ *     "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ *   ],
+ *   propertyTypeIds: [
+ *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ *   ]
  * )
  */
 export function updateSchema(
     schemaFqn :FullyQualifiedName,
     action :string,
-    entityTypes :UUID[],
-    propertyTypes :UUID[]) :Promise<> {
+    entityTypeIds :UUID[],
+    propertyTypeIds :UUID[]) :Promise<> {
 
   if (!FullyQualifiedName.isValid(schemaFqn)) {
     return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
@@ -316,12 +320,20 @@ export function updateSchema(
     return Promise.reject('invalid parameter: action must be a non-empty string');
   }
 
-  if (!isNonEmptyArray(entityTypes)) {
-    return Promise.reject('invalid parameter: updateRequest.entityTypes must be a non-empty array');
+  let entityTypes = entityTypeIds;
+  if (isUndefined(entityTypeIds) || isEmptyArray(entityTypeIds)) {
+    entityTypes = [];
+  }
+  else if (!isValidUuidArray(entityTypeIds)) {
+    return Promise.reject('invalid parameter: entityTypeIds must be an array of valid UUIDs');
   }
 
-  if (!isNonEmptyArray(propertyTypes)) {
-    return Promise.reject('invalid parameter: updateRequest.propertyTypes must be a non-empty array');
+  let propertyTypes = propertyTypeIds;
+  if (isUndefined(propertyTypeIds) || isEmptyArray(propertyTypeIds)) {
+    propertyTypes = [];
+  }
+  else if (!isValidUuidArray(propertyTypeIds)) {
+    return Promise.reject('invalid parameter: propertyTypeIds must be an array of valid UUIDs');
   }
 
   const { namespace, name } = schemaFqn;
