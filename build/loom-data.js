@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.13.6
+ * loom-data - v0.14.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -5069,6 +5069,25 @@ module.exports = {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
+var DATA_API = exports.DATA_API = 'DataApi';
+var EDM_API = exports.EDM_API = 'EntityDataModelApi';
+var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
+var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
+var PERMISSIONS_REQUESTS_API = exports.PERMISSIONS_REQUESTS_API = 'PermissionsRequestsApi';
+var SEARCH_API = exports.SEARCH_API = 'SearchApi';
+var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /**
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
@@ -10050,25 +10069,6 @@ module.exports = {
 }));
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
-var DATA_API = exports.DATA_API = 'DataApi';
-var EDM_API = exports.EDM_API = 'EntityDataModelApi';
-var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
-var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
-var PERMISSIONS_REQUESTS_API = exports.PERMISSIONS_REQUESTS_API = 'PermissionsRequestsApi';
-var SEARCH_API = exports.SEARCH_API = 'SearchApi';
-var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
@@ -10112,13 +10112,13 @@ var _axios = __webpack_require__(174);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
 var _Configuration = __webpack_require__(32);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -10521,7 +10521,7 @@ var AUTHORIZATIONS_PATH = exports.AUTHORIZATIONS_PATH = 'authorizations';
 
 var DATA_PATH = exports.DATA_PATH = 'data';
 var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
-var HISTORICAL_PATH = exports.HISTORICAL_PATH = 'historical';
+var TICKET_PATH = exports.TICKET_PATH = 'ticket';
 
 /*
  *
@@ -10790,7 +10790,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -11032,7 +11032,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -11451,7 +11451,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -11927,7 +11927,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getConfig = exports.configure = undefined;
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -12623,7 +12623,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -23807,7 +23807,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -23860,13 +23860,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getEntitySetData = getEntitySetData;
-exports.getEntitySetDataFileUrl = getEntitySetDataFileUrl;
-exports.getSelectedEntitySetData = getSelectedEntitySetData;
 exports.createEntityData = createEntityData;
-
-var _immutable = __webpack_require__(5);
-
-var _immutable2 = _interopRequireDefault(_immutable);
+exports.storeEntityData = storeEntityData;
+exports.acquireSyncTicket = acquireSyncTicket;
+exports.releaseSyncTicket = releaseSyncTicket;
 
 var _isUndefined = __webpack_require__(7);
 
@@ -23876,7 +23873,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -23888,85 +23885,17 @@ var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
- *
- * @module DataApi
- * @memberof loom-data
- *
- * @example
- * import Loom from 'loom-data';
- * // Loom.DataApi.get...
- *
- * @example
- * import { DataApi } from 'loom-data';
- * // DataApi.get...
- */
-
 var LOG = new _Logger2.default('DataApi');
 
-var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
-  map.set('csv', 'csv');
-  map.set('CSV', 'csv');
-  map.set('json', 'json');
-  map.set('JSON', 'json');
-});
+// const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
+//   map.set('csv', 'csv');
+//   map.set('CSV', 'csv');
+//   map.set('json', 'json');
+//   map.set('JSON', 'json');
+// });
 
 /**
- * `GET /data/entitydata/{uuid}`
- *
- * Gets all data for the given EntitySet UUID.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {UUID} entitySetId
- * @returns {Promise}
- *
- * @example
- * DataApi.getEntitySetData("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getEntitySetData(entitySetId) {
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
-  });
-}
-
-/**
- * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {UUID} entitySetId
- * @param {string} fileType
- * @returns {string}
- *
- * @example
- * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
- */
-function getEntitySetDataFileUrl(entitySetId, fileType) {
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    LOG.warn('invalid parameter: entitySetId must be a valid UUID', entitySetId);
-    return null;
-  }
-
-  if (!FILE_TYPES.contains(fileType)) {
-    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
-    return null;
-  }
-
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + FILE_TYPES.get(fileType);
-}
-
-/**
- * `POST /data/historical/entitydata/{uuid}`
+ * `POST /data/entitydata/{entitySetId}`
  *
  * Gets all data for the given EntitySet UUID with respect to the given filters.
  *
@@ -23984,7 +23913,26 @@ function getEntitySetDataFileUrl(entitySetId, fileType) {
  *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
  * );
  */
-function getSelectedEntitySetData(entitySetId, syncIds, propertyTypeIds) {
+
+
+/**
+ * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
+ *
+ * @module DataApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.DataApi.get...
+ *
+ * @example
+ * import { DataApi } from 'loom-data';
+ * // DataApi.get...
+ */
+
+// import Immutable from 'immutable';
+
+function getEntitySetData(entitySetId, syncIds, propertyTypeIds) {
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
     return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
@@ -24009,7 +23957,7 @@ function getSelectedEntitySetData(entitySetId, syncIds, propertyTypeIds) {
     properties: propertyTypeIdsCollection
   };
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.HISTORICAL_PATH + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -24017,7 +23965,7 @@ function getSelectedEntitySetData(entitySetId, syncIds, propertyTypeIds) {
 }
 
 /**
- * `POST /data/entitydata/{uuid}/{uuid}`
+ * `PUT /data/entitydata/{entitySetId}/{syncId}`
  *
  * Creates an entry for the given entity data.
  *
@@ -24029,18 +23977,18 @@ function getSelectedEntitySetData(entitySetId, syncIds, propertyTypeIds) {
  * @return {Promise}
  *
  * @example
- * DataApi.createEntityData({
+ * DataApi.createEntityData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   {
- *     "entityId_1": [
+ *     "id_1": [
  *       {
  *         "uuid_1": ["value_1", "value_2"],
  *         "uuid_2": ["value_3", "value_4"]
  *       }
  *     ]
  *   }
- * });
+ * );
  */
 function createEntityData(entitySetId, syncId, entities) {
 
@@ -24058,7 +24006,112 @@ function createEntityData(entitySetId, syncId, entities) {
     return Promise.reject('invalid parameter: entities must be a non-empty object');
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + syncId, entities).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + syncId, entities).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `PATCH /data/entitydata/{ticketId}/{syncId}`
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} ticketId
+ * @param {UUID} syncId
+ * @param {Object} entities
+ * @return {Promise}
+ *
+ * @example
+ * DataApi.storeEntityData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "id_1": [
+ *       {
+ *         "uuid_1": ["value_1", "value_2"],
+ *         "uuid_2": ["value_3", "value_4"]
+ *       }
+ *     ]
+ *   }
+ * );
+ */
+function storeEntityData(ticketId, syncId, entities) {
+
+  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
+    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
+    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  }
+
+  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
+
+  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
+    return Promise.reject('invalid parameter: entities must be a non-empty object');
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).patch('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.TICKET_PATH + '/' + ticketId + '/' + syncId, entities).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `POST /data/ticket/{entitySetId}/{syncId}`
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} syncId
+ * @return {Promise}
+ *
+ * @example
+ * DataApi.acquireSyncTicket(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ * );
+ */
+function acquireSyncTicket(entitySetId, syncId) {
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
+    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.TICKET_PATH + '/' + entitySetId + '/' + syncId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `DELETE /data/ticket/{syncId}`
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} syncId
+ * @return {Promise}
+ *
+ * @example
+ * DataApi.acquireSyncTicket(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ * );
+ */
+function releaseSyncTicket(syncId) {
+
+  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
+    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + syncId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -24131,7 +24184,7 @@ var _Schema = __webpack_require__(44);
 
 var _Schema2 = _interopRequireDefault(_Schema);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -25030,7 +25083,7 @@ exports.removePrincipals = removePrincipals;
 exports.getAllRoles = getAllRoles;
 exports.getAllMembers = getAllMembers;
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -25050,7 +25103,7 @@ var _Organization = __webpack_require__(43);
 
 var _Organization2 = _interopRequireDefault(_Organization);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -25792,7 +25845,7 @@ var _AclData = __webpack_require__(42);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -25923,7 +25976,7 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -26110,7 +26163,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -26309,7 +26362,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.search = search;
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -26317,7 +26370,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -27410,7 +27463,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _immutable = __webpack_require__(5);
+var _immutable = __webpack_require__(6);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -49393,7 +49446,7 @@ var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.13.6";
+var version = "v0.14.0";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
