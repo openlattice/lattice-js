@@ -250,7 +250,7 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
 }
 
 /**
- * `DELETE /data/ticket/{syncId}`
+ * `DELETE /data/ticket/{ticketId}`
  *
  * @static
  * @memberof loom-data.DataApi
@@ -262,14 +262,14 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
  * );
  */
-export function releaseSyncTicket(syncId :UUID) :Promise<> {
+export function releaseSyncTicket(ticketId :UUID) :Promise<> {
 
-  if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  if (!isValidUuid(ticketId)) {
+    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
   }
 
   return getApiAxiosInstance(DATA_API)
-    .delete(`/${TICKET_PATH}/${syncId}`)
+    .delete(`/${TICKET_PATH}/${ticketId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

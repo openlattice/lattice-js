@@ -2,8 +2,6 @@
  * @flow
  */
 
-import FullyQualifiedName from './FullyQualifiedName';
-
 import Logger from '../utils/Logger';
 
 import {
@@ -24,7 +22,6 @@ const LOG = new Logger('EntitySet');
 export default class EntitySet {
 
   id :?UUID;
-  type :FullyQualifiedName;
   entityTypeId :UUID;
   name :string;
   title :string;
@@ -32,14 +29,12 @@ export default class EntitySet {
 
   constructor(
       id :?UUID,
-      type :FullyQualifiedName,
       entityTypeId :UUID,
       name :string,
       title :string,
       description :?string) {
 
     this.id = id;
-    this.type = type;
     this.entityTypeId = entityTypeId;
     this.name = name;
     this.title = title;
@@ -55,7 +50,6 @@ export default class EntitySet {
 export class EntitySetBuilder {
 
   id :?UUID;
-  type :FullyQualifiedName;
   entityTypeId :UUID;
   name :string;
   title :string;
@@ -68,16 +62,6 @@ export class EntitySetBuilder {
     }
 
     this.id = entitySetId;
-    return this;
-  }
-
-  setType(entitySetFqn :FullyQualifiedName) :EntitySetBuilder {
-
-    if (!FullyQualifiedName.isValid(entitySetFqn)) {
-      throw new Error('invalid parameter: entitySetFqn must be a valid FQN');
-    }
-
-    this.type = entitySetFqn;
     return this;
   }
 
@@ -123,10 +107,6 @@ export class EntitySetBuilder {
 
   build() :EntitySet {
 
-    if (!this.type) {
-      throw new Error('missing property: type is a required property');
-    }
-
     if (!this.entityTypeId) {
       throw new Error('missing property: entityTypeId is a required property');
     }
@@ -141,7 +121,6 @@ export class EntitySetBuilder {
 
     return new EntitySet(
       this.id,
-      this.type,
       this.entityTypeId,
       this.name,
       this.title,
@@ -164,7 +143,6 @@ export function isValid(entitySet :any) :boolean {
 
     // required properties
     entitySetBuilder
-      .setType(entitySet.type)
       .setEntityTypeId(entitySet.entityTypeId)
       .setName(entitySet.name)
       .setTitle(entitySet.title);

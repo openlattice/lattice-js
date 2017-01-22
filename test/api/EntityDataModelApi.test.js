@@ -54,7 +54,6 @@ const MOCK_PROPERTY_TYPE_FQN = {
 const MOCK_ENTITY_SET_UUID = '4b08e1f9-4a00-4169-92ea-10e377070220';
 
 const MOCK_ENTITY_SET = {
-  type: MOCK_ENTITY_TYPE_FQN,
   entityTypeId: MOCK_ENTITY_TYPE_UUID,
   name: 'EntityTypes',
   title: 'a collection EntityTypes',
