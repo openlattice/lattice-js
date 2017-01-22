@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.14.0
+ * loom-data - v0.14.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4410,7 +4410,7 @@ exports.isNonEmptyObject = isNonEmptyObject;
 exports.isNonEmptyString = isNonEmptyString;
 exports.isNonEmptyStringArray = isNonEmptyStringArray;
 
-var _isArray = __webpack_require__(12);
+var _isArray = __webpack_require__(11);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
@@ -4961,7 +4961,7 @@ var _PermissionTypes = __webpack_require__(40);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -10120,7 +10120,7 @@ var _Configuration = __webpack_require__(32);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10205,6 +10205,171 @@ module.exports = root;
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(28),
+    getRawTag = __webpack_require__(226),
+    objectToString = __webpack_require__(253);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+module.exports = isArray;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var DATASTORE_PATH = exports.DATASTORE_PATH = 'datastore';
+
+/*
+ *
+ * shared paths
+ *
+ */
+var ENTITY_SET_PATH = exports.ENTITY_SET_PATH = 'entity/set';
+var ENTITY_TYPE_PATH = exports.ENTITY_TYPE_PATH = 'entity/type';
+var IDS_PATH = exports.IDS_PATH = 'ids';
+var NAMESPACE_PATH = exports.NAMESPACE_PATH = 'namespace';
+var PRINCIPALS_PATH = exports.PRINCIPALS_PATH = 'principals';
+var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
+var ROLES_PATH = exports.ROLES_PATH = 'roles';
+
+/*
+ *
+ * AuthorizationApi specific paths
+ *
+ */
+
+var AUTHORIZATIONS_PATH = exports.AUTHORIZATIONS_PATH = 'authorizations';
+
+/*
+ *
+ * DataApi specific paths
+ *
+ */
+
+var DATA_PATH = exports.DATA_PATH = 'data';
+var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
+var TICKET_PATH = exports.TICKET_PATH = 'ticket';
+
+/*
+ *
+ * EntityDataModelApi specific paths
+ *
+ */
+
+var EDM_PATH = exports.EDM_PATH = 'edm';
+var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
+
+/*
+ *
+ * OrganizationsApi specific paths
+ *
+ */
+
+var DESCRIPTION_PATH = exports.DESCRIPTION_PATH = 'description';
+var EMAIL_DOMAINS_PATH = exports.EMAIL_DOMAINS_PATH = 'email-domains';
+var MEMBERS_PATH = exports.MEMBERS_PATH = 'members';
+var ORGANIZATIONS_PATH = exports.ORGANIZATIONS_PATH = 'organizations';
+var TITLE_PATH = exports.TITLE_PATH = 'title';
+
+/*
+ *
+ * PermissionsApi specific paths
+ *
+ */
+
+var PERMISSIONS_PATH = exports.PERMISSIONS_PATH = 'permissions';
+
+/*
+ *
+ * PermissionsRequestsApi specific paths
+ *
+ */
+
+var ADMIN_PATH = exports.ADMIN_PATH = 'admin';
+var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
+var RESOLVED_PATH = exports.RESOLVED_PATH = 'resolved';
+var UNRESOLVED_PATH = exports.UNRESOLVED_PATH = 'unresolved';
+
+/*
+ *
+ * PrincipalsApi specific paths
+ *
+ */
+
+var USERS_PATH = exports.USERS_PATH = 'users';
+
+/*
+ *
+ * SearchApi specific paths
+ *
+ */
+
+var SEARCH_PATH = exports.SEARCH_PATH = 'search';
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10413,171 +10578,6 @@ FullyQualifiedName.isValid = function () {
 
 exports.default = FullyQualifiedName;
 module.exports = exports['default'];
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Symbol = __webpack_require__(28),
-    getRawTag = __webpack_require__(226),
-    objectToString = __webpack_require__(253);
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
-
-module.exports = baseGetTag;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-module.exports = isArray;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var DATASTORE_PATH = exports.DATASTORE_PATH = 'datastore';
-
-/*
- *
- * shared paths
- *
- */
-var ENTITY_SET_PATH = exports.ENTITY_SET_PATH = 'entity/set';
-var ENTITY_TYPE_PATH = exports.ENTITY_TYPE_PATH = 'entity/type';
-var IDS_PATH = exports.IDS_PATH = 'ids';
-var NAMESPACE_PATH = exports.NAMESPACE_PATH = 'namespace';
-var PRINCIPALS_PATH = exports.PRINCIPALS_PATH = 'principals';
-var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
-var ROLES_PATH = exports.ROLES_PATH = 'roles';
-
-/*
- *
- * AuthorizationApi specific paths
- *
- */
-
-var AUTHORIZATIONS_PATH = exports.AUTHORIZATIONS_PATH = 'authorizations';
-
-/*
- *
- * DataApi specific paths
- *
- */
-
-var DATA_PATH = exports.DATA_PATH = 'data';
-var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
-var TICKET_PATH = exports.TICKET_PATH = 'ticket';
-
-/*
- *
- * EntityDataModelApi specific paths
- *
- */
-
-var EDM_PATH = exports.EDM_PATH = 'edm';
-var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
-
-/*
- *
- * OrganizationsApi specific paths
- *
- */
-
-var DESCRIPTION_PATH = exports.DESCRIPTION_PATH = 'description';
-var EMAIL_DOMAINS_PATH = exports.EMAIL_DOMAINS_PATH = 'email-domains';
-var MEMBERS_PATH = exports.MEMBERS_PATH = 'members';
-var ORGANIZATIONS_PATH = exports.ORGANIZATIONS_PATH = 'organizations';
-var TITLE_PATH = exports.TITLE_PATH = 'title';
-
-/*
- *
- * PermissionsApi specific paths
- *
- */
-
-var PERMISSIONS_PATH = exports.PERMISSIONS_PATH = 'permissions';
-
-/*
- *
- * PermissionsRequestsApi specific paths
- *
- */
-
-var ADMIN_PATH = exports.ADMIN_PATH = 'admin';
-var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
-var RESOLVED_PATH = exports.RESOLVED_PATH = 'resolved';
-var UNRESOLVED_PATH = exports.UNRESOLVED_PATH = 'unresolved';
-
-/*
- *
- * PrincipalsApi specific paths
- *
- */
-
-var USERS_PATH = exports.USERS_PATH = 'users';
-
-/*
- *
- * SearchApi specific paths
- *
- */
-
-var SEARCH_PATH = exports.SEARCH_PATH = 'search';
 
 /***/ }),
 /* 14 */
@@ -10798,7 +10798,7 @@ var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11040,7 +11040,7 @@ var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11611,10 +11611,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _FullyQualifiedName = __webpack_require__(10);
-
-var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
-
 var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
@@ -11634,11 +11630,10 @@ var LOG = new _Logger2.default('EntitySet');
  * @memberof loom-data
  */
 
-var EntitySet = function EntitySet(id, type, entityTypeId, name, title, description) {
+var EntitySet = function EntitySet(id, entityTypeId, name, title, description) {
   _classCallCheck(this, EntitySet);
 
   this.id = id;
-  this.type = type;
   this.entityTypeId = entityTypeId;
   this.name = name;
   this.title = title;
@@ -11668,17 +11663,6 @@ var EntitySetBuilder = exports.EntitySetBuilder = function () {
       }
 
       this.id = entitySetId;
-      return this;
-    }
-  }, {
-    key: 'setType',
-    value: function setType(entitySetFqn) {
-
-      if (!_FullyQualifiedName2.default.isValid(entitySetFqn)) {
-        throw new Error('invalid parameter: entitySetFqn must be a valid FQN');
-      }
-
-      this.type = entitySetFqn;
       return this;
     }
   }, {
@@ -11729,10 +11713,6 @@ var EntitySetBuilder = exports.EntitySetBuilder = function () {
     key: 'build',
     value: function build() {
 
-      if (!this.type) {
-        throw new Error('missing property: type is a required property');
-      }
-
       if (!this.entityTypeId) {
         throw new Error('missing property: entityTypeId is a required property');
       }
@@ -11745,7 +11725,7 @@ var EntitySetBuilder = exports.EntitySetBuilder = function () {
         throw new Error('missing property: title is a required property');
       }
 
-      return new EntitySet(this.id, this.type, this.entityTypeId, this.name, this.title, this.description);
+      return new EntitySet(this.id, this.entityTypeId, this.name, this.title, this.description);
     }
   }]);
 
@@ -11765,7 +11745,7 @@ function isValid(entitySet) {
     var entitySetBuilder = new EntitySetBuilder();
 
     // required properties
-    entitySetBuilder.setType(entitySet.type).setEntityTypeId(entitySet.entityTypeId).setName(entitySet.name).setTitle(entitySet.title);
+    entitySetBuilder.setEntityTypeId(entitySet.entityTypeId).setName(entitySet.name).setTitle(entitySet.title);
 
     // optional properties
     if ((0, _LangUtils.isDefined)(entitySet.id)) {
@@ -11880,7 +11860,7 @@ module.exports = isObject;
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(10),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -12772,7 +12752,7 @@ var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -13338,7 +13318,7 @@ module.exports = baseIndexOf;
 
 var Symbol = __webpack_require__(28),
     arrayMap = __webpack_require__(209),
-    isArray = __webpack_require__(12),
+    isArray = __webpack_require__(11),
     isSymbol = __webpack_require__(31);
 
 /** Used as references for various `Number` constants. */
@@ -13508,7 +13488,7 @@ module.exports = isArguments;
 /* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(10),
     isObject = __webpack_require__(30);
 
 /** `Object#toString` result references. */
@@ -24023,7 +24003,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -24241,7 +24221,7 @@ function acquireSyncTicket(entitySetId, syncId) {
 }
 
 /**
- * `DELETE /data/ticket/{syncId}`
+ * `DELETE /data/ticket/{ticketId}`
  *
  * @static
  * @memberof loom-data.DataApi
@@ -24253,13 +24233,13 @@ function acquireSyncTicket(entitySetId, syncId) {
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
  * );
  */
-function releaseSyncTicket(syncId) {
+function releaseSyncTicket(ticketId) {
 
-  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
+    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + syncId).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + ticketId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -24312,7 +24292,7 @@ var _EntitySet = __webpack_require__(27);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -24334,7 +24314,7 @@ var _Schema2 = _interopRequireDefault(_Schema);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -25253,7 +25233,7 @@ var _Organization2 = _interopRequireDefault(_Organization);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26126,7 +26106,7 @@ var _Principal2 = _interopRequireDefault(_Principal);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26313,7 +26293,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26697,7 +26677,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SchemaBuilder = exports.Schema = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.FullyQualifiedName = undefined;
 
-var _FullyQualifiedName = __webpack_require__(10);
+var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -28801,7 +28781,7 @@ module.exports = baseHas;
 /* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(10),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -28896,7 +28876,7 @@ module.exports = baseIsNative;
 /* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(10),
     isLength = __webpack_require__(29),
     isObjectLike = __webpack_require__(16);
 
@@ -29055,7 +29035,7 @@ module.exports = baseUnary;
 /* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(12),
+var isArray = __webpack_require__(11),
     isKey = __webpack_require__(237),
     stringToPath = __webpack_require__(256),
     toString = __webpack_require__(57);
@@ -29238,7 +29218,7 @@ var DataView = __webpack_require__(202),
     Promise = __webpack_require__(206),
     Set = __webpack_require__(207),
     WeakMap = __webpack_require__(208),
-    baseGetTag = __webpack_require__(11),
+    baseGetTag = __webpack_require__(10),
     toSource = __webpack_require__(54);
 
 /** `Object#toString` result references. */
@@ -29318,7 +29298,7 @@ module.exports = getValue;
 
 var castPath = __webpack_require__(220),
     isArguments = __webpack_require__(55),
-    isArray = __webpack_require__(12),
+    isArray = __webpack_require__(11),
     isIndex = __webpack_require__(236),
     isLength = __webpack_require__(29),
     toKey = __webpack_require__(257);
@@ -29559,7 +29539,7 @@ module.exports = isIndex;
 /* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(12),
+var isArray = __webpack_require__(11),
     isSymbol = __webpack_require__(31);
 
 /** Used to match property names within property paths. */
@@ -30335,7 +30315,7 @@ module.exports = isBuffer;
 var baseKeys = __webpack_require__(217),
     getTag = __webpack_require__(227),
     isArguments = __webpack_require__(55),
-    isArray = __webpack_require__(12),
+    isArray = __webpack_require__(11),
     isArrayLike = __webpack_require__(261),
     isBuffer = __webpack_require__(262),
     isPrototype = __webpack_require__(52),
@@ -30443,7 +30423,7 @@ module.exports = isNull;
 /* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(10),
     getPrototype = __webpack_require__(225),
     isObjectLike = __webpack_require__(16);
 
@@ -30511,8 +30491,8 @@ module.exports = isPlainObject;
 /* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
-    isArray = __webpack_require__(12),
+var baseGetTag = __webpack_require__(10),
+    isArray = __webpack_require__(11),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -48660,7 +48640,7 @@ var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.14.0";
+var version = "v0.14.1";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
