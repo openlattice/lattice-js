@@ -17,14 +17,8 @@ const MOCK_DESCRIPTION = 'description';
 const MOCK_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
 const MOCK_ET_UUID = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
 
-const MOCK_TYPE_FQN = {
-  namespace: 'LOOM',
-  name: 'Data'
-};
-
 const MOCK_ES_OBJ = {
   id: MOCK_UUID,
-  type: MOCK_TYPE_FQN,
   entityTypeId: MOCK_ET_UUID,
   name: MOCK_NAME,
   title: MOCK_TITLE,
@@ -64,30 +58,6 @@ describe('EntitySet', () => {
       it('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setId(MOCK_UUID);
-        }).not.toThrow();
-      });
-
-    });
-
-    describe('setType()', () => {
-
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setType();
-        }).toThrow();
-      });
-
-      it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            builder.setType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      it('should not throw when given valid parameters', () => {
-        expect(() => {
-          builder.setType(MOCK_TYPE_FQN);
         }).not.toThrow();
       });
 
@@ -195,7 +165,6 @@ describe('EntitySet', () => {
 
         expect(() => {
           (new EntitySetBuilder())
-            .setEntityTypeId(MOCK_ET_UUID)
             .setName(MOCK_NAME)
             .setTitle(MOCK_TITLE)
             .build();
@@ -203,15 +172,6 @@ describe('EntitySet', () => {
 
         expect(() => {
           (new EntitySetBuilder())
-            .setType(MOCK_TYPE_FQN)
-            .setName(MOCK_NAME)
-            .setTitle(MOCK_TITLE)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          (new EntitySetBuilder())
-            .setType(MOCK_TYPE_FQN)
             .setEntityTypeId(MOCK_ET_UUID)
             .setTitle(MOCK_TITLE)
             .build();
@@ -219,7 +179,6 @@ describe('EntitySet', () => {
 
         expect(() => {
           (new EntitySetBuilder())
-            .setType(MOCK_TYPE_FQN)
             .setEntityTypeId(MOCK_ET_UUID)
             .setName(MOCK_NAME)
             .build();
@@ -230,7 +189,6 @@ describe('EntitySet', () => {
 
         expect(() => {
           (new EntitySetBuilder())
-            .setType(MOCK_TYPE_FQN)
             .setEntityTypeId(MOCK_ET_UUID)
             .setName(MOCK_NAME)
             .setTitle(MOCK_TITLE)
@@ -241,7 +199,6 @@ describe('EntitySet', () => {
         expect(() => {
           (new EntitySetBuilder())
             .setId(MOCK_UUID)
-            .setType(MOCK_TYPE_FQN)
             .setEntityTypeId(MOCK_ET_UUID)
             .setName(MOCK_NAME)
             .setTitle(MOCK_TITLE)
@@ -253,7 +210,6 @@ describe('EntitySet', () => {
 
         const entitySet = builder
           .setId(MOCK_UUID)
-          .setType(MOCK_TYPE_FQN)
           .setEntityTypeId(MOCK_ET_UUID)
           .setName(MOCK_NAME)
           .setTitle(MOCK_TITLE)
@@ -264,9 +220,6 @@ describe('EntitySet', () => {
 
         expect(entitySet.id).toBeDefined();
         expect(entitySet.id).toEqual(MOCK_UUID);
-
-        expect(entitySet.type).toBeDefined();
-        expect(entitySet.type).toEqual(MOCK_TYPE_FQN);
 
         expect(entitySet.entityTypeId).toBeDefined();
         expect(entitySet.entityTypeId).toEqual(MOCK_ET_UUID);
@@ -296,7 +249,7 @@ describe('EntitySet', () => {
       it('should return true when given a valid instance ', () => {
         expect(isValid(
           new EntitySet(
-            MOCK_UUID, MOCK_TYPE_FQN, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
+            MOCK_UUID, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
           )
         )).toEqual(true);
       });
@@ -305,7 +258,6 @@ describe('EntitySet', () => {
 
         const entitySet = (new EntitySetBuilder())
           .setId(MOCK_UUID)
-          .setType(MOCK_TYPE_FQN)
           .setEntityTypeId(MOCK_ET_UUID)
           .setName(MOCK_NAME)
           .setTitle(MOCK_TITLE)
@@ -334,12 +286,6 @@ describe('EntitySet', () => {
           if (isDefined(invalidInput)) {
             expect(isValid(Object.assign({}, MOCK_ES_OBJ, { id: invalidInput }))).toEqual(false);
           }
-        });
-      });
-
-      it('should return false when given an object literal with an invalid "type" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ES_OBJ, { type: invalidInput }))).toEqual(false);
         });
       });
 
@@ -374,20 +320,10 @@ describe('EntitySet', () => {
           if (isDefined(invalidInput)) {
             expect(isValid(
               new EntitySet(
-                invalidInput, MOCK_TYPE_FQN, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
+                invalidInput, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
               )
             )).toEqual(false);
           }
-        });
-      });
-
-      it('should return false when given an instance with an invalid "type" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(
-            new EntitySet(
-              MOCK_UUID, invalidInput, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
-            )
-          )).toEqual(false);
         });
       });
 
@@ -395,7 +331,7 @@ describe('EntitySet', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
-              MOCK_UUID, MOCK_TYPE_FQN, invalidInput, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
+              MOCK_UUID, invalidInput, MOCK_NAME, MOCK_TITLE, MOCK_DESCRIPTION
             )
           )).toEqual(false);
         });
@@ -405,7 +341,7 @@ describe('EntitySet', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
-              MOCK_UUID, MOCK_TYPE_FQN, MOCK_ET_UUID, invalidInput, MOCK_TITLE, MOCK_DESCRIPTION
+              MOCK_UUID, MOCK_ET_UUID, invalidInput, MOCK_TITLE, MOCK_DESCRIPTION
             )
           )).toEqual(false);
         });
@@ -415,7 +351,7 @@ describe('EntitySet', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
-              MOCK_UUID, MOCK_TYPE_FQN, MOCK_ET_UUID, MOCK_NAME, invalidInput, MOCK_DESCRIPTION
+              MOCK_UUID, MOCK_ET_UUID, MOCK_NAME, invalidInput, MOCK_DESCRIPTION
             )
           )).toEqual(false);
         });
@@ -426,7 +362,7 @@ describe('EntitySet', () => {
           if (isDefined(invalidInput)) {
             expect(isValid(
               new EntitySet(
-                MOCK_UUID, MOCK_TYPE_FQN, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, invalidInput
+                MOCK_UUID, MOCK_ET_UUID, MOCK_NAME, MOCK_TITLE, invalidInput
               )
             )).toEqual(false);
           }
