@@ -159,16 +159,16 @@ function testReleaseSyncTicket() {
   describe('releaseSyncTicket()', () => {
 
     const functionInvocation = [
-      DataApi.releaseSyncTicket, MOCK_SYNC_UUID
+      DataApi.releaseSyncTicket, MOCK_TICKET_UUID
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      DataApi.releaseSyncTicket(MOCK_SYNC_UUID)
+      DataApi.releaseSyncTicket(MOCK_TICKET_UUID)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${TICKET_PATH}/${MOCK_SYNC_UUID}`
+            `/${TICKET_PATH}/${MOCK_TICKET_UUID}`
           );
           done();
         })
