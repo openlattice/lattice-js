@@ -29,11 +29,11 @@ import {
 
 import {
   ENTITY_DATA_PATH,
-  HISTORICAL_PATH
+  TICKET_PATH
 } from '../constants/ApiPaths';
 
 import {
-  getApiBaseUrl,
+  // getApiBaseUrl,
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
@@ -49,12 +49,12 @@ import {
 
 const LOG = new Logger('DataApi');
 
-const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
-  map.set('csv', 'csv');
-  map.set('CSV', 'csv');
-  map.set('json', 'json');
-  map.set('JSON', 'json');
-});
+// const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
+//   map.set('csv', 'csv');
+//   map.set('CSV', 'csv');
+//   map.set('json', 'json');
+//   map.set('JSON', 'json');
+// });
 
 /**
  * `POST /data/entitydata/{entitySetId}`
@@ -205,7 +205,71 @@ export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) 
   }
 
   return getApiAxiosInstance(DATA_API)
-    .patch(`/${ENTITY_DATA_PATH}/${ticketId}/${syncId}`, entities)
+    .patch(`/${ENTITY_DATA_PATH}/${TICKET_PATH}/${ticketId}/${syncId}`, entities)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `POST /data/ticket/{entitySetId}/{syncId}`
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} syncId
+ * @return {Promise}
+ *
+ * @example
+ * DataApi.acquireSyncTicket(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ * );
+ */
+export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
+
+  if (!isValidUuid(entitySetId)) {
+    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+  }
+
+  if (!isValidUuid(syncId)) {
+    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post(`/${TICKET_PATH}/${entitySetId}/${syncId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `DELETE /data/ticket/{syncId}`
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} syncId
+ * @return {Promise}
+ *
+ * @example
+ * DataApi.acquireSyncTicket(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ * );
+ */
+export function releaseSyncTicket(syncId :UUID) :Promise<> {
+
+  if (!isValidUuid(syncId)) {
+    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${TICKET_PATH}/${syncId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

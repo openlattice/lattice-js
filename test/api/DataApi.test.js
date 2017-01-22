@@ -8,7 +8,8 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  ENTITY_DATA_PATH
+  ENTITY_DATA_PATH,
+  TICKET_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -54,6 +55,8 @@ describe('DataApi', () => {
 
   testCreateEntityData();
   testStoreEntityData();
+  testAcquireSyncTicket();
+  testReleaseSyncTicket();
 });
 
 function testCreateEntityData() {
@@ -102,8 +105,70 @@ function testStoreEntityData() {
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_TICKET_UUID}/${MOCK_SYNC_UUID}`,
+            `/${ENTITY_DATA_PATH}/${TICKET_PATH}/${MOCK_TICKET_UUID}/${MOCK_SYNC_UUID}`,
             MOCK_ENTITIES
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testAcquireSyncTicket() {
+
+  describe('acquireSyncTicket()', () => {
+
+    const functionInvocation = [
+      DataApi.acquireSyncTicket, MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID
+    ];
+
+    it('should send a POST request with the correct URL path', (done) => {
+
+      DataApi.acquireSyncTicket(MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${TICKET_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testReleaseSyncTicket() {
+
+  describe('releaseSyncTicket()', () => {
+
+    const functionInvocation = [
+      DataApi.releaseSyncTicket, MOCK_SYNC_UUID
+    ];
+
+    it('should send a DELETE request with the correct URL path', (done) => {
+
+      DataApi.releaseSyncTicket(MOCK_SYNC_UUID)
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${TICKET_PATH}/${MOCK_SYNC_UUID}`
           );
           done();
         })

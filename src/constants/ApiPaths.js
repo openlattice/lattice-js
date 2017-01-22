@@ -39,7 +39,7 @@ export const AUTHORIZATIONS_PATH :string = 'authorizations';
 
 export const DATA_PATH :string = 'data';
 export const ENTITY_DATA_PATH :string = 'entitydata';
-export const HISTORICAL_PATH :string = 'historical';
+export const TICKET_PATH :string = 'ticket';
 
 /*
  *
