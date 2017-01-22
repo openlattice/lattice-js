@@ -2,8 +2,6 @@
  * @flow
  */
 
-import FullyQualifiedName from './FullyQualifiedName';
-
 import Logger from '../utils/Logger';
 
 import {
