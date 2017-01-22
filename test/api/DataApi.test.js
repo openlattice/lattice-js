@@ -58,42 +58,10 @@ describe('DataApi', () => {
     mockAxiosInstance = null;
   });
 
-  testGetEntitySetData();
   testGetEntitySetDataFileUrl();
   testGetSelectedEntitySetData();
   testCreateEntityData();
 });
-
-function testGetEntitySetData() {
-
-  describe('getEntitySetData()', () => {
-
-    const functionInvocation = [
-      DataApi.getEntitySetData, MOCK_ENTITY_SET_UUID
-    ];
-
-    it('should send a GET request with the correct URL path', (done) => {
-
-      DataApi.getEntitySetData(MOCK_ENTITY_SET_UUID)
-        .then(() => {
-          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-
-  });
-}
 
 function testGetEntitySetDataFileUrl() {
 
@@ -162,12 +130,12 @@ function testCreateEntityData() {
       DataApi.createEntityData, MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES
     ];
 
-    it('should send a POST request with the correct URL path and data', (done) => {
+    it('should send a PUT request with the correct URL path and data', (done) => {
 
       DataApi.createEntityData(MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES)
         .then(() => {
-          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
             `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`,
             MOCK_ENTITIES
           );

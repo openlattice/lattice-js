@@ -56,34 +56,6 @@ const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<
   map.set('JSON', 'json');
 });
 
-/**
- * `GET /data/entitydata/{uuid}`
- *
- * Gets all data for the given EntitySet UUID.
- *
- * @static
- * @memberof loom-data.DataApi
- * @param {UUID} entitySetId
- * @returns {Promise}
- *
- * @example
- * DataApi.getEntitySetData("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-export function getEntitySetData(entitySetId :UUID) :Promise<> {
-
-  if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .get(`/${ENTITY_DATA_PATH}/${entitySetId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
-}
 
 /**
  * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
@@ -169,7 +141,57 @@ export function getSelectedEntitySetData(entitySetId :UUID, syncIds :UUID[], pro
 }
 
 /**
- * `POST /data/entitydata/{uuid}/{uuid}`
+ * `PATCH /data/entitydata/{ticketId}/{syncId}`
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} ticketId
+ * @param {UUID} syncId
+ * @param {Object} entities
+ * @return {Promise}
+ *
+ * @example
+ * DataApi.storeEntityData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "id_1": [
+ *       {
+ *         "uuid_1": ["value_1", "value_2"],
+ *         "uuid_2": ["value_3", "value_4"]
+ *       }
+ *     ]
+ *   }
+ * );
+ */
+export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) :Promise<> {
+
+  if (!isValidUuid(ticketId)) {
+    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
+  }
+
+  if (!isValidUuid(syncId)) {
+    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+  }
+
+  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
+
+  if (!isNonEmptyObject(entities)) {
+    return Promise.reject('invalid parameter: entities must be a non-empty object');
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .patch(`/${ENTITY_DATA_PATH}/${ticketId}/${syncId}`, entities)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `PUT /data/entitydata/{entitySetId}/{syncId}`
  *
  * Creates an entry for the given entity data.
  *
@@ -181,18 +203,18 @@ export function getSelectedEntitySetData(entitySetId :UUID, syncIds :UUID[], pro
  * @return {Promise}
  *
  * @example
- * DataApi.createEntityData({
+ * DataApi.createEntityData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   {
- *     "entityId_1": [
+ *     "id_1": [
  *       {
  *         "uuid_1": ["value_1", "value_2"],
  *         "uuid_2": ["value_3", "value_4"]
  *       }
  *     ]
  *   }
- * });
+ * );
  */
 export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Object) :Promise<> {
 
@@ -211,7 +233,7 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
   }
 
   return getApiAxiosInstance(DATA_API)
-    .post(`/${ENTITY_DATA_PATH}/${entitySetId}/${syncId}`, entities)
+    .put(`/${ENTITY_DATA_PATH}/${entitySetId}/${syncId}`, entities)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
