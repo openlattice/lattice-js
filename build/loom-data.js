@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.14.1
+ * loom-data - v0.14.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4410,7 +4410,7 @@ exports.isNonEmptyObject = isNonEmptyObject;
 exports.isNonEmptyString = isNonEmptyString;
 exports.isNonEmptyStringArray = isNonEmptyStringArray;
 
-var _isArray = __webpack_require__(11);
+var _isArray = __webpack_require__(12);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
@@ -10120,7 +10120,7 @@ var _Configuration = __webpack_require__(32);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(12);
+var _ApiPaths = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10205,72 +10205,6 @@ module.exports = root;
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Symbol = __webpack_require__(27),
-    getRawTag = __webpack_require__(222),
-    objectToString = __webpack_require__(249);
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
-
-module.exports = baseGetTag;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-module.exports = isArray;
-
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10366,7 +10300,74 @@ var USERS_PATH = exports.USERS_PATH = 'users';
  *
  */
 
+var POPULAR_PATH = exports.POPULAR_PATH = 'popular';
 var SEARCH_PATH = exports.SEARCH_PATH = 'search';
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(27),
+    getRawTag = __webpack_require__(222),
+    objectToString = __webpack_require__(249);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+module.exports = isArray;
+
 
 /***/ }),
 /* 13 */
@@ -11837,7 +11838,7 @@ module.exports = isObject;
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -13001,7 +13002,7 @@ module.exports = baseIndexOf;
 
 var Symbol = __webpack_require__(27),
     arrayMap = __webpack_require__(205),
-    isArray = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isSymbol = __webpack_require__(30);
 
 /** Used as references for various `Number` constants. */
@@ -13172,7 +13173,7 @@ module.exports = isArguments;
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isObject = __webpack_require__(29);
 
 /** `Object#toString` result references. */
@@ -23855,7 +23856,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(12);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -24166,7 +24167,7 @@ var _Schema2 = _interopRequireDefault(_Schema);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(12);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -25085,7 +25086,7 @@ var _Organization2 = _interopRequireDefault(_Organization);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(12);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -25958,7 +25959,7 @@ var _Principal2 = _interopRequireDefault(_Principal);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(12);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26145,7 +26146,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(12);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26341,6 +26342,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.search = search;
+exports.getPopularEntitySet = getPopularEntitySet;
 
 var _immutable = __webpack_require__(6);
 
@@ -26352,6 +26354,8 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
+var _ApiPaths = __webpack_require__(10);
+
 var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
@@ -26359,6 +26363,8 @@ var _LangUtils = __webpack_require__(1);
 var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('SearchApi');
 
 /**
  * SearchApi...
@@ -26374,8 +26380,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * import { SearchApi } from 'loom-data';
  * // SearchApi.search...
  */
-
-var LOG = new _Logger2.default('SearchApi');
 
 var KEYWORD = 'kw';
 var ENTITY_TYPE_ID = 'eid';
@@ -26471,6 +26475,25 @@ function search(searchOptions) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/', data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `GET /search/popular`
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @returns {Promise<EntitySet[]>}
+ *
+ * @example
+ * SearchApi.getPopularEntitySet();
+ */
+function getPopularEntitySet() {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.POPULAR_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -29769,7 +29792,7 @@ module.exports = baseHas;
 /* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -29864,7 +29887,7 @@ module.exports = baseIsNative;
 /* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     isLength = __webpack_require__(28),
     isObjectLike = __webpack_require__(16);
 
@@ -30023,7 +30046,7 @@ module.exports = baseUnary;
 /* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(11),
+var isArray = __webpack_require__(12),
     isKey = __webpack_require__(233),
     stringToPath = __webpack_require__(252),
     toString = __webpack_require__(54);
@@ -30206,7 +30229,7 @@ var DataView = __webpack_require__(198),
     Promise = __webpack_require__(202),
     Set = __webpack_require__(203),
     WeakMap = __webpack_require__(204),
-    baseGetTag = __webpack_require__(10),
+    baseGetTag = __webpack_require__(11),
     toSource = __webpack_require__(51);
 
 /** `Object#toString` result references. */
@@ -30286,7 +30309,7 @@ module.exports = getValue;
 
 var castPath = __webpack_require__(216),
     isArguments = __webpack_require__(52),
-    isArray = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isIndex = __webpack_require__(232),
     isLength = __webpack_require__(28),
     toKey = __webpack_require__(253);
@@ -30527,7 +30550,7 @@ module.exports = isIndex;
 /* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(11),
+var isArray = __webpack_require__(12),
     isSymbol = __webpack_require__(30);
 
 /** Used to match property names within property paths. */
@@ -31303,7 +31326,7 @@ module.exports = isBuffer;
 var baseKeys = __webpack_require__(213),
     getTag = __webpack_require__(223),
     isArguments = __webpack_require__(52),
-    isArray = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isArrayLike = __webpack_require__(257),
     isBuffer = __webpack_require__(258),
     isPrototype = __webpack_require__(49),
@@ -31411,7 +31434,7 @@ module.exports = isNull;
 /* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(11),
     getPrototype = __webpack_require__(221),
     isObjectLike = __webpack_require__(16);
 
@@ -31479,8 +31502,8 @@ module.exports = isPlainObject;
 /* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isArray = __webpack_require__(11),
+var baseGetTag = __webpack_require__(11),
+    isArray = __webpack_require__(12),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -49426,7 +49449,7 @@ var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.14.1";
+var version = "v0.14.2";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
