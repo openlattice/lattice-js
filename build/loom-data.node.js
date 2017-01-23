@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.14.2
+ * loom-data - v0.14.3
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -5069,25 +5069,6 @@ function isValidPrincipalArray(principals) {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
-var DATA_API = exports.DATA_API = 'DataApi';
-var EDM_API = exports.EDM_API = 'EntityDataModelApi';
-var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
-var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
-var PERMISSIONS_REQUESTS_API = exports.PERMISSIONS_REQUESTS_API = 'PermissionsRequestsApi';
-var SEARCH_API = exports.SEARCH_API = 'SearchApi';
-var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
 /**
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
@@ -10069,6 +10050,25 @@ var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
 }));
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
+var DATA_API = exports.DATA_API = 'DataApi';
+var EDM_API = exports.EDM_API = 'EntityDataModelApi';
+var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
+var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
+var PERMISSIONS_REQUESTS_API = exports.PERMISSIONS_REQUESTS_API = 'PermissionsRequestsApi';
+var SEARCH_API = exports.SEARCH_API = 'SearchApi';
+var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
@@ -10112,13 +10112,13 @@ var _axios = __webpack_require__(179);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
 var _Configuration = __webpack_require__(32);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
 
@@ -10791,7 +10791,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -11033,7 +11033,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -11475,7 +11475,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -11904,7 +11904,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getConfig = exports.configure = undefined;
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -12524,7 +12524,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -23936,7 +23936,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -23989,10 +23989,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getEntitySetData = getEntitySetData;
+exports.getEntitySetDataFileUrl = getEntitySetDataFileUrl;
 exports.createEntityData = createEntityData;
 exports.storeEntityData = storeEntityData;
 exports.acquireSyncTicket = acquireSyncTicket;
 exports.releaseSyncTicket = releaseSyncTicket;
+
+var _immutable = __webpack_require__(5);
+
+var _immutable2 = _interopRequireDefault(_immutable);
 
 var _isUndefined = __webpack_require__(7);
 
@@ -24002,7 +24007,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
 
@@ -24014,14 +24019,29 @@ var _ValidationUtils = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
+ *
+ * @module DataApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.DataApi.get...
+ *
+ * @example
+ * import { DataApi } from 'loom-data';
+ * // DataApi.get...
+ */
+
 var LOG = new _Logger2.default('DataApi');
 
-// const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
-//   map.set('csv', 'csv');
-//   map.set('CSV', 'csv');
-//   map.set('json', 'json');
-//   map.set('JSON', 'json');
-// });
+var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
+  map.set('csv', 'csv');
+  map.set('CSV', 'csv');
+  map.set('json', 'json');
+  map.set('JSON', 'json');
+});
 
 /**
  * `POST /data/entitydata/{entitySetId}`
@@ -24042,25 +24062,6 @@ var LOG = new _Logger2.default('DataApi');
  *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
  * );
  */
-
-
-/**
- * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
- *
- * @module DataApi
- * @memberof loom-data
- *
- * @example
- * import Loom from 'loom-data';
- * // Loom.DataApi.get...
- *
- * @example
- * import { DataApi } from 'loom-data';
- * // DataApi.get...
- */
-
-// import Immutable from 'immutable';
-
 function getEntitySetData(entitySetId, syncIds, propertyTypeIds) {
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
@@ -24091,6 +24092,33 @@ function getEntitySetData(entitySetId, syncIds, propertyTypeIds) {
   }).catch(function (e) {
     LOG.error(e);
   });
+}
+
+/**
+ * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} entitySetId
+ * @param {string} fileType
+ * @returns {string}
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
+ */
+function getEntitySetDataFileUrl(entitySetId, fileType) {
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    LOG.warn('invalid parameter: entitySetId must be a valid UUID', entitySetId);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    return null;
+  }
+
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + FILE_TYPES.get(fileType);
 }
 
 /**
@@ -24313,7 +24341,7 @@ var _Schema = __webpack_require__(45);
 
 var _Schema2 = _interopRequireDefault(_Schema);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
 
@@ -25212,7 +25240,7 @@ exports.removePrincipals = removePrincipals;
 exports.getAllRoles = getAllRoles;
 exports.getAllMembers = getAllMembers;
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -25232,7 +25260,7 @@ var _Organization = __webpack_require__(44);
 
 var _Organization2 = _interopRequireDefault(_Organization);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
 
@@ -25974,7 +26002,7 @@ var _AclData = __webpack_require__(43);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26105,7 +26133,7 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
 
@@ -26292,7 +26320,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
 
@@ -26492,7 +26520,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.search = search;
 exports.getPopularEntitySet = getPopularEntitySet;
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -26500,7 +26528,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(5);
+var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
 
@@ -27898,7 +27926,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _immutable = __webpack_require__(6);
+var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
@@ -48663,7 +48691,7 @@ var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.14.2";
+var version = "v0.14.3";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
