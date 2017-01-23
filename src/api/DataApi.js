@@ -17,7 +17,7 @@
  * // DataApi.get...
  */
 
-// import Immutable from 'immutable';
+import Immutable from 'immutable';
 
 import isUndefined from 'lodash/isUndefined';
 
@@ -33,7 +33,7 @@ import {
 } from '../constants/ApiPaths';
 
 import {
-  // getApiBaseUrl,
+  getApiBaseUrl,
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
@@ -49,12 +49,12 @@ import {
 
 const LOG = new Logger('DataApi');
 
-// const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
-//   map.set('csv', 'csv');
-//   map.set('CSV', 'csv');
-//   map.set('json', 'json');
-//   map.set('JSON', 'json');
-// });
+const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
+  map.set('csv', 'csv');
+  map.set('CSV', 'csv');
+  map.set('json', 'json');
+  map.set('JSON', 'json');
+});
 
 /**
  * `POST /data/entitydata/{entitySetId}`
@@ -110,6 +110,33 @@ export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTyp
     .catch((e) => {
       LOG.error(e);
     });
+}
+
+/**
+ * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof loom-data.DataApi
+ * @param {UUID} entitySetId
+ * @param {string} fileType
+ * @returns {string}
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
+ */
+export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?string {
+
+  if (!isValidUuid(entitySetId)) {
+    LOG.warn('invalid parameter: entitySetId must be a valid UUID', entitySetId);
+    return null;
+  }
+
+  if (!FILE_TYPES.contains(fileType)) {
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    return null;
+  }
+
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${entitySetId}?fileType=${FILE_TYPES.get(fileType)}`;
 }
 
 /**
