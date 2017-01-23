@@ -96,4 +96,5 @@ export const USERS_PATH :string = 'users';
  *
  */
 
+export const POPULAR_PATH :string = 'popular';
 export const SEARCH_PATH :string = 'search';
