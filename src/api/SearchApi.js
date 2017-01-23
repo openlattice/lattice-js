@@ -26,6 +26,10 @@ import {
 } from '../constants/ApiNames';
 
 import {
+  POPULAR_PATH
+} from '../constants/ApiPaths';
+
+import {
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
@@ -134,6 +138,28 @@ export function search(searchOptions :Object) :Promise<> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post('/', data)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
+ * `GET /search/popular`
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @returns {Promise<EntitySet[]>}
+ *
+ * @example
+ * SearchApi.getPopularEntitySet();
+ */
+export function getPopularEntitySet() :Promise<> {
+
+  return getApiAxiosInstance(SEARCH_API)
+    .get(`/${POPULAR_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
