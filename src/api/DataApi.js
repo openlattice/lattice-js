@@ -138,8 +138,6 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     return null;
   }
 
-  console.log(Configuration.getConfig().get('authToken'));
-
   const authToken = Configuration.getConfig().get('authToken');
   const split = authToken.split(' ');
   const token = split[1];
