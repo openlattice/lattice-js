@@ -24,6 +24,10 @@ import isUndefined from 'lodash/isUndefined';
 import Logger from '../utils/Logger';
 
 import {
+  getConfig
+} from '../config/Configuration';
+
+import {
   DATA_API
 } from '../constants/ApiNames';
 
@@ -136,7 +140,12 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     return null;
   }
 
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${entitySetId}?fileType=${FILE_TYPES.get(fileType)}`;
+  const authToken = getConfig().get('authToken');
+  const split = authToken.split(' ');
+  const token = split[1];
+
+  // eslint-disable-next-line
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${entitySetId}?fileType=${FILE_TYPES.get(fileType)}&token=${token}`;
 }
 
 /**
