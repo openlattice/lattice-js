@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.14.3
+ * loom-data - v0.14.4
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4659,11 +4659,11 @@ var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Ace = __webpack_require__(25);
+var _Ace = __webpack_require__(26);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
-var _EntitySet = __webpack_require__(26);
+var _EntitySet = __webpack_require__(27);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
@@ -10116,7 +10116,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _Configuration = __webpack_require__(32);
+var _Configuration = __webpack_require__(23);
 
 var _ApiNames = __webpack_require__(6);
 
@@ -10307,7 +10307,7 @@ var SEARCH_PATH = exports.SEARCH_PATH = 'search';
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(27),
+var Symbol = __webpack_require__(28),
     getRawTag = __webpack_require__(222),
     objectToString = __webpack_require__(249);
 
@@ -10418,7 +10418,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
  * fqn.getFullyQualifiedName(); // "LOOM.Data"
  */
 
-var _isObject = __webpack_require__(29);
+var _isObject = __webpack_require__(30);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
@@ -10600,7 +10600,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _PrincipalTypes = __webpack_require__(24);
+var _PrincipalTypes = __webpack_require__(25);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -11321,6 +11321,108 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getConfig = exports.configure = undefined;
+
+var _immutable = __webpack_require__(5);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _EnvToUrlMap = __webpack_require__(192);
+
+var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
+
+var _Logger = __webpack_require__(2);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LangUtils = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @module Configuration
+ * @memberof loom-data
+ */
+
+var LOG = new _Logger2.default('Configuration');
+
+var configObj = _immutable2.default.Map().withMutations(function (map) {
+
+  if (true) {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+  } else {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+  }
+});
+
+/**
+ * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
+ * result in the same base URL:
+ *   - "https://api.loom.digital"
+ *   - "api.loom.digital"
+ *   - "loom.digital"
+ *   - "api"
+ *
+ * @memberof loom-data.Configuration
+ * @param {Object} config - an object literal containing all configuration options
+ * @param {string} config.authToken - a Base64-encoded JWT auth token
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
+ */
+function configure(config) {
+
+  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
+    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
+    LOG.error(errorMsg, config);
+    throw new Error(errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
+    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
+  } else {
+    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
+    LOG.error(_errorMsg, config.authToken);
+    throw new Error(_errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
+    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+    }
+    // mild url validation to at least check the protocol and domain
+    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+        configObj = configObj.set('baseUrl', config.baseUrl);
+      } else {
+        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
+        LOG.error(_errorMsg2, config.baseUrl);
+        throw new Error(_errorMsg2);
+      }
+  } else {
+    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
+    LOG.error(_errorMsg3, config.baseUrl);
+    throw new Error(_errorMsg3);
+  }
+}
+
+function getConfig() {
+
+  return configObj;
+}
+
+exports.configure = configure;
+exports.getConfig = getConfig;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(4);
@@ -11418,7 +11520,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(163)))
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11437,7 +11539,7 @@ exports.default = PrincipalTypes;
 module.exports = exports['default'];
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11574,7 +11676,7 @@ function isValid(ace) {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11745,7 +11847,7 @@ function isValid(entitySet) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(9);
@@ -11757,7 +11859,7 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -11798,7 +11900,7 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /**
@@ -11835,7 +11937,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
@@ -11870,7 +11972,7 @@ module.exports = isSymbol;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11895,108 +11997,6 @@ try {
 
 module.exports = g;
 
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getConfig = exports.configure = undefined;
-
-var _immutable = __webpack_require__(5);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _EnvToUrlMap = __webpack_require__(192);
-
-var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
-
-var _Logger = __webpack_require__(2);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LangUtils = __webpack_require__(1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @module Configuration
- * @memberof loom-data
- */
-
-var LOG = new _Logger2.default('Configuration');
-
-var configObj = _immutable2.default.Map().withMutations(function (map) {
-
-  if (true) {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-  } else {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-  }
-});
-
-/**
- * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
- * result in the same base URL:
- *   - "https://api.loom.digital"
- *   - "api.loom.digital"
- *   - "loom.digital"
- *   - "api"
- *
- * @memberof loom-data.Configuration
- * @param {Object} config - an object literal containing all configuration options
- * @param {string} config.authToken - a Base64-encoded JWT auth token
- * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
- */
-function configure(config) {
-
-  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
-    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
-    LOG.error(errorMsg, config);
-    throw new Error(errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
-    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
-  } else {
-    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
-    LOG.error(_errorMsg, config.authToken);
-    throw new Error(_errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
-    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-    }
-    // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
-        configObj = configObj.set('baseUrl', config.baseUrl);
-      } else {
-        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
-        LOG.error(_errorMsg2, config.baseUrl);
-        throw new Error(_errorMsg2);
-      }
-  } else {
-    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
-    LOG.error(_errorMsg3, config.baseUrl);
-    throw new Error(_errorMsg3);
-  }
-}
-
-function getConfig() {
-
-  return configObj;
-}
-
-exports.configure = configure;
-exports.getConfig = getConfig;
 
 /***/ }),
 /* 33 */
@@ -12347,7 +12347,7 @@ var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _Ace = __webpack_require__(25);
+var _Ace = __webpack_require__(26);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
@@ -13000,10 +13000,10 @@ module.exports = baseIndexOf;
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(27),
+var Symbol = __webpack_require__(28),
     arrayMap = __webpack_require__(205),
     isArray = __webpack_require__(12),
-    isSymbol = __webpack_require__(30);
+    isSymbol = __webpack_require__(31);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -13048,7 +13048,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 module.exports = freeGlobal;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
 
 /***/ }),
 /* 49 */
@@ -13174,7 +13174,7 @@ module.exports = isArguments;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
-    isObject = __webpack_require__(29);
+    isObject = __webpack_require__(30);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -23859,6 +23859,10 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
+var _Configuration = __webpack_require__(23);
+
+var Configuration = _interopRequireWildcard(_Configuration);
+
 var _ApiNames = __webpack_require__(6);
 
 var _ApiPaths = __webpack_require__(10);
@@ -23869,7 +23873,11 @@ var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('DataApi');
 
 /**
  * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
@@ -23885,8 +23893,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * import { DataApi } from 'loom-data';
  * // DataApi.get...
  */
-
-var LOG = new _Logger2.default('DataApi');
 
 var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
   map.set('csv', 'csv');
@@ -23970,7 +23976,12 @@ function getEntitySetDataFileUrl(entitySetId, fileType) {
     return null;
   }
 
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + FILE_TYPES.get(fileType);
+  var authToken = Configuration.getConfig().get('authToken');
+  var split = authToken.split(' ');
+  var token = split[1];
+
+  // eslint-disable-next-line
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + FILE_TYPES.get(fileType) + '&token=' + token;
 }
 
 /**
@@ -24169,7 +24180,7 @@ var _isUndefined = __webpack_require__(7);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _EntitySet = __webpack_require__(26);
+var _EntitySet = __webpack_require__(27);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
@@ -25096,7 +25107,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _PrincipalTypes = __webpack_require__(24);
+var _PrincipalTypes = __webpack_require__(25);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -26548,7 +26559,7 @@ var _PermissionTypes = __webpack_require__(39);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _PrincipalTypes = __webpack_require__(24);
+var _PrincipalTypes = __webpack_require__(25);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -26584,7 +26595,7 @@ var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Ace = __webpack_require__(25);
+var _Ace = __webpack_require__(26);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
@@ -26596,7 +26607,7 @@ var _AclData = __webpack_require__(42);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _EntitySet = __webpack_require__(26);
+var _EntitySet = __webpack_require__(27);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
@@ -26658,7 +26669,7 @@ module.exports = __webpack_require__(175);
 var utils = __webpack_require__(4);
 var bind = __webpack_require__(37);
 var Axios = __webpack_require__(177);
-var defaults = __webpack_require__(23);
+var defaults = __webpack_require__(24);
 
 /**
  * Create an instance of Axios
@@ -26778,7 +26789,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(23);
+var defaults = __webpack_require__(24);
 var utils = __webpack_require__(4);
 var InterceptorManager = __webpack_require__(178);
 var dispatchRequest = __webpack_require__(179);
@@ -26932,7 +26943,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(4);
 var transformData = __webpack_require__(182);
 var isCancel = __webpack_require__(35);
-var defaults = __webpack_require__(23);
+var defaults = __webpack_require__(24);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -29447,7 +29458,7 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
 
 /***/ }),
 /* 196 */
@@ -29864,7 +29875,7 @@ module.exports = baseIsNaN;
 
 var isFunction = __webpack_require__(53),
     isMasked = __webpack_require__(235),
-    isObject = __webpack_require__(29),
+    isObject = __webpack_require__(30),
     toSource = __webpack_require__(51);
 
 /**
@@ -29916,7 +29927,7 @@ module.exports = baseIsNative;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
-    isLength = __webpack_require__(28),
+    isLength = __webpack_require__(29),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -30200,7 +30211,7 @@ module.exports = getPrototype;
 /* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(27);
+var Symbol = __webpack_require__(28);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -30339,7 +30350,7 @@ var castPath = __webpack_require__(216),
     isArguments = __webpack_require__(52),
     isArray = __webpack_require__(12),
     isIndex = __webpack_require__(232),
-    isLength = __webpack_require__(28),
+    isLength = __webpack_require__(29),
     toKey = __webpack_require__(253);
 
 /**
@@ -30579,7 +30590,7 @@ module.exports = isIndex;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(12),
-    isSymbol = __webpack_require__(30);
+    isSymbol = __webpack_require__(31);
 
 /** Used to match property names within property paths. */
 var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
@@ -31110,7 +31121,7 @@ module.exports = stringToPath;
 /* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isSymbol = __webpack_require__(30);
+var isSymbol = __webpack_require__(31);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -31268,7 +31279,7 @@ module.exports = has;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(53),
-    isLength = __webpack_require__(28);
+    isLength = __webpack_require__(29);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -48685,7 +48696,7 @@ module.exports = isTypedArray;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31), __webpack_require__(22)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32), __webpack_require__(22)(module)))
 
 /***/ }),
 /* 265 */
@@ -49473,11 +49484,11 @@ var _PrincipalsApi = __webpack_require__(170);
 
 var PrincipalsApi = _interopRequireWildcard(_PrincipalsApi);
 
-var _Configuration = __webpack_require__(32);
+var _Configuration = __webpack_require__(23);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.14.3";
+var version = "v0.14.4";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
