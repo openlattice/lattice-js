@@ -23,9 +23,7 @@ import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 
-import {
-  getConfig
-} from '../config/Configuration';
+import * as Configuration from '../config/Configuration';
 
 import {
   DATA_API
@@ -140,7 +138,9 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     return null;
   }
 
-  const authToken = getConfig().get('authToken');
+  console.log(Configuration.getConfig().get('authToken'));
+
+  const authToken = Configuration.getConfig().get('authToken');
   const split = authToken.split(' ');
   const token = split[1];
 

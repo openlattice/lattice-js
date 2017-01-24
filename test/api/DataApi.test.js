@@ -1,6 +1,9 @@
 /* eslint-disable no-use-before-define */
 
+import Immutable from 'immutable';
+
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as Configuration from '../../src/config/Configuration';
 import * as DataApi from '../../src/api/DataApi';
 
 import {
@@ -46,13 +49,21 @@ const MOCK_ENTITIES = {
   ]
 };
 
+const MOCK_AUTH_TOKEN = 'foobar';
+
 let mockAxiosInstance = null;
+let configObj = null;
 
 describe('DataApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
+    configObj = Immutable.fromJS({
+      authToken: `Bearer ${MOCK_AUTH_TOKEN}`,
+      baseUrl: 'http://localhost:8080'
+    });
     spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
+    spyOn(Configuration, 'getConfig').and.returnValue(configObj);
   });
 
   afterEach(() => {
@@ -114,7 +125,8 @@ function testGetEntitySetDataFileUrl() {
     it('should return the correct URL', () => {
 
       expect(DataApi.getEntitySetDataFileUrl(MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE)).toEqual(
-        `${DATA_API_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
+        // eslint-disable-next-line
+        `${DATA_API_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}&token=${MOCK_AUTH_TOKEN}`
       );
     });
 
