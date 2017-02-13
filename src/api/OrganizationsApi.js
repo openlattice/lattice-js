@@ -210,8 +210,14 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<> {
     return Promise.reject('invalid parameter: title must be a non-empty string');
   }
 
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .put(`/${organizationId}/${TITLE_PATH}`, title)
+    .put(`/${organizationId}/${TITLE_PATH}`, title, axiosConfig)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -247,8 +253,14 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
     return Promise.reject('invalid parameter: description must be a non-empty string');
   }
 
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .put(`/${organizationId}/${DESCRIPTION_PATH}`, description)
+    .put(`/${organizationId}/${DESCRIPTION_PATH}`, description, axiosConfig)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

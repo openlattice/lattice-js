@@ -32,7 +32,7 @@ import {
   SEARCH_PATH
 } from '../constants/ApiPaths';
 
-let baseUrlToAxiosInstanceMap :Map<string, Object> = Immutable.Map();
+let baseUrlToAxiosInstanceMap :Immutable.Map<string, Object> = Immutable.Map();
 
 function getApiBaseUrl(api :string) :string {
 

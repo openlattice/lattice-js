@@ -228,7 +228,12 @@ function testUpdateTitle() {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
             `/${MOCK_ORG_UUID}/${TITLE_PATH}`,
-            MOCK_TITLE
+            MOCK_TITLE,
+            {
+              headers: {
+                'Content-Type': 'text/plain'
+              }
+            }
           );
           done();
         })
@@ -260,7 +265,12 @@ function testUpdateDescription() {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
             `/${MOCK_ORG_UUID}/${DESCRIPTION_PATH}`,
-            MOCK_DESCRIPTION
+            MOCK_DESCRIPTION,
+            {
+              headers: {
+                'Content-Type': 'text/plain'
+              }
+            }
           );
           done();
         })
