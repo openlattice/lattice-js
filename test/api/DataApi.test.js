@@ -51,8 +51,8 @@ const MOCK_ENTITIES = {
 
 const MOCK_AUTH_TOKEN = 'foobar';
 
-let mockAxiosInstance = null;
 let configObj = null;
+let mockAxiosInstance = null;
 
 describe('DataApi', () => {
 

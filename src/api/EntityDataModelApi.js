@@ -23,6 +23,8 @@ import EntitySet from '../models/EntitySet';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
+import * as Configuration from '../config/Configuration';
+
 import EntityType, {
   isValid as isValidEntityType
 } from '../models/EntityType';
@@ -49,6 +51,7 @@ import {
 } from '../constants/ApiPaths';
 
 import {
+  getApiBaseUrl,
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
@@ -214,14 +217,13 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 }
 
 /**
- * `GET /edm/schema/{namespace}/{name}?fileType={fileType}`
- *
- * Gets the Schema definition for the given Schema FQN formatted as the given file type.
+ * Returns the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {string} namespace
- * @return {Promise<Schema[]>}
+ * @param {FullyQualifiedName} schemaFqn
+ * @param {string} fileType
+ * @returns {string}
  *
  * @example
  * EntityDataModelApi.getSchemaFormatted(
@@ -229,26 +231,26 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
  *   "json"
  * );
  */
-export function getSchemaFormatted(schemaFqn :FullyQualifiedName, fileType :string) :Promise<> {
+export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string) :?string {
 
   if (!FullyQualifiedName.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    LOG.warn('invalid parameter: schemaFqn must be a valid FQN', schemaFqn);
+    return null;
   }
 
+  // TODO: validate fileType to restrict to only allowed file types
+
   if (!isNonEmptyString(fileType)) {
-    return Promise.reject('invalid parameter: fileType must be a valid file type string');
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    return null;
   }
 
   const { namespace, name } = schemaFqn;
+  const authToken = Configuration.getConfig().get('authToken');
+  const split = authToken.split(' ');
+  const token = split[1];
 
-  return getApiAxiosInstance(EDM_API)
-    .get(`/${SCHEMA_PATH}/${namespace}/${name}?fileType=${fileType}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((e) => {
-      LOG.error(e);
-    });
+  return `${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}?fileType=${fileType}&token=${token}`;
 }
 
 /**
