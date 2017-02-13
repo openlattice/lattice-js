@@ -23,7 +23,7 @@ const MOCK_ACCESS_CHECK_OBJ = {
   permissions: MOCK_PERMISSIONS
 };
 
-fdescribe('AccessCheck', () => {
+describe('AccessCheck', () => {
 
   describe('AccessCheckBuilder', () => {
 
