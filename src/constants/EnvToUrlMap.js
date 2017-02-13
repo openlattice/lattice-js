@@ -6,7 +6,7 @@
 
 import Immutable from 'immutable';
 
-const ENVIRONMENT_URLS :Map<string, string> = Immutable.Map({
+const ENVIRONMENT_URLS :Immutable.Map<string, string> = Immutable.Map({
   LOCAL: 'http://localhost:8080',
   PROD: 'https://api.loom.digital'
 });

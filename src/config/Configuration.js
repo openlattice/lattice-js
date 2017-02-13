@@ -86,7 +86,7 @@ function configure(config :Object) {
   }
 }
 
-function getConfig() :Map<string, any> {
+function getConfig() :Immutable.Map<string, any> {
 
   return configObj;
 }
