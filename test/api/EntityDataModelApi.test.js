@@ -1,6 +1,9 @@
 /* eslint-disable no-use-before-define */
 
+import Immutable from 'immutable';
+
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as Configuration from '../../src/config/Configuration';
 import * as EntityDataModelApi from '../../src/api/EntityDataModelApi';
 
 import {
@@ -25,12 +28,15 @@ import {
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
   testApiFunctionShouldRejectOnGivenInvalidParameters,
+  testApiFunctionShouldReturnNullOnInvalidParameters,
   testApiFunctionShouldReturnPromiseOnValidParameters
 } from '../utils/ApiTestUtils';
 
 import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
+
+const EDM_API_BASE_URL = AxiosUtils.getApiBaseUrl(EDM_API);
 
 const MOCK_SCHEMA_FQN = {
   namespace: 'LOOM',
@@ -96,14 +102,22 @@ const MOCK_SCHEMA = {
 };
 
 const MOCK_ACTION = 'ADD';
+const MOCK_AUTH_TOKEN = 'foobar';
+const MOCK_FILE_TYPE = 'json';
 
+let configObj = null;
 let mockAxiosInstance = null;
 
 describe('EntityDataModelApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
+    configObj = Immutable.fromJS({
+      authToken: `Bearer ${MOCK_AUTH_TOKEN}`,
+      baseUrl: 'http://localhost:8080'
+    });
     spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
+    spyOn(Configuration, 'getConfig').and.returnValue(configObj);
   });
 
   afterEach(() => {
@@ -114,7 +128,7 @@ describe('EntityDataModelApi', () => {
   testGetSchema();
   testGetAllSchemas();
   testGetAllSchemasInNamespace();
-  testGetSchemaFormatted();
+  testGetSchemaFileUrl();
   testCreateSchema();
   testCreateEmptySchema();
   testUpdateSchema();
@@ -196,33 +210,24 @@ function testGetSchema() {
   });
 }
 
-function testGetSchemaFormatted() {
+function testGetSchemaFileUrl() {
 
-  describe('getSchemaFormatted()', () => {
+  describe('getSchemaFileUrl()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.getSchemaFormatted, MOCK_SCHEMA_FQN, 'json'
+      EntityDataModelApi.getSchemaFileUrl, MOCK_SCHEMA_FQN, MOCK_FILE_TYPE
     ];
 
-    it('should send a GET request with the correct URL path', (done) => {
+    it('should return the correct URL', () => {
 
-      EntityDataModelApi.getSchemaFormatted(MOCK_SCHEMA_FQN, 'json')
-        .then(() => {
-          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}?fileType=json`
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
+      expect(EntityDataModelApi.getSchemaFileUrl(MOCK_SCHEMA_FQN, MOCK_FILE_TYPE)).toEqual(
+        // eslint-disable-next-line
+        `${EDM_API_BASE_URL}/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}?fileType=${MOCK_FILE_TYPE}&token=${MOCK_AUTH_TOKEN}`
+      );
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldReturnNullOnInvalidParameters(...functionInvocation);
 
   });
 }
