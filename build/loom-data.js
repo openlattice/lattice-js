@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.14.6
+ * loom-data - v0.14.7
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4391,7 +4391,7 @@ return hooks;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)(module)))
 
 /***/ }),
 /* 1 */
@@ -4672,7 +4672,7 @@ var _EntitySet = __webpack_require__(27);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(17);
+var _EntityType = __webpack_require__(18);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -4680,7 +4680,7 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _PropertyType = __webpack_require__(18);
+var _PropertyType = __webpack_require__(19);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -10128,7 +10128,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _Configuration = __webpack_require__(23);
+var _Configuration = __webpack_require__(17);
 
 var _ApiNames = __webpack_require__(7);
 
@@ -10797,6 +10797,108 @@ module.exports = isObjectLike;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getConfig = exports.configure = undefined;
+
+var _immutable = __webpack_require__(5);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _EnvToUrlMap = __webpack_require__(194);
+
+var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
+
+var _Logger = __webpack_require__(2);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LangUtils = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @module Configuration
+ * @memberof loom-data
+ */
+
+var LOG = new _Logger2.default('Configuration');
+
+var configObj = _immutable2.default.Map().withMutations(function (map) {
+
+  if (true) {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+  } else {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+  }
+});
+
+/**
+ * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
+ * result in the same base URL:
+ *   - "https://api.loom.digital"
+ *   - "api.loom.digital"
+ *   - "loom.digital"
+ *   - "api"
+ *
+ * @memberof loom-data.Configuration
+ * @param {Object} config - an object literal containing all configuration options
+ * @param {string} config.authToken - a Base64-encoded JWT auth token
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
+ */
+function configure(config) {
+
+  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
+    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
+    LOG.error(errorMsg, config);
+    throw new Error(errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
+    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
+  } else {
+    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
+    LOG.error(_errorMsg, config.authToken);
+    throw new Error(_errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
+    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+    }
+    // mild url validation to at least check the protocol and domain
+    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+        configObj = configObj.set('baseUrl', config.baseUrl);
+      } else {
+        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
+        LOG.error(_errorMsg2, config.baseUrl);
+        throw new Error(_errorMsg2);
+      }
+  } else {
+    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
+    LOG.error(_errorMsg3, config.baseUrl);
+    throw new Error(_errorMsg3);
+  }
+}
+
+function getConfig() {
+
+  return configObj;
+}
+
+exports.configure = configure;
+exports.getConfig = getConfig;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.EntityTypeBuilder = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -11030,7 +11132,7 @@ function isValid(entityType) {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11238,7 +11340,7 @@ function isValid(propertyType) {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var eq = __webpack_require__(257);
@@ -11265,7 +11367,7 @@ module.exports = assocIndexOf;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isKeyable = __webpack_require__(236);
@@ -11289,7 +11391,7 @@ module.exports = getMapData;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15);
@@ -11301,7 +11403,7 @@ module.exports = nativeCreate;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -11327,108 +11429,6 @@ module.exports = function(module) {
 	return module;
 };
 
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getConfig = exports.configure = undefined;
-
-var _immutable = __webpack_require__(5);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _EnvToUrlMap = __webpack_require__(194);
-
-var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
-
-var _Logger = __webpack_require__(2);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LangUtils = __webpack_require__(1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @module Configuration
- * @memberof loom-data
- */
-
-var LOG = new _Logger2.default('Configuration');
-
-var configObj = _immutable2.default.Map().withMutations(function (map) {
-
-  if (true) {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-  } else {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-  }
-});
-
-/**
- * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
- * result in the same base URL:
- *   - "https://api.loom.digital"
- *   - "api.loom.digital"
- *   - "loom.digital"
- *   - "api"
- *
- * @memberof loom-data.Configuration
- * @param {Object} config - an object literal containing all configuration options
- * @param {string} config.authToken - a Base64-encoded JWT auth token
- * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
- */
-function configure(config) {
-
-  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
-    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
-    LOG.error(errorMsg, config);
-    throw new Error(errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
-    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
-  } else {
-    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
-    LOG.error(_errorMsg, config.authToken);
-    throw new Error(_errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
-    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-    }
-    // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
-        configObj = configObj.set('baseUrl', config.baseUrl);
-      } else {
-        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
-        LOG.error(_errorMsg2, config.baseUrl);
-        throw new Error(_errorMsg2);
-      }
-  } else {
-    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
-    LOG.error(_errorMsg3, config.baseUrl);
-    throw new Error(_errorMsg3);
-  }
-}
-
-function getConfig() {
-
-  return configObj;
-}
-
-exports.configure = configure;
-exports.getConfig = getConfig;
 
 /***/ }),
 /* 24 */
@@ -12988,7 +12988,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _EntityType = __webpack_require__(17);
+var _EntityType = __webpack_require__(18);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -12996,7 +12996,7 @@ var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _PropertyType = __webpack_require__(18);
+var _PropertyType = __webpack_require__(19);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -24086,7 +24086,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _Configuration = __webpack_require__(23);
+var _Configuration = __webpack_require__(17);
 
 var Configuration = _interopRequireWildcard(_Configuration);
 
@@ -24380,7 +24380,7 @@ exports.getEntityDataModelProjection = getEntityDataModelProjection;
 exports.getSchema = getSchema;
 exports.getAllSchemas = getAllSchemas;
 exports.getAllSchemasInNamespace = getAllSchemasInNamespace;
-exports.getSchemaFormatted = getSchemaFormatted;
+exports.getSchemaFileUrl = getSchemaFileUrl;
 exports.createSchema = createSchema;
 exports.createEmptySchema = createEmptySchema;
 exports.updateSchema = updateSchema;
@@ -24420,11 +24420,15 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _EntityType = __webpack_require__(17);
+var _Configuration = __webpack_require__(17);
+
+var Configuration = _interopRequireWildcard(_Configuration);
+
+var _EntityType = __webpack_require__(18);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _PropertyType = __webpack_require__(18);
+var _PropertyType = __webpack_require__(19);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -24442,22 +24446,9 @@ var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-/**
- * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
- *
- * @module EntityDataModelApi
- * @memberof loom-data
- *
- * @example
- * import Loom from 'loom-data';
- * // Loom.EntityDataModelApi.get...
- *
- * @example
- * import { EntityDataModelApi } from 'loom-data';
- * // EntityDataModelApi.get...
- */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var LOG = new _Logger2.default('EntityDataModelApi');
 
@@ -24479,6 +24470,23 @@ var LOG = new _Logger2.default('EntityDataModelApi');
  * @example
  * EntityDataModelApi.getEntityDataModel();
  */
+
+
+/**
+ * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
+ *
+ * @module EntityDataModelApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.EntityDataModelApi.get...
+ *
+ * @example
+ * import { EntityDataModelApi } from 'loom-data';
+ * // EntityDataModelApi.get...
+ */
+
 function getEntityDataModel() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/').then(function (axiosResponse) {
@@ -24597,14 +24605,13 @@ function getAllSchemasInNamespace(namespace) {
 }
 
 /**
- * `GET /edm/schema/{namespace}/{name}?fileType={fileType}`
- *
- * Gets the Schema definition for the given Schema FQN formatted as the given file type.
+ * Returns the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {string} namespace
- * @return {Promise<Schema[]>}
+ * @param {FullyQualifiedName} schemaFqn
+ * @param {string} fileType
+ * @returns {string}
  *
  * @example
  * EntityDataModelApi.getSchemaFormatted(
@@ -24612,25 +24619,28 @@ function getAllSchemasInNamespace(namespace) {
  *   "json"
  * );
  */
-function getSchemaFormatted(schemaFqn, fileType) {
+function getSchemaFileUrl(schemaFqn, fileType) {
 
   if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    LOG.warn('invalid parameter: schemaFqn must be a valid FQN', schemaFqn);
+    return null;
   }
 
+  // TODO: validate fileType to restrict to only allowed file types
+
   if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
-    return Promise.reject('invalid parameter: fileType must be a valid file type string');
+    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    return null;
   }
 
   var namespace = schemaFqn.namespace,
       name = schemaFqn.name;
 
+  var authToken = Configuration.getConfig().get('authToken');
+  var split = authToken.split(' ');
+  var token = split[1];
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
-  });
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.EDM_API) + '/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType + '&token=' + token;
 }
 
 /**
@@ -25555,7 +25565,13 @@ function updateTitle(organizationId, title) {
     return Promise.reject('invalid parameter: title must be a non-empty string');
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.TITLE_PATH, title).then(function (axiosResponse) {
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -25589,7 +25605,13 @@ function updateDescription(organizationId, description) {
     return Promise.reject('invalid parameter: description must be a non-empty string');
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.DESCRIPTION_PATH, description).then(function (axiosResponse) {
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -26876,7 +26898,7 @@ var _EntitySet = __webpack_require__(27);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(17);
+var _EntityType = __webpack_require__(18);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -26888,7 +26910,7 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _PropertyType = __webpack_require__(18);
+var _PropertyType = __webpack_require__(19);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -30688,7 +30710,7 @@ module.exports = hasUnicode;
 /* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(21);
+var nativeCreate = __webpack_require__(22);
 
 /**
  * Removes all key-value entries from the hash.
@@ -30732,7 +30754,7 @@ module.exports = hashDelete;
 /* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(21);
+var nativeCreate = __webpack_require__(22);
 
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -30768,7 +30790,7 @@ module.exports = hashGet;
 /* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(21);
+var nativeCreate = __webpack_require__(22);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -30797,7 +30819,7 @@ module.exports = hashHas;
 /* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(21);
+var nativeCreate = __webpack_require__(22);
 
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -30955,7 +30977,7 @@ module.exports = listCacheClear;
 /* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(19);
+var assocIndexOf = __webpack_require__(20);
 
 /** Used for built-in method references. */
 var arrayProto = Array.prototype;
@@ -30996,7 +31018,7 @@ module.exports = listCacheDelete;
 /* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(19);
+var assocIndexOf = __webpack_require__(20);
 
 /**
  * Gets the list cache value for `key`.
@@ -31021,7 +31043,7 @@ module.exports = listCacheGet;
 /* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(19);
+var assocIndexOf = __webpack_require__(20);
 
 /**
  * Checks if a list cache value for `key` exists.
@@ -31043,7 +31065,7 @@ module.exports = listCacheHas;
 /* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(19);
+var assocIndexOf = __webpack_require__(20);
 
 /**
  * Sets the list cache `key` to `value`.
@@ -31102,7 +31124,7 @@ module.exports = mapCacheClear;
 /* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(20);
+var getMapData = __webpack_require__(21);
 
 /**
  * Removes `key` and its value from the map.
@@ -31126,7 +31148,7 @@ module.exports = mapCacheDelete;
 /* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(20);
+var getMapData = __webpack_require__(21);
 
 /**
  * Gets the map value for `key`.
@@ -31148,7 +31170,7 @@ module.exports = mapCacheGet;
 /* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(20);
+var getMapData = __webpack_require__(21);
 
 /**
  * Checks if a map value for `key` exists.
@@ -31170,7 +31192,7 @@ module.exports = mapCacheHas;
 /* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(20);
+var getMapData = __webpack_require__(21);
 
 /**
  * Sets the map `key` to `value`.
@@ -31265,7 +31287,7 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)(module)))
 
 /***/ }),
 /* 251 */
@@ -31580,7 +31602,7 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)(module)))
 
 /***/ }),
 /* 260 */
@@ -48920,7 +48942,7 @@ module.exports = isTypedArray;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32), __webpack_require__(22)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32), __webpack_require__(23)(module)))
 
 /***/ }),
 /* 266 */
@@ -49708,11 +49730,11 @@ var _PrincipalsApi = __webpack_require__(172);
 
 var PrincipalsApi = _interopRequireWildcard(_PrincipalsApi);
 
-var _Configuration = __webpack_require__(23);
+var _Configuration = __webpack_require__(17);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.14.6";
+var version = "v0.14.7";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
