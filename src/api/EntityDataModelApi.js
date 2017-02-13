@@ -214,6 +214,44 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 }
 
 /**
+ * `GET /edm/schema/{namespace}/{name}?fileType={fileType}`
+ *
+ * Gets the Schema definition for the given Schema FQN formatted as the given file type.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {string} namespace
+ * @return {Promise<Schema[]>}
+ *
+ * @example
+ * EntityDataModelApi.getSchemaFormatted(
+ *   { namespace: "LOOM", name: "MySchema" },
+ *   "json"
+ * );
+ */
+export function getSchemaFormatted(schemaFqn :FullyQualifiedName, fileType :string) :Promise<> {
+
+  if (!FullyQualifiedName.isValid(schemaFqn)) {
+    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+  }
+
+  if (!isNonEmptyString(fileType)) {
+    return Promise.reject('invalid parameter: fileType must be a valid file type string');
+  }
+
+  const { namespace, name } = schemaFqn;
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${SCHEMA_PATH}/${namespace}/${name}?fileType=${fileType}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+/**
  * `POST /edm/schema`
  *
  * Creates a new Schema definition, it it does not already exist.
