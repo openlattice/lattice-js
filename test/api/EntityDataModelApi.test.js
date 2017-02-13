@@ -114,6 +114,7 @@ describe('EntityDataModelApi', () => {
   testGetSchema();
   testGetAllSchemas();
   testGetAllSchemasInNamespace();
+  testGetSchemaFormatted();
   testCreateSchema();
   testCreateEmptySchema();
   testUpdateSchema();
@@ -179,6 +180,37 @@ function testGetSchema() {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
             `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testGetSchemaFormatted() {
+
+  describe('getSchemaFormatted()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.getSchemaFormatted, MOCK_SCHEMA_FQN, 'json'
+    ];
+
+    it('should send a GET request with the correct URL path', (done) => {
+
+      EntityDataModelApi.getSchemaFormatted(MOCK_SCHEMA_FQN, 'json')
+        .then(() => {
+          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
+            `/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}?fileType=json`
           );
           done();
         })
