@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.14.4
+ * loom-data - v0.14.5
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -12889,7 +12889,7 @@ function isValid(schema) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = createDebug.debug = createDebug.default = createDebug;
+exports = module.exports = createDebug.debug = createDebug['default'] = createDebug;
 exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
@@ -13020,6 +13020,9 @@ function createDebug(namespace) {
 
 function enable(namespaces) {
   exports.save(namespaces);
+
+  exports.names = [];
+  exports.skips = [];
 
   var split = (namespaces || '').split(/[\s,]+/);
   var len = split.length;
@@ -24301,6 +24304,7 @@ exports.getEntityDataModelProjection = getEntityDataModelProjection;
 exports.getSchema = getSchema;
 exports.getAllSchemas = getAllSchemas;
 exports.getAllSchemasInNamespace = getAllSchemasInNamespace;
+exports.getSchemaFormatted = getSchemaFormatted;
 exports.createSchema = createSchema;
 exports.createEmptySchema = createEmptySchema;
 exports.updateSchema = updateSchema;
@@ -24510,6 +24514,43 @@ function getAllSchemasInNamespace(namespace) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `GET /edm/schema/{namespace}/{name}?fileType={fileType}`
+ *
+ * Gets the Schema definition for the given Schema FQN formatted as the given file type.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {string} namespace
+ * @return {Promise<Schema[]>}
+ *
+ * @example
+ * EntityDataModelApi.getSchemaFormatted(
+ *   { namespace: "LOOM", name: "MySchema" },
+ *   "json"
+ * );
+ */
+function getSchemaFormatted(schemaFqn, fileType) {
+
+  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
+    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
+    return Promise.reject('invalid parameter: fileType must be a valid file type string');
+  }
+
+  var namespace = schemaFqn.namespace,
+      name = schemaFqn.name;
+
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -28242,11 +28283,12 @@ exports.inspectOpts = Object.keys(process.env).filter(function (key) {
  *   $ DEBUG_FD=3 node script.js 3>debug.log
  */
 
-if ('DEBUG_FD' in process.env) {
-  util.deprecate(function(){}, '`DEBUG_FD` is deprecated. Override `debug.log` if you want to use a different log function (https://git.io/vMUyr)')()
+var fd = parseInt(process.env.DEBUG_FD, 10) || 2;
+
+if (1 !== fd && 2 !== fd) {
+  util.deprecate(function(){}, 'except for stderr(2) and stdout(1), any other usage of DEBUG_FD is deprecated. Override debug.log if you want to use a different log function (https://git.io/debug_fd)')()
 }
 
-var fd = parseInt(process.env.DEBUG_FD, 10) || 2;
 var stream = 1 === fd ? process.stdout :
              2 === fd ? process.stderr :
              createWritableStdioStream(fd);
@@ -48702,7 +48744,7 @@ var _Configuration = __webpack_require__(23);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.14.4";
+var version = "v0.14.5";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
