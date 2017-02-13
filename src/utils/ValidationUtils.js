@@ -7,6 +7,10 @@ import validateUUID from 'uuid-validate';
 import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 
+import AccessCheck, {
+  isValid as isValidAccessCheck
+} from '../models/AccessCheck';
+
 import Ace, {
   isValid as isValidAce
 } from '../models/Ace';
@@ -109,5 +113,12 @@ export function isValidPrincipalArray(principals :Principal[]) :boolean {
 
   return validateNonEmptyArray(principals, (principal :Principal) => {
     return isValidPrincipal(principal);
+  });
+}
+
+export function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
+
+  return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => {
+    return isValidAccessCheck(accessCheck);
   });
 }

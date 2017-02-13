@@ -77,6 +77,7 @@ describe('DataApi', () => {
   testAcquireSyncTicket();
   testReleaseSyncTicket();
 });
+
 function testGetEntitySetData() {
 
   describe('getEntitySetData()', () => {
