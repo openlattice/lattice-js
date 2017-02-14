@@ -8,6 +8,7 @@ import {
   AUTHORIZATION_API,
   DATA_API,
   EDM_API,
+  LINKING_API,
   ORGANIZATIONS_API,
   PERMISSIONS_API,
   PERMISSIONS_REQUESTS_API,
@@ -20,6 +21,7 @@ import {
   DATA_PATH,
   DATASTORE_PATH,
   EDM_PATH,
+  LINKING_PATH,
   ORGANIZATIONS_PATH,
   PERMISSIONS_PATH,
   PRINCIPALS_PATH,
@@ -140,6 +142,32 @@ describe('AxiosUtils', () => {
         });
         expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
           `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${EDM_PATH}`
+        );
+      });
+
+    });
+
+    describe('LinkingApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(LINKING_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${LINKING_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(LINKING_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${LINKING_PATH}`
         );
       });
 

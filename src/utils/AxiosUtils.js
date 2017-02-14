@@ -13,6 +13,7 @@ import {
   AUTHORIZATION_API,
   DATA_API,
   EDM_API,
+  LINKING_API,
   ORGANIZATIONS_API,
   PERMISSIONS_API,
   PERMISSIONS_REQUESTS_API,
@@ -25,6 +26,7 @@ import {
   DATA_PATH,
   DATASTORE_PATH,
   EDM_PATH,
+  LINKING_PATH,
   ORGANIZATIONS_PATH,
   PERMISSIONS_PATH,
   PRINCIPALS_PATH,
@@ -45,6 +47,8 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${DATASTORE_PATH}/${DATA_PATH}`;
     case EDM_API:
       return `${baseUrl}/${DATASTORE_PATH}/${EDM_PATH}`;
+    case LINKING_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${LINKING_PATH}`;
     case ORGANIZATIONS_API:
       return `${baseUrl}/${DATASTORE_PATH}/${ORGANIZATIONS_PATH}`;
     case PERMISSIONS_API:
