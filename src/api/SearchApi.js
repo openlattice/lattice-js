@@ -147,6 +147,41 @@ export function search(searchOptions :Object) :Promise<> {
 }
 
 /**
+ * `POST /search/{entitySetId}`
+ *
+ * Executes a search query over the given entity set.
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {UUID} entitySetId
+ * @param {string} searchTerm
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntitySetData("ec6865e6-e60e-424b-a071-6a9c1603d735", "john");
+ */
+export function searchEntitySetData(entitySetId :UUID, searchTerm :String) :Promise<> {
+
+  if (!isValidUuid(entitySetId)) {
+    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+  }
+
+  if (!isNonEmptyString(searchTerm)) {
+    return Promise.reject('invalid parameter: searchTerm must be a non-empty string');
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .post(`/${entitySetId}`, searchTerm)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((e) => {
+      LOG.error(e);
+    });
+}
+
+
+/**
  * `GET /search/popular`
  *
  * @static
