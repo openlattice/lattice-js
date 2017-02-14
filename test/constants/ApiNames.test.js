@@ -3,6 +3,7 @@ import * as ApiNames from '../../src/constants/ApiNames';
 const AUTHORIZATION_API :string = 'AuthorizationApi';
 const DATA_API :string = 'DataApi';
 const EDM_API :string = 'EntityDataModelApi';
+const LINKING_API :string = 'LinkingApi';
 const ORGANIZATIONS_API :string = 'OrganizationsApi';
 const PERMISSIONS_API :string = 'PermissionsApi';
 const PERMISSIONS_REQUESTS_API :string = 'PermissionsRequestsApi';
@@ -24,6 +25,11 @@ describe('ApiNames', () => {
   it(`should expose "${EDM_API}"`, () => {
     expect(ApiNames.EDM_API).toBeDefined();
     expect(ApiNames.EDM_API).toEqual(EDM_API);
+  });
+
+  it(`should expose "${LINKING_API}"`, () => {
+    expect(ApiNames.LINKING_API).toBeDefined();
+    expect(ApiNames.LINKING_API).toEqual(LINKING_API);
   });
 
   it(`should expose "${ORGANIZATIONS_API}"`, () => {

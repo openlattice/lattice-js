@@ -16,6 +16,7 @@ import * as DataModels from './models';
 import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
+import * as LinkingApi from './api/LinkingApi';
 import * as OrganizationsApi from './api/OrganizationsApi';
 import * as PermissionsApi from './api/PermissionsApi';
 import * as PermissionsRequestsApi from './api/PermissionsRequestsApi';
@@ -37,6 +38,7 @@ export {
   AuthorizationApi,
   DataApi,
   EntityDataModelApi,
+  LinkingApi,
   OrganizationsApi,
   PermissionsApi,
   PermissionsRequestsApi,
@@ -52,6 +54,7 @@ export default {
   AuthorizationApi,
   DataApi,
   EntityDataModelApi,
+  LinkingApi,
   OrganizationsApi,
   PermissionsApi,
   PermissionsRequestsApi,

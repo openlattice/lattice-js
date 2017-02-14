@@ -22,6 +22,8 @@ export const NAMESPACE_PATH :string = 'namespace';
 export const PRINCIPALS_PATH :string = 'principals';
 export const PROPERTY_TYPE_PATH :string = 'property/type';
 export const ROLES_PATH :string = 'roles';
+export const SET_PATH :string = 'set';
+export const TYPE_PATH :string = 'type';
 
 /*
  *
@@ -49,6 +51,14 @@ export const TICKET_PATH :string = 'ticket';
 
 export const EDM_PATH :string = 'edm';
 export const SCHEMA_PATH :string = 'schema';
+
+/*
+ *
+ * LinkingApi specific paths
+ *
+ */
+
+export const LINKING_PATH :string = 'linking';
 
 /*
  *

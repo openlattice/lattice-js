@@ -11,6 +11,8 @@ const NAMESPACE_PATH :string = 'namespace';
 const PRINCIPALS_PATH :string = 'principals';
 const PROPERTY_TYPE_PATH :string = 'property/type';
 const ROLES_PATH :string = 'roles';
+const SET_PATH :string = 'set';
+const TYPE_PATH :string = 'type';
 
 // AuthorizationApi specific paths
 const AUTHORIZATIONS_PATH :string = 'authorizations';
@@ -23,6 +25,9 @@ const TICKET_PATH :string = 'ticket';
 // EntityDataModelApi specific paths
 const EDM_PATH :string = 'edm';
 const SCHEMA_PATH :string = 'schema';
+
+// LinkingApi specific paths
+const LINKING_PATH :string = 'linking';
 
 // OrganizationsApi specific paths
 const DESCRIPTION_PATH :string = 'description';
@@ -95,6 +100,16 @@ describe('ApiPaths', () => {
       expect(ApiPaths.ROLES_PATH).toEqual(ROLES_PATH);
     });
 
+    it(`should expose "${SET_PATH}"`, () => {
+      expect(ApiPaths.SET_PATH).toBeDefined();
+      expect(ApiPaths.SET_PATH).toEqual(SET_PATH);
+    });
+
+    it(`should expose "${TYPE_PATH}"`, () => {
+      expect(ApiPaths.TYPE_PATH).toBeDefined();
+      expect(ApiPaths.TYPE_PATH).toEqual(TYPE_PATH);
+    });
+
   });
 
   describe('AuthorizationApi specific paths', () => {
@@ -135,6 +150,15 @@ describe('ApiPaths', () => {
     it(`should expose "${SCHEMA_PATH}"`, () => {
       expect(ApiPaths.SCHEMA_PATH).toBeDefined();
       expect(ApiPaths.SCHEMA_PATH).toEqual(SCHEMA_PATH);
+    });
+
+  });
+
+  describe('LinkingApi specific paths', () => {
+
+    it(`should expose "${LINKING_PATH}"`, () => {
+      expect(ApiPaths.LINKING_PATH).toBeDefined();
+      expect(ApiPaths.LINKING_PATH).toEqual(LINKING_PATH);
     });
 
   });
