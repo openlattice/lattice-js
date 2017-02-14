@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.15.0
+ * loom-data - v0.15.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -27102,6 +27102,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.search = search;
+exports.searchEntitySetData = searchEntitySetData;
 exports.getPopularEntitySet = getPopularEntitySet;
 
 var _immutable = __webpack_require__(5);
@@ -27235,6 +27236,37 @@ function search(searchOptions) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/', data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (e) {
+    LOG.error(e);
+  });
+}
+
+/**
+ * `POST /search/{entitySetId}`
+ *
+ * Executes a search query over the given entity set.
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {UUID} entitySetId
+ * @param {string} searchTerm
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntitySetData("ec6865e6-e60e-424b-a071-6a9c1603d735", "john");
+ */
+function searchEntitySetData(entitySetId, searchTerm) {
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    return Promise.reject('invalid parameter: searchTerm must be a non-empty string');
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, searchTerm).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -49247,7 +49279,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.15.0";
+var version = "v0.15.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
