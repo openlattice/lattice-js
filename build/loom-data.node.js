@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.15.1
+ * loom-data - v0.15.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -25594,14 +25594,9 @@ function createLinkingEntityType(linkingEntityType) {
  * TODO: add better validation
  * TODO: add unit tests
  */
-function linkEntitySets(linkingProperties, linkingEntityType) {
+function linkEntitySets(linkingEntitySet) {
 
-  var path = '/' + _ApiPaths.SET_PATH;
-  if ((0, _ValidationUtils.isValidUuid)(linkingEntityType)) {
-    path = path + '?type=' + linkingEntityType;
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post(path, linkingProperties).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.SET_PATH, linkingEntitySet).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (e) {
     LOG.error(e);
@@ -49279,7 +49274,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.15.1";
+var version = "v0.15.2";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
