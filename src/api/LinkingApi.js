@@ -77,15 +77,10 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
  * TODO: add better validation
  * TODO: add unit tests
  */
-export function linkEntitySets(linkingProperties :Object[], linkingEntityType :?UUID) :Promise<> {
-
-  let path = `/${SET_PATH}`;
-  if (isValidUuid(linkingEntityType)) {
-    path = `${path}?type=${linkingEntityType}`;
-  }
+export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
 
   return getApiAxiosInstance(LINKING_API)
-    .post(path, linkingProperties)
+    .post(`/${SET_PATH}`, linkingEntitySet)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
