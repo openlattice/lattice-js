@@ -44,6 +44,12 @@ describe('loom-data-js', () => {
     expect(Object.keys(Loom.EntityDataModelApi).length).toBeGreaterThan(0);
   });
 
+  it('should expose LinkingApi', () => {
+    expect(Loom.LinkingApi).toBeDefined();
+    expect(Loom.LinkingApi).toEqual(jasmine.any(Object));
+    expect(Object.keys(Loom.LinkingApi).length).toBeGreaterThan(0);
+  });
+
   it('should expose OrganizationsApi', () => {
     expect(Loom.OrganizationsApi).toBeDefined();
     expect(Loom.OrganizationsApi).toEqual(jasmine.any(Object));
