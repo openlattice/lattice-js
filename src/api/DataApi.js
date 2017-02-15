@@ -109,8 +109,9 @@ export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTyp
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -193,8 +194,9 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -243,8 +245,9 @@ export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) 
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -278,8 +281,9 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -307,7 +311,8 @@ export function releaseSyncTicket(ticketId :UUID) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
