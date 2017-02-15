@@ -61,8 +61,9 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -84,8 +85,9 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -120,8 +122,9 @@ export function linkEntities(syncId :UUID, entitySetId :UUID, entityId :string, 
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -156,8 +159,9 @@ export function setLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :str
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -192,8 +196,9 @@ export function removeLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -232,8 +237,9 @@ export function addLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :str
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -276,7 +282,8 @@ export function removeLinkedEntity(
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }

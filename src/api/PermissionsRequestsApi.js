@@ -73,8 +73,9 @@ export function getAllResolvedRequestsForUser(aclRoot :UUID[]) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -95,8 +96,9 @@ export function getUnresolvedRequestForUser(aclRoot :UUID[]) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -117,8 +119,9 @@ export function getAllUnresolvedRequestForAdmin(aclRoot :UUID[]) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -161,8 +164,9 @@ export function updateUnresolvedRequestStatus(
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -200,7 +204,8 @@ export function upsertPermissionsRequest(
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
