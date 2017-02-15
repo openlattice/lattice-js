@@ -61,8 +61,9 @@ export function getUser(userId :string) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -80,8 +81,9 @@ export function getAllUsers() :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -103,8 +105,9 @@ export function getAllUsersForRole(role :string) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -122,8 +125,9 @@ export function getAllUsersForAllRoles() :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -153,8 +157,9 @@ export function addRoleToUser(userId :string, role :string) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -188,8 +193,9 @@ export function setUserRoles(userId :string, roles :string[]) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
@@ -219,7 +225,8 @@ export function removeRoleFromUser(userId :string, role :string) :Promise<> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
