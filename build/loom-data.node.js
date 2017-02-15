@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.15.2
+ * loom-data - v0.16.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -24216,8 +24216,9 @@ function checkAuthorizations(queries) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.AUTHORIZATION_API).post('/', accessChecks).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24338,8 +24339,9 @@ function getEntitySetData(entitySetId, syncIds, propertyTypeIds) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24419,8 +24421,9 @@ function createEntityData(entitySetId, syncId, entities) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + syncId, entities).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24466,8 +24469,9 @@ function storeEntityData(ticketId, syncId, entities) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).patch('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.TICKET_PATH + '/' + ticketId + '/' + syncId, entities).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24498,8 +24502,9 @@ function acquireSyncTicket(entitySetId, syncId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.TICKET_PATH + '/' + entitySetId + '/' + syncId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24524,8 +24529,9 @@ function releaseSyncTicket(ticketId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + ticketId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24655,8 +24661,9 @@ function getEntityDataModel() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/').then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24678,8 +24685,9 @@ function getEntityDataModelProjection(projection) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/', projection).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24716,8 +24724,9 @@ function getSchema(schemaFqn) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24737,8 +24746,9 @@ function getAllSchemas() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24763,8 +24773,9 @@ function getAllSchemasInNamespace(namespace) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24834,8 +24845,9 @@ function createSchema(schema) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.SCHEMA_PATH, schema).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24866,8 +24878,9 @@ function createEmptySchema(schemaFqn) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24932,8 +24945,9 @@ function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name, data).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -24964,8 +24978,9 @@ function getEntitySet(entitySetId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25011,8 +25026,9 @@ function getAllEntitySets() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25047,8 +25063,9 @@ function createEntitySets(entitySets) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25073,8 +25090,9 @@ function deleteEntitySet(entitySetId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25105,8 +25123,9 @@ function getEntityType(entityTypeId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25137,8 +25156,9 @@ function getEntityTypeId(entityTypeFqn) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25158,8 +25178,9 @@ function getAllEntityTypes() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25201,8 +25222,9 @@ function createEntityType(entityType) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25227,8 +25249,9 @@ function deleteEntityType(entityTypeId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25265,8 +25288,9 @@ function updatePropertyTypesForEntityType(entityTypeId, propertyTypeIds) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId, propertyTypeIds).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25299,8 +25323,9 @@ function addPropertyTypeToEntityType(entityTypeId, propertyTypeId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25333,8 +25358,9 @@ function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25365,8 +25391,9 @@ function getPropertyType(propertyTypeId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25397,8 +25424,9 @@ function getPropertyTypeId(propertyTypeFqn) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25418,8 +25446,9 @@ function getAllPropertyTypes() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25444,8 +25473,9 @@ function getAllPropertyTypesInNamespace(namespace) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.NAMESPACE_PATH + '/' + namespace).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25479,8 +25509,9 @@ function createPropertyType(propertyType) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25506,8 +25537,9 @@ function deletePropertyType(propertyTypeId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25578,8 +25610,9 @@ function createLinkingEntityType(linkingEntityType) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.TYPE_PATH, linkingEntityType).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25598,8 +25631,9 @@ function linkEntitySets(linkingEntitySet) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.SET_PATH, linkingEntitySet).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25631,8 +25665,9 @@ function linkEntities(syncId, entitySetId, entityId, entities) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId, entities).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25664,8 +25699,9 @@ function setLinkedEntities(syncId, entitySetId, entityId, entities) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).put('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId, entities).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25697,8 +25733,9 @@ function removeLinkedEntities(syncId, entitySetId, entityId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).delete('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25734,8 +25771,9 @@ function addLinkedEntities(syncId, entitySetId, entityId, linkedEntityId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).put('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId + '/' + linkedEntityId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25771,8 +25809,9 @@ function removeLinkedEntity(syncId, entitySetId, entityId, linkedEntityId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).delete('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId + '/' + linkedEntityId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25877,8 +25916,9 @@ function getOrganization(organizationId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25898,8 +25938,9 @@ function getAllOrganizations() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/').then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25936,8 +25977,9 @@ function createOrganization(organization) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/', organization).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -25962,8 +26004,9 @@ function deleteOrganization(organizationId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26002,8 +26045,9 @@ function updateTitle(organizationId, title) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26042,8 +26086,9 @@ function updateDescription(organizationId, description) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26068,8 +26113,9 @@ function getAutoApprovedEmailDomains(organizationId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26102,8 +26148,9 @@ function addAutoApprovedEmailDomain(organizationId, emailDomain) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26144,8 +26191,9 @@ function addAutoApprovedEmailDomains(organizationId, emailDomains) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26186,8 +26234,9 @@ function setAutoApprovedEmailDomains(organizationId, emailDomains) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26220,8 +26269,9 @@ function removeAutoApprovedEmailDomain(organizationId, emailDomain) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26266,8 +26316,9 @@ function removeAutoApprovedEmailDomains(organizationId, emailDomains) {
     data: emailDomainSet
   }).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26332,8 +26383,9 @@ function addPrincipal(organizationId, principalType, principalId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26375,8 +26427,9 @@ function addPrincipals(organizationId, principals) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26417,8 +26470,9 @@ function setPrincipals(organizationId, principals) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26457,8 +26511,9 @@ function removePrincipal(organizationId, principalType, principalId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26503,8 +26558,9 @@ function removePrincipals(organizationId, principals) {
     data: data
   }).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26529,8 +26585,9 @@ function getAllRoles(organizationId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26555,8 +26612,9 @@ function getAllMembers(organizationId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26633,8 +26691,9 @@ function getAcl(aclKey) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/', aclKey).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26679,8 +26738,9 @@ function updateAcl(aclData) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).patch('/', aclData).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26755,8 +26815,9 @@ function getAllResolvedRequestsForUser(aclRoot) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).post('/' + _ApiPaths.RESOLVED_PATH, aclRoot).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26774,8 +26835,9 @@ function getUnresolvedRequestForUser(aclRoot) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).post('/' + _ApiPaths.UNRESOLVED_PATH, aclRoot).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26793,8 +26855,9 @@ function getAllUnresolvedRequestForAdmin(aclRoot) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).post('/' + _ApiPaths.ADMIN_PATH + '/' + _ApiPaths.UNRESOLVED_PATH, aclRoot).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26833,8 +26896,9 @@ function updateUnresolvedRequestStatus(aclRoot, userPrincipal, permissions, stat
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).post('/' + _ApiPaths.ADMIN_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26868,8 +26932,9 @@ function upsertPermissionsRequest(aclRoot, permissions, status) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).put('/', data).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26942,8 +27007,9 @@ function getUser(userId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26958,8 +27024,9 @@ function getAllUsers() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26978,8 +27045,9 @@ function getAllUsersForRole(role) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -26994,8 +27062,9 @@ function getAllUsersForAllRoles() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -27022,8 +27091,9 @@ function addRoleToUser(userId, role) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -27053,8 +27123,9 @@ function setUserRoles(userId, roles) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH, userRoles).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -27081,8 +27152,9 @@ function removeRoleFromUser(userId, role) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).delete('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -27232,8 +27304,9 @@ function search(searchOptions) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/', data).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -27263,8 +27336,9 @@ function searchEntitySetData(entitySetId, searchTerm) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, searchTerm).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -27282,8 +27356,9 @@ function getPopularEntitySet() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.POPULAR_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -49274,7 +49349,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.15.2";
+var version = "v0.16.0";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
