@@ -52,8 +52,12 @@ const LOG = new Logger('PrincipalsApi');
  */
 export function getUser(userId :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
@@ -96,8 +100,12 @@ export function getAllUsers() :Promise<> {
  */
 export function getAllUsersForRole(role :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(role)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
@@ -144,12 +152,18 @@ export function getAllUsersForAllRoles() :Promise<> {
  */
 export function addRoleToUser(userId :string, role :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(role)) {
-    return Promise.reject('invalid parameter: role must be a non-empty string');
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
@@ -176,8 +190,12 @@ export function addRoleToUser(userId :string, role :string) :Promise<> {
  */
 export function setUserRoles(userId :string, roles :string[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   let userRoles = roles;
@@ -185,7 +203,9 @@ export function setUserRoles(userId :string, roles :string[]) :Promise<> {
     userRoles = [];
   }
   else if (!isNonEmptyStringArray(roles)) {
-    return Promise.reject('invalid parameter: roles must be an array of strings');
+    errorMsg = 'invalid parameter: roles must be an array of strings';
+    LOG.error(errorMsg, roles);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
@@ -212,12 +232,18 @@ export function setUserRoles(userId :string, roles :string[]) :Promise<> {
  */
 export function removeRoleFromUser(userId :string, role :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(role)) {
-    return Promise.reject('invalid parameter: role must be a non-empty string');
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
