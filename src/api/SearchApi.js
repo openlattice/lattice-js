@@ -26,7 +26,8 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  POPULAR_PATH
+  POPULAR_PATH,
+  ORGANIZATIONS_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -104,8 +105,12 @@ const PROPERTY_TYPE_IDS = 'pid';
  */
 export function search(searchOptions :Object) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyObject(searchOptions)) {
-    return Promise.reject('invalid parameter: at least one search parameter must be defined');
+    errorMsg = 'invalid parameter: at least one search parameter must be defined';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
   }
 
   const data = {};
@@ -113,21 +118,27 @@ export function search(searchOptions :Object) :Promise<> {
 
   if (isDefined(keyword)) {
     if (!isNonEmptyString(keyword)) {
-      return Promise.reject('invalid parameter: keyword must be a non-empty string');
+      errorMsg = 'invalid property: keyword must be a non-empty string';
+      LOG.error(errorMsg, keyword);
+      return Promise.reject(errorMsg);
     }
     data[KEYWORD] = keyword;
   }
 
   if (isDefined(entityTypeId)) {
     if (!isValidUuid(entityTypeId)) {
-      return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+      errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+      LOG.error(errorMsg, entityTypeId);
+      return Promise.reject(errorMsg);
     }
     data[ENTITY_TYPE_ID] = entityTypeId;
   }
 
   if (isDefined(propertyTypeIds)) {
     if (!isValidUuidArray(propertyTypeIds)) {
-      return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+      errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+      LOG.error(errorMsg, propertyTypeIds);
+      return Promise.reject(errorMsg);
     }
     data[PROPERTY_TYPE_IDS] = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((id :UUID) => {
@@ -152,6 +163,10 @@ export function search(searchOptions :Object) :Promise<> {
  *
  * Executes a search query over the given entity set.
  *
+ * TODO: add unit tests
+ * TODO: better validation
+ * TODO: create data models
+ *
  * @static
  * @memberof loom-data.SearchApi
  * @param {UUID} entitySetId
@@ -159,20 +174,33 @@ export function search(searchOptions :Object) :Promise<> {
  * @returns {Promise}
  *
  * @example
- * SearchApi.searchEntitySetData("ec6865e6-e60e-424b-a071-6a9c1603d735", "john");
+ * SearchApi.searchEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
  */
-export function searchEntitySetData(entitySetId :UUID, searchTerm :String) :Promise<> {
+export function searchEntitySetData(entitySetId :UUID, searchRequest :SearchDataRequest) :Promise<> {
+
+  let errorMsg = '';
 
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(searchTerm)) {
-    return Promise.reject('invalid parameter: searchTerm must be a non-empty string');
+  if (!isNonEmptyObject(searchRequest)) {
+    errorMsg = 'invalid parameter: searchRequest must be a non-empty object';
+    LOG.error(errorMsg, searchRequest);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(SEARCH_API)
-    .post(`/${entitySetId}`, searchTerm)
+    .post(`/${entitySetId}`, searchRequest)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -186,6 +214,8 @@ export function searchEntitySetData(entitySetId :UUID, searchTerm :String) :Prom
 /**
  * `GET /search/popular`
  *
+ * TODO: add unit tests
+ *
  * @static
  * @memberof loom-data.SearchApi
  * @returns {Promise<EntitySet[]>}
@@ -197,6 +227,39 @@ export function getPopularEntitySet() :Promise<> {
 
   return getApiAxiosInstance(SEARCH_API)
     .get(`/${POPULAR_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /search/organizations`
+ *
+ * TODO: add unit tests
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchOrganizations("Loom");
+ */
+export function searchOrganizations(searchTerm :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyString(searchTerm)) {
+    errorMsg = 'invalid parameter: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .post(`/${ORGANIZATIONS_PATH}`, searchTerm)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
