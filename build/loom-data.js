@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.16.0
+ * loom-data - v0.16.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -27020,6 +27020,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.search = search;
 exports.searchEntitySetData = searchEntitySetData;
 exports.getPopularEntitySet = getPopularEntitySet;
+exports.searchOrganizations = searchOrganizations;
 
 var _immutable = __webpack_require__(5);
 
@@ -27116,8 +27117,12 @@ var PROPERTY_TYPE_IDS = 'pid';
  */
 function search(searchOptions) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    return Promise.reject('invalid parameter: at least one search parameter must be defined');
+    errorMsg = 'invalid parameter: at least one search parameter must be defined';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
   }
 
   var data = {};
@@ -27128,21 +27133,27 @@ function search(searchOptions) {
 
   if ((0, _LangUtils.isDefined)(keyword)) {
     if (!(0, _LangUtils.isNonEmptyString)(keyword)) {
-      return Promise.reject('invalid parameter: keyword must be a non-empty string');
+      errorMsg = 'invalid property: keyword must be a non-empty string';
+      LOG.error(errorMsg, keyword);
+      return Promise.reject(errorMsg);
     }
     data[KEYWORD] = keyword;
   }
 
   if ((0, _LangUtils.isDefined)(entityTypeId)) {
     if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-      return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+      errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+      LOG.error(errorMsg, entityTypeId);
+      return Promise.reject(errorMsg);
     }
     data[ENTITY_TYPE_ID] = entityTypeId;
   }
 
   if ((0, _LangUtils.isDefined)(propertyTypeIds)) {
     if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-      return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+      errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+      LOG.error(errorMsg, propertyTypeIds);
+      return Promise.reject(errorMsg);
     }
     data[PROPERTY_TYPE_IDS] = _immutable2.default.Set().withMutations(function (set) {
       propertyTypeIds.forEach(function (id) {
@@ -27164,6 +27175,10 @@ function search(searchOptions) {
  *
  * Executes a search query over the given entity set.
  *
+ * TODO: add unit tests
+ * TODO: better validation
+ * TODO: create data models
+ *
  * @static
  * @memberof loom-data.SearchApi
  * @param {UUID} entitySetId
@@ -27171,19 +27186,32 @@ function search(searchOptions) {
  * @returns {Promise}
  *
  * @example
- * SearchApi.searchEntitySetData("ec6865e6-e60e-424b-a071-6a9c1603d735", "john");
+ * SearchApi.searchEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
  */
-function searchEntitySetData(entitySetId, searchTerm) {
+function searchEntitySetData(entitySetId, searchRequest) {
+
+  var errorMsg = '';
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
-  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-    return Promise.reject('invalid parameter: searchTerm must be a non-empty string');
+  if (!(0, _LangUtils.isNonEmptyObject)(searchRequest)) {
+    errorMsg = 'invalid parameter: searchRequest must be a non-empty object';
+    LOG.error(errorMsg, searchRequest);
+    return Promise.reject(errorMsg);
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, searchTerm).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, searchRequest).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -27193,6 +27221,8 @@ function searchEntitySetData(entitySetId, searchTerm) {
 
 /**
  * `GET /search/popular`
+ *
+ * TODO: add unit tests
  *
  * @static
  * @memberof loom-data.SearchApi
@@ -27204,6 +27234,36 @@ function searchEntitySetData(entitySetId, searchTerm) {
 function getPopularEntitySet() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.POPULAR_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/organizations`
+ *
+ * TODO: add unit tests
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchOrganizations("Loom");
+ */
+function searchOrganizations(searchTerm) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid parameter: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ORGANIZATIONS_PATH, searchTerm).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -50131,7 +50191,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.16.0";
+var version = "v0.16.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
