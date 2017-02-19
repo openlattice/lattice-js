@@ -256,3 +256,34 @@ export function removeRoleFromUser(userId :string, role :string) :Promise<> {
       return Promise.reject(error);
     });
 }
+
+/**
+ * `GET /principals/users/search/{searchQuery}`
+ *
+ * @static
+ * @memberof loom-data.PrincipalsApi
+ * @param {string} searchQuery
+ * @return {Promise}
+ *
+ * TODO: add unit tests
+ */
+export function searchAllUsers(searchQuery :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyString(searchQuery)) {
+    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
+    LOG.error(errorMsg, searchQuery);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${USERS_PATH}/search/${searchQuery}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
