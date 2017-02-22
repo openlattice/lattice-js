@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.17.0
+ * loom-data - v0.17.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -24056,11 +24056,15 @@ var LOG = new _Logger2.default('AuthorizationApi');
 
 function checkAuthorizations(queries) {
 
+  var errorMsg = '';
+
   var accessChecks = queries;
   if ((0, _isUndefined2.default)(queries) || (0, _LangUtils.isEmptyArray)(queries)) {
     accessChecks = [];
   } else if (!(0, _ValidationUtils.isValidAccessCheckArray)(queries)) {
-    return Promise.reject('invalid parameter: queries must be an array of valid AccessChecks');
+    errorMsg = 'invalid parameter: queries must be an array of valid AccessChecks';
+    LOG.error(errorMsg, queries);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.AUTHORIZATION_API).post('/', accessChecks).then(function (axiosResponse) {
@@ -24163,22 +24167,30 @@ var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
  */
 function getEntitySetData(entitySetId, syncIds, propertyTypeIds) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   var syncIdsCollection = syncIds;
   if ((0, _isUndefined2.default)(syncIds) || (0, _LangUtils.isEmptyArray)(syncIds)) {
     syncIdsCollection = [];
   } else if (!(0, _ValidationUtils.isValidUuidArray)(syncIds)) {
-    return Promise.reject('invalid parameter: syncIds must be an array of valid UUIDs');
+    errorMsg = 'invalid parameter: syncIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, syncIds);
+    return Promise.reject(errorMsg);
   }
 
   var propertyTypeIdsCollection = propertyTypeIds;
   if ((0, _isUndefined2.default)(propertyTypeIds) || (0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
     propertyTypeIdsCollection = [];
   } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   var data = {
@@ -24208,15 +24220,21 @@ function getEntitySetData(entitySetId, syncIds, propertyTypeIds) {
  */
 function getEntitySetDataFileUrl(entitySetId, fileType) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    LOG.warn('invalid parameter: entitySetId must be a valid UUID', entitySetId);
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
     return null;
   }
 
   if (!FILE_TYPES.contains(fileType)) {
-    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+    LOG.error(errorMsg, fileType);
     return null;
   }
+
+  // TODO: fix authToken issue with cookies so that we don't have to use this "token" query param
 
   var authToken = Configuration.getConfig().get('authToken');
   var split = authToken.split(' ');
@@ -24254,18 +24272,26 @@ function getEntitySetDataFileUrl(entitySetId, fileType) {
  */
 function createEntityData(entitySetId, syncId, entities) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
 
   if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
-    return Promise.reject('invalid parameter: entities must be a non-empty object');
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entities);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + syncId, entities).then(function (axiosResponse) {
@@ -24302,18 +24328,26 @@ function createEntityData(entitySetId, syncId, entities) {
  */
 function storeEntityData(ticketId, syncId, entities) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
-    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
+    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
+    LOG.error(errorMsg, ticketId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
 
   if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
-    return Promise.reject('invalid parameter: entities must be a non-empty object');
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entities);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).patch('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.TICKET_PATH + '/' + ticketId + '/' + syncId, entities).then(function (axiosResponse) {
@@ -24341,12 +24375,18 @@ function storeEntityData(ticketId, syncId, entities) {
  */
 function acquireSyncTicket(entitySetId, syncId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.TICKET_PATH + '/' + entitySetId + '/' + syncId).then(function (axiosResponse) {
@@ -24372,8 +24412,12 @@ function acquireSyncTicket(entitySetId, syncId) {
  */
 function releaseSyncTicket(ticketId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
-    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
+    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
+    LOG.error(errorMsg, ticketId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + ticketId).then(function (axiosResponse) {
@@ -24532,6 +24576,14 @@ function getEntityDataModel() {
  */
 function getEntityDataModelProjection(projection) {
 
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(projection)) {
+    errorMsg = 'invalid parameter: projection must be a non-empty object';
+    LOG.error(errorMsg, projection);
+    return Promise.reject(errorMsg);
+  }
+
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/', projection).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
@@ -24563,8 +24615,12 @@ function getEntityDataModelProjection(projection) {
  */
 function getSchema(schemaFqn) {
 
+  var errorMsg = '';
+
   if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
   }
 
   var namespace = schemaFqn.namespace,
@@ -24616,8 +24672,12 @@ function getAllSchemas() {
  */
 function getAllSchemasInNamespace(namespace) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
-    return Promise.reject('invalid parameter: namespace must be a non-empty string');
+    errorMsg = 'invalid parameter: namespace must be a non-empty string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
@@ -24645,15 +24705,19 @@ function getAllSchemasInNamespace(namespace) {
  */
 function getSchemaFileUrl(schemaFqn, fileType) {
 
+  var errorMsg = '';
+
   if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    LOG.warn('invalid parameter: schemaFqn must be a valid FQN', schemaFqn);
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
     return null;
   }
 
   // TODO: validate fileType to restrict to only allowed file types
 
   if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
-    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+    LOG.error(errorMsg, fileType);
     return null;
   }
 
@@ -24688,8 +24752,12 @@ function getSchemaFileUrl(schemaFqn, fileType) {
  */
 function createSchema(schema) {
 
+  var errorMsg = '';
+
   if (!(0, _Schema.isValid)(schema)) {
-    return Promise.reject('invalid parameter: schema must be a valid Schema');
+    errorMsg = 'invalid parameter: schema must be a valid Schema';
+    LOG.error(errorMsg, schema);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.SCHEMA_PATH, schema).then(function (axiosResponse) {
@@ -24717,8 +24785,12 @@ function createSchema(schema) {
  */
 function createEmptySchema(schemaFqn) {
 
+  var errorMsg = '';
+
   if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
   }
 
   var namespace = schemaFqn.namespace,
@@ -24760,26 +24832,36 @@ function createEmptySchema(schemaFqn) {
  */
 function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
 
+  var errorMsg = '';
+
   if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(action)) {
-    return Promise.reject('invalid parameter: action must be a non-empty string');
+    errorMsg = 'invalid parameter: action must be a non-empty string';
+    LOG.error(errorMsg, action);
+    return Promise.reject(errorMsg);
   }
 
   var entityTypes = entityTypeIds;
   if ((0, _isUndefined2.default)(entityTypeIds) || (0, _LangUtils.isEmptyArray)(entityTypeIds)) {
     entityTypes = [];
   } else if (!(0, _ValidationUtils.isValidUuidArray)(entityTypeIds)) {
-    return Promise.reject('invalid parameter: entityTypeIds must be an array of valid UUIDs');
+    errorMsg = 'invalid parameter: entityTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, entityTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   var propertyTypes = propertyTypeIds;
   if ((0, _isUndefined2.default)(propertyTypeIds) || (0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
     propertyTypes = [];
   } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be an array of valid UUIDs');
+    errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   var namespace = schemaFqn.namespace,
@@ -24821,8 +24903,12 @@ function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
  */
 function getEntitySet(entitySetId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
@@ -24848,8 +24934,12 @@ function getEntitySet(entitySetId) {
  */
 function getEntitySetId(entitySetName) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
+    LOG.error(errorMsg, entitySetName);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetName).then(function (axiosResponse) {
@@ -24906,8 +24996,12 @@ function getAllEntitySets() {
  */
 function createEntitySets(entitySets) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidEntitySetArray)(entitySets)) {
-    return Promise.reject('invalid parameter: entitySets must be a non-empty array of valid EntitySets');
+    errorMsg = 'invalid parameter: entitySets must be a non-empty array of valid EntitySets';
+    LOG.error(errorMsg, entitySets);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
@@ -24933,8 +25027,12 @@ function createEntitySets(entitySets) {
  */
 function deleteEntitySet(entitySetId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
@@ -24966,8 +25064,12 @@ function deleteEntitySet(entitySetId) {
  */
 function getEntityType(entityTypeId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
@@ -24995,8 +25097,12 @@ function getEntityType(entityTypeId) {
  */
 function getEntityTypeId(entityTypeFqn) {
 
+  var errorMsg = '';
+
   if (!_FullyQualifiedName2.default.isValid(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: entityTypeFqn must be a valid FQN';
+    LOG.error(errorMsg, entityTypeFqn);
+    return Promise.reject(errorMsg);
   }
 
   var namespace = entityTypeFqn.namespace,
@@ -25065,8 +25171,12 @@ function getAllEntityTypes() {
  */
 function createEntityType(entityType) {
 
+  var errorMsg = '';
+
   if (!(0, _EntityType.isValid)(entityType)) {
-    return Promise.reject('invalid parameter: entityType must be a valid EntityType');
+    errorMsg = 'invalid parameter: entityType must be a valid EntityType';
+    LOG.error(errorMsg, entityType);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
@@ -25092,8 +25202,12 @@ function createEntityType(entityType) {
  */
 function deleteEntityType(entityTypeId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
@@ -25127,12 +25241,18 @@ function deleteEntityType(entityTypeId) {
 
 function updatePropertyTypesForEntityType(entityTypeId, propertyTypeIds) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId, propertyTypeIds).then(function (axiosResponse) {
@@ -25162,12 +25282,18 @@ function updatePropertyTypesForEntityType(entityTypeId, propertyTypeIds) {
  */
 function addPropertyTypeToEntityType(entityTypeId, propertyTypeId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
@@ -25197,12 +25323,18 @@ function addPropertyTypeToEntityType(entityTypeId, propertyTypeId) {
  */
 function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
@@ -25234,8 +25366,12 @@ function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
  */
 function getPropertyType(propertyTypeId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
@@ -25263,8 +25399,12 @@ function getPropertyType(propertyTypeId) {
  */
 function getPropertyTypeId(propertyTypeFqn) {
 
+  var errorMsg = '';
+
   if (!_FullyQualifiedName2.default.isValid(propertyTypeFqn)) {
-    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: propertyTypeFqn must be a valid FQN';
+    LOG.error(errorMsg, propertyTypeFqn);
+    return Promise.reject(errorMsg);
   }
 
   var namespace = propertyTypeFqn.namespace,
@@ -25316,8 +25456,12 @@ function getAllPropertyTypes() {
  */
 function getAllPropertyTypesInNamespace(namespace) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
-    return Promise.reject('invalid parameter: namespace must be a non-empty string');
+    errorMsg = 'invalid parameter: namespace must be a non-empty string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.NAMESPACE_PATH + '/' + namespace).then(function (axiosResponse) {
@@ -25352,8 +25496,12 @@ function getAllPropertyTypesInNamespace(namespace) {
  */
 function createPropertyType(propertyType) {
 
+  var errorMsg = '';
+
   if (!(0, _PropertyType.isValid)(propertyType)) {
-    return Promise.reject('invalid parameter: propertyType must be a valid PropertyType');
+    errorMsg = 'invalid parameter: propertyType must be a valid PropertyType';
+    LOG.error(errorMsg, propertyType);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
@@ -25380,8 +25528,12 @@ function createPropertyType(propertyType) {
  */
 function deletePropertyType(propertyTypeId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
@@ -25500,16 +25652,24 @@ function linkEntitySets(linkingEntitySet) {
  */
 function linkEntities(syncId, entitySetId, entityId, entities) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId, entities).then(function (axiosResponse) {
@@ -25534,16 +25694,24 @@ function linkEntities(syncId, entitySetId, entityId, entities) {
  */
 function setLinkedEntities(syncId, entitySetId, entityId, entities) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).put('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId, entities).then(function (axiosResponse) {
@@ -25568,16 +25736,24 @@ function setLinkedEntities(syncId, entitySetId, entityId, entities) {
  */
 function removeLinkedEntities(syncId, entitySetId, entityId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).delete('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId).then(function (axiosResponse) {
@@ -25602,20 +25778,30 @@ function removeLinkedEntities(syncId, entitySetId, entityId) {
  */
 function addLinkedEntities(syncId, entitySetId, entityId, linkedEntityId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(linkedEntityId)) {
-    return Promise.reject('invalid parameter: linkedEntityId must be a non-empty string');
+    errorMsg = 'invalid parameter: linkedEntityId must be a non-empty string';
+    LOG.error(errorMsg, linkedEntityId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).put('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId + '/' + linkedEntityId).then(function (axiosResponse) {
@@ -25640,20 +25826,30 @@ function addLinkedEntities(syncId, entitySetId, entityId, linkedEntityId) {
  */
 function removeLinkedEntity(syncId, entitySetId, entityId, linkedEntityId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(linkedEntityId)) {
-    return Promise.reject('invalid parameter: linkedEntityId must be a non-empty string');
+    errorMsg = 'invalid parameter: linkedEntityId must be a non-empty string';
+    LOG.error(errorMsg, linkedEntityId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).delete('/' + _ApiPaths.SET_PATH + '/' + syncId + '/' + entitySetId + '/' + entityId + '/' + linkedEntityId).then(function (axiosResponse) {
@@ -25759,8 +25955,12 @@ var LOG = new _Logger2.default('OrganizationsApi');
  */
 function getOrganization(organizationId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId).then(function (axiosResponse) {
@@ -25820,8 +26020,12 @@ function getAllOrganizations() {
  */
 function createOrganization(organization) {
 
+  var errorMsg = '';
+
   if (!(0, _Organization.isValid)(organization)) {
-    return Promise.reject('invalid parameter: organization must be a valid Organization');
+    errorMsg = 'invalid parameter: organization must be a valid Organization';
+    LOG.error(errorMsg, organization);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/', organization).then(function (axiosResponse) {
@@ -25847,8 +26051,12 @@ function createOrganization(organization) {
  */
 function deleteOrganization(organizationId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId).then(function (axiosResponse) {
@@ -25878,12 +26086,18 @@ function deleteOrganization(organizationId) {
  */
 function updateTitle(organizationId, title) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(title)) {
-    return Promise.reject('invalid parameter: title must be a non-empty string');
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, title);
+    return Promise.reject(errorMsg);
   }
 
   var axiosConfig = {
@@ -25919,12 +26133,18 @@ function updateTitle(organizationId, title) {
  */
 function updateDescription(organizationId, description) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(description)) {
-    return Promise.reject('invalid parameter: description must be a non-empty string');
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, description);
+    return Promise.reject(errorMsg);
   }
 
   var axiosConfig = {
@@ -25956,8 +26176,12 @@ function updateDescription(organizationId, description) {
  */
 function getAutoApprovedEmailDomains(organizationId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH).then(function (axiosResponse) {
@@ -25987,12 +26211,18 @@ function getAutoApprovedEmailDomains(organizationId) {
  */
 function addAutoApprovedEmailDomain(organizationId, emailDomain) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(emailDomain)) {
-    return Promise.reject('invalid parameter: emailDomain must be a non-empty string');
+    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
+    LOG.error(errorMsg);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
@@ -26024,12 +26254,18 @@ function addAutoApprovedEmailDomain(organizationId, emailDomain) {
  */
 function addAutoApprovedEmailDomains(organizationId, emailDomains) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
-    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
   }
 
   var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
@@ -26067,12 +26303,18 @@ function addAutoApprovedEmailDomains(organizationId, emailDomains) {
  */
 function setAutoApprovedEmailDomains(organizationId, emailDomains) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
-    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
   }
 
   var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
@@ -26108,12 +26350,18 @@ function setAutoApprovedEmailDomains(organizationId, emailDomains) {
  */
 function removeAutoApprovedEmailDomain(organizationId, emailDomain) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(emailDomain)) {
-    return Promise.reject('invalid parameter: emailDomain must be a non-empty string');
+    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
+    LOG.error(errorMsg, emailDomain);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
@@ -26145,12 +26393,18 @@ function removeAutoApprovedEmailDomain(organizationId, emailDomain) {
  */
 function removeAutoApprovedEmailDomains(organizationId, emailDomains) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
-    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
   }
 
   var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
@@ -26186,8 +26440,12 @@ function removeAutoApprovedEmailDomains(organizationId, emailDomains) {
  */
 function getAllPrincipals(organizationId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH).then(function (axiosResponse) {
@@ -26218,16 +26476,24 @@ function getAllPrincipals(organizationId) {
  */
 function addPrincipal(organizationId, principalType, principalId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(principalType) && !_PrincipalTypes2.default[principalType]) {
-    return Promise.reject('invalid parameter: principalType must be a valid PrincipalType');
+    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
+    LOG.error(errorMsg, principalType);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(principalId)) {
-    return Promise.reject('invalid parameter: principalId must be a non-empty string');
+    errorMsg = 'invalid parameter: principalId must be a non-empty string';
+    LOG.error(errorMsg, principalId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
@@ -26259,12 +26525,18 @@ function addPrincipal(organizationId, principalType, principalId) {
  */
 function addPrincipals(organizationId, principals) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
-    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: alternative way to dedupe
@@ -26303,12 +26575,18 @@ function addPrincipals(organizationId, principals) {
  */
 function setPrincipals(organizationId, principals) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
-    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
   }
 
   var data = _immutable2.default.Set().withMutations(function (set) {
@@ -26346,16 +26624,24 @@ function setPrincipals(organizationId, principals) {
  */
 function removePrincipal(organizationId, principalType, principalId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(principalType) && !_PrincipalTypes2.default[principalType]) {
-    return Promise.reject('invalid parameter: principalType must be a valid PrincipalType');
+    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
+    LOG.error(errorMsg, principalType);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(principalId)) {
-    return Promise.reject('invalid parameter: principalId must be a non-empty string');
+    errorMsg = 'invalid parameter: principalId must be a non-empty string';
+    LOG.error(errorMsg, principalId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
@@ -26387,12 +26673,18 @@ function removePrincipal(organizationId, principalType, principalId) {
  */
 function removePrincipals(organizationId, principals) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
-    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
   }
 
   var data = _immutable2.default.Set().withMutations(function (set) {
@@ -26428,8 +26720,12 @@ function removePrincipals(organizationId, principals) {
  */
 function getAllRoles(organizationId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
@@ -26455,8 +26751,12 @@ function getAllRoles(organizationId) {
  */
 function getAllMembers(organizationId) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH).then(function (axiosResponse) {
@@ -26534,8 +26834,12 @@ var LOG = new _Logger2.default('PermissionsApi');
 
 function getAcl(aclKey) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
-    return Promise.reject('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclKey must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclKey);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/', aclKey).then(function (axiosResponse) {
@@ -26581,8 +26885,12 @@ function getAcl(aclKey) {
  */
 function updateAcl(aclData) {
 
+  var errorMsg = '';
+
   if (!(0, _AclData.isValid)(aclData)) {
-    return Promise.reject('invalid parameter: aclData must be a valid AclData object');
+    errorMsg = 'invalid parameter: aclData must be a valid AclData object';
+    LOG.error(errorMsg, aclData);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).patch('/', aclData).then(function (axiosResponse) {
@@ -26658,8 +26966,12 @@ var LOG = new _Logger2.default('PermissionsRequestsApi');
  */
 function getAllResolvedRequestsForUser(aclRoot) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuidArray)(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).post('/' + _ApiPaths.RESOLVED_PATH, aclRoot).then(function (axiosResponse) {
@@ -26678,8 +26990,12 @@ function getAllResolvedRequestsForUser(aclRoot) {
  */
 function getUnresolvedRequestForUser(aclRoot) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuidArray)(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).post('/' + _ApiPaths.UNRESOLVED_PATH, aclRoot).then(function (axiosResponse) {
@@ -26698,8 +27014,12 @@ function getUnresolvedRequestForUser(aclRoot) {
  */
 function getAllUnresolvedRequestForAdmin(aclRoot) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuidArray)(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_REQUESTS_API).post('/' + _ApiPaths.ADMIN_PATH + '/' + _ApiPaths.UNRESOLVED_PATH, aclRoot).then(function (axiosResponse) {
@@ -26720,18 +27040,26 @@ function getAllUnresolvedRequestForAdmin(aclRoot) {
  */
 function updateUnresolvedRequestStatus(aclRoot, userPrincipal, permissions, status) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuidArray)(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _Principal.isValid)(userPrincipal)) {
-    return Promise.reject('invalid parameter: userPrincipal must be a valid Principal');
+    errorMsg = 'invalid parameter: userPrincipal must be a valid Principal';
+    LOG.error(errorMsg, userPrincipal);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate permissions Map
 
   if (!(0, _LangUtils.isNonEmptyString)(status) && !_RequestStatusTypes2.default[status]) {
-    return Promise.reject('invalid parameter: status must be a valid RequestStatus');
+    errorMsg = 'invalid parameter: status must be a valid RequestStatus';
+    LOG.error(errorMsg, status);
+    return Promise.reject(errorMsg);
   }
 
   var data = {
@@ -26761,14 +27089,20 @@ function updateUnresolvedRequestStatus(aclRoot, userPrincipal, permissions, stat
  */
 function upsertPermissionsRequest(aclRoot, permissions, status) {
 
+  var errorMsg = '';
+
   if (!(0, _ValidationUtils.isValidUuidArray)(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate permissions Map
 
   if (!(0, _LangUtils.isNonEmptyString)(status) && !_RequestStatusTypes2.default[status]) {
-    return Promise.reject('invalid parameter: status must be a valid RequestStatus');
+    errorMsg = 'invalid parameter: status must be a valid RequestStatus';
+    LOG.error(errorMsg, status);
+    return Promise.reject(errorMsg);
   }
 
   var data = {
@@ -26851,8 +27185,12 @@ var LOG = new _Logger2.default('PrincipalsApi');
  */
 function getUser(userId) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
@@ -26889,8 +27227,12 @@ function getAllUsers() {
  */
 function getAllUsersForRole(role) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(role)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty UUID string');
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
@@ -26931,12 +27273,18 @@ function getAllUsersForAllRoles() {
  */
 function addRoleToUser(userId, role) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(role)) {
-    return Promise.reject('invalid parameter: role must be a non-empty string');
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
@@ -26960,15 +27308,21 @@ function addRoleToUser(userId, role) {
  */
 function setUserRoles(userId, roles) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   var userRoles = roles;
   if ((0, _isUndefined2.default)(roles) || (0, _LangUtils.isEmptyArray)(roles)) {
     userRoles = [];
   } else if (!(0, _LangUtils.isNonEmptyStringArray)(roles)) {
-    return Promise.reject('invalid parameter: roles must be an array of strings');
+    errorMsg = 'invalid parameter: roles must be an array of strings';
+    LOG.error(errorMsg, roles);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH, userRoles).then(function (axiosResponse) {
@@ -26992,12 +27346,18 @@ function setUserRoles(userId, roles) {
  */
 function removeRoleFromUser(userId, role) {
 
+  var errorMsg = '';
+
   if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    return Promise.reject('invalid parameter: userId must be a non-empty string');
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
   }
 
   if (!(0, _LangUtils.isNonEmptyString)(role)) {
-    return Promise.reject('invalid parameter: role must be a non-empty string');
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).delete('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
@@ -50362,7 +50722,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.17.0";
+var version = "v0.17.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
