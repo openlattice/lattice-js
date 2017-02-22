@@ -19,6 +19,8 @@
 
 import Immutable from 'immutable';
 
+import isFinite from 'lodash/isFinite';
+
 import Logger from '../utils/Logger';
 
 import {
@@ -50,11 +52,18 @@ const LOG = new Logger('SearchApi');
 const KEYWORD = 'kw';
 const ENTITY_TYPE_ID = 'eid';
 const PROPERTY_TYPE_IDS = 'pid';
+const START = 'start';
+const MAX_HITS = 'maxHits';
+const SEARCH_TERM = 'searchTerm';
 
 /**
  * `POST /search`
  *
- * Executes a search query with the given parameters.
+ * Executes a search across all EntitySet metadata with the given parameters.
+ *
+ * TODO: add unit tests
+ * TODO: better validation
+ * TODO: create data models
  *
  * @static
  * @memberof loom-data.SearchApi
@@ -65,45 +74,55 @@ const PROPERTY_TYPE_IDS = 'pid';
  * @returns {Promise}
  *
  * @example
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     keyword: "test",
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     propertyTypeIds: [
+ *     "propertyTypeIds": [
  *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *       "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     ]
+ *     ],
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     keyword: "test",
- *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ *     "searchTerm": "Loom",
+ *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     keyword: "test",
- *     propertyTypeIds: [
+ *     "searchTerm": "Loom",
+ *     "propertyTypeIds": [
  *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *       "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     ]
+ *     ],
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  */
-export function search(searchOptions :Object) :Promise<> {
+export function searchEntitySetMetaData(searchOptions :SearchOptions) :Promise<> {
 
   let errorMsg = '';
 
@@ -114,15 +133,36 @@ export function search(searchOptions :Object) :Promise<> {
   }
 
   const data = {};
-  const { keyword, entityTypeId, propertyTypeIds } = searchOptions;
+  const {
+    start,
+    maxHits,
+    searchTerm,
+    entityTypeId,
+    propertyTypeIds
+  } = searchOptions;
 
-  if (isDefined(keyword)) {
-    if (!isNonEmptyString(keyword)) {
-      errorMsg = 'invalid property: keyword must be a non-empty string';
-      LOG.error(errorMsg, keyword);
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+
+  if (isDefined(searchTerm)) {
+    if (!isNonEmptyString(searchTerm)) {
+      errorMsg = 'invalid property: searchTerm must be a non-empty string';
+      LOG.error(errorMsg, searchTerm);
       return Promise.reject(errorMsg);
     }
-    data[KEYWORD] = keyword;
+    data[KEYWORD] = searchTerm;
   }
 
   if (isDefined(entityTypeId)) {
@@ -183,7 +223,7 @@ export function search(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchEntitySetData(entitySetId :UUID, searchRequest :SearchDataRequest) :Promise<> {
+export function searchEntitySetData(entitySetId :UUID, searchOptions :SearchOptions) :Promise<> {
 
   let errorMsg = '';
 
@@ -193,40 +233,43 @@ export function searchEntitySetData(entitySetId :UUID, searchRequest :SearchData
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyObject(searchRequest)) {
-    errorMsg = 'invalid parameter: searchRequest must be a non-empty object';
-    LOG.error(errorMsg, searchRequest);
+  if (!isNonEmptyObject(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
     return Promise.reject(errorMsg);
   }
 
+  const data = {};
+  const {
+    start,
+    maxHits,
+    searchTerm
+  } = searchOptions;
+
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
   return getApiAxiosInstance(SEARCH_API)
-    .post(`/${entitySetId}`, searchRequest)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-
-/**
- * `GET /search/popular`
- *
- * TODO: add unit tests
- *
- * @static
- * @memberof loom-data.SearchApi
- * @returns {Promise<EntitySet[]>}
- *
- * @example
- * SearchApi.getPopularEntitySet();
- */
-export function getPopularEntitySet() :Promise<> {
-
-  return getApiAxiosInstance(SEARCH_API)
-    .get(`/${POPULAR_PATH}`)
+    .post(`/${entitySetId}`, data)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -246,20 +289,80 @@ export function getPopularEntitySet() :Promise<> {
  * @returns {Promise}
  *
  * @example
- * SearchApi.searchOrganizations("Loom");
+ * SearchApi.searchOrganizations(
+ *   {
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
  */
-export function searchOrganizations(searchTerm :string) :Promise<> {
+export function searchOrganizations(searchOptions :SearchOptions) :Promise<> {
 
   let errorMsg = '';
 
+  if (!isNonEmptyObject(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  const data = {};
+  const {
+    start,
+    maxHits,
+    searchTerm
+  } = searchOptions;
+
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
   if (!isNonEmptyString(searchTerm)) {
-    errorMsg = 'invalid parameter: searchTerm must be a non-empty string';
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
     LOG.error(errorMsg, searchTerm);
     return Promise.reject(errorMsg);
   }
 
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
   return getApiAxiosInstance(SEARCH_API)
-    .post(`/${ORGANIZATIONS_PATH}`, searchTerm)
+    .post(`/${ORGANIZATIONS_PATH}`, data)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /search/popular`
+ *
+ * TODO: add unit tests
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @returns {Promise<EntitySet[]>}
+ *
+ * @example
+ * SearchApi.getPopularEntitySets();
+ */
+export function getPopularEntitySets() :Promise<> {
+
+  return getApiAxiosInstance(SEARCH_API)
+    .get(`/${POPULAR_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
