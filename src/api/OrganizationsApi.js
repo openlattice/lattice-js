@@ -362,7 +362,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
 
   if (!isNonEmptyString(emailDomain)) {
     errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
-    LOG.error(errorMsg)
+    LOG.error(errorMsg);
     return Promise.reject(errorMsg);
   }
 
