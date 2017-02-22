@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.16.1
+ * loom-data - v0.17.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -82,7 +82,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 273);
+/******/ 	return __webpack_require__(__webpack_require__.s = 274);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1903,7 +1903,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(271)("./" + name);
+            __webpack_require__(272)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -4418,15 +4418,15 @@ var _isEmpty = __webpack_require__(261);
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
-var _isNull = __webpack_require__(262);
+var _isNull = __webpack_require__(263);
 
 var _isNull2 = _interopRequireDefault(_isNull);
 
-var _isPlainObject = __webpack_require__(263);
+var _isPlainObject = __webpack_require__(264);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _isString = __webpack_require__(264);
+var _isString = __webpack_require__(265);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -4434,7 +4434,7 @@ var _isUndefined = __webpack_require__(6);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _trim = __webpack_require__(269);
+var _trim = __webpack_require__(270);
 
 var _trim2 = _interopRequireDefault(_trim);
 
@@ -4493,7 +4493,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _loglevel = __webpack_require__(270);
+var _loglevel = __webpack_require__(271);
 
 var _loglevel2 = _interopRequireDefault(_loglevel);
 
@@ -4501,7 +4501,7 @@ var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _lodash = __webpack_require__(266);
+var _lodash = __webpack_require__(267);
 
 var _ = _interopRequireWildcard(_lodash);
 
@@ -4648,7 +4648,7 @@ exports.isValidPermissionArray = isValidPermissionArray;
 exports.isValidPrincipalArray = isValidPrincipalArray;
 exports.isValidAccessCheckArray = isValidAccessCheckArray;
 
-var _uuidValidate = __webpack_require__(272);
+var _uuidValidate = __webpack_require__(273);
 
 var _uuidValidate2 = _interopRequireDefault(_uuidValidate);
 
@@ -10133,7 +10133,7 @@ var _Configuration = __webpack_require__(17);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10205,6 +10205,21 @@ exports.getApiAxiosInstance = getApiAxiosInstance;
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(49);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10312,21 +10327,6 @@ var USERS_PATH = exports.USERS_PATH = 'users';
 
 var POPULAR_PATH = exports.POPULAR_PATH = 'popular';
 var SEARCH_PATH = exports.SEARCH_PATH = 'search';
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var freeGlobal = __webpack_require__(49);
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-module.exports = root;
-
 
 /***/ }),
 /* 11 */
@@ -11875,7 +11875,7 @@ function isValid(entitySet) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(9);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -13134,7 +13134,7 @@ function isValid(schema) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -24106,7 +24106,7 @@ var Configuration = _interopRequireWildcard(_Configuration);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -24457,7 +24457,7 @@ var _Schema2 = _interopRequireDefault(_Schema);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -25416,7 +25416,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -25717,7 +25717,7 @@ var _Organization2 = _interopRequireDefault(_Organization);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26623,7 +26623,7 @@ var _Principal2 = _interopRequireDefault(_Principal);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -26804,6 +26804,7 @@ exports.getAllUsersForAllRoles = getAllUsersForAllRoles;
 exports.addRoleToUser = addRoleToUser;
 exports.setUserRoles = setUserRoles;
 exports.removeRoleFromUser = removeRoleFromUser;
+exports.searchAllUsers = searchAllUsers;
 
 var _isUndefined = __webpack_require__(6);
 
@@ -26815,7 +26816,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -27007,6 +27008,34 @@ function removeRoleFromUser(userId, role) {
   });
 }
 
+/**
+ * `GET /principals/users/search/{searchQuery}`
+ *
+ * @static
+ * @memberof loom-data.PrincipalsApi
+ * @param {string} searchQuery
+ * @return {Promise}
+ *
+ * TODO: add unit tests
+ */
+function searchAllUsers(searchQuery) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchQuery)) {
+    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
+    LOG.error(errorMsg, searchQuery);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/search/' + searchQuery).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
 /***/ }),
 /* 174 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -27017,14 +27046,18 @@ function removeRoleFromUser(userId, role) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.search = search;
+exports.searchEntitySetMetaData = searchEntitySetMetaData;
 exports.searchEntitySetData = searchEntitySetData;
-exports.getPopularEntitySet = getPopularEntitySet;
 exports.searchOrganizations = searchOrganizations;
+exports.getPopularEntitySets = getPopularEntitySets;
 
 var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
+
+var _isFinite = __webpack_require__(262);
+
+var _isFinite2 = _interopRequireDefault(_isFinite);
 
 var _Logger = __webpack_require__(2);
 
@@ -27032,7 +27065,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(7);
 
-var _ApiPaths = __webpack_require__(9);
+var _ApiPaths = __webpack_require__(10);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -27041,8 +27074,6 @@ var _LangUtils = __webpack_require__(1);
 var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('SearchApi');
 
 /**
  * SearchApi...
@@ -27059,14 +27090,23 @@ var LOG = new _Logger2.default('SearchApi');
  * // SearchApi.search...
  */
 
+var LOG = new _Logger2.default('SearchApi');
+
 var KEYWORD = 'kw';
 var ENTITY_TYPE_ID = 'eid';
 var PROPERTY_TYPE_IDS = 'pid';
+var START = 'start';
+var MAX_HITS = 'maxHits';
+var SEARCH_TERM = 'searchTerm';
 
 /**
  * `POST /search`
  *
- * Executes a search query with the given parameters.
+ * Executes a search across all EntitySet metadata with the given parameters.
+ *
+ * TODO: add unit tests
+ * TODO: better validation
+ * TODO: create data models
  *
  * @static
  * @memberof loom-data.SearchApi
@@ -27077,45 +27117,55 @@ var PROPERTY_TYPE_IDS = 'pid';
  * @returns {Promise}
  *
  * @example
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     keyword: "test",
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     propertyTypeIds: [
+ *     "propertyTypeIds": [
  *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *       "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     ]
+ *     ],
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     keyword: "test",
- *     entityTypeId: "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ *     "searchTerm": "Loom",
+ *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  *
- * SearchApi.search(
+ * SearchApi.searchEntitySetMetaData(
  *   {
- *     keyword: "test",
- *     propertyTypeIds: [
+ *     "searchTerm": "Loom",
+ *     "propertyTypeIds": [
  *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *       "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     ]
+ *     ],
+ *     "start": 0,
+ *     "maxHits": 100
  *   }
  * );
  */
-function search(searchOptions) {
+function searchEntitySetMetaData(searchOptions) {
 
   var errorMsg = '';
 
@@ -27126,18 +27176,35 @@ function search(searchOptions) {
   }
 
   var data = {};
-  var keyword = searchOptions.keyword,
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm,
       entityTypeId = searchOptions.entityTypeId,
       propertyTypeIds = searchOptions.propertyTypeIds;
 
 
-  if ((0, _LangUtils.isDefined)(keyword)) {
-    if (!(0, _LangUtils.isNonEmptyString)(keyword)) {
-      errorMsg = 'invalid property: keyword must be a non-empty string';
-      LOG.error(errorMsg, keyword);
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+
+  if ((0, _LangUtils.isDefined)(searchTerm)) {
+    if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+      errorMsg = 'invalid property: searchTerm must be a non-empty string';
+      LOG.error(errorMsg, searchTerm);
       return Promise.reject(errorMsg);
     }
-    data[KEYWORD] = keyword;
+    data[KEYWORD] = searchTerm;
   }
 
   if ((0, _LangUtils.isDefined)(entityTypeId)) {
@@ -27195,7 +27262,7 @@ function search(searchOptions) {
  *   }
  * );
  */
-function searchEntitySetData(entitySetId, searchRequest) {
+function searchEntitySetData(entitySetId, searchOptions) {
 
   var errorMsg = '';
 
@@ -27205,35 +27272,41 @@ function searchEntitySetData(entitySetId, searchRequest) {
     return Promise.reject(errorMsg);
   }
 
-  if (!(0, _LangUtils.isNonEmptyObject)(searchRequest)) {
-    errorMsg = 'invalid parameter: searchRequest must be a non-empty object';
-    LOG.error(errorMsg, searchRequest);
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
     return Promise.reject(errorMsg);
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, searchRequest).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
 
-/**
- * `GET /search/popular`
- *
- * TODO: add unit tests
- *
- * @static
- * @memberof loom-data.SearchApi
- * @returns {Promise<EntitySet[]>}
- *
- * @example
- * SearchApi.getPopularEntitySet();
- */
-function getPopularEntitySet() {
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.POPULAR_PATH).then(function (axiosResponse) {
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -27251,19 +27324,75 @@ function getPopularEntitySet() {
  * @returns {Promise}
  *
  * @example
- * SearchApi.searchOrganizations("Loom");
+ * SearchApi.searchOrganizations(
+ *   {
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
  */
-function searchOrganizations(searchTerm) {
+function searchOrganizations(searchOptions) {
 
   var errorMsg = '';
 
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
   if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-    errorMsg = 'invalid parameter: searchTerm must be a non-empty string';
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
     LOG.error(errorMsg, searchTerm);
     return Promise.reject(errorMsg);
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ORGANIZATIONS_PATH, searchTerm).then(function (axiosResponse) {
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ORGANIZATIONS_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /search/popular`
+ *
+ * TODO: add unit tests
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @returns {Promise<EntitySet[]>}
+ *
+ * @example
+ * SearchApi.getPopularEntitySets();
+ */
+function getPopularEntitySets() {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.POPULAR_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30298,7 +30427,7 @@ module.exports = Array.isArray || function (arr) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -30425,7 +30554,7 @@ module.exports = MapCache;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -30438,7 +30567,7 @@ module.exports = Promise;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -30451,7 +30580,7 @@ module.exports = Set;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(9);
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -30919,7 +31048,7 @@ module.exports = charsStartIndex;
 /* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(9);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -31665,7 +31794,7 @@ module.exports = mapCacheSet;
 /* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var memoize = __webpack_require__(267);
+var memoize = __webpack_require__(268);
 
 /** Used as the maximum memoize cache size. */
 var MAX_MEMOIZE_SIZE = 500;
@@ -32008,8 +32137,8 @@ module.exports = isArrayLike;
 /* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(10),
-    stubFalse = __webpack_require__(268);
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(9),
+    stubFalse = __webpack_require__(269);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -32060,7 +32189,7 @@ var baseKeys = __webpack_require__(216),
     isArrayLike = __webpack_require__(259),
     isBuffer = __webpack_require__(260),
     isPrototype = __webpack_require__(50),
-    isTypedArray = __webpack_require__(265);
+    isTypedArray = __webpack_require__(266);
 
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
@@ -32134,6 +32263,48 @@ module.exports = isEmpty;
 
 /***/ }),
 /* 262 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(9);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeIsFinite = root.isFinite;
+
+/**
+ * Checks if `value` is a finite primitive number.
+ *
+ * **Note:** This method is based on
+ * [`Number.isFinite`](https://mdn.io/Number/isFinite).
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a finite number, else `false`.
+ * @example
+ *
+ * _.isFinite(3);
+ * // => true
+ *
+ * _.isFinite(Number.MIN_VALUE);
+ * // => true
+ *
+ * _.isFinite(Infinity);
+ * // => false
+ *
+ * _.isFinite('3');
+ * // => false
+ */
+function isFinite(value) {
+  return typeof value == 'number' && nativeIsFinite(value);
+}
+
+module.exports = isFinite;
+
+
+/***/ }),
+/* 263 */
 /***/ (function(module, exports) {
 
 /**
@@ -32161,7 +32332,7 @@ module.exports = isNull;
 
 
 /***/ }),
-/* 263 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
@@ -32229,7 +32400,7 @@ module.exports = isPlainObject;
 
 
 /***/ }),
-/* 264 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
@@ -32265,7 +32436,7 @@ module.exports = isString;
 
 
 /***/ }),
-/* 265 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsTypedArray = __webpack_require__(215),
@@ -32298,7 +32469,7 @@ module.exports = isTypedArray;
 
 
 /***/ }),
-/* 266 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -49390,7 +49561,7 @@ module.exports = isTypedArray;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32), __webpack_require__(23)(module)))
 
 /***/ }),
-/* 267 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var MapCache = __webpack_require__(204);
@@ -49469,7 +49640,7 @@ module.exports = memoize;
 
 
 /***/ }),
-/* 268 */
+/* 269 */
 /***/ (function(module, exports) {
 
 /**
@@ -49493,7 +49664,7 @@ module.exports = stubFalse;
 
 
 /***/ }),
-/* 269 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseToString = __webpack_require__(48),
@@ -49548,7 +49719,7 @@ module.exports = trim;
 
 
 /***/ }),
-/* 270 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -49781,7 +49952,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 /***/ }),
-/* 271 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -50016,11 +50187,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 271;
+webpackContext.id = 272;
 
 
 /***/ }),
-/* 272 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {// Regular expression used for basic parsing of the uuid.
@@ -50124,7 +50295,7 @@ var extractVersion = module.exports.version = function (uuid) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(198).Buffer))
 
 /***/ }),
-/* 273 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50191,7 +50362,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.16.1";
+var version = "v0.17.0";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
