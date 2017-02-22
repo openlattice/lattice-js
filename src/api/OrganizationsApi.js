@@ -75,8 +75,12 @@ const LOG = new Logger('OrganizationsApi');
  */
 export function getOrganization(organizationId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -142,8 +146,12 @@ export function getAllOrganizations() {
  */
 export function createOrganization(organization :Organization) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidOrganization(organization)) {
-    return Promise.reject('invalid parameter: organization must be a valid Organization');
+    errorMsg = 'invalid parameter: organization must be a valid Organization';
+    LOG.error(errorMsg, organization);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -172,8 +180,12 @@ export function createOrganization(organization :Organization) :Promise<> {
  */
 export function deleteOrganization(organizationId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -206,12 +218,18 @@ export function deleteOrganization(organizationId :UUID) :Promise<> {
  */
 export function updateTitle(organizationId :UUID, title :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(title)) {
-    return Promise.reject('invalid parameter: title must be a non-empty string');
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, title);
+    return Promise.reject(errorMsg);
   }
 
   const axiosConfig = {
@@ -250,12 +268,18 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<> {
  */
 export function updateDescription(organizationId :UUID, description :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(description)) {
-    return Promise.reject('invalid parameter: description must be a non-empty string');
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, description);
+    return Promise.reject(errorMsg);
   }
 
   const axiosConfig = {
@@ -290,8 +314,12 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
  */
 export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -324,12 +352,18 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
  */
 export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(emailDomain)) {
-    return Promise.reject('invalid parameter: emailDomain must be a non-empty string');
+    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
+    LOG.error(errorMsg);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -364,12 +398,18 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
  */
 export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyStringArray(emailDomains)) {
-    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
   }
 
   const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
@@ -410,12 +450,18 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  */
 export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyStringArray(emailDomains)) {
-    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
   }
 
   const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
@@ -454,12 +500,18 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  */
 export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(emailDomain)) {
-    return Promise.reject('invalid parameter: emailDomain must be a non-empty string');
+    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
+    LOG.error(errorMsg, emailDomain);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -494,12 +546,18 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
  */
 export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyStringArray(emailDomains)) {
-    return Promise.reject('invalid parameter: emailDomains must be a non-empty array of strings');
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
   }
 
   const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
@@ -538,8 +596,12 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
  */
 export function getAllPrincipals(organizationId :UUID) {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -573,16 +635,24 @@ export function getAllPrincipals(organizationId :UUID) {
  */
 export function addPrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(principalType) && !PrincipalTypes[principalType]) {
-    return Promise.reject('invalid parameter: principalType must be a valid PrincipalType');
+    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
+    LOG.error(errorMsg, principalType);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(principalId)) {
-    return Promise.reject('invalid parameter: principalId must be a non-empty string');
+    errorMsg = 'invalid parameter: principalId must be a non-empty string';
+    LOG.error(errorMsg, principalId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -617,12 +687,18 @@ export function addPrincipal(organizationId :UUID, principalType :PrincipalType,
  */
 export function addPrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidPrincipalArray(principals)) {
-    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: alternative way to dedupe
@@ -664,12 +740,18 @@ export function addPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  */
 export function setPrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidPrincipalArray(principals)) {
-    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
   }
 
   const data = Immutable.Set().withMutations((set :Set<Principal>) => {
@@ -710,16 +792,24 @@ export function setPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  */
 export function removePrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(principalType) && !PrincipalTypes[principalType]) {
-    return Promise.reject('invalid parameter: principalType must be a valid PrincipalType');
+    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
+    LOG.error(errorMsg, principalType);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(principalId)) {
-    return Promise.reject('invalid parameter: principalId must be a non-empty string');
+    errorMsg = 'invalid parameter: principalId must be a non-empty string';
+    LOG.error(errorMsg, principalId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -754,12 +844,18 @@ export function removePrincipal(organizationId :UUID, principalType :PrincipalTy
  */
 export function removePrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidPrincipalArray(principals)) {
-    return Promise.reject('invalid parameter: principals must be a non-empty array of valid Principals');
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
   }
 
   const data = Immutable.Set().withMutations((set :Set<Principal>) => {
@@ -798,8 +894,12 @@ export function removePrincipals(organizationId :UUID, principals :Principal[]) 
  */
 export function getAllRoles(organizationId :UUID) {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
@@ -828,8 +928,12 @@ export function getAllRoles(organizationId :UUID) {
  */
 export function getAllMembers(organizationId :UUID) {
 
+  let errorMsg = '';
+
   if (!isValidUuid(organizationId)) {
-    return Promise.reject('invalid parameter: organizationId must be a valid UUID');
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)

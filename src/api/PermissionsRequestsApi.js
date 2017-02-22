@@ -64,8 +64,13 @@ const LOG = new Logger('PermissionsRequestsApi');
  */
 export function getAllResolvedRequestsForUser(aclRoot :UUID[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuidArray(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
+
   }
 
   return getApiAxiosInstance(PERMISSIONS_REQUESTS_API)
@@ -87,8 +92,12 @@ export function getAllResolvedRequestsForUser(aclRoot :UUID[]) :Promise<> {
  */
 export function getUnresolvedRequestForUser(aclRoot :UUID[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuidArray(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PERMISSIONS_REQUESTS_API)
@@ -110,8 +119,12 @@ export function getUnresolvedRequestForUser(aclRoot :UUID[]) :Promise<> {
  */
 export function getAllUnresolvedRequestForAdmin(aclRoot :UUID[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuidArray(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PERMISSIONS_REQUESTS_API)
@@ -136,18 +149,26 @@ export function getAllUnresolvedRequestForAdmin(aclRoot :UUID[]) :Promise<> {
 export function updateUnresolvedRequestStatus(
     aclRoot :UUID[], userPrincipal :Principal, permissions :Map<UUID, Permission[]>, status :RequestStatus) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuidArray(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidPrincipal(userPrincipal)) {
-    return Promise.reject('invalid parameter: userPrincipal must be a valid Principal');
+    errorMsg = 'invalid parameter: userPrincipal must be a valid Principal';
+    LOG.error(errorMsg, userPrincipal);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate permissions Map
 
   if (!isNonEmptyString(status) && !RequestStatusTypes[status]) {
-    return Promise.reject('invalid parameter: status must be a valid RequestStatus');
+    errorMsg = 'invalid parameter: status must be a valid RequestStatus';
+    LOG.error(errorMsg, status);
+    return Promise.reject(errorMsg);
   }
 
   const data = {
@@ -181,14 +202,20 @@ export function updateUnresolvedRequestStatus(
 export function upsertPermissionsRequest(
     aclRoot :UUID[], permissions :Map<UUID, Permission[]>, status :RequestStatus) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuidArray(aclRoot)) {
-    return Promise.reject('invalid parameter: aclRoot must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclRoot must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclRoot);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate permissions Map
 
   if (!isNonEmptyString(status) && !RequestStatusTypes[status]) {
-    return Promise.reject('invalid parameter: status must be a valid RequestStatus');
+    errorMsg = 'invalid parameter: status must be a valid RequestStatus';
+    LOG.error(errorMsg, status);
+    return Promise.reject(errorMsg);
   }
 
   const data = {

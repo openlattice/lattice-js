@@ -57,6 +57,7 @@ import {
 
 import {
   isEmptyArray,
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -115,6 +116,14 @@ export function getEntityDataModel() :Promise<> {
  */
 export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
 
+  let errorMsg = '';
+
+  if (!isNonEmptyObject(projection)) {
+    errorMsg = 'invalid parameter: projection must be a non-empty object';
+    LOG.error(errorMsg, projection);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(EDM_API)
     .post('/', projection)
     .then((axiosResponse) => {
@@ -149,8 +158,12 @@ export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
  */
 export function getSchema(schemaFqn :FullyQualifiedName) :Promise<> {
 
+  let errorMsg = '';
+
   if (!FullyQualifiedName.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
   }
 
   const { namespace, name } = schemaFqn;
@@ -206,8 +219,12 @@ export function getAllSchemas() :Promise<> {
  */
 export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(namespace)) {
-    return Promise.reject('invalid parameter: namespace must be a non-empty string');
+    errorMsg = 'invalid parameter: namespace must be a non-empty string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -238,15 +255,19 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
  */
 export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string) :?string {
 
+  let errorMsg = '';
+
   if (!FullyQualifiedName.isValid(schemaFqn)) {
-    LOG.warn('invalid parameter: schemaFqn must be a valid FQN', schemaFqn);
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
     return null;
   }
 
   // TODO: validate fileType to restrict to only allowed file types
 
   if (!isNonEmptyString(fileType)) {
-    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+    LOG.error(errorMsg, fileType);
     return null;
   }
 
@@ -279,8 +300,12 @@ export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string
  */
 export function createSchema(schema :Schema) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidSchema(schema)) {
-    return Promise.reject('invalid parameter: schema must be a valid Schema');
+    errorMsg = 'invalid parameter: schema must be a valid Schema';
+    LOG.error(errorMsg, schema);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -311,8 +336,12 @@ export function createSchema(schema :Schema) :Promise<> {
  */
 export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<> {
 
+  let errorMsg = '';
+
   if (!FullyQualifiedName.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
   }
 
   const { namespace, name } = schemaFqn;
@@ -359,12 +388,18 @@ export function updateSchema(
     entityTypeIds :UUID[],
     propertyTypeIds :UUID[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!FullyQualifiedName.isValid(schemaFqn)) {
-    return Promise.reject('invalid parameter: schemaFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(action)) {
-    return Promise.reject('invalid parameter: action must be a non-empty string');
+    errorMsg = 'invalid parameter: action must be a non-empty string';
+    LOG.error(errorMsg, action);
+    return Promise.reject(errorMsg);
   }
 
   let entityTypes = entityTypeIds;
@@ -372,7 +407,9 @@ export function updateSchema(
     entityTypes = [];
   }
   else if (!isValidUuidArray(entityTypeIds)) {
-    return Promise.reject('invalid parameter: entityTypeIds must be an array of valid UUIDs');
+    errorMsg = 'invalid parameter: entityTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, entityTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   let propertyTypes = propertyTypeIds;
@@ -380,7 +417,9 @@ export function updateSchema(
     propertyTypes = [];
   }
   else if (!isValidUuidArray(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be an array of valid UUIDs');
+    errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   const { namespace, name } = schemaFqn;
@@ -423,8 +462,12 @@ export function updateSchema(
  */
 export function getEntitySet(entitySetId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -453,8 +496,12 @@ export function getEntitySet(entitySetId :UUID) :Promise<> {
  */
 export function getEntitySetId(entitySetName :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(entitySetName)) {
-    return Promise.reject('invalid parameter: entitySetName must be a non-empty string');
+    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
+    LOG.error(errorMsg, entitySetName);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -517,8 +564,12 @@ export function getAllEntitySets() :Promise<> {
  */
 export function createEntitySets(entitySets :EntitySet[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidEntitySetArray(entitySets)) {
-    return Promise.reject('invalid parameter: entitySets must be a non-empty array of valid EntitySets');
+    errorMsg = 'invalid parameter: entitySets must be a non-empty array of valid EntitySets';
+    LOG.error(errorMsg, entitySets);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -547,8 +598,12 @@ export function createEntitySets(entitySets :EntitySet[]) :Promise<> {
  */
 export function deleteEntitySet(entitySetId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -583,8 +638,12 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<> {
  */
 export function getEntityType(entityTypeId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -615,8 +674,12 @@ export function getEntityType(entityTypeId :UUID) :Promise<> {
  */
 export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
 
+  let errorMsg = '';
+
   if (!FullyQualifiedName.isValid(entityTypeFqn)) {
-    return Promise.reject('invalid parameter: entityTypeFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: entityTypeFqn must be a valid FQN';
+    LOG.error(errorMsg, entityTypeFqn);
+    return Promise.reject(errorMsg);
   }
 
   const { namespace, name } = entityTypeFqn;
@@ -689,8 +752,12 @@ export function getAllEntityTypes() :Promise<> {
  */
 export function createEntityType(entityType :EntityType) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidEntityType(entityType)) {
-    return Promise.reject('invalid parameter: entityType must be a valid EntityType');
+    errorMsg = 'invalid parameter: entityType must be a valid EntityType';
+    LOG.error(errorMsg, entityType);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -719,8 +786,12 @@ export function createEntityType(entityType :EntityType) :Promise<> {
  */
 export function deleteEntityType(entityTypeId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -757,12 +828,18 @@ export function deleteEntityType(entityTypeId :UUID) :Promise<> {
 
 export function updatePropertyTypesForEntityType(entityTypeId :UUID, propertyTypeIds :UUID[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuidArray(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -795,12 +872,18 @@ export function updatePropertyTypesForEntityType(entityTypeId :UUID, propertyTyp
  */
 export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -833,12 +916,18 @@ export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :
  */
 export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entityTypeId)) {
-    return Promise.reject('invalid parameter: entityTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -873,8 +962,12 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
  */
 export function getPropertyType(propertyTypeId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -905,8 +998,12 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<> {
  */
 export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<> {
 
+  let errorMsg = '';
+
   if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
-    return Promise.reject('invalid parameter: propertyTypeFqn must be a valid FQN');
+    errorMsg = 'invalid parameter: propertyTypeFqn must be a valid FQN';
+    LOG.error(errorMsg, propertyTypeFqn);
+    return Promise.reject(errorMsg);
   }
 
   const { namespace, name } = propertyTypeFqn;
@@ -962,8 +1059,12 @@ export function getAllPropertyTypes() :Promise<> {
  */
 export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isNonEmptyString(namespace)) {
-    return Promise.reject('invalid parameter: namespace must be a non-empty string');
+    errorMsg = 'invalid parameter: namespace must be a non-empty string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -1001,8 +1102,12 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  */
 export function createPropertyType(propertyType :PropertyType) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidPropertyType(propertyType)) {
-    return Promise.reject('invalid parameter: propertyType must be a valid PropertyType');
+    errorMsg = 'invalid parameter: propertyType must be a valid PropertyType';
+    LOG.error(errorMsg, propertyType);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
@@ -1032,8 +1137,12 @@ export function createPropertyType(propertyType :PropertyType) :Promise<> {
  */
 export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(propertyTypeId)) {
-    return Promise.reject('invalid parameter: propertyTypeId must be a valid UUID');
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)

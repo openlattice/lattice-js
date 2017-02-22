@@ -59,12 +59,16 @@ const LOG = new Logger('AuthorizationApi');
  */
 export function checkAuthorizations(queries :AccessCheck[]) :Promise<> {
 
+  let errorMsg = '';
+
   let accessChecks = queries;
   if (isUndefined(queries) || isEmptyArray(queries)) {
     accessChecks = [];
   }
   else if (!isValidAccessCheckArray(queries)) {
-    return Promise.reject('invalid parameter: queries must be an array of valid AccessChecks');
+    errorMsg = 'invalid parameter: queries must be an array of valid AccessChecks';
+    LOG.error(errorMsg, queries);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(AUTHORIZATION_API)
