@@ -51,7 +51,7 @@ import {
 
 const LOG = new Logger('DataApi');
 
-const FILE_TYPES :Immutable.Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
+const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
   map.set('csv', 'csv');
   map.set('CSV', 'csv');
   map.set('json', 'json');
