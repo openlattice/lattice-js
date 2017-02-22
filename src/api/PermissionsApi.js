@@ -56,8 +56,12 @@ const LOG = new Logger('PermissionsApi');
  */
 export function getAcl(aclKey :UUID[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuidArray(aclKey)) {
-    return Promise.reject('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: aclKey must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclKey);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
@@ -106,8 +110,12 @@ export function getAcl(aclKey :UUID[]) :Promise<> {
  */
 export function updateAcl(aclData :AclData) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidAclData(aclData)) {
-    return Promise.reject('invalid parameter: aclData must be a valid AclData object');
+    errorMsg = 'invalid parameter: aclData must be a valid AclData object';
+    LOG.error(errorMsg, aclData);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)

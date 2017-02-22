@@ -105,16 +105,24 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
  */
 export function linkEntities(syncId :UUID, entitySetId :UUID, entityId :string, entities :EntityKey[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(LINKING_API)
@@ -142,16 +150,24 @@ export function linkEntities(syncId :UUID, entitySetId :UUID, entityId :string, 
  */
 export function setLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :string, entities :EntityKey[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(LINKING_API)
@@ -179,16 +195,24 @@ export function setLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :str
  */
 export function removeLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(LINKING_API)
@@ -214,22 +238,36 @@ export function removeLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :
  * TODO: add unit tests
  * TODO: create data models
  */
-export function addLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :string, linkedEntityId :UUID) :Promise<> {
+export function addLinkedEntities(
+    syncId :UUID,
+    entitySetId :UUID,
+    entityId :string,
+    linkedEntityId :string) :Promise<> {
+
+  let errorMsg = '';
 
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(linkedEntityId)) {
-    return Promise.reject('invalid parameter: linkedEntityId must be a non-empty string');
+    errorMsg = 'invalid parameter: linkedEntityId must be a non-empty string';
+    LOG.error(errorMsg, linkedEntityId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(LINKING_API)
@@ -261,20 +299,30 @@ export function removeLinkedEntity(
     entityId :string,
     linkedEntityId :string) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(entityId)) {
-    return Promise.reject('invalid parameter: entityId must be a non-empty string');
+    errorMsg = 'invalid parameter: entityId must be a non-empty string';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isNonEmptyString(linkedEntityId)) {
-    return Promise.reject('invalid parameter: linkedEntityId must be a non-empty string');
+    errorMsg = 'invalid parameter: linkedEntityId must be a non-empty string';
+    LOG.error(errorMsg, linkedEntityId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(LINKING_API)

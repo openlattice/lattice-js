@@ -51,7 +51,7 @@ import {
 
 const LOG = new Logger('DataApi');
 
-const FILE_TYPES :Immutable.Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
+const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
   map.set('csv', 'csv');
   map.set('CSV', 'csv');
   map.set('json', 'json');
@@ -79,8 +79,12 @@ const FILE_TYPES :Immutable.Map<string, string> = Immutable.Map().withMutations(
  */
 export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTypeIds :UUID[]) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   let syncIdsCollection = syncIds;
@@ -88,7 +92,9 @@ export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTyp
     syncIdsCollection = [];
   }
   else if (!isValidUuidArray(syncIds)) {
-    return Promise.reject('invalid parameter: syncIds must be an array of valid UUIDs');
+    errorMsg = 'invalid parameter: syncIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, syncIds);
+    return Promise.reject(errorMsg);
   }
 
   let propertyTypeIdsCollection = propertyTypeIds;
@@ -96,7 +102,9 @@ export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTyp
     propertyTypeIdsCollection = [];
   }
   else if (!isValidUuidArray(propertyTypeIds)) {
-    return Promise.reject('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
   }
 
   const data = {
@@ -129,15 +137,21 @@ export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTyp
  */
 export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?string {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entitySetId)) {
-    LOG.warn('invalid parameter: entitySetId must be a valid UUID', entitySetId);
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
     return null;
   }
 
   if (!FILE_TYPES.contains(fileType)) {
-    LOG.warn('invalid parameter: fileType must be a valid file type string', fileType);
+    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+    LOG.error(errorMsg, fileType);
     return null;
   }
+
+  // TODO: fix authToken issue with cookies so that we don't have to use this "token" query param
 
   const authToken = Configuration.getConfig().get('authToken');
   const split = authToken.split(' ');
@@ -175,18 +189,26 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
  */
 export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Object) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
 
   if (!isNonEmptyObject(entities)) {
-    return Promise.reject('invalid parameter: entities must be a non-empty object');
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entities);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(DATA_API)
@@ -226,18 +248,26 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
  */
 export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(ticketId)) {
-    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
+    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
+    LOG.error(errorMsg, ticketId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
 
   if (!isNonEmptyObject(entities)) {
-    return Promise.reject('invalid parameter: entities must be a non-empty object');
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entities);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(DATA_API)
@@ -268,12 +298,18 @@ export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) 
  */
 export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(entitySetId)) {
-    return Promise.reject('invalid parameter: entitySetId must be a valid UUID');
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
   }
 
   if (!isValidUuid(syncId)) {
-    return Promise.reject('invalid parameter: syncId must be a valid UUID');
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(DATA_API)
@@ -302,8 +338,12 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
  */
 export function releaseSyncTicket(ticketId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
   if (!isValidUuid(ticketId)) {
-    return Promise.reject('invalid parameter: ticketId must be a valid UUID');
+    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
+    LOG.error(errorMsg, ticketId);
+    return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(DATA_API)
