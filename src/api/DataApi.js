@@ -41,7 +41,8 @@ import {
 
 import {
   isEmptyArray,
-  isNonEmptyObject
+  isNonEmptyObject,
+  isNonEmptyString
 } from '../utils/LangUtils';
 
 import {
@@ -50,13 +51,6 @@ import {
 } from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataApi');
-
-const FILE_TYPES :Map<string, string> = Immutable.Map().withMutations((map :Map<string, string>) => {
-  map.set('csv', 'csv');
-  map.set('CSV', 'csv');
-  map.set('json', 'json');
-  map.set('JSON', 'json');
-});
 
 /**
  * `POST /data/entitydata/{entitySetId}`
@@ -87,29 +81,43 @@ export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTyp
     return Promise.reject(errorMsg);
   }
 
-  let syncIdsCollection = syncIds;
+  let syncIdsSet :UUID[];
   if (isUndefined(syncIds) || isEmptyArray(syncIds)) {
-    syncIdsCollection = [];
+    syncIdsSet = [];
   }
   else if (!isValidUuidArray(syncIds)) {
     errorMsg = 'invalid parameter: syncIds must be an array of valid UUIDs';
     LOG.error(errorMsg, syncIds);
     return Promise.reject(errorMsg);
   }
+  else {
+    syncIdsSet = Immutable.Set().withMutations((set :Set<UUID>) => {
+      syncIds.forEach((syncId :UUID) => {
+        set.add(syncId);
+      });
+    }).toJS();
+  }
 
-  let propertyTypeIdsCollection = propertyTypeIds;
+  let propertyTypeIdsSet :UUID[];
   if (isUndefined(propertyTypeIds) || isEmptyArray(propertyTypeIds)) {
-    propertyTypeIdsCollection = [];
+    propertyTypeIdsSet = [];
   }
   else if (!isValidUuidArray(propertyTypeIds)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
   }
+  else {
+    propertyTypeIdsSet = Immutable.Set().withMutations((set :Set<UUID>) => {
+      propertyTypeIds.forEach((propertyTypeId :UUID) => {
+        set.add(propertyTypeId);
+      });
+    }).toJS();
+  }
 
   const data = {
-    syncIds: syncIdsCollection,
-    properties: propertyTypeIdsCollection
+    syncIds: syncIdsSet,
+    properties: propertyTypeIdsSet
   };
 
   return getApiAxiosInstance(DATA_API)
@@ -145,20 +153,14 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     return null;
   }
 
-  if (!FILE_TYPES.contains(fileType)) {
-    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+  if (!isNonEmptyString(fileType)) {
+    errorMsg = 'invalid parameter: fileType must be a non-empty string';
     LOG.error(errorMsg, fileType);
     return null;
   }
 
-  // TODO: fix authToken issue with cookies so that we don't have to use this "token" query param
-
-  const authToken = Configuration.getConfig().get('authToken');
-  const split = authToken.split(' ');
-  const token = split[1];
-
   // eslint-disable-next-line
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${entitySetId}?fileType=${FILE_TYPES.get(fileType)}&token=${token}`;
+  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${entitySetId}?fileType=${fileType.toLowerCase()}`;
 }
 
 /**
