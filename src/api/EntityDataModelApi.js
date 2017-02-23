@@ -23,8 +23,6 @@ import EntitySet from '../models/EntitySet';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
-import * as Configuration from '../config/Configuration';
-
 import EntityType, {
   isValid as isValidEntityType
 } from '../models/EntityType';
@@ -57,7 +55,6 @@ import {
 
 import {
   isEmptyArray,
-  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -115,14 +112,6 @@ export function getEntityDataModel() :Promise<> {
  * TODO: create data models
  */
 export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyObject(projection)) {
-    errorMsg = 'invalid parameter: projection must be a non-empty object';
-    LOG.error(errorMsg, projection);
-    return Promise.reject(errorMsg);
-  }
 
   return getApiAxiosInstance(EDM_API)
     .post('/', projection)
@@ -263,20 +252,14 @@ export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string
     return null;
   }
 
-  // TODO: validate fileType to restrict to only allowed file types
-
   if (!isNonEmptyString(fileType)) {
-    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+    errorMsg = 'invalid parameter: fileType must be a non-empty string';
     LOG.error(errorMsg, fileType);
     return null;
   }
 
   const { namespace, name } = schemaFqn;
-  const authToken = Configuration.getConfig().get('authToken');
-  const split = authToken.split(' ');
-  const token = split[1];
-
-  return `${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}?fileType=${fileType}&token=${token}`;
+  return `${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}?fileType=${fileType.toLowerCase()}`;
 }
 
 /**
