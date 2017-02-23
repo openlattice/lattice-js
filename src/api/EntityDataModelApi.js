@@ -55,7 +55,6 @@ import {
 
 import {
   isEmptyArray,
-  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
