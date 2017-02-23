@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.17.1
+ * loom-data - v0.17.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4391,7 +4391,7 @@ return hooks;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module)))
 
 /***/ }),
 /* 1 */
@@ -4664,15 +4664,15 @@ var _AccessCheck = __webpack_require__(41);
 
 var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
 
-var _Ace = __webpack_require__(26);
+var _Ace = __webpack_require__(25);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
-var _EntitySet = __webpack_require__(27);
+var _EntitySet = __webpack_require__(26);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -4680,7 +4680,7 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _PropertyType = __webpack_require__(19);
+var _PropertyType = __webpack_require__(18);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -10129,7 +10129,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _Configuration = __webpack_require__(17);
+var _Configuration = __webpack_require__(32);
 
 var _ApiNames = __webpack_require__(7);
 
@@ -10332,7 +10332,7 @@ var SEARCH_PATH = exports.SEARCH_PATH = 'search';
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28),
+var Symbol = __webpack_require__(27),
     getRawTag = __webpack_require__(225),
     objectToString = __webpack_require__(252);
 
@@ -10443,7 +10443,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
  * fqn.getFullyQualifiedName(); // "LOOM.Data"
  */
 
-var _isObject = __webpack_require__(30);
+var _isObject = __webpack_require__(29);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
@@ -10625,7 +10625,7 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _PrincipalTypes = __webpack_require__(25);
+var _PrincipalTypes = __webpack_require__(24);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -10802,108 +10802,6 @@ module.exports = isObjectLike;
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getConfig = exports.configure = undefined;
-
-var _immutable = __webpack_require__(5);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _EnvToUrlMap = __webpack_require__(195);
-
-var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
-
-var _Logger = __webpack_require__(2);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LangUtils = __webpack_require__(1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @module Configuration
- * @memberof loom-data
- */
-
-var LOG = new _Logger2.default('Configuration');
-
-var configObj = _immutable2.default.Map().withMutations(function (map) {
-
-  if (true) {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-  } else {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-  }
-});
-
-/**
- * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
- * result in the same base URL:
- *   - "https://api.loom.digital"
- *   - "api.loom.digital"
- *   - "loom.digital"
- *   - "api"
- *
- * @memberof loom-data.Configuration
- * @param {Object} config - an object literal containing all configuration options
- * @param {string} config.authToken - a Base64-encoded JWT auth token
- * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
- */
-function configure(config) {
-
-  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
-    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
-    LOG.error(errorMsg, config);
-    throw new Error(errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
-    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
-  } else {
-    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
-    LOG.error(_errorMsg, config.authToken);
-    throw new Error(_errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
-    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-    }
-    // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
-        configObj = configObj.set('baseUrl', config.baseUrl);
-      } else {
-        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
-        LOG.error(_errorMsg2, config.baseUrl);
-        throw new Error(_errorMsg2);
-      }
-  } else {
-    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
-    LOG.error(_errorMsg3, config.baseUrl);
-    throw new Error(_errorMsg3);
-  }
-}
-
-function getConfig() {
-
-  return configObj;
-}
-
-exports.configure = configure;
-exports.getConfig = getConfig;
-
-/***/ }),
-/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11145,7 +11043,7 @@ function isValid(entityType) {
 }
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11353,7 +11251,7 @@ function isValid(propertyType) {
 }
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var eq = __webpack_require__(258);
@@ -11380,7 +11278,7 @@ module.exports = assocIndexOf;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isKeyable = __webpack_require__(237);
@@ -11404,7 +11302,7 @@ module.exports = getMapData;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15);
@@ -11416,7 +11314,7 @@ module.exports = nativeCreate;
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -11444,7 +11342,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11545,7 +11443,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(165)))
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11564,7 +11462,7 @@ exports.default = PrincipalTypes;
 module.exports = exports['default'];
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11701,7 +11599,7 @@ function isValid(ace) {
 }
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11872,7 +11770,7 @@ function isValid(entitySet) {
 }
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(9);
@@ -11884,7 +11782,7 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -11925,7 +11823,7 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
 /**
@@ -11962,7 +11860,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
@@ -11997,7 +11895,7 @@ module.exports = isSymbol;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 var g;
@@ -12022,6 +11920,108 @@ try {
 
 module.exports = g;
 
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getConfig = exports.configure = undefined;
+
+var _immutable = __webpack_require__(5);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _EnvToUrlMap = __webpack_require__(195);
+
+var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
+
+var _Logger = __webpack_require__(2);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LangUtils = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @module Configuration
+ * @memberof loom-data
+ */
+
+var LOG = new _Logger2.default('Configuration');
+
+var configObj = _immutable2.default.Map().withMutations(function (map) {
+
+  if (true) {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+  } else {
+    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+  }
+});
+
+/**
+ * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
+ * result in the same base URL:
+ *   - "https://api.loom.digital"
+ *   - "api.loom.digital"
+ *   - "loom.digital"
+ *   - "api"
+ *
+ * @memberof loom-data.Configuration
+ * @param {Object} config - an object literal containing all configuration options
+ * @param {string} config.authToken - a Base64-encoded JWT auth token
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
+ */
+function configure(config) {
+
+  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
+    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
+    LOG.error(errorMsg, config);
+    throw new Error(errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
+    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
+  } else {
+    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
+    LOG.error(_errorMsg, config.authToken);
+    throw new Error(_errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
+    if (_EnvToUrlMap2.default.get('PROD').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+    } else if (_EnvToUrlMap2.default.get('LOCAL').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
+    }
+    // mild url validation to at least check the protocol and domain
+    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+        configObj = configObj.set('baseUrl', config.baseUrl);
+      } else {
+        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
+        LOG.error(_errorMsg2, config.baseUrl);
+        throw new Error(_errorMsg2);
+      }
+  } else {
+    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
+    LOG.error(_errorMsg3, config.baseUrl);
+    throw new Error(_errorMsg3);
+  }
+}
+
+function getConfig() {
+
+  return configObj;
+}
+
+exports.configure = configure;
+exports.getConfig = getConfig;
 
 /***/ }),
 /* 33 */
@@ -12519,7 +12519,7 @@ var _isUndefined = __webpack_require__(6);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _Ace = __webpack_require__(26);
+var _Ace = __webpack_require__(25);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
@@ -13001,7 +13001,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -13009,7 +13009,7 @@ var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _PropertyType = __webpack_require__(19);
+var _PropertyType = __webpack_require__(18);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -13172,10 +13172,10 @@ module.exports = baseIndexOf;
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28),
+var Symbol = __webpack_require__(27),
     arrayMap = __webpack_require__(208),
     isArray = __webpack_require__(12),
-    isSymbol = __webpack_require__(31);
+    isSymbol = __webpack_require__(30);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -13220,7 +13220,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 module.exports = freeGlobal;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
 
 /***/ }),
 /* 50 */
@@ -13387,7 +13387,7 @@ module.exports = isArguments;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
-    isObject = __webpack_require__(30);
+    isObject = __webpack_require__(29);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -24104,10 +24104,6 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _Configuration = __webpack_require__(17);
-
-var Configuration = _interopRequireWildcard(_Configuration);
-
 var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(10);
@@ -24118,11 +24114,7 @@ var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('DataApi');
 
 /**
  * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
@@ -24139,12 +24131,7 @@ var LOG = new _Logger2.default('DataApi');
  * // DataApi.get...
  */
 
-var FILE_TYPES = _immutable2.default.Map().withMutations(function (map) {
-  map.set('csv', 'csv');
-  map.set('CSV', 'csv');
-  map.set('json', 'json');
-  map.set('JSON', 'json');
-});
+var LOG = new _Logger2.default('DataApi');
 
 /**
  * `POST /data/entitydata/{entitySetId}`
@@ -24175,27 +24162,39 @@ function getEntitySetData(entitySetId, syncIds, propertyTypeIds) {
     return Promise.reject(errorMsg);
   }
 
-  var syncIdsCollection = syncIds;
+  var syncIdsSet = void 0;
   if ((0, _isUndefined2.default)(syncIds) || (0, _LangUtils.isEmptyArray)(syncIds)) {
-    syncIdsCollection = [];
+    syncIdsSet = [];
   } else if (!(0, _ValidationUtils.isValidUuidArray)(syncIds)) {
     errorMsg = 'invalid parameter: syncIds must be an array of valid UUIDs';
     LOG.error(errorMsg, syncIds);
     return Promise.reject(errorMsg);
+  } else {
+    syncIdsSet = _immutable2.default.Set().withMutations(function (set) {
+      syncIds.forEach(function (syncId) {
+        set.add(syncId);
+      });
+    }).toJS();
   }
 
-  var propertyTypeIdsCollection = propertyTypeIds;
+  var propertyTypeIdsSet = void 0;
   if ((0, _isUndefined2.default)(propertyTypeIds) || (0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
-    propertyTypeIdsCollection = [];
+    propertyTypeIdsSet = [];
   } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
+  } else {
+    propertyTypeIdsSet = _immutable2.default.Set().withMutations(function (set) {
+      propertyTypeIds.forEach(function (propertyTypeId) {
+        set.add(propertyTypeId);
+      });
+    }).toJS();
   }
 
   var data = {
-    syncIds: syncIdsCollection,
-    properties: propertyTypeIdsCollection
+    syncIds: syncIdsSet,
+    properties: propertyTypeIdsSet
   };
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
@@ -24228,20 +24227,14 @@ function getEntitySetDataFileUrl(entitySetId, fileType) {
     return null;
   }
 
-  if (!FILE_TYPES.contains(fileType)) {
-    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+  if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
+    errorMsg = 'invalid parameter: fileType must be a non-empty string';
     LOG.error(errorMsg, fileType);
     return null;
   }
 
-  // TODO: fix authToken issue with cookies so that we don't have to use this "token" query param
-
-  var authToken = Configuration.getConfig().get('authToken');
-  var split = authToken.split(' ');
-  var token = split[1];
-
   // eslint-disable-next-line
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + FILE_TYPES.get(fileType) + '&token=' + token;
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + fileType.toLowerCase();
 }
 
 /**
@@ -24471,7 +24464,7 @@ var _isUndefined = __webpack_require__(6);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _EntitySet = __webpack_require__(27);
+var _EntitySet = __webpack_require__(26);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
@@ -24483,15 +24476,11 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _Configuration = __webpack_require__(17);
-
-var Configuration = _interopRequireWildcard(_Configuration);
-
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _PropertyType = __webpack_require__(19);
+var _PropertyType = __webpack_require__(18);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -24509,9 +24498,22 @@ var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
+ *
+ * @module EntityDataModelApi
+ * @memberof loom-data
+ *
+ * @example
+ * import Loom from 'loom-data';
+ * // Loom.EntityDataModelApi.get...
+ *
+ * @example
+ * import { EntityDataModelApi } from 'loom-data';
+ * // EntityDataModelApi.get...
+ */
 
 var LOG = new _Logger2.default('EntityDataModelApi');
 
@@ -24533,23 +24535,6 @@ var LOG = new _Logger2.default('EntityDataModelApi');
  * @example
  * EntityDataModelApi.getEntityDataModel();
  */
-
-
-/**
- * EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
- *
- * @module EntityDataModelApi
- * @memberof loom-data
- *
- * @example
- * import Loom from 'loom-data';
- * // Loom.EntityDataModelApi.get...
- *
- * @example
- * import { EntityDataModelApi } from 'loom-data';
- * // EntityDataModelApi.get...
- */
-
 function getEntityDataModel() {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/').then(function (axiosResponse) {
@@ -24575,14 +24560,6 @@ function getEntityDataModel() {
  * TODO: create data models
  */
 function getEntityDataModelProjection(projection) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(projection)) {
-    errorMsg = 'invalid parameter: projection must be a non-empty object';
-    LOG.error(errorMsg, projection);
-    return Promise.reject(errorMsg);
-  }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/', projection).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -24713,10 +24690,8 @@ function getSchemaFileUrl(schemaFqn, fileType) {
     return null;
   }
 
-  // TODO: validate fileType to restrict to only allowed file types
-
   if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
-    errorMsg = 'invalid parameter: fileType must be a valid file type string';
+    errorMsg = 'invalid parameter: fileType must be a non-empty string';
     LOG.error(errorMsg, fileType);
     return null;
   }
@@ -24724,11 +24699,7 @@ function getSchemaFileUrl(schemaFqn, fileType) {
   var namespace = schemaFqn.namespace,
       name = schemaFqn.name;
 
-  var authToken = Configuration.getConfig().get('authToken');
-  var split = authToken.split(' ');
-  var token = split[1];
-
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.EDM_API) + '/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType + '&token=' + token;
+  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.EDM_API) + '/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType.toLowerCase();
 }
 
 /**
@@ -25895,7 +25866,7 @@ var _immutable = __webpack_require__(5);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _PrincipalTypes = __webpack_require__(25);
+var _PrincipalTypes = __webpack_require__(24);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -26806,7 +26777,7 @@ var LOG = new _Logger2.default('PermissionsApi');
  * @static
  * @memberof loom-data.PermissionsApi
  * @param {UUID[]} aclKey
- * @returns {Promise}
+ * @returns {Promise<Acl>}
  *
  * @example
  * PermissionsApi.getAcl(
@@ -27780,7 +27751,7 @@ var _PermissionTypes = __webpack_require__(39);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _PrincipalTypes = __webpack_require__(25);
+var _PrincipalTypes = __webpack_require__(24);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -27816,7 +27787,7 @@ var _FullyQualifiedName = __webpack_require__(13);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Ace = __webpack_require__(26);
+var _Ace = __webpack_require__(25);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
@@ -27828,11 +27799,11 @@ var _AclData = __webpack_require__(43);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _EntitySet = __webpack_require__(27);
+var _EntitySet = __webpack_require__(26);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -27844,7 +27815,7 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _PropertyType = __webpack_require__(19);
+var _PropertyType = __webpack_require__(18);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
@@ -27890,7 +27861,7 @@ module.exports = __webpack_require__(178);
 var utils = __webpack_require__(4);
 var bind = __webpack_require__(37);
 var Axios = __webpack_require__(180);
-var defaults = __webpack_require__(24);
+var defaults = __webpack_require__(23);
 
 /**
  * Create an instance of Axios
@@ -28010,7 +27981,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(24);
+var defaults = __webpack_require__(23);
 var utils = __webpack_require__(4);
 var InterceptorManager = __webpack_require__(181);
 var dispatchRequest = __webpack_require__(182);
@@ -28164,7 +28135,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(4);
 var transformData = __webpack_require__(185);
 var isCancel = __webpack_require__(35);
-var defaults = __webpack_require__(24);
+var defaults = __webpack_require__(23);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -30679,7 +30650,7 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
 
 /***/ }),
 /* 199 */
@@ -31096,7 +31067,7 @@ module.exports = baseIsNaN;
 
 var isFunction = __webpack_require__(55),
     isMasked = __webpack_require__(238),
-    isObject = __webpack_require__(30),
+    isObject = __webpack_require__(29),
     toSource = __webpack_require__(52);
 
 /**
@@ -31148,7 +31119,7 @@ module.exports = baseIsNative;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(11),
-    isLength = __webpack_require__(29),
+    isLength = __webpack_require__(28),
     isObjectLike = __webpack_require__(16);
 
 /** `Object#toString` result references. */
@@ -31432,7 +31403,7 @@ module.exports = getPrototype;
 /* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28);
+var Symbol = __webpack_require__(27);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -31571,7 +31542,7 @@ var castPath = __webpack_require__(219),
     isArguments = __webpack_require__(54),
     isArray = __webpack_require__(12),
     isIndex = __webpack_require__(235),
-    isLength = __webpack_require__(29),
+    isLength = __webpack_require__(28),
     toKey = __webpack_require__(256);
 
 /**
@@ -31644,7 +31615,7 @@ module.exports = hasUnicode;
 /* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(22);
+var nativeCreate = __webpack_require__(21);
 
 /**
  * Removes all key-value entries from the hash.
@@ -31688,7 +31659,7 @@ module.exports = hashDelete;
 /* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(22);
+var nativeCreate = __webpack_require__(21);
 
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -31724,7 +31695,7 @@ module.exports = hashGet;
 /* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(22);
+var nativeCreate = __webpack_require__(21);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -31753,7 +31724,7 @@ module.exports = hashHas;
 /* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(22);
+var nativeCreate = __webpack_require__(21);
 
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -31811,7 +31782,7 @@ module.exports = isIndex;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(12),
-    isSymbol = __webpack_require__(31);
+    isSymbol = __webpack_require__(30);
 
 /** Used to match property names within property paths. */
 var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
@@ -31911,7 +31882,7 @@ module.exports = listCacheClear;
 /* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(20);
+var assocIndexOf = __webpack_require__(19);
 
 /** Used for built-in method references. */
 var arrayProto = Array.prototype;
@@ -31952,7 +31923,7 @@ module.exports = listCacheDelete;
 /* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(20);
+var assocIndexOf = __webpack_require__(19);
 
 /**
  * Gets the list cache value for `key`.
@@ -31977,7 +31948,7 @@ module.exports = listCacheGet;
 /* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(20);
+var assocIndexOf = __webpack_require__(19);
 
 /**
  * Checks if a list cache value for `key` exists.
@@ -31999,7 +31970,7 @@ module.exports = listCacheHas;
 /* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(20);
+var assocIndexOf = __webpack_require__(19);
 
 /**
  * Sets the list cache `key` to `value`.
@@ -32058,7 +32029,7 @@ module.exports = mapCacheClear;
 /* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(21);
+var getMapData = __webpack_require__(20);
 
 /**
  * Removes `key` and its value from the map.
@@ -32082,7 +32053,7 @@ module.exports = mapCacheDelete;
 /* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(21);
+var getMapData = __webpack_require__(20);
 
 /**
  * Gets the map value for `key`.
@@ -32104,7 +32075,7 @@ module.exports = mapCacheGet;
 /* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(21);
+var getMapData = __webpack_require__(20);
 
 /**
  * Checks if a map value for `key` exists.
@@ -32126,7 +32097,7 @@ module.exports = mapCacheHas;
 /* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(21);
+var getMapData = __webpack_require__(20);
 
 /**
  * Sets the map `key` to `value`.
@@ -32221,7 +32192,7 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module)))
 
 /***/ }),
 /* 252 */
@@ -32342,7 +32313,7 @@ module.exports = stringToPath;
 /* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isSymbol = __webpack_require__(31);
+var isSymbol = __webpack_require__(30);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -32459,7 +32430,7 @@ module.exports = eq;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(55),
-    isLength = __webpack_require__(29);
+    isLength = __webpack_require__(28);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -32536,7 +32507,7 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module)))
 
 /***/ }),
 /* 261 */
@@ -49918,7 +49889,7 @@ module.exports = isTypedArray;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32), __webpack_require__(23)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31), __webpack_require__(22)(module)))
 
 /***/ }),
 /* 268 */
@@ -50710,7 +50681,7 @@ var _PrincipalsApi = __webpack_require__(173);
 
 var PrincipalsApi = _interopRequireWildcard(_PrincipalsApi);
 
-var _Configuration = __webpack_require__(17);
+var _Configuration = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -50722,7 +50693,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.17.1";
+var version = "v0.17.2";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
