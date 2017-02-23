@@ -45,7 +45,7 @@ const LOG = new Logger('PermissionsApi');
  * @static
  * @memberof loom-data.PermissionsApi
  * @param {UUID[]} aclKey
- * @returns {Promise}
+ * @returns {Promise<Acl>}
  *
  * @example
  * PermissionsApi.getAcl(
