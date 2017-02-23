@@ -23,8 +23,6 @@ import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 
-import * as Configuration from '../config/Configuration';
-
 import {
   DATA_API
 } from '../constants/ApiNames';

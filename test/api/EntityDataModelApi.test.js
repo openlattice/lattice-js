@@ -1,9 +1,6 @@
 /* eslint-disable no-use-before-define */
 
-import Immutable from 'immutable';
-
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
-import * as Configuration from '../../src/config/Configuration';
 import * as EntityDataModelApi from '../../src/api/EntityDataModelApi';
 
 import {
@@ -102,22 +99,15 @@ const MOCK_SCHEMA = {
 };
 
 const MOCK_ACTION = 'ADD';
-const MOCK_AUTH_TOKEN = 'foobar';
 const MOCK_FILE_TYPE = 'json';
 
-let configObj = null;
 let mockAxiosInstance = null;
 
 describe('EntityDataModelApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
-    configObj = Immutable.fromJS({
-      authToken: `Bearer ${MOCK_AUTH_TOKEN}`,
-      baseUrl: 'http://localhost:8080'
-    });
     spyOn(AxiosUtils, 'getApiAxiosInstance').and.returnValue(mockAxiosInstance);
-    spyOn(Configuration, 'getConfig').and.returnValue(configObj);
   });
 
   afterEach(() => {
@@ -222,7 +212,15 @@ function testGetSchemaFileUrl() {
 
       expect(EntityDataModelApi.getSchemaFileUrl(MOCK_SCHEMA_FQN, MOCK_FILE_TYPE)).toEqual(
         // eslint-disable-next-line
-        `${EDM_API_BASE_URL}/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}?fileType=${MOCK_FILE_TYPE}&token=${MOCK_AUTH_TOKEN}`
+        `${EDM_API_BASE_URL}/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}?fileType=${MOCK_FILE_TYPE}`
+      );
+    });
+
+    it('should correctly set the fileType query param as lowercase', () => {
+
+      expect(EntityDataModelApi.getSchemaFileUrl(MOCK_SCHEMA_FQN, MOCK_FILE_TYPE.toUpperCase())).toEqual(
+        // eslint-disable-next-line
+        `${EDM_API_BASE_URL}/${SCHEMA_PATH}/${MOCK_SCHEMA_FQN.namespace}/${MOCK_SCHEMA_FQN.name}?fileType=${MOCK_FILE_TYPE}`
       );
     });
 

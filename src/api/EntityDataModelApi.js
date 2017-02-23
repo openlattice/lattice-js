@@ -23,8 +23,6 @@ import EntitySet from '../models/EntitySet';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
-import * as Configuration from '../config/Configuration';
-
 import EntityType, {
   isValid as isValidEntityType
 } from '../models/EntityType';
