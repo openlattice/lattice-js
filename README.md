@@ -4,6 +4,4 @@ The `loom-data` library is a layer on top of Loom's REST APIs to simplify the pr
 writing data into the Loom data store. The library exposes a thin wrapper around each of Loom's REST APIs to
 standardize the data models and formats used, and facilitate communication with Loom.
 
-## APIs
-
-### [EntityDataModelApi](docs/EntityDataModelApi.md)
+### [How To Release](docs/HowToRelease.md)
