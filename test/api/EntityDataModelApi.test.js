@@ -127,6 +127,7 @@ describe('EntityDataModelApi', () => {
   testGetAllEntitySets();
   testCreateEntitySets();
   testDeleteEntitySet();
+  testRenameEntitySet();
   testGetEntityType();
   testGetEntityTypeId();
   testGetAllEntityTypes();
@@ -134,12 +135,14 @@ describe('EntityDataModelApi', () => {
   testDeleteEntityType();
   testAddPropertyTypeToEntityType();
   testRemovePropertyTypeFromEntityType();
+  testRenameEntityType();
   testGetPropertyType();
   testGetPropertyTypeId();
   testGetAllPropertyTypes();
   testGetAllPropertyTypesInNamespace();
   testCreatePropertyType();
   testDeletePropertyType();
+  testRenamePropertyType();
 });
 
 function testGetEntityDataModel() {
@@ -548,6 +551,38 @@ function testDeleteEntitySet() {
   });
 }
 
+function testRenameEntitySet() {
+
+  describe('renameEntitySet()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.renameEntitySet, MOCK_ENTITY_SET_UUID, MOCK_ENTITY_SET.name
+    ];
+
+    it('should send a PATCH request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.renameEntitySet(MOCK_ENTITY_SET_UUID, MOCK_ENTITY_SET.name)
+        .then(() => {
+          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
+            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
+            MOCK_ENTITY_SET.name
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
 function testGetEntityType() {
 
   describe('getEntityType()', () => {
@@ -766,6 +801,38 @@ function testRemovePropertyTypeFromEntityType() {
   });
 }
 
+function testRenameEntityType() {
+
+  describe('renameEntityType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.renameEntityType, MOCK_ENTITY_TYPE_UUID, MOCK_ENTITY_TYPE_FQN
+    ];
+
+    it('should send a PATCH request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.renameEntityType(MOCK_ENTITY_TYPE_UUID, MOCK_ENTITY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_UUID}`,
+            MOCK_ENTITY_TYPE_FQN
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
 function testGetPropertyType() {
 
   describe('getPropertyType()', () => {
@@ -949,5 +1016,37 @@ function testDeletePropertyType() {
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
     testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+  });
+}
+
+function testRenamePropertyType() {
+
+  describe('renamePropertyType()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.renamePropertyType, MOCK_PROPERTY_TYPE_UUID, MOCK_PROPERTY_TYPE_FQN
+    ];
+
+    it('should send a PATCH request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.renamePropertyType(MOCK_PROPERTY_TYPE_UUID, MOCK_PROPERTY_TYPE_FQN)
+        .then(() => {
+          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
+            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_UUID}`,
+            MOCK_PROPERTY_TYPE_FQN
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
   });
 }

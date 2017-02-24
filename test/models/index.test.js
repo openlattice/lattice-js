@@ -57,6 +57,26 @@ describe('Loom.DataModels', () => {
     expect(DataModels.EntityTypeBuilder).toEqual(jasmine.any(Function));
   });
 
+  it('should expose LinkingEntitySet', () => {
+    expect(DataModels.LinkingEntitySet).toBeDefined();
+    expect(DataModels.LinkingEntitySet).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose LinkingEntitySetBuilder', () => {
+    expect(DataModels.LinkingEntitySetBuilder).toBeDefined();
+    expect(DataModels.LinkingEntitySetBuilder).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose LinkingEntityType', () => {
+    expect(DataModels.LinkingEntityType).toBeDefined();
+    expect(DataModels.LinkingEntityType).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose LinkingEntityTypeBuilder', () => {
+    expect(DataModels.LinkingEntityTypeBuilder).toBeDefined();
+    expect(DataModels.LinkingEntityTypeBuilder).toEqual(jasmine.any(Function));
+  });
+
   it('should expose Principal', () => {
     expect(DataModels.Principal).toBeDefined();
     expect(DataModels.Principal).toEqual(jasmine.any(Function));
