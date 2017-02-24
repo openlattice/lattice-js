@@ -14,7 +14,6 @@
  *
  * @class FullyQualifiedName
  * @memberof loom-data
- * @private
  *
  * @example
  * // create from an object literal
@@ -188,6 +187,7 @@ export default class FullyQualifiedName {
   // for Immutable.js equality
   valueOf() {
 
+    // TODO: use Immutable.hash()
     return this.getFullyQualifiedName();
   }
 }

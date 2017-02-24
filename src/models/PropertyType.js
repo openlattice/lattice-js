@@ -26,7 +26,6 @@ const LOG = new Logger('PropertyType');
 /**
  * @class PropertyType
  * @memberof loom-data
- * @private
  */
 export default class PropertyType {
 
