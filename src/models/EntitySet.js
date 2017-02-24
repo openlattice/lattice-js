@@ -47,7 +47,6 @@ export default class EntitySet {
 /**
  * @class EntitySetBuilder
  * @memberof loom-data
- * @private
  */
 export class EntitySetBuilder {
 

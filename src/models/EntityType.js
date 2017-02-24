@@ -60,7 +60,6 @@ export default class EntityType {
 /**
  * @class EntityTypeBuilder
  * @memberof loom-data
- * @private
  */
 export class EntityTypeBuilder {
 

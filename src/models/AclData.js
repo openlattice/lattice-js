@@ -39,7 +39,6 @@ export default class AclData {
 /**
  * @class AclDataBuilder
  * @memberof loom-data
- * @private
  */
 export class AclDataBuilder {
 
