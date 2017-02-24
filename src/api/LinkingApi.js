@@ -40,14 +40,6 @@ import {
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
-import {
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidUuid
-} from '../utils/ValidationUtils';
-
 const LOG = new Logger('LinkingApi');
 
 /**
@@ -127,37 +119,9 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
  * TODO: add unit tests
  * TODO: create data models
  */
-export function linkEntities(syncId :UUID, entitySetId :UUID, entityId :string, entities :EntityKey[]) :Promise<> {
+export function linkEntities() :Promise<> {
 
-  let errorMsg = '';
-
-  if (!isValidUuid(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(entityId)) {
-    errorMsg = 'invalid parameter: entityId must be a non-empty string';
-    LOG.error(errorMsg, entityId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(LINKING_API)
-    .post(`/${SET_PATH}/${syncId}/${entitySetId}/${entityId}`, entities)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
+  return Promise.reject('LinkingApi.linkEntities() is not implemented');
 }
 
 /**
@@ -172,37 +136,9 @@ export function linkEntities(syncId :UUID, entitySetId :UUID, entityId :string, 
  * TODO: add unit tests
  * TODO: create data models
  */
-export function setLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :string, entities :EntityKey[]) :Promise<> {
+export function setLinkedEntities() :Promise<> {
 
-  let errorMsg = '';
-
-  if (!isValidUuid(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(entityId)) {
-    errorMsg = 'invalid parameter: entityId must be a non-empty string';
-    LOG.error(errorMsg, entityId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(LINKING_API)
-    .put(`/${SET_PATH}/${syncId}/${entitySetId}/${entityId}`, entities)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
+  return Promise.reject('LinkingApi.setLinkedEntities() is not implemented');
 }
 
 /**
@@ -217,37 +153,9 @@ export function setLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :str
  * TODO: add unit tests
  * TODO: create data models
  */
-export function removeLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :string) :Promise<> {
+export function removeLinkedEntities() :Promise<> {
 
-  let errorMsg = '';
-
-  if (!isValidUuid(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(entityId)) {
-    errorMsg = 'invalid parameter: entityId must be a non-empty string';
-    LOG.error(errorMsg, entityId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(LINKING_API)
-    .delete(`/${SET_PATH}/${syncId}/${entitySetId}/${entityId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
+  return Promise.reject('LinkingApi.removeLinkedEntities() is not implemented');
 }
 
 /**
@@ -262,47 +170,9 @@ export function removeLinkedEntities(syncId :UUID, entitySetId :UUID, entityId :
  * TODO: add unit tests
  * TODO: create data models
  */
-export function addLinkedEntities(
-    syncId :UUID,
-    entitySetId :UUID,
-    entityId :string,
-    linkedEntityId :string) :Promise<> {
+export function addLinkedEntities() :Promise<> {
 
-  let errorMsg = '';
-
-  if (!isValidUuid(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(entityId)) {
-    errorMsg = 'invalid parameter: entityId must be a non-empty string';
-    LOG.error(errorMsg, entityId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(linkedEntityId)) {
-    errorMsg = 'invalid parameter: linkedEntityId must be a non-empty string';
-    LOG.error(errorMsg, linkedEntityId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(LINKING_API)
-    .put(`/${SET_PATH}/${syncId}/${entitySetId}/${entityId}/${linkedEntityId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
+  return Promise.reject('LinkingApi.addLinkedEntities() is not implemented');
 }
 
 /**
@@ -317,45 +187,7 @@ export function addLinkedEntities(
  * TODO: add unit tests
  * TODO: create data models
  */
-export function removeLinkedEntity(
-    syncId :UUID,
-    entitySetId :UUID,
-    entityId :string,
-    linkedEntityId :string) :Promise<> {
+export function removeLinkedEntity() :Promise<> {
 
-  let errorMsg = '';
-
-  if (!isValidUuid(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(entityId)) {
-    errorMsg = 'invalid parameter: entityId must be a non-empty string';
-    LOG.error(errorMsg, entityId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(linkedEntityId)) {
-    errorMsg = 'invalid parameter: linkedEntityId must be a non-empty string';
-    LOG.error(errorMsg, linkedEntityId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(LINKING_API)
-    .delete(`/${SET_PATH}/${syncId}/${entitySetId}/${entityId}/${linkedEntityId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
+  return Promise.reject('LinkingApi.removeLinkedEntity() is not implemented');
 }

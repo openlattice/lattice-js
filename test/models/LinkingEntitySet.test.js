@@ -28,7 +28,7 @@ const MOCK_LES_OBJ = {
   linkingProperties: MOCK_LINKING_PROPERTIES
 };
 
-fdescribe('LinkingEntitySet', () => {
+describe('LinkingEntitySet', () => {
 
   describe('LinkingEntitySetBuilder', () => {
 
