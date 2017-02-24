@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.18.0
+ * loom-data - v0.19.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -27736,7 +27736,7 @@ exports.getAllUsersForAllRoles = getAllUsersForAllRoles;
 exports.addRoleToUser = addRoleToUser;
 exports.setUserRoles = setUserRoles;
 exports.removeRoleFromUser = removeRoleFromUser;
-exports.searchAllUsers = searchAllUsers;
+exports.searchAllUsersByEmail = searchAllUsersByEmail;
 
 var _isUndefined = __webpack_require__(6);
 
@@ -27967,7 +27967,7 @@ function removeRoleFromUser(userId, role) {
 }
 
 /**
- * `GET /principals/users/search/{searchQuery}`
+ * `GET /principals/users/search/email/{searchQuery}`
  *
  * @static
  * @memberof loom-data.PrincipalsApi
@@ -27976,7 +27976,7 @@ function removeRoleFromUser(userId, role) {
  *
  * TODO: add unit tests
  */
-function searchAllUsers(searchQuery) {
+function searchAllUsersByEmail(searchQuery) {
 
   var errorMsg = '';
 
@@ -27986,7 +27986,7 @@ function searchAllUsers(searchQuery) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/search/' + searchQuery).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/search/email/' + searchQuery).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33197,7 +33197,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.18.0";
+var version = "v0.19.0";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
