@@ -62,7 +62,7 @@
     "karma-jasmine-diff-reporter": "^1.0.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-phantomjs-launcher": "^1.0.2",
-    "karma-spec-reporter": "0.0.26",
+    "karma-spec-reporter": "0.0.28",
     "karma-webpack": "^2.0.0",
     "npm-run-all": "^4.0.0",
     "phantomjs-prebuilt": "^2.1.13",
