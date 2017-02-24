@@ -2,8 +2,6 @@
  * @flow
  */
 
-import Immutable from 'immutable';
-
 import Logger from '../utils/Logger';
 
 import {
