@@ -19,6 +19,14 @@
 
 import Logger from '../utils/Logger';
 
+import LinkingEntitySet, {
+  isValid as isValidLinkingEntitySet
+} from '../models/LinkingEntitySet';
+
+import LinkingEntityType, {
+  isValid as isValidLinkingEntityType
+} from '../models/LinkingEntityType';
+
 import {
   LINKING_API
 } from '../constants/ApiNames';
@@ -56,6 +64,14 @@ const LOG = new Logger('LinkingApi');
  */
 export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :Promise<> {
 
+  let errorMsg = '';
+
+  if (!isValidLinkingEntityType(linkingEntityType)) {
+    errorMsg = 'invalid parameter: linkingEntityType must be a valid LinkingEntityType';
+    LOG.error(errorMsg, linkingEntityType);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(LINKING_API)
     .post(`/${TYPE_PATH}`, linkingEntityType)
     .then((axiosResponse) => {
@@ -79,6 +95,14 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
  * TODO: add unit tests
  */
 export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidLinkingEntitySet(linkingEntitySet)) {
+    errorMsg = 'invalid parameter: linkingEntitySet must be a valid LinkingEntitySet';
+    LOG.error(errorMsg, linkingEntitySet);
+    return Promise.reject(errorMsg);
+  }
 
   return getApiAxiosInstance(LINKING_API)
     .post(`/${SET_PATH}`, linkingEntitySet)
