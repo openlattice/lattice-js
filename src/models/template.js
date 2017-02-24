@@ -26,7 +26,7 @@ export default class Model {
   }
 }
 
-class ModelBuilder {
+export class ModelBuilder {
 
   id :UUID;
 
