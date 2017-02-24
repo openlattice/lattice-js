@@ -258,7 +258,7 @@ export function removeRoleFromUser(userId :string, role :string) :Promise<> {
 }
 
 /**
- * `GET /principals/users/search/{searchQuery}`
+ * `GET /principals/users/search/email/{searchQuery}`
  *
  * @static
  * @memberof loom-data.PrincipalsApi
@@ -267,7 +267,7 @@ export function removeRoleFromUser(userId :string, role :string) :Promise<> {
  *
  * TODO: add unit tests
  */
-export function searchAllUsers(searchQuery :string) :Promise<> {
+export function searchAllUsersByEmail(searchQuery :string) :Promise<> {
 
   let errorMsg = '';
 
@@ -278,7 +278,7 @@ export function searchAllUsers(searchQuery :string) :Promise<> {
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}/search/${searchQuery}`)
+    .get(`/${USERS_PATH}/search/email/${searchQuery}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
