@@ -39,6 +39,8 @@ export default class EntitySet {
     this.name = name;
     this.title = title;
     this.description = description;
+
+    // TODO: use Immutable.hash() for implementing valueOf()
   }
 }
 

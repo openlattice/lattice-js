@@ -5,7 +5,9 @@
 import log from 'loglevel';
 import moment from 'moment';
 
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import isError from 'lodash/isError';
+import isString from 'lodash/isString';
 
 declare var __DEV__;
 declare var __TEST__;
@@ -32,7 +34,7 @@ else {
 
 function isNonEmptyString(value :any) {
 
-  return _.isString(value) && !_.isEmpty(value);
+  return isString(value) && !isEmpty(value);
 }
 
 function getMessagePrefix(loggerLevel, loggerName) {
@@ -61,7 +63,7 @@ export default class Logger {
     else {
       this.logger[logLevel](messagePrefix);
       if (logLevel !== LOG_LEVELS.TRACE) {
-        if (_.isError(message) || !_.isEmpty(message)) {
+        if (isError(message) || !isEmpty(message)) {
           this.logger[logLevel](message);
         }
       }
