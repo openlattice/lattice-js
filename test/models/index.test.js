@@ -37,6 +37,16 @@ describe('Loom.DataModels', () => {
     expect(DataModels.AclDataBuilder).toEqual(jasmine.any(Function));
   });
 
+  it('should expose DataSource', () => {
+    expect(DataModels.DataSource).toBeDefined();
+    expect(DataModels.DataSource).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose DataSourceBuilder', () => {
+    expect(DataModels.DataSourceBuilder).toBeDefined();
+    expect(DataModels.DataSourceBuilder).toEqual(jasmine.any(Function));
+  });
+
   it('should expose EntitySet', () => {
     expect(DataModels.EntitySet).toBeDefined();
     expect(DataModels.EntitySet).toEqual(jasmine.any(Function));
