@@ -4,30 +4,8 @@ import Axios from 'axios';
 
 import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 
-import {
-  AUTHORIZATION_API,
-  DATA_API,
-  EDM_API,
-  LINKING_API,
-  ORGANIZATIONS_API,
-  PERMISSIONS_API,
-  PERMISSIONS_REQUESTS_API,
-  PRINCIPALS_API,
-  SEARCH_API
-} from '../../src/constants/ApiNames';
-
-import {
-  AUTHORIZATIONS_PATH,
-  DATA_PATH,
-  DATASTORE_PATH,
-  EDM_PATH,
-  LINKING_PATH,
-  ORGANIZATIONS_PATH,
-  PERMISSIONS_PATH,
-  PRINCIPALS_PATH,
-  REQUESTS_PATH,
-  SEARCH_PATH
-} from '../../src/constants/ApiPaths';
+import * as ApiNames from '../../src/constants/ApiNames';
+import * as ApiPaths from '../../src/constants/ApiPaths';
 
 const MOCK_AUTH_TOKEN = 'hello_world';
 
@@ -69,6 +47,15 @@ describe('AxiosUtils', () => {
 
   describe('getApiBaseUrl()', () => {
 
+    it('should implement a case to handle all APIs ', () => {
+
+      Object.values(ApiNames).forEach((api :string) => {
+        expect(() => {
+          AxiosUtils.getApiBaseUrl(api);
+        }).not.toThrow();
+      });
+    });
+
     describe('AuthorizationApi', () => {
 
       it('should return the correct LOCAL URL', () => {
@@ -77,8 +64,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(AUTHORIZATION_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.AUTHORIZATION_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.AUTHORIZATIONS_PATH}`
         );
       });
 
@@ -88,8 +75,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(AUTHORIZATION_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.AUTHORIZATION_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.AUTHORIZATIONS_PATH}`
         );
       });
 
@@ -103,8 +90,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${DATA_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.DATA_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_PATH}`
         );
       });
 
@@ -114,8 +101,34 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(DATA_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${DATA_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.DATA_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_PATH}`
+        );
+      });
+
+    });
+
+    describe('DataSourcesApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.DATA_SOURCES_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_SOURCES_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.DATA_SOURCES_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_SOURCES_PATH}`
         );
       });
 
@@ -129,8 +142,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${EDM_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.EDM_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.EDM_PATH}`
         );
       });
 
@@ -140,8 +153,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(EDM_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${EDM_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.EDM_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.EDM_PATH}`
         );
       });
 
@@ -155,8 +168,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(LINKING_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${LINKING_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.LINKING_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.LINKING_PATH}`
         );
       });
 
@@ -166,8 +179,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(LINKING_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${LINKING_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.LINKING_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.LINKING_PATH}`
         );
       });
 
@@ -181,8 +194,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(ORGANIZATIONS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${ORGANIZATIONS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.ORGANIZATIONS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.ORGANIZATIONS_PATH}`
         );
       });
 
@@ -192,8 +205,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(ORGANIZATIONS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${ORGANIZATIONS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.ORGANIZATIONS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.ORGANIZATIONS_PATH}`
         );
       });
 
@@ -207,8 +220,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${PERMISSIONS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.PERMISSIONS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_PATH}`
         );
       });
 
@@ -218,8 +231,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${PERMISSIONS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.PERMISSIONS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_PATH}`
         );
       });
 
@@ -233,8 +246,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_REQUESTS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${REQUESTS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.PERMISSIONS_REQUESTS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_REQUESTS_PATH}`
         );
       });
 
@@ -244,8 +257,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(PERMISSIONS_REQUESTS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${REQUESTS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.PERMISSIONS_REQUESTS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_REQUESTS_PATH}`
         );
       });
 
@@ -259,8 +272,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(PRINCIPALS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.PRINCIPALS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PRINCIPALS_PATH}`
         );
       });
 
@@ -270,8 +283,34 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(PRINCIPALS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.PRINCIPALS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PRINCIPALS_PATH}`
+        );
+      });
+
+    });
+
+    describe('RequestsApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.REQUESTS_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.REQUESTS_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.REQUESTS_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.REQUESTS_PATH}`
         );
       });
 
@@ -285,8 +324,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'localhost'
         });
-        expect(AxiosUtils.getApiBaseUrl(SEARCH_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${SEARCH_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.SEARCH_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SEARCH_PATH}`
         );
       });
 
@@ -296,8 +335,8 @@ describe('AxiosUtils', () => {
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'api'
         });
-        expect(AxiosUtils.getApiBaseUrl(SEARCH_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${DATASTORE_PATH}/${SEARCH_PATH}`
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.SEARCH_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SEARCH_PATH}`
         );
       });
 
@@ -307,13 +346,13 @@ describe('AxiosUtils', () => {
 
   describe('getApiAxiosInstance()', () => {
 
-    const DATA_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${DATA_PATH}`;
-    const EDM_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${DATASTORE_PATH}/${EDM_PATH}`;
+    const DATA_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_PATH}`;
+    const EDM_API_BASE_URL = `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.EDM_PATH}`;
 
     it('should create a new Axios instance for each distinct URL', () => {
 
-      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(DATA_API);
-      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(EDM_API);
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(ApiNames.EDM_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(2);
       expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
@@ -325,14 +364,14 @@ describe('AxiosUtils', () => {
 
     it('should reuse the existing Axios instance for the same URL', () => {
 
-      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(DATA_API);
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
       expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
 
       Axios.create.calls.reset();
 
-      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(DATA_API);
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
       expect(Axios.create).not.toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(0);
       expect(axiosInstance2.defaults.baseURL).toEqual(DATA_API_BASE_URL);
@@ -343,7 +382,7 @@ describe('AxiosUtils', () => {
 
     it('should create a new Axios instance for the same URL if the authToken changes', () => {
 
-      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(DATA_API);
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
       expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
@@ -355,7 +394,7 @@ describe('AxiosUtils', () => {
         baseUrl: 'localhost'
       });
 
-      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(DATA_API);
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
       expect(Axios.create).toHaveBeenCalled();
       expect(Axios.create).toHaveBeenCalledTimes(1);
       expect(axiosInstance2.defaults.baseURL).toEqual(DATA_API_BASE_URL);

@@ -12,12 +12,14 @@ import {
 import {
   AUTHORIZATION_API,
   DATA_API,
+  DATA_SOURCES_API,
   EDM_API,
   LINKING_API,
   ORGANIZATIONS_API,
   PERMISSIONS_API,
   PERMISSIONS_REQUESTS_API,
   PRINCIPALS_API,
+  REQUESTS_API,
   SEARCH_API
 } from '../constants/ApiNames';
 
@@ -25,10 +27,12 @@ import {
   AUTHORIZATIONS_PATH,
   DATA_PATH,
   DATASTORE_PATH,
+  DATA_SOURCES_PATH,
   EDM_PATH,
   LINKING_PATH,
   ORGANIZATIONS_PATH,
   PERMISSIONS_PATH,
+  PERMISSIONS_REQUESTS_PATH,
   PRINCIPALS_PATH,
   REQUESTS_PATH,
   SEARCH_PATH
@@ -45,6 +49,8 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`;
     case DATA_API:
       return `${baseUrl}/${DATASTORE_PATH}/${DATA_PATH}`;
+    case DATA_SOURCES_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${DATA_SOURCES_PATH}`;
     case EDM_API:
       return `${baseUrl}/${DATASTORE_PATH}/${EDM_PATH}`;
     case LINKING_API:
@@ -54,13 +60,15 @@ function getApiBaseUrl(api :string) :string {
     case PERMISSIONS_API:
       return `${baseUrl}/${DATASTORE_PATH}/${PERMISSIONS_PATH}`;
     case PERMISSIONS_REQUESTS_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${PERMISSIONS_REQUESTS_PATH}`;
+    case PRINCIPALS_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`;
+    case REQUESTS_API:
       return `${baseUrl}/${DATASTORE_PATH}/${REQUESTS_PATH}`;
     case SEARCH_API:
       return `${baseUrl}/${DATASTORE_PATH}/${SEARCH_PATH}`;
-    case PRINCIPALS_API:
-      return `${baseUrl}/${DATASTORE_PATH}/${PRINCIPALS_PATH}`;
     default:
-      return baseUrl;
+      throw new Error(`unknown API: no case implemented to handle the given API: ${api}`);
   }
 }
 
