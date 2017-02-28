@@ -15,6 +15,7 @@ import * as DataModels from './models';
 
 import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
+import * as DataSourcesApi from './api/DataSourcesApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as LinkingApi from './api/LinkingApi';
 import * as OrganizationsApi from './api/OrganizationsApi';
@@ -37,6 +38,7 @@ export {
   Types,
   AuthorizationApi,
   DataApi,
+  DataSourcesApi,
   EntityDataModelApi,
   LinkingApi,
   OrganizationsApi,
@@ -53,6 +55,7 @@ export default {
   Types,
   AuthorizationApi,
   DataApi,
+  DataSourcesApi,
   EntityDataModelApi,
   LinkingApi,
   OrganizationsApi,

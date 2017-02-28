@@ -19,7 +19,6 @@ const MOCK_ES_IDS = [
   'fae6af98-2675-45bd-9a5b-1619a87235a8'
 ];
 
-
 const MOCK_DS_OBJ = {
   id: MOCK_DS_UUID,
   title: MOCK_TITLE,

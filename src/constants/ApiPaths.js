@@ -45,6 +45,14 @@ export const TICKET_PATH :string = 'ticket';
 
 /*
  *
+ * DataSourcesApi specific paths
+ *
+ */
+
+export const DATA_SOURCES_PATH :string = 'datasource';
+
+/*
+ *
  * EntityDataModelApi specific paths
  *
  */

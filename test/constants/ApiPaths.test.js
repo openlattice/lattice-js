@@ -22,6 +22,9 @@ const DATA_PATH :string = 'data';
 const ENTITY_DATA_PATH :string = 'entitydata';
 const TICKET_PATH :string = 'ticket';
 
+// DataSourcesApi specific paths
+const DATA_SOURCES_PATH :string = 'datasource';
+
 // EntityDataModelApi specific paths
 const EDM_PATH :string = 'edm';
 const SCHEMA_PATH :string = 'schema';
@@ -136,6 +139,15 @@ describe('ApiPaths', () => {
     it(`should expose "${TICKET_PATH}"`, () => {
       expect(ApiPaths.TICKET_PATH).toBeDefined();
       expect(ApiPaths.TICKET_PATH).toEqual(TICKET_PATH);
+    });
+
+  });
+
+  describe('DataSourcesApi specific paths', () => {
+
+    it(`should expose "${DATA_SOURCES_PATH}"`, () => {
+      expect(ApiPaths.DATA_SOURCES_PATH).toBeDefined();
+      expect(ApiPaths.DATA_SOURCES_PATH).toEqual(DATA_SOURCES_PATH);
     });
 
   });
