@@ -7,6 +7,7 @@ import FullyQualifiedName from './FullyQualifiedName';
 import Ace, { AceBuilder } from './Ace';
 import Acl, { AclBuilder } from './Acl';
 import AclData, { AclDataBuilder } from './AclData';
+import DataSource, { DataSourceBuilder } from './DataSource';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
 import LinkingEntitySet, { LinkingEntitySetBuilder } from './LinkingEntitySet';
@@ -24,6 +25,8 @@ export {
   AclBuilder,
   AclData,
   AclDataBuilder,
+  DataSource,
+  DataSourceBuilder,
   EntitySet,
   EntitySetBuilder,
   EntityType,
