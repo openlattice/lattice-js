@@ -31,7 +31,7 @@ const MOCK_DS_OBJ = {
 
 let mockAxiosInstance = null;
 
-fdescribe('DataSourcesApi', () => {
+describe('DataSourcesApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
