@@ -155,6 +155,16 @@ describe('LinkingEntityType', () => {
         }).toThrow();
       });
 
+      it('should not throw when an optional property has not been set', () => {
+
+        expect(() => {
+          (new LinkingEntityTypeBuilder())
+            .setEntityType(MOCK_ENTITY_TYPE)
+            .setEntityTypeIds(MOCK_ET_IDS)
+            .build();
+        }).not.toThrow();
+      });
+
       it('should return a valid instance', () => {
 
         const linkingEntityType = builder

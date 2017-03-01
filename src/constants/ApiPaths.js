@@ -45,6 +45,14 @@ export const TICKET_PATH :string = 'ticket';
 
 /*
  *
+ * DataSourcesApi specific paths
+ *
+ */
+
+export const DATA_SOURCES_PATH :string = 'datasource';
+
+/*
+ *
  * EntityDataModelApi specific paths
  *
  */
@@ -87,7 +95,7 @@ export const PERMISSIONS_PATH :string = 'permissions';
  */
 
 export const ADMIN_PATH :string = 'admin';
-export const REQUESTS_PATH :string = 'requests';
+export const PERMISSIONS_REQUESTS_PATH :string = 'permissionsrequests';
 export const RESOLVED_PATH :string = 'resolved';
 export const UNRESOLVED_PATH :string = 'unresolved';
 
@@ -99,6 +107,14 @@ export const UNRESOLVED_PATH :string = 'unresolved';
  */
 
 export const USERS_PATH :string = 'users';
+
+/*
+ *
+ * RequestsApi specific paths
+ *
+ */
+
+export const REQUESTS_PATH :string = 'requests';
 
 /*
  *
