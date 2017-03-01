@@ -31,7 +31,6 @@ import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldReturnPromiseOnValidParameters,
   testApiFunctionShouldNotThrowOnInvalidParameters,
-  testApiFunctionShouldNotRejectOnInvalidParameters,
   testApiFunctionShouldRejectOnGivenInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters
 } from '../utils/ApiTestUtils';
@@ -69,7 +68,7 @@ INVALID_PARAMS.forEach((invalidParam1 :any) => {
 
 let mockAxiosInstance = null;
 
-fdescribe('RequestsApi', () => {
+describe('RequestsApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
