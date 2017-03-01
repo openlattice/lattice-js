@@ -40,6 +40,8 @@ import type {
   Permission
 } from '../constants/types/PermissionTypes';
 
+const BASE_UUID :string = '00000000-0000-0000-0000-000000000000';
+
 export function validateNonEmptyArray(value :any[], validatorFn :Function) :boolean {
 
   if (!isNonEmptyArray(value)) {
@@ -57,7 +59,7 @@ export function validateNonEmptyArray(value :any[], validatorFn :Function) :bool
 
 export function isValidUuid(value :any) :boolean {
 
-  return validateUUID(value);
+  return validateUUID(value) || value === BASE_UUID;
 }
 
 export function isValidUuidArray(uuids :UUID[]) :boolean {
