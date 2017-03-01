@@ -117,22 +117,39 @@ export function testApiFunctionShouldRejectOnGivenInvalidParameters(invalidParam
   it('should reject when given specific invalid parameters', (done) => {
 
     const promises = [];
-    for (let i = 0; i < validParams.length; i += 1) {
 
-      const invocationParameters = validParams.slice(0);
-      invalidParams.forEach((invalidInput) => {
+    if (validParams.length === 0) {
 
-        invocationParameters[i] = invalidInput;
+      invalidParams.forEach((invalidInput :any) => {
 
         promises.push(
-          functionToTest(...invocationParameters)
+          functionToTest(invalidInput)
         );
 
         promises.push(
-          // TODO: bug: only passing a single parameter, instead of wrapping each parameter with []
-          functionToTest([...invocationParameters])
+          functionToTest([invalidInput])
         );
       });
+    }
+    else {
+
+      for (let i = 0; i < validParams.length; i += 1) {
+
+        const invocationParameters = validParams.slice(0);
+        invalidParams.forEach((invalidInput :any) => {
+
+          invocationParameters[i] = invalidInput;
+
+          promises.push(
+            functionToTest(...invocationParameters)
+          );
+
+          promises.push(
+            // TODO: bug: only passing a single parameter, instead of wrapping each parameter with []
+            functionToTest([...invocationParameters])
+          );
+        });
+      }
     }
 
     BBPromise.any(promises)

@@ -20,6 +20,7 @@
  */
 
 import Immutable from 'immutable';
+import has from 'lodash/has';
 
 import RequestStateTypes from '../constants/types/RequestStateTypes';
 import Logger from '../utils/Logger';
@@ -38,6 +39,7 @@ import {
 import {
   isDefined,
   isNonEmptyArray,
+  isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -103,7 +105,6 @@ type StateAclKeysObject = {
 };
 export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<> {
 
-  // state :RequestState, aclKeys :UUID[][]
   let errorMsg :string;
 
   // https://flowtype.org/docs/objects.html#sealed-object-types
@@ -111,38 +112,36 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<> {
   axiosConfig.url = '/';
   axiosConfig.method = 'get';
 
-  const {
-    state,
-    aclKeys
-  } : {
-    state :RequestState,
-    aclKeys :UUID[][]
-  } = options;
+  if (isDefined(options) && !isNonEmptyObject(options)) {
+    errorMsg = 'invalid parameter: when given, options must be a non-empty object literal';
+    LOG.error(errorMsg, options.state);
+    return Promise.reject(errorMsg);
+  }
 
-  if (isDefined(state)) {
+  if (isNonEmptyObject(options) && has(options, 'state')) {
 
-    if (!isNonEmptyString(state) || !RequestStateTypes[state]) {
-      errorMsg = 'invalid parameter: state must be a valid RequestState';
-      LOG.error(errorMsg, state);
+    if (!isNonEmptyString(options.state) || !RequestStateTypes[options.state]) {
+      errorMsg = 'invalid parameter: when given, state must be a valid RequestState';
+      LOG.error(errorMsg, options.state);
       return Promise.reject(errorMsg);
     }
 
-    axiosConfig.url = `/${state}`;
+    axiosConfig.url = `/${options.state}`;
   }
 
-  if (isDefined(aclKeys)) {
+  if (isNonEmptyObject(options) && has(options, 'aclKeys')) {
 
-    if (!isNonEmptyArray(aclKeys)) {
-      errorMsg = 'invalid parameter: aclKeys must be a non-empty array of UUID arrays';
-      LOG.error(errorMsg, aclKeys);
+    if (!isNonEmptyArray(options.aclKeys)) {
+      errorMsg = 'invalid parameter: when given, aclKeys must be a non-empty array of UUID arrays';
+      LOG.error(errorMsg, options.aclKeys);
       return Promise.reject(errorMsg);
     }
 
     const aclKeysSet :Set<List<UUID>> = Immutable.Set().withMutations((set :Set<List<UUID>>) => {
-      for (let index = 0; index < aclKeys.length; index += 1) {
-        const aclKey = aclKeys[index];
+      for (let index = 0; index < options.aclKeys.length; index += 1) {
+        const aclKey = options.aclKeys[index];
         if (!isValidUuidArray(aclKey)) {
-          errorMsg = `invalid parameter: aclKeys[${index}] must be a non-empty array of UUIDs`;
+          errorMsg = `invalid parameter: when given, aclKeys[${index}] must be a non-empty array of UUIDs`;
           LOG.error(errorMsg, aclKey);
           break;
         }
@@ -180,7 +179,7 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<> {
  * @param {Request[]} requests
  * @returns {Promise}
  */
-export function submitRequest(requests :Request[]) :Promise<> {
+export function submitRequests(requests :Request[]) :Promise<> {
 
   let errorMsg :string;
 
