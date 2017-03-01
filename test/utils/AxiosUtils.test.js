@@ -238,32 +238,6 @@ describe('AxiosUtils', () => {
 
     });
 
-    describe('PermissionsRequestsApi', () => {
-
-      it('should return the correct LOCAL URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'localhost'
-        });
-        expect(AxiosUtils.getApiBaseUrl(ApiNames.PERMISSIONS_REQUESTS_API)).toEqual(
-          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_REQUESTS_PATH}`
-        );
-      });
-
-      it('should return the correct PROD URL', () => {
-
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'api'
-        });
-        expect(AxiosUtils.getApiBaseUrl(ApiNames.PERMISSIONS_REQUESTS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_REQUESTS_PATH}`
-        );
-      });
-
-    });
-
     describe('PrincipalsApi', () => {
 
       it('should return the correct LOCAL URL', () => {

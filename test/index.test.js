@@ -68,16 +68,16 @@ describe('loom-data-js', () => {
     expect(Object.keys(Loom.PermissionsApi).length).toBeGreaterThan(0);
   });
 
-  it('should expose PermissionsRequestsApi', () => {
-    expect(Loom.PermissionsRequestsApi).toBeDefined();
-    expect(Loom.PermissionsRequestsApi).toEqual(jasmine.any(Object));
-    expect(Object.keys(Loom.PermissionsRequestsApi).length).toBeGreaterThan(0);
-  });
-
   it('should expose PrincipalsApi', () => {
     expect(Loom.PrincipalsApi).toBeDefined();
     expect(Loom.PrincipalsApi).toEqual(jasmine.any(Object));
     expect(Object.keys(Loom.PrincipalsApi).length).toBeGreaterThan(0);
+  });
+
+  it('should expose RequestsApi', () => {
+    expect(Loom.RequestsApi).toBeDefined();
+    expect(Loom.RequestsApi).toEqual(jasmine.any(Object));
+    expect(Object.keys(Loom.RequestsApi).length).toBeGreaterThan(0);
   });
 
   it('should expose SearchApi', () => {

@@ -15,6 +15,8 @@ import LinkingEntityType, { LinkingEntityTypeBuilder } from './LinkingEntityType
 import Organization, { OrganizationBuilder } from './Organization';
 import Principal, { PrincipalBuilder } from './Principal';
 import PropertyType, { PropertyTypeBuilder } from './PropertyType';
+import Request, { RequestBuilder } from './Request';
+import RequestStatus, { RequestStatusBuilder } from './RequestStatus';
 import Schema, { SchemaBuilder } from './Schema';
 
 export {
@@ -41,6 +43,10 @@ export {
   PrincipalBuilder,
   PropertyType,
   PropertyTypeBuilder,
+  Request,
+  RequestBuilder,
+  RequestStatus,
+  RequestStatusBuilder,
   Schema,
   SchemaBuilder
 };
