@@ -96,6 +96,7 @@ export function testApiFunctionShouldRejectOnInvalidParameters(functionToTest, .
         );
 
         promises.push(
+          // TODO: bug: only passing a single parameter, instead of wrapping each parameter with []
           functionToTest([...invocationParameters])
         );
       });
@@ -128,6 +129,7 @@ export function testApiFunctionShouldRejectOnGivenInvalidParameters(invalidParam
         );
 
         promises.push(
+          // TODO: bug: only passing a single parameter, instead of wrapping each parameter with []
           functionToTest([...invocationParameters])
         );
       });

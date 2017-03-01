@@ -583,6 +583,7 @@ function testAddPrincipal() {
     testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    // TODO: figure out how to test non-valid enum values, like non-valid PrincipalTypes
     testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });

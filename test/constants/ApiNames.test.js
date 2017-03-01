@@ -7,7 +7,6 @@ const EDM_API :string = 'EntityDataModelApi';
 const LINKING_API :string = 'LinkingApi';
 const ORGANIZATIONS_API :string = 'OrganizationsApi';
 const PERMISSIONS_API :string = 'PermissionsApi';
-const PERMISSIONS_REQUESTS_API :string = 'PermissionsRequestsApi';
 const PRINCIPALS_API :string = 'PrincipalsApi';
 const REQUESTS_API :string = 'RequestsApi';
 const SEARCH_API :string = 'SearchApi';
@@ -47,11 +46,6 @@ describe('ApiNames', () => {
   it(`should expose "${PERMISSIONS_API}"`, () => {
     expect(ApiNames.PERMISSIONS_API).toBeDefined();
     expect(ApiNames.PERMISSIONS_API).toEqual(PERMISSIONS_API);
-  });
-
-  it(`should expose "${PERMISSIONS_REQUESTS_API}"`, () => {
-    expect(ApiNames.PERMISSIONS_REQUESTS_API).toBeDefined();
-    expect(ApiNames.PERMISSIONS_REQUESTS_API).toEqual(PERMISSIONS_REQUESTS_API);
   });
 
   it(`should expose "${PRINCIPALS_API}"`, () => {

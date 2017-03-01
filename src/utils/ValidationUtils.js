@@ -31,6 +31,14 @@ import PropertyType, {
   isValid as isValidPropertyType
 } from '../models/PropertyType';
 
+import Request, {
+  isValid as isValidRequest
+} from '../models/Request';
+
+import RequestStatus, {
+  isValid as isValidRequestStatus
+} from '../models/RequestStatus';
+
 import {
   isNonEmptyArray,
   isNonEmptyString
@@ -122,5 +130,19 @@ export function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
 
   return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => {
     return isValidAccessCheck(accessCheck);
+  });
+}
+
+export function isValidRequestArray(requests :Request[]) :boolean {
+
+  return validateNonEmptyArray(requests, (request :Request) => {
+    return isValidRequest(request);
+  });
+}
+
+export function isValidRequestStatusArray(statuses :RequestStatus[]) :boolean {
+
+  return validateNonEmptyArray(statuses, (requestStatus :RequestStatus) => {
+    return isValidRequestStatus(requestStatus);
   });
 }
