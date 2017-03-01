@@ -69,7 +69,7 @@ INVALID_PARAMS.forEach((invalidParam1 :any) => {
 
 let mockAxiosInstance = null;
 
-describe('RequestsApi', () => {
+fdescribe('RequestsApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
@@ -121,119 +121,106 @@ function testGetAllRequestStatuses() {
 
     });
 
-    testGetAllRequestStatusesForRequestState();
-    testGetAllRequestStatusesForAclKeys();
-    testGetAllRequestStatusesForRequestStateAclKeys();
-  });
-}
+    describe('get all RequestStatuses for the specified RequestState', () => {
 
-function testGetAllRequestStatusesForRequestState() {
+      const invocationParameters = [
+        { state: RequestStateTypes.SUBMITTED }
+      ];
 
-  describe('get all RequestStatuses for the specified RequestState', () => {
+      const functionInvocation = [
+        RequestsApi.getAllRequestStatuses, ...invocationParameters
+      ];
 
-    const invocationParameters = [
-      { state: RequestStateTypes.SUBMITTED }
-    ];
+      it('should send a GET request with the correct URL path', (done) => {
 
-    const functionInvocation = [
-      RequestsApi.getAllRequestStatuses, ...invocationParameters
-    ];
-
-    it('should send a GET request with the correct URL path', (done) => {
-
-      RequestsApi.getAllRequestStatuses(...invocationParameters)
-        .then(() => {
-          expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-            url: `/${RequestStateTypes.SUBMITTED}`,
-            method: 'get'
+        RequestsApi.getAllRequestStatuses(...invocationParameters)
+          .then(() => {
+            expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
+            expect(mockAxiosInstance.request).toHaveBeenCalledWith({
+              url: `/${RequestStateTypes.SUBMITTED}`,
+              method: 'get'
+            });
+            done();
+          })
+          .catch(() => {
+            done.fail();
           });
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
+      });
+
+      testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
+      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    describe('get all RequestStatuses for the specified AclKeys', () => {
 
-  });
-}
+      const invocationParameters = [
+        { aclKeys: [MOCK_ACL_KEY] }
+      ];
 
-function testGetAllRequestStatusesForAclKeys() {
+      const functionInvocation = [
+        RequestsApi.getAllRequestStatuses, ...invocationParameters
+      ];
 
-  describe('get all RequestStatuses for the specified AclKeys', () => {
+      it('should send a POST request with the correct URL path and data', (done) => {
 
-    const invocationParameters = [
-      { aclKeys: [MOCK_ACL_KEY] }
-    ];
-
-    const functionInvocation = [
-      RequestsApi.getAllRequestStatuses, ...invocationParameters
-    ];
-
-    it('should send a POST request with the correct URL path and data', (done) => {
-
-      RequestsApi.getAllRequestStatuses(...invocationParameters)
-        .then(() => {
-          expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-            url: '/',
-            method: 'post',
-            data: [MOCK_ACL_KEY]
+        RequestsApi.getAllRequestStatuses(...invocationParameters)
+          .then(() => {
+            expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
+            expect(mockAxiosInstance.request).toHaveBeenCalledWith({
+              url: '/',
+              method: 'post',
+              data: [MOCK_ACL_KEY]
+            });
+            done();
+          })
+          .catch(() => {
+            done.fail();
           });
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
+      });
+
+      testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
+      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    describe('get all RequestStatuses for the specified RequestState and AclKeys', () => {
 
-  });
-}
+      const invocationParameters = [
+        {
+          state: RequestStateTypes.SUBMITTED,
+          aclKeys: [MOCK_ACL_KEY]
+        }
+      ];
 
-function testGetAllRequestStatusesForRequestStateAclKeys() {
+      const functionInvocation = [
+        RequestsApi.getAllRequestStatuses, ...invocationParameters
+      ];
 
-  describe('get all RequestStatuses for the specified RequestState and AclKeys', () => {
+      it('should send a POST request with the correct URL path and data', (done) => {
 
-    const invocationParameters = [
-      {
-        state: RequestStateTypes.SUBMITTED,
-        aclKeys: [MOCK_ACL_KEY]
-      }
-    ];
-
-    const functionInvocation = [
-      RequestsApi.getAllRequestStatuses, ...invocationParameters
-    ];
-
-    it('should send a POST request with the correct URL path and data', (done) => {
-
-      RequestsApi.getAllRequestStatuses(...invocationParameters)
-        .then(() => {
-          expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-            url: `/${RequestStateTypes.SUBMITTED}`,
-            method: 'post',
-            data: [MOCK_ACL_KEY]
+        RequestsApi.getAllRequestStatuses(...invocationParameters)
+          .then(() => {
+            expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
+            expect(mockAxiosInstance.request).toHaveBeenCalledWith({
+              url: `/${RequestStateTypes.SUBMITTED}`,
+              method: 'post',
+              data: [MOCK_ACL_KEY]
+            });
+            done();
+          })
+          .catch(() => {
+            done.fail();
           });
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
+      });
+
+      testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
+      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
   });
 }
-
 
 function testSubmitRequests() {
 
