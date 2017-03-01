@@ -172,12 +172,22 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<> {
  * `PUT /requests`
  *
  * TODO: add description
- * TODO: add tests
  *
  * @static
  * @memberof loom-data.RequestsApi
  * @param {Request[]} requests
  * @returns {Promise}
+ *
+ * @example
+ * RequestsApi.submitRequests(
+ *   [
+ *     {
+ *       "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *       "permissions": ["READ"],
+ *       reason: "a good reason"
+ *     },
+ *   ]
+ * );
  */
 export function submitRequests(requests :Request[]) :Promise<> {
 
@@ -189,7 +199,7 @@ export function submitRequests(requests :Request[]) :Promise<> {
     return Promise.reject(errorMsg);
   }
 
-  // TODO: Immutable.Set()
+  // TODO: Immutable.Set() with unit tests
 
   return getApiAxiosInstance(REQUESTS_API)
     .put('/', requests)
@@ -206,12 +216,29 @@ export function submitRequests(requests :Request[]) :Promise<> {
  * `PATCH /requests`
  *
  * TODO: add description
- * TODO: add tests
  *
  * @static
  * @memberof loom-data.RequestsApi
  * @param {Status[]} statuses
  * @returns {Promise}
+ *
+ * @example
+ * RequestsApi.updateRequestStatuses(
+ *   [
+ *     {
+ *       "request": {
+ *         "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *         "permissions": ["READ"],
+ *         reason: "a good reason"
+ *       },
+ *       "state": "SUBMITTED"
+ *       "principal": {
+ *         "type": "USER",
+ *         "id": "principalId"
+ *       }
+ *     }
+ *   ]
+ * );
  */
 export function updateRequestStatuses(statuses :RequestStatus[]) :Promise<> {
 
@@ -223,7 +250,7 @@ export function updateRequestStatuses(statuses :RequestStatus[]) :Promise<> {
     return Promise.reject(errorMsg);
   }
 
-  // TODO: Immutable.Set()
+  // TODO: Immutable.Set() with unit tests
 
   return getApiAxiosInstance(REQUESTS_API)
     .patch('/', statuses)
