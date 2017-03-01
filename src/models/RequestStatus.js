@@ -76,8 +76,16 @@ export class RequestStatusBuilder {
 
   build() :RequestStatus {
 
-    if (!this.id) {
-      throw new Error('missing property: id is a required property');
+    if (!this.request) {
+      throw new Error('missing property: request is a required property');
+    }
+
+    if (!this.state) {
+      throw new Error('missing property: state is a required property');
+    }
+
+    if (!this.principal) {
+      throw new Error('missing property: principal is a required property');
     }
 
     return new RequestStatus(this.request, this.state, this.principal);
