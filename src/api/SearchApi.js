@@ -280,6 +280,36 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :SearchOpti
 }
 
 /**
+ * `POST /search/advanced/{entitySetId}`
+ *
+ * TODO: add documentation
+ * TODO: add tests
+ * TODO: add validation
+ * TODO: path constants
+ * TODO: create data models
+ */
+export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :AdvancedSearchOptions) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .post(`/advanced/${entitySetId}`, searchOptions)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `POST /search/organizations`
  *
  * TODO: add unit tests
