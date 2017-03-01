@@ -144,8 +144,6 @@ function testGetAllOrganizations() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });
 }

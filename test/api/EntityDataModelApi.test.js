@@ -482,8 +482,6 @@ function testGetAllEntitySets() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });
 }
@@ -670,8 +668,6 @@ function testGetAllEntityTypes() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });
 }
@@ -920,8 +916,6 @@ function testGetAllPropertyTypes() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
 
   });
 }
