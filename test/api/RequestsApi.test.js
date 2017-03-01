@@ -178,6 +178,37 @@ function testGetAllRequestStatuses() {
           });
       });
 
+      it('should send a Set of AclKeys by correctly removing duplicates', (done) => {
+
+        const aclKeys = [
+          ['ec6865e6-e60e-424b-a071-6a9c1603d735'],
+          ['ec6865e6-e60e-424b-a071-6a9c1603d735', '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e'],
+          ['8f79e123-3411-4099-a41f-88e5d22d0e8d'],
+          ['ec6865e6-e60e-424b-a071-6a9c1603d735'],
+          ['fae6af98-2675-45bd-9a5b-1619a87235a8', '4b08e1f9-4a00-4169-92ea-10e377070220'],
+          ['ec6865e6-e60e-424b-a071-6a9c1603d735', '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e']
+        ];
+
+        RequestsApi.getAllRequestStatuses({ aclKeys })
+          .then(() => {
+            expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
+            expect(mockAxiosInstance.request).toHaveBeenCalledWith({
+              url: '/',
+              method: 'post',
+              data: [
+                ['ec6865e6-e60e-424b-a071-6a9c1603d735'],
+                ['ec6865e6-e60e-424b-a071-6a9c1603d735', '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e'],
+                ['8f79e123-3411-4099-a41f-88e5d22d0e8d'],
+                ['fae6af98-2675-45bd-9a5b-1619a87235a8', '4b08e1f9-4a00-4169-92ea-10e377070220']
+              ]
+            });
+            done();
+          })
+          .catch(() => {
+            done.fail();
+          });
+      });
+
       testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
       testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
 
