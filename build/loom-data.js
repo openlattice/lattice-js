@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.19.1
+ * loom-data - v0.19.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -28259,6 +28259,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.searchEntitySetMetaData = searchEntitySetMetaData;
 exports.searchEntitySetData = searchEntitySetData;
+exports.advancedSearchEntitySetData = advancedSearchEntitySetData;
 exports.searchOrganizations = searchOrganizations;
 exports.getPopularEntitySets = getPopularEntitySets;
 
@@ -28518,6 +28519,33 @@ function searchEntitySetData(entitySetId, searchOptions) {
   data[SEARCH_TERM] = searchTerm;
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/advanced/{entitySetId}`
+ *
+ * TODO: add documentation
+ * TODO: add tests
+ * TODO: add validation
+ * TODO: path constants
+ * TODO: create data models
+ */
+function advancedSearchEntitySetData(entitySetId, searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/advanced/' + entitySetId, searchOptions).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -34385,7 +34413,7 @@ var _Configuration = __webpack_require__(31);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.19.1";
+var version = "v0.19.2";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
