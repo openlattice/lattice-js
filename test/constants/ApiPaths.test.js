@@ -1,9 +1,7 @@
 import * as ApiPaths from '../../src/constants/ApiPaths';
 
-// base paths
-const DATASTORE_PATH :string = 'datastore';
-
 // shared paths
+const DATASTORE_PATH :string = 'datastore';
 const ENTITY_SET_PATH :string = 'entity/set';
 const ENTITY_TYPE_PATH :string = 'entity/type';
 const IDS_PATH :string = 'ids';
@@ -42,12 +40,6 @@ const TITLE_PATH :string = 'title';
 // PermissionsApi specific paths
 const PERMISSIONS_PATH :string = 'permissions';
 
-// PermissionsRequestsApi specific paths
-const ADMIN_PATH :string = 'admin';
-const PERMISSIONS_REQUESTS_PATH :string = 'permissionsrequests';
-const RESOLVED_PATH :string = 'resolved';
-const UNRESOLVED_PATH :string = 'unresolved';
-
 // PrincipalsApi specific paths
 const USERS_PATH :string = 'users';
 
@@ -60,16 +52,12 @@ const SEARCH_PATH :string = 'search';
 
 describe('ApiPaths', () => {
 
-  describe('base paths', () => {
+  describe('shared paths', () => {
 
     it(`should expose "${DATASTORE_PATH}"`, () => {
       expect(ApiPaths.DATASTORE_PATH).toBeDefined();
       expect(ApiPaths.DATASTORE_PATH).toEqual(DATASTORE_PATH);
     });
-
-  });
-
-  describe('shared paths', () => {
 
     it(`should expose "${ENTITY_SET_PATH}"`, () => {
       expect(ApiPaths.ENTITY_SET_PATH).toBeDefined();
@@ -212,30 +200,6 @@ describe('ApiPaths', () => {
     it(`should expose "${PERMISSIONS_PATH}"`, () => {
       expect(ApiPaths.PERMISSIONS_PATH).toBeDefined();
       expect(ApiPaths.PERMISSIONS_PATH).toEqual(PERMISSIONS_PATH);
-    });
-
-  });
-
-  describe('PermissionsRequestsApi specific paths', () => {
-
-    it(`should expose "${ADMIN_PATH}"`, () => {
-      expect(ApiPaths.ADMIN_PATH).toBeDefined();
-      expect(ApiPaths.ADMIN_PATH).toEqual(ADMIN_PATH);
-    });
-
-    it(`should expose "${PERMISSIONS_REQUESTS_PATH}"`, () => {
-      expect(ApiPaths.PERMISSIONS_REQUESTS_PATH).toBeDefined();
-      expect(ApiPaths.PERMISSIONS_REQUESTS_PATH).toEqual(PERMISSIONS_REQUESTS_PATH);
-    });
-
-    it(`should expose "${RESOLVED_PATH}"`, () => {
-      expect(ApiPaths.RESOLVED_PATH).toBeDefined();
-      expect(ApiPaths.RESOLVED_PATH).toEqual(RESOLVED_PATH);
-    });
-
-    it(`should expose "${UNRESOLVED_PATH}"`, () => {
-      expect(ApiPaths.UNRESOLVED_PATH).toBeDefined();
-      expect(ApiPaths.UNRESOLVED_PATH).toEqual(UNRESOLVED_PATH);
     });
 
   });

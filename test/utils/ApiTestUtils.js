@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+
 import BBPromise from 'bluebird';
 
 import * as AxiosUtils from '../../src/utils/AxiosUtils';
@@ -37,14 +39,13 @@ export function testApiFunctionShouldReturnNullOnInvalidParameters(functionToTes
   it('should return null when given invalid parameters', () => {
 
     for (let i = 0; i < validParameters.length; i += 1) {
-
-      const invocationParameters = validParameters.slice(0);
+      const invocationParams1 = validParameters.slice(0);
+      const invocationParams2 = validParameters.slice(0);
       INVALID_PARAMS.forEach((invalidInput) => {
-
-        invocationParameters[i] = invalidInput;
-
-        expect(functionToTest(...invocationParameters)).toEqual(null);
-        expect(functionToTest([...invocationParameters])).toEqual(null);
+        invocationParams1[i] = invalidInput;
+        invocationParams2[i] = [invalidInput];
+        expect(functionToTest(...invocationParams1)).toEqual(null);
+        expect(functionToTest(...invocationParams2)).toEqual(null);
       });
     }
   });
@@ -56,20 +57,23 @@ export function testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest,
 
     for (let i = 0; i < validParameters.length; i += 1) {
 
-      const invocationParameters = validParameters.slice(0);
+      const invocationParams1 = validParameters.slice(0);
+      const invocationParams2 = validParameters.slice(0);
+
       INVALID_PARAMS.forEach((invalidInput) => {
 
-        invocationParameters[i] = invalidInput;
+        invocationParams1[i] = invalidInput;
+        invocationParams2[i] = [invalidInput];
 
         expect(() => {
-          const result = functionToTest(...invocationParameters);
+          const result = functionToTest(...invocationParams1);
           if (result instanceof Promise) {
             result.catch(() => {});
           }
         }).not.toThrow();
 
         expect(() => {
-          const result = functionToTest([...invocationParameters]);
+          const result = functionToTest(...invocationParams2);
           if (result instanceof Promise) {
             result.catch(() => {});
           }
@@ -79,35 +83,11 @@ export function testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest,
   });
 }
 
-export function testApiFunctionShouldRejectOnInvalidParameters(functionToTest, ...validParameters) {
+export function testApiFunctionShouldRejectOnInvalidParameters(functionToTest, ...validParams) {
 
   it('should reject when given invalid parameters', (done) => {
 
-    const promises = [];
-    for (let i = 0; i < validParameters.length; i += 1) {
-
-      const invocationParameters = validParameters.slice(0);
-      INVALID_PARAMS.forEach((invalidInput) => {
-
-        invocationParameters[i] = invalidInput;
-
-        promises.push(
-          functionToTest(...invocationParameters)
-        );
-
-        promises.push(
-          functionToTest([...invocationParameters])
-        );
-      });
-    }
-
-    BBPromise.any(promises)
-      .then(() => {
-        done.fail();
-      })
-      .catch(() => {
-        done();
-      });
+    testShouldRejectOnInvalidParameters(done, INVALID_PARAMS, functionToTest, ...validParams);
   });
 }
 
@@ -115,62 +95,49 @@ export function testApiFunctionShouldRejectOnGivenInvalidParameters(invalidParam
 
   it('should reject when given specific invalid parameters', (done) => {
 
-    const promises = [];
-    for (let i = 0; i < validParams.length; i += 1) {
-
-      const invocationParameters = validParams.slice(0);
-      invalidParams.forEach((invalidInput) => {
-
-        invocationParameters[i] = invalidInput;
-
-        promises.push(
-          functionToTest(...invocationParameters)
-        );
-
-        promises.push(
-          functionToTest([...invocationParameters])
-        );
-      });
-    }
-
-    BBPromise.any(promises)
-      .then(() => {
-        done.fail();
-      })
-      .catch(() => {
-        done();
-      });
+    testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest, ...validParams);
   });
 }
 
-export function testApiFunctionShouldNotRejectOnInvalidParameters(functionToTest, ...validParameters) {
+function testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest, ...validParams) {
 
-  it('should not reject when given invalid parameters', (done) => {
+  const promises = [];
 
-    const promises = [];
-    for (let i = 0; i < validParameters.length; i += 1) {
+  if (validParams.length === 0) {
 
-      const invocationParameters = validParameters.slice(0);
-      INVALID_PARAMS.forEach((invalidInput) => {
+    invalidParams.forEach((invalidInput :any) => {
+      promises.push(
+        functionToTest(invalidInput)
+      );
+      promises.push(
+        functionToTest([invalidInput])
+      );
+    });
+  }
+  else {
 
-        invocationParameters[i] = invalidInput;
-
+    for (let i = 0; i < validParams.length; i += 1) {
+      const invocationParams1 = validParams.slice(0);
+      const invocationParams2 = validParams.slice(0);
+      invalidParams.forEach((invalidInput :any) => {
+        invocationParams1[i] = invalidInput;
         promises.push(
-          functionToTest(...invocationParameters)
+          functionToTest(...invocationParams1)
         );
-
+        invocationParams2[i] = [invalidInput];
         promises.push(
-          functionToTest([...invocationParameters])
+          functionToTest(...invocationParams2)
         );
       });
     }
+  }
 
-    BBPromise.all(promises)
-      .then(() => {
-        done();
-      })
-      .catch(() => {
-        done.fail();
-      });
-  });
+  // if any promises are fulfilled, fail
+  BBPromise.any(promises)
+    .then(() => {
+      done.fail();
+    })
+    .catch(() => {
+      done();
+    });
 }

@@ -2,19 +2,9 @@
  * @flow
  */
 
-/*
- *
- * base paths
- *
- */
 
+// shared paths
 export const DATASTORE_PATH :string = 'datastore';
-
-/*
- *
- * shared paths
- *
- */
 export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const IDS_PATH :string = 'ids';
@@ -25,102 +15,40 @@ export const ROLES_PATH :string = 'roles';
 export const SET_PATH :string = 'set';
 export const TYPE_PATH :string = 'type';
 
-/*
- *
- * AuthorizationApi specific paths
- *
- */
-
+// AuthorizationApi specific paths
 export const AUTHORIZATIONS_PATH :string = 'authorizations';
 
-/*
- *
- * DataApi specific paths
- *
- */
-
+// DataApi specific paths
 export const DATA_PATH :string = 'data';
 export const ENTITY_DATA_PATH :string = 'entitydata';
 export const TICKET_PATH :string = 'ticket';
 
-/*
- *
- * DataSourcesApi specific paths
- *
- */
-
+// DataSourcesApi specific paths
 export const DATA_SOURCES_PATH :string = 'datasource';
 
-/*
- *
- * EntityDataModelApi specific paths
- *
- */
-
+// EntityDataModelApi specific paths
 export const EDM_PATH :string = 'edm';
 export const SCHEMA_PATH :string = 'schema';
 
-/*
- *
- * LinkingApi specific paths
- *
- */
-
+// LinkingApi specific paths
 export const LINKING_PATH :string = 'linking';
 
-/*
- *
- * OrganizationsApi specific paths
- *
- */
-
+// OrganizationsApi specific paths
 export const DESCRIPTION_PATH :string = 'description';
 export const EMAIL_DOMAINS_PATH :string = 'email-domains';
 export const MEMBERS_PATH :string = 'members';
 export const ORGANIZATIONS_PATH :string = 'organizations';
 export const TITLE_PATH :string = 'title';
 
-/*
- *
- * PermissionsApi specific paths
- *
- */
-
+// PermissionsApi specific paths
 export const PERMISSIONS_PATH :string = 'permissions';
 
-/*
- *
- * PermissionsRequestsApi specific paths
- *
- */
-
-export const ADMIN_PATH :string = 'admin';
-export const PERMISSIONS_REQUESTS_PATH :string = 'permissionsrequests';
-export const RESOLVED_PATH :string = 'resolved';
-export const UNRESOLVED_PATH :string = 'unresolved';
-
-
-/*
- *
- * PrincipalsApi specific paths
- *
- */
-
+// PrincipalsApi specific paths
 export const USERS_PATH :string = 'users';
 
-/*
- *
- * RequestsApi specific paths
- *
- */
-
+// RequestsApi specific paths
 export const REQUESTS_PATH :string = 'requests';
 
-/*
- *
- * SearchApi specific paths
- *
- */
-
+// SearchApi specific paths
 export const POPULAR_PATH :string = 'popular';
 export const SEARCH_PATH :string = 'search';
