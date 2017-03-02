@@ -10,11 +10,11 @@ import {
   AUTHORIZATION_API
 } from '../../src/constants/ApiNames';
 
-import {
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
-  INVALID_PARAMS_ENUM_VALUES,
-  INVALID_PARAMS_NOT_DEFINED_ALLOWED
-} from '../constants/TestConstants';
+// import {
+//   INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+//   INVALID_PARAMS_ENUM_VALUES,
+//   INVALID_PARAMS_NOT_DEFINED_ALLOWED
+// } from '../constants/TestConstants';
 
 import {
   getMockAxiosInstance
@@ -22,9 +22,9 @@ import {
 
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
-  testApiFunctionShouldReturnPromiseOnValidParameters,
-  testApiFunctionShouldNotThrowOnInvalidParameters,
-  testApiFunctionShouldRejectOnGivenInvalidParameters
+  testApiFunctionShouldReturnPromiseOnValidParameters
+  // testApiFunctionShouldNotThrowOnInvalidParameters,
+  // testApiFunctionShouldRejectOnGivenInvalidParameters
 } from '../utils/ApiTestUtils';
 
 const MOCK_QUERIES = [

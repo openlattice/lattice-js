@@ -16,17 +16,17 @@ import {
   SCHEMA_PATH
 } from '../../src/constants/ApiPaths';
 
-import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
-  INVALID_PARAMS_ENUM_VALUES,
-} from '../constants/TestConstants';
+// import {
+//   INVALID_PARAMS,
+//   INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+//   INVALID_PARAMS_ENUM_VALUES,
+// } from '../constants/TestConstants';
 
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
-  testApiFunctionShouldRejectOnGivenInvalidParameters,
+  // testApiFunctionShouldRejectOnGivenInvalidParameters,
   testApiFunctionShouldReturnNullOnInvalidParameters,
   testApiFunctionShouldReturnPromiseOnValidParameters
 } from '../utils/ApiTestUtils';
