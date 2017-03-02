@@ -16,6 +16,10 @@ import {
   SCHEMA_PATH
 } from '../../src/constants/ApiPaths';
 
+import {
+  MOCK_ENTITY_SET_DM
+} from '../constants/MockDataModels';
+
 // import {
 //   INVALID_PARAMS,
 //   INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
@@ -54,15 +58,6 @@ const MOCK_PROPERTY_TYPE_UUID = '8f79e123-3411-4099-a41f-88e5d22d0e8d';
 const MOCK_PROPERTY_TYPE_FQN = {
   namespace: 'LOOM',
   name: 'PROPERTY_TYPE'
-};
-
-const MOCK_ENTITY_SET_UUID = '4b08e1f9-4a00-4169-92ea-10e377070220';
-
-const MOCK_ENTITY_SET = {
-  entityTypeId: MOCK_ENTITY_TYPE_UUID,
-  name: 'EntityTypes',
-  title: 'a collection EntityTypes',
-  description: 'a collection EntityTypes'
 };
 
 const MOCK_ENTITY_TYPE = {
@@ -407,16 +402,16 @@ function testGetEntitySet() {
   describe('getEntitySet()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.getEntitySet, MOCK_ENTITY_SET_UUID
+      EntityDataModelApi.getEntitySet, MOCK_ENTITY_SET_DM.id
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getEntitySet(MOCK_ENTITY_SET_UUID)
+      EntityDataModelApi.getEntitySet(MOCK_ENTITY_SET_DM.id)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
+            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_DM.id}`,
           );
           done();
         })
@@ -438,16 +433,16 @@ function testGetEntitySetId() {
   describe('getEntitySetId()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.getEntitySetId, MOCK_ENTITY_SET.name
+      EntityDataModelApi.getEntitySetId, MOCK_ENTITY_SET_DM.name
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getEntitySetId(MOCK_ENTITY_SET.name)
+      EntityDataModelApi.getEntitySetId(MOCK_ENTITY_SET_DM.name)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${IDS_PATH}/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET.name}`,
+            `/${IDS_PATH}/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_DM.name}`,
           );
           done();
         })
@@ -498,17 +493,17 @@ function testCreateEntitySets() {
   describe('createEntitySets()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.createEntitySets, [MOCK_ENTITY_SET]
+      EntityDataModelApi.createEntitySets, [MOCK_ENTITY_SET_DM]
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.createEntitySets([MOCK_ENTITY_SET])
+      EntityDataModelApi.createEntitySets([MOCK_ENTITY_SET_DM])
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
             `/${ENTITY_SET_PATH}`,
-            [MOCK_ENTITY_SET]
+            [MOCK_ENTITY_SET_DM]
           );
           done();
         })
@@ -530,16 +525,16 @@ function testDeleteEntitySet() {
   describe('deleteEntitySet()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.deleteEntitySet, MOCK_ENTITY_SET_UUID
+      EntityDataModelApi.deleteEntitySet, MOCK_ENTITY_SET_DM.id
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      EntityDataModelApi.deleteEntitySet(MOCK_ENTITY_SET_UUID)
+      EntityDataModelApi.deleteEntitySet(MOCK_ENTITY_SET_DM.id)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_UUID}`
+            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_DM.id}`
           );
           done();
         })
@@ -561,17 +556,17 @@ function testRenameEntitySet() {
   describe('renameEntitySet()', () => {
 
     const functionInvocation = [
-      EntityDataModelApi.renameEntitySet, MOCK_ENTITY_SET_UUID, MOCK_ENTITY_SET.name
+      EntityDataModelApi.renameEntitySet, MOCK_ENTITY_SET_DM.id, MOCK_ENTITY_SET_DM.name
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.renameEntitySet(MOCK_ENTITY_SET_UUID, MOCK_ENTITY_SET.name)
+      EntityDataModelApi.renameEntitySet(MOCK_ENTITY_SET_DM.id, MOCK_ENTITY_SET_DM.name)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
-            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
-            MOCK_ENTITY_SET.name
+            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_DM.id}`,
+            MOCK_ENTITY_SET_DM.name
           );
           done();
         })

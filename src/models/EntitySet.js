@@ -2,11 +2,16 @@
  * @flow
  */
 
+import Immutable from 'immutable';
+import isUndefined from 'lodash/isUndefined';
+
 import Logger from '../utils/Logger';
 
 import {
   isDefined,
-  isNonEmptyString
+  isEmptyArray,
+  isNonEmptyString,
+  isNonEmptyStringArray
 } from '../utils/LangUtils';
 
 import {
@@ -26,19 +31,22 @@ export default class EntitySet {
   name :string;
   title :string;
   description :?string;
+  contacts :string[];
 
   constructor(
       id :?UUID,
       entityTypeId :UUID,
       name :string,
       title :string,
-      description :?string) {
+      description :?string,
+      contacts :string[]) {
 
     this.id = id;
     this.entityTypeId = entityTypeId;
     this.name = name;
     this.title = title;
     this.description = description;
+    this.contacts = contacts;
 
     // TODO: use Immutable.hash() for implementing valueOf()
   }
@@ -55,6 +63,7 @@ export class EntitySetBuilder {
   name :string;
   title :string;
   description :?string;
+  contacts :string[];
 
   setId(entitySetId :UUID) :EntitySetBuilder {
 
@@ -106,6 +115,25 @@ export class EntitySetBuilder {
     return this;
   }
 
+  setContacts(contacts :string[]) :EntitySetBuilder {
+
+    if (isUndefined(contacts) || isEmptyArray(contacts)) {
+      return this;
+    }
+
+    if (!isNonEmptyStringArray(contacts)) {
+      throw new Error('invalid parameter: contacts must be a non-empty array of strings');
+    }
+
+    this.contacts = Immutable.Set().withMutations((set :Set<string>) => {
+      contacts.forEach((contact :string) => {
+        set.add(contact);
+      });
+    }).toJS();
+
+    return this;
+  }
+
   build() :EntitySet {
 
     if (!this.entityTypeId) {
@@ -120,12 +148,17 @@ export class EntitySetBuilder {
       throw new Error('missing property: title is a required property');
     }
 
+    if (!this.contacts) {
+      this.contacts = [];
+    }
+
     return new EntitySet(
       this.id,
       this.entityTypeId,
       this.name,
       this.title,
-      this.description
+      this.description,
+      this.contacts
     );
   }
 }
@@ -146,7 +179,8 @@ export function isValid(entitySet :any) :boolean {
     entitySetBuilder
       .setEntityTypeId(entitySet.entityTypeId)
       .setName(entitySet.name)
-      .setTitle(entitySet.title);
+      .setTitle(entitySet.title)
+      .setContacts(entitySet.contacts);
 
     // optional properties
     if (isDefined(entitySet.id)) {
