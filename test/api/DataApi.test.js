@@ -12,17 +12,18 @@ import {
   TICKET_PATH
 } from '../../src/constants/ApiPaths';
 
-import {
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
-} from '../constants/TestConstants';
+// import {
+//   INVALID_PARAMS,
+//   INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+// } from '../constants/TestConstants';
 
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldReturnPromiseOnValidParameters,
   testApiFunctionShouldReturnNullOnInvalidParameters,
   testApiFunctionShouldNotThrowOnInvalidParameters,
-  testApiFunctionShouldRejectOnInvalidParameters,
-  testApiFunctionShouldRejectOnGivenInvalidParameters
+  testApiFunctionShouldRejectOnInvalidParameters
+  // testApiFunctionShouldRejectOnGivenInvalidParameters
 } from '../utils/ApiTestUtils';
 
 import {
@@ -96,11 +97,15 @@ function testGetEntitySetData() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnGivenInvalidParameters(
-      INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
-      ...functionInvocation
-    );
+    // testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    // testApiFunctionShouldRejectOnGivenInvalidParameters(
+    //   [
+    //     INVALID_PARAMS,
+    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+    //   ],
+    //   ...functionInvocation
+    // );
   });
 }
 

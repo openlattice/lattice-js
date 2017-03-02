@@ -16,15 +16,17 @@ import {
   SCHEMA_PATH
 } from '../../src/constants/ApiPaths';
 
-import {
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
-} from '../constants/TestConstants';
+// import {
+//   INVALID_PARAMS,
+//   INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+//   INVALID_PARAMS_ENUM_VALUES,
+// } from '../constants/TestConstants';
 
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
-  testApiFunctionShouldRejectOnGivenInvalidParameters,
+  // testApiFunctionShouldRejectOnGivenInvalidParameters,
   testApiFunctionShouldReturnNullOnInvalidParameters,
   testApiFunctionShouldReturnPromiseOnValidParameters
 } from '../utils/ApiTestUtils';
@@ -386,11 +388,16 @@ function testUpdateSchema() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnGivenInvalidParameters(
-      INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
-      ...functionInvocation
-    );
+    // testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    // testApiFunctionShouldRejectOnGivenInvalidParameters(
+    //   [
+    //     INVALID_PARAMS,
+    //     INVALID_PARAMS_ENUM_VALUES,
+    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+    //   ],
+    //   ...functionInvocation
+    // );
 
   });
 }

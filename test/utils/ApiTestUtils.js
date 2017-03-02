@@ -39,14 +39,13 @@ export function testApiFunctionShouldReturnNullOnInvalidParameters(functionToTes
   it('should return null when given invalid parameters', () => {
 
     for (let i = 0; i < validParameters.length; i += 1) {
-
-      const invocationParameters = validParameters.slice(0);
+      const invocationParams1 = validParameters.slice(0);
+      const invocationParams2 = validParameters.slice(0);
       INVALID_PARAMS.forEach((invalidInput) => {
-
-        invocationParameters[i] = invalidInput;
-
-        expect(functionToTest(...invocationParameters)).toEqual(null);
-        expect(functionToTest([...invocationParameters])).toEqual(null);
+        invocationParams1[i] = invalidInput;
+        invocationParams2[i] = [invalidInput];
+        expect(functionToTest(...invocationParams1)).toEqual(null);
+        expect(functionToTest(...invocationParams2)).toEqual(null);
       });
     }
   });
@@ -58,20 +57,23 @@ export function testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest,
 
     for (let i = 0; i < validParameters.length; i += 1) {
 
-      const invocationParameters = validParameters.slice(0);
+      const invocationParams1 = validParameters.slice(0);
+      const invocationParams2 = validParameters.slice(0);
+
       INVALID_PARAMS.forEach((invalidInput) => {
 
-        invocationParameters[i] = invalidInput;
+        invocationParams1[i] = invalidInput;
+        invocationParams2[i] = [invalidInput];
 
         expect(() => {
-          const result = functionToTest(...invocationParameters);
+          const result = functionToTest(...invocationParams1);
           if (result instanceof Promise) {
             result.catch(() => {});
           }
         }).not.toThrow();
 
         expect(() => {
-          const result = functionToTest([...invocationParameters]);
+          const result = functionToTest(...invocationParams2);
           if (result instanceof Promise) {
             result.catch(() => {});
           }
@@ -85,7 +87,7 @@ export function testApiFunctionShouldRejectOnInvalidParameters(functionToTest, .
 
   it('should reject when given invalid parameters', (done) => {
 
-    testShouldRejectOnInvalidParameters(done, INVALID_PARAMS, functionToTest, validParams);
+    testShouldRejectOnInvalidParameters(done, INVALID_PARAMS, functionToTest, ...validParams);
   });
 }
 
@@ -93,7 +95,7 @@ export function testApiFunctionShouldRejectOnGivenInvalidParameters(invalidParam
 
   it('should reject when given specific invalid parameters', (done) => {
 
-    testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest, validParams);
+    testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest, ...validParams);
   });
 }
 
@@ -130,6 +132,7 @@ function testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest
     }
   }
 
+  // if any promises are fulfilled, fail
   BBPromise.any(promises)
     .then(() => {
       done.fail();
