@@ -26,6 +26,10 @@ const moduleIds = context.keys().map((module) => {
   return String(context.resolve(module));
 });
 
+/*
+ * end hack
+ */
+
 describe('AxiosUtils', () => {
 
   beforeEach(() => {
