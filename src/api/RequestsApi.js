@@ -45,7 +45,6 @@ import {
 
 import {
   isValidRequestArray,
-  isValidRequestStatusArray,
   isValidUuidArray
 } from '../utils/ValidationUtils';
 
@@ -242,13 +241,13 @@ export function submitRequests(requests :Request[]) :Promise<> {
  */
 export function updateRequestStatuses(statuses :RequestStatus[]) :Promise<> {
 
-  let errorMsg :string;
-
-  if (!isValidRequestStatusArray(statuses)) {
-    errorMsg = 'invalid parameter: statuses must be a non-empty array of valid Requests';
-    LOG.error(errorMsg, statuses);
-    return Promise.reject(errorMsg);
-  }
+  // let errorMsg :string;
+  //
+  // if (!isValidRequestStatusArray(statuses)) {
+  //   errorMsg = 'invalid parameter: statuses must be a non-empty array of valid Requests';
+  //   LOG.error(errorMsg, statuses);
+  //   return Promise.reject(errorMsg);
+  // }
 
   // TODO: Immutable.Set() with unit tests
 
