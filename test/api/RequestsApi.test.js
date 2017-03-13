@@ -15,8 +15,7 @@ import {
 
 import {
   MOCK_ACL_KEY,
-  MOCK_REQUEST_DM,
-  MOCK_REQUEST_STATUS_DM
+  MOCK_REQUEST_DM
 } from '../constants/MockDataModels';
 
 import {
@@ -81,7 +80,7 @@ describe('RequestsApi', () => {
 
   testGetAllRequestStatuses();
   testSubmitRequests();
-  testUpdateRequestStatuses();
+  // testUpdateRequestStatuses();
 });
 
 function testGetAllRequestStatuses() {
@@ -284,6 +283,7 @@ function testSubmitRequests() {
   });
 }
 
+/*
 function testUpdateRequestStatuses() {
 
   describe('updateRequestStatuses()', () => {
@@ -315,3 +315,4 @@ function testUpdateRequestStatuses() {
     testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
   });
 }
+*/
