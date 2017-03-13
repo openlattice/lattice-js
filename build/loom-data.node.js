@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.20.0
+ * loom-data - v0.20.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -28782,13 +28782,13 @@ function submitRequests(requests) {
  */
 function updateRequestStatuses(statuses) {
 
-  var errorMsg = void 0;
-
-  if (!(0, _ValidationUtils.isValidRequestStatusArray)(statuses)) {
-    errorMsg = 'invalid parameter: statuses must be a non-empty array of valid Requests';
-    LOG.error(errorMsg, statuses);
-    return Promise.reject(errorMsg);
-  }
+  // let errorMsg :string;
+  //
+  // if (!isValidRequestStatusArray(statuses)) {
+  //   errorMsg = 'invalid parameter: statuses must be a non-empty array of valid Requests';
+  //   LOG.error(errorMsg, statuses);
+  //   return Promise.reject(errorMsg);
+  // }
 
   // TODO: Immutable.Set() with unit tests
 
@@ -34024,7 +34024,7 @@ var _Configuration = __webpack_require__(37);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.20.0";
+var version = "v0.20.1";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
