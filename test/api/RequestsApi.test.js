@@ -284,6 +284,7 @@ function testSubmitRequests() {
   });
 }
 
+/*
 function testUpdateRequestStatuses() {
 
   describe('updateRequestStatuses()', () => {
@@ -315,3 +316,4 @@ function testUpdateRequestStatuses() {
     testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
   });
 }
+*/

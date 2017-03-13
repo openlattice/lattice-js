@@ -45,7 +45,6 @@ import {
 
 import {
   isValidRequestArray,
-  isValidRequestStatusArray,
   isValidUuidArray
 } from '../utils/ValidationUtils';
 
