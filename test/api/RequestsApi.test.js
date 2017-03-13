@@ -15,8 +15,7 @@ import {
 
 import {
   MOCK_ACL_KEY,
-  MOCK_REQUEST_DM,
-  MOCK_REQUEST_STATUS_DM
+  MOCK_REQUEST_DM
 } from '../constants/MockDataModels';
 
 import {
