@@ -12,8 +12,7 @@ import Logger from '../utils/Logger';
 
 import {
   isDefined,
-  isEmptyArray,
-  isNonEmptyString
+  isEmptyArray
 } from '../utils/LangUtils';
 
 import {
