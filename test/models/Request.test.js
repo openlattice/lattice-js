@@ -11,7 +11,8 @@ import {
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED
 } from '../constants/TestConstants';
 
 const MOCK_ACL_KEY = [
@@ -122,7 +123,7 @@ describe('Request', () => {
     describe('setReason()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setReason(invalidInput);
           }).toThrow();
@@ -250,7 +251,7 @@ describe('Request', () => {
       });
 
       it('should return false when given an object literal with an invalid "reason" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(Object.assign({}, MOCK_REQUEST_OBJ, { reason: invalidInput }))).toEqual(false);
           }
@@ -288,7 +289,7 @@ describe('Request', () => {
       });
 
       it('should return false when given an instance with an invalid "reason" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           if (isDefined(invalidInput)) {
             expect(isValid(
               new Request(

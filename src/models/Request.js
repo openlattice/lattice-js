@@ -5,6 +5,7 @@
 import Immutable from 'immutable';
 
 import has from 'lodash/has';
+import isString from 'lodash/isString';
 import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
@@ -77,8 +78,8 @@ export class RequestBuilder {
 
   setReason(reason :string) :RequestBuilder {
 
-    if (!isNonEmptyString(reason)) {
-      throw new Error('invalid parameter: reason must be a non-empty string');
+    if (!isString(reason)) {
+      throw new Error('invalid parameter: reason must be a string');
     }
 
     this.reason = reason;

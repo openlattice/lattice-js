@@ -38,3 +38,7 @@ INVALID_PARAMS_ENUM_VALUES.push('invalid_enum_value_string');
 export const INVALID_PARAMS_NOT_DEFINED_ALLOWED :any[] = INVALID_PARAMS.slice(0);
 INVALID_PARAMS_NOT_DEFINED_ALLOWED.splice(1, 1); // remove "null"
 INVALID_PARAMS_NOT_DEFINED_ALLOWED.splice(0, 1); // remove "undefined"
+
+export const INVALID_PARAMS_EMPTY_STRING_ALLOWED :any[] = INVALID_PARAMS.slice(0);
+INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(14, 1); // remove "' '"
+INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(13, 1); // remove "''"
