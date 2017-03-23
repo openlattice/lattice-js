@@ -8,8 +8,11 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  ADVANCED_PATH,
+  FQN_PATH,
   ORGANIZATIONS_PATH,
-  POPULAR_PATH
+  SEARCH_ENTITY_TYPES_PATH,
+  SEARCH_PROPERTY_TYPES_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -26,6 +29,8 @@ import {
 const MOCK_START = 20;
 const MOCK_MAX_HITS = 100;
 const MOCK_SEARCH_TERM = 'test';
+const MOCK_NAMESPACE = 'NAMESPACE';
+const MOCK_NAME = 'NAME';
 const MOCK_ENTITY_SET_UUID = '27ae8ba3-1f7f-42d4-a04a-2c44d1cbf3aa';
 const MOCK_ENTITY_TYPE_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
 const MOCK_PROPERTY_TYPE_UUIDS = [
@@ -48,8 +53,12 @@ describe('SearchApi', () => {
 
   testSearchEntitySetMetaData();
   testSearchEntitySetData();
+  testAdvancedSearchEntitySetData();
   testSearchOrganizations();
-  testGetPopularEntitySets();
+  testSearchEntityTypes();
+  testSearchEntityTypesByFQN();
+  testSearchPropertyTypes();
+  testSearchPropertyTypesByFQN();
 });
 
 function testSearchEntitySetMetaData() {
@@ -229,6 +238,53 @@ function testSearchEntitySetData() {
   });
 }
 
+function testAdvancedSearchEntitySetData() {
+
+  describe('advancedSearchEntitySetData()', () => {
+
+    const searchOptions = {
+      searchFields: {
+        [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM,
+        [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM
+      },
+      start: MOCK_START,
+      maxHits: MOCK_MAX_HITS
+    };
+
+    const functionInvocation = [
+      SearchApi.advancedSearchEntitySetData, MOCK_ENTITY_SET_UUID, searchOptions
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      SearchApi.advancedSearchEntitySetData(MOCK_ENTITY_SET_UUID, searchOptions)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${ADVANCED_PATH}/${MOCK_ENTITY_SET_UUID}`,
+            {
+              searchFields: {
+                [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM,
+                [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM
+              },
+              start: MOCK_START,
+              maxHits: MOCK_MAX_HITS
+            }
+          );
+          done();
+        })
+        .catch((e) => {
+          done.fail(e);
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+  });
+}
+
 function testSearchOrganizations() {
 
   describe('searchOrganizations()', () => {
@@ -270,20 +326,33 @@ function testSearchOrganizations() {
   });
 }
 
-function testGetPopularEntitySets() {
+function testSearchEntityTypes() {
 
-  describe('getPopularEntitySets()', () => {
+  describe('searchEntityTypes()', () => {
+
+    const searchOptions = {
+      searchTerm: MOCK_SEARCH_TERM,
+      start: MOCK_START,
+      maxHits: MOCK_MAX_HITS
+    };
 
     const functionInvocation = [
-      SearchApi.getPopularEntitySets
+      SearchApi.searchEntityTypes, searchOptions
     ];
 
-    it('should send a GET request with the correct URL path', (done) => {
+    it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.getPopularEntitySets()
+      SearchApi.searchEntityTypes(searchOptions)
         .then(() => {
-          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(`/${POPULAR_PATH}`);
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${SEARCH_ENTITY_TYPES_PATH}`,
+            {
+              searchTerm: MOCK_SEARCH_TERM,
+              start: MOCK_START,
+              maxHits: MOCK_MAX_HITS
+            }
+          );
           done();
         })
         .catch((e) => {
@@ -293,6 +362,134 @@ function testGetPopularEntitySets() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+  });
+}
 
+function testSearchEntityTypesByFQN() {
+
+  describe('searchEntityTypesByFQN()', () => {
+
+    const searchOptions = {
+      namespace: MOCK_NAMESPACE,
+      name: MOCK_NAME,
+      start: MOCK_START,
+      maxHits: MOCK_MAX_HITS
+    };
+
+    const functionInvocation = [
+      SearchApi.searchEntityTypesByFQN, searchOptions
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      SearchApi.searchEntityTypesByFQN(searchOptions)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${SEARCH_ENTITY_TYPES_PATH}/${FQN_PATH}`,
+            {
+              namespace: MOCK_NAMESPACE,
+              name: MOCK_NAME,
+              start: MOCK_START,
+              maxHits: MOCK_MAX_HITS
+            }
+          );
+          done();
+        })
+        .catch((e) => {
+          done.fail(e);
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+  });
+}
+
+function testSearchPropertyTypes() {
+
+  describe('searchPropertyTypes()', () => {
+
+    const searchOptions = {
+      searchTerm: MOCK_SEARCH_TERM,
+      start: MOCK_START,
+      maxHits: MOCK_MAX_HITS
+    };
+
+    const functionInvocation = [
+      SearchApi.searchPropertyTypes, searchOptions
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      SearchApi.searchPropertyTypes(searchOptions)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${SEARCH_PROPERTY_TYPES_PATH}`,
+            {
+              searchTerm: MOCK_SEARCH_TERM,
+              start: MOCK_START,
+              maxHits: MOCK_MAX_HITS
+            }
+          );
+          done();
+        })
+        .catch((e) => {
+          done.fail(e);
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+  });
+}
+
+function testSearchPropertyTypesByFQN() {
+
+  describe('searchPropertyTypesByFQN()', () => {
+
+    const searchOptions = {
+      namespace: MOCK_NAMESPACE,
+      name: MOCK_NAME,
+      start: MOCK_START,
+      maxHits: MOCK_MAX_HITS
+    };
+
+    const functionInvocation = [
+      SearchApi.searchPropertyTypesByFQN, searchOptions
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      SearchApi.searchPropertyTypesByFQN(searchOptions)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${SEARCH_PROPERTY_TYPES_PATH}/${FQN_PATH}`,
+            {
+              namespace: MOCK_NAMESPACE,
+              name: MOCK_NAME,
+              start: MOCK_START,
+              maxHits: MOCK_MAX_HITS
+            }
+          );
+          done();
+        })
+        .catch((e) => {
+          done.fail(e);
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
   });
 }
