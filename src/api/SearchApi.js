@@ -341,11 +341,11 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
 
   const searchFieldsMap :Map<UUID, string> = Immutable.fromJS(searchFields);
 
-  const allKeysUuids = searchFieldsMap.keySeq().every((key :UUID) => {
+  const allKeysUuids :boolean = searchFieldsMap.keySeq().every((key :UUID) => {
     return isValidUuid(key);
   });
 
-  const allValuesUuids = searchFieldsMap.valueSeq().every((value :string) => {
+  const allValuesUuids :boolean = searchFieldsMap.valueSeq().every((value :string) => {
     return isNonEmptyString(value);
   });
 
@@ -354,7 +354,8 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
     LOG.error(errorMsg, searchFields);
     return Promise.reject(errorMsg);
   }
-  else if (!allValuesUuids) {
+
+  if (!allValuesUuids) {
     errorMsg = 'invalid parameter: searchFields entry values must all be non-empty strings';
     LOG.error(errorMsg, searchFields);
     return Promise.reject(errorMsg);
