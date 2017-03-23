@@ -47,7 +47,6 @@ const USERS_PATH :string = 'users';
 const REQUESTS_PATH :string = 'requests';
 
 // SearchApi specific paths
-const POPULAR_PATH :string = 'popular';
 const SEARCH_PATH :string = 'search';
 
 describe('ApiPaths', () => {
@@ -223,11 +222,6 @@ describe('ApiPaths', () => {
   });
 
   describe('SearchApi specific paths', () => {
-
-    it(`should expose "${POPULAR_PATH}"`, () => {
-      expect(ApiPaths.POPULAR_PATH).toBeDefined();
-      expect(ApiPaths.POPULAR_PATH).toEqual(POPULAR_PATH);
-    });
 
     it(`should expose "${SEARCH_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PATH).toBeDefined();

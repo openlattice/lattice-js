@@ -28,7 +28,6 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  POPULAR_PATH,
   ORGANIZATIONS_PATH
 } from '../constants/ApiPaths';
 
@@ -368,31 +367,6 @@ export function searchOrganizations(searchOptions :SearchOptions) :Promise<> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${ORGANIZATIONS_PATH}`, data)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /search/popular`
- *
- * TODO: add unit tests
- *
- * @static
- * @memberof loom-data.SearchApi
- * @returns {Promise<EntitySet[]>}
- *
- * @example
- * SearchApi.getPopularEntitySets();
- */
-export function getPopularEntitySets() :Promise<> {
-
-  return getApiAxiosInstance(SEARCH_API)
-    .get(`/${POPULAR_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

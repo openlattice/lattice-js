@@ -8,8 +8,7 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  ORGANIZATIONS_PATH,
-  POPULAR_PATH
+  ORGANIZATIONS_PATH
 } from '../../src/constants/ApiPaths';
 
 import {
@@ -49,7 +48,6 @@ describe('SearchApi', () => {
   testSearchEntitySetMetaData();
   testSearchEntitySetData();
   testSearchOrganizations();
-  testGetPopularEntitySets();
 });
 
 function testSearchEntitySetMetaData() {
@@ -267,32 +265,5 @@ function testSearchOrganizations() {
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
     testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
     testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
-  });
-}
-
-function testGetPopularEntitySets() {
-
-  describe('getPopularEntitySets()', () => {
-
-    const functionInvocation = [
-      SearchApi.getPopularEntitySets
-    ];
-
-    it('should send a GET request with the correct URL path', (done) => {
-
-      SearchApi.getPopularEntitySets()
-        .then(() => {
-          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(`/${POPULAR_PATH}`);
-          done();
-        })
-        .catch((e) => {
-          done.fail(e);
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
   });
 }
