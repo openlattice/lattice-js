@@ -30,6 +30,11 @@ export function isNonEmptyObject(value :any) :boolean {
   return isPlainObject(value) && !isEmpty(value);
 }
 
+export function isEmptyString(value :any) :boolean {
+
+  return isString(value) && isEmpty(value);
+}
+
 export function isNonEmptyString(value :any) :boolean {
 
   return isString(value) && !isEmpty(trim(value));

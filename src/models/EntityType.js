@@ -5,9 +5,11 @@
 import Immutable from 'immutable';
 
 import isUndefined from 'lodash/isUndefined';
+import has from 'lodash/has';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
+import SecurableTypes from '../constants/types/SecurableTypes';
 import Logger from '../utils/Logger';
 
 import {
@@ -21,6 +23,10 @@ import {
   isValidUuid,
   isValidUuidArray
 } from '../utils/ValidationUtils';
+
+import type {
+  SecurableType
+} from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('EntityType');
 
@@ -37,6 +43,8 @@ export default class EntityType {
   schemas :FullyQualifiedName[];
   key :UUID[];
   properties :UUID[];
+  baseType :?UUID;
+  category :SecurableType;
 
   constructor(
       id :?UUID,
@@ -45,7 +53,9 @@ export default class EntityType {
       description :?string,
       schemas :FullyQualifiedName[],
       key :UUID[],
-      properties :UUID[]) {
+      properties :UUID[],
+      baseType :?UUID,
+      category :SecurableType) {
 
     this.id = id;
     this.type = type;
@@ -54,6 +64,8 @@ export default class EntityType {
     this.schemas = schemas;
     this.key = key;
     this.properties = properties;
+    this.baseType = baseType;
+    this.category = category;
   }
 }
 
@@ -70,6 +82,8 @@ export class EntityTypeBuilder {
   schemas :FullyQualifiedName[];
   key :UUID[];
   properties :UUID[];
+  baseType :?UUID;
+  category :SecurableType;
 
   setId(entityTypeId :UUID) :EntityTypeBuilder {
 
@@ -168,6 +182,26 @@ export class EntityTypeBuilder {
     return this;
   }
 
+  setBaseType(baseType :UUID) :EntityTypeBuilder {
+
+    if (!isValidUuid(baseType)) {
+      throw new Error('invalid parameter: baseType must be a valid UUID');
+    }
+
+    this.baseType = baseType;
+    return this;
+  }
+
+  setCategory(category :SecurableType) :EntityTypeBuilder {
+
+    if (!isNonEmptyString(category) || !SecurableTypes[category]) {
+      throw new Error('invalid parameter: category must be a valid SecurableType');
+    }
+
+    this.category = category;
+    return this;
+  }
+
   build() :EntityType {
 
     if (!this.type) {
@@ -197,7 +231,9 @@ export class EntityTypeBuilder {
       this.description,
       this.schemas,
       this.key,
-      this.properties
+      this.properties,
+      this.baseType,
+      this.category
     );
   }
 }
@@ -223,12 +259,20 @@ export function isValid(entityType :any) :boolean {
       .setPropertyTypes(entityType.properties);
 
     // optional properties
-    if (isDefined(entityType.id)) {
+    if (has(entityType, 'id')) {
       entityTypeBuilder.setId(entityType.id);
     }
 
-    if (isDefined(entityType.description)) {
+    if (has(entityType, 'description')) {
       entityTypeBuilder.setDescription(entityType.description);
+    }
+
+    if (has(entityType, 'baseType')) {
+      entityTypeBuilder.setBaseType(entityType.baseType);
+    }
+
+    if (has(entityType, 'category')) {
+      entityTypeBuilder.setCategory(entityType.category);
     }
 
     entityTypeBuilder.build();
