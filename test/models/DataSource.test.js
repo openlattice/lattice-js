@@ -4,27 +4,28 @@ import DataSource, {
 } from '../../src/models/DataSource';
 
 import {
-  isDefined
-} from '../../src/utils/LangUtils';
-
-import {
-  INVALID_PARAMS
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED
 } from '../constants/TestConstants';
 
-const MOCK_DS_UUID = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
-const MOCK_TITLE = 'title';
-const MOCK_DESCRIPTION = 'description';
-const MOCK_ES_IDS = [
+const MOCK_DS_UUID :string = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
+const MOCK_TITLE :string = 'title';
+const MOCK_DESCRIPTION :string = 'description';
+const MOCK_ES_IDS :string[] = [
   'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
   'fae6af98-2675-45bd-9a5b-1619a87235a8'
 ];
 
-const MOCK_DS_OBJ = {
+const MOCK_DS_OBJ :Object = {
   id: MOCK_DS_UUID,
   title: MOCK_TITLE,
   description: MOCK_DESCRIPTION,
   entitySetIds: MOCK_ES_IDS
 };
+
+const INVALID_PARAMS_DESCRIPTION :any[] = INVALID_PARAMS_EMPTY_STRING_ALLOWED.slice(0);
+INVALID_PARAMS_DESCRIPTION.splice(1, 1); // remove "null"
+INVALID_PARAMS_DESCRIPTION.splice(0, 1); // remove "undefined"
 
 describe('DataSource', () => {
 
@@ -91,17 +92,17 @@ describe('DataSource', () => {
     describe('setDescription()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      it('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setDescription();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -267,10 +268,8 @@ describe('DataSource', () => {
       });
 
       it('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_DS_OBJ, { description: invalidInput }))).toEqual(false);
-          }
+        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_DS_OBJ, { description: invalidInput }))).toEqual(false);
         });
       });
 
@@ -302,14 +301,12 @@ describe('DataSource', () => {
       });
 
       it('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new DataSource(
-                MOCK_DS_UUID, MOCK_TITLE, invalidInput, MOCK_ES_IDS
-              )
-            )).toEqual(false);
-          }
+        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
+          expect(isValid(
+            new DataSource(
+              MOCK_DS_UUID, MOCK_TITLE, invalidInput, MOCK_ES_IDS
+            )
+          )).toEqual(false);
         });
       });
 

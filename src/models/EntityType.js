@@ -4,8 +4,8 @@
 
 import Immutable from 'immutable';
 
-import isUndefined from 'lodash/isUndefined';
 import has from 'lodash/has';
+import isUndefined from 'lodash/isUndefined';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
