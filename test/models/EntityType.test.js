@@ -10,15 +10,14 @@ import {
   INVALID_KEYS,
   INVALID_PARAMS,
   INVALID_PROPERTIES,
-  INVALID_SCHEMAS,
-  INVALID_UUIDS
+  INVALID_SCHEMAS
 } from '../constants/InvalidParams';
 
 import {
   MOCK_ENTITY_TYPE_DM
 } from '../constants/MockDataModels';
 
-fdescribe('EntityType', () => {
+describe('EntityType', () => {
 
   describe('EntityTypeBuilder', () => {
 
