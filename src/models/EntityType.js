@@ -151,6 +151,10 @@ export class EntityTypeBuilder {
 
   setKey(key :UUID[]) :EntityTypeBuilder {
 
+    if (isUndefined(key) || isEmptyArray(key)) {
+      return this;
+    }
+
     if (!isValidUuidArray(key)) {
       throw new Error('invalid parameter: key must be a non-empty array of valid UUIDs');
     }
@@ -165,6 +169,10 @@ export class EntityTypeBuilder {
   }
 
   setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder {
+
+    if (isUndefined(propertyTypes) || isEmptyArray(propertyTypes)) {
+      return this;
+    }
 
     if (!isValidUuidArray(propertyTypes)) {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
@@ -217,16 +225,16 @@ export class EntityTypeBuilder {
       throw new Error('missing property: title is a required property');
     }
 
+    if (!this.schemas) {
+      this.schemas = [];
+    }
+
     if (!this.key) {
-      throw new Error('missing property: key is a required property');
+      this.key = [];
     }
 
     if (!this.properties) {
-      throw new Error('missing property: properties is a required property');
-    }
-
-    if (!this.schemas) {
-      this.schemas = [];
+      this.properties = [];
     }
 
     return new EntityType(

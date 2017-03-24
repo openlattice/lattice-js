@@ -7,8 +7,9 @@ import {
   INVALID_BASE_TYPES,
   INVALID_CATEGORIES,
   INVALID_DESCRIPTIONS,
-  INVALID_ENUM_VALUES,
+  INVALID_KEYS,
   INVALID_PARAMS,
+  INVALID_PROPERTIES,
   INVALID_SCHEMAS,
   INVALID_UUIDS
 } from '../constants/InvalidParams';
@@ -165,7 +166,7 @@ fdescribe('EntityType', () => {
     describe('setKey()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_KEYS.forEach((invalidInput) => {
           expect(() => {
             builder.setKey(invalidInput);
           }).toThrow();
@@ -176,17 +177,17 @@ fdescribe('EntityType', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_KEYS.forEach((invalidInput) => {
           expect(() => {
             builder.setKey([...MOCK_ENTITY_TYPE_DM.key, invalidInput]);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      it('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setKey();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -200,7 +201,7 @@ fdescribe('EntityType', () => {
     describe('setPropertyTypes()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_PROPERTIES.forEach((invalidInput) => {
           expect(() => {
             builder.setPropertyTypes(invalidInput);
           }).toThrow();
@@ -211,17 +212,17 @@ fdescribe('EntityType', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_PROPERTIES.forEach((invalidInput) => {
           expect(() => {
             builder.setPropertyTypes([...MOCK_ENTITY_TYPE_DM.properties, invalidInput]);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      it('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setPropertyTypes();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -285,35 +286,11 @@ fdescribe('EntityType', () => {
       it('should throw when a required property has not been set', () => {
 
         expect(() => {
-          (new EntityTypeBuilder())
-            .setType(MOCK_ENTITY_TYPE_DM.type)
-            .setKey(MOCK_ENTITY_TYPE_DM.key)
-            .setPropertyTypes(MOCK_ENTITY_TYPE_DM.properties)
-            .build();
+          (new EntityTypeBuilder()).setType(MOCK_ENTITY_TYPE_DM.type).build();
         }).toThrow();
 
         expect(() => {
-          (new EntityTypeBuilder())
-            .setTitle(MOCK_ENTITY_TYPE_DM.title)
-            .setKey(MOCK_ENTITY_TYPE_DM.key)
-            .setPropertyTypes(MOCK_ENTITY_TYPE_DM.properties)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          (new EntityTypeBuilder())
-            .setTitle(MOCK_ENTITY_TYPE_DM.title)
-            .setType(MOCK_ENTITY_TYPE_DM.type)
-            .setPropertyTypes(MOCK_ENTITY_TYPE_DM.properties)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          (new EntityTypeBuilder())
-            .setTitle(MOCK_ENTITY_TYPE_DM.title)
-            .setType(MOCK_ENTITY_TYPE_DM.type)
-            .setKey(MOCK_ENTITY_TYPE_DM.key)
-            .build();
+          (new EntityTypeBuilder()).setTitle(MOCK_ENTITY_TYPE_DM.title).build();
         }).toThrow();
 
       });
@@ -375,14 +352,14 @@ fdescribe('EntityType', () => {
 
       it('should set required properties that are allowed to be empty', () => {
 
-        const org = builder
+        const entityType = builder
           .setType(MOCK_ENTITY_TYPE_DM.type)
           .setTitle(MOCK_ENTITY_TYPE_DM.title)
-          .setKey(MOCK_ENTITY_TYPE_DM.key)
-          .setPropertyTypes(MOCK_ENTITY_TYPE_DM.properties)
           .build();
 
-        expect(org.schemas).toEqual([]);
+        expect(entityType.key).toEqual([]);
+        expect(entityType.properties).toEqual([]);
+        expect(entityType.schemas).toEqual([]);
       });
 
       it('should return a valid instance', () => {
@@ -519,14 +496,14 @@ fdescribe('EntityType', () => {
       });
 
       it('should return false when given an object literal with an invalid "key" property', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_KEYS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE_DM, { key: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE_DM, { key: [invalidInput] }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "properties" property', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_PROPERTIES.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE_DM, { properties: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE_DM, { properties: [invalidInput] }))).toEqual(false);
         });
@@ -635,7 +612,7 @@ fdescribe('EntityType', () => {
       });
 
       it('should return false when given an instance with an invalid "key" property', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_KEYS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE_DM.id,
@@ -666,7 +643,7 @@ fdescribe('EntityType', () => {
       });
 
       it('should return false when given an instance with an invalid "properties" property', () => {
-        INVALID_UUIDS.forEach((invalidInput) => {
+        INVALID_PROPERTIES.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE_DM.id,

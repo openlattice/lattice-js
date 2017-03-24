@@ -58,6 +58,18 @@ INVALID_CATEGORIES.splice(0, 1); // remove "undefined"
 const INVALID_DESCRIPTIONS :any[] = INVALID_PARAMS_EMPTY_STRING_ALLOWED.slice(0);
 INVALID_DESCRIPTIONS.splice(0, 1); // remove "undefined"
 
+// we'll allow "key" to be set to the empty array, and ignore "undefined"
+const INVALID_KEYS :any[] = INVALID_UUIDS.slice(0);
+INVALID_KEYS.splice(3, 1); // remove "new Array()"
+INVALID_KEYS.splice(2, 1); // remove "[]"
+INVALID_KEYS.splice(0, 1); // remove "undefined"
+
+// we'll allow "properties" to be set to the empty array, and ignore "undefined"
+const INVALID_PROPERTIES :any[] = INVALID_UUIDS.slice(0);
+INVALID_PROPERTIES.splice(3, 1); // remove "new Array()"
+INVALID_PROPERTIES.splice(2, 1); // remove "[]"
+INVALID_PROPERTIES.splice(0, 1); // remove "undefined"
+
 // we'll allow "schemas" to be set to the empty array, and ignore "undefined"
 const INVALID_SCHEMAS :any[] = INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.slice(0);
 INVALID_SCHEMAS.splice(0, 1); // remove "undefined"
@@ -67,7 +79,9 @@ export {
   INVALID_CATEGORIES,
   INVALID_DESCRIPTIONS,
   INVALID_ENUM_VALUES,
+  INVALID_KEYS,
   INVALID_PARAMS,
+  INVALID_PROPERTIES,
   INVALID_SCHEMAS,
   INVALID_UUIDS
 };
