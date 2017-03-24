@@ -15,6 +15,7 @@ import Logger from '../utils/Logger';
 import {
   isDefined,
   isEmptyArray,
+  isEmptyString,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -39,7 +40,7 @@ export default class EntityType {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :?string;
+  description :string;
   schemas :FullyQualifiedName[];
   key :UUID[];
   properties :UUID[];
@@ -50,7 +51,7 @@ export default class EntityType {
       id :?UUID,
       type :FullyQualifiedName,
       title :string,
-      description :?string,
+      description :string,
       schemas :FullyQualifiedName[],
       key :UUID[],
       properties :UUID[],
@@ -78,7 +79,7 @@ export class EntityTypeBuilder {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :?string;
+  description :string;
   schemas :FullyQualifiedName[];
   key :UUID[];
   properties :UUID[];
@@ -117,6 +118,10 @@ export class EntityTypeBuilder {
 
   setDescription(description :string) :EntityTypeBuilder {
 
+    if (isUndefined(description) || isEmptyString(description)) {
+      return this;
+    }
+
     if (!isNonEmptyString(description)) {
       throw new Error('invalid parameter: description must be a non-empty string');
     }
@@ -146,10 +151,6 @@ export class EntityTypeBuilder {
 
   setKey(key :UUID[]) :EntityTypeBuilder {
 
-    if (isUndefined(key) || isEmptyArray(key)) {
-      return this;
-    }
-
     if (!isValidUuidArray(key)) {
       throw new Error('invalid parameter: key must be a non-empty array of valid UUIDs');
     }
@@ -164,10 +165,6 @@ export class EntityTypeBuilder {
   }
 
   setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder {
-
-    if (isUndefined(propertyTypes) || isEmptyArray(propertyTypes)) {
-      return this;
-    }
 
     if (!isValidUuidArray(propertyTypes)) {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
@@ -184,6 +181,10 @@ export class EntityTypeBuilder {
 
   setBaseType(baseType :UUID) :EntityTypeBuilder {
 
+    if (isUndefined(baseType)) {
+      return this;
+    }
+
     if (!isValidUuid(baseType)) {
       throw new Error('invalid parameter: baseType must be a valid UUID');
     }
@@ -193,6 +194,10 @@ export class EntityTypeBuilder {
   }
 
   setCategory(category :SecurableType) :EntityTypeBuilder {
+
+    if (isUndefined(category) || isEmptyString(category)) {
+      return this;
+    }
 
     if (!isNonEmptyString(category) || !SecurableTypes[category]) {
       throw new Error('invalid parameter: category must be a valid SecurableType');
@@ -212,16 +217,16 @@ export class EntityTypeBuilder {
       throw new Error('missing property: title is a required property');
     }
 
-    if (!this.schemas) {
-      this.schemas = [];
-    }
-
     if (!this.key) {
-      this.key = [];
+      throw new Error('missing property: key is a required property');
     }
 
     if (!this.properties) {
-      this.properties = [];
+      throw new Error('missing property: properties is a required property');
+    }
+
+    if (!this.schemas) {
+      this.schemas = [];
     }
 
     return new EntityType(
