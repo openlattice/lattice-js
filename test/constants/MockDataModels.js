@@ -62,6 +62,15 @@ export const MOCK_PRINCIPAL_DM :Object = {
   id: 'mockPrincipalId'
 };
 
+export const MOCK_PROPERTY_TYPE_DM :Object = {
+  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
+  type: { namespace: 'LOOM', name: 'MockType' },
+  title: 'title',
+  description: 'description',
+  datatype: 'datatype',
+  schemas: [{ namespace: 'LOOM', name: 'MockSchema' }]
+};
+
 export const MOCK_REQUEST_DM :Object = {
   aclKey: ['ec6865e6-e60e-424b-a071-6a9c1603d735'],
   permissions: ['READ'],

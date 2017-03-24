@@ -10,7 +10,8 @@ import {
   INVALID_KEYS,
   INVALID_PARAMS,
   INVALID_PROPERTIES,
-  INVALID_SCHEMAS
+  INVALID_SCHEMAS,
+  INVALID_UUIDS
 } from '../constants/InvalidParams';
 
 import {
@@ -33,18 +34,18 @@ describe('EntityType', () => {
 
     describe('setId()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setId();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_UUIDS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setId();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -57,11 +58,6 @@ describe('EntityType', () => {
 
     describe('setType()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setType();
-        }).toThrow();
-      });
 
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
@@ -69,6 +65,12 @@ describe('EntityType', () => {
             builder.setType(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setType();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -81,11 +83,6 @@ describe('EntityType', () => {
 
     describe('setTitle()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setTitle();
-        }).toThrow();
-      });
 
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
@@ -93,6 +90,12 @@ describe('EntityType', () => {
             builder.setTitle(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setTitle();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -465,7 +468,7 @@ describe('EntityType', () => {
       });
 
       it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_UUIDS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE_DM, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -521,7 +524,7 @@ describe('EntityType', () => {
       });
 
       it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_UUIDS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               invalidInput,

@@ -4,39 +4,15 @@ import PropertyType, {
 } from '../../src/models/PropertyType';
 
 import {
-  isDefined
-} from '../../src/utils/LangUtils';
+  INVALID_DESCRIPTIONS,
+  INVALID_PARAMS,
+  INVALID_SCHEMAS,
+  INVALID_UUIDS
+} from '../constants/InvalidParams';
 
 import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
-} from '../constants/TestConstants';
-
-const MOCK_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
-const MOCK_TITLE = 'title';
-const MOCK_DESCRIPTION = 'description';
-const MOCK_DATATYPE = 'GeographyPoint';
-
-const MOCK_TYPE_FQN = {
-  namespace: 'LOOM',
-  name: 'Data'
-};
-
-const MOCK_SCHEMAS = [
-  {
-    namespace: 'LOOM',
-    name: 'Schema'
-  }
-];
-
-const MOCK_PT_OBJ = {
-  id: MOCK_UUID,
-  type: MOCK_TYPE_FQN,
-  title: MOCK_TITLE,
-  description: MOCK_DESCRIPTION,
-  datatype: MOCK_DATATYPE,
-  schemas: MOCK_SCHEMAS
-};
+  MOCK_PROPERTY_TYPE_DM
+} from '../constants/MockDataModels';
 
 describe('PropertyType', () => {
 
@@ -54,35 +30,29 @@ describe('PropertyType', () => {
 
     describe('setId()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setId();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_UUIDS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
         });
       });
 
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setId();
+        }).toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setId(MOCK_UUID);
+          builder.setId(MOCK_PROPERTY_TYPE_DM.id);
         }).not.toThrow();
       });
 
     });
 
     describe('setType()', () => {
-
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setType();
-        }).toThrow();
-      });
 
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
@@ -92,21 +62,21 @@ describe('PropertyType', () => {
         });
       });
 
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setType();
+        }).toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setType(MOCK_TYPE_FQN);
+          builder.setType(MOCK_PROPERTY_TYPE_DM.type);
         }).not.toThrow();
       });
 
     });
 
     describe('setTitle()', () => {
-
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setTitle();
-        }).toThrow();
-      });
 
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
@@ -116,9 +86,15 @@ describe('PropertyType', () => {
         });
       });
 
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setTitle();
+        }).toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setTitle(MOCK_TITLE);
+          builder.setTitle(MOCK_PROPERTY_TYPE_DM.title);
         }).not.toThrow();
       });
 
@@ -126,35 +102,29 @@ describe('PropertyType', () => {
 
     describe('setDescription()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setDescription();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_DESCRIPTIONS.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
         });
       });
 
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setDescription();
+        }).not.toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setDescription(MOCK_DESCRIPTION);
+          builder.setDescription(MOCK_PROPERTY_TYPE_DM.description);
         }).not.toThrow();
       });
 
     });
 
     describe('setDataType()', () => {
-
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setDataType();
-        }).toThrow();
-      });
 
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
@@ -164,9 +134,15 @@ describe('PropertyType', () => {
         });
       });
 
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setDataType();
+        }).toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setDataType(MOCK_DATATYPE);
+          builder.setDataType(MOCK_PROPERTY_TYPE_DM.datatype);
         }).not.toThrow();
       });
 
@@ -175,7 +151,7 @@ describe('PropertyType', () => {
     describe('setSchemas()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_SCHEMAS.forEach((invalidInput) => {
           expect(() => {
             builder.setSchemas(invalidInput);
           }).toThrow();
@@ -186,9 +162,9 @@ describe('PropertyType', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_SCHEMAS.forEach((invalidInput) => {
           expect(() => {
-            builder.setSchemas([...MOCK_SCHEMAS, invalidInput]);
+            builder.setSchemas([...MOCK_PROPERTY_TYPE_DM.schemas, invalidInput]);
           }).toThrow();
         });
       });
@@ -201,7 +177,7 @@ describe('PropertyType', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setSchemas(MOCK_SCHEMAS);
+          builder.setSchemas(MOCK_PROPERTY_TYPE_DM.schemas);
         }).not.toThrow();
       });
 
@@ -213,22 +189,22 @@ describe('PropertyType', () => {
 
         expect(() => {
           (new PropertyTypeBuilder())
-            .setTitle(MOCK_TITLE)
-            .setDataType(MOCK_DATATYPE)
+            .setTitle(MOCK_PROPERTY_TYPE_DM.title)
+            .setDataType(MOCK_PROPERTY_TYPE_DM.datatype)
             .build();
         }).toThrow();
 
         expect(() => {
           (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
-            .setDataType(MOCK_DATATYPE)
+            .setType(MOCK_PROPERTY_TYPE_DM.type)
+            .setDataType(MOCK_PROPERTY_TYPE_DM.datatype)
             .build();
         }).toThrow();
 
         expect(() => {
           (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
-            .setTitle(MOCK_TITLE)
+            .setType(MOCK_PROPERTY_TYPE_DM.type)
+            .setTitle(MOCK_PROPERTY_TYPE_DM.title)
             .build();
         }).toThrow();
 
@@ -237,9 +213,9 @@ describe('PropertyType', () => {
       it('should set required properties that are allowed to be empty', () => {
 
         const org = builder
-          .setType(MOCK_TYPE_FQN)
-          .setTitle(MOCK_TITLE)
-          .setDataType(MOCK_DATATYPE)
+          .setType(MOCK_PROPERTY_TYPE_DM.type)
+          .setTitle(MOCK_PROPERTY_TYPE_DM.title)
+          .setDataType(MOCK_PROPERTY_TYPE_DM.datatype)
           .build();
 
         expect(org.schemas).toEqual([]);
@@ -249,21 +225,21 @@ describe('PropertyType', () => {
 
         expect(() => {
           (new PropertyTypeBuilder())
-            .setType(MOCK_TYPE_FQN)
-            .setTitle(MOCK_TITLE)
-            .setDescription(MOCK_DESCRIPTION)
-            .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
+            .setType(MOCK_PROPERTY_TYPE_DM.type)
+            .setTitle(MOCK_PROPERTY_TYPE_DM.title)
+            .setDescription(MOCK_PROPERTY_TYPE_DM.description)
+            .setDataType(MOCK_PROPERTY_TYPE_DM.datatype)
+            .setSchemas(MOCK_PROPERTY_TYPE_DM.schemas)
             .build();
         }).not.toThrow();
 
         expect(() => {
           (new PropertyTypeBuilder())
-            .setId(MOCK_UUID)
-            .setType(MOCK_TYPE_FQN)
-            .setTitle(MOCK_TITLE)
-            .setDataType(MOCK_DATATYPE)
-            .setSchemas(MOCK_SCHEMAS)
+            .setId(MOCK_PROPERTY_TYPE_DM.id)
+            .setType(MOCK_PROPERTY_TYPE_DM.type)
+            .setTitle(MOCK_PROPERTY_TYPE_DM.title)
+            .setDataType(MOCK_PROPERTY_TYPE_DM.datatype)
+            .setSchemas(MOCK_PROPERTY_TYPE_DM.schemas)
             .build();
         }).not.toThrow();
       });
@@ -271,33 +247,33 @@ describe('PropertyType', () => {
       it('should return a valid instance', () => {
 
         const propertyType = builder
-          .setId(MOCK_UUID)
-          .setType(MOCK_TYPE_FQN)
-          .setTitle(MOCK_TITLE)
-          .setDescription(MOCK_DESCRIPTION)
-          .setDataType(MOCK_DATATYPE)
-          .setSchemas(MOCK_SCHEMAS)
+          .setId(MOCK_PROPERTY_TYPE_DM.id)
+          .setType(MOCK_PROPERTY_TYPE_DM.type)
+          .setTitle(MOCK_PROPERTY_TYPE_DM.title)
+          .setDescription(MOCK_PROPERTY_TYPE_DM.description)
+          .setDataType(MOCK_PROPERTY_TYPE_DM.datatype)
+          .setSchemas(MOCK_PROPERTY_TYPE_DM.schemas)
           .build();
 
         expect(propertyType).toEqual(jasmine.any(PropertyType));
 
         expect(propertyType.id).toBeDefined();
-        expect(propertyType.id).toEqual(MOCK_UUID);
+        expect(propertyType.id).toEqual(MOCK_PROPERTY_TYPE_DM.id);
 
         expect(propertyType.type).toBeDefined();
-        expect(propertyType.type).toEqual(MOCK_TYPE_FQN);
+        expect(propertyType.type).toEqual(MOCK_PROPERTY_TYPE_DM.type);
 
         expect(propertyType.title).toBeDefined();
-        expect(propertyType.title).toEqual(MOCK_TITLE);
+        expect(propertyType.title).toEqual(MOCK_PROPERTY_TYPE_DM.title);
 
         expect(propertyType.description).toBeDefined();
-        expect(propertyType.description).toEqual(MOCK_DESCRIPTION);
+        expect(propertyType.description).toEqual(MOCK_PROPERTY_TYPE_DM.description);
 
         expect(propertyType.datatype).toBeDefined();
-        expect(propertyType.datatype).toEqual(MOCK_DATATYPE);
+        expect(propertyType.datatype).toEqual(MOCK_PROPERTY_TYPE_DM.datatype);
 
         expect(propertyType.schemas).toBeDefined();
-        expect(propertyType.schemas).toEqual(MOCK_SCHEMAS);
+        expect(propertyType.schemas).toEqual(MOCK_PROPERTY_TYPE_DM.schemas);
       });
 
     });
@@ -309,13 +285,18 @@ describe('PropertyType', () => {
     describe('valid', () => {
 
       it('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_PT_OBJ)).toEqual(true);
+        expect(isValid(MOCK_PROPERTY_TYPE_DM)).toEqual(true);
       });
 
       it('should return true when given a valid instance ', () => {
         expect(isValid(
           new PropertyType(
-            MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
+            MOCK_PROPERTY_TYPE_DM.id,
+            MOCK_PROPERTY_TYPE_DM.type,
+            MOCK_PROPERTY_TYPE_DM.title,
+            MOCK_PROPERTY_TYPE_DM.description,
+            MOCK_PROPERTY_TYPE_DM.datatype,
+            MOCK_PROPERTY_TYPE_DM.schemas
           )
         )).toEqual(true);
       });
@@ -323,12 +304,12 @@ describe('PropertyType', () => {
       it('should return true when given an instance constructed by the builder', () => {
 
         const propertyType = (new PropertyTypeBuilder())
-          .setId(MOCK_UUID)
-          .setType(MOCK_TYPE_FQN)
-          .setTitle(MOCK_TITLE)
-          .setDescription(MOCK_DESCRIPTION)
-          .setDataType(MOCK_DATATYPE)
-          .setSchemas(MOCK_SCHEMAS)
+          .setId(MOCK_PROPERTY_TYPE_DM.id)
+          .setType(MOCK_PROPERTY_TYPE_DM.type)
+          .setTitle(MOCK_PROPERTY_TYPE_DM.title)
+          .setDescription(MOCK_PROPERTY_TYPE_DM.description)
+          .setDataType(MOCK_PROPERTY_TYPE_DM.datatype)
+          .setSchemas(MOCK_PROPERTY_TYPE_DM.schemas)
           .build();
 
         expect(isValid(propertyType)).toEqual(true);
@@ -349,54 +330,53 @@ describe('PropertyType', () => {
       });
 
       it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_PT_OBJ, { id: invalidInput }))).toEqual(false);
-          }
+        INVALID_UUIDS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { id: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "type" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { type: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { type: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { title: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { title: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_PT_OBJ, { description: invalidInput }))).toEqual(false);
-          }
+        INVALID_DESCRIPTIONS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "datatype" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { datatype: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { datatype: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "schemas" property', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PT_OBJ, { schemas: invalidInput }))).toEqual(false);
+        INVALID_SCHEMAS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { schemas: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new PropertyType(
-                invalidInput, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
-              )
-            )).toEqual(false);
-          }
+        INVALID_UUIDS.forEach((invalidInput) => {
+          expect(isValid(
+            new PropertyType(
+              invalidInput,
+              MOCK_PROPERTY_TYPE_DM.type,
+              MOCK_PROPERTY_TYPE_DM.title,
+              MOCK_PROPERTY_TYPE_DM.description,
+              MOCK_PROPERTY_TYPE_DM.datatype,
+              MOCK_PROPERTY_TYPE_DM.schemas
+            )
+          )).toEqual(false);
         });
       });
 
@@ -404,7 +384,12 @@ describe('PropertyType', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
-              MOCK_UUID, invalidInput, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
+              MOCK_PROPERTY_TYPE_DM.id,
+              invalidInput,
+              MOCK_PROPERTY_TYPE_DM.title,
+              MOCK_PROPERTY_TYPE_DM.description,
+              MOCK_PROPERTY_TYPE_DM.datatype,
+              MOCK_PROPERTY_TYPE_DM.schemas
             )
           )).toEqual(false);
         });
@@ -414,21 +399,29 @@ describe('PropertyType', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
-              MOCK_UUID, MOCK_TYPE_FQN, invalidInput, MOCK_DESCRIPTION, MOCK_DATATYPE, MOCK_SCHEMAS
+              MOCK_PROPERTY_TYPE_DM.id,
+              MOCK_PROPERTY_TYPE_DM.type,
+              invalidInput,
+              MOCK_PROPERTY_TYPE_DM.description,
+              MOCK_PROPERTY_TYPE_DM.datatype,
+              MOCK_PROPERTY_TYPE_DM.schemas
             )
           )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new PropertyType(
-                MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, invalidInput, MOCK_DATATYPE, MOCK_SCHEMAS
-              )
-            )).toEqual(false);
-          }
+        INVALID_DESCRIPTIONS.forEach((invalidInput) => {
+          expect(isValid(
+            new PropertyType(
+              MOCK_PROPERTY_TYPE_DM.id,
+              MOCK_PROPERTY_TYPE_DM.type,
+              MOCK_PROPERTY_TYPE_DM.title,
+              invalidInput,
+              MOCK_PROPERTY_TYPE_DM.datatype,
+              MOCK_PROPERTY_TYPE_DM.schemas
+            )
+          )).toEqual(false);
         });
       });
 
@@ -436,17 +429,27 @@ describe('PropertyType', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
-              MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, invalidInput, MOCK_SCHEMAS
+              MOCK_PROPERTY_TYPE_DM.id,
+              MOCK_PROPERTY_TYPE_DM.type,
+              MOCK_PROPERTY_TYPE_DM.title,
+              MOCK_PROPERTY_TYPE_DM.description,
+              invalidInput,
+              MOCK_PROPERTY_TYPE_DM.schemas
             )
           )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "schemas" property', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_SCHEMAS.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
-              MOCK_UUID, MOCK_TYPE_FQN, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_DATATYPE, invalidInput
+              MOCK_PROPERTY_TYPE_DM.id,
+              MOCK_PROPERTY_TYPE_DM.type,
+              MOCK_PROPERTY_TYPE_DM.title,
+              MOCK_PROPERTY_TYPE_DM.description,
+              MOCK_PROPERTY_TYPE_DM.datatype,
+              invalidInput
             )
           )).toEqual(false);
         });

@@ -8,7 +8,8 @@ import {
   INVALID_EMAILS,
   INVALID_MEMBERS,
   INVALID_PARAMS,
-  INVALID_ROLES
+  INVALID_ROLES,
+  INVALID_UUIDS
 } from '../constants/InvalidParams';
 
 import {
@@ -31,18 +32,18 @@ describe('Organization', () => {
 
     describe('setId()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setId();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_UUIDS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setId();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -55,18 +56,18 @@ describe('Organization', () => {
 
     describe('setTitle()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setTitle();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setTitle(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setTitle();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -318,7 +319,7 @@ describe('Organization', () => {
       });
 
       it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_UUIDS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORG_DM, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -354,7 +355,7 @@ describe('Organization', () => {
       });
 
       it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_UUIDS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
               invalidInput,
