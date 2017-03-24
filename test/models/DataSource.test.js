@@ -16,7 +16,7 @@ const INVALID_PARAMS_DESCRIPTION :any[] = INVALID_PARAMS_EMPTY_STRING_ALLOWED.sl
 INVALID_PARAMS_DESCRIPTION.splice(1, 1); // remove "null"
 INVALID_PARAMS_DESCRIPTION.splice(0, 1); // remove "undefined"
 
-fdescribe('DataSource', () => {
+describe('DataSource', () => {
 
   describe('DataSourceBuilder', () => {
 
