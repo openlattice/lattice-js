@@ -13,8 +13,13 @@ import {
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED
 } from '../constants/TestConstants';
+
+const INVALID_PARAMS_DESCRIPTION :any[] = INVALID_PARAMS_EMPTY_STRING_ALLOWED.slice(0);
+INVALID_PARAMS_DESCRIPTION.splice(1, 1); // remove "null"
+INVALID_PARAMS_DESCRIPTION.splice(0, 1); // remove "undefined"
 
 describe('EntitySet', () => {
 
@@ -128,18 +133,18 @@ describe('EntitySet', () => {
 
     describe('setDescription()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setDescription();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setDescription();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -357,10 +362,8 @@ describe('EntitySet', () => {
       });
 
       it('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { description: invalidInput }))).toEqual(false);
-          }
+        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
@@ -434,19 +437,17 @@ describe('EntitySet', () => {
       });
 
       it('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new EntitySet(
-                MOCK_ENTITY_SET_DM.id,
-                MOCK_ENTITY_SET_DM.entityTypeId,
-                MOCK_ENTITY_SET_DM.name,
-                MOCK_ENTITY_SET_DM.title,
-                invalidInput,
-                MOCK_ENTITY_SET_DM.contacts
-              )
-            )).toEqual(false);
-          }
+        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
+          expect(isValid(
+            new EntitySet(
+              MOCK_ENTITY_SET_DM.id,
+              MOCK_ENTITY_SET_DM.entityTypeId,
+              MOCK_ENTITY_SET_DM.name,
+              MOCK_ENTITY_SET_DM.title,
+              invalidInput,
+              MOCK_ENTITY_SET_DM.contacts
+            )
+          )).toEqual(false);
         });
       });
 

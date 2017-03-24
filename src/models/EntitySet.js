@@ -3,6 +3,8 @@
  */
 
 import Immutable from 'immutable';
+
+import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
@@ -10,6 +12,7 @@ import Logger from '../utils/Logger';
 import {
   isDefined,
   isEmptyArray,
+  isEmptyString,
   isNonEmptyString,
   isNonEmptyStringArray
 } from '../utils/LangUtils';
@@ -30,7 +33,7 @@ export default class EntitySet {
   entityTypeId :UUID;
   name :string;
   title :string;
-  description :?string;
+  description :string;
   contacts :string[];
 
   constructor(
@@ -38,7 +41,7 @@ export default class EntitySet {
       entityTypeId :UUID,
       name :string,
       title :string,
-      description :?string,
+      description :string,
       contacts :string[]) {
 
     this.id = id;
@@ -62,7 +65,7 @@ export class EntitySetBuilder {
   entityTypeId :UUID;
   name :string;
   title :string;
-  description :?string;
+  description :string;
   contacts :string[];
 
   setId(entitySetId :UUID) :EntitySetBuilder {
@@ -106,6 +109,10 @@ export class EntitySetBuilder {
   }
 
   setDescription(description :string) :EntitySetBuilder {
+
+    if (isUndefined(description) || isEmptyString(description)) {
+      return this;
+    }
 
     if (!isNonEmptyString(description)) {
       throw new Error('invalid parameter: description must be a non-empty string');
@@ -183,11 +190,11 @@ export function isValid(entitySet :any) :boolean {
       .setContacts(entitySet.contacts);
 
     // optional properties
-    if (isDefined(entitySet.id)) {
+    if (has(entitySet, 'id')) {
       entitySetBuilder.setId(entitySet.id);
     }
 
-    if (isDefined(entitySet.description)) {
+    if (has(entitySet, 'description')) {
       entitySetBuilder.setDescription(entitySet.description);
     }
 

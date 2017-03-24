@@ -135,11 +135,14 @@ export function isValid(dataSource :any) :boolean {
 
     // required properties
     dataSourceBuilder
-      .setId(dataSource.id)
       .setTitle(dataSource.title)
       .setEntitySetIds(dataSource.entitySetIds);
 
     // optional properties
+    if (has(dataSource, 'id')) {
+      dataSourceBuilder.setId(dataSource.id);
+    }
+
     if (has(dataSource, 'description')) {
       dataSourceBuilder.setDescription(dataSource.description);
     }
