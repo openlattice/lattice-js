@@ -48,6 +48,15 @@ export const MOCK_ENTITY_TYPE_DM :Object = {
   category: SecurableTypes.EntityType
 };
 
+export const MOCK_ORG_DM :Object = {
+  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
+  title: 'title',
+  description: 'description',
+  members: [{ type: 'USER', id: 'principalId_0' }],
+  roles: [{ type: 'ROLE', id: 'principalId_1' }],
+  emails: ['kryptnostic.com']
+};
+
 export const MOCK_PRINCIPAL_DM :Object = {
   type: PrincipalTypes.USER,
   id: 'mockPrincipalId'

@@ -24,9 +24,9 @@ const INVALID_PARAMS :any[] = [
  * generic invalid parameters
  */
 
-const INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED :any[] = INVALID_PARAMS.slice(0);
-INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.splice(3, 1); // remove "new Array()"
-INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.splice(2, 1); // remove "[]"
+const INVALID_PARAMS_EMPTY_ARRAY_ALLOWED :any[] = INVALID_PARAMS.slice(0);
+INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.splice(3, 1); // remove "new Array()"
+INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.splice(2, 1); // remove "[]"
 
 const INVALID_PARAMS_EMPTY_STRING_ALLOWED :any[] = INVALID_PARAMS.slice(0);
 INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(15, 1); // remove "new String()"
@@ -58,11 +58,19 @@ INVALID_CATEGORIES.splice(0, 1); // remove "undefined"
 const INVALID_DESCRIPTIONS :any[] = INVALID_PARAMS_EMPTY_STRING_ALLOWED.slice(0);
 INVALID_DESCRIPTIONS.splice(0, 1); // remove "undefined"
 
+// we'll allow "roles" to be set to the empty array, and ignore "undefined"
+const INVALID_EMAILS :any[] = INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.slice(0);
+INVALID_EMAILS.splice(0, 1); // remove "undefined"
+
 // we'll allow "key" to be set to the empty array, and ignore "undefined"
 const INVALID_KEYS :any[] = INVALID_UUIDS.slice(0);
 INVALID_KEYS.splice(3, 1); // remove "new Array()"
 INVALID_KEYS.splice(2, 1); // remove "[]"
 INVALID_KEYS.splice(0, 1); // remove "undefined"
+
+// we'll allow "members" to be set to the empty array, and ignore "undefined"
+const INVALID_MEMBERS :any[] = INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.slice(0);
+INVALID_MEMBERS.splice(0, 1); // remove "undefined"
 
 // we'll allow "properties" to be set to the empty array, and ignore "undefined"
 const INVALID_PROPERTIES :any[] = INVALID_UUIDS.slice(0);
@@ -70,18 +78,25 @@ INVALID_PROPERTIES.splice(3, 1); // remove "new Array()"
 INVALID_PROPERTIES.splice(2, 1); // remove "[]"
 INVALID_PROPERTIES.splice(0, 1); // remove "undefined"
 
+// we'll allow "roles" to be set to the empty array, and ignore "undefined"
+const INVALID_ROLES :any[] = INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.slice(0);
+INVALID_ROLES.splice(0, 1); // remove "undefined"
+
 // we'll allow "schemas" to be set to the empty array, and ignore "undefined"
-const INVALID_SCHEMAS :any[] = INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.slice(0);
+const INVALID_SCHEMAS :any[] = INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.slice(0);
 INVALID_SCHEMAS.splice(0, 1); // remove "undefined"
 
 export {
   INVALID_BASE_TYPES,
   INVALID_CATEGORIES,
   INVALID_DESCRIPTIONS,
+  INVALID_EMAILS,
   INVALID_ENUM_VALUES,
   INVALID_KEYS,
+  INVALID_MEMBERS,
   INVALID_PARAMS,
   INVALID_PROPERTIES,
+  INVALID_ROLES,
   INVALID_SCHEMAS,
   INVALID_UUIDS
 };
