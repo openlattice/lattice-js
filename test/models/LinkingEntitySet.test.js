@@ -5,28 +5,11 @@ import LinkingEntitySet, {
 
 import {
   INVALID_PARAMS
-} from '../constants/TestConstants';
+} from '../constants/InvalidParams';
 
-const MOCK_ENTITY_SET = {
-  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  entityTypeId: '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e',
-  name: 'name',
-  title: 'title',
-  description: 'description'
-};
-
-const MOCK_LINKING_PROPERTIES = [
-  {
-    '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e': '4b08e1f9-4a00-4169-92ea-10e377070220',
-    'e39dfdfa-a3e6-4f1f-b54b-646a723c3085': 'ec6865e6-e60e-424b-a071-6a9c1603d735'
-  },
-  { 'fae6af98-2675-45bd-9a5b-1619a87235a8': '8f79e123-3411-4099-a41f-88e5d22d0e8d' }
-];
-
-const MOCK_LES_OBJ = {
-  entitySet: MOCK_ENTITY_SET,
-  linkingProperties: MOCK_LINKING_PROPERTIES
-};
+import {
+  MOCK_LINKING_ENTITY_SET_DM
+} from '../constants/MockDataModels';
 
 describe('LinkingEntitySet', () => {
 
@@ -60,7 +43,7 @@ describe('LinkingEntitySet', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setEntitySet(MOCK_ENTITY_SET);
+          builder.setEntitySet(MOCK_LINKING_ENTITY_SET_DM.entitySet);
         }).not.toThrow();
       });
 
@@ -82,7 +65,7 @@ describe('LinkingEntitySet', () => {
       it('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setLinkingProperties([...MOCK_LINKING_PROPERTIES, invalidInput]);
+            builder.setLinkingProperties([...MOCK_LINKING_ENTITY_SET_DM.linkingProperties, invalidInput]);
           }).toThrow();
         });
       });
@@ -95,7 +78,7 @@ describe('LinkingEntitySet', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setLinkingProperties(MOCK_LINKING_PROPERTIES);
+          builder.setLinkingProperties(MOCK_LINKING_ENTITY_SET_DM.linkingProperties);
         }).not.toThrow();
       });
 
@@ -107,13 +90,13 @@ describe('LinkingEntitySet', () => {
 
         expect(() => {
           (new LinkingEntitySetBuilder())
-            .setEntitySet(MOCK_ENTITY_SET)
+            .setEntitySet(MOCK_LINKING_ENTITY_SET_DM.entitySet)
             .build();
         }).toThrow();
 
         expect(() => {
           (new LinkingEntitySetBuilder())
-            .setLinkingProperties(MOCK_LINKING_PROPERTIES)
+            .setLinkingProperties(MOCK_LINKING_ENTITY_SET_DM.linkingProperties)
             .build();
         }).toThrow();
       });
@@ -121,17 +104,17 @@ describe('LinkingEntitySet', () => {
       it('should return a valid instance', () => {
 
         const linkingEntitySet = builder
-          .setEntitySet(MOCK_ENTITY_SET)
-          .setLinkingProperties(MOCK_LINKING_PROPERTIES)
+          .setEntitySet(MOCK_LINKING_ENTITY_SET_DM.entitySet)
+          .setLinkingProperties(MOCK_LINKING_ENTITY_SET_DM.linkingProperties)
           .build();
 
         expect(linkingEntitySet).toEqual(jasmine.any(LinkingEntitySet));
 
         expect(linkingEntitySet.entitySet).toBeDefined();
-        expect(linkingEntitySet.entitySet).toEqual(MOCK_ENTITY_SET);
+        expect(linkingEntitySet.entitySet).toEqual(MOCK_LINKING_ENTITY_SET_DM.entitySet);
 
         expect(linkingEntitySet.linkingProperties).toBeDefined();
-        expect(linkingEntitySet.linkingProperties).toEqual(MOCK_LINKING_PROPERTIES);
+        expect(linkingEntitySet.linkingProperties).toEqual(MOCK_LINKING_ENTITY_SET_DM.linkingProperties);
       });
 
     });
@@ -143,13 +126,13 @@ describe('LinkingEntitySet', () => {
     describe('valid', () => {
 
       it('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_LES_OBJ)).toEqual(true);
+        expect(isValid(MOCK_LINKING_ENTITY_SET_DM)).toEqual(true);
       });
 
       it('should return true when given a valid instance ', () => {
         expect(isValid(
           new LinkingEntitySet(
-            MOCK_ENTITY_SET, MOCK_LINKING_PROPERTIES
+            MOCK_LINKING_ENTITY_SET_DM.entitySet, MOCK_LINKING_ENTITY_SET_DM.linkingProperties
           )
         )).toEqual(true);
       });
@@ -157,8 +140,8 @@ describe('LinkingEntitySet', () => {
       it('should return true when given an instance constructed by the builder', () => {
 
         const linkingEntitySet = (new LinkingEntitySetBuilder())
-          .setEntitySet(MOCK_ENTITY_SET)
-          .setLinkingProperties(MOCK_LINKING_PROPERTIES)
+          .setEntitySet(MOCK_LINKING_ENTITY_SET_DM.entitySet)
+          .setLinkingProperties(MOCK_LINKING_ENTITY_SET_DM.linkingProperties)
           .build();
 
         expect(isValid(linkingEntitySet)).toEqual(true);
@@ -180,14 +163,18 @@ describe('LinkingEntitySet', () => {
 
       it('should return false when given an object literal with an invalid "entitySet" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_LES_OBJ, { entitySet: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_LINKING_ENTITY_SET_DM, { entitySet: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "linkingProperties" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_LES_OBJ, { linkingProperties: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_LES_OBJ, { linkingProperties: [invalidInput] }))).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_LINKING_ENTITY_SET_DM, { linkingProperties: invalidInput }))
+          ).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_LINKING_ENTITY_SET_DM, { linkingProperties: [invalidInput] }))
+          ).toEqual(false);
         });
       });
 
@@ -195,7 +182,7 @@ describe('LinkingEntitySet', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntitySet(
-              invalidInput, MOCK_LINKING_PROPERTIES
+              invalidInput, MOCK_LINKING_ENTITY_SET_DM.linkingProperties
             )
           )).toEqual(false);
         });
@@ -205,12 +192,12 @@ describe('LinkingEntitySet', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntitySet(
-              MOCK_ENTITY_SET, invalidInput
+              MOCK_LINKING_ENTITY_SET_DM.entitySet, invalidInput
             )
           )).toEqual(false);
           expect(isValid(
             new LinkingEntitySet(
-              MOCK_ENTITY_SET, [invalidInput]
+              MOCK_LINKING_ENTITY_SET_DM.entitySet, [invalidInput]
             )
           )).toEqual(false);
         });

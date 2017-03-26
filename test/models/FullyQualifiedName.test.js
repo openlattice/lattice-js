@@ -3,8 +3,9 @@
 import FullyQualifiedName from '../../src/models/FullyQualifiedName';
 
 import {
-  INVALID_PARAMS
-} from '../constants/TestConstants';
+  INVALID_PARAMS,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
 
 const MOCK_NAMESPACE = 'LOOM';
 const MOCK_NAME = 'DATA';
@@ -56,7 +57,7 @@ describe('FullyQualifiedName', () => {
       });
 
       it('should throw when given 1 invalid parameter', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             new FullyQualifiedName(invalidInput);
           }).toThrow();
@@ -110,7 +111,7 @@ describe('FullyQualifiedName', () => {
       });
 
       it('should return false when given 1 invalid parameter', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(FullyQualifiedName.isValid(invalidInput)).toEqual(false);
         });
       });

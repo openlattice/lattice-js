@@ -4,39 +4,13 @@ import LinkingEntityType, {
 } from '../../src/models/LinkingEntityType';
 
 import {
-  isDefined
-} from '../../src/utils/LangUtils';
-
-import {
   INVALID_PARAMS,
   INVALID_PARAMS_BOOLEANS_ALLOWED
-} from '../constants/TestConstants';
+} from '../constants/InvalidParams';
 
-const MOCK_ENTITY_TYPE = {
-  title: 'MyEntity',
-  description: 'so this is an EntityType',
-  type: { namespace: 'LOOM', name: 'ENTITY_TYPE' },
-  schemas: [
-    { namespace: 'LOOM', name: 'SCHEMA' }
-  ],
-  key: [
-    '8f79e123-3411-4099-a41f-88e5d22d0e8d'
-  ],
-  properties: [
-    '8f79e123-3411-4099-a41f-88e5d22d0e8d'
-  ]
-};
-
-const MOCK_ET_IDS = [
-  'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
-  'fae6af98-2675-45bd-9a5b-1619a87235a8'
-];
-
-const MOCK_LET_OBJ = {
-  entityType: MOCK_ENTITY_TYPE,
-  entityTypeIds: MOCK_ET_IDS,
-  deidentified: false
-};
+import {
+  MOCK_LINKING_ENTITY_TYPE_DM
+} from '../constants/MockDataModels';
 
 describe('LinkingEntityType', () => {
 
@@ -70,7 +44,7 @@ describe('LinkingEntityType', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setEntityType(MOCK_ENTITY_TYPE);
+          builder.setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType);
         }).not.toThrow();
       });
 
@@ -92,7 +66,7 @@ describe('LinkingEntityType', () => {
       it('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setEntityTypeIds([...MOCK_ET_IDS, invalidInput]);
+            builder.setEntityTypeIds([...MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds, invalidInput]);
           }).toThrow();
         });
       });
@@ -105,7 +79,7 @@ describe('LinkingEntityType', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setEntityTypeIds(MOCK_ET_IDS);
+          builder.setEntityTypeIds(MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds);
         }).not.toThrow();
       });
 
@@ -144,13 +118,13 @@ describe('LinkingEntityType', () => {
 
         expect(() => {
           (new LinkingEntityTypeBuilder())
-            .setEntityType(MOCK_ENTITY_TYPE)
+            .setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType)
             .build();
         }).toThrow();
 
         expect(() => {
           (new LinkingEntityTypeBuilder())
-            .setEntityTypeIds(MOCK_ET_IDS)
+            .setEntityTypeIds(MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds)
             .build();
         }).toThrow();
       });
@@ -159,8 +133,8 @@ describe('LinkingEntityType', () => {
 
         expect(() => {
           (new LinkingEntityTypeBuilder())
-            .setEntityType(MOCK_ENTITY_TYPE)
-            .setEntityTypeIds(MOCK_ET_IDS)
+            .setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType)
+            .setEntityTypeIds(MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds)
             .build();
         }).not.toThrow();
       });
@@ -168,18 +142,18 @@ describe('LinkingEntityType', () => {
       it('should return a valid instance', () => {
 
         const linkingEntityType = builder
-          .setEntityType(MOCK_ENTITY_TYPE)
-          .setEntityTypeIds(MOCK_ET_IDS)
+          .setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType)
+          .setEntityTypeIds(MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds)
           .setDeidentified(true)
           .build();
 
         expect(linkingEntityType).toEqual(jasmine.any(LinkingEntityType));
 
         expect(linkingEntityType.entityType).toBeDefined();
-        expect(linkingEntityType.entityType).toEqual(MOCK_ENTITY_TYPE);
+        expect(linkingEntityType.entityType).toEqual(MOCK_LINKING_ENTITY_TYPE_DM.entityType);
 
         expect(linkingEntityType.entityTypeIds).toBeDefined();
-        expect(linkingEntityType.entityTypeIds).toEqual(MOCK_ET_IDS);
+        expect(linkingEntityType.entityTypeIds).toEqual(MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds);
 
         expect(linkingEntityType.deidentified).toBeDefined();
         expect(linkingEntityType.deidentified).toEqual(true);
@@ -194,13 +168,13 @@ describe('LinkingEntityType', () => {
     describe('valid', () => {
 
       it('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_LET_OBJ)).toEqual(true);
+        expect(isValid(MOCK_LINKING_ENTITY_TYPE_DM)).toEqual(true);
       });
 
       it('should return true when given a valid instance ', () => {
         expect(isValid(
           new LinkingEntityType(
-            MOCK_ENTITY_TYPE, MOCK_ET_IDS, false
+            MOCK_LINKING_ENTITY_TYPE_DM.entityType, MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds, false
           )
         )).toEqual(true);
       });
@@ -208,8 +182,8 @@ describe('LinkingEntityType', () => {
       it('should return true when given an instance constructed by the builder', () => {
 
         const linkingEntityType = (new LinkingEntityTypeBuilder())
-          .setEntityType(MOCK_ENTITY_TYPE)
-          .setEntityTypeIds(MOCK_ET_IDS)
+          .setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType)
+          .setEntityTypeIds(MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds)
           .setDeidentified(true)
           .build();
 
@@ -232,22 +206,26 @@ describe('LinkingEntityType', () => {
 
       it('should return false when given an object literal with an invalid "entityType" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_LET_OBJ, { entityType: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityType: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "entityTypeIds" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_LET_OBJ, { entityTypeIds: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_LET_OBJ, { entityTypeIds: [invalidInput] }))).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityTypeIds: invalidInput }))
+          ).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityTypeIds: [invalidInput] }))
+          ).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "deidentified" property', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_LET_OBJ, { deidentified: invalidInput }))).toEqual(false);
-          }
+          expect(
+            isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { deidentified: invalidInput }))
+          ).toEqual(false);
         });
       });
 
@@ -255,7 +233,7 @@ describe('LinkingEntityType', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntityType(
-              invalidInput, MOCK_ET_IDS, true
+              invalidInput, MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds, true
             )
           )).toEqual(false);
         });
@@ -265,12 +243,12 @@ describe('LinkingEntityType', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntityType(
-              MOCK_ENTITY_TYPE, invalidInput, true
+              MOCK_LINKING_ENTITY_TYPE_DM.entityType, invalidInput, true
             )
           )).toEqual(false);
           expect(isValid(
             new LinkingEntityType(
-              MOCK_ENTITY_TYPE, [invalidInput], true
+              MOCK_LINKING_ENTITY_TYPE_DM.entityType, [invalidInput], true
             )
           )).toEqual(false);
         });
@@ -278,13 +256,11 @@ describe('LinkingEntityType', () => {
 
       it('should return false when given an instance with an invalid "deidentified" property', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new LinkingEntityType(
-                MOCK_ENTITY_TYPE, MOCK_ET_IDS, invalidInput
-              )
-            )).toEqual(false);
-          }
+          expect(isValid(
+            new LinkingEntityType(
+              MOCK_LINKING_ENTITY_TYPE_DM.entityType, MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds, invalidInput
+            )
+          )).toEqual(false);
         });
       });
 

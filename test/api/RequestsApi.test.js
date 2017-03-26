@@ -20,7 +20,7 @@ import {
 
 import {
   INVALID_PARAMS
-} from '../constants/TestConstants';
+} from '../constants/InvalidParams';
 
 import {
   getMockAxiosInstance

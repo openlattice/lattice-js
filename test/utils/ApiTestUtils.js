@@ -6,7 +6,7 @@ import * as AxiosUtils from '../../src/utils/AxiosUtils';
 
 import {
   INVALID_PARAMS
-} from '../constants/TestConstants';
+} from '../constants/InvalidParams';
 
 export function testApiFunctionShouldGetCorrectAxiosInstance(apiName, functionToTest, ...validParameters) {
 

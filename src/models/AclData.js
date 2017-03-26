@@ -57,7 +57,7 @@ export class AclDataBuilder {
 
   setAction(action :Action) :AclDataBuilder {
 
-    if (!isNonEmptyString(action) && !ActionTypes[action]) {
+    if (!isNonEmptyString(action) || !ActionTypes[action]) {
       throw new Error('invalid parameter: action must be a valid Action');
     }
 

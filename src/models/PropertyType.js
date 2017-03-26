@@ -4,6 +4,7 @@
 
 import Immutable from 'immutable';
 
+import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
 
 import FullyQualifiedName from './FullyQualifiedName';
@@ -13,6 +14,7 @@ import Logger from '../utils/Logger';
 import {
   isDefined,
   isEmptyArray,
+  isEmptyString,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -32,7 +34,7 @@ export default class PropertyType {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :?string;
+  description :string;
   datatype :string;
   schemas :FullyQualifiedName[];
 
@@ -40,7 +42,7 @@ export default class PropertyType {
       id :?UUID,
       type :FullyQualifiedName,
       title :string,
-      description :?string,
+      description :string,
       datatype :string,
       schemas :FullyQualifiedName[]) {
 
@@ -62,7 +64,7 @@ export class PropertyTypeBuilder {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :?string;
+  description :string;
   datatype :string;
   schemas :FullyQualifiedName[];
 
@@ -97,6 +99,10 @@ export class PropertyTypeBuilder {
   }
 
   setDescription(description :string) :PropertyTypeBuilder {
+
+    if (isUndefined(description) || isEmptyString(description)) {
+      return this;
+    }
 
     if (!isNonEmptyString(description)) {
       throw new Error('invalid parameter: description must be a non-empty string');
@@ -184,11 +190,11 @@ export function isValid(propertyType :any) :boolean {
       .setSchemas(propertyType.schemas);
 
     // optional properties
-    if (isDefined(propertyType.id)) {
+    if (has(propertyType, 'id')) {
       propertyTypeBuilder.setId(propertyType.id);
     }
 
-    if (isDefined(propertyType.description)) {
+    if (has(propertyType, 'description')) {
       propertyTypeBuilder.setDescription(propertyType.description);
     }
 
