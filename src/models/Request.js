@@ -12,7 +12,8 @@ import Logger from '../utils/Logger';
 
 import {
   isDefined,
-  isEmptyArray
+  isEmptyArray,
+  isEmptyString
 } from '../utils/LangUtils';
 
 import {
@@ -30,9 +31,9 @@ export default class Request {
 
   aclKey :UUID[];
   permissions :Permission[];
-  reason :?string;
+  reason :string;
 
-  constructor(aclKey :UUID[], permissions :Permission[], reason :?string) {
+  constructor(aclKey :UUID[], permissions :Permission[], reason :string) {
 
     this.aclKey = aclKey;
     this.permissions = permissions;
@@ -44,7 +45,7 @@ export class RequestBuilder {
 
   aclKey :UUID[];
   permissions :Permission[];
-  reason :?string;
+  reason :string;
 
   setAclKey(aclKey :UUID[]) :RequestBuilder {
 
@@ -77,6 +78,10 @@ export class RequestBuilder {
 
   setReason(reason :string) :RequestBuilder {
 
+    if (isUndefined(reason) || isEmptyString(reason)) {
+      return this;
+    }
+
     if (!isString(reason)) {
       throw new Error('invalid parameter: reason must be a string');
     }
@@ -107,12 +112,6 @@ export function isValid(request :any) :boolean {
     return false;
   }
 
-  if (!has(request, 'permissions')) {
-
-    LOG.error('missing properties: request is missing required properties');
-    return false;
-  }
-
   try {
 
     const requestBuilder = new RequestBuilder();
@@ -123,7 +122,7 @@ export function isValid(request :any) :boolean {
       .setPermissions(request.permissions);
 
     // optional properties
-    if (isDefined(request.reason)) {
+    if (has(request, 'reason')) {
       requestBuilder.setReason(request.reason);
     }
 

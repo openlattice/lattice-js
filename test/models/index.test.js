@@ -87,6 +87,16 @@ describe('Loom.DataModels', () => {
     expect(DataModels.LinkingEntityTypeBuilder).toEqual(jasmine.any(Function));
   });
 
+  it('should expose Organization', () => {
+    expect(DataModels.Organization).toBeDefined();
+    expect(DataModels.Organization).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose OrganizationBuilder', () => {
+    expect(DataModels.OrganizationBuilder).toBeDefined();
+    expect(DataModels.OrganizationBuilder).toEqual(jasmine.any(Function));
+  });
+
   it('should expose Principal', () => {
     expect(DataModels.Principal).toBeDefined();
     expect(DataModels.Principal).toEqual(jasmine.any(Function));
@@ -105,6 +115,26 @@ describe('Loom.DataModels', () => {
   it('should expose PropertyTypeBuilder', () => {
     expect(DataModels.PropertyTypeBuilder).toBeDefined();
     expect(DataModels.PropertyTypeBuilder).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose Request', () => {
+    expect(DataModels.Request).toBeDefined();
+    expect(DataModels.Request).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose RequestBuilder', () => {
+    expect(DataModels.RequestBuilder).toBeDefined();
+    expect(DataModels.RequestBuilder).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose RequestStatus', () => {
+    expect(DataModels.RequestStatus).toBeDefined();
+    expect(DataModels.RequestStatus).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose RequestStatusBuilder', () => {
+    expect(DataModels.RequestStatusBuilder).toBeDefined();
+    expect(DataModels.RequestStatusBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose Schema', () => {

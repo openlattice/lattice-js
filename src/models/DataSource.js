@@ -4,10 +4,14 @@
 
 import Immutable from 'immutable';
 
+import has from 'lodash/has';
+import isUndefined from 'lodash/isUndefined';
+
 import Logger from '../utils/Logger';
 
 import {
   isDefined,
+  isEmptyString,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -22,13 +26,13 @@ export default class DataSource {
 
   id :UUID;
   title :string;
-  description :?string;
+  description :string;
   entitySetIds :UUID[];
 
   constructor(
       id :UUID,
       title :string,
-      description :?string,
+      description :string,
       entitySetIds :UUID[]) {
 
     this.id = id;
@@ -42,7 +46,7 @@ export class DataSourceBuilder {
 
   id :UUID;
   title :string;
-  description :?string;
+  description :string;
   entitySetIds :UUID[];
 
   setId(id :UUID) :DataSourceBuilder {
@@ -66,6 +70,10 @@ export class DataSourceBuilder {
   }
 
   setDescription(description :string) :DataSourceBuilder {
+
+    if (isUndefined(description) || isEmptyString(description)) {
+      return this;
+    }
 
     if (!isNonEmptyString(description)) {
       throw new Error('invalid parameter: description must be a non-empty string');
@@ -127,12 +135,15 @@ export function isValid(dataSource :any) :boolean {
 
     // required properties
     dataSourceBuilder
-      .setId(dataSource.id)
       .setTitle(dataSource.title)
       .setEntitySetIds(dataSource.entitySetIds);
 
     // optional properties
-    if (isDefined(dataSource.description)) {
+    if (has(dataSource, 'id')) {
+      dataSourceBuilder.setId(dataSource.id);
+    }
+
+    if (has(dataSource, 'description')) {
       dataSourceBuilder.setDescription(dataSource.description);
     }
 

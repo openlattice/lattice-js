@@ -12,11 +12,6 @@ import {
   TICKET_PATH
 } from '../../src/constants/ApiPaths';
 
-// import {
-//   INVALID_PARAMS,
-//   INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
-// } from '../constants/TestConstants';
-
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldReturnPromiseOnValidParameters,
