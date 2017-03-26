@@ -4,17 +4,14 @@ import DataSource, {
 } from '../../src/models/DataSource';
 
 import {
-  MOCK_DATA_SOURCE_DM
-} from '../constants/MockDataModels';
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
 
 import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_STRING_ALLOWED
-} from '../constants/TestConstants';
-
-const INVALID_PARAMS_DESCRIPTION :any[] = INVALID_PARAMS_EMPTY_STRING_ALLOWED.slice(0);
-INVALID_PARAMS_DESCRIPTION.splice(1, 1); // remove "null"
-INVALID_PARAMS_DESCRIPTION.splice(0, 1); // remove "undefined"
+  MOCK_DATA_SOURCE_DM
+} from '../constants/MockDataModels';
 
 describe('DataSource', () => {
 
@@ -33,7 +30,7 @@ describe('DataSource', () => {
     describe('setId()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
@@ -81,7 +78,7 @@ describe('DataSource', () => {
     describe('setDescription()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
@@ -105,7 +102,7 @@ describe('DataSource', () => {
     describe('setEntitySetIds()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntitySetIds(invalidInput);
           }).toThrow();
@@ -116,7 +113,7 @@ describe('DataSource', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntitySetIds([...MOCK_DATA_SOURCE_DM.entitySetIds, invalidInput]);
           }).toThrow();
@@ -248,7 +245,7 @@ describe('DataSource', () => {
       });
 
       it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -260,20 +257,20 @@ describe('DataSource', () => {
       });
 
       it('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "entitySetIds" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { entitySetIds: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { entitySetIds: [invalidInput] }))).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new DataSource(
               invalidInput,
@@ -299,7 +296,7 @@ describe('DataSource', () => {
       });
 
       it('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS_DESCRIPTION.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new DataSource(
               MOCK_DATA_SOURCE_DM.id,
@@ -312,7 +309,7 @@ describe('DataSource', () => {
       });
 
       it('should return false when given an instance with an invalid "entitySetIds" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new DataSource(
               MOCK_DATA_SOURCE_DM.id,

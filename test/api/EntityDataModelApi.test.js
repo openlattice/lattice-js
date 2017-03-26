@@ -20,12 +20,6 @@ import {
   MOCK_ENTITY_SET_DM
 } from '../constants/MockDataModels';
 
-// import {
-//   INVALID_PARAMS,
-//   INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
-//   INVALID_PARAMS_ENUM_VALUES,
-// } from '../constants/TestConstants';
-
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,

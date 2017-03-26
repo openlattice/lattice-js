@@ -4,6 +4,7 @@
 
 import Immutable from 'immutable';
 
+import has from 'lodash/has';
 import isBoolean from 'lodash/isBoolean';
 
 import Logger from '../utils/Logger';
@@ -121,7 +122,7 @@ export function isValid(linkingEntityType :any) :boolean {
       .setEntityTypeIds(linkingEntityType.entityTypeIds);
 
     // optional properties
-    if (isDefined(linkingEntityType.deidentified)) {
+    if (has(linkingEntityType, 'deidentified')) {
       linkingEntityTypeBuilder.setDeidentified(linkingEntityType.deidentified);
     }
 

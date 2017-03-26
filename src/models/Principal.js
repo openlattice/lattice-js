@@ -53,7 +53,7 @@ export class PrincipalBuilder {
 
   setType(type :PrincipalType) :PrincipalBuilder {
 
-    if (!isNonEmptyString(type) && !PrincipalTypes[type]) {
+    if (!isNonEmptyString(type) || !PrincipalTypes[type]) {
       throw new Error('invalid parameter: type must be a non-empty string');
     }
 

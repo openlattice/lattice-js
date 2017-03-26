@@ -6,32 +6,13 @@ import AclData, {
 } from '../../src/models/AclData';
 
 import {
-  INVALID_PARAMS
-} from '../constants/TestConstants';
+  INVALID_PARAMS,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
 
-const MOCK_ACTION = 'ADD';
-
-const MOCK_ACL = {
-  aclKey: [
-    'ec6865e6-e60e-424b-a071-6a9c1603d735'
-  ],
-  aces: [
-    {
-      principal: {
-        type: 'USER',
-        id: 'principalId'
-      },
-      permissions: [
-        'READ'
-      ]
-    }
-  ]
-};
-
-const MOCK_ACL_DATA_OBJ = {
-  acl: MOCK_ACL,
-  action: MOCK_ACTION
-};
+import {
+  MOCK_ACL_DATA_DM
+} from '../constants/MockDataModels';
 
 describe('AclData', () => {
 
@@ -49,12 +30,6 @@ describe('AclData', () => {
 
     describe('setAcl()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setAcl();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
@@ -63,9 +38,15 @@ describe('AclData', () => {
         });
       });
 
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setAcl();
+        }).toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setAcl(MOCK_ACL);
+          builder.setAcl(MOCK_ACL_DATA_DM.acl);
         }).not.toThrow();
       });
 
@@ -73,24 +54,24 @@ describe('AclData', () => {
 
     describe('setAction()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setAction();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setAction(invalidInput);
           }).toThrow();
         });
       });
 
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setAction();
+        }).toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         Object.values(ActionTypes).forEach((type) => {
           expect(() => {
-            builder.setAction([type]);
+            builder.setAction(type);
           }).not.toThrow();
         });
       });
@@ -103,13 +84,13 @@ describe('AclData', () => {
 
         expect(() => {
           (new AclDataBuilder())
-            .setAcl(MOCK_ACL)
+            .setAcl(MOCK_ACL_DATA_DM.acl)
             .build();
         }).toThrow();
 
         expect(() => {
           (new AclDataBuilder())
-            .setAction(MOCK_ACTION)
+            .setAction(MOCK_ACL_DATA_DM.action)
             .build();
         }).toThrow();
       });
@@ -117,17 +98,17 @@ describe('AclData', () => {
       it('should return a valid instance', () => {
 
         const acl = builder
-          .setAcl(MOCK_ACL)
-          .setAction(MOCK_ACTION)
+          .setAcl(MOCK_ACL_DATA_DM.acl)
+          .setAction(MOCK_ACL_DATA_DM.action)
           .build();
 
         expect(acl).toEqual(jasmine.any(AclData));
 
         expect(acl.acl).toBeDefined();
-        expect(acl.acl).toEqual(MOCK_ACL);
+        expect(acl.acl).toEqual(MOCK_ACL_DATA_DM.acl);
 
         expect(acl.action).toBeDefined();
-        expect(acl.action).toEqual(MOCK_ACTION);
+        expect(acl.action).toEqual(MOCK_ACL_DATA_DM.action);
       });
 
     });
@@ -139,13 +120,13 @@ describe('AclData', () => {
     describe('valid', () => {
 
       it('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACL_DATA_OBJ)).toEqual(true);
+        expect(isValid(MOCK_ACL_DATA_DM)).toEqual(true);
       });
 
       it('should return true when given a valid instance ', () => {
         expect(isValid(
           new AclData(
-            MOCK_ACL, MOCK_ACTION
+            MOCK_ACL_DATA_DM.acl, MOCK_ACL_DATA_DM.action
           )
         )).toEqual(true);
       });
@@ -153,8 +134,8 @@ describe('AclData', () => {
       it('should return true when given an instance constructed by the builder', () => {
 
         const acl = (new AclDataBuilder())
-          .setAcl(MOCK_ACL)
-          .setAction(MOCK_ACTION)
+          .setAcl(MOCK_ACL_DATA_DM.acl)
+          .setAction(MOCK_ACL_DATA_DM.action)
           .build();
 
         expect(isValid(acl)).toEqual(true);
@@ -176,13 +157,13 @@ describe('AclData', () => {
 
       it('should return false when given an object literal with an invalid "acl" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACL_DATA_OBJ, { acl: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ACL_DATA_DM, { acl: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "action" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACL_DATA_OBJ, { action: invalidInput }))).toEqual(false);
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ACL_DATA_DM, { action: invalidInput }))).toEqual(false);
         });
       });
 
@@ -190,17 +171,17 @@ describe('AclData', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new AclData(
-              invalidInput, MOCK_ACTION
+              invalidInput, MOCK_ACL_DATA_DM.action
             )
           )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "action" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new AclData(
-              MOCK_ACL, invalidInput
+              MOCK_ACL_DATA_DM.acl, invalidInput
             )
           )).toEqual(false);
         });
