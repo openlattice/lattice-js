@@ -630,47 +630,6 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<> {
 /**
  * `PATCH /edm/entity/set/{uuid}`
  *
- * Updates the EntitySet definition for the given EntitySet UUID with the given EntitySet name.
- *
- * @static
- * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entitySetId
- * @param {string} entitySetName
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.renameEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735", "UpdatedEntitySet");
- */
-export function renameEntitySet(entitySetId :UUID, entitySetName :string) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(entitySetName)) {
-    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
-    LOG.error(errorMsg, entitySetName);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(EDM_API)
-    .patch(`/${ENTITY_SET_PATH}/${entitySetId}`, entitySetName)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `PATCH /edm/entity/set/{uuid}`
- *
  * Updates the EntityType definition for the given EntityType UUID with the given metadata.
  *
  * @static
@@ -1027,50 +986,6 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
 /**
  * `PATCH /edm/entity/type/{uuid}`
  *
- * Updates the EntityType definition for the given EntityType UUID with the given EntityType FullyQualifiedName.
- *
- * @static
- * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {FullyQualifiedName} entityTypeFqn
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.renameEntityType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   { namespace: "LOOM", name: "UpdatedEntity" }
- * );
- */
-export function renameEntityType(entityTypeId :UUID, entityTypeFqn :FullyQualifiedName) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
-    errorMsg = 'invalid parameter: entityTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, entityTypeFqn);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(EDM_API)
-    .patch(`/${ENTITY_TYPE_PATH}/${entityTypeId}`, entityTypeFqn)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `PATCH /edm/entity/type/{uuid}`
- *
  * Updates the EntityType definition for the given EntityType UUID with the given metadata.
  *
  * @static
@@ -1354,50 +1269,6 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `PATCH /edm/property/type/{uuid}`
- *
- * Updates the PropertyType definition for the given PropertyType UUID with the given PropertyType FullyQualifiedName.
- *
- * @static
- * @memberof loom-data.EntityDataModelApi
- * @param {UUID} propertyTypeId
- * @param {FullyQualifiedName} propertyTypeFqn
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.renamePropertyType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   { namespace: "LOOM", name: "UpdatedProperty" }
- * );
- */
-export function renamePropertyType(propertyTypeId :UUID, propertyTypeFqn :FullyQualifiedName) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
-    errorMsg = 'invalid parameter: propertyTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, propertyTypeFqn);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(EDM_API)
-    .patch(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`, propertyTypeFqn)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
