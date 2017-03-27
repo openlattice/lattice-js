@@ -91,8 +91,7 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
     return Promise.reject(errorMsg);
   }
 
-  const isPropertyTypeIdsValidUuidArray :boolean = isValidUuidArray(propertyTypeIds);
-  if (isPropertyTypeIdsValidUuidArray) {
+  if (isValidUuidArray(propertyTypeIds)) {
     data.properties = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
