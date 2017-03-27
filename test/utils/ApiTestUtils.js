@@ -6,7 +6,7 @@ import * as AxiosUtils from '../../src/utils/AxiosUtils';
 
 import {
   INVALID_PARAMS
-} from '../constants/TestConstants';
+} from '../constants/InvalidParams';
 
 export function testApiFunctionShouldGetCorrectAxiosInstance(apiName, functionToTest, ...validParameters) {
 
@@ -116,9 +116,14 @@ function testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest
   }
   else {
 
+    // if (validParams.length !== invalidParams.length) {
+    //   throw new Error('validParams.length should equal invalidParams.length');
+    // }
+
     for (let i = 0; i < validParams.length; i += 1) {
       const invocationParams1 = validParams.slice(0);
       const invocationParams2 = validParams.slice(0);
+      // invalidParams[i].forEach((invalidInput :any) => {
       invalidParams.forEach((invalidInput :any) => {
         invocationParams1[i] = invalidInput;
         promises.push(

@@ -7,22 +7,12 @@ import Ace, {
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
-} from '../constants/TestConstants';
+  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
+} from '../constants/InvalidParams';
 
-const MOCK_PRINCIPAL = {
-  type: 'USER',
-  id: 'principalId'
-};
-
-const MOCK_PERMISSIONS = [
-  'READ'
-];
-
-const MOCK_ACE_OBJ = {
-  principal: MOCK_PRINCIPAL,
-  permissions: MOCK_PERMISSIONS
-};
+import {
+  MOCK_ACE_DM
+} from '../constants/MockDataModels';
 
 describe('Ace', () => {
 
@@ -40,12 +30,6 @@ describe('Ace', () => {
 
     describe('setPrincipal()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setPrincipal();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
@@ -54,9 +38,15 @@ describe('Ace', () => {
         });
       });
 
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setPrincipal();
+        }).toThrow();
+      });
+
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setPrincipal(MOCK_PRINCIPAL);
+          builder.setPrincipal(MOCK_ACE_DM.principal);
         }).not.toThrow();
       });
 
@@ -65,7 +55,7 @@ describe('Ace', () => {
     describe('setPermissions()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(invalidInput);
           }).toThrow();
@@ -76,7 +66,7 @@ describe('Ace', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
           }).toThrow();
@@ -110,24 +100,24 @@ describe('Ace', () => {
 
       it('should set required properties that are allowed to be empty', () => {
 
-        const ace = builder.setPrincipal(MOCK_PRINCIPAL).build();
+        const ace = builder.setPrincipal(MOCK_ACE_DM.principal).build();
         expect(ace.permissions).toEqual([]);
       });
 
       it('should return a valid instance', () => {
 
         const ace = builder
-          .setPrincipal(MOCK_PRINCIPAL)
-          .setPermissions(MOCK_PERMISSIONS)
+          .setPrincipal(MOCK_ACE_DM.principal)
+          .setPermissions(MOCK_ACE_DM.permissions)
           .build();
 
         expect(ace).toEqual(jasmine.any(Ace));
 
         expect(ace.principal).toBeDefined();
-        expect(ace.principal).toEqual(MOCK_PRINCIPAL);
+        expect(ace.principal).toEqual(MOCK_ACE_DM.principal);
 
         expect(ace.permissions).toBeDefined();
-        expect(ace.permissions).toEqual(MOCK_PERMISSIONS);
+        expect(ace.permissions).toEqual(MOCK_ACE_DM.permissions);
       });
 
     });
@@ -139,13 +129,13 @@ describe('Ace', () => {
     describe('valid', () => {
 
       it('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACE_OBJ)).toEqual(true);
+        expect(isValid(MOCK_ACE_DM)).toEqual(true);
       });
 
       it('should return true when given a valid object instance ', () => {
         expect(isValid(
           new Ace(
-            MOCK_PRINCIPAL, MOCK_PERMISSIONS
+            MOCK_ACE_DM.principal, MOCK_ACE_DM.permissions
           )
         )).toEqual(true);
       });
@@ -153,8 +143,8 @@ describe('Ace', () => {
       it('should return true when given an instance constructed by the builder', () => {
 
         const ace = (new AceBuilder())
-          .setPrincipal(MOCK_PRINCIPAL)
-          .setPermissions(MOCK_PERMISSIONS)
+          .setPrincipal(MOCK_ACE_DM.principal)
+          .setPermissions(MOCK_ACE_DM.permissions)
           .build();
 
         expect(isValid(ace)).toEqual(true);
@@ -176,14 +166,14 @@ describe('Ace', () => {
 
       it('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { principal: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ACE_DM, { principal: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "permissions" property', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { permissions: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_ACE_OBJ, { permissions: [invalidInput] }))).toEqual(false);
+        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: [invalidInput] }))).toEqual(false);
         });
       });
 
@@ -191,22 +181,22 @@ describe('Ace', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
-              invalidInput, MOCK_PERMISSIONS
+              invalidInput, MOCK_ACE_DM.permissions
             )
           )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "permissions" property', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
-              MOCK_PRINCIPAL, invalidInput
+              MOCK_ACE_DM.principal, invalidInput
             )
           )).toEqual(false);
           expect(isValid(
             new Ace(
-              MOCK_PRINCIPAL, [invalidInput]
+              MOCK_ACE_DM.principal, [invalidInput]
             )
           )).toEqual(false);
         });

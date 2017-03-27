@@ -4,27 +4,14 @@ import DataSource, {
 } from '../../src/models/DataSource';
 
 import {
-  isDefined
-} from '../../src/utils/LangUtils';
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
 
 import {
-  INVALID_PARAMS
-} from '../constants/TestConstants';
-
-const MOCK_DS_UUID = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
-const MOCK_TITLE = 'title';
-const MOCK_DESCRIPTION = 'description';
-const MOCK_ES_IDS = [
-  'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
-  'fae6af98-2675-45bd-9a5b-1619a87235a8'
-];
-
-const MOCK_DS_OBJ = {
-  id: MOCK_DS_UUID,
-  title: MOCK_TITLE,
-  description: MOCK_DESCRIPTION,
-  entitySetIds: MOCK_ES_IDS
-};
+  MOCK_DATA_SOURCE_DM
+} from '../constants/MockDataModels';
 
 describe('DataSource', () => {
 
@@ -43,7 +30,7 @@ describe('DataSource', () => {
     describe('setId()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
@@ -58,7 +45,7 @@ describe('DataSource', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setId(MOCK_DS_UUID);
+          builder.setId(MOCK_DATA_SOURCE_DM.id);
         }).not.toThrow();
       });
 
@@ -82,7 +69,7 @@ describe('DataSource', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setTitle(MOCK_TITLE);
+          builder.setTitle(MOCK_DATA_SOURCE_DM.title);
         }).not.toThrow();
       });
 
@@ -91,22 +78,22 @@ describe('DataSource', () => {
     describe('setDescription()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      it('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setDescription();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setDescription(MOCK_DESCRIPTION);
+          builder.setDescription(MOCK_DATA_SOURCE_DM.description);
         }).not.toThrow();
       });
 
@@ -115,7 +102,7 @@ describe('DataSource', () => {
     describe('setEntitySetIds()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntitySetIds(invalidInput);
           }).toThrow();
@@ -126,9 +113,9 @@ describe('DataSource', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setEntitySetIds([...MOCK_ES_IDS, invalidInput]);
+            builder.setEntitySetIds([...MOCK_DATA_SOURCE_DM.entitySetIds, invalidInput]);
           }).toThrow();
         });
       });
@@ -141,7 +128,7 @@ describe('DataSource', () => {
 
       it('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setEntitySetIds(MOCK_ES_IDS);
+          builder.setEntitySetIds(MOCK_DATA_SOURCE_DM.entitySetIds);
         }).not.toThrow();
       });
 
@@ -153,22 +140,22 @@ describe('DataSource', () => {
 
         expect(() => {
           (new DataSourceBuilder())
-            .setTitle(MOCK_TITLE)
-            .setEntitySetIds(MOCK_ES_IDS)
+            .setTitle(MOCK_DATA_SOURCE_DM.title)
+            .setEntitySetIds(MOCK_DATA_SOURCE_DM.entitySetIds)
             .build();
         }).toThrow();
 
         expect(() => {
           (new DataSourceBuilder())
-            .setId(MOCK_DS_UUID)
-            .setEntitySetIds(MOCK_ES_IDS)
+            .setId(MOCK_DATA_SOURCE_DM.id)
+            .setEntitySetIds(MOCK_DATA_SOURCE_DM.entitySetIds)
             .build();
         }).toThrow();
 
         expect(() => {
           (new DataSourceBuilder())
-            .setId(MOCK_DS_UUID)
-            .setTitle(MOCK_TITLE)
+            .setId(MOCK_DATA_SOURCE_DM.id)
+            .setTitle(MOCK_DATA_SOURCE_DM.title)
             .build();
         }).toThrow();
       });
@@ -177,9 +164,9 @@ describe('DataSource', () => {
 
         expect(() => {
           (new DataSourceBuilder())
-            .setId(MOCK_DS_UUID)
-            .setTitle(MOCK_TITLE)
-            .setEntitySetIds(MOCK_ES_IDS)
+            .setId(MOCK_DATA_SOURCE_DM.id)
+            .setTitle(MOCK_DATA_SOURCE_DM.title)
+            .setEntitySetIds(MOCK_DATA_SOURCE_DM.entitySetIds)
             .build();
         }).not.toThrow();
       });
@@ -187,25 +174,25 @@ describe('DataSource', () => {
       it('should return a valid instance', () => {
 
         const dataSource = builder
-          .setId(MOCK_DS_UUID)
-          .setTitle(MOCK_TITLE)
-          .setDescription(MOCK_DESCRIPTION)
-          .setEntitySetIds(MOCK_ES_IDS)
+          .setId(MOCK_DATA_SOURCE_DM.id)
+          .setTitle(MOCK_DATA_SOURCE_DM.title)
+          .setDescription(MOCK_DATA_SOURCE_DM.description)
+          .setEntitySetIds(MOCK_DATA_SOURCE_DM.entitySetIds)
           .build();
 
         expect(dataSource).toEqual(jasmine.any(DataSource));
 
         expect(dataSource.id).toBeDefined();
-        expect(dataSource.id).toEqual(MOCK_DS_UUID);
+        expect(dataSource.id).toEqual(MOCK_DATA_SOURCE_DM.id);
 
         expect(dataSource.title).toBeDefined();
-        expect(dataSource.title).toEqual(MOCK_TITLE);
+        expect(dataSource.title).toEqual(MOCK_DATA_SOURCE_DM.title);
 
         expect(dataSource.description).toBeDefined();
-        expect(dataSource.description).toEqual(MOCK_DESCRIPTION);
+        expect(dataSource.description).toEqual(MOCK_DATA_SOURCE_DM.description);
 
         expect(dataSource.entitySetIds).toBeDefined();
-        expect(dataSource.entitySetIds).toEqual(MOCK_ES_IDS);
+        expect(dataSource.entitySetIds).toEqual(MOCK_DATA_SOURCE_DM.entitySetIds);
       });
 
     });
@@ -217,13 +204,16 @@ describe('DataSource', () => {
     describe('valid', () => {
 
       it('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_DS_OBJ)).toEqual(true);
+        expect(isValid(MOCK_DATA_SOURCE_DM)).toEqual(true);
       });
 
       it('should return true when given a valid instance ', () => {
         expect(isValid(
           new DataSource(
-            MOCK_DS_UUID, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_ES_IDS
+            MOCK_DATA_SOURCE_DM.id,
+            MOCK_DATA_SOURCE_DM.title,
+            MOCK_DATA_SOURCE_DM.description,
+            MOCK_DATA_SOURCE_DM.entitySetIds
           )
         )).toEqual(true);
       });
@@ -231,10 +221,10 @@ describe('DataSource', () => {
       it('should return true when given an instance constructed by the builder', () => {
 
         const dataSource = (new DataSourceBuilder())
-          .setId(MOCK_DS_UUID)
-          .setTitle(MOCK_TITLE)
-          .setDescription(MOCK_DESCRIPTION)
-          .setEntitySetIds(MOCK_ES_IDS)
+          .setId(MOCK_DATA_SOURCE_DM.id)
+          .setTitle(MOCK_DATA_SOURCE_DM.title)
+          .setDescription(MOCK_DATA_SOURCE_DM.description)
+          .setEntitySetIds(MOCK_DATA_SOURCE_DM.entitySetIds)
           .build();
 
         expect(isValid(dataSource)).toEqual(true);
@@ -255,37 +245,38 @@ describe('DataSource', () => {
       });
 
       it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DS_OBJ, { id: invalidInput }))).toEqual(false);
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { id: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DS_OBJ, { title: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { title: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_DS_OBJ, { description: invalidInput }))).toEqual(false);
-          }
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "entitySetIds" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DS_OBJ, { entitySetIds: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_DS_OBJ, { entitySetIds: [invalidInput] }))).toEqual(false);
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { entitySetIds: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_DATA_SOURCE_DM, { entitySetIds: [invalidInput] }))).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new DataSource(
-              invalidInput, MOCK_TITLE, MOCK_DESCRIPTION, MOCK_ES_IDS
+              invalidInput,
+              MOCK_DATA_SOURCE_DM.title,
+              MOCK_DATA_SOURCE_DM.description,
+              MOCK_DATA_SOURCE_DM.entitySetIds
             )
           )).toEqual(false);
         });
@@ -295,34 +286,44 @@ describe('DataSource', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new DataSource(
-              MOCK_DS_UUID, invalidInput, MOCK_DESCRIPTION, MOCK_ES_IDS
+              MOCK_DATA_SOURCE_DM.id,
+              invalidInput,
+              MOCK_DATA_SOURCE_DM.description,
+              MOCK_DATA_SOURCE_DM.entitySetIds
             )
           )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new DataSource(
-                MOCK_DS_UUID, MOCK_TITLE, invalidInput, MOCK_ES_IDS
-              )
-            )).toEqual(false);
-          }
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(
+            new DataSource(
+              MOCK_DATA_SOURCE_DM.id,
+              MOCK_DATA_SOURCE_DM.title,
+              invalidInput,
+              MOCK_DATA_SOURCE_DM.entitySetIds
+            )
+          )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "entitySetIds" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new DataSource(
-              MOCK_DS_UUID, MOCK_TITLE, MOCK_DESCRIPTION, invalidInput
+              MOCK_DATA_SOURCE_DM.id,
+              MOCK_DATA_SOURCE_DM.title,
+              MOCK_DATA_SOURCE_DM.description,
+              invalidInput
             )
           )).toEqual(false);
           expect(isValid(
             new DataSource(
-              MOCK_DS_UUID, MOCK_TITLE, MOCK_DESCRIPTION, [invalidInput]
+              MOCK_DATA_SOURCE_DM.id,
+              MOCK_DATA_SOURCE_DM.title,
+              MOCK_DATA_SOURCE_DM.description,
+              [invalidInput]
             )
           )).toEqual(false);
         });

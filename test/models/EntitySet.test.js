@@ -4,17 +4,15 @@ import EntitySet, {
 } from '../../src/models/EntitySet';
 
 import {
-  isDefined
-} from '../../src/utils/LangUtils';
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
 
 import {
   MOCK_ENTITY_SET_DM
 } from '../constants/MockDataModels';
-
-import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
-} from '../constants/TestConstants';
 
 describe('EntitySet', () => {
 
@@ -32,18 +30,18 @@ describe('EntitySet', () => {
 
     describe('setId()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setId();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setId();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -56,18 +54,18 @@ describe('EntitySet', () => {
 
     describe('setEntityTypeId()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setEntityTypeId();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntityTypeId(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setEntityTypeId();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -80,18 +78,18 @@ describe('EntitySet', () => {
 
     describe('setName()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setName();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setName(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setName();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -104,18 +102,18 @@ describe('EntitySet', () => {
 
     describe('setTitle()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setTitle();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setTitle(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setTitle();
+        }).toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -128,18 +126,18 @@ describe('EntitySet', () => {
 
     describe('setDescription()', () => {
 
-      it('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setDescription();
-        }).toThrow();
-      });
-
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
         });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setDescription();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -153,7 +151,7 @@ describe('EntitySet', () => {
     describe('setContacts()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setContacts(invalidInput);
           }).toThrow();
@@ -164,7 +162,7 @@ describe('EntitySet', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setContacts(Object.values(MOCK_ENTITY_SET_DM.contacts).push(invalidInput));
           }).toThrow();
@@ -331,15 +329,13 @@ describe('EntitySet', () => {
       });
 
       it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { id: invalidInput }))).toEqual(false);
-          }
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { id: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "entityTypeId" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { entityTypeId: invalidInput }))).toEqual(false);
         });
       });
@@ -357,39 +353,35 @@ describe('EntitySet', () => {
       });
 
       it('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { description: invalidInput }))).toEqual(false);
-          }
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
       it('should return false when given an object literal with an invalid "contacts" property', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { contacts: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { contacts: [invalidInput] }))).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new EntitySet(
-                invalidInput,
-                MOCK_ENTITY_SET_DM.entityTypeId,
-                MOCK_ENTITY_SET_DM.name,
-                MOCK_ENTITY_SET_DM.title,
-                MOCK_ENTITY_SET_DM.description,
-                MOCK_ENTITY_SET_DM.contacts
-              )
-            )).toEqual(false);
-          }
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
+          expect(isValid(
+            new EntitySet(
+              invalidInput,
+              MOCK_ENTITY_SET_DM.entityTypeId,
+              MOCK_ENTITY_SET_DM.name,
+              MOCK_ENTITY_SET_DM.title,
+              MOCK_ENTITY_SET_DM.description,
+              MOCK_ENTITY_SET_DM.contacts
+            )
+          )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "entityTypeId" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
               MOCK_ENTITY_SET_DM.id,
@@ -434,24 +426,22 @@ describe('EntitySet', () => {
       });
 
       it('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          if (isDefined(invalidInput)) {
-            expect(isValid(
-              new EntitySet(
-                MOCK_ENTITY_SET_DM.id,
-                MOCK_ENTITY_SET_DM.entityTypeId,
-                MOCK_ENTITY_SET_DM.name,
-                MOCK_ENTITY_SET_DM.title,
-                invalidInput,
-                MOCK_ENTITY_SET_DM.contacts
-              )
-            )).toEqual(false);
-          }
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(
+            new EntitySet(
+              MOCK_ENTITY_SET_DM.id,
+              MOCK_ENTITY_SET_DM.entityTypeId,
+              MOCK_ENTITY_SET_DM.name,
+              MOCK_ENTITY_SET_DM.title,
+              invalidInput,
+              MOCK_ENTITY_SET_DM.contacts
+            )
+          )).toEqual(false);
         });
       });
 
       it('should return false when given an instance with an invalid "contacts" property', () => {
-        INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
               MOCK_ENTITY_SET_DM.id,

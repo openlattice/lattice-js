@@ -20,6 +20,16 @@ export function isEmptyArray(value :any) :boolean {
   return isArray(value) && isEmpty(value);
 }
 
+export function isEmptyObject(value :any) :boolean {
+
+  return isPlainObject(value) && isEmpty(value);
+}
+
+export function isEmptyString(value :any) :boolean {
+
+  return isString(value) && isEmpty(value);
+}
+
 export function isNonEmptyArray(value :any) :boolean {
 
   return isArray(value) && !isEmpty(value);

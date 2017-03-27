@@ -4,6 +4,7 @@
 
 import Immutable from 'immutable';
 
+import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
 
 import Principal from './Principal';
@@ -12,6 +13,7 @@ import Logger from '../utils/Logger';
 import {
   isDefined,
   isEmptyArray,
+  isEmptyString,
   isNonEmptyString,
   isNonEmptyStringArray
 } from '../utils/LangUtils';
@@ -31,7 +33,7 @@ export default class Organization {
 
   id :?UUID;
   title :string;
-  description :?string;
+  description :string;
   members :Principal[];
   roles :Principal[];
   emails :string[];
@@ -39,7 +41,7 @@ export default class Organization {
   constructor(
       id :?UUID,
       title :string,
-      description :?string,
+      description :string,
       members :Principal[],
       roles :Principal[],
       emails :string[]) {
@@ -61,7 +63,7 @@ export class OrganizationBuilder {
 
   id :?UUID;
   title :string;
-  description :?string;
+  description :string;
   members :Principal[];
   roles :Principal[];
   emails :string[];
@@ -87,6 +89,10 @@ export class OrganizationBuilder {
   }
 
   setDescription(description :string) :OrganizationBuilder {
+
+    if (isUndefined(description) || isEmptyString(description)) {
+      return this;
+    }
 
     if (!isNonEmptyString(description)) {
       throw new Error('invalid parameter: description must be a non-empty string');
@@ -203,11 +209,11 @@ export function isValid(organization :any) :boolean {
       .build();
 
     // optional properties
-    if (isDefined(organization.id)) {
+    if (has(organization, 'id')) {
       organizationBuilder.setId(organization.id);
     }
 
-    if (isDefined(organization.description)) {
+    if (has(organization, 'description')) {
       organizationBuilder.setDescription(organization.description);
     }
 
