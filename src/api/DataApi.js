@@ -38,7 +38,7 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isEmptyArray,
+  isNonEmptyArray,
   isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
@@ -58,18 +58,18 @@ const LOG = new Logger('DataApi');
  * @static
  * @memberof loom-data.DataApi
  * @param {UUID} entitySetId
- * @param {UUID[]} syncIds
+ * @param {UUID} syncId
  * @param {UUID[]} propertyTypeIds
  * @returns {Promise}
  *
  * @example
  * DataApi.getSelectedEntitySetData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
  * );
  */
-export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTypeIds :UUID[]) :Promise<> {
+export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeIds :UUID[]) :Promise<> {
 
   let errorMsg = '';
 
@@ -79,44 +79,31 @@ export function getEntitySetData(entitySetId :UUID, syncIds :UUID[], propertyTyp
     return Promise.reject(errorMsg);
   }
 
-  let syncIdsSet :UUID[];
-  if (isUndefined(syncIds) || isEmptyArray(syncIds)) {
-    syncIdsSet = [];
+  const data = {};
+
+  const isSyncIdValidUuid :boolean = isValidUuid(syncId);
+  if (isSyncIdValidUuid) {
+    data.syncId = syncId;
   }
-  else if (!isValidUuidArray(syncIds)) {
-    errorMsg = 'invalid parameter: syncIds must be an array of valid UUIDs';
-    LOG.error(errorMsg, syncIds);
+  else if (isNonEmptyString(syncId) && !isSyncIdValidUuid) {
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
     return Promise.reject(errorMsg);
-  }
-  else {
-    syncIdsSet = Immutable.Set().withMutations((set :Set<UUID>) => {
-      syncIds.forEach((syncId :UUID) => {
-        set.add(syncId);
-      });
-    }).toJS();
   }
 
-  let propertyTypeIdsSet :UUID[];
-  if (isUndefined(propertyTypeIds) || isEmptyArray(propertyTypeIds)) {
-    propertyTypeIdsSet = [];
-  }
-  else if (!isValidUuidArray(propertyTypeIds)) {
-    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
-    LOG.error(errorMsg, propertyTypeIds);
-    return Promise.reject(errorMsg);
-  }
-  else {
-    propertyTypeIdsSet = Immutable.Set().withMutations((set :Set<UUID>) => {
+  const isPropertyTypeIdsValidUuidArray :boolean = isValidUuidArray(propertyTypeIds);
+  if (isPropertyTypeIdsValidUuidArray) {
+    data.properties = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
       });
     }).toJS();
   }
-
-  const data = {
-    syncIds: syncIdsSet,
-    properties: propertyTypeIdsSet
-  };
+  else if (isNonEmptyArray(propertyTypeIds) && !isPropertyTypeIdsValidUuidArray) {
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
+  }
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${ENTITY_DATA_PATH}/${entitySetId}`, data)

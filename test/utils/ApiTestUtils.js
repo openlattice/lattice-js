@@ -116,6 +116,10 @@ function testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest
   }
   else {
 
+    // if (validParams.length !== invalidParams.length) {
+    //   throw new Error('validParams.length should equal invalidParams.length');
+    // }
+
     for (let i = 0; i < validParams.length; i += 1) {
       const invocationParams1 = validParams.slice(0);
       const invocationParams2 = validParams.slice(0);

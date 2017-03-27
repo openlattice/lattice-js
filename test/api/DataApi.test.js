@@ -12,6 +12,11 @@ import {
   TICKET_PATH
 } from '../../src/constants/ApiPaths';
 
+// import {
+//   INVALID_SS_PARAMS,
+//   INVALID_SS_PARAMS_EMPTY_COLLECTION_ALLOWED
+// } from '../constants/InvalidParams';
+
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldReturnPromiseOnValidParameters,
@@ -68,18 +73,18 @@ function testGetEntitySetData() {
   describe('getEntitySetData()', () => {
 
     const functionInvocation = [
-      DataApi.getEntitySetData, MOCK_ENTITY_SET_UUID, [MOCK_SYNC_UUID], [MOCK_PROPERTY_TYPE_UUID]
+      DataApi.getEntitySetData, MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, [MOCK_PROPERTY_TYPE_UUID]
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      DataApi.getEntitySetData(MOCK_ENTITY_SET_UUID, [MOCK_SYNC_UUID], [MOCK_PROPERTY_TYPE_UUID])
+      DataApi.getEntitySetData(MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, [MOCK_PROPERTY_TYPE_UUID])
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
             `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
             {
-              syncIds: [MOCK_SYNC_UUID],
+              syncId: MOCK_SYNC_UUID,
               properties: [MOCK_PROPERTY_TYPE_UUID]
             }
           );
@@ -92,12 +97,12 @@ function testGetEntitySetData() {
 
     testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
     testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    // testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
     // testApiFunctionShouldRejectOnGivenInvalidParameters(
     //   [
-    //     INVALID_PARAMS,
-    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
-    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
+    //     INVALID_SS_PARAMS,
+    //     INVALID_SS_PARAMS,
+    //     INVALID_SS_PARAMS_EMPTY_COLLECTION_ALLOWED
     //   ],
     //   ...functionInvocation
     // );
