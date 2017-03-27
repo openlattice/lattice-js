@@ -123,6 +123,7 @@ function testShouldRejectOnInvalidParameters(done, invalidParams, functionToTest
     for (let i = 0; i < validParams.length; i += 1) {
       const invocationParams1 = validParams.slice(0);
       const invocationParams2 = validParams.slice(0);
+      // invalidParams[i].forEach((invalidInput :any) => {
       invalidParams.forEach((invalidInput :any) => {
         invocationParams1[i] = invalidInput;
         promises.push(

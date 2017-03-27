@@ -38,7 +38,8 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isNonEmptyArray,
+  isEmptyArray,
+  isEmptyString,
   isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
@@ -81,11 +82,10 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
 
   const data = {};
 
-  const isSyncIdValidUuid :boolean = isValidUuid(syncId);
-  if (isSyncIdValidUuid) {
+  if (isValidUuid(syncId)) {
     data.syncId = syncId;
   }
-  else if (isNonEmptyString(syncId) && !isSyncIdValidUuid) {
+  else if (!isUndefined(syncId) && !isEmptyString(syncId)) {
     errorMsg = 'invalid parameter: syncId must be a valid UUID';
     LOG.error(errorMsg, syncId);
     return Promise.reject(errorMsg);
@@ -99,7 +99,7 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
       });
     }).toJS();
   }
-  else if (isNonEmptyArray(propertyTypeIds) && !isPropertyTypeIdsValidUuidArray) {
+  else if (!isUndefined(syncId) && !isEmptyArray(syncId)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
@@ -184,7 +184,12 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(syncId)) {
+  let url :string = `/${ENTITY_DATA_PATH}/${entitySetId}`;
+
+  if (isValidUuid(syncId)) {
+    url = `${url}/${syncId}`;
+  }
+  else if (!isUndefined(syncId) && !isEmptyString(syncId)) {
     errorMsg = 'invalid parameter: syncId must be a valid UUID';
     LOG.error(errorMsg, syncId);
     return Promise.reject(errorMsg);
@@ -199,7 +204,7 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
   }
 
   return getApiAxiosInstance(DATA_API)
-    .put(`/${ENTITY_DATA_PATH}/${entitySetId}/${syncId}`, entities)
+    .put(url, entities)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
