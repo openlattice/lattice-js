@@ -19,6 +19,7 @@
 
 import Immutable from 'immutable';
 
+import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
 
 import EntitySet from '../models/EntitySet';
@@ -57,7 +58,9 @@ import {
 
 import {
   isEmptyArray,
-  isNonEmptyString
+  isNonEmptyObject,
+  isNonEmptyString,
+  isNonEmptyStringArray
 } from '../utils/LangUtils';
 
 import {
@@ -627,18 +630,27 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<> {
 /**
  * `PATCH /edm/entity/set/{uuid}`
  *
- * Updates the EntitySet definition for the given EntitySet UUID with the given EntitySet name.
+ * Updates the EntityType definition for the given EntityType UUID with the given metadata.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entitySetId
- * @param {string} entitySetName
+ * @param {UUID} entityTypeId
+ * @param {Object} metadata
  * @return {Promise}
  *
  * @example
- * EntityDataModelApi.renameEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735", "UpdatedEntitySet");
+ * EntityDataModelApi.updateEntitySetMetaData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "type": { namespace: "LOOM", name: "UpdatedEntitySet" },
+ *     "name": "MyEntitySet",
+ *     "title": "MyEntitySet",
+ *     "description": "MyEntitySet description",
+ *     "contacts": ["support@kryptnostic.com"]
+ *   }
+ * );
  */
-export function renameEntitySet(entitySetId :UUID, entitySetName :string) :Promise<> {
+export function updateEntitySetMetaData(entitySetId :UUID, metadata :Object) :Promise<> {
 
   let errorMsg = '';
 
@@ -648,14 +660,44 @@ export function renameEntitySet(entitySetId :UUID, entitySetName :string) :Promi
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(entitySetName)) {
-    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
-    LOG.error(errorMsg, entitySetName);
+  if (!isNonEmptyObject(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'type') && !FullyQualifiedName.isValid(metadata.type)) {
+    errorMsg = 'invalid parameter: type must be a valid FQN';
+    LOG.error(errorMsg, metadata.type);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'name') && !isNonEmptyString(metadata.name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, metadata.name);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'title') && !isNonEmptyString(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'description') && !isNonEmptyString(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'contacts') && !isNonEmptyStringArray(metadata.contacts)) {
+    errorMsg = 'invalid parameter: contacts must be a non-empty string';
+    LOG.error(errorMsg, metadata.contacts);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
-    .patch(`/${ENTITY_SET_PATH}/${entitySetId}`, entitySetName)
+    .patch(`/${ENTITY_SET_PATH}/${entitySetId}`, metadata)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -944,21 +986,27 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
 /**
  * `PATCH /edm/entity/type/{uuid}`
  *
- * Updates the EntityType definition for the given EntityType UUID with the given EntityType FullyQualifiedName.
+ * Updates the EntityType definition for the given EntityType UUID with the given metadata.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
- * @param {FullyQualifiedName} entityTypeFqn
+ * @param {Object} metadata
  * @return {Promise}
  *
  * @example
- * EntityDataModelApi.renameEntityType(
+ * EntityDataModelApi.updateEntityTypeMetaData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   { namespace: "LOOM", name: "UpdatedEntity" }
+ *   {
+ *     "type": { namespace: "LOOM", name: "UpdatedEntity" },
+ *     "name": "MyEntity",
+ *     "title": "MyEntity",
+ *     "description": "MyEntity description",
+ *     "contacts": ["support@kryptnostic.com"]
+ *   }
  * );
  */
-export function renameEntityType(entityTypeId :UUID, entityTypeFqn :FullyQualifiedName) :Promise<> {
+export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :Promise<> {
 
   let errorMsg = '';
 
@@ -968,14 +1016,44 @@ export function renameEntityType(entityTypeId :UUID, entityTypeFqn :FullyQualifi
     return Promise.reject(errorMsg);
   }
 
-  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
-    errorMsg = 'invalid parameter: entityTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, entityTypeFqn);
+  if (!isNonEmptyObject(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'type') && !FullyQualifiedName.isValid(metadata.type)) {
+    errorMsg = 'invalid parameter: type must be a valid FQN';
+    LOG.error(errorMsg, metadata.type);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'name') && !isNonEmptyString(metadata.name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, metadata.name);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'title') && !isNonEmptyString(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'description') && !isNonEmptyString(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'contacts') && !isNonEmptyStringArray(metadata.contacts)) {
+    errorMsg = 'invalid parameter: contacts must be a non-empty string';
+    LOG.error(errorMsg, metadata.contacts);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
-    .patch(`/${ENTITY_TYPE_PATH}/${entityTypeId}`, entityTypeFqn)
+    .patch(`/${ENTITY_TYPE_PATH}/${entityTypeId}`, metadata)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -1203,21 +1281,27 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
 /**
  * `PATCH /edm/property/type/{uuid}`
  *
- * Updates the PropertyType definition for the given PropertyType UUID with the given PropertyType FullyQualifiedName.
+ * Updates the PropertyType definition for the given PropertyType UUID with the given metadata.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
- * @param {FullyQualifiedName} propertyTypeFqn
+ * @param {Object} metadata
  * @return {Promise}
  *
  * @example
- * EntityDataModelApi.renamePropertyType(
+ * EntityDataModelApi.updatePropertyTypeMetaData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   { namespace: "LOOM", name: "UpdatedProperty" }
+ *   {
+ *     "type": { namespace: "LOOM", name: "UpdatedProperty" },
+ *     "name": "MyProperty",
+ *     "title": "MyProperty",
+ *     "description": "MyProperty description",
+ *     "contacts": ["support@kryptnostic.com"]
+ *   }
  * );
  */
-export function renamePropertyType(propertyTypeId :UUID, propertyTypeFqn :FullyQualifiedName) :Promise<> {
+export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Object) :Promise<> {
 
   let errorMsg = '';
 
@@ -1227,14 +1311,44 @@ export function renamePropertyType(propertyTypeId :UUID, propertyTypeFqn :FullyQ
     return Promise.reject(errorMsg);
   }
 
-  if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
-    errorMsg = 'invalid parameter: propertyTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, propertyTypeFqn);
+  if (!isNonEmptyObject(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'type') && !FullyQualifiedName.isValid(metadata.type)) {
+    errorMsg = 'invalid parameter: type must be a valid FQN';
+    LOG.error(errorMsg, metadata.type);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'name') && !isNonEmptyString(metadata.name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, metadata.name);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'title') && !isNonEmptyString(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'description') && !isNonEmptyString(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'contacts') && !isNonEmptyStringArray(metadata.contacts)) {
+    errorMsg = 'invalid parameter: contacts must be a non-empty string';
+    LOG.error(errorMsg, metadata.contacts);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(EDM_API)
-    .patch(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`, propertyTypeFqn)
+    .patch(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`, metadata)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
