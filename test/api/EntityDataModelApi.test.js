@@ -17,7 +17,10 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
-  MOCK_ENTITY_SET_DM
+  MOCK_FQN,
+  MOCK_ENTITY_SET_DM,
+  MOCK_ENTITY_TYPE_DM,
+  MOCK_PROPERTY_TYPE_DM
 } from '../constants/MockDataModels';
 
 import {
@@ -92,6 +95,14 @@ const MOCK_SCHEMA = {
 const MOCK_ACTION = 'ADD';
 const MOCK_FILE_TYPE = 'json';
 
+const MOCK_METADATA_UPDATE = {
+  type: MOCK_FQN,
+  name: 'name',
+  title: 'title',
+  description: 'description',
+  contacts: ['foo@bar.com']
+};
+
 let mockAxiosInstance = null;
 
 describe('EntityDataModelApi', () => {
@@ -119,6 +130,7 @@ describe('EntityDataModelApi', () => {
   testCreateEntitySets();
   testDeleteEntitySet();
   testRenameEntitySet();
+  testUpdateEntitySetMetaData();
   testGetEntityType();
   testGetEntityTypeId();
   testGetAllEntityTypes();
@@ -127,6 +139,7 @@ describe('EntityDataModelApi', () => {
   testAddPropertyTypeToEntityType();
   testRemovePropertyTypeFromEntityType();
   testRenameEntityType();
+  testUpdateEntityTypeMetaData();
   testGetPropertyType();
   testGetPropertyTypeId();
   testGetAllPropertyTypes();
@@ -134,6 +147,7 @@ describe('EntityDataModelApi', () => {
   testCreatePropertyType();
   testDeletePropertyType();
   testRenamePropertyType();
+  testUpdatePropertyTypeMetaData();
 });
 
 function testGetEntityDataModel() {
@@ -577,6 +591,38 @@ function testRenameEntitySet() {
   });
 }
 
+function testUpdateEntitySetMetaData() {
+
+  describe('updateEntitySetMetaData()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.updateEntitySetMetaData, MOCK_ENTITY_SET_DM.id, MOCK_METADATA_UPDATE
+    ];
+
+    it('should send a PATCH request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.updateEntitySetMetaData(MOCK_ENTITY_SET_DM.id, MOCK_METADATA_UPDATE)
+        .then(() => {
+          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
+            `/${ENTITY_SET_PATH}/${MOCK_ENTITY_SET_DM.id}`,
+            MOCK_METADATA_UPDATE
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
 function testGetEntityType() {
 
   describe('getEntityType()', () => {
@@ -825,6 +871,38 @@ function testRenameEntityType() {
   });
 }
 
+function testUpdateEntityTypeMetaData() {
+
+  describe('updateEntityTypeMetaData()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.updateEntityTypeMetaData, MOCK_ENTITY_TYPE_DM.id, MOCK_METADATA_UPDATE
+    ];
+
+    it('should send a PATCH request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.updateEntityTypeMetaData(MOCK_ENTITY_TYPE_DM.id, MOCK_METADATA_UPDATE)
+        .then(() => {
+          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
+            `/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_DM.id}`,
+            MOCK_METADATA_UPDATE
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
 function testGetPropertyType() {
 
   describe('getPropertyType()', () => {
@@ -1025,6 +1103,38 @@ function testRenamePropertyType() {
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
             `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_UUID}`,
             MOCK_PROPERTY_TYPE_FQN
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
+    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+
+  });
+}
+
+function testUpdatePropertyTypeMetaData() {
+
+  describe('updatePropertyTypeMetaData()', () => {
+
+    const functionInvocation = [
+      EntityDataModelApi.updatePropertyTypeMetaData, MOCK_PROPERTY_TYPE_DM.id, MOCK_METADATA_UPDATE
+    ];
+
+    it('should send a PATCH request with the correct URL path and data', (done) => {
+
+      EntityDataModelApi.updatePropertyTypeMetaData(MOCK_PROPERTY_TYPE_DM.id, MOCK_METADATA_UPDATE)
+        .then(() => {
+          expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
+            `/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_DM.id}`,
+            MOCK_METADATA_UPDATE
           );
           done();
         })
