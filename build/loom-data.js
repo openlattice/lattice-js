@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.21.0
+ * loom-data - v0.21.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4584,7 +4584,7 @@ var _isError = __webpack_require__(279);
 
 var _isError2 = _interopRequireDefault(_isError);
 
-var _isString = __webpack_require__(35);
+var _isString = __webpack_require__(25);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -4726,7 +4726,7 @@ exports.isNonEmptyObject = isNonEmptyObject;
 exports.isNonEmptyString = isNonEmptyString;
 exports.isNonEmptyStringArray = isNonEmptyStringArray;
 
-var _isArray = __webpack_require__(15);
+var _isArray = __webpack_require__(14);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
@@ -4742,7 +4742,7 @@ var _isPlainObject = __webpack_require__(63);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _isString = __webpack_require__(35);
+var _isString = __webpack_require__(25);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -4834,11 +4834,11 @@ var _uuidValidate = __webpack_require__(288);
 
 var _uuidValidate2 = _interopRequireDefault(_uuidValidate);
 
-var _PermissionTypes = __webpack_require__(26);
+var _PermissionTypes = __webpack_require__(27);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _FullyQualifiedName = __webpack_require__(14);
+var _FullyQualifiedName = __webpack_require__(15);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -4846,7 +4846,7 @@ var _AccessCheck = __webpack_require__(45);
 
 var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
 
-var _Ace = __webpack_require__(30);
+var _Ace = __webpack_require__(31);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
@@ -4870,7 +4870,7 @@ var _Request = __webpack_require__(21);
 
 var _Request2 = _interopRequireDefault(_Request);
 
-var _RequestStatus = __webpack_require__(31);
+var _RequestStatus = __webpack_require__(32);
 
 var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
 
@@ -10457,7 +10457,7 @@ exports.getApiAxiosInstance = getApiAxiosInstance;
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(32),
+var Symbol = __webpack_require__(33),
     getRawTag = __webpack_require__(242),
     objectToString = __webpack_require__(269);
 
@@ -10593,6 +10593,38 @@ var SEARCH_PROPERTY_TYPES_PATH = exports.SEARCH_PROPERTY_TYPES_PATH = 'property_
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+module.exports = isArray;
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10639,7 +10671,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
  * fqn.getFullyQualifiedName(); // "LOOM.Data"
  */
 
-var _isObject = __webpack_require__(34);
+var _isObject = __webpack_require__(35);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
@@ -10803,38 +10835,6 @@ exports.default = FullyQualifiedName;
 module.exports = exports['default'];
 
 /***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-module.exports = isArray;
-
-
-/***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10854,7 +10854,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _PrincipalTypes = __webpack_require__(27);
+var _PrincipalTypes = __webpack_require__(28);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -11022,11 +11022,11 @@ var _isUndefined = __webpack_require__(5);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _FullyQualifiedName = __webpack_require__(14);
+var _FullyQualifiedName = __webpack_require__(15);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _SecurableTypes = __webpack_require__(29);
+var _SecurableTypes = __webpack_require__(30);
 
 var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
 
@@ -11528,7 +11528,7 @@ var _isUndefined = __webpack_require__(5);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _FullyQualifiedName = __webpack_require__(14);
+var _FullyQualifiedName = __webpack_require__(15);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11739,7 +11739,7 @@ var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isString = __webpack_require__(35);
+var _isString = __webpack_require__(25);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -11938,6 +11938,42 @@ module.exports = nativeCreate;
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var baseGetTag = __webpack_require__(10),
+    isArray = __webpack_require__(14),
+    isObjectLike = __webpack_require__(12);
+
+/** `Object#toString` result references. */
+var stringTag = '[object String]';
+
+/**
+ * Checks if `value` is classified as a `String` primitive or object.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a string, else `false`.
+ * @example
+ *
+ * _.isString('abc');
+ * // => true
+ *
+ * _.isString(1);
+ * // => false
+ */
+function isString(value) {
+  return typeof value == 'string' ||
+    (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
+}
+
+module.exports = isString;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
@@ -12036,7 +12072,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(180)))
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12057,7 +12093,7 @@ exports.default = PermissionTypes;
 module.exports = exports['default'];
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12076,7 +12112,7 @@ exports.default = PrincipalTypes;
 module.exports = exports['default'];
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12095,7 +12131,7 @@ exports.default = RequestStateTypes;
 module.exports = exports['default'];
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12116,7 +12152,7 @@ exports.default = SecurableTypes;
 module.exports = exports['default'];
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12253,7 +12289,7 @@ function isValid(ace) {
 }
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12272,7 +12308,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _RequestStateTypes = __webpack_require__(28);
+var _RequestStateTypes = __webpack_require__(29);
 
 var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
 
@@ -12384,7 +12420,7 @@ function isValid(requestStatus) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(11);
@@ -12396,7 +12432,7 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -12437,7 +12473,7 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -12471,42 +12507,6 @@ function isObject(value) {
 }
 
 module.exports = isObject;
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseGetTag = __webpack_require__(10),
-    isArray = __webpack_require__(15),
-    isObjectLike = __webpack_require__(12);
-
-/** `Object#toString` result references. */
-var stringTag = '[object String]';
-
-/**
- * Checks if `value` is classified as a `String` primitive or object.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a string, else `false`.
- * @example
- *
- * _.isString('abc');
- * // => true
- *
- * _.isString(1);
- * // => false
- */
-function isString(value) {
-  return typeof value == 'string' ||
-    (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
-}
-
-module.exports = isString;
 
 
 /***/ }),
@@ -13130,7 +13130,7 @@ var _isUndefined = __webpack_require__(5);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _Ace = __webpack_require__(30);
+var _Ace = __webpack_require__(31);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
@@ -13923,7 +13923,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
     value: function setId(id) {
 
       if (!(0, _ValidationUtils.isValidUuid)(id)) {
-        throw new Error('invalid parameter: type must be a valid UUID');
+        throw new Error('invalid parameter: id must be a valid UUID');
       }
 
       this.id = id;
@@ -14096,7 +14096,7 @@ var _EntityType = __webpack_require__(18);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _FullyQualifiedName = __webpack_require__(14);
+var _FullyQualifiedName = __webpack_require__(15);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -14263,9 +14263,9 @@ module.exports = baseIndexOf;
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(32),
+var Symbol = __webpack_require__(33),
     arrayMap = __webpack_require__(225),
-    isArray = __webpack_require__(15),
+    isArray = __webpack_require__(14),
     isSymbol = __webpack_require__(36);
 
 /** Used as references for various `Number` constants. */
@@ -14439,7 +14439,7 @@ module.exports = isArguments;
 var baseKeys = __webpack_require__(233),
     getTag = __webpack_require__(243),
     isArguments = __webpack_require__(60),
-    isArray = __webpack_require__(15),
+    isArray = __webpack_require__(14),
     isArrayLike = __webpack_require__(276),
     isBuffer = __webpack_require__(278),
     isPrototype = __webpack_require__(57),
@@ -14520,7 +14520,7 @@ module.exports = isEmpty;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
-    isObject = __webpack_require__(34);
+    isObject = __webpack_require__(35);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -25970,11 +25970,11 @@ var _isUndefined = __webpack_require__(5);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _PermissionTypes = __webpack_require__(26);
+var _PermissionTypes = __webpack_require__(27);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _SecurableTypes = __webpack_require__(29);
+var _SecurableTypes = __webpack_require__(30);
 
 var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
 
@@ -26213,7 +26213,7 @@ function getEntitySetData(entitySetId, syncId, propertyTypeIds) {
         set.add(propertyTypeId);
       });
     }).toJS();
-  } else if (!(0, _isUndefined2.default)(syncId) && !(0, _LangUtils.isEmptyArray)(syncId)) {
+  } else if (!(0, _isUndefined2.default)(propertyTypeIds) && !(0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
@@ -26248,6 +26248,8 @@ function getEntitySetDataFileUrl(entitySetId, fileType) {
     LOG.error(errorMsg, entitySetId);
     return null;
   }
+
+  // TODO: create an allowed file type constants map, and validate fileType against it
 
   if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
     errorMsg = 'invalid parameter: fileType must be a non-empty string';
@@ -26732,7 +26734,7 @@ var _EntitySet = __webpack_require__(19);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _FullyQualifiedName = __webpack_require__(14);
+var _FullyQualifiedName = __webpack_require__(15);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -27081,7 +27083,7 @@ function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
     return Promise.reject(errorMsg);
   }
 
-  if (!(0, _LangUtils.isNonEmptyString)(action) && !UpdateSchemaRequestActions[action]) {
+  if (!(0, _LangUtils.isNonEmptyString)(action) || !UpdateSchemaRequestActions[action]) {
     errorMsg = 'invalid parameter: action must be a valid action';
     LOG.error(errorMsg, action);
     return Promise.reject(errorMsg);
@@ -28219,7 +28221,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _PrincipalTypes = __webpack_require__(27);
+var _PrincipalTypes = __webpack_require__(28);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -28808,7 +28810,7 @@ function addPrincipal(organizationId, principalType, principalId) {
     return Promise.reject(errorMsg);
   }
 
-  if (!(0, _LangUtils.isNonEmptyString)(principalType) && !_PrincipalTypes2.default[principalType]) {
+  if (!(0, _LangUtils.isNonEmptyString)(principalType) || !_PrincipalTypes2.default[principalType]) {
     errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
     LOG.error(errorMsg, principalType);
     return Promise.reject(errorMsg);
@@ -28956,7 +28958,7 @@ function removePrincipal(organizationId, principalType, principalId) {
     return Promise.reject(errorMsg);
   }
 
-  if (!(0, _LangUtils.isNonEmptyString)(principalType) && !_PrincipalTypes2.default[principalType]) {
+  if (!(0, _LangUtils.isNonEmptyString)(principalType) || !_PrincipalTypes2.default[principalType]) {
     errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
     LOG.error(errorMsg, principalType);
     return Promise.reject(errorMsg);
@@ -29522,7 +29524,7 @@ var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _RequestStateTypes = __webpack_require__(28);
+var _RequestStateTypes = __webpack_require__(29);
 
 var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
 
@@ -29534,7 +29536,7 @@ var _Request = __webpack_require__(21);
 
 var _Request2 = _interopRequireDefault(_Request);
 
-var _RequestStatus = __webpack_require__(31);
+var _RequestStatus = __webpack_require__(32);
 
 var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
 
@@ -29789,9 +29791,9 @@ var _isFinite = __webpack_require__(280);
 
 var _isFinite2 = _interopRequireDefault(_isFinite);
 
-var _FullyQualifiedName = __webpack_require__(14);
+var _isString = __webpack_require__(25);
 
-var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
+var _isString2 = _interopRequireDefault(_isString);
 
 var _Logger = __webpack_require__(1);
 
@@ -30316,9 +30318,15 @@ function searchEntityTypesByFQN(searchOptions) {
     return Promise.reject(errorMsg);
   }
 
-  if (!_FullyQualifiedName2.default.isValid(namespace, name)) {
-    errorMsg = 'invalid parameter: namespace and name must be a valid FQN';
-    LOG.error(errorMsg, namespace, name);
+  if ((0, _LangUtils.isDefined)(namespace) && !(0, _isString2.default)(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isDefined)(name) && !(0, _isString2.default)(name)) {
+    errorMsg = 'invalid parameter: name must be a string';
+    LOG.error(errorMsg, name);
     return Promise.reject(errorMsg);
   }
 
@@ -30449,9 +30457,15 @@ function searchPropertyTypesByFQN(searchOptions) {
     return Promise.reject(errorMsg);
   }
 
-  if (!_FullyQualifiedName2.default.isValid(namespace, name)) {
-    errorMsg = 'invalid parameter: namespace and name must be a valid FQN';
-    LOG.error(errorMsg, namespace, name);
+  if ((0, _LangUtils.isDefined)(namespace) && !(0, _isString2.default)(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isDefined)(name) && !(0, _isString2.default)(name)) {
+    errorMsg = 'invalid parameter: name must be a string';
+    LOG.error(errorMsg, name);
     return Promise.reject(errorMsg);
   }
 
@@ -30484,19 +30498,19 @@ var _ActionTypes = __webpack_require__(44);
 
 var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
-var _PermissionTypes = __webpack_require__(26);
+var _PermissionTypes = __webpack_require__(27);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _PrincipalTypes = __webpack_require__(27);
+var _PrincipalTypes = __webpack_require__(28);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
-var _RequestStateTypes = __webpack_require__(28);
+var _RequestStateTypes = __webpack_require__(29);
 
 var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
 
-var _SecurableTypes = __webpack_require__(29);
+var _SecurableTypes = __webpack_require__(30);
 
 var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
 
@@ -30520,11 +30534,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SchemaBuilder = exports.Schema = exports.RequestStatusBuilder = exports.RequestStatus = exports.RequestBuilder = exports.Request = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.LinkingEntityTypeBuilder = exports.LinkingEntityType = exports.LinkingEntitySetBuilder = exports.LinkingEntitySet = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.DataSourceBuilder = exports.DataSource = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.FullyQualifiedName = undefined;
 
-var _FullyQualifiedName = __webpack_require__(14);
+var _FullyQualifiedName = __webpack_require__(15);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _Ace = __webpack_require__(30);
+var _Ace = __webpack_require__(31);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
@@ -30572,7 +30586,7 @@ var _Request = __webpack_require__(21);
 
 var _Request2 = _interopRequireDefault(_Request);
 
-var _RequestStatus = __webpack_require__(31);
+var _RequestStatus = __webpack_require__(32);
 
 var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
 
@@ -30628,7 +30642,7 @@ module.exports = __webpack_require__(195);
 var utils = __webpack_require__(6);
 var bind = __webpack_require__(43);
 var Axios = __webpack_require__(197);
-var defaults = __webpack_require__(25);
+var defaults = __webpack_require__(26);
 
 /**
  * Create an instance of Axios
@@ -30748,7 +30762,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(25);
+var defaults = __webpack_require__(26);
 var utils = __webpack_require__(6);
 var InterceptorManager = __webpack_require__(198);
 var dispatchRequest = __webpack_require__(199);
@@ -30902,7 +30916,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(6);
 var transformData = __webpack_require__(202);
 var isCancel = __webpack_require__(41);
-var defaults = __webpack_require__(25);
+var defaults = __webpack_require__(26);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -31544,7 +31558,7 @@ var _Configuration = __webpack_require__(38);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.21.0";
+var version = "v0.21.1";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
@@ -33918,7 +33932,7 @@ module.exports = baseIsNaN;
 
 var isFunction = __webpack_require__(62),
     isMasked = __webpack_require__(255),
-    isObject = __webpack_require__(34),
+    isObject = __webpack_require__(35),
     toSource = __webpack_require__(59);
 
 /**
@@ -33970,7 +33984,7 @@ module.exports = baseIsNative;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
-    isLength = __webpack_require__(33),
+    isLength = __webpack_require__(34),
     isObjectLike = __webpack_require__(12);
 
 /** `Object#toString` result references. */
@@ -34128,7 +34142,7 @@ module.exports = baseUnary;
 /* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(15),
+var isArray = __webpack_require__(14),
     isKey = __webpack_require__(253),
     stringToPath = __webpack_require__(272),
     toString = __webpack_require__(64);
@@ -34254,7 +34268,7 @@ module.exports = getPrototype;
 /* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(32);
+var Symbol = __webpack_require__(33);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -34391,9 +34405,9 @@ module.exports = getValue;
 
 var castPath = __webpack_require__(236),
     isArguments = __webpack_require__(60),
-    isArray = __webpack_require__(15),
+    isArray = __webpack_require__(14),
     isIndex = __webpack_require__(252),
-    isLength = __webpack_require__(33),
+    isLength = __webpack_require__(34),
     toKey = __webpack_require__(273);
 
 /**
@@ -34632,7 +34646,7 @@ module.exports = isIndex;
 /* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(15),
+var isArray = __webpack_require__(14),
     isSymbol = __webpack_require__(36);
 
 /** Used to match property names within property paths. */
@@ -35281,7 +35295,7 @@ module.exports = eq;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(62),
-    isLength = __webpack_require__(33);
+    isLength = __webpack_require__(34);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
