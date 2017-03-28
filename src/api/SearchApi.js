@@ -20,8 +20,8 @@
 import Immutable from 'immutable';
 
 import isFinite from 'lodash/isFinite';
+import isString from 'lodash/isString';
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
 import {
@@ -564,9 +564,15 @@ export function searchEntityTypesByFQN(searchOptions :Object) :Promise<> {
     return Promise.reject(errorMsg);
   }
 
-  if (!FullyQualifiedName.isValid(namespace, name)) {
-    errorMsg = 'invalid parameter: namespace and name must be a valid FQN';
-    LOG.error(errorMsg, namespace, name);
+  if (isDefined(namespace) && !isString(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  if (isDefined(name) && !isString(name)) {
+    errorMsg = 'invalid parameter: name must be a string';
+    LOG.error(errorMsg, name);
     return Promise.reject(errorMsg);
   }
 
@@ -705,9 +711,15 @@ export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<> {
     return Promise.reject(errorMsg);
   }
 
-  if (!FullyQualifiedName.isValid(namespace, name)) {
-    errorMsg = 'invalid parameter: namespace and name must be a valid FQN';
-    LOG.error(errorMsg, namespace, name);
+  if (isDefined(namespace) && !isString(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  if (isDefined(name) && !isString(name)) {
+    errorMsg = 'invalid parameter: name must be a string';
+    LOG.error(errorMsg, name);
     return Promise.reject(errorMsg);
   }
 

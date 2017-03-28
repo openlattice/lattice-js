@@ -643,7 +643,7 @@ export function addPrincipal(organizationId :UUID, principalType :PrincipalType,
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(principalType) && !PrincipalTypes[principalType]) {
+  if (!isNonEmptyString(principalType) || !PrincipalTypes[principalType]) {
     errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
     LOG.error(errorMsg, principalType);
     return Promise.reject(errorMsg);
@@ -800,7 +800,7 @@ export function removePrincipal(organizationId :UUID, principalType :PrincipalTy
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(principalType) && !PrincipalTypes[principalType]) {
+  if (!isNonEmptyString(principalType) || !PrincipalTypes[principalType]) {
     errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
     LOG.error(errorMsg, principalType);
     return Promise.reject(errorMsg);

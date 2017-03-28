@@ -17,6 +17,12 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
+  INVALID_PARAMS,
+  INVALID_SS_PARAMS,
+  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
+} from '../constants/InvalidParams';
+
+import {
   MOCK_FQN,
   MOCK_ENTITY_SET_DM,
   MOCK_ENTITY_TYPE_DM,
@@ -28,7 +34,6 @@ import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
-  // testApiFunctionShouldRejectOnGivenInvalidParameters,
   testApiFunctionShouldReturnNullOnInvalidParameters,
   testApiFunctionShouldReturnPromiseOnValidParameters
 } from '../utils/ApiTestUtils';
@@ -95,9 +100,10 @@ function testGetEntityDataModel() {
 
   describe('getEntityDataModel()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getEntityDataModel
-    ];
+    const functionToTest :Function = EntityDataModelApi.getEntityDataModel;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -112,8 +118,9 @@ function testGetEntityDataModel() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -122,13 +129,19 @@ function testGetSchema() {
 
   describe('getSchema()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getSchema, MOCK_FQN
+    const functionToTest :Function = EntityDataModelApi.getSchema;
+
+    const validParams :any[] = [
+      MOCK_FQN
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getSchema(MOCK_FQN)
+      EntityDataModelApi.getSchema(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -141,10 +154,10 @@ function testGetSchema() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -155,8 +168,16 @@ function testGetSchemaFileUrl() {
 
     const MOCK_FILE_TYPE = 'json';
 
-    const functionInvocation = [
-      EntityDataModelApi.getSchemaFileUrl, MOCK_FQN, MOCK_FILE_TYPE
+    const functionToTest :Function = EntityDataModelApi.getSchemaFileUrl;
+
+    const validParams :any[] = [
+      MOCK_FQN,
+      MOCK_FILE_TYPE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should return the correct URL', () => {
@@ -175,8 +196,8 @@ function testGetSchemaFileUrl() {
       );
     });
 
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldReturnNullOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldReturnNullOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -185,9 +206,10 @@ function testGetAllSchemas() {
 
   describe('getAllSchemas()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getAllSchemas
-    ];
+    const functionToTest :Function = EntityDataModelApi.getAllSchemas;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -204,8 +226,9 @@ function testGetAllSchemas() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -214,13 +237,19 @@ function testGetAllSchemasInNamespace() {
 
   describe('getAllSchemasInNamespace()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getAllSchemasInNamespace, MOCK_FQN.namespace
+    const functionToTest :Function = EntityDataModelApi.getAllSchemasInNamespace;
+
+    const validParams :any[] = [
+      MOCK_FQN.namespace
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getAllSchemasInNamespace(MOCK_FQN.namespace)
+      EntityDataModelApi.getAllSchemasInNamespace(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -233,10 +262,10 @@ function testGetAllSchemasInNamespace() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -245,13 +274,19 @@ function testCreateSchema() {
 
   describe('createSchema()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.createSchema, MOCK_SCHEMA_DM
+    const functionToTest :Function = EntityDataModelApi.createSchema;
+
+    const validParams :any[] = [
+      MOCK_SCHEMA_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.createSchema(MOCK_SCHEMA_DM)
+      EntityDataModelApi.createSchema(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -265,10 +300,10 @@ function testCreateSchema() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -277,13 +312,19 @@ function testCreateEmptySchema() {
 
   describe('createEmptySchema()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.createEmptySchema, MOCK_FQN
+    const functionToTest :Function = EntityDataModelApi.createEmptySchema;
+
+    const validParams :any[] = [
+      MOCK_FQN
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.createEmptySchema(MOCK_FQN)
+      EntityDataModelApi.createEmptySchema(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
@@ -296,10 +337,10 @@ function testCreateEmptySchema() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -310,13 +351,25 @@ function testUpdateSchema() {
 
     const MOCK_ACTION = 'ADD';
 
-    const functionInvocation = [
-      EntityDataModelApi.updateSchema, MOCK_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE_DM.id], [MOCK_PROPERTY_TYPE_DM.id]
+    const functionToTest :Function = EntityDataModelApi.updateSchema;
+
+    const validParams :any[] = [
+      MOCK_FQN,
+      MOCK_ACTION,
+      [MOCK_ENTITY_TYPE_DM.id],
+      [MOCK_PROPERTY_TYPE_DM.id]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED,
+      INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.updateSchema(MOCK_FQN, MOCK_ACTION, [MOCK_ENTITY_TYPE_DM.id], [MOCK_PROPERTY_TYPE_DM.id])
+      EntityDataModelApi.updateSchema(...validParams)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
@@ -334,18 +387,10 @@ function testUpdateSchema() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    // testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    // testApiFunctionShouldRejectOnGivenInvalidParameters(
-    //   [
-    //     INVALID_PARAMS,
-    //     INVALID_PARAMS_ENUM_VALUES,
-    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED,
-    //     INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED
-    //   ],
-    //   ...functionInvocation
-    // );
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -354,13 +399,19 @@ function testGetEntitySet() {
 
   describe('getEntitySet()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getEntitySet, MOCK_ENTITY_SET_DM.id
+    const functionToTest :Function = EntityDataModelApi.getEntitySet;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getEntitySet(MOCK_ENTITY_SET_DM.id)
+      EntityDataModelApi.getEntitySet(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -373,10 +424,10 @@ function testGetEntitySet() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -385,13 +436,19 @@ function testGetEntitySetId() {
 
   describe('getEntitySetId()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getEntitySetId, MOCK_ENTITY_SET_DM.name
+    const functionToTest :Function = EntityDataModelApi.getEntitySetId;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_DM.name
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getEntitySetId(MOCK_ENTITY_SET_DM.name)
+      EntityDataModelApi.getEntitySetId(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -404,10 +461,10 @@ function testGetEntitySetId() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -416,9 +473,10 @@ function testGetAllEntitySets() {
 
   describe('getAllEntitySets()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getAllEntitySets
-    ];
+    const functionToTest :Function = EntityDataModelApi.getAllEntitySets;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -435,8 +493,9 @@ function testGetAllEntitySets() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -445,13 +504,19 @@ function testCreateEntitySets() {
 
   describe('createEntitySets()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.createEntitySets, [MOCK_ENTITY_SET_DM]
+    const functionToTest :Function = EntityDataModelApi.createEntitySets;
+
+    const validParams :any[] = [
+      [MOCK_ENTITY_SET_DM]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.createEntitySets([MOCK_ENTITY_SET_DM])
+      EntityDataModelApi.createEntitySets(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -465,10 +530,10 @@ function testCreateEntitySets() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -477,13 +542,19 @@ function testDeleteEntitySet() {
 
   describe('deleteEntitySet()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.deleteEntitySet, MOCK_ENTITY_SET_DM.id
+    const functionToTest :Function = EntityDataModelApi.deleteEntitySet;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      EntityDataModelApi.deleteEntitySet(MOCK_ENTITY_SET_DM.id)
+      EntityDataModelApi.deleteEntitySet(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
@@ -496,10 +567,10 @@ function testDeleteEntitySet() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -508,13 +579,21 @@ function testUpdateEntitySetMetaData() {
 
   describe('updateEntitySetMetaData()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.updateEntitySetMetaData, MOCK_ENTITY_SET_DM.id, MOCK_METADATA_UPDATE
+    const functionToTest :Function = EntityDataModelApi.updateEntitySetMetaData;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_DM.id,
+      MOCK_METADATA_UPDATE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.updateEntitySetMetaData(MOCK_ENTITY_SET_DM.id, MOCK_METADATA_UPDATE)
+      EntityDataModelApi.updateEntitySetMetaData(...validParams)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
@@ -528,10 +607,10 @@ function testUpdateEntitySetMetaData() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -540,13 +619,19 @@ function testGetEntityType() {
 
   describe('getEntityType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getEntityType, MOCK_ENTITY_TYPE_DM.id
+    const functionToTest :Function = EntityDataModelApi.getEntityType;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_TYPE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getEntityType(MOCK_ENTITY_TYPE_DM.id)
+      EntityDataModelApi.getEntityType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -559,10 +644,10 @@ function testGetEntityType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -571,13 +656,19 @@ function testGetEntityTypeId() {
 
   describe('getEntityTypeId()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getEntityTypeId, MOCK_FQN
+    const functionToTest :Function = EntityDataModelApi.getEntityTypeId;
+
+    const validParams :any[] = [
+      MOCK_FQN
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getEntityTypeId(MOCK_FQN)
+      EntityDataModelApi.getEntityTypeId(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -590,10 +681,10 @@ function testGetEntityTypeId() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -602,9 +693,10 @@ function testGetAllEntityTypes() {
 
   describe('getAllEntityTypes()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getAllEntityTypes
-    ];
+    const functionToTest :Function = EntityDataModelApi.getAllEntityTypes;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -621,8 +713,9 @@ function testGetAllEntityTypes() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -631,13 +724,19 @@ function testCreateEntityType() {
 
   describe('createEntityType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.createEntityType, MOCK_ENTITY_TYPE_DM
+    const functionToTest :Function = EntityDataModelApi.createEntityType;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_TYPE_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.createEntityType(MOCK_ENTITY_TYPE_DM)
+      EntityDataModelApi.createEntityType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -651,10 +750,10 @@ function testCreateEntityType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -663,13 +762,19 @@ function testDeleteEntityType() {
 
   describe('deleteEntityType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.deleteEntityType, MOCK_ENTITY_TYPE_DM.id
+    const functionToTest :Function = EntityDataModelApi.deleteEntityType;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_TYPE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      EntityDataModelApi.deleteEntityType(MOCK_ENTITY_TYPE_DM.id)
+      EntityDataModelApi.deleteEntityType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
@@ -682,10 +787,10 @@ function testDeleteEntityType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -694,13 +799,21 @@ function testAddPropertyTypeToEntityType() {
 
   describe('addPropertyTypeToEntityType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.addPropertyTypeToEntityType, MOCK_ENTITY_TYPE_DM.id, MOCK_PROPERTY_TYPE_DM.id
+    const functionToTest :Function = EntityDataModelApi.addPropertyTypeToEntityType;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_TYPE_DM.id,
+      MOCK_PROPERTY_TYPE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path', (done) => {
 
-      EntityDataModelApi.addPropertyTypeToEntityType(MOCK_ENTITY_TYPE_DM.id, MOCK_PROPERTY_TYPE_DM.id)
+      EntityDataModelApi.addPropertyTypeToEntityType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
@@ -713,10 +826,10 @@ function testAddPropertyTypeToEntityType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -725,13 +838,21 @@ function testRemovePropertyTypeFromEntityType() {
 
   describe('removePropertyTypeFromEntityType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.removePropertyTypeFromEntityType, MOCK_ENTITY_TYPE_DM.id, MOCK_PROPERTY_TYPE_DM.id
+    const functionToTest :Function = EntityDataModelApi.removePropertyTypeFromEntityType;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_TYPE_DM.id,
+      MOCK_PROPERTY_TYPE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      EntityDataModelApi.removePropertyTypeFromEntityType(MOCK_ENTITY_TYPE_DM.id, MOCK_PROPERTY_TYPE_DM.id)
+      EntityDataModelApi.removePropertyTypeFromEntityType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
@@ -744,10 +865,10 @@ function testRemovePropertyTypeFromEntityType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -756,13 +877,21 @@ function testUpdateEntityTypeMetaData() {
 
   describe('updateEntityTypeMetaData()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.updateEntityTypeMetaData, MOCK_ENTITY_TYPE_DM.id, MOCK_METADATA_UPDATE
+    const functionToTest :Function = EntityDataModelApi.updateEntityTypeMetaData;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_TYPE_DM.id,
+      MOCK_METADATA_UPDATE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.updateEntityTypeMetaData(MOCK_ENTITY_TYPE_DM.id, MOCK_METADATA_UPDATE)
+      EntityDataModelApi.updateEntityTypeMetaData(...validParams)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
@@ -776,10 +905,10 @@ function testUpdateEntityTypeMetaData() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -788,13 +917,19 @@ function testGetPropertyType() {
 
   describe('getPropertyType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getPropertyType, MOCK_PROPERTY_TYPE_DM.id
+    const functionToTest :Function = EntityDataModelApi.getPropertyType;
+
+    const validParams :any[] = [
+      MOCK_PROPERTY_TYPE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getPropertyType(MOCK_PROPERTY_TYPE_DM.id)
+      EntityDataModelApi.getPropertyType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -807,10 +942,10 @@ function testGetPropertyType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -819,13 +954,19 @@ function testGetPropertyTypeId() {
 
   describe('getPropertyTypeId()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getPropertyTypeId, MOCK_FQN
+    const functionToTest :Function = EntityDataModelApi.getPropertyTypeId;
+
+    const validParams :any[] = [
+      MOCK_FQN
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getPropertyTypeId(MOCK_FQN)
+      EntityDataModelApi.getPropertyTypeId(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -838,10 +979,10 @@ function testGetPropertyTypeId() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -850,9 +991,10 @@ function testGetAllPropertyTypes() {
 
   describe('getAllPropertyTypes()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getAllPropertyTypes
-    ];
+    const functionToTest :Function = EntityDataModelApi.getAllPropertyTypes;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -869,8 +1011,9 @@ function testGetAllPropertyTypes() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -879,13 +1022,19 @@ function testGetAllPropertyTypesInNamespace() {
 
   describe('getAllPropertyTypesInNamespace()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.getAllPropertyTypesInNamespace, MOCK_FQN.namespace
+    const functionToTest :Function = EntityDataModelApi.getAllPropertyTypesInNamespace;
+
+    const validParams :any[] = [
+      MOCK_FQN.namespace
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      EntityDataModelApi.getAllPropertyTypesInNamespace(MOCK_FQN.namespace)
+      EntityDataModelApi.getAllPropertyTypesInNamespace(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -898,10 +1047,10 @@ function testGetAllPropertyTypesInNamespace() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -910,13 +1059,19 @@ function testCreatePropertyType() {
 
   describe('createPropertyType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.createPropertyType, MOCK_PROPERTY_TYPE_DM
+    const functionToTest :Function = EntityDataModelApi.createPropertyType;
+
+    const validParams :any[] = [
+      MOCK_PROPERTY_TYPE_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.createPropertyType(MOCK_PROPERTY_TYPE_DM)
+      EntityDataModelApi.createPropertyType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -930,10 +1085,10 @@ function testCreatePropertyType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -942,13 +1097,19 @@ function testDeletePropertyType() {
 
   describe('deletePropertyType()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.deletePropertyType, MOCK_PROPERTY_TYPE_DM.id
+    const functionToTest :Function = EntityDataModelApi.deletePropertyType;
+
+    const validParams :any[] = [
+      MOCK_PROPERTY_TYPE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.deletePropertyType(MOCK_PROPERTY_TYPE_DM.id)
+      EntityDataModelApi.deletePropertyType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
@@ -961,10 +1122,11 @@ function testDeletePropertyType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
@@ -972,13 +1134,21 @@ function testUpdatePropertyTypeMetaData() {
 
   describe('updatePropertyTypeMetaData()', () => {
 
-    const functionInvocation = [
-      EntityDataModelApi.updatePropertyTypeMetaData, MOCK_PROPERTY_TYPE_DM.id, MOCK_METADATA_UPDATE
+    const functionToTest :Function = EntityDataModelApi.updatePropertyTypeMetaData;
+
+    const validParams :any[] = [
+      MOCK_PROPERTY_TYPE_DM.id,
+      MOCK_METADATA_UPDATE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      EntityDataModelApi.updatePropertyTypeMetaData(MOCK_PROPERTY_TYPE_DM.id, MOCK_METADATA_UPDATE)
+      EntityDataModelApi.updatePropertyTypeMetaData(...validParams)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
@@ -992,10 +1162,10 @@ function testUpdatePropertyTypeMetaData() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(EDM_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, EDM_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }

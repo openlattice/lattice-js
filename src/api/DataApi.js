@@ -98,7 +98,7 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
       });
     }).toJS();
   }
-  else if (!isUndefined(syncId) && !isEmptyArray(syncId)) {
+  else if (!isUndefined(propertyTypeIds) && !isEmptyArray(propertyTypeIds)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
@@ -136,6 +136,8 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     LOG.error(errorMsg, entitySetId);
     return null;
   }
+
+  // TODO: create an allowed file type constants map, and validate fileType against it
 
   if (!isNonEmptyString(fileType)) {
     errorMsg = 'invalid parameter: fileType must be a non-empty string';

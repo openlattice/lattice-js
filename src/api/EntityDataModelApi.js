@@ -390,7 +390,7 @@ export function updateSchema(
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(action) && !UpdateSchemaRequestActions[action]) {
+  if (!isNonEmptyString(action) || !UpdateSchemaRequestActions[action]) {
     errorMsg = 'invalid parameter: action must be a valid action';
     LOG.error(errorMsg, action);
     return Promise.reject(errorMsg);
