@@ -30,7 +30,6 @@ import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldReturnPromiseOnValidParameters,
   testApiFunctionShouldNotThrowOnInvalidParameters,
-  testApiFunctionShouldRejectOnGivenInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters
 } from '../utils/ApiTestUtils';
 
@@ -85,18 +84,22 @@ describe('RequestsApi', () => {
 
 function testGetAllRequestStatuses() {
 
+  // TODO: figure out how to test object parameters with optional properties like in RequestsApi.getAllRequestStatuses
+
   describe('getAllRequestStatuses()', () => {
 
-    testApiFunctionShouldRejectOnGivenInvalidParameters(
-      GET_ALL_REQUEST_STATUSES_INVALID_PARAMS,
-      RequestsApi.getAllRequestStatuses
-    );
+    // testApiFunctionShouldRejectOnGivenInvalidParameters(
+    //   GET_ALL_REQUEST_STATUSES_INVALID_PARAMS,
+    //   RequestsApi.getAllRequestStatuses
+    // );
 
     describe('get all RequestStatuses', () => {
 
-      const functionInvocation = [
-        RequestsApi.getAllRequestStatuses
-      ];
+      // TODO: temporary
+      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
+      const validParams :any[] = [];
+      testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
+      testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
 
       it('should send a GET request with the correct URL path', (done) => {
 
@@ -114,24 +117,19 @@ function testGetAllRequestStatuses() {
           });
       });
 
-      testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
     });
 
     describe('get all RequestStatuses for the specified RequestState', () => {
 
-      const invocationParameters = [
-        { state: RequestStateTypes.SUBMITTED }
-      ];
-
-      const functionInvocation = [
-        RequestsApi.getAllRequestStatuses, ...invocationParameters
-      ];
+      // TODO: temporary
+      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
+      const validParams :any[] = [{ state: RequestStateTypes.SUBMITTED }];
+      testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
+      testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
 
       it('should send a GET request with the correct URL path', (done) => {
 
-        RequestsApi.getAllRequestStatuses(...invocationParameters)
+        RequestsApi.getAllRequestStatuses(...validParams)
           .then(() => {
             expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
             expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -145,24 +143,19 @@ function testGetAllRequestStatuses() {
           });
       });
 
-      testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
     });
 
     describe('get all RequestStatuses for the specified AclKeys', () => {
 
-      const invocationParameters = [
-        { aclKeys: [MOCK_ACL_KEY] }
-      ];
-
-      const functionInvocation = [
-        RequestsApi.getAllRequestStatuses, ...invocationParameters
-      ];
+      // TODO: temporary
+      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
+      const validParams :any[] = [{ aclKeys: [MOCK_ACL_KEY] }];
+      testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
+      testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
 
       it('should send a POST request with the correct URL path and data', (done) => {
 
-        RequestsApi.getAllRequestStatuses(...invocationParameters)
+        RequestsApi.getAllRequestStatuses(...validParams)
           .then(() => {
             expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
             expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -208,27 +201,22 @@ function testGetAllRequestStatuses() {
           });
       });
 
-      testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
     });
 
     describe('get all RequestStatuses for the specified RequestState and AclKeys', () => {
 
-      const invocationParameters = [
-        {
-          state: RequestStateTypes.SUBMITTED,
-          aclKeys: [MOCK_ACL_KEY]
-        }
-      ];
-
-      const functionInvocation = [
-        RequestsApi.getAllRequestStatuses, ...invocationParameters
-      ];
+      // TODO: temporary
+      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
+      const validParams :any[] = [{
+        state: RequestStateTypes.SUBMITTED,
+        aclKeys: [MOCK_ACL_KEY]
+      }];
+      testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
+      testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
 
       it('should send a POST request with the correct URL path and data', (done) => {
 
-        RequestsApi.getAllRequestStatuses(...invocationParameters)
+        RequestsApi.getAllRequestStatuses(...validParams)
           .then(() => {
             expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
             expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -243,9 +231,6 @@ function testGetAllRequestStatuses() {
           });
       });
 
-      testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-
     });
 
   });
@@ -255,17 +240,19 @@ function testSubmitRequests() {
 
   describe('submitRequests()', () => {
 
-    const invocationParameters = [
+    const functionToTest :Function = RequestsApi.submitRequests;
+
+    const validParams :any[] = [
       [MOCK_REQUEST_DM]
     ];
 
-    const functionInvocation = [
-      RequestsApi.submitRequests, ...invocationParameters
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      RequestsApi.submitRequests(...invocationParameters)
+      RequestsApi.submitRequests(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith('/', [MOCK_REQUEST_DM]);
@@ -276,10 +263,11 @@ function testSubmitRequests() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(REQUESTS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 

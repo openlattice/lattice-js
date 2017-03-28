@@ -8,6 +8,15 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
+
+import {
+  MOCK_ACL_KEY,
+  MOCK_ACL_DATA_DM
+} from '../constants/MockDataModels';
+
+import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
@@ -17,24 +26,6 @@ import {
 import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
-
-const MOCK_ACL_KEY = [
-  'ec6865e6-e60e-424b-a071-6a9c1603d735'
-];
-
-const MOCK_ACL_DATA = {
-  acl: {
-    aclKey: MOCK_ACL_KEY,
-    aces: [{
-      principal: {
-        type: 'USER',
-        id: 'some_id'
-      },
-      permissions: ['READ', 'WRITE']
-    }]
-  },
-  action: 'ADD'
-};
 
 let mockAxiosInstance = null;
 
@@ -57,13 +48,19 @@ function testGetAcl() {
 
   describe('getAcl()', () => {
 
-    const functionInvocation = [
-      PermissionsApi.getAcl, MOCK_ACL_KEY
+    const functionToTest :Function = PermissionsApi.getAcl;
+
+    const validParams :any[] = [
+      MOCK_ACL_KEY
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      PermissionsApi.getAcl(MOCK_ACL_KEY)
+      PermissionsApi.getAcl(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -77,10 +74,10 @@ function testGetAcl() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(PERMISSIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, PERMISSIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -89,18 +86,24 @@ function testUpdateAcl() {
 
   describe('updateAcl()', () => {
 
-    const functionInvocation = [
-      PermissionsApi.updateAcl, MOCK_ACL_DATA
+    const functionToTest :Function = PermissionsApi.updateAcl;
+
+    const validParams :any[] = [
+      MOCK_ACL_DATA_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      PermissionsApi.updateAcl(MOCK_ACL_DATA)
+      PermissionsApi.updateAcl(...validParams)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
             '/',
-            MOCK_ACL_DATA
+            MOCK_ACL_DATA_DM
           );
           done();
         })
@@ -109,10 +112,10 @@ function testUpdateAcl() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(PERMISSIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, PERMISSIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }

@@ -16,6 +16,11 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
+  INVALID_PARAMS,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
+
+import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
@@ -63,17 +68,25 @@ describe('SearchApi', () => {
 
 function testSearchEntitySetMetaData() {
 
+  // TODO: figure out how to test object parameters with optional properties
+
   describe('searchEntitySetMetaData()', () => {
 
     function testSearchInvocation(searchOptions, expectedParameters) {
 
-      const functionInvocation = [
-        SearchApi.searchEntitySetMetaData, searchOptions
+      const functionToTest :Function = SearchApi.searchEntitySetMetaData;
+
+      const validParams :any[] = [
+        searchOptions
+      ];
+
+      const invalidParams :any[] = [
+        INVALID_PARAMS
       ];
 
       it('should send a POST request with the correct URL path and data', (done) => {
 
-        SearchApi.searchEntitySetMetaData(searchOptions)
+        SearchApi.searchEntitySetMetaData(...validParams)
           .then(() => {
             expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
             expect(mockAxiosInstance.post).toHaveBeenCalledWith(...expectedParameters);
@@ -84,10 +97,10 @@ function testSearchEntitySetMetaData() {
           });
       });
 
-      testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-      testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-      testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-      testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+      testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+      testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+      testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+      testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
     }
 
     describe('search by keyword', () => {
@@ -201,19 +214,25 @@ function testSearchEntitySetData() {
 
   describe('searchEntitySetData()', () => {
 
-    const searchOptions = {
-      searchTerm: MOCK_SEARCH_TERM,
-      start: MOCK_START,
-      maxHits: MOCK_MAX_HITS
-    };
+    const functionToTest :Function = SearchApi.searchEntitySetData;
 
-    const functionInvocation = [
-      SearchApi.searchEntitySetData, MOCK_ENTITY_SET_UUID, searchOptions
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_UUID,
+      {
+        searchTerm: MOCK_SEARCH_TERM,
+        start: MOCK_START,
+        maxHits: MOCK_MAX_HITS
+      }
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.searchEntitySetData(MOCK_ENTITY_SET_UUID, searchOptions)
+      SearchApi.searchEntitySetData(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -231,33 +250,42 @@ function testSearchEntitySetData() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
 function testAdvancedSearchEntitySetData() {
 
+  // TODO: figure out how to test object parameters with optional properties
+
   describe('advancedSearchEntitySetData()', () => {
 
-    const searchOptions = {
-      searchFields: {
-        [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM,
-        [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM
-      },
-      start: MOCK_START,
-      maxHits: MOCK_MAX_HITS
-    };
+    const functionToTest :Function = SearchApi.advancedSearchEntitySetData;
 
-    const functionInvocation = [
-      SearchApi.advancedSearchEntitySetData, MOCK_ENTITY_SET_UUID, searchOptions
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_UUID,
+      {
+        searchFields: {
+          [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM,
+          [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM
+        },
+        start: MOCK_START,
+        maxHits: MOCK_MAX_HITS
+      }
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.advancedSearchEntitySetData(MOCK_ENTITY_SET_UUID, searchOptions)
+      SearchApi.advancedSearchEntitySetData(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -278,30 +306,35 @@ function testAdvancedSearchEntitySetData() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
 function testSearchOrganizations() {
 
+  // TODO: figure out how to test object parameters with optional properties
+
   describe('searchOrganizations()', () => {
 
-    const searchOptions = {
+    const functionToTest :Function = SearchApi.searchOrganizations;
+
+    const validParams :any[] = [{
       searchTerm: MOCK_SEARCH_TERM,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
-    };
+    }];
 
-    const functionInvocation = [
-      SearchApi.searchOrganizations, searchOptions
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.searchOrganizations(searchOptions)
+      SearchApi.searchOrganizations(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -319,30 +352,35 @@ function testSearchOrganizations() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
 function testSearchEntityTypes() {
 
+  // TODO: figure out how to test object parameters with optional properties
+
   describe('searchEntityTypes()', () => {
 
-    const searchOptions = {
+    const functionToTest :Function = SearchApi.searchEntityTypes;
+
+    const validParams :any[] = [{
       searchTerm: MOCK_SEARCH_TERM,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
-    };
+    }];
 
-    const functionInvocation = [
-      SearchApi.searchEntityTypes, searchOptions
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.searchEntityTypes(searchOptions)
+      SearchApi.searchEntityTypes(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -360,31 +398,36 @@ function testSearchEntityTypes() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
 function testSearchEntityTypesByFQN() {
 
+  // TODO: figure out how to test object parameters with optional properties
+
   describe('searchEntityTypesByFQN()', () => {
 
-    const searchOptions = {
+    const functionToTest :Function = SearchApi.searchEntityTypesByFQN;
+
+    const validParams :any[] = [{
       namespace: MOCK_NAMESPACE,
       name: MOCK_NAME,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
-    };
+    }];
 
-    const functionInvocation = [
-      SearchApi.searchEntityTypesByFQN, searchOptions
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.searchEntityTypesByFQN(searchOptions)
+      SearchApi.searchEntityTypesByFQN(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -403,30 +446,35 @@ function testSearchEntityTypesByFQN() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
 function testSearchPropertyTypes() {
 
+  // TODO: figure out how to test object parameters with optional properties
+
   describe('searchPropertyTypes()', () => {
 
-    const searchOptions = {
+    const functionToTest :Function = SearchApi.searchPropertyTypes;
+
+    const validParams :any[] = [{
       searchTerm: MOCK_SEARCH_TERM,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
-    };
+    }];
 
-    const functionInvocation = [
-      SearchApi.searchPropertyTypes, searchOptions
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.searchPropertyTypes(searchOptions)
+      SearchApi.searchPropertyTypes(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -444,31 +492,36 @@ function testSearchPropertyTypes() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
 function testSearchPropertyTypesByFQN() {
 
+  // TODO: figure out how to test object parameters with optional properties
+
   describe('searchPropertyTypesByFQN()', () => {
 
-    const searchOptions = {
+    const functionToTest :Function = SearchApi.searchPropertyTypesByFQN;
+
+    const validParams :any[] = [{
       namespace: MOCK_NAMESPACE,
       name: MOCK_NAME,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
-    };
+    }];
 
-    const functionInvocation = [
-      SearchApi.searchPropertyTypesByFQN, searchOptions
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      SearchApi.searchPropertyTypesByFQN(searchOptions)
+      SearchApi.searchPropertyTypesByFQN(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -487,9 +540,10 @@ function testSearchPropertyTypesByFQN() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(SEARCH_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, SEARCH_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
