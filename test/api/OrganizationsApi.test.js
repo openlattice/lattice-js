@@ -19,6 +19,15 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
+  INVALID_PARAMS,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
+
+import {
+  MOCK_ORGANIZATION_DM
+} from '../constants/MockDataModels';
+
+import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
@@ -29,7 +38,6 @@ import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
 
-const MOCK_ORG_UUID = 'ec6865e6-e60e-424b-a071-6a9c1603d735';
 const MOCK_TITLE = 'MyOrganization';
 const MOCK_DESCRIPTION = 'what an organization';
 const MOCK_EMAIL_DOMAIN = 'kryptnostic.com';
@@ -45,14 +53,6 @@ const MOCK_USER_PRINCIPAL = {
 const MOCK_ROLE_PRINCIPAL = {
   type: 'ROLE',
   id: 'principalId_1'
-};
-
-const MOCK_ORG = {
-  id: MOCK_ORG_UUID,
-  title: MOCK_TITLE,
-  description: MOCK_DESCRIPTION,
-  members: [MOCK_USER_PRINCIPAL],
-  roles: [MOCK_ROLE_PRINCIPAL]
 };
 
 let mockAxiosInstance = null;
@@ -94,17 +94,23 @@ function testGetOrganization() {
 
   describe('getOrganization()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.getOrganization, MOCK_ORG_UUID
+    const functionToTest :Function = OrganizationsApi.getOrganization;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      OrganizationsApi.getOrganization(MOCK_ORG_UUID)
+      OrganizationsApi.getOrganization(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}`
+            `/${MOCK_ORGANIZATION_DM.id}`
           );
           done();
         })
@@ -113,10 +119,10 @@ function testGetOrganization() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -125,9 +131,10 @@ function testGetAllOrganizations() {
 
   describe('getAllOrganizations()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.getAllOrganizations
-    ];
+    const functionToTest :Function = OrganizationsApi.getAllOrganizations;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -142,8 +149,9 @@ function testGetAllOrganizations() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -152,18 +160,24 @@ function testCreateOrganization() {
 
   describe('createOrganization()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.createOrganization, MOCK_ORG
+    const functionToTest :Function = OrganizationsApi.createOrganization;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.createOrganization(MOCK_ORG)
+      OrganizationsApi.createOrganization(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
             '/',
-            MOCK_ORG
+            MOCK_ORGANIZATION_DM
           );
           done();
         })
@@ -172,10 +186,10 @@ function testCreateOrganization() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -184,17 +198,23 @@ function testDeleteOrganization() {
 
   describe('deleteOrganization()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.deleteOrganization, MOCK_ORG_UUID
+    const functionToTest :Function = OrganizationsApi.deleteOrganization;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      OrganizationsApi.deleteOrganization(MOCK_ORG_UUID)
+      OrganizationsApi.deleteOrganization(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}`
+            `/${MOCK_ORGANIZATION_DM.id}`
           );
           done();
         })
@@ -203,10 +223,10 @@ function testDeleteOrganization() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -215,17 +235,25 @@ function testUpdateTitle() {
 
   describe('updateTitle()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.updateTitle, MOCK_ORG_UUID, MOCK_TITLE
+    const functionToTest :Function = OrganizationsApi.updateTitle;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_TITLE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.updateTitle(MOCK_ORG_UUID, MOCK_TITLE)
+      OrganizationsApi.updateTitle(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${TITLE_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${TITLE_PATH}`,
             MOCK_TITLE,
             {
               headers: {
@@ -240,10 +268,10 @@ function testUpdateTitle() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -252,17 +280,25 @@ function testUpdateDescription() {
 
   describe('updateDescription()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.updateDescription, MOCK_ORG_UUID, MOCK_DESCRIPTION
+    const functionToTest :Function = OrganizationsApi.updateDescription;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_DESCRIPTION
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.updateDescription(MOCK_ORG_UUID, MOCK_DESCRIPTION)
+      OrganizationsApi.updateDescription(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${DESCRIPTION_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${DESCRIPTION_PATH}`,
             MOCK_DESCRIPTION,
             {
               headers: {
@@ -277,10 +313,10 @@ function testUpdateDescription() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -289,17 +325,23 @@ function testGetAutoApprovedEmailDomains() {
 
   describe('getAutoApprovedEmailDomains()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.getAutoApprovedEmailDomains, MOCK_ORG_UUID
+    const functionToTest :Function = OrganizationsApi.getAutoApprovedEmailDomains;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      OrganizationsApi.getAutoApprovedEmailDomains(MOCK_ORG_UUID)
+      OrganizationsApi.getAutoApprovedEmailDomains(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}`
+            `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`
           );
           done();
         })
@@ -308,10 +350,10 @@ function testGetAutoApprovedEmailDomains() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -320,17 +362,25 @@ function testAddAutoApprovedEmailDomain() {
 
   describe('addAutoApprovedEmailDomain()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.addAutoApprovedEmailDomain, MOCK_ORG_UUID, MOCK_EMAIL_DOMAIN
+    const functionToTest :Function = OrganizationsApi.addAutoApprovedEmailDomain;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_EMAIL_DOMAIN
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.addAutoApprovedEmailDomain(MOCK_ORG_UUID, MOCK_EMAIL_DOMAIN)
+      OrganizationsApi.addAutoApprovedEmailDomain(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`
+            `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`
           );
           done();
         })
@@ -339,10 +389,10 @@ function testAddAutoApprovedEmailDomain() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -351,17 +401,25 @@ function testAddAutoApprovedEmailDomains() {
 
   describe('addAutoApprovedEmailDomains()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.addAutoApprovedEmailDomains, MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN]
+    const functionToTest :Function = OrganizationsApi.addAutoApprovedEmailDomains;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      [MOCK_EMAIL_DOMAIN]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.addAutoApprovedEmailDomains(MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN])
+      OrganizationsApi.addAutoApprovedEmailDomains(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
             [MOCK_EMAIL_DOMAIN]
           );
           done();
@@ -373,11 +431,11 @@ function testAddAutoApprovedEmailDomains() {
 
     it('should send a POST request with the correct URL path and deduplicated data', (done) => {
 
-      OrganizationsApi.addAutoApprovedEmailDomains(MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN, MOCK_EMAIL_DOMAIN])
+      OrganizationsApi.addAutoApprovedEmailDomains(MOCK_ORGANIZATION_DM.id, [MOCK_EMAIL_DOMAIN, MOCK_EMAIL_DOMAIN])
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
             [MOCK_EMAIL_DOMAIN]
           );
           done();
@@ -387,10 +445,10 @@ function testAddAutoApprovedEmailDomains() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -399,17 +457,25 @@ function testSetAutoApprovedEmailDomains() {
 
   describe('setAutoApprovedEmailDomains()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.setAutoApprovedEmailDomains, MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN]
+    const functionToTest :Function = OrganizationsApi.setAutoApprovedEmailDomains;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      [MOCK_EMAIL_DOMAIN]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.setAutoApprovedEmailDomains(MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN])
+      OrganizationsApi.setAutoApprovedEmailDomains(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
             [MOCK_EMAIL_DOMAIN]
           );
           done();
@@ -421,11 +487,11 @@ function testSetAutoApprovedEmailDomains() {
 
     it('should send a PUT request with the correct URL path and deduplicated data', (done) => {
 
-      OrganizationsApi.setAutoApprovedEmailDomains(MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN, MOCK_EMAIL_DOMAIN])
+      OrganizationsApi.setAutoApprovedEmailDomains(MOCK_ORGANIZATION_DM.id, [MOCK_EMAIL_DOMAIN, MOCK_EMAIL_DOMAIN])
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
             [MOCK_EMAIL_DOMAIN]
           );
           done();
@@ -435,10 +501,10 @@ function testSetAutoApprovedEmailDomains() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -447,17 +513,25 @@ function testRemoveAutoApprovedEmailDomain() {
 
   describe('removeAutoApprovedEmailDomain()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.removeAutoApprovedEmailDomain, MOCK_ORG_UUID, MOCK_EMAIL_DOMAIN
+    const functionToTest :Function = OrganizationsApi.removeAutoApprovedEmailDomain;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_EMAIL_DOMAIN
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      OrganizationsApi.removeAutoApprovedEmailDomain(MOCK_ORG_UUID, MOCK_EMAIL_DOMAIN)
+      OrganizationsApi.removeAutoApprovedEmailDomain(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`
+            `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`
           );
           done();
         })
@@ -466,10 +540,10 @@ function testRemoveAutoApprovedEmailDomain() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -478,17 +552,25 @@ function testRemoveAutoApprovedEmailDomains() {
 
   describe('removeAutoApprovedEmailDomains()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.removeAutoApprovedEmailDomains, MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN]
+    const functionToTest :Function = OrganizationsApi.removeAutoApprovedEmailDomains;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      [MOCK_EMAIL_DOMAIN]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.removeAutoApprovedEmailDomains(MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN])
+      OrganizationsApi.removeAutoApprovedEmailDomains(...validParams)
         .then(() => {
           expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-            url: `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}`,
+            url: `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
             method: 'delete',
             data: [MOCK_EMAIL_DOMAIN]
           });
@@ -501,11 +583,11 @@ function testRemoveAutoApprovedEmailDomains() {
 
     it('should send a DELETE request with the correct URL path and deduplicated data', (done) => {
 
-      OrganizationsApi.removeAutoApprovedEmailDomains(MOCK_ORG_UUID, [MOCK_EMAIL_DOMAIN, MOCK_EMAIL_DOMAIN])
+      OrganizationsApi.removeAutoApprovedEmailDomains(MOCK_ORGANIZATION_DM.id, [MOCK_EMAIL_DOMAIN, MOCK_EMAIL_DOMAIN])
         .then(() => {
           expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-            url: `/${MOCK_ORG_UUID}/${EMAIL_DOMAINS_PATH}`,
+            url: `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
             method: 'delete',
             data: [MOCK_EMAIL_DOMAIN]
           });
@@ -516,10 +598,10 @@ function testRemoveAutoApprovedEmailDomains() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -528,17 +610,23 @@ function testGetAllPrincipals() {
 
   describe('getAllPrincipals()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.getAllPrincipals, MOCK_ORG_UUID
+    const functionToTest :Function = OrganizationsApi.getAllPrincipals;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      OrganizationsApi.getAllPrincipals(MOCK_ORG_UUID)
+      OrganizationsApi.getAllPrincipals(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`
           );
           done();
         })
@@ -547,10 +635,10 @@ function testGetAllPrincipals() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -559,17 +647,27 @@ function testAddPrincipal() {
 
   describe('addPrincipal()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.addPrincipal, MOCK_ORG_UUID, MOCK_PRINCIPAL_TYPE, MOCK_PRINCIPAL_ID
+    const functionToTest :Function = OrganizationsApi.addPrincipal;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_PRINCIPAL_TYPE,
+      MOCK_PRINCIPAL_ID
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.addPrincipal(MOCK_ORG_UUID, MOCK_PRINCIPAL_TYPE, MOCK_PRINCIPAL_ID)
+      OrganizationsApi.addPrincipal(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}/${MOCK_PRINCIPAL_TYPE}/${MOCK_PRINCIPAL_ID}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MOCK_PRINCIPAL_TYPE}/${MOCK_PRINCIPAL_ID}`
           );
           done();
         })
@@ -578,11 +676,10 @@ function testAddPrincipal() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    // TODO: figure out how to test non-valid enum values, like non-valid PrincipalTypes
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -591,17 +688,25 @@ function testAddPrincipals() {
 
   describe('addPrincipals()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.addPrincipals, MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
+    const functionToTest :Function = OrganizationsApi.addPrincipals;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.addPrincipals(MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL])
+      OrganizationsApi.addPrincipals(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
             [
               // TODO: figure out how to avoid having to do this...
               new Principal(MOCK_USER_PRINCIPAL.type, MOCK_USER_PRINCIPAL.id),
@@ -617,11 +722,11 @@ function testAddPrincipals() {
 
     it('should send a POST request with the correct URL path and deduplicated data', (done) => {
 
-      OrganizationsApi.addPrincipals(MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_USER_PRINCIPAL])
+      OrganizationsApi.addPrincipals(MOCK_ORGANIZATION_DM.id, [MOCK_USER_PRINCIPAL, MOCK_USER_PRINCIPAL])
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
             // TODO: figure out how to avoid having to do this...
             [new Principal(MOCK_USER_PRINCIPAL.type, MOCK_USER_PRINCIPAL.id)]
           );
@@ -632,10 +737,10 @@ function testAddPrincipals() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -644,17 +749,25 @@ function testSetPrincipals() {
 
   describe('setPrincipals()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.setPrincipals, MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
+    const functionToTest :Function = OrganizationsApi.setPrincipals;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PUT request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.setPrincipals(MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL])
+      OrganizationsApi.setPrincipals(...validParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
             [
               // TODO: figure out how to avoid having to do this...
               new Principal(MOCK_USER_PRINCIPAL.type, MOCK_USER_PRINCIPAL.id),
@@ -670,11 +783,11 @@ function testSetPrincipals() {
 
     it('should send a PUT request with the correct URL path and deduplicated data', (done) => {
 
-      OrganizationsApi.setPrincipals(MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_USER_PRINCIPAL])
+      OrganizationsApi.setPrincipals(MOCK_ORGANIZATION_DM.id, [MOCK_USER_PRINCIPAL, MOCK_USER_PRINCIPAL])
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}`,
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
             // TODO: figure out how to avoid having to do this...
             [new Principal(MOCK_USER_PRINCIPAL.type, MOCK_USER_PRINCIPAL.id)]
           );
@@ -685,10 +798,10 @@ function testSetPrincipals() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -697,17 +810,27 @@ function testRemovePrincipal() {
 
   describe('removePrincipal()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.removePrincipal, MOCK_ORG_UUID, MOCK_PRINCIPAL_TYPE, MOCK_PRINCIPAL_ID
+    const functionToTest :Function = OrganizationsApi.removePrincipal;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_PRINCIPAL_TYPE,
+      MOCK_PRINCIPAL_ID
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      OrganizationsApi.removePrincipal(MOCK_ORG_UUID, MOCK_PRINCIPAL_TYPE, MOCK_PRINCIPAL_ID)
+      OrganizationsApi.removePrincipal(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}/${MOCK_PRINCIPAL_TYPE}/${MOCK_PRINCIPAL_ID}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MOCK_PRINCIPAL_TYPE}/${MOCK_PRINCIPAL_ID}`
           );
           done();
         })
@@ -716,10 +839,10 @@ function testRemovePrincipal() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -728,17 +851,25 @@ function testRemovePrincipals() {
 
   describe('removePrincipals()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.removePrincipals, MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
+    const functionToTest :Function = OrganizationsApi.removePrincipals;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path and data', (done) => {
 
-      OrganizationsApi.removePrincipals(MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL])
+      OrganizationsApi.removePrincipals(...validParams)
         .then(() => {
           expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-            url: `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}`,
+            url: `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
             method: 'delete',
             data: [
               // TODO: figure out how to avoid having to do this...
@@ -755,11 +886,11 @@ function testRemovePrincipals() {
 
     it('should send a DELETE request with the correct URL path and deduplicated data', (done) => {
 
-      OrganizationsApi.removePrincipals(MOCK_ORG_UUID, [MOCK_USER_PRINCIPAL, MOCK_USER_PRINCIPAL])
+      OrganizationsApi.removePrincipals(MOCK_ORGANIZATION_DM.id, [MOCK_USER_PRINCIPAL, MOCK_USER_PRINCIPAL])
         .then(() => {
           expect(mockAxiosInstance.request).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-            url: `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}`,
+            url: `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
             method: 'delete',
             data: [
               // TODO: figure out how to avoid having to do this...
@@ -773,10 +904,10 @@ function testRemovePrincipals() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -785,17 +916,23 @@ function testGetAllRoles() {
 
   describe('getAllRoles()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.getAllRoles, MOCK_ORG_UUID
+    const functionToTest :Function = OrganizationsApi.getAllRoles;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      OrganizationsApi.getAllRoles(MOCK_ORG_UUID)
+      OrganizationsApi.getAllRoles(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}/${ROLES_PATH}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}`
           );
           done();
         })
@@ -804,10 +941,10 @@ function testGetAllRoles() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -816,17 +953,23 @@ function testGetAllMembers() {
 
   describe('getAllMembers()', () => {
 
-    const functionInvocation = [
-      OrganizationsApi.getAllMembers, MOCK_ORG_UUID
+    const functionToTest :Function = OrganizationsApi.getAllMembers;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      OrganizationsApi.getAllMembers(MOCK_ORG_UUID)
+      OrganizationsApi.getAllMembers(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${MOCK_ORG_UUID}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`
           );
           done();
         })
@@ -835,10 +978,10 @@ function testGetAllMembers() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(ORGANIZATIONS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }

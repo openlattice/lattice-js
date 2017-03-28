@@ -11,14 +11,20 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
+  INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
+
+import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
 
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
-  testApiFunctionShouldReturnPromiseOnValidParameters
-  // testApiFunctionShouldNotThrowOnInvalidParameters,
-  // testApiFunctionShouldRejectOnGivenInvalidParameters
+  testApiFunctionShouldReturnPromiseOnValidParameters,
+  testApiFunctionShouldNotThrowOnInvalidParameters,
+  testApiFunctionShouldRejectOnInvalidParameters
 } from '../utils/ApiTestUtils';
 
 const MOCK_QUERIES = [
@@ -51,13 +57,19 @@ function testCheckAuthorizations() {
 
   describe('checkAuthorizations()', () => {
 
-    const functionInvocation = [
-      AuthorizationApi.checkAuthorizations, MOCK_QUERIES
+    const functionToTest :Function = AuthorizationApi.checkAuthorizations;
+
+    const validParams :any[] = [
+      MOCK_QUERIES
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS_EMPTY_ARRAY_ALLOWED
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      AuthorizationApi.checkAuthorizations(MOCK_QUERIES)
+      AuthorizationApi.checkAuthorizations(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith('/', MOCK_QUERIES);
@@ -68,13 +80,10 @@ function testCheckAuthorizations() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(AUTHORIZATION_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    // testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    // testApiFunctionShouldRejectOnGivenInvalidParameters(
-    //   [INVALID_PARAMS_EMPTY_COLLECTION_ALLOWED],
-    //   ...functionInvocation
-    // );
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, AUTHORIZATION_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -83,17 +92,23 @@ function testGetAccessibleObjects() {
 
   describe('getAccessibleObjects()', () => {
 
-    const invocationParams = [
-      SecurableTypes.EntityType, PermissionTypes.READ, MOCK_PAGING_TOKEN
+    const functionToTest :Function = AuthorizationApi.getAccessibleObjects;
+
+    const validParams :any[] = [
+      SecurableTypes.EntityType,
+      PermissionTypes.READ,
+      MOCK_PAGING_TOKEN
     ];
 
-    const functionInvocation = [
-      AuthorizationApi.getAccessibleObjects, ...invocationParams
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS_EMPTY_STRING_ALLOWED
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      AuthorizationApi.getAccessibleObjects(...invocationParams)
+      AuthorizationApi.getAccessibleObjects(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -107,13 +122,10 @@ function testGetAccessibleObjects() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(AUTHORIZATION_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    // testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    // testApiFunctionShouldRejectOnGivenInvalidParameters(
-    //   [INVALID_PARAMS_ENUM_VALUES, INVALID_PARAMS_ENUM_VALUES, INVALID_PARAMS_NOT_DEFINED_ALLOWED],
-    //   ...functionInvocation
-    // );
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, AUTHORIZATION_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }

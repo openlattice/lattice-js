@@ -10,7 +10,7 @@ import {
   INVALID_SS_PARAMS,
   INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED,
   INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED,
-  INVALID_SS_PARAMS_UNDEFINED_ALLOWED
+  INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED
 } from '../constants/InvalidParams';
 
 import {
@@ -237,7 +237,7 @@ describe('EntityType', () => {
     describe('setBaseType()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS_UNDEFINED_ALLOWED.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setBaseType(invalidInput);
           }).toThrow();
@@ -511,7 +511,7 @@ describe('EntityType', () => {
       });
 
       it('should return false when given an object literal with an invalid "baseType" property', () => {
-        INVALID_SS_PARAMS_UNDEFINED_ALLOWED.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE_DM, { baseType: invalidInput }))).toEqual(false);
         });
       });
@@ -675,7 +675,7 @@ describe('EntityType', () => {
       });
 
       it('should return false when given an instance with an invalid "baseType" property', () => {
-        INVALID_SS_PARAMS_UNDEFINED_ALLOWED.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE_DM.id,

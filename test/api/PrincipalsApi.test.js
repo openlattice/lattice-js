@@ -13,6 +13,10 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
+  INVALID_PARAMS
+} from '../constants/InvalidParams';
+
+import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters,
@@ -49,13 +53,19 @@ function testGetUser() {
 
   describe('getUser()', () => {
 
-    const functionInvocation = [
-      PrincipalsApi.getUser, MOCK_USER_ID
+    const functionToTest :Function = PrincipalsApi.getUser;
+
+    const validParams :any[] = [
+      MOCK_USER_ID
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      PrincipalsApi.getUser(MOCK_USER_ID)
+      PrincipalsApi.getUser(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -68,10 +78,10 @@ function testGetUser() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -80,9 +90,10 @@ function testGetAllUsers() {
 
   describe('getAllUsers()', () => {
 
-    const functionInvocation = [
-      PrincipalsApi.getAllUsers
-    ];
+    const functionToTest :Function = PrincipalsApi.getAllUsers;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -99,8 +110,9 @@ function testGetAllUsers() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -109,13 +121,19 @@ function testGetAllUsersForRole() {
 
   describe('getAllUsersForRole()', () => {
 
-    const functionInvocation = [
-      PrincipalsApi.getAllUsersForRole, MOCK_ROLE
+    const functionToTest :Function = PrincipalsApi.getAllUsersForRole;
+
+    const validParams :any[] = [
+      MOCK_ROLE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      PrincipalsApi.getAllUsersForRole(MOCK_ROLE)
+      PrincipalsApi.getAllUsersForRole(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
@@ -128,10 +146,10 @@ function testGetAllUsersForRole() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -140,9 +158,10 @@ function testGetAllUsersForAllRoles() {
 
   describe('getAllUsersForAllRoles()', () => {
 
-    const functionInvocation = [
-      PrincipalsApi.getAllUsersForAllRoles
-    ];
+    const functionToTest :Function = PrincipalsApi.getAllUsersForAllRoles;
+
+    const validParams :any[] = [];
+    const invalidParams :any[] = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -159,8 +178,9 @@ function testGetAllUsersForAllRoles() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(PRINCIPALS_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }

@@ -13,6 +13,15 @@ import {
 } from '../../src/constants/ApiPaths';
 
 import {
+  INVALID_PARAMS
+} from '../constants/InvalidParams';
+
+import {
+  MOCK_LINKING_ENTITY_SET_DM,
+  MOCK_LINKING_ENTITY_TYPE_DM
+} from '../constants/MockDataModels';
+
+import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
 
@@ -22,53 +31,6 @@ import {
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters
 } from '../utils/ApiTestUtils';
-
-const MOCK_ENTITY_TYPE = {
-  title: 'MyEntity',
-  description: 'so this is an EntityType',
-  type: { namespace: 'LOOM', name: 'ENTITY_TYPE' },
-  schemas: [
-    { namespace: 'LOOM', name: 'SCHEMA' }
-  ],
-  key: [
-    '8f79e123-3411-4099-a41f-88e5d22d0e8d'
-  ],
-  properties: [
-    '8f79e123-3411-4099-a41f-88e5d22d0e8d'
-  ]
-};
-
-const MOCK_ET_IDS = [
-  'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
-  'fae6af98-2675-45bd-9a5b-1619a87235a8'
-];
-
-const MOCK_LET = {
-  entityType: MOCK_ENTITY_TYPE,
-  entityTypeIds: MOCK_ET_IDS,
-  deidentified: false
-};
-
-const MOCK_ENTITY_SET = {
-  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  entityTypeId: '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e',
-  name: 'name',
-  title: 'title',
-  description: 'description'
-};
-
-const MOCK_LINKING_PROPERTIES = [
-  {
-    '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e': '4b08e1f9-4a00-4169-92ea-10e377070220',
-    'e39dfdfa-a3e6-4f1f-b54b-646a723c3085': 'ec6865e6-e60e-424b-a071-6a9c1603d735'
-  },
-  { 'fae6af98-2675-45bd-9a5b-1619a87235a8': '8f79e123-3411-4099-a41f-88e5d22d0e8d' }
-];
-
-const MOCK_LES = {
-  entitySet: MOCK_ENTITY_SET,
-  linkingProperties: MOCK_LINKING_PROPERTIES
-};
 
 let mockAxiosInstance = null;
 
@@ -91,16 +53,22 @@ function testCreateLinkingEntityType() {
 
   describe('createLinkingEntityType()', () => {
 
-    const functionInvocation = [
-      LinkingApi.createLinkingEntityType, MOCK_LET
+    const functionToTest :Function = LinkingApi.createLinkingEntityType;
+
+    const validParams :any[] = [
+      MOCK_LINKING_ENTITY_TYPE_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      LinkingApi.createLinkingEntityType(MOCK_LET)
+      LinkingApi.createLinkingEntityType(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.post).toHaveBeenCalledWith(`/${TYPE_PATH}`, MOCK_LET);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(`/${TYPE_PATH}`, MOCK_LINKING_ENTITY_TYPE_DM);
           done();
         })
         .catch(() => {
@@ -108,10 +76,10 @@ function testCreateLinkingEntityType() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(LINKING_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, LINKING_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -120,16 +88,22 @@ function testLinkEntitySets() {
 
   describe('linkEntitySets()', () => {
 
-    const functionInvocation = [
-      LinkingApi.linkEntitySets, MOCK_LES
+    const functionToTest :Function = LinkingApi.linkEntitySets;
+
+    const validParams :any[] = [
+      MOCK_LINKING_ENTITY_SET_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      LinkingApi.linkEntitySets(MOCK_LES)
+      LinkingApi.linkEntitySets(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.post).toHaveBeenCalledWith(`/${SET_PATH}`, MOCK_LES);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(`/${SET_PATH}`, MOCK_LINKING_ENTITY_SET_DM);
           done();
         })
         .catch(() => {
@@ -137,10 +111,10 @@ function testLinkEntitySets() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(LINKING_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, LINKING_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }

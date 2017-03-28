@@ -23,6 +23,7 @@ export default function karmaConfig(theKarmaConfigObject :Object) {
 
   const baseKarmaConfig :Object = getBaseKarmaConfig(theKarmaConfigObject);
 
+  // TODO: this is always true since package.json sets "BUILD": "test" for every test script
   if (isTest) {
 
     baseKarmaConfig.files.push(

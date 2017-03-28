@@ -12,11 +12,12 @@ import {
   TICKET_PATH
 } from '../../src/constants/ApiPaths';
 
-// import {
-//   INVALID_SS_PARAMS,
-//   INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED,
-//   INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED
-// } from '../constants/InvalidParams';
+import {
+  INVALID_PARAMS,
+  INVALID_SS_PARAMS,
+  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED,
+  INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED
+} from '../constants/InvalidParams';
 
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,
@@ -24,7 +25,6 @@ import {
   testApiFunctionShouldReturnNullOnInvalidParameters,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters
-  // testApiFunctionShouldRejectOnGivenInvalidParameters
 } from '../utils/ApiTestUtils';
 
 import {
@@ -35,8 +35,8 @@ const DATA_API_BASE_URL = AxiosUtils.getApiBaseUrl(DATA_API);
 
 const MOCK_FILE_TYPE = 'json';
 const MOCK_ENTITY_SET_UUID = '4b08e1f9-4a00-4169-92ea-10e377070220';
-const MOCK_SYNC_UUID = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
 const MOCK_PROPERTY_TYPE_UUID = '8f79e123-3411-4099-a41f-88e5d22d0e8d';
+const MOCK_SYNC_UUID = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
 const MOCK_TICKET_UUID = '89ad6988-37f1-48d7-a89b-618909b432a2';
 
 const MOCK_ENTITIES = {
@@ -73,42 +73,107 @@ function testGetEntitySetData() {
 
   describe('getEntitySetData()', () => {
 
-    const functionInvocation = [
-      DataApi.getEntitySetData, MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, [MOCK_PROPERTY_TYPE_UUID]
+    const functionToTest :Function = DataApi.getEntitySetData;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_UUID,
+      MOCK_SYNC_UUID,
+      [MOCK_PROPERTY_TYPE_UUID]
     ];
 
-    // TODO: test for optional parameters
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED,
+      INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
+    ];
 
-    it('should send a POST request with the correct URL path and data', (done) => {
+    function testApi(invocationParams :mixed[], expectedParameters :mixed[], done :Function) {
 
-      DataApi.getEntitySetData(MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, [MOCK_PROPERTY_TYPE_UUID])
+      DataApi.getEntitySetData(...invocationParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
-            {
-              syncId: MOCK_SYNC_UUID,
-              properties: [MOCK_PROPERTY_TYPE_UUID]
-            }
-          );
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(...expectedParameters);
           done();
         })
         .catch(() => {
           done.fail();
         });
+    }
+
+    describe('should send a POST request with the correct URL path and data', () => {
+
+      it('+syncId, +propertyTypeIds', (done) => {
+
+        const invocationParams :mixed[] = [
+          MOCK_ENTITY_SET_UUID,
+          MOCK_SYNC_UUID,
+          [MOCK_PROPERTY_TYPE_UUID]
+        ];
+
+        const expectedParameters :mixed[] = [
+          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          {
+            syncId: MOCK_SYNC_UUID,
+            properties: [MOCK_PROPERTY_TYPE_UUID]
+          }
+        ];
+
+        testApi(invocationParams, expectedParameters, done);
+      });
+
+      it('+syncId, -propertyTypeIds', (done) => {
+
+        const invocationParams :mixed[] = [
+          MOCK_ENTITY_SET_UUID,
+          MOCK_SYNC_UUID,
+          undefined
+        ];
+
+        const expectedParameters :mixed[] = [
+          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          { syncId: MOCK_SYNC_UUID }
+        ];
+
+        testApi(invocationParams, expectedParameters, done);
+      });
+
+      it('-syncId, +propertyTypeIds', (done) => {
+
+        const invocationParams :mixed[] = [
+          MOCK_ENTITY_SET_UUID,
+          undefined,
+          [MOCK_PROPERTY_TYPE_UUID]
+        ];
+
+        const expectedParameters :mixed[] = [
+          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          { properties: [MOCK_PROPERTY_TYPE_UUID] }
+        ];
+
+        testApi(invocationParams, expectedParameters, done);
+      });
+
+      it('-syncId, -propertyTypeIds', (done) => {
+
+        const invocationParams :mixed[] = [
+          MOCK_ENTITY_SET_UUID
+        ];
+
+        const expectedParameters :mixed[] = [
+          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          {}
+        ];
+
+        testApi(invocationParams, expectedParameters, done);
+      });
+
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    // testApiFunctionShouldRejectOnGivenInvalidParameters(
-    //   [
-    //     INVALID_SS_PARAMS,
-    //     INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED,
-    //     INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
-    //   ],
-    //   ...functionInvocation
-    // );
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
   });
 }
 
@@ -116,8 +181,16 @@ function testGetEntitySetDataFileUrl() {
 
   describe('getEntitySetDataFileUrl()', () => {
 
-    const functionInvocation = [
-      DataApi.getEntitySetDataFileUrl, MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE
+    const functionToTest :Function = DataApi.getEntitySetDataFileUrl;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_UUID,
+      MOCK_FILE_TYPE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should return the correct URL', () => {
@@ -134,8 +207,8 @@ function testGetEntitySetDataFileUrl() {
       );
     });
 
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldReturnNullOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldReturnNullOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -144,39 +217,73 @@ function testCreateEntityData() {
 
   describe('createEntityData()', () => {
 
-    const functionInvocation = [
-      DataApi.createEntityData, MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES
+    const functionToTest :Function = DataApi.createEntityData;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_UUID,
+      MOCK_SYNC_UUID,
+      MOCK_ENTITIES
     ];
 
-    // TODO: test for optional parameters
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED,
+      INVALID_PARAMS
+    ];
 
-    it('should send a PUT request with the correct URL path and data when syncId is given', (done) => {
+    function testApi(invocationParams :mixed[], expectedParameters :mixed[], done :Function) {
 
-      DataApi.createEntityData(MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES)
+      DataApi.createEntityData(...invocationParams)
         .then(() => {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
-            `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`,
-            MOCK_ENTITIES
-          );
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(...expectedParameters);
           done();
         })
         .catch(() => {
           done.fail();
         });
+    }
+
+    describe('should send a PUT request with the correct URL path and data when syncId is given', () => {
+
+      it('+syncId', (done) => {
+
+        const invocationParams :mixed[] = [
+          MOCK_ENTITY_SET_UUID,
+          MOCK_SYNC_UUID,
+          MOCK_ENTITIES
+        ];
+
+        const expectedParameters :mixed[] = [
+          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`,
+          MOCK_ENTITIES
+        ];
+
+        testApi(invocationParams, expectedParameters, done);
+      });
+
+      it('-syncId', (done) => {
+
+        const invocationParams :mixed[] = [
+          MOCK_ENTITY_SET_UUID,
+          undefined,
+          MOCK_ENTITIES
+        ];
+
+        const expectedParameters :mixed[] = [
+          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          MOCK_ENTITIES
+        ];
+
+        testApi(invocationParams, expectedParameters, done);
+      });
+
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    // testApiFunctionShouldRejectOnGivenInvalidParameters(
-    //   [
-    //     INVALID_SS_PARAMS,
-    //     INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED,
-    //     INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
-    //   ],
-    //   ...functionInvocation
-    // );
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -185,13 +292,23 @@ function testStoreEntityData() {
 
   describe('storeEntityData()', () => {
 
-    const functionInvocation = [
-      DataApi.storeEntityData, MOCK_TICKET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES
+    const functionToTest :Function = DataApi.storeEntityData;
+
+    const validParams :any[] = [
+      MOCK_TICKET_UUID,
+      MOCK_SYNC_UUID,
+      MOCK_ENTITIES
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
     ];
 
     it('should send a PATCH request with the correct URL path and data', (done) => {
 
-      DataApi.storeEntityData(MOCK_TICKET_UUID, MOCK_SYNC_UUID, MOCK_ENTITIES)
+      DataApi.storeEntityData(...validParams)
         .then(() => {
           expect(mockAxiosInstance.patch).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.patch).toHaveBeenCalledWith(
@@ -205,10 +322,10 @@ function testStoreEntityData() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -217,13 +334,21 @@ function testAcquireSyncTicket() {
 
   describe('acquireSyncTicket()', () => {
 
-    const functionInvocation = [
-      DataApi.acquireSyncTicket, MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID
+    const functionToTest :Function = DataApi.acquireSyncTicket;
+
+    const validParams :any[] = [
+      MOCK_ENTITY_SET_UUID,
+      MOCK_SYNC_UUID
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS
     ];
 
     it('should send a POST request with the correct URL path', (done) => {
 
-      DataApi.acquireSyncTicket(MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID)
+      DataApi.acquireSyncTicket(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
@@ -236,10 +361,10 @@ function testAcquireSyncTicket() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -248,13 +373,19 @@ function testReleaseSyncTicket() {
 
   describe('releaseSyncTicket()', () => {
 
-    const functionInvocation = [
-      DataApi.releaseSyncTicket, MOCK_TICKET_UUID
+    const functionToTest :Function = DataApi.releaseSyncTicket;
+
+    const validParams :any[] = [
+      MOCK_TICKET_UUID
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      DataApi.releaseSyncTicket(MOCK_TICKET_UUID)
+      DataApi.releaseSyncTicket(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
@@ -267,10 +398,10 @@ function testReleaseSyncTicket() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }

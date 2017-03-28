@@ -7,27 +7,22 @@ import { DATA_SOURCES_API } from '../../src/constants/ApiNames';
 import { getMockAxiosInstance } from '../utils/MockDataUtils';
 
 import {
+  INVALID_PARAMS,
+  INVALID_SS_PARAMS
+} from '../constants/InvalidParams';
+
+import {
+  MOCK_DATA_SOURCE_DM
+} from '../constants/MockDataModels';
+
+import {
   testApiFunctionShouldGetCorrectAxiosInstance,
   testApiFunctionShouldReturnPromiseOnValidParameters,
   testApiFunctionShouldNotThrowOnInvalidParameters,
   testApiFunctionShouldRejectOnInvalidParameters
 } from '../utils/ApiTestUtils';
 
-const MOCK_DS_UUID = '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e';
 const MOCK_SYNC_UUID = '8f79e123-3411-4099-a41f-88e5d22d0e8d';
-const MOCK_TITLE = 'title';
-const MOCK_DESCRIPTION = 'description';
-const MOCK_ES_IDS = [
-  'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
-  'fae6af98-2675-45bd-9a5b-1619a87235a8'
-];
-
-const MOCK_DS_OBJ = {
-  id: MOCK_DS_UUID,
-  title: MOCK_TITLE,
-  description: MOCK_DESCRIPTION,
-  entitySetIds: MOCK_ES_IDS
-};
 
 let mockAxiosInstance = null;
 
@@ -54,16 +49,22 @@ function testGetDataSource() {
 
   describe('getDataSource()', () => {
 
-    const functionInvocation = [
-      DataSourcesApi.getDataSource, MOCK_DS_UUID
+    const functionToTest :Function = DataSourcesApi.getDataSource;
+
+    const validParams :any[] = [
+      MOCK_DATA_SOURCE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      DataSourcesApi.getDataSource(MOCK_DS_UUID)
+      DataSourcesApi.getDataSource(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(`/${MOCK_DS_UUID}`);
+          expect(mockAxiosInstance.get).toHaveBeenCalledWith(`/${MOCK_DATA_SOURCE_DM.id}`);
           done();
         })
         .catch(() => {
@@ -71,10 +72,10 @@ function testGetDataSource() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_SOURCES_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_SOURCES_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -83,16 +84,22 @@ function testCreateOrUpdateDataSource() {
 
   describe('createOrUpdateDataSource()', () => {
 
-    const functionInvocation = [
-      DataSourcesApi.createOrUpdateDataSource, MOCK_DS_OBJ
+    const functionToTest :Function = DataSourcesApi.createOrUpdateDataSource;
+
+    const validParams :any[] = [
+      MOCK_DATA_SOURCE_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
     ];
 
     it('should send a POST request with the correct URL path and data', (done) => {
 
-      DataSourcesApi.createOrUpdateDataSource(MOCK_DS_OBJ)
+      DataSourcesApi.createOrUpdateDataSource(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.post).toHaveBeenCalledWith('/', MOCK_DS_OBJ);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith('/', MOCK_DATA_SOURCE_DM);
           done();
         })
         .catch(() => {
@@ -100,10 +107,10 @@ function testCreateOrUpdateDataSource() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_SOURCES_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_SOURCES_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -112,16 +119,22 @@ function testDeleteDataSource() {
 
   describe('deleteDataSource()', () => {
 
-    const functionInvocation = [
-      DataSourcesApi.deleteDataSource, MOCK_DS_UUID
+    const functionToTest :Function = DataSourcesApi.deleteDataSource;
+
+    const validParams :any[] = [
+      MOCK_DATA_SOURCE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      DataSourcesApi.deleteDataSource(MOCK_DS_UUID)
+      DataSourcesApi.deleteDataSource(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(`/${MOCK_DS_UUID}`);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(`/${MOCK_DATA_SOURCE_DM.id}`);
           done();
         })
         .catch(() => {
@@ -129,10 +142,10 @@ function testDeleteDataSource() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_SOURCES_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_SOURCES_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -141,16 +154,22 @@ function testStartSync() {
 
   describe('startSync()', () => {
 
-    const functionInvocation = [
-      DataSourcesApi.startSync, MOCK_DS_UUID
+    const functionToTest :Function = DataSourcesApi.startSync;
+
+    const validParams :any[] = [
+      MOCK_DATA_SOURCE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS
     ];
 
     it('should send a POST request with the correct URL path', (done) => {
 
-      DataSourcesApi.startSync(MOCK_DS_UUID)
+      DataSourcesApi.startSync(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.post).toHaveBeenCalledWith(`/${MOCK_DS_UUID}`);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(`/${MOCK_DATA_SOURCE_DM.id}`);
           done();
         })
         .catch(() => {
@@ -158,10 +177,10 @@ function testStartSync() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_SOURCES_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_SOURCES_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
@@ -170,16 +189,24 @@ function testSignalSyncCompleted() {
 
   describe('signalSyncCompleted()', () => {
 
-    const functionInvocation = [
-      DataSourcesApi.signalSyncCompleted, MOCK_DS_UUID, MOCK_SYNC_UUID
+    const functionToTest :Function = DataSourcesApi.signalSyncCompleted;
+
+    const validParams :any[] = [
+      MOCK_DATA_SOURCE_DM.id,
+      MOCK_SYNC_UUID
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS
     ];
 
     it('should send a DELETE request with the correct URL path', (done) => {
 
-      DataSourcesApi.signalSyncCompleted(MOCK_DS_UUID, MOCK_SYNC_UUID)
+      DataSourcesApi.signalSyncCompleted(...validParams)
         .then(() => {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(`/${MOCK_DS_UUID}/${MOCK_SYNC_UUID}`);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(`/${MOCK_DATA_SOURCE_DM.id}/${MOCK_SYNC_UUID}`);
           done();
         })
         .catch(() => {
@@ -187,10 +214,10 @@ function testSignalSyncCompleted() {
         });
     });
 
-    testApiFunctionShouldGetCorrectAxiosInstance(DATA_SOURCES_API, ...functionInvocation);
-    testApiFunctionShouldReturnPromiseOnValidParameters(...functionInvocation);
-    testApiFunctionShouldNotThrowOnInvalidParameters(...functionInvocation);
-    testApiFunctionShouldRejectOnInvalidParameters(...functionInvocation);
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, DATA_SOURCES_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
