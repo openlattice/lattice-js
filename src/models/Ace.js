@@ -4,8 +4,6 @@
 
 import Immutable from 'immutable';
 
-import isUndefined from 'lodash/isUndefined';
-
 import Logger from '../utils/Logger';
 
 import Principal, {
@@ -64,7 +62,7 @@ export class AceBuilder {
 
   setPermissions(permissions :Permission[]) :AceBuilder {
 
-    if (isUndefined(permissions) || isEmptyArray(permissions)) {
+    if (!isDefined(permissions) || isEmptyArray(permissions)) {
       return this;
     }
 

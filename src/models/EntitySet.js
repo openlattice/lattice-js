@@ -5,7 +5,6 @@
 import Immutable from 'immutable';
 
 import has from 'lodash/has';
-import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 
@@ -33,7 +32,7 @@ export default class EntitySet {
   entityTypeId :UUID;
   name :string;
   title :string;
-  description :string;
+  description :?string;
   contacts :string[];
 
   constructor(
@@ -41,15 +40,23 @@ export default class EntitySet {
       entityTypeId :UUID,
       name :string,
       title :string,
-      description :string,
+      description :?string,
       contacts :string[]) {
 
-    this.id = id;
+    // required properties
     this.entityTypeId = entityTypeId;
     this.name = name;
     this.title = title;
-    this.description = description;
     this.contacts = contacts;
+
+    // optional properties
+    if (isDefined(id)) {
+      this.id = id;
+    }
+
+    if (isDefined(description)) {
+      this.description = description;
+    }
 
     // TODO: use Immutable.hash() for implementing valueOf()
   }
@@ -65,10 +72,14 @@ export class EntitySetBuilder {
   entityTypeId :UUID;
   name :string;
   title :string;
-  description :string;
+  description :?string;
   contacts :string[];
 
-  setId(entitySetId :UUID) :EntitySetBuilder {
+  setId(entitySetId :?UUID) :EntitySetBuilder {
+
+    if (!isDefined(entitySetId) || isEmptyString(entitySetId)) {
+      return this;
+    }
 
     if (!isValidUuid(entitySetId)) {
       throw new Error('invalid parameter: entitySetId must be a valid UUID');
@@ -108,9 +119,9 @@ export class EntitySetBuilder {
     return this;
   }
 
-  setDescription(description :string) :EntitySetBuilder {
+  setDescription(description :?string) :EntitySetBuilder {
 
-    if (isUndefined(description) || isEmptyString(description)) {
+    if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
 
@@ -124,7 +135,7 @@ export class EntitySetBuilder {
 
   setContacts(contacts :string[]) :EntitySetBuilder {
 
-    if (isUndefined(contacts) || isEmptyArray(contacts)) {
+    if (!isDefined(contacts) || isEmptyArray(contacts)) {
       return this;
     }
 
