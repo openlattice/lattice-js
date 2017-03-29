@@ -5,7 +5,6 @@
 import Immutable from 'immutable';
 
 import has from 'lodash/has';
-import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 
@@ -24,32 +23,44 @@ const LOG = new Logger('DataSource');
 
 export default class DataSource {
 
-  id :UUID;
+  id :?UUID;
   title :string;
-  description :string;
+  description :?string;
   entitySetIds :UUID[];
 
   constructor(
-      id :UUID,
+      id :?UUID,
       title :string,
-      description :string,
+      description :?string,
       entitySetIds :UUID[]) {
 
-    this.id = id;
+    // required properties
     this.title = title;
-    this.description = description;
     this.entitySetIds = entitySetIds;
+
+    // optional properties
+    if (isDefined(id)) {
+      this.id = id;
+    }
+
+    if (isDefined(description)) {
+      this.description = description;
+    }
   }
 }
 
 export class DataSourceBuilder {
 
-  id :UUID;
+  id :?UUID;
   title :string;
-  description :string;
+  description :?string;
   entitySetIds :UUID[];
 
-  setId(id :UUID) :DataSourceBuilder {
+  setId(id :?UUID) :DataSourceBuilder {
+
+    if (!isDefined(id) || isEmptyString(id)) {
+      return this;
+    }
 
     if (!isValidUuid(id)) {
       throw new Error('invalid parameter: id must be a valid UUID');
@@ -69,9 +80,9 @@ export class DataSourceBuilder {
     return this;
   }
 
-  setDescription(description :string) :DataSourceBuilder {
+  setDescription(description :?string) :DataSourceBuilder {
 
-    if (isUndefined(description) || isEmptyString(description)) {
+    if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
 

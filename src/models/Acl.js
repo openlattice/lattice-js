@@ -3,7 +3,6 @@
  */
 
 import has from 'lodash/has';
-import isUndefined from 'lodash/isUndefined';
 
 import Ace from './Ace';
 import Logger from '../utils/Logger';
@@ -47,7 +46,7 @@ export class AclBuilder {
 
   setAclKey(aclKey :UUID[]) :AclBuilder {
 
-    if (isUndefined(aclKey) || isEmptyArray(aclKey)) {
+    if (!isDefined(aclKey) || isEmptyArray(aclKey)) {
       return this;
     }
 
@@ -61,7 +60,7 @@ export class AclBuilder {
 
   setAces(aces :Ace[]) :AclBuilder {
 
-    if (isUndefined(aces) || isEmptyArray(aces)) {
+    if (!isDefined(aces) || isEmptyArray(aces)) {
       return this;
     }
 

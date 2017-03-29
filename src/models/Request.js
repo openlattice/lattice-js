@@ -6,7 +6,6 @@ import Immutable from 'immutable';
 
 import has from 'lodash/has';
 import isString from 'lodash/isString';
-import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 
@@ -59,7 +58,7 @@ export class RequestBuilder {
 
   setPermissions(permissions :Permission[]) :RequestBuilder {
 
-    if (isUndefined(permissions) || isEmptyArray(permissions)) {
+    if (!isDefined(permissions) || isEmptyArray(permissions)) {
       return this;
     }
 
@@ -78,7 +77,7 @@ export class RequestBuilder {
 
   setReason(reason :string) :RequestBuilder {
 
-    if (isUndefined(reason) || isEmptyString(reason)) {
+    if (!isDefined(reason) || isEmptyString(reason)) {
       return this;
     }
 
