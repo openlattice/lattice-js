@@ -5,7 +5,6 @@
 import Immutable from 'immutable';
 
 import has from 'lodash/has';
-import isUndefined from 'lodash/isUndefined';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
@@ -34,7 +33,7 @@ export default class PropertyType {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :string;
+  description :?string;
   datatype :string;
   schemas :FullyQualifiedName[];
 
@@ -42,16 +41,24 @@ export default class PropertyType {
       id :?UUID,
       type :FullyQualifiedName,
       title :string,
-      description :string,
+      description :?string,
       datatype :string,
       schemas :FullyQualifiedName[]) {
 
-    this.id = id;
+    // required properties
     this.type = type;
     this.title = title;
-    this.description = description;
     this.datatype = datatype;
     this.schemas = schemas;
+
+    // optional properties
+    if (isDefined(id)) {
+      this.id = id;
+    }
+
+    if (isDefined(description)) {
+      this.description = description;
+    }
   }
 }
 
@@ -64,11 +71,15 @@ export class PropertyTypeBuilder {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :string;
+  description :?string;
   datatype :string;
   schemas :FullyQualifiedName[];
 
-  setId(propertyTypeId :UUID) :PropertyTypeBuilder {
+  setId(propertyTypeId :?UUID) :PropertyTypeBuilder {
+
+    if (!isDefined(propertyTypeId) || isEmptyString(propertyTypeId)) {
+      return this;
+    }
 
     if (!isValidUuid(propertyTypeId)) {
       throw new Error('invalid parameter: propertyTypeId must be a valid UUID');
@@ -98,9 +109,9 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setDescription(description :string) :PropertyTypeBuilder {
+  setDescription(description :?string) :PropertyTypeBuilder {
 
-    if (isUndefined(description) || isEmptyString(description)) {
+    if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
 
@@ -124,7 +135,7 @@ export class PropertyTypeBuilder {
 
   setSchemas(schemas :FullyQualifiedName[]) :PropertyTypeBuilder {
 
-    if (isUndefined(schemas) || isEmptyArray(schemas)) {
+    if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
     }
 

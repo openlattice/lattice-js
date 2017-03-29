@@ -7,7 +7,8 @@ import {
   INVALID_PARAMS,
   INVALID_PARAMS_EMPTY_STRING_ALLOWED,
   INVALID_SS_PARAMS,
-  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
+  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED,
+  INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED
 } from '../constants/InvalidParams';
 
 import {
@@ -31,17 +32,17 @@ describe('PropertyType', () => {
     describe('setId()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      it('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setId();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       it('should not throw when given valid parameters', () => {
@@ -330,7 +331,7 @@ describe('PropertyType', () => {
       });
 
       it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -366,7 +367,7 @@ describe('PropertyType', () => {
       });
 
       it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
               invalidInput,

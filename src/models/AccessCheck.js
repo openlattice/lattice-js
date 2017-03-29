@@ -4,7 +4,6 @@
 
 import Immutable from 'immutable';
 import has from 'lodash/has';
-import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 
@@ -51,7 +50,7 @@ export class AccessCheckBuilder {
 
   setAclKey(aclKey :UUID[]) :AccessCheckBuilder {
 
-    if (isUndefined(aclKey) || isEmptyArray(aclKey)) {
+    if (!isDefined(aclKey) || isEmptyArray(aclKey)) {
       return this;
     }
 
@@ -65,7 +64,7 @@ export class AccessCheckBuilder {
 
   setPermissions(permissions :Permission[]) :AccessCheckBuilder {
 
-    if (isUndefined(permissions) || isEmptyArray(permissions)) {
+    if (!isDefined(permissions) || isEmptyArray(permissions)) {
       return this;
     }
 

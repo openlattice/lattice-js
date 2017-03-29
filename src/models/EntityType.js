@@ -5,7 +5,6 @@
 import Immutable from 'immutable';
 
 import has from 'lodash/has';
-import isUndefined from 'lodash/isUndefined';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
@@ -40,33 +39,47 @@ export default class EntityType {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :string;
+  description :?string;
   schemas :FullyQualifiedName[];
   key :UUID[];
   properties :UUID[];
   baseType :?UUID;
-  category :SecurableType;
+  category :?SecurableType;
 
   constructor(
       id :?UUID,
       type :FullyQualifiedName,
       title :string,
-      description :string,
+      description :?string,
       schemas :FullyQualifiedName[],
       key :UUID[],
       properties :UUID[],
       baseType :?UUID,
-      category :SecurableType) {
+      category :?SecurableType) {
 
-    this.id = id;
+    // required properties
     this.type = type;
     this.title = title;
-    this.description = description;
     this.schemas = schemas;
     this.key = key;
     this.properties = properties;
-    this.baseType = baseType;
-    this.category = category;
+
+    // optional properties
+    if (isDefined(id)) {
+      this.id = id;
+    }
+
+    if (isDefined(description)) {
+      this.description = description;
+    }
+
+    if (isDefined(baseType)) {
+      this.baseType = baseType;
+    }
+
+    if (isDefined(category)) {
+      this.category = category;
+    }
   }
 }
 
@@ -79,14 +92,18 @@ export class EntityTypeBuilder {
   id :?UUID;
   type :FullyQualifiedName;
   title :string;
-  description :string;
+  description :?string;
   schemas :FullyQualifiedName[];
   key :UUID[];
   properties :UUID[];
   baseType :?UUID;
-  category :SecurableType;
+  category :?SecurableType;
 
-  setId(entityTypeId :UUID) :EntityTypeBuilder {
+  setId(entityTypeId :?UUID) :EntityTypeBuilder {
+
+    if (!isDefined(entityTypeId) || isEmptyString(entityTypeId)) {
+      return this;
+    }
 
     if (!isValidUuid(entityTypeId)) {
       throw new Error('invalid parameter: entityTypeId must be a valid UUID');
@@ -116,9 +133,9 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setDescription(description :string) :EntityTypeBuilder {
+  setDescription(description :?string) :EntityTypeBuilder {
 
-    if (isUndefined(description) || isEmptyString(description)) {
+    if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
 
@@ -132,7 +149,7 @@ export class EntityTypeBuilder {
 
   setSchemas(schemas :FullyQualifiedName[]) :EntityTypeBuilder {
 
-    if (isUndefined(schemas) || isEmptyArray(schemas)) {
+    if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
     }
 
@@ -151,7 +168,7 @@ export class EntityTypeBuilder {
 
   setKey(key :UUID[]) :EntityTypeBuilder {
 
-    if (isUndefined(key) || isEmptyArray(key)) {
+    if (!isDefined(key) || isEmptyArray(key)) {
       return this;
     }
 
@@ -170,7 +187,7 @@ export class EntityTypeBuilder {
 
   setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder {
 
-    if (isUndefined(propertyTypes) || isEmptyArray(propertyTypes)) {
+    if (!isDefined(propertyTypes) || isEmptyArray(propertyTypes)) {
       return this;
     }
 
@@ -189,7 +206,7 @@ export class EntityTypeBuilder {
 
   setBaseType(baseType :UUID) :EntityTypeBuilder {
 
-    if (isUndefined(baseType)) {
+    if (!isDefined(baseType) || isEmptyString(baseType)) {
       return this;
     }
 
@@ -203,7 +220,7 @@ export class EntityTypeBuilder {
 
   setCategory(category :SecurableType) :EntityTypeBuilder {
 
-    if (isUndefined(category) || isEmptyString(category)) {
+    if (!isDefined(category) || isEmptyString(category)) {
       return this;
     }
 

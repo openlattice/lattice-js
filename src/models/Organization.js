@@ -5,7 +5,6 @@
 import Immutable from 'immutable';
 
 import has from 'lodash/has';
-import isUndefined from 'lodash/isUndefined';
 
 import Principal from './Principal';
 import Logger from '../utils/Logger';
@@ -33,7 +32,7 @@ export default class Organization {
 
   id :?UUID;
   title :string;
-  description :string;
+  description :?string;
   members :Principal[];
   roles :Principal[];
   emails :string[];
@@ -41,17 +40,25 @@ export default class Organization {
   constructor(
       id :?UUID,
       title :string,
-      description :string,
+      description :?string,
       members :Principal[],
       roles :Principal[],
       emails :string[]) {
 
-    this.id = id;
+    // required properties
     this.title = title;
-    this.description = description;
     this.members = members;
     this.roles = roles;
     this.emails = emails;
+
+    // optional properties
+    if (isDefined(id)) {
+      this.id = id;
+    }
+
+    if (isDefined(description)) {
+      this.description = description;
+    }
   }
 }
 
@@ -63,12 +70,16 @@ export class OrganizationBuilder {
 
   id :?UUID;
   title :string;
-  description :string;
+  description :?string;
   members :Principal[];
   roles :Principal[];
   emails :string[];
 
-  setId(id :UUID) :OrganizationBuilder {
+  setId(id :?UUID) :OrganizationBuilder {
+
+    if (!isDefined(id) || isEmptyString(id)) {
+      return this;
+    }
 
     if (!isValidUuid(id)) {
       throw new Error('invalid parameter: id must be a valid UUID');
@@ -88,9 +99,9 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setDescription(description :string) :OrganizationBuilder {
+  setDescription(description :?string) :OrganizationBuilder {
 
-    if (isUndefined(description) || isEmptyString(description)) {
+    if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
 
@@ -104,7 +115,7 @@ export class OrganizationBuilder {
 
   setMembers(members :Principal[]) :OrganizationBuilder {
 
-    if (isUndefined(members) || isEmptyArray(members)) {
+    if (!isDefined(members) || isEmptyArray(members)) {
       return this;
     }
 
@@ -123,7 +134,7 @@ export class OrganizationBuilder {
 
   setRoles(roles :Principal[]) :OrganizationBuilder {
 
-    if (isUndefined(roles) || isEmptyArray(roles)) {
+    if (!isDefined(roles) || isEmptyArray(roles)) {
       return this;
     }
 
@@ -142,7 +153,7 @@ export class OrganizationBuilder {
 
   setAutoApprovedEmails(emails :string[]) :OrganizationBuilder {
 
-    if (isUndefined(emails) || isEmptyArray(emails)) {
+    if (!isDefined(emails) || isEmptyArray(emails)) {
       return this;
     }
 
