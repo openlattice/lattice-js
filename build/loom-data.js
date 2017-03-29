@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.21.1
+ * loom-data - v0.21.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -4726,7 +4726,7 @@ exports.isNonEmptyObject = isNonEmptyObject;
 exports.isNonEmptyString = isNonEmptyString;
 exports.isNonEmptyStringArray = isNonEmptyStringArray;
 
-var _isArray = __webpack_require__(14);
+var _isArray = __webpack_require__(13);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
@@ -4746,7 +4746,7 @@ var _isString = __webpack_require__(25);
 
 var _isString2 = _interopRequireDefault(_isString);
 
-var _isUndefined = __webpack_require__(5);
+var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -4838,7 +4838,7 @@ var _PermissionTypes = __webpack_require__(27);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(14);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -4854,11 +4854,11 @@ var _EntitySet = __webpack_require__(19);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _Principal = __webpack_require__(16);
+var _Principal = __webpack_require__(15);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
@@ -9963,34 +9963,6 @@ function isValidRequestStatusArray(statuses) {
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is `undefined`.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
- * @example
- *
- * _.isUndefined(void 0);
- * // => true
- *
- * _.isUndefined(null);
- * // => false
- */
-function isUndefined(value) {
-  return value === undefined;
-}
-
-module.exports = isUndefined;
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10296,7 +10268,7 @@ module.exports = {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10317,7 +10289,7 @@ var SEARCH_API = exports.SEARCH_API = 'SearchApi';
 var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseHas = __webpack_require__(228),
@@ -10358,7 +10330,7 @@ module.exports = has;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10379,9 +10351,9 @@ var _immutable2 = _interopRequireDefault(_immutable);
 
 var _Configuration = __webpack_require__(38);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10454,7 +10426,7 @@ exports.getApiBaseUrl = getApiBaseUrl;
 exports.getApiAxiosInstance = getApiAxiosInstance;
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(33),
@@ -10488,7 +10460,7 @@ module.exports = baseGetTag;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var freeGlobal = __webpack_require__(56);
@@ -10503,7 +10475,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /**
@@ -10538,7 +10510,7 @@ module.exports = isObjectLike;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10592,7 +10564,7 @@ var SEARCH_ENTITY_TYPES_PATH = exports.SEARCH_ENTITY_TYPES_PATH = 'entity_types'
 var SEARCH_PROPERTY_TYPES_PATH = exports.SEARCH_PROPERTY_TYPES_PATH = 'property_types';
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -10624,7 +10596,7 @@ module.exports = isArray;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10835,7 +10807,7 @@ exports.default = FullyQualifiedName;
 module.exports = exports['default'];
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10972,7 +10944,7 @@ function isValid(principal) {
 }
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsNative = __webpack_require__(231),
@@ -10995,7 +10967,7 @@ module.exports = getNative;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11014,15 +10986,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(14);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11052,15 +11020,29 @@ var LOG = new _Logger2.default('EntityType');
 var EntityType = function EntityType(id, type, title, description, schemas, key, properties, baseType, category) {
   _classCallCheck(this, EntityType);
 
-  this.id = id;
+  // required properties
   this.type = type;
   this.title = title;
-  this.description = description;
   this.schemas = schemas;
   this.key = key;
   this.properties = properties;
-  this.baseType = baseType;
-  this.category = category;
+
+  // optional properties
+  if ((0, _LangUtils.isDefined)(id)) {
+    this.id = id;
+  }
+
+  if ((0, _LangUtils.isDefined)(description)) {
+    this.description = description;
+  }
+
+  if ((0, _LangUtils.isDefined)(baseType)) {
+    this.baseType = baseType;
+  }
+
+  if ((0, _LangUtils.isDefined)(category)) {
+    this.category = category;
+  }
 };
 
 /**
@@ -11079,6 +11061,10 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
   _createClass(EntityTypeBuilder, [{
     key: 'setId',
     value: function setId(entityTypeId) {
+
+      if (!(0, _LangUtils.isDefined)(entityTypeId) || (0, _LangUtils.isEmptyString)(entityTypeId)) {
+        return this;
+      }
 
       if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
         throw new Error('invalid parameter: entityTypeId must be a valid UUID');
@@ -11113,7 +11099,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
     key: 'setDescription',
     value: function setDescription(description) {
 
-      if ((0, _isUndefined2.default)(description) || (0, _LangUtils.isEmptyString)(description)) {
+      if (!(0, _LangUtils.isDefined)(description) || (0, _LangUtils.isEmptyString)(description)) {
         return this;
       }
 
@@ -11128,7 +11114,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
     key: 'setSchemas',
     value: function setSchemas(schemas) {
 
-      if ((0, _isUndefined2.default)(schemas) || (0, _LangUtils.isEmptyArray)(schemas)) {
+      if (!(0, _LangUtils.isDefined)(schemas) || (0, _LangUtils.isEmptyArray)(schemas)) {
         return this;
       }
 
@@ -11148,7 +11134,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
     key: 'setKey',
     value: function setKey(key) {
 
-      if ((0, _isUndefined2.default)(key) || (0, _LangUtils.isEmptyArray)(key)) {
+      if (!(0, _LangUtils.isDefined)(key) || (0, _LangUtils.isEmptyArray)(key)) {
         return this;
       }
 
@@ -11168,7 +11154,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
     key: 'setPropertyTypes',
     value: function setPropertyTypes(propertyTypes) {
 
-      if ((0, _isUndefined2.default)(propertyTypes) || (0, _LangUtils.isEmptyArray)(propertyTypes)) {
+      if (!(0, _LangUtils.isDefined)(propertyTypes) || (0, _LangUtils.isEmptyArray)(propertyTypes)) {
         return this;
       }
 
@@ -11188,7 +11174,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
     key: 'setBaseType',
     value: function setBaseType(baseType) {
 
-      if ((0, _isUndefined2.default)(baseType)) {
+      if (!(0, _LangUtils.isDefined)(baseType) || (0, _LangUtils.isEmptyString)(baseType)) {
         return this;
       }
 
@@ -11203,7 +11189,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
     key: 'setCategory',
     value: function setCategory(category) {
 
-      if ((0, _isUndefined2.default)(category) || (0, _LangUtils.isEmptyString)(category)) {
+      if (!(0, _LangUtils.isDefined)(category) || (0, _LangUtils.isEmptyString)(category)) {
         return this;
       }
 
@@ -11288,6 +11274,34 @@ function isValid(entityType) {
 }
 
 /***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is `undefined`.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
+ * @example
+ *
+ * _.isUndefined(void 0);
+ * // => true
+ *
+ * _.isUndefined(null);
+ * // => false
+ */
+function isUndefined(value) {
+  return value === undefined;
+}
+
+module.exports = isUndefined;
+
+
+/***/ }),
 /* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11307,13 +11321,9 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
-
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 var _Logger = __webpack_require__(1);
 
@@ -11337,12 +11347,20 @@ var LOG = new _Logger2.default('EntitySet');
 var EntitySet = function EntitySet(id, entityTypeId, name, title, description, contacts) {
   _classCallCheck(this, EntitySet);
 
-  this.id = id;
+  // required properties
   this.entityTypeId = entityTypeId;
   this.name = name;
   this.title = title;
-  this.description = description;
   this.contacts = contacts;
+
+  // optional properties
+  if ((0, _LangUtils.isDefined)(id)) {
+    this.id = id;
+  }
+
+  if ((0, _LangUtils.isDefined)(description)) {
+    this.description = description;
+  }
 
   // TODO: use Immutable.hash() for implementing valueOf()
 };
@@ -11363,6 +11381,10 @@ var EntitySetBuilder = exports.EntitySetBuilder = function () {
   _createClass(EntitySetBuilder, [{
     key: 'setId',
     value: function setId(entitySetId) {
+
+      if (!(0, _LangUtils.isDefined)(entitySetId) || (0, _LangUtils.isEmptyString)(entitySetId)) {
+        return this;
+      }
 
       if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
         throw new Error('invalid parameter: entitySetId must be a valid UUID');
@@ -11408,7 +11430,7 @@ var EntitySetBuilder = exports.EntitySetBuilder = function () {
     key: 'setDescription',
     value: function setDescription(description) {
 
-      if ((0, _isUndefined2.default)(description) || (0, _LangUtils.isEmptyString)(description)) {
+      if (!(0, _LangUtils.isDefined)(description) || (0, _LangUtils.isEmptyString)(description)) {
         return this;
       }
 
@@ -11423,7 +11445,7 @@ var EntitySetBuilder = exports.EntitySetBuilder = function () {
     key: 'setContacts',
     value: function setContacts(contacts) {
 
-      if ((0, _isUndefined2.default)(contacts) || (0, _LangUtils.isEmptyArray)(contacts)) {
+      if (!(0, _LangUtils.isDefined)(contacts) || (0, _LangUtils.isEmptyArray)(contacts)) {
         return this;
       }
 
@@ -11520,15 +11542,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(14);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11554,12 +11572,20 @@ var LOG = new _Logger2.default('PropertyType');
 var PropertyType = function PropertyType(id, type, title, description, datatype, schemas) {
   _classCallCheck(this, PropertyType);
 
-  this.id = id;
+  // required properties
   this.type = type;
   this.title = title;
-  this.description = description;
   this.datatype = datatype;
   this.schemas = schemas;
+
+  // optional properties
+  if ((0, _LangUtils.isDefined)(id)) {
+    this.id = id;
+  }
+
+  if ((0, _LangUtils.isDefined)(description)) {
+    this.description = description;
+  }
 };
 
 /**
@@ -11578,6 +11604,10 @@ var PropertyTypeBuilder = exports.PropertyTypeBuilder = function () {
   _createClass(PropertyTypeBuilder, [{
     key: 'setId',
     value: function setId(propertyTypeId) {
+
+      if (!(0, _LangUtils.isDefined)(propertyTypeId) || (0, _LangUtils.isEmptyString)(propertyTypeId)) {
+        return this;
+      }
 
       if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
         throw new Error('invalid parameter: propertyTypeId must be a valid UUID');
@@ -11612,7 +11642,7 @@ var PropertyTypeBuilder = exports.PropertyTypeBuilder = function () {
     key: 'setDescription',
     value: function setDescription(description) {
 
-      if ((0, _isUndefined2.default)(description) || (0, _LangUtils.isEmptyString)(description)) {
+      if (!(0, _LangUtils.isDefined)(description) || (0, _LangUtils.isEmptyString)(description)) {
         return this;
       }
 
@@ -11638,7 +11668,7 @@ var PropertyTypeBuilder = exports.PropertyTypeBuilder = function () {
     key: 'setSchemas',
     value: function setSchemas(schemas) {
 
-      if ((0, _isUndefined2.default)(schemas) || (0, _LangUtils.isEmptyArray)(schemas)) {
+      if (!(0, _LangUtils.isDefined)(schemas) || (0, _LangUtils.isEmptyArray)(schemas)) {
         return this;
       }
 
@@ -11735,17 +11765,13 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
 var _isString = __webpack_require__(25);
 
 var _isString2 = _interopRequireDefault(_isString);
-
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 var _Logger = __webpack_require__(1);
 
@@ -11791,7 +11817,7 @@ var RequestBuilder = exports.RequestBuilder = function () {
     key: 'setPermissions',
     value: function setPermissions(permissions) {
 
-      if ((0, _isUndefined2.default)(permissions) || (0, _LangUtils.isEmptyArray)(permissions)) {
+      if (!(0, _LangUtils.isDefined)(permissions) || (0, _LangUtils.isEmptyArray)(permissions)) {
         return this;
       }
 
@@ -11811,7 +11837,7 @@ var RequestBuilder = exports.RequestBuilder = function () {
     key: 'setReason',
     value: function setReason(reason) {
 
-      if ((0, _isUndefined2.default)(reason) || (0, _LangUtils.isEmptyString)(reason)) {
+      if (!(0, _LangUtils.isDefined)(reason) || (0, _LangUtils.isEmptyString)(reason)) {
         return this;
       }
 
@@ -11926,7 +11952,7 @@ module.exports = getMapData;
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(17);
+var getNative = __webpack_require__(16);
 
 /* Built-in method references that are verified to be native. */
 var nativeCreate = getNative(Object, 'create');
@@ -11938,9 +11964,9 @@ module.exports = nativeCreate;
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isArray = __webpack_require__(14),
-    isObjectLike = __webpack_require__(12);
+var baseGetTag = __webpack_require__(9),
+    isArray = __webpack_require__(13),
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var stringTag = '[object String]';
@@ -11977,7 +12003,7 @@ module.exports = isString;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 var normalizeHeaderName = __webpack_require__(209);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
@@ -12171,15 +12197,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
 var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _Principal = __webpack_require__(16);
+var _Principal = __webpack_require__(15);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
@@ -12233,7 +12255,7 @@ var AceBuilder = exports.AceBuilder = function () {
     key: 'setPermissions',
     value: function setPermissions(permissions) {
 
-      if ((0, _isUndefined2.default)(permissions) || (0, _LangUtils.isEmptyArray)(permissions)) {
+      if (!(0, _LangUtils.isDefined)(permissions) || (0, _LangUtils.isEmptyArray)(permissions)) {
         return this;
       }
 
@@ -12312,7 +12334,7 @@ var _RequestStateTypes = __webpack_require__(29);
 
 var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
 
-var _Principal = __webpack_require__(16);
+var _Principal = __webpack_require__(15);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
@@ -12423,7 +12445,7 @@ function isValid(requestStatus) {
 /* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(11);
+var root = __webpack_require__(10);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -12513,8 +12535,8 @@ module.exports = isObject;
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isObjectLike = __webpack_require__(12);
+var baseGetTag = __webpack_require__(9),
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
@@ -12681,7 +12703,7 @@ exports.getConfig = getConfig;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 var settle = __webpack_require__(201);
 var buildURL = __webpack_require__(204);
 var parseHeaders = __webpack_require__(210);
@@ -12979,13 +13001,9 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
-
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 var _Logger = __webpack_require__(1);
 
@@ -13030,7 +13048,7 @@ var AccessCheckBuilder = exports.AccessCheckBuilder = function () {
     key: 'setAclKey',
     value: function setAclKey(aclKey) {
 
-      if ((0, _isUndefined2.default)(aclKey) || (0, _LangUtils.isEmptyArray)(aclKey)) {
+      if (!(0, _LangUtils.isDefined)(aclKey) || (0, _LangUtils.isEmptyArray)(aclKey)) {
         return this;
       }
 
@@ -13045,7 +13063,7 @@ var AccessCheckBuilder = exports.AccessCheckBuilder = function () {
     key: 'setPermissions',
     value: function setPermissions(permissions) {
 
-      if ((0, _isUndefined2.default)(permissions) || (0, _LangUtils.isEmptyArray)(permissions)) {
+      if (!(0, _LangUtils.isDefined)(permissions) || (0, _LangUtils.isEmptyArray)(permissions)) {
         return this;
       }
 
@@ -13122,13 +13140,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
-
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 var _Ace = __webpack_require__(31);
 
@@ -13177,7 +13191,7 @@ var AclBuilder = exports.AclBuilder = function () {
     key: 'setAclKey',
     value: function setAclKey(aclKey) {
 
-      if ((0, _isUndefined2.default)(aclKey) || (0, _LangUtils.isEmptyArray)(aclKey)) {
+      if (!(0, _LangUtils.isDefined)(aclKey) || (0, _LangUtils.isEmptyArray)(aclKey)) {
         return this;
       }
 
@@ -13192,7 +13206,7 @@ var AclBuilder = exports.AclBuilder = function () {
     key: 'setAces',
     value: function setAces(aces) {
 
-      if ((0, _isUndefined2.default)(aces) || (0, _LangUtils.isEmptyArray)(aces)) {
+      if (!(0, _LangUtils.isDefined)(aces) || (0, _LangUtils.isEmptyArray)(aces)) {
         return this;
       }
 
@@ -13390,13 +13404,9 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
-
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
 var _Logger = __webpack_require__(1);
 
@@ -13415,10 +13425,18 @@ var LOG = new _Logger2.default('DataSource');
 var DataSource = function DataSource(id, title, description, entitySetIds) {
   _classCallCheck(this, DataSource);
 
-  this.id = id;
+  // required properties
   this.title = title;
-  this.description = description;
   this.entitySetIds = entitySetIds;
+
+  // optional properties
+  if ((0, _LangUtils.isDefined)(id)) {
+    this.id = id;
+  }
+
+  if ((0, _LangUtils.isDefined)(description)) {
+    this.description = description;
+  }
 };
 
 exports.default = DataSource;
@@ -13431,6 +13449,10 @@ var DataSourceBuilder = exports.DataSourceBuilder = function () {
   _createClass(DataSourceBuilder, [{
     key: 'setId',
     value: function setId(id) {
+
+      if (!(0, _LangUtils.isDefined)(id) || (0, _LangUtils.isEmptyString)(id)) {
+        return this;
+      }
 
       if (!(0, _ValidationUtils.isValidUuid)(id)) {
         throw new Error('invalid parameter: id must be a valid UUID');
@@ -13454,7 +13476,7 @@ var DataSourceBuilder = exports.DataSourceBuilder = function () {
     key: 'setDescription',
     value: function setDescription(description) {
 
-      if ((0, _isUndefined2.default)(description) || (0, _LangUtils.isEmptyString)(description)) {
+      if (!(0, _LangUtils.isDefined)(description) || (0, _LangUtils.isEmptyString)(description)) {
         return this;
       }
 
@@ -13704,7 +13726,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -13716,7 +13738,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -13863,15 +13885,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isUndefined = __webpack_require__(5);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-var _Principal = __webpack_require__(16);
+var _Principal = __webpack_require__(15);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
@@ -13897,12 +13915,20 @@ var LOG = new _Logger2.default('Organization');
 var Organization = function Organization(id, title, description, members, roles, emails) {
   _classCallCheck(this, Organization);
 
-  this.id = id;
+  // required properties
   this.title = title;
-  this.description = description;
   this.members = members;
   this.roles = roles;
   this.emails = emails;
+
+  // optional properties
+  if ((0, _LangUtils.isDefined)(id)) {
+    this.id = id;
+  }
+
+  if ((0, _LangUtils.isDefined)(description)) {
+    this.description = description;
+  }
 };
 
 /**
@@ -13921,6 +13947,10 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
   _createClass(OrganizationBuilder, [{
     key: 'setId',
     value: function setId(id) {
+
+      if (!(0, _LangUtils.isDefined)(id) || (0, _LangUtils.isEmptyString)(id)) {
+        return this;
+      }
 
       if (!(0, _ValidationUtils.isValidUuid)(id)) {
         throw new Error('invalid parameter: id must be a valid UUID');
@@ -13944,7 +13974,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
     key: 'setDescription',
     value: function setDescription(description) {
 
-      if ((0, _isUndefined2.default)(description) || (0, _LangUtils.isEmptyString)(description)) {
+      if (!(0, _LangUtils.isDefined)(description) || (0, _LangUtils.isEmptyString)(description)) {
         return this;
       }
 
@@ -13959,7 +13989,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
     key: 'setMembers',
     value: function setMembers(members) {
 
-      if ((0, _isUndefined2.default)(members) || (0, _LangUtils.isEmptyArray)(members)) {
+      if (!(0, _LangUtils.isDefined)(members) || (0, _LangUtils.isEmptyArray)(members)) {
         return this;
       }
 
@@ -13979,7 +14009,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
     key: 'setRoles',
     value: function setRoles(roles) {
 
-      if ((0, _isUndefined2.default)(roles) || (0, _LangUtils.isEmptyArray)(roles)) {
+      if (!(0, _LangUtils.isDefined)(roles) || (0, _LangUtils.isEmptyArray)(roles)) {
         return this;
       }
 
@@ -13999,7 +14029,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
     key: 'setAutoApprovedEmails',
     value: function setAutoApprovedEmails(emails) {
 
-      if ((0, _isUndefined2.default)(emails) || (0, _LangUtils.isEmptyArray)(emails)) {
+      if (!(0, _LangUtils.isDefined)(emails) || (0, _LangUtils.isEmptyArray)(emails)) {
         return this;
       }
 
@@ -14092,11 +14122,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(14);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -14224,8 +14254,8 @@ function isValid(schema) {
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(17),
-    root = __webpack_require__(11);
+var getNative = __webpack_require__(16),
+    root = __webpack_require__(10);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -14265,7 +14295,7 @@ module.exports = baseIndexOf;
 
 var Symbol = __webpack_require__(33),
     arrayMap = __webpack_require__(225),
-    isArray = __webpack_require__(14),
+    isArray = __webpack_require__(13),
     isSymbol = __webpack_require__(36);
 
 /** Used as references for various `Number` constants. */
@@ -14395,7 +14425,7 @@ module.exports = toSource;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsArguments = __webpack_require__(229),
-    isObjectLike = __webpack_require__(12);
+    isObjectLike = __webpack_require__(11);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -14439,7 +14469,7 @@ module.exports = isArguments;
 var baseKeys = __webpack_require__(233),
     getTag = __webpack_require__(243),
     isArguments = __webpack_require__(60),
-    isArray = __webpack_require__(14),
+    isArray = __webpack_require__(13),
     isArrayLike = __webpack_require__(276),
     isBuffer = __webpack_require__(278),
     isPrototype = __webpack_require__(57),
@@ -14519,7 +14549,7 @@ module.exports = isEmpty;
 /* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(9),
     isObject = __webpack_require__(35);
 
 /** `Object#toString` result references. */
@@ -14562,9 +14592,9 @@ module.exports = isFunction;
 /* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(9),
     getPrototype = __webpack_require__(241),
-    isObjectLike = __webpack_require__(12);
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var objectTag = '[object Object]';
@@ -25966,7 +25996,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.checkAuthorizations = checkAuthorizations;
 exports.getAccessibleObjects = getAccessibleObjects;
 
-var _isUndefined = __webpack_require__(5);
+var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -25986,9 +26016,9 @@ var _AccessCheck = __webpack_require__(45);
 
 var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(2);
 
@@ -26131,7 +26161,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(5);
+var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -26139,11 +26169,11 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(2);
 
@@ -26473,9 +26503,9 @@ var _DataSource = __webpack_require__(48);
 
 var _DataSource2 = _interopRequireDefault(_DataSource);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _ValidationUtils = __webpack_require__(3);
 
@@ -26722,11 +26752,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isUndefined = __webpack_require__(5);
+var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -26734,7 +26764,7 @@ var _EntitySet = __webpack_require__(19);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(14);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -26742,7 +26772,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -26754,11 +26784,11 @@ var _Schema = __webpack_require__(52);
 
 var _Schema2 = _interopRequireDefault(_Schema);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(2);
 
@@ -28017,11 +28047,11 @@ var _LinkingEntityType = __webpack_require__(50);
 
 var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28225,7 +28255,7 @@ var _PrincipalTypes = __webpack_require__(28);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
-var _Principal = __webpack_require__(16);
+var _Principal = __webpack_require__(15);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
@@ -28237,11 +28267,11 @@ var _Organization = __webpack_require__(51);
 
 var _Organization2 = _interopRequireDefault(_Organization);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(2);
 
@@ -29114,9 +29144,9 @@ var _AclData = __webpack_require__(47);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _ValidationUtils = __webpack_require__(3);
 
@@ -29246,7 +29276,7 @@ exports.setUserRoles = setUserRoles;
 exports.removeRoleFromUser = removeRoleFromUser;
 exports.searchAllUsersByEmail = searchAllUsersByEmail;
 
-var _isUndefined = __webpack_require__(5);
+var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -29254,11 +29284,11 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(2);
 
@@ -29520,7 +29550,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(8);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -29540,9 +29570,9 @@ var _RequestStatus = __webpack_require__(32);
 
 var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(2);
 
@@ -29799,11 +29829,11 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
-var _AxiosUtils = __webpack_require__(9);
+var _AxiosUtils = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(2);
 
@@ -30534,7 +30564,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.SchemaBuilder = exports.Schema = exports.RequestStatusBuilder = exports.RequestStatus = exports.RequestBuilder = exports.Request = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.LinkingEntityTypeBuilder = exports.LinkingEntityType = exports.LinkingEntitySetBuilder = exports.LinkingEntitySet = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.DataSourceBuilder = exports.DataSource = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.FullyQualifiedName = undefined;
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(14);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -30558,7 +30588,7 @@ var _EntitySet = __webpack_require__(19);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -30574,7 +30604,7 @@ var _Organization = __webpack_require__(51);
 
 var _Organization2 = _interopRequireDefault(_Organization);
 
-var _Principal = __webpack_require__(16);
+var _Principal = __webpack_require__(15);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
@@ -30639,7 +30669,7 @@ module.exports = __webpack_require__(195);
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 var bind = __webpack_require__(43);
 var Axios = __webpack_require__(197);
 var defaults = __webpack_require__(26);
@@ -30763,7 +30793,7 @@ module.exports = CancelToken;
 
 
 var defaults = __webpack_require__(26);
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 var InterceptorManager = __webpack_require__(198);
 var dispatchRequest = __webpack_require__(199);
 var isAbsoluteURL = __webpack_require__(207);
@@ -30854,7 +30884,7 @@ module.exports = Axios;
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 
 function InterceptorManager() {
   this.handlers = [];
@@ -30913,7 +30943,7 @@ module.exports = InterceptorManager;
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 var transformData = __webpack_require__(202);
 var isCancel = __webpack_require__(41);
 var defaults = __webpack_require__(26);
@@ -31057,7 +31087,7 @@ module.exports = function settle(resolve, reject, response) {
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 
 /**
  * Transform the data for a request or a response
@@ -31127,7 +31157,7 @@ module.exports = btoa;
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -31221,7 +31251,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -31302,7 +31332,7 @@ module.exports = function isAbsoluteURL(url) {
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -31377,7 +31407,7 @@ module.exports = (
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -31396,7 +31426,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(5);
 
 /**
  * Parse headers into an object
@@ -31558,7 +31588,7 @@ var _Configuration = __webpack_require__(38);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.21.1";
+var version = "v0.21.2";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
@@ -33622,8 +33652,8 @@ module.exports = Array.isArray || function (arr) {
 /* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(17),
-    root = __webpack_require__(11);
+var getNative = __webpack_require__(16),
+    root = __webpack_require__(10);
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -33749,8 +33779,8 @@ module.exports = MapCache;
 /* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(17),
-    root = __webpack_require__(11);
+var getNative = __webpack_require__(16),
+    root = __webpack_require__(10);
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -33762,8 +33792,8 @@ module.exports = Promise;
 /* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(17),
-    root = __webpack_require__(11);
+var getNative = __webpack_require__(16),
+    root = __webpack_require__(10);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -33775,8 +33805,8 @@ module.exports = Set;
 /* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(17),
-    root = __webpack_require__(11);
+var getNative = __webpack_require__(16),
+    root = __webpack_require__(10);
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -33888,8 +33918,8 @@ module.exports = baseHas;
 /* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isObjectLike = __webpack_require__(12);
+var baseGetTag = __webpack_require__(9),
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
@@ -33983,9 +34013,9 @@ module.exports = baseIsNative;
 /* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(9),
     isLength = __webpack_require__(34),
-    isObjectLike = __webpack_require__(12);
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -34142,7 +34172,7 @@ module.exports = baseUnary;
 /* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(14),
+var isArray = __webpack_require__(13),
     isKey = __webpack_require__(253),
     stringToPath = __webpack_require__(272),
     toString = __webpack_require__(64);
@@ -34244,7 +34274,7 @@ module.exports = charsStartIndex;
 /* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(11);
+var root = __webpack_require__(10);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -34325,7 +34355,7 @@ var DataView = __webpack_require__(218),
     Promise = __webpack_require__(222),
     Set = __webpack_require__(223),
     WeakMap = __webpack_require__(224),
-    baseGetTag = __webpack_require__(10),
+    baseGetTag = __webpack_require__(9),
     toSource = __webpack_require__(59);
 
 /** `Object#toString` result references. */
@@ -34405,7 +34435,7 @@ module.exports = getValue;
 
 var castPath = __webpack_require__(236),
     isArguments = __webpack_require__(60),
-    isArray = __webpack_require__(14),
+    isArray = __webpack_require__(13),
     isIndex = __webpack_require__(252),
     isLength = __webpack_require__(34),
     toKey = __webpack_require__(273);
@@ -34646,7 +34676,7 @@ module.exports = isIndex;
 /* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(14),
+var isArray = __webpack_require__(13),
     isSymbol = __webpack_require__(36);
 
 /** Used to match property names within property paths. */
@@ -35333,8 +35363,8 @@ module.exports = isArrayLike;
 /* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isObjectLike = __webpack_require__(12);
+var baseGetTag = __webpack_require__(9),
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var boolTag = '[object Boolean]';
@@ -35368,7 +35398,7 @@ module.exports = isBoolean;
 /* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(11),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(10),
     stubFalse = __webpack_require__(284);
 
 /** Detect free variable `exports`. */
@@ -35413,8 +35443,8 @@ module.exports = isBuffer;
 /* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isObjectLike = __webpack_require__(12),
+var baseGetTag = __webpack_require__(9),
+    isObjectLike = __webpack_require__(11),
     isPlainObject = __webpack_require__(63);
 
 /** `Object#toString` result references. */
@@ -35455,7 +35485,7 @@ module.exports = isError;
 /* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(11);
+var root = __webpack_require__(10);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeIsFinite = root.isFinite;
