@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.21.2
+ * loom-data - v0.21.3
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -12167,11 +12167,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var SecurableTypes = {
+  ComplexType: 'ComplexType',
+  EdgeType: 'EdgeType',
   EntitySet: 'EntitySet',
   EntityType: 'EntityType',
-  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
   DataSource: 'Datasource',
-  Organization: 'Organization'
+  LinkingEntityType: 'LinkingEntityType',
+  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
+  Organization: 'Organization',
+  OrganizationRole: 'OrganizationRole'
 };
 
 exports.default = SecurableTypes;
@@ -31588,7 +31592,7 @@ var _Configuration = __webpack_require__(38);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.21.2";
+var version = "v0.21.3";
 
 /**
  * The `loom-data` library is a layer on top of Loom's REST APIs to simplify the process of reading data from and
