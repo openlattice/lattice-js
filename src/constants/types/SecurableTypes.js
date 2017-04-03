@@ -3,11 +3,15 @@
  */
 
 const SecurableTypes = {
+  ComplexType: 'ComplexType',
+  EdgeType: 'EdgeType',
   EntitySet: 'EntitySet',
   EntityType: 'EntityType',
-  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
   DataSource: 'Datasource',
-  Organization: 'Organization'
+  LinkingEntityType: 'LinkingEntityType',
+  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
+  Organization: 'Organization',
+  OrganizationRole: 'OrganizationRole'
 };
 
 export type SecurableType = $Keys<typeof SecurableTypes>;
