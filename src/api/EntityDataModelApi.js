@@ -43,6 +43,7 @@ import {
 } from '../constants/ApiNames';
 
 import {
+  ASSOCIATION_TYPE_PATH,
   IDS_PATH,
   SCHEMA_PATH,
   ENTITY_SET_PATH,
@@ -801,6 +802,22 @@ export function getAllEntityTypes() :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_TYPE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * TODO: everything
+ */
+export function getAllAssociationEntityTypes() :Promise<> {
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ASSOCIATION_TYPE_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

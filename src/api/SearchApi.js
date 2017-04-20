@@ -42,6 +42,7 @@ import {
 
 import {
   isDefined,
+  isNonEmptyArray,
   isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
@@ -333,33 +334,13 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyObject(searchFields)) {
-    errorMsg = 'invalid parameter: searchFields must be a non-empty object';
+  if (!isNonEmptyArray(searchFields)) {
+    errorMsg = 'invalid parameter: searchFields must be a non-empty array';
     LOG.error(errorMsg, searchFields);
     return Promise.reject(errorMsg);
   }
 
-  const searchFieldsMap :Map<UUID, string> = Immutable.fromJS(searchFields);
-
-  const allKeysUuids :boolean = searchFieldsMap.keySeq().every((key :UUID) => {
-    return isValidUuid(key);
-  });
-
-  const allValuesUuids :boolean = searchFieldsMap.valueSeq().every((value :string) => {
-    return isNonEmptyString(value);
-  });
-
-  if (!allKeysUuids) {
-    errorMsg = 'invalid parameter: searchFields entry keys must all be UUIDs';
-    LOG.error(errorMsg, searchFields);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!allValuesUuids) {
-    errorMsg = 'invalid parameter: searchFields entry values must all be non-empty strings';
-    LOG.error(errorMsg, searchFields);
-    return Promise.reject(errorMsg);
-  }
+  // TODO: validate searchFields
 
   data[START] = start;
   data[MAX_HITS] = maxHits;
@@ -730,6 +711,22 @@ export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${SEARCH_PROPERTY_TYPES_PATH}/${FQN_PATH}`, data)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * TODO: everything
+ */
+export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promise<> {
+
+  return getApiAxiosInstance(SEARCH_API)
+    .get(`/${entitySetId}/${entityId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

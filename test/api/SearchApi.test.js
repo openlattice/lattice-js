@@ -266,13 +266,14 @@ function testAdvancedSearchEntitySetData() {
 
     const functionToTest :Function = SearchApi.advancedSearchEntitySetData;
 
+    // TODO: searchFields needs to be List<SearchDetails>
     const validParams :any[] = [
       MOCK_ENTITY_SET_UUID,
       {
-        searchFields: {
-          [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM,
-          [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM
-        },
+        searchFields: [
+          { [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM },
+          { [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM }
+        ],
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       }
@@ -291,10 +292,10 @@ function testAdvancedSearchEntitySetData() {
           expect(mockAxiosInstance.post).toHaveBeenCalledWith(
             `/${ADVANCED_PATH}/${MOCK_ENTITY_SET_UUID}`,
             {
-              searchFields: {
-                [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM,
-                [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM
-              },
+              searchFields: [
+                { [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM },
+                { [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM }
+              ],
               start: MOCK_START,
               maxHits: MOCK_MAX_HITS
             }

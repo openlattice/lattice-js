@@ -29,6 +29,7 @@ const ENTITY_DATA_PATH :string = 'entitydata';
 const TICKET_PATH :string = 'ticket';
 
 // EntityDataModelApi specific paths
+const ASSOCIATION_TYPE_PATH :string = 'association/type';
 const SCHEMA_PATH :string = 'schema';
 
 // OrganizationsApi specific paths
@@ -171,6 +172,11 @@ describe('ApiPaths', () => {
   });
 
   describe('EntityDataModelApi specific paths', () => {
+
+    it(`should expose "${ASSOCIATION_TYPE_PATH}"`, () => {
+      expect(ApiPaths.ASSOCIATION_TYPE_PATH).toBeDefined();
+      expect(ApiPaths.ASSOCIATION_TYPE_PATH).toEqual(ASSOCIATION_TYPE_PATH);
+    });
 
     it(`should expose "${SCHEMA_PATH}"`, () => {
       expect(ApiPaths.SCHEMA_PATH).toBeDefined();
