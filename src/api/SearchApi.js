@@ -738,3 +738,19 @@ export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<> {
       return Promise.reject(error);
     });
 }
+
+/**
+ * TODO: everything
+ */
+export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promise<> {
+
+  return getApiAxiosInstance(SEARCH_API)
+    .get(`/${entitySetId}/${entityId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
