@@ -2,6 +2,7 @@
  * @flow
  */
 
+export const ANALYSIS_API :string = 'AnalysisApi';
 export const AUTHORIZATION_API :string = 'AuthorizationApi';
 export const DATA_API :string = 'DataApi';
 export const DATA_SOURCES_API :string = 'DataSourcesApi';

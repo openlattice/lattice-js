@@ -10,6 +10,7 @@ import {
 } from '../config/Configuration';
 
 import {
+  ANALYSIS_API,
   AUTHORIZATION_API,
   DATA_API,
   DATA_SOURCES_API,
@@ -23,6 +24,7 @@ import {
 } from '../constants/ApiNames';
 
 import {
+  ANALYSIS_PATH,
   AUTHORIZATIONS_PATH,
   DATA_PATH,
   DATASTORE_PATH,
@@ -43,6 +45,8 @@ function getApiBaseUrl(api :string) :string {
   const baseUrl :string = getConfig().get('baseUrl');
 
   switch (api) {
+    case ANALYSIS_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${ANALYSIS_PATH}`;
     case AUTHORIZATION_API:
       return `${baseUrl}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`;
     case DATA_API:
