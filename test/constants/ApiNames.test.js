@@ -1,5 +1,6 @@
 import * as ApiNames from '../../src/constants/ApiNames';
 
+const ANALYSIS_API :string = 'AnalysisApi';
 const AUTHORIZATION_API :string = 'AuthorizationApi';
 const DATA_API :string = 'DataApi';
 const DATA_SOURCES_API :string = 'DataSourcesApi';
@@ -12,6 +13,11 @@ const REQUESTS_API :string = 'RequestsApi';
 const SEARCH_API :string = 'SearchApi';
 
 describe('ApiNames', () => {
+
+  it(`should expose "${ANALYSIS_API}"`, () => {
+    expect(ApiNames.ANALYSIS_API).toBeDefined();
+    expect(ApiNames.ANALYSIS_API).toEqual(ANALYSIS_API);
+  });
 
   it(`should expose "${AUTHORIZATION_API}"`, () => {
     expect(ApiNames.AUTHORIZATION_API).toBeDefined();

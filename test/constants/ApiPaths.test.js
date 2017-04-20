@@ -1,6 +1,7 @@
 import * as ApiPaths from '../../src/constants/ApiPaths';
 
 // base endpoint controller paths
+const ANALYSIS_PATH :string = 'analysis';
 const AUTHORIZATIONS_PATH :string = 'authorizations';
 const DATA_PATH :string = 'data';
 const DATA_SOURCES_PATH :string = 'datasource';
@@ -48,6 +49,11 @@ const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
 describe('ApiPaths', () => {
 
   describe('base endpoint controller paths', () => {
+
+    it(`should expose "${ANALYSIS_PATH}"`, () => {
+      expect(ApiPaths.ANALYSIS_PATH).toBeDefined();
+      expect(ApiPaths.ANALYSIS_PATH).toEqual(ANALYSIS_PATH);
+    });
 
     it(`should expose "${AUTHORIZATIONS_PATH}"`, () => {
       expect(ApiPaths.AUTHORIZATIONS_PATH).toBeDefined();
