@@ -13,6 +13,7 @@
 import * as Types from './constants/types';
 import * as DataModels from './models';
 
+import * as AnalysisApi from './api/AnalysisApi';
 import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
 import * as DataSourcesApi from './api/DataSourcesApi';
@@ -36,6 +37,7 @@ export {
   configure,
   DataModels,
   Types,
+  AnalysisApi,
   AuthorizationApi,
   DataApi,
   DataSourcesApi,
@@ -53,6 +55,7 @@ export default {
   configure,
   DataModels,
   Types,
+  AnalysisApi,
   AuthorizationApi,
   DataApi,
   DataSourcesApi,

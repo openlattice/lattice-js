@@ -3,6 +3,7 @@
  */
 
 // base endpoint controller paths
+export const ANALYSIS_PATH :string = 'analysis';
 export const AUTHORIZATIONS_PATH :string = 'authorizations';
 export const DATA_PATH :string = 'data';
 export const DATA_SOURCES_PATH :string = 'datasource';
@@ -30,6 +31,7 @@ export const ENTITY_DATA_PATH :string = 'entitydata';
 export const TICKET_PATH :string = 'ticket';
 
 // EntityDataModelApi specific paths
+export const ASSOCIATION_TYPE_PATH :string = 'association/type';
 export const SCHEMA_PATH :string = 'schema';
 
 // OrganizationsApi specific paths

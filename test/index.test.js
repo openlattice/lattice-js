@@ -26,6 +26,12 @@ describe('loom-data-js', () => {
     expect(Object.keys(Loom.Types).length).toBeGreaterThan(0);
   });
 
+  it('should expose AnalysisApi', () => {
+    expect(Loom.AnalysisApi).toBeDefined();
+    expect(Loom.AnalysisApi).toEqual(jasmine.any(Object));
+    expect(Object.keys(Loom.AnalysisApi).length).toBeGreaterThan(0);
+  });
+
   it('should expose AuthorizationApi', () => {
     expect(Loom.AuthorizationApi).toBeDefined();
     expect(Loom.AuthorizationApi).toEqual(jasmine.any(Object));

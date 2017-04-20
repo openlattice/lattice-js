@@ -1,6 +1,7 @@
 import * as ApiPaths from '../../src/constants/ApiPaths';
 
 // base endpoint controller paths
+const ANALYSIS_PATH :string = 'analysis';
 const AUTHORIZATIONS_PATH :string = 'authorizations';
 const DATA_PATH :string = 'data';
 const DATA_SOURCES_PATH :string = 'datasource';
@@ -28,6 +29,7 @@ const ENTITY_DATA_PATH :string = 'entitydata';
 const TICKET_PATH :string = 'ticket';
 
 // EntityDataModelApi specific paths
+const ASSOCIATION_TYPE_PATH :string = 'association/type';
 const SCHEMA_PATH :string = 'schema';
 
 // OrganizationsApi specific paths
@@ -48,6 +50,11 @@ const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
 describe('ApiPaths', () => {
 
   describe('base endpoint controller paths', () => {
+
+    it(`should expose "${ANALYSIS_PATH}"`, () => {
+      expect(ApiPaths.ANALYSIS_PATH).toBeDefined();
+      expect(ApiPaths.ANALYSIS_PATH).toEqual(ANALYSIS_PATH);
+    });
 
     it(`should expose "${AUTHORIZATIONS_PATH}"`, () => {
       expect(ApiPaths.AUTHORIZATIONS_PATH).toBeDefined();
@@ -165,6 +172,11 @@ describe('ApiPaths', () => {
   });
 
   describe('EntityDataModelApi specific paths', () => {
+
+    it(`should expose "${ASSOCIATION_TYPE_PATH}"`, () => {
+      expect(ApiPaths.ASSOCIATION_TYPE_PATH).toBeDefined();
+      expect(ApiPaths.ASSOCIATION_TYPE_PATH).toEqual(ASSOCIATION_TYPE_PATH);
+    });
 
     it(`should expose "${SCHEMA_PATH}"`, () => {
       expect(ApiPaths.SCHEMA_PATH).toBeDefined();
