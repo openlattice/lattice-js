@@ -1537,6 +1537,42 @@ export function createAssociationType(associationType :AssociationType) :Promise
     });
 }
 
+/**
+ * `DELETE /edm/association/type/{uuid}`
+ *
+ * Deletes the AssociationType definition for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function deleteAssociationType(associationTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 /*
  *
  * ComplexType APIs
