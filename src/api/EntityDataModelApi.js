@@ -47,6 +47,7 @@ import {
   DETAILED_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
+  HIERARCHY_PATH,
   IDS_PATH,
   NAMESPACE_PATH,
   PROPERTY_TYPE_PATH,
@@ -741,7 +742,7 @@ export function updateEntitySetMetaData(entitySetId :UUID, metadata :Object) :Pr
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entityTypeId - the EntityType UUID
+ * @param {UUID} entityTypeId
  * @return {Promise<EntityType>} - a Promise that will resolve with the EntityType definition as its fulfillment value
  *
  * @example
@@ -1106,6 +1107,43 @@ export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :
 
   return getApiAxiosInstance(EDM_API)
     .patch(`/${ENTITY_TYPE_PATH}/${entityTypeId}`, metadata)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /edm/entity/type/{uuid}/hierarchy`
+ *
+ * Gets the EntityType hierarchy for the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getEntityTypeHierarchy(entityTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${HIERARCHY_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
