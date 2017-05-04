@@ -122,7 +122,7 @@ export function getAllOrganizations() {
 /**
  * `POST /organizations`
  *
- * Creates a new Organization, it it does not already exist.
+ * Creates a new Organization, if it does not already exist.
  *
  * @static
  * @memberof loom-data.OrganizationsApi

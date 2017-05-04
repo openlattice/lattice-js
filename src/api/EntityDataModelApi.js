@@ -297,7 +297,7 @@ export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string
 /**
  * `POST /edm/schema`
  *
- * Creates a new Schema definition, it it doesn't exist.
+ * Creates a new Schema definition, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi

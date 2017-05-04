@@ -186,7 +186,7 @@ Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 `POST /edm/schema`
 
-Creates a new Schema definition, it it doesn't exist.
+Creates a new Schema definition, if it doesn't exist.
 
 **Parameters**
 
