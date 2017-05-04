@@ -32,6 +32,7 @@ const TICKET_PATH :string = 'ticket';
 const ASSOCIATION_TYPE_PATH :string = 'association/type';
 const COMPLEX_TYPE_PATH :string = 'complex/type';
 const DETAILED_PATH :string = 'detailed';
+const ENUM_TYPE_PATH :string = 'enum/type';
 const HIERARCHY_PATH :string = 'hierarchy';
 const SCHEMA_PATH :string = 'schema';
 
@@ -189,6 +190,11 @@ describe('ApiPaths', () => {
     it(`should expose "${DETAILED_PATH}"`, () => {
       expect(ApiPaths.DETAILED_PATH).toBeDefined();
       expect(ApiPaths.DETAILED_PATH).toEqual(DETAILED_PATH);
+    });
+
+    it(`should expose "${ENUM_TYPE_PATH}"`, () => {
+      expect(ApiPaths.ENUM_TYPE_PATH).toBeDefined();
+      expect(ApiPaths.ENUM_TYPE_PATH).toEqual(ENUM_TYPE_PATH);
     });
 
     it(`should expose "${HIERARCHY_PATH}"`, () => {

@@ -48,6 +48,7 @@ import {
   DETAILED_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
+  ENUM_TYPE_PATH,
   HIERARCHY_PATH,
   IDS_PATH,
   NAMESPACE_PATH,
@@ -1819,3 +1820,39 @@ export function deleteComplexType(complexTypeId :UUID) :Promise<> {
  * EnumType APIs
  *
  */
+
+/**
+ * `GET /edm/enum/type/{uuid}`
+ *
+ * Gets the EnumType definition for the given EnumType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} enumTypeId
+ * @return {Promise<EnumType>} - a Promise that will resolve with the EnumType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getEnumType(enumTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(enumTypeId)) {
+    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
+    LOG.error(errorMsg, enumTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ENUM_TYPE_PATH}/${enumTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
