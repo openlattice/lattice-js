@@ -1128,7 +1128,7 @@ export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
- * @return {Promise<PropertyType>} - a Promise that will resolve with the PropertyType definitions
+ * @return {Promise<PropertyType>} - a Promise that will resolve with the PropertyType definition
  * as its fulfillment value
  *
  * @example
@@ -1418,6 +1418,43 @@ export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Objec
  * AssociationType APIs
  *
  */
+
+/**
+ * `GET /edm/association/type/{uuid}`
+ *
+ * Gets the AssociationType definition for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType definition
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAssociationType(associationTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
 
 
 /*
