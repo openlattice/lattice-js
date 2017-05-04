@@ -87,11 +87,11 @@ const UpdateSchemaRequestActions :{[key :string] :string} = {
 /**
  * `GET /edm`
  *
- * Gets the entire Entity Data Model schema.
+ * Gets the entire Entity Data Model.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise} - a Promise that will resolve with the Entity Data Model schema as its fulfillment value
+ * @return {Promise<Object>} - a Promise that will resolve with the Entity Data Model as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntityDataModel();
@@ -112,18 +112,33 @@ export function getEntityDataModel() :Promise<> {
 /**
  * `POST /edm`
  *
- * Gets the Entity Data Model schema, filtered by the given projection.
+ * Gets the Entity Data Model, filtered by the given projection.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise}
+ * @param {Object[]} projection - a Set of objects containing an ID, a SecurableType, and a Set of SecurableTypes
+ * @return {Promise<Object>} - a Promise that will resolve with the filtered Entity Data Model as its fulfillment value
  *
- * TODO: add documentation
- * TODO: add validation
- * TODO: add unit tests
- * TODO: create data models
+ * @example
+ * EntityDataModelApi.getEntityDataModelProjection(
+ *   [
+ *     {
+ *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "type": "EntitySet",
+ *       "include": [
+ *         "EntitySet",
+ *         "EntityType",
+ *         "PropertyTypeInEntitySet"
+ *       ]
+ *     }
+ *   ]
+ * );
  */
 export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
+
+  // TODO: add validation
+  // TODO: add unit tests
+  // TODO: create data models
 
   return getApiAxiosInstance(EDM_API)
     .post('/', projection)
@@ -150,11 +165,11 @@ export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
- * @return {Promise<Schema>}
+ * @return {Promise<Schema>} - a Promise that will resolve with the Schema definition as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getSchema(
- *   { namespace: "LOOM", name: "MySchema" }
+ *   { "namespace": "LOOM", "name": "MySchema" }
  * );
  */
 export function getSchema(schemaFqn :FullyQualifiedName) :Promise<> {
@@ -187,7 +202,7 @@ export function getSchema(schemaFqn :FullyQualifiedName) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<Schema[]>}
+ * @return {Promise<Schema[]>} - a Promise that will resolve with all Schema definitions
  *
  * @example
  * EntityDataModelApi.getAllSchemas();
@@ -213,7 +228,8 @@ export function getAllSchemas() :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {string} namespace
- * @return {Promise<Schema[]>}
+ * @return {Promise<Schema[]>} - a Promise that will resolve with the Schema definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllSchemasInNamespace("LOOM");
@@ -240,17 +256,17 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<> {
 }
 
 /**
- * Returns the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
+ * Generates the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
  * @param {string} fileType
- * @returns {string}
+ * @returns {string} - the direct file download URL
  *
  * @example
  * EntityDataModelApi.getSchemaFormatted(
- *   { namespace: "LOOM", name: "MySchema" },
+ *   { "namespace": "LOOM", "name": "MySchema" },
  *   "json"
  * );
  */
@@ -277,19 +293,19 @@ export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string
 /**
  * `POST /edm/schema`
  *
- * Creates a new Schema definition, it it does not already exist.
+ * Creates a new Schema definition, it it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Schema} schema
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.createSchema(
  *   {
- *     fqn: { namespace: "LOOM", name: "MySchema" },
- *     propertyTypes: [],
- *     entityTypes: []
+ *     "fqn": { "namespace": "LOOM", "name": "MySchema" },
+ *     "propertyTypes": [],
+ *     "entityTypes": []
  *   }
  * );
  */
@@ -317,16 +333,16 @@ export function createSchema(schema :Schema) :Promise<> {
 /**
  * `PUT /edm/schema/{namespace}/{name}`
  *
- * Creates a new empty Schema definition for the given Schema FQN.
+ * Creates a new empty Schema definition for the given Schema FQN, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.createEmptySchema(
- *   { namespace: "LOOM", name: "MySchema" }
+ *   { "namespace": "LOOM", "name": "MySchema" }
  * );
  */
 export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<> {
@@ -363,16 +379,16 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<> {
  * @param {string} action
  * @param {UUID[]} entityTypeIds
  * @param {UUID[]} propertyTypeIds
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updateSchema(
- *   { namespace: "LOOM", name: "MySchema" },
- *   action: "ADD",
- *   entityTypeIds: [
+ *   { "namespace": "LOOM", "name": "MySchema" },
+ *   "action": "ADD",
+ *   "entityTypeIds": [
  *     "ec6865e6-e60e-424b-a071-6a9c1603d735"
  *   ],
- *   propertyTypeIds: [
+ *   "propertyTypeIds": [
  *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
  *   ]
  * )
@@ -464,7 +480,7 @@ export function updateSchema(
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entitySetId
- * @return {Promise<EntitySet>}
+ * @return {Promise<EntitySet>} - a Promise that will resolve with the EntitySet definition as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -498,7 +514,7 @@ export function getEntitySet(entitySetId :UUID) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {string} entitySetName
- * @return {Promise<UUID>}
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntitySetId("MyEntitySet");
@@ -530,7 +546,7 @@ export function getEntitySetId(entitySetName :string) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<EntitySet[]>}
+ * @return {Promise<EntitySet[]>} - a Promise that will resolve with all EntitySet definitions
  *
  * @example
  * EntityDataModelApi.getAllEntitySets();
@@ -551,22 +567,23 @@ export function getAllEntitySets() :Promise<> {
 /**
  * `POST /edm/entity/set`
  *
- * Creates a new EntitySet definition.
+ * Creates new EntitySet definitions if they don't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {EntitySet[]} entitySets
- * @return {Promise<Map<string, UUID>>}
+ * @return {Promise<Map<string, UUID>>} - a Promise that will resolve with a Map as its fulfillment value, where
+ * the key is the EntitySet name and the value is the newly-created EntitySet UUID
  *
  * @example
  * EntityDataModelApi.createEntitySets(
  *   [
  *     {
- *       id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
- *       type: { namespace: "LOOM", name: "MyEntity" },
- *       name: "MyEntities",
- *       title: "My Entities",
- *       description: "a collection of MyEntity EntityTypes",
+ *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "type": { "namespace": "LOOM", "name": "MyEntity" },
+ *       "name": "MyEntities",
+ *       "title": "My Entities",
+ *       "description": "a collection of MyEntity EntityTypes",
  *     }
  *   ]
  * );
@@ -601,8 +618,8 @@ export function createEntitySets(entitySets :EntitySet[]) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entitySetId - the EntitySet UUID
- * @return {Promise}
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -637,7 +654,7 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<> {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {Object} metadata
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updateEntitySetMetaData(
@@ -652,6 +669,8 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<> {
  * );
  */
 export function updateEntitySetMetaData(entitySetId :UUID, metadata :Object) :Promise<> {
+
+  // TODO: create data model: MetaDataUpdate
 
   let errorMsg = '';
 
@@ -756,11 +775,11 @@ export function getEntityType(entityTypeId :UUID) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} entityTypeFqn
- * @return {Promise<UUID>}
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntityTypeId(
- *   { namespace: "LOOM", name: "MyProperty" }
+ *   { "namespace": "LOOM", "name": "MyProperty" }
  * );
  */
 export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
@@ -793,7 +812,8 @@ export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<EntityType[]>}
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with all EntityType definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllEntityTypes();
@@ -812,9 +832,21 @@ export function getAllEntityTypes() :Promise<> {
 }
 
 /**
- * TODO: everything
+ * `GET /edm/association/type`
+ *
+ * Gets all association EntityType definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllAssociationEntityTypes();
  */
 export function getAllAssociationEntityTypes() :Promise<> {
+
+  // TODO: everything
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ASSOCIATION_TYPE_PATH}`)
@@ -830,7 +862,7 @@ export function getAllAssociationEntityTypes() :Promise<> {
 /**
  * `POST /edm/entity/type`
  *
- * Creates a new EntityType definition.
+ * Creates a new EntityType definition, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
@@ -840,16 +872,16 @@ export function getAllAssociationEntityTypes() :Promise<> {
  * @example
  * EntityDataModelApi.createEntityType(
  *   {
- *     id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
- *     type: { namespace: "LOOM", name: "MyEntity" },
- *     schemas: [
- *       { namespace: "LOOM", name: "MySchema" }
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyEntity" },
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
  *     ],
- *     key: [
- *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     "key": [
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
  *     ],
- *     properties: [
+ *     "properties": [
  *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
  *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
@@ -885,8 +917,8 @@ export function createEntityType(entityType :EntityType) :Promise<> {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entityTypeId - the EntityType UUID
- * @return {Promise}
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.deleteEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -921,7 +953,7 @@ export function deleteEntityType(entityTypeId :UUID) :Promise<> {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {UUID} propertyTypeId
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.addPropertyTypeToEntityType(
@@ -965,7 +997,7 @@ export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {UUID} propertyTypeId
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.removePropertyTypeFromEntityType(
@@ -1009,13 +1041,13 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {Object} metadata
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updateEntityTypeMetaData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
- *     "type": { namespace: "LOOM", name: "UpdatedEntity" },
+ *     "type": { "namespace": "LOOM", "name": "UpdatedEntity" },
  *     "name": "MyEntity",
  *     "title": "MyEntity",
  *     "description": "MyEntity description",
@@ -1024,6 +1056,8 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
  * );
  */
 export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :Promise<> {
+
+  // TODO: create data model: MetaDataUpdate
 
   let errorMsg = '';
 
@@ -1094,7 +1128,8 @@ export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
- * @return {Promise<PropertyType>}
+ * @return {Promise<PropertyType>} - a Promise that will resolve with the PropertyType definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -1128,7 +1163,7 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} propertyTypeFqn
- * @return {Promise<UUID>}
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getPropertyTypeId(
@@ -1165,7 +1200,8 @@ export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<PropertyType[]>}
+ * @return {Promise<PropertyType[]>} - a Promise that will resolve with all PropertyType definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllPropertyTypes();
@@ -1191,7 +1227,8 @@ export function getAllPropertyTypes() :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {string} namespace
- * @return {Promise<PropertyType[]>}
+ * @return {Promise<PropertyType[]>} - a Promise that will resolve with the PropertyType definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
@@ -1220,12 +1257,12 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
 /**
  * `POST /edm/property/type`
  *
- * Creates a new PropertyType definition.
+ * Creates a new PropertyType definition, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {PropertyType} propertyType
- * @return {Promise<UUID>} - a Promise that will resolve with the newly-created PropertyType UUID
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created PropertyType definition UUID
  *
  * @example
  * EntityDataModelApi.createPropertyType(
@@ -1268,8 +1305,7 @@ export function createPropertyType(propertyType :PropertyType) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
- * @param {FullyQualifiedName} propertyTypeFqn
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.deletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -1304,13 +1340,13 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
  * @param {Object} metadata
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updatePropertyTypeMetaData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
- *     "type": { namespace: "LOOM", name: "UpdatedProperty" },
+ *     "type": { "namespace": "LOOM", "name": "UpdatedProperty" },
  *     "name": "MyProperty",
  *     "title": "MyProperty",
  *     "description": "MyProperty description",
@@ -1319,6 +1355,8 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
  * );
  */
 export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Object) :Promise<> {
+
+  // TODO: create data model: MetaDataUpdate
 
   let errorMsg = '';
 
@@ -1374,3 +1412,23 @@ export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Objec
       return Promise.reject(error);
     });
 }
+
+/*
+ *
+ * AssociationType APIs
+ *
+ */
+
+
+/*
+ *
+ * ComplexType APIs
+ *
+ */
+
+
+/*
+ *
+ * EnumType APIs
+ *
+ */
