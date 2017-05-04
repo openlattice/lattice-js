@@ -42,12 +42,12 @@ const LOG = new Logger('DataSourcesApi');
 /**
  * `GET /datasource/{uuid}`
  *
- * TODO: add description
+ * Gets the DataSource definition for the given DataSource UUID.
  *
  * @static
  * @memberof loom-data.DataSourcesApi
  * @param {UUID} dataSourceId
- * @returns {Promise<DataSource>}
+ * @returns {Promise<DataSource>} - a Promise that will resolve with the DataSource definition as its fulfillment value
  *
  * @example
  * DataSourcesApi.getDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
@@ -76,12 +76,12 @@ export function getDataSource(dataSourceId :UUID) :Promise<> {
 /**
  * `POST /datasource`
  *
- * TODO: add description
+ * Creates a new DataSource definition if it doesn't exist, or updates the existing DataSource definition.
  *
  * @static
  * @memberof loom-data.DataSourcesApi
  * @param {DataSource} dataSource
- * @returns {Promise<UUID>}
+ * @returns {Promise<UUID>} - a Promise that will resolve with the newly-created DataSource UUID
  *
  * @example
  * DataSourcesApi.createOrUpdateDataSource(
@@ -120,12 +120,12 @@ export function createOrUpdateDataSource(dataSource :DataSource) :Promise<> {
 /**
  * `DELETE /datasource/{uuid}`
  *
- * TODO: add description
+ * Deletes the DataSource definition for the given DataSource UUID.
  *
  * @static
  * @memberof loom-data.DataSourcesApi
  * @param {UUID} dataSourceId
- * @returns {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * DataSourcesApi.deleteDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
@@ -154,17 +154,17 @@ export function deleteDataSource(dataSourceId :UUID) :Promise<> {
 /**
  * `POST /datasource/{uuid}`
  *
- * TODO: add description
- *
  * @static
  * @memberof loom-data.DataSourcesApi
  * @param {UUID} dataSourceId
- * @returns {Promise<UUID>}
+ * @returns {Promise<UUID>} - a Promise that will resolve with the sync UUID as its fulfillment value
  *
  * @example
  * DataSourcesApi.startSync("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
  */
 export function startSync(dataSourceId :UUID) :Promise<> {
+
+  // TODO: add description
 
   let errorMsg = '';
 
@@ -188,13 +188,11 @@ export function startSync(dataSourceId :UUID) :Promise<> {
 /**
  * `DELETE /datasource/{uuid}/{uuid}`
  *
- * TODO: add description
- *
  * @static
  * @memberof loom-data.DataSourcesApi
  * @param {UUID} dataSourceId
  * @param {UUID} syncId
- * @returns {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * DataSourcesApi.signalSyncCompleted(
@@ -203,6 +201,8 @@ export function startSync(dataSourceId :UUID) :Promise<> {
  * );
  */
 export function signalSyncCompleted(dataSourceId :UUID, syncId :UUID) :Promise<> {
+
+  // TODO: add description
 
   let errorMsg = '';
 
