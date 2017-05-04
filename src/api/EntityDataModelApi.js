@@ -1856,3 +1856,31 @@ export function getEnumType(enumTypeId :UUID) :Promise<> {
       return Promise.reject(error);
     });
 }
+
+/**
+ * `GET /edm/enum/type`
+ *
+ * Gets all EnumType definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<EnumType[]>} - a Promise that will resolve with all EnumType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllEnumTypes();
+ */
+export function getAllEnumTypes() :Promise<> {
+
+  // TODO: everything
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ENUM_TYPE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
