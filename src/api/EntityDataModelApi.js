@@ -44,6 +44,7 @@ import {
 
 import {
   ASSOCIATION_TYPE_PATH,
+  COMPLEX_TYPE_PATH,
   DETAILED_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
@@ -1617,6 +1618,41 @@ export function deleteAssociationType(associationTypeId :UUID) :Promise<> {
  *
  */
 
+/**
+ * `GET /edm/complex/type/{uuid}`
+ *
+ * Gets the ComplexType definition for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise<ComplexType>} - a Promise that will resolve with the ComplexType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getComplexType(complexTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${COMPLEX_TYPE_PATH}/${complexTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
 
 /*
  *

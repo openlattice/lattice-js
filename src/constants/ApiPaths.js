@@ -32,6 +32,7 @@ export const TICKET_PATH :string = 'ticket';
 
 // EntityDataModelApi specific paths
 export const ASSOCIATION_TYPE_PATH :string = 'association/type';
+export const COMPLEX_TYPE_PATH :string = 'complex/type';
 export const DETAILED_PATH :string = 'detailed';
 export const HIERARCHY_PATH :string = 'hierarchy';
 export const SCHEMA_PATH :string = 'schema';

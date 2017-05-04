@@ -30,6 +30,7 @@ const TICKET_PATH :string = 'ticket';
 
 // EntityDataModelApi specific paths
 const ASSOCIATION_TYPE_PATH :string = 'association/type';
+const COMPLEX_TYPE_PATH :string = 'complex/type';
 const DETAILED_PATH :string = 'detailed';
 const HIERARCHY_PATH :string = 'hierarchy';
 const SCHEMA_PATH :string = 'schema';
@@ -178,6 +179,11 @@ describe('ApiPaths', () => {
     it(`should expose "${ASSOCIATION_TYPE_PATH}"`, () => {
       expect(ApiPaths.ASSOCIATION_TYPE_PATH).toBeDefined();
       expect(ApiPaths.ASSOCIATION_TYPE_PATH).toEqual(ASSOCIATION_TYPE_PATH);
+    });
+
+    it(`should expose "${COMPLEX_TYPE_PATH}"`, () => {
+      expect(ApiPaths.COMPLEX_TYPE_PATH).toBeDefined();
+      expect(ApiPaths.COMPLEX_TYPE_PATH).toEqual(COMPLEX_TYPE_PATH);
     });
 
     it(`should expose "${DETAILED_PATH}"`, () => {
