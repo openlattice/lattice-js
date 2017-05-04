@@ -56,19 +56,21 @@ const LOG = new Logger('AuthorizationApi');
 /**
  * `POST /authorizations`
  *
- * TODO: add description
+ * Gets the Authorizations for the given AccessChecks.
  *
  * @static
  * @memberof loom-data.AuthorizationApi
  * @param {AccessCheck[]} queries
- * @returns {Promise}
+ * @returns {Promise<Authorization[]>} - a Promise that will resolve with the Authorizations as its fulfillment value
  *
  * @example
  * AuthorizationApi.checkAuthorizations(
- *   {
- *     aclKey: ['4b08e1f9-4a00-4169-92ea-10e377070220'],
- *     permissions: ['READ']
- *   }
+ *   [
+ *     {
+ *       "aclKey": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
+ *       "permissions": ["READ"]
+ *     }
+ *   ]
  * );
  */
 export function checkAuthorizations(queries :AccessCheck[]) :Promise<> {
@@ -101,14 +103,15 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<> {
 /**
  * `GET /authorizations`
  *
- * TODO: add description
+ * Gets all authorized objects of the given SecurableType with the given Permission.
  *
  * @static
  * @memberof loom-data.AuthorizationApi
  * @param {SecurableType} securableType
  * @param {Permission} permission
  * @param {string} pagingToken (optional)
- * @returns {Promise<AuthorizedObjectsSearchResult>}
+ * @returns {Promise<AuthorizedObjectsSearchResult>} - a Promise that will resolve with the authorized objects and a
+ * paging token as its fulfillment value
  *
  * @example
  * AuthorizationApi.getAccessibleObjects(
