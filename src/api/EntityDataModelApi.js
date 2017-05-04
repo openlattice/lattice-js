@@ -877,6 +877,8 @@ export function getAllAssociationEntityTypes() :Promise<> {
  *   {
  *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *     "type": { "namespace": "LOOM", "name": "MyEntity" },
+ *     "title": "title",
+ *     "description": "description",
  *     "schemas": [
  *       { "namespace": "LOOM", "name": "MySchema" }
  *     ],
@@ -888,7 +890,9 @@ export function getAllAssociationEntityTypes() :Promise<> {
  *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
  *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     ]
+ *     ],
+ *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *     "category": "EntityType"
  *   }
  * );
  */
@@ -1309,6 +1313,8 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  *   {
  *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *     "type": { "namespace": "LOOM", "name": "MyProperty" },
+ *     "title": "title",
+ *     "description": "description",
  *     "datatype": "String",
  *     "schemas": [
  *       { "namespace": "LOOM", "name": "MySchema" }
@@ -1710,6 +1716,59 @@ export function getComplexTypeHierarchy(complexTypeId :UUID) :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${COMPLEX_TYPE_PATH}/${complexTypeId}/${HIERARCHY_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /edm/complex/type`
+ *
+ * Creates a new ComplexType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {ComplexType} complexType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created ComplexType UUID
+ *
+ * @example
+ * EntityDataModelApi.createComplexType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyComplexType" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
+ *     ],
+ *     "properties": [
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     ],
+ *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *     "category": "ComplexType"
+ *   }
+ * );
+ */
+export function createComplexType(complexType :ComplexType) :Promise<> {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidComplexType(complexType)) {
+  //   errorMsg = 'invalid parameter: complexType must be a valid ComplexType';
+  //   LOG.error(errorMsg, complexType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return getApiAxiosInstance(EDM_API)
+    .post(`/${COMPLEX_TYPE_PATH}`, complexType)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
