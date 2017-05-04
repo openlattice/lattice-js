@@ -1939,3 +1939,39 @@ export function createEnumType(enumType :EnumType) :Promise<> {
       return Promise.reject(error);
     });
 }
+
+/**
+ * `DELETE /edm/enum/type/{uuid}`
+ *
+ * Deletes the EnumType definition for the given EnumType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} enumTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function deleteEnumType(enumTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(enumTypeId)) {
+    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
+    LOG.error(errorMsg, enumTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${ENUM_TYPE_PATH}/${enumTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
