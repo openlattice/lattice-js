@@ -1316,10 +1316,12 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  *     "type": { "namespace": "LOOM", "name": "MyProperty" },
  *     "title": "title",
  *     "description": "description",
- *     "datatype": "String",
  *     "schemas": [
  *       { "namespace": "LOOM", "name": "MySchema" }
- *     ]
+ *     ],
+ *     "datatype": "String",
+ *     "piiField": false,
+ *     "analyzer": "STANDARD"
  *   }
  * );
  */
@@ -1876,6 +1878,59 @@ export function getAllEnumTypes() :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENUM_TYPE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /edm/enum/type`
+ *
+ * Creates a new EnumType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {EnumType} enumType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created EnumType UUID
+ *
+ * @example
+ * EntityDataModelApi.createEnumType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyEnumType" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "members": [
+ *       "Blue", "Red", "Green"
+ *     ],
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
+ *     ],
+ *     "datatype": "String",
+ *     "flags": false,
+ *     "piiField": false,
+ *     "analyzer": "STANDARD"
+ *   }
+ * );
+ */
+export function createEnumType(enumType :EnumType) :Promise<> {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidEnumType(enumType)) {
+  //   errorMsg = 'invalid parameter: enumType must be a valid EnumType';
+  //   LOG.error(errorMsg, enumType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return getApiAxiosInstance(EDM_API)
+    .post(`/${ENUM_TYPE_PATH}`, enumType)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
