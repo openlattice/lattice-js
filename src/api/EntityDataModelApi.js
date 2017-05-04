@@ -44,12 +44,13 @@ import {
 
 import {
   ASSOCIATION_TYPE_PATH,
-  IDS_PATH,
-  SCHEMA_PATH,
+  DETAILED_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
+  IDS_PATH,
+  NAMESPACE_PATH,
   PROPERTY_TYPE_PATH,
-  NAMESPACE_PATH
+  SCHEMA_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -1456,6 +1457,42 @@ export function getAssociationType(associationTypeId :UUID) :Promise<> {
     });
 }
 
+/**
+ * `GET /edm/association/type/{uuid}/detailed`
+ *
+ * Gets details about the AssociationType for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType details
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAssociationTypeDetails("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DETAILED_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
 
 /*
  *
