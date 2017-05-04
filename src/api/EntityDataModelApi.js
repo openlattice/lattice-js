@@ -1268,11 +1268,11 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  * @example
  * EntityDataModelApi.createPropertyType(
  *   {
- *     id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
- *     type: { namespace: "LOOM", name: "MyProperty" },
- *     datatype: "String",
- *     schemas: [
- *       { namespace: "LOOM", name: "MySchema" }
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyProperty" },
+ *     "datatype": "String",
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
  *     ]
  *   }
  * );
@@ -1465,7 +1465,7 @@ export function getAssociationType(associationTypeId :UUID) :Promise<> {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} associationTypeId
- * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType details
+ * @return {Promise<Object>} - a Promise that will resolve with the AssociationType details
  * as its fulfillment value
  *
  * @example
@@ -1485,6 +1485,49 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DETAILED_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /edm/association/type`
+ *
+ * Creates a new AssociationType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {AssociationType} associationType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created AssociationType definition UUID
+ *
+ * @example
+ * EntityDataModelApi.createAssociationType(
+ *   {
+ *     "entityType": { ... },
+ *     "src": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *     "dst": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
+ *     "bidirectional": true
+ *   }
+ * );
+ */
+export function createAssociationType(associationType :AssociationType) :Promise<> {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidAssociationType(associationType)) {
+  //   errorMsg = 'invalid parameter: associationType must be a valid AssociationType';
+  //   LOG.error(errorMsg, associationType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return getApiAxiosInstance(EDM_API)
+    .post(`/${ASSOCIATION_TYPE_PATH}`, associationType)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
