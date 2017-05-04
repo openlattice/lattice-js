@@ -3,7 +3,7 @@
  */
 
 /**
- * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel.
+ * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel schema.
  *
  * @module DataApi
  * @memberof loom-data
@@ -61,7 +61,7 @@ const LOG = new Logger('DataApi');
  * @param {UUID} entitySetId
  * @param {UUID} syncId
  * @param {UUID[]} propertyTypeIds
- * @returns {Promise}
+ * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
  *
  * @example
  * DataApi.getSelectedEntitySetData(
@@ -122,7 +122,7 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
  * @memberof loom-data.DataApi
  * @param {UUID} entitySetId
  * @param {string} fileType
- * @returns {string}
+ * @returns {string} - the direct file download URL
  *
  * @example
  * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
@@ -159,7 +159,7 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
  * @param {UUID} entitySetId
  * @param {UUID} syncId
  * @param {Object} entities
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * DataApi.createEntityData(
@@ -223,7 +223,7 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
  * @param {UUID} ticketId
  * @param {UUID} syncId
  * @param {Object} entities
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * DataApi.storeEntityData(
@@ -277,11 +277,13 @@ export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) 
 /**
  * `POST /data/ticket/{entitySetId}/{syncId}`
  *
+ * Acquires a sync ticket UUID for the given EntitySet UUID.
+ *
  * @static
  * @memberof loom-data.DataApi
  * @param {UUID} entitySetId
  * @param {UUID} syncId
- * @return {Promise}
+ * @return {Promise<UUID>} - a Promise that will resolve with the acquired sync ticket UUID as its fulfillment value
  *
  * @example
  * DataApi.acquireSyncTicket(
@@ -319,15 +321,15 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
 /**
  * `DELETE /data/ticket/{ticketId}`
  *
+ * Releases the given sync ticket UUID.
+ *
  * @static
  * @memberof loom-data.DataApi
  * @param {UUID} syncId
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
- * DataApi.acquireSyncTicket(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
- * );
+ * DataApi.acquireSyncTicket("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
  */
 export function releaseSyncTicket(ticketId :UUID) :Promise<> {
 
@@ -349,3 +351,6 @@ export function releaseSyncTicket(ticketId :UUID) :Promise<> {
       return Promise.reject(error);
     });
 }
+
+// TODO: createAssociationData()
+// TODO: storeAssociationData()
