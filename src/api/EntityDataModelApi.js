@@ -1654,6 +1654,34 @@ export function getComplexType(complexTypeId :UUID) :Promise<> {
     });
 }
 
+/**
+ * `GET /edm/complex/type`
+ *
+ * Gets all ComplexType definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<ComplexType[]>} - a Promise that will resolve with all ComplexType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllComplexTypes();
+ */
+export function getAllComplexTypes() :Promise<> {
+
+  // TODO: everything
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${COMPLEX_TYPE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 /*
  *
  * EnumType APIs
