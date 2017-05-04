@@ -1778,6 +1778,42 @@ export function createComplexType(complexType :ComplexType) :Promise<> {
     });
 }
 
+/**
+ * `DELETE /edm/complex/type/{uuid}`
+ *
+ * Deletes the ComplexType definition for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function deleteComplexType(complexTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${COMPLEX_TYPE_PATH}/${complexTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 /*
  *
  * EnumType APIs
