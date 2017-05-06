@@ -4,9 +4,11 @@
 
 -   [EntityDataModelApi](#entitydatamodelapi)
     -   [getEntityDataModel](#getentitydatamodel)
+    -   [getEntityDataModelProjection](#getentitydatamodelprojection)
     -   [getSchema](#getschema)
     -   [getAllSchemas](#getallschemas)
     -   [getAllSchemasInNamespace](#getallschemasinnamespace)
+    -   [getSchemaFileUrl](#getschemafileurl)
     -   [createSchema](#createschema)
     -   [createEmptySchema](#createemptyschema)
     -   [updateSchema](#updateschema)
@@ -15,18 +17,37 @@
     -   [getAllEntitySets](#getallentitysets)
     -   [createEntitySets](#createentitysets)
     -   [deleteEntitySet](#deleteentityset)
+    -   [updateEntitySetMetaData](#updateentitysetmetadata)
     -   [getEntityType](#getentitytype)
     -   [getEntityTypeId](#getentitytypeid)
     -   [getAllEntityTypes](#getallentitytypes)
+    -   [getAllAssociationEntityTypes](#getallassociationentitytypes)
     -   [createEntityType](#createentitytype)
     -   [deleteEntityType](#deleteentitytype)
-    -   [updatePropertyTypesForEntityType](#updatepropertytypesforentitytype)
+    -   [addPropertyTypeToEntityType](#addpropertytypetoentitytype)
+    -   [removePropertyTypeFromEntityType](#removepropertytypefromentitytype)
+    -   [updateEntityTypeMetaData](#updateentitytypemetadata)
+    -   [getEntityTypeHierarchy](#getentitytypehierarchy)
     -   [getPropertyType](#getpropertytype)
     -   [getPropertyTypeId](#getpropertytypeid)
     -   [getAllPropertyTypes](#getallpropertytypes)
     -   [getAllPropertyTypesInNamespace](#getallpropertytypesinnamespace)
     -   [createPropertyType](#createpropertytype)
     -   [deletePropertyType](#deletepropertytype)
+    -   [updatePropertyTypeMetaData](#updatepropertytypemetadata)
+    -   [getAssociationType](#getassociationtype)
+    -   [getAssociationTypeDetails](#getassociationtypedetails)
+    -   [createAssociationType](#createassociationtype)
+    -   [deleteAssociationType](#deleteassociationtype)
+    -   [getComplexType](#getcomplextype)
+    -   [getAllComplexTypes](#getallcomplextypes)
+    -   [getComplexTypeHierarchy](#getcomplextypehierarchy)
+    -   [createComplexType](#createcomplextype)
+    -   [deleteComplexType](#deletecomplextype)
+    -   [getEnumType](#getenumtype)
+    -   [getAllEnumTypes](#getallenumtypes)
+    -   [createEnumType](#createenumtype)
+    -   [deleteEnumType](#deleteenumtype)
 
 ## EntityDataModelApi
 
@@ -46,9 +67,9 @@ import { EntityDataModelApi } from 'loom-data';
 
 ### getEntityDataModel
 
-`GET /`
+`GET /edm`
 
-Gets the entire Entity Data Model schema.
+Gets the entire Entity Data Model.
 
 **Examples**
 
@@ -56,11 +77,41 @@ Gets the entire Entity Data Model schema.
 EntityDataModelApi.getEntityDataModel();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that will resolve with the Entity Data Model schema as its fulfillment value
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Promise that will resolve with the Entity Data Model as its fulfillment value
+
+### getEntityDataModelProjection
+
+`POST /edm`
+
+Gets the Entity Data Model, filtered by the given projection.
+
+**Parameters**
+
+-   `projection` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Set of objects containing an ID, a SecurableType, and a Set of SecurableTypes
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getEntityDataModelProjection(
+  [
+    {
+      "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+      "type": "EntitySet",
+      "include": [
+        "EntitySet",
+        "EntityType",
+        "PropertyTypeInEntitySet"
+      ]
+    }
+  ]
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Promise that will resolve with the filtered Entity Data Model as its fulfillment value
 
 ### getSchema
 
-`GET /schema/{namespace}/{name}`
+`GET /edm/schema/{namespace}/{name}`
 
 Gets the Schema definition for the given Schema FQN.
 
@@ -72,15 +123,15 @@ Gets the Schema definition for the given Schema FQN.
 
 ```javascript
 EntityDataModelApi.getSchema(
-  { namespace: "LOOM", name: "MySchema" }
+  { "namespace": "LOOM", "name": "MySchema" }
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;Schema>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;Schema>** a Promise that will resolve with the Schema definition as its fulfillment value
 
 ### getAllSchemas
 
-`GET /schema`
+`GET /edm/schema`
 
 Gets all Schema definitions.
 
@@ -90,11 +141,11 @@ Gets all Schema definitions.
 EntityDataModelApi.getAllSchemas();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Schema>>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Schema>>** a Promise that will resolve with all Schema definitions
 
 ### getAllSchemasInNamespace
 
-`GET /schema/{namespace}`
+`GET /edm/schema/{namespace}`
 
 Gets all Schema definitions under the given namespace.
 
@@ -108,13 +159,34 @@ Gets all Schema definitions under the given namespace.
 EntityDataModelApi.getAllSchemasInNamespace("LOOM");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Schema>>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Schema>>** a Promise that will resolve with the Schema definitions
+as its fulfillment value
+
+### getSchemaFileUrl
+
+Generates the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
+
+**Parameters**
+
+-   `schemaFqn` **FullyQualifiedName** 
+-   `fileType` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getSchemaFormatted(
+  { "namespace": "LOOM", "name": "MySchema" },
+  "json"
+);
+```
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the direct file download URL
 
 ### createSchema
 
-`POST /schema`
+`POST /edm/schema`
 
-Creates a new Schema definition, it it does not already exist.
+Creates a new Schema definition, if it doesn't exist.
 
 **Parameters**
 
@@ -125,20 +197,20 @@ Creates a new Schema definition, it it does not already exist.
 ```javascript
 EntityDataModelApi.createSchema(
   {
-    fqn: { namespace: "LOOM", name: "MySchema" },
-    propertyTypes: [],
-    entityTypes: []
+    "fqn": { "namespace": "LOOM", "name": "MySchema" },
+    "propertyTypes": [],
+    "entityTypes": []
   }
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
 
 ### createEmptySchema
 
-`PUT /schema/{namespace}/{name}`
+`PUT /edm/schema/{namespace}/{name}`
 
-Creates a new empty Schema definition for the given Schema FQN.
+Creates a new empty Schema definition for the given Schema FQN, if it doesn't exist.
 
 **Parameters**
 
@@ -148,15 +220,15 @@ Creates a new empty Schema definition for the given Schema FQN.
 
 ```javascript
 EntityDataModelApi.createEmptySchema(
-  { namespace: "LOOM", name: "MySchema" }
+  { "namespace": "LOOM", "name": "MySchema" }
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
 
 ### updateSchema
 
-`PATCH /schema/{namespace}/{name}`
+`PATCH /edm/schema/{namespace}/{name}`
 
 Updates the Schema definition for the given Schema FQN.
 
@@ -164,27 +236,29 @@ Updates the Schema definition for the given Schema FQN.
 
 -   `schemaFqn` **FullyQualifiedName** 
 -   `action` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
--   `entityTypes` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;UUID>** 
--   `propertyTypes` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;UUID>** 
+-   `entityTypeIds` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;UUID>** 
+-   `propertyTypeIds` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;UUID>** 
 
 **Examples**
 
 ```javascript
 EntityDataModelApi.updateSchema(
-  { namespace: "LOOM", name: "MySchema" },
-  {
-    action: "ADD", // or REMOVE, or REPLACE,
-    propertyTypes: [],
-    entityTypes: []
-  }
+  { "namespace": "LOOM", "name": "MySchema" },
+  "action": "ADD",
+  "entityTypeIds": [
+    "ec6865e6-e60e-424b-a071-6a9c1603d735"
+  ],
+  "propertyTypeIds": [
+    "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+  ]
 )
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
 
 ### getEntitySet
 
-`GET /entity/set/{uuid}`
+`GET /edm/entity/set/{uuid}`
 
 Gets the EntitySet definition for the given EntitySet UUID.
 
@@ -198,11 +272,11 @@ Gets the EntitySet definition for the given EntitySet UUID.
 EntityDataModelApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;EntitySet>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;EntitySet>** a Promise that will resolve with the EntitySet definition as its fulfillment value
 
 ### getEntitySetId
 
-`GET /ids/entity/set/{name}`
+`GET /edm/ids/entity/set/{name}`
 
 Gets the EntitySet UUID for the given EntitySet name.
 
@@ -216,11 +290,11 @@ Gets the EntitySet UUID for the given EntitySet name.
 EntityDataModelApi.getEntitySetId("MyEntitySet");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the UUID as its fulfillment value
 
 ### getAllEntitySets
 
-`GET /entity/set`
+`GET /edm/entity/set`
 
 Gets all EntitySet definitions.
 
@@ -230,13 +304,13 @@ Gets all EntitySet definitions.
 EntityDataModelApi.getAllEntitySets();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntitySet>>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntitySet>>** a Promise that will resolve with all EntitySet definitions
 
 ### createEntitySets
 
-`POST /entity/set`
+`POST /edm/entity/set`
 
-Creates a new EntitySet definition.
+Creates new EntitySet definitions if they don't exist.
 
 **Parameters**
 
@@ -248,27 +322,28 @@ Creates a new EntitySet definition.
 EntityDataModelApi.createEntitySets(
   [
     {
-      id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
-      type: { namespace: "LOOM", name: "MyEntity" },
-      name: "MyEntities",
-      title: "My Entities",
-      description: "a collection of MyEntity EntityTypes",
+      "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+      "type": { "namespace": "LOOM", "name": "MyEntity" },
+      "name": "MyEntities",
+      "title": "My Entities",
+      "description": "a collection of MyEntity EntityTypes",
     }
   ]
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), UUID>>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)&lt;[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), UUID>>** a Promise that will resolve with a Map as its fulfillment value, where
+the key is the EntitySet name and the value is the newly-created EntitySet UUID
 
 ### deleteEntitySet
 
-`DELETE /entity/set/{uuid}`
+`DELETE /edm/entity/set/{uuid}`
 
 Deletes the EntitySet definition for the given EntitySet UUID.
 
 **Parameters**
 
--   `entitySetId` **UUID** the EntitySet UUID
+-   `entitySetId` **UUID** 
 
 **Examples**
 
@@ -276,17 +351,46 @@ Deletes the EntitySet definition for the given EntitySet UUID.
 EntityDataModelApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### updateEntitySetMetaData
+
+`PATCH /edm/entity/set/{uuid}`
+
+Updates the EntityType definition for the given EntityType UUID with the given metadata.
+
+**Parameters**
+
+-   `entitySetId` **UUID** 
+-   `metadata` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+-   `entityTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.updateEntitySetMetaData(
+  "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  {
+    "type": { namespace: "LOOM", name: "UpdatedEntitySet" },
+    "name": "MyEntitySet",
+    "title": "MyEntitySet",
+    "description": "MyEntitySet description",
+    "contacts": ["support@kryptnostic.com"]
+  }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
 
 ### getEntityType
 
-`GET /entity/type/{uuid}`
+`GET /edm/entity/type/{uuid}`
 
 Gets the EntityType definition for the given EntityType UUID.
 
 **Parameters**
 
--   `entityTypeId` **UUID** the EntityType UUID
+-   `entityTypeId` **UUID** 
 
 **Examples**
 
@@ -298,7 +402,7 @@ Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 ### getEntityTypeId
 
-`GET /ids/entity/type/{namespace}/{name}`
+`GET /edm/ids/entity/type/{namespace}/{name}`
 
 Gets the EntityType UUID for the given EntityType FQN.
 
@@ -310,15 +414,15 @@ Gets the EntityType UUID for the given EntityType FQN.
 
 ```javascript
 EntityDataModelApi.getEntityTypeId(
-  { namespace: "LOOM", name: "MyProperty" }
+  { "namespace": "LOOM", "name": "MyProperty" }
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the UUID as its fulfillment value
 
 ### getAllEntityTypes
 
-`GET /entity/type`
+`GET /edm/entity/type`
 
 Gets all EntityType definitions.
 
@@ -328,13 +432,29 @@ Gets all EntityType definitions.
 EntityDataModelApi.getAllEntityTypes();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntityType>>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntityType>>** a Promise that will resolve with all EntityType definitions
+as its fulfillment value
+
+### getAllAssociationEntityTypes
+
+`GET /edm/association/type`
+
+Gets all association EntityType definitions.
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getAllAssociationEntityTypes();
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntityType>>** a Promise that will resolve with the EntityType definitions
+as its fulfillment value
 
 ### createEntityType
 
-`POST /entity/type`
+`POST /edm/entity/type`
 
-Creates a new EntityType definition.
+Creates a new EntityType definition, if it doesn't exist.
 
 **Parameters**
 
@@ -345,20 +465,24 @@ Creates a new EntityType definition.
 ```javascript
 EntityDataModelApi.createEntityType(
   {
-    id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
-    type: { namespace: "LOOM", name: "MyEntity" },
-    schemas: [
-      { namespace: "LOOM", name: "MySchema" }
+    "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+    "type": { "namespace": "LOOM", "name": "MyEntity" },
+    "title": "title",
+    "description": "description",
+    "schemas": [
+      { "namespace": "LOOM", "name": "MySchema" }
     ],
-    key: [
-      "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
-      "4b08e1f9-4a00-4169-92ea-10e377070220"
+    "key": [
+      "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+      "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
     ],
-    properties: [
+    "properties": [
       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
       "fae6af98-2675-45bd-9a5b-1619a87235a8"
-    ]
+    ],
+    "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+    "category": "EntityType"
   }
 );
 ```
@@ -367,13 +491,13 @@ Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 ### deleteEntityType
 
-`DELETE /entity/type/{uuid}`
+`DELETE /edm/entity/type/{uuid}`
 
 Deletes the EntityType definition for the given EntityType UUID.
 
 **Parameters**
 
--   `entityTypeId` **UUID** the EntityType UUID
+-   `entityTypeId` **UUID** 
 
 **Examples**
 
@@ -381,36 +505,102 @@ Deletes the EntityType definition for the given EntityType UUID.
 EntityDataModelApi.deleteEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
 
-### updatePropertyTypesForEntityType
+### addPropertyTypeToEntityType
 
-`PUT /entity/type/{uuid}`
+`PUT /edm/entity/type/{uuid}/{uuid}`
 
-Updates the EntityType definition for the given EntityType UUID with the given PropertyType UUIDs.
+Updates the EntityType definition for the given EntityType UUID by adding the given PropertyType UUID.
 
 **Parameters**
 
--   `entityTypeId` **UUID** the EntityType UUID
--   `propertyTypeIds` **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;UUID>** the final set of PropertyType UUIDs with which to set on the EntityType
+-   `entityTypeId` **UUID** 
+-   `propertyTypeId` **UUID** 
 
 **Examples**
 
 ```javascript
-EntityDataModelApi.updatePropertyTypesForEntityType(
+EntityDataModelApi.addPropertyTypeToEntityType(
   "ec6865e6-e60e-424b-a071-6a9c1603d735",
-  [
-    "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
-    "4b08e1f9-4a00-4169-92ea-10e377070220"
-  ]
+  "4b08e1f9-4a00-4169-92ea-10e377070220"
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### removePropertyTypeFromEntityType
+
+`DELETE /edm/entity/type/{uuid}/{uuid}`
+
+Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID.
+
+**Parameters**
+
+-   `entityTypeId` **UUID** 
+-   `propertyTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.removePropertyTypeFromEntityType(
+  "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  "4b08e1f9-4a00-4169-92ea-10e377070220"
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### updateEntityTypeMetaData
+
+`PATCH /edm/entity/type/{uuid}`
+
+Updates the EntityType definition for the given EntityType UUID with the given metadata.
+
+**Parameters**
+
+-   `entityTypeId` **UUID** 
+-   `metadata` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.updateEntityTypeMetaData(
+  "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  {
+    "type": { "namespace": "LOOM", "name": "UpdatedEntity" },
+    "name": "MyEntity",
+    "title": "MyEntity",
+    "description": "MyEntity description",
+    "contacts": ["support@kryptnostic.com"]
+  }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### getEntityTypeHierarchy
+
+`GET /edm/entity/type/{uuid}/hierarchy`
+
+Gets the EntityType hierarchy for the given EntityType UUID.
+
+**Parameters**
+
+-   `entityTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getEntityTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EntityType>>** a Promise that will resolve with the EntityType definitions
+as its fulfillment value
 
 ### getPropertyType
 
-`GET /property/type/{uuid}`
+`GET /edm/property/type/{uuid}`
 
 Gets the PropertyType definition for the given PropertyType UUID.
 
@@ -424,11 +614,12 @@ Gets the PropertyType definition for the given PropertyType UUID.
 EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;PropertyType>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;PropertyType>** a Promise that will resolve with the PropertyType definition
+as its fulfillment value
 
 ### getPropertyTypeId
 
-`GET /ids/property/type/{namespace}/{name}`
+`GET /edm/ids/property/type/{namespace}/{name}`
 
 Gets the PropertyType UUID for the given PropertyType FQN.
 
@@ -444,11 +635,11 @@ EntityDataModelApi.getPropertyTypeId(
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the UUID as its fulfillment value
 
 ### getAllPropertyTypes
 
-`GET /property/type`
+`GET /edm/property/type`
 
 Gets all PropertyType definitions.
 
@@ -458,11 +649,12 @@ Gets all PropertyType definitions.
 EntityDataModelApi.getAllPropertyTypes();
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;PropertyType>>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;PropertyType>>** a Promise that will resolve with all PropertyType definitions
+as its fulfillment value
 
 ### getAllPropertyTypesInNamespace
 
-`GET /namespace/{namespace}/property/type`
+`GET /edm/property/type/namespace/{namespace}`
 
 Gets all PropertyType definitions under the given namespace.
 
@@ -476,13 +668,14 @@ Gets all PropertyType definitions under the given namespace.
 EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;PropertyType>>** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;PropertyType>>** a Promise that will resolve with the PropertyType definitions
+as its fulfillment value
 
 ### createPropertyType
 
-`POST /property/type`
+`POST /edm/property/type`
 
-Creates a new PropertyType definition.
+Creates a new PropertyType definition, if it doesn't exist.
 
 **Parameters**
 
@@ -493,28 +686,31 @@ Creates a new PropertyType definition.
 ```javascript
 EntityDataModelApi.createPropertyType(
   {
-    id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
-    type: { namespace: "LOOM", name: "MyProperty" },
-    datatype: "String",
-    schemas: [
-      { namespace: "LOOM", name: "MySchema" }
-    ]
+    "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+    "type": { "namespace": "LOOM", "name": "MyProperty" },
+    "title": "title",
+    "description": "description",
+    "schemas": [
+      { "namespace": "LOOM", "name": "MySchema" }
+    ],
+    "datatype": "String",
+    "piiField": false,
+    "analyzer": "STANDARD"
   }
 );
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the newly-created PropertyType UUID
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the newly-created PropertyType definition UUID
 
 ### deletePropertyType
 
-`DELETE /property/type/{uuid}`
+`DELETE /edm/property/type/{uuid}`
 
 Deletes the PropertyType definition for the given PropertyType UUID.
 
 **Parameters**
 
 -   `propertyTypeId` **UUID** 
--   `propertyTypeFqn` **FullyQualifiedName** 
 
 **Examples**
 
@@ -522,4 +718,304 @@ Deletes the PropertyType definition for the given PropertyType UUID.
 EntityDataModelApi.deletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
 ```
 
-Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** 
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### updatePropertyTypeMetaData
+
+`PATCH /edm/property/type/{uuid}`
+
+Updates the PropertyType definition for the given PropertyType UUID with the given metadata.
+
+**Parameters**
+
+-   `propertyTypeId` **UUID** 
+-   `metadata` **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.updatePropertyTypeMetaData(
+  "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  {
+    "type": { "namespace": "LOOM", "name": "UpdatedProperty" },
+    "name": "MyProperty",
+    "title": "MyProperty",
+    "description": "MyProperty description",
+    "contacts": ["support@kryptnostic.com"]
+  }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### getAssociationType
+
+`GET /edm/association/type/{uuid}`
+
+Gets the AssociationType definition for the given AssociationType UUID.
+
+**Parameters**
+
+-   `associationTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;AssociationType>** a Promise that will resolve with the AssociationType definition
+as its fulfillment value
+
+### getAssociationTypeDetails
+
+`GET /edm/association/type/{uuid}/detailed`
+
+Gets details about the AssociationType for the given AssociationType UUID.
+
+**Parameters**
+
+-   `associationTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getAssociationTypeDetails("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)>** a Promise that will resolve with the AssociationType details
+as its fulfillment value
+
+### createAssociationType
+
+`POST /edm/association/type`
+
+Creates a new AssociationType definition, if it doesn't exist.
+
+**Parameters**
+
+-   `associationType` **AssociationType** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.createAssociationType(
+  {
+    "entityType": { ... },
+    "src": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+    "dst": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
+    "bidirectional": true
+  }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the newly-created AssociationType definition UUID
+
+### deleteAssociationType
+
+`DELETE /edm/association/type/{uuid}`
+
+Deletes the AssociationType definition for the given AssociationType UUID.
+
+**Parameters**
+
+-   `associationTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.deleteAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### getComplexType
+
+`GET /edm/complex/type/{uuid}`
+
+Gets the ComplexType definition for the given ComplexType UUID.
+
+**Parameters**
+
+-   `complexTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;ComplexType>** a Promise that will resolve with the ComplexType definition as its fulfillment value
+
+### getAllComplexTypes
+
+`GET /edm/complex/type`
+
+Gets all ComplexType definitions.
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getAllComplexTypes();
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;ComplexType>>** a Promise that will resolve with all ComplexType definitions
+as its fulfillment value
+
+### getComplexTypeHierarchy
+
+`GET /edm/complex/type/{uuid}/hierarchy`
+
+Gets the ComplexType hierarchy for the given ComplexType UUID.
+
+**Parameters**
+
+-   `complexTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getComplexTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;ComplexType>>** a Promise that will resolve with the ComplexType definitions
+as its fulfillment value
+
+### createComplexType
+
+`POST /edm/complex/type`
+
+Creates a new ComplexType definition, if it doesn't exist.
+
+**Parameters**
+
+-   `complexType` **ComplexType** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.createComplexType(
+  {
+    "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+    "type": { "namespace": "LOOM", "name": "MyComplexType" },
+    "title": "title",
+    "description": "description",
+    "schemas": [
+      { "namespace": "LOOM", "name": "MySchema" }
+    ],
+    "properties": [
+      "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+      "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
+      "fae6af98-2675-45bd-9a5b-1619a87235a8"
+    ],
+    "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+    "category": "ComplexType"
+  }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the newly-created ComplexType UUID
+
+### deleteComplexType
+
+`DELETE /edm/complex/type/{uuid}`
+
+Deletes the ComplexType definition for the given ComplexType UUID.
+
+**Parameters**
+
+-   `complexTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.deleteComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
+
+### getEnumType
+
+`GET /edm/enum/type/{uuid}`
+
+Gets the EnumType definition for the given EnumType UUID.
+
+**Parameters**
+
+-   `enumTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;EnumType>** a Promise that will resolve with the EnumType definition as its fulfillment value
+
+### getAllEnumTypes
+
+`GET /edm/enum/type`
+
+Gets all EnumType definitions.
+
+**Examples**
+
+```javascript
+EntityDataModelApi.getAllEnumTypes();
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;EnumType>>** a Promise that will resolve with all EnumType definitions
+as its fulfillment value
+
+### createEnumType
+
+`POST /edm/enum/type`
+
+Creates a new EnumType definition, if it doesn't exist.
+
+**Parameters**
+
+-   `enumType` **EnumType** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.createEnumType(
+  {
+    "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+    "type": { "namespace": "LOOM", "name": "MyEnumType" },
+    "title": "title",
+    "description": "description",
+    "members": [
+      "Blue", "Red", "Green"
+    ],
+    "schemas": [
+      { "namespace": "LOOM", "name": "MySchema" }
+    ],
+    "datatype": "String",
+    "flags": false,
+    "piiField": false,
+    "analyzer": "STANDARD"
+  }
+);
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;UUID>** a Promise that will resolve with the newly-created EnumType UUID
+
+### deleteEnumType
+
+`DELETE /edm/enum/type/{uuid}`
+
+Deletes the EnumType definition for the given EnumType UUID.
+
+**Parameters**
+
+-   `enumTypeId` **UUID** 
+
+**Examples**
+
+```javascript
+EntityDataModelApi.deleteEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+```
+
+Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)** a Promise that resolves without a value
