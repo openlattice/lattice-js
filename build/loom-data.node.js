@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.22.0
+ * loom-data - v0.22.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -25,9 +25,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -9987,6 +9987,16 @@ function isArray(val) {
 }
 
 /**
+ * Determine if a value is a Node Buffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Node Buffer, otherwise false
+ */
+function isBuffer(val) {
+  return ((typeof Buffer !== 'undefined') && (Buffer.isBuffer) && (Buffer.isBuffer(val)));
+}
+
+/**
  * Determine if a value is an ArrayBuffer
  *
  * @param {Object} val The value to test
@@ -10249,6 +10259,7 @@ function extend(a, b, thisArg) {
 module.exports = {
   isArray: isArray,
   isArrayBuffer: isArrayBuffer,
+  isBuffer: isBuffer,
   isFormData: isFormData,
   isArrayBufferView: isArrayBufferView,
   isString: isString,
@@ -10553,6 +10564,7 @@ var TICKET_PATH = exports.TICKET_PATH = 'ticket';
 
 // EntityDataModelApi specific paths
 var ASSOCIATION_TYPE_PATH = exports.ASSOCIATION_TYPE_PATH = 'association/type';
+var DETAILED_PATH = exports.DETAILED_PATH = 'detailed';
 var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
 
 // OrganizationsApi specific paths
@@ -12066,6 +12078,7 @@ var defaults = {
     normalizeHeaderName(headers, 'Content-Type');
     if (utils.isFormData(data) ||
       utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
       utils.isStream(data) ||
       utils.isFile(data) ||
       utils.isBlob(data)
@@ -14353,7 +14366,7 @@ function enable(namespaces) {
   exports.names = [];
   exports.skips = [];
 
-  var split = (namespaces || '').split(/[\s,]+/);
+  var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
   var len = split.length;
 
   for (var i = 0; i < len; i++) {
@@ -14438,7 +14451,7 @@ var safeMethods = {GET: true, HEAD: true, OPTIONS: true, TRACE: true};
 
 // Create handlers that pass events from native requests
 var eventHandlers = Object.create(null);
-['abort', 'aborted', 'error'].forEach(function (event) {
+['abort', 'aborted', 'error', 'socket'].forEach(function (event) {
 	eventHandlers[event] = function (arg) {
 		this._redirectable.emit(event, arg);
 	};
@@ -14450,6 +14463,7 @@ function RedirectableRequest(options, responseCallback) {
 	Writable.call(this);
 	this._options = options;
 	this._redirectCount = 0;
+	this._bufferedWrites = [];
 
 	// Attach a callback if passed
 	if (responseCallback) {
@@ -14485,14 +14499,31 @@ RedirectableRequest.prototype._performRequest = function () {
 	// Set up event handlers
 	request._redirectable = this;
 	for (var event in eventHandlers) {
+		/* istanbul ignore else */
 		if (event) {
 			request.on(event, eventHandlers[event]);
 		}
 	}
 
-	// The first request is explicitly ended in RedirectableRequest#end
-	if (this._currentResponse) {
-		request.end();
+	// End a redirected request
+	// (The first request must be ended explicitly with RedirectableRequest#end)
+	if (this._isRedirect) {
+		// If the request doesn't have en entity, end directly.
+		var bufferedWrites = this._bufferedWrites;
+		if (bufferedWrites.length === 0) {
+			request.end();
+		// Otherwise, write the request entity and end afterwards.
+		} else {
+			var i = 0;
+			(function writeNext() {
+				if (i < bufferedWrites.length) {
+					var bufferedWrite = bufferedWrites[i++];
+					request.write(bufferedWrite.data, bufferedWrite.encoding, writeNext);
+				} else {
+					request.end();
+				}
+			})();
+		}
 	}
 };
 
@@ -14513,16 +14544,32 @@ RedirectableRequest.prototype._processResponse = function (response) {
 			return this.emit('error', new Error('Max redirects exceeded.'));
 		}
 
+		// RFC7231§6.4: Automatic redirection needs to done with
+		// care for methods not known to be safe […],
+		// since the user might not wish to redirect an unsafe request.
 		// RFC7231§6.4.7: The 307 (Temporary Redirect) status code indicates
 		// that the target resource resides temporarily under a different URI
 		// and the user agent MUST NOT change the request method
 		// if it performs an automatic redirection to that URI.
-		if (response.statusCode !== 307) {
-			// RFC7231§6.4: Automatic redirection needs to done with
-			// care for methods not known to be safe […],
-			// since the user might not wish to redirect an unsafe request.
-			if (!(this._options.method in safeMethods)) {
-				this._options.method = 'GET';
+		var header;
+		var headers = this._options.headers;
+		if (response.statusCode !== 307 && !(this._options.method in safeMethods)) {
+			this._options.method = 'GET';
+			// Drop a possible entity and headers related to it
+			this._bufferedWrites = [];
+			for (header in headers) {
+				if (/^content-/i.test(header)) {
+					delete headers[header];
+				}
+			}
+		}
+
+		// Drop the Host header, as the redirect might lead to a different host
+		if (!this._isRedirect) {
+			for (header in headers) {
+				if (/^host$/i.test(header)) {
+					delete headers[header];
+				}
 			}
 		}
 
@@ -14530,23 +14577,22 @@ RedirectableRequest.prototype._processResponse = function (response) {
 		var redirectUrl = url.resolve(this._currentUrl, location);
 		debug('redirecting to', redirectUrl);
 		Object.assign(this._options, url.parse(redirectUrl));
-		this._currentResponse = response;
+		this._isRedirect = true;
 		this._performRequest();
 	} else {
 		// The response is not a redirect; return it as-is
 		response.responseUrl = this._currentUrl;
-		return this.emit('response', response);
+		this.emit('response', response);
+
+		// Clean up
+		delete this._options;
+		delete this._bufferedWrites;
 	}
 };
 
 // Aborts the current native request
 RedirectableRequest.prototype.abort = function () {
 	this._currentRequest.abort();
-};
-
-// Ends the current native request
-RedirectableRequest.prototype.end = function (data, encoding, callback) {
-	this._currentRequest.end(data, encoding, callback);
 };
 
 // Flushes the headers of the current native request
@@ -14570,8 +14616,17 @@ RedirectableRequest.prototype.setTimeout = function (timeout, callback) {
 };
 
 // Writes buffered data to the current native request
-RedirectableRequest.prototype._write = function (chunk, encoding, callback) {
-	this._currentRequest.write(chunk, encoding, callback);
+RedirectableRequest.prototype._write = function (data, encoding, callback) {
+	this._currentRequest.write(data, encoding, callback);
+	this._bufferedWrites.push({data: data, encoding: encoding});
+};
+
+// Ends the current native request
+RedirectableRequest.prototype.end = function (data, encoding, callback) {
+	this._currentRequest.end(data, encoding, callback);
+	if (data) {
+		this._bufferedWrites.push({data: data, encoding: encoding});
+	}
 };
 
 // Export a redirecting wrapper for each native protocol
@@ -26163,14 +26218,9 @@ var _ApiNames = __webpack_require__(6);
 
 var _AxiosUtils = __webpack_require__(7);
 
+var _LangUtils = __webpack_require__(2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('AnalysisApi');
-
-/**
- * TODO: everything
- */
-
 
 /**
  * AnalysisApi ...
@@ -26187,9 +26237,46 @@ var LOG = new _Logger2.default('AnalysisApi');
  * // AnalysisApi.get...
  */
 
-function getTopUtilizers(entitySetId, propertyTypeIds, count) {
+var LOG = new _Logger2.default('AnalysisApi');
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).post('/' + entitySetId + '/' + count, propertyTypeIds).then(function (axiosResponse) {
+/**
+ * `GET /analysis/{uuid}/{count}`
+ *
+ * Gets the top rows of data for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof loom-data.AnalysisApi
+ * @param {UUID} entitySetId
+ * @param {number} count
+ * @param {Object} options
+ * @param {string} fileType (optional)
+ * @returns {Promise<SetMultimap<Object, Object>>} - a Promise that will resolve with the data as its fulfillment value
+ *
+ * @example
+ * AnalysisApi.getTopUtilizers(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   100,
+ *   {
+ *     "associationTypeId": "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *     "neighborTypeIds": [
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     ],
+ *     "utilizerIsSrc": false
+ *   }
+ *   "json"
+ * );
+ */
+function getTopUtilizers(entitySetId, count, options, fileType) {
+
+  // TODO: everything
+
+  var url = '/' + entitySetId + '/' + count;
+  if ((0, _LangUtils.isNonEmptyString)(fileType)) {
+    url = url + '&fileType=' + fileType;
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).post(url, options).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -26962,6 +27049,7 @@ exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
 exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
 exports.updatePropertyTypeMetaData = updatePropertyTypeMetaData;
+exports.getAssociationTypeDetails = getAssociationTypeDetails;
 
 var _immutable = __webpack_require__(4);
 
@@ -28238,6 +28326,46 @@ function updatePropertyTypeMetaData(propertyTypeId, metadata) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * AssociationType APIs
+ *
+ */
+
+/**
+ * `GET /edm/association/type/{uuid}/detailed`
+ *
+ * Gets details about the AssociationType for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType details
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAssociationTypeDetails("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAssociationTypeDetails(associationTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DETAILED_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30921,13 +31049,15 @@ module.exports = function httpAdapter(config) {
     }
 
     if (data && !utils.isStream(data)) {
-      if (utils.isArrayBuffer(data)) {
+      if (utils.isBuffer(data)) {
+        // Nothing to do...
+      } else if (utils.isArrayBuffer(data)) {
         data = new Buffer(new Uint8Array(data));
       } else if (utils.isString(data)) {
         data = new Buffer(data, 'utf-8');
       } else {
         return reject(createError(
-          'Data after transformation must be a string, an ArrayBuffer, or a Stream',
+          'Data after transformation must be a string, an ArrayBuffer, a Buffer, or a Stream',
           config
         ));
       }
@@ -31040,12 +31170,15 @@ module.exports = function httpAdapter(config) {
         break;
       }
 
+      // return the last request in case of redirects
+      var lastRequest = res.req || req;
+
       var response = {
         status: res.statusCode,
         statusText: res.statusMessage,
         headers: res.headers,
         config: config,
-        request: req
+        request: lastRequest
       };
 
       if (config.responseType === 'stream') {
@@ -32110,7 +32243,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.22.0";
+var version = "v0.22.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -32191,15 +32324,15 @@ function useColors() {
   // NB: In an Electron preload script, document will be defined but not fully
   // initialized. Since we know we're in Chrome, we'll just detect this case
   // explicitly
-  if (typeof window !== 'undefined' && window && typeof window.process !== 'undefined' && window.process.type === 'renderer') {
+  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
     return true;
   }
 
   // is webkit? http://stackoverflow.com/a/16459606/376773
   // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && document && 'WebkitAppearance' in document.documentElement.style) ||
+  return (typeof document !== 'undefined' && document && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
     // is firebug? http://stackoverflow.com/a/398120/376773
-    (typeof window !== 'undefined' && window && window.console && (console.firebug || (console.exception && console.table))) ||
+    (typeof window !== 'undefined' && window && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
     // is firefox >= v31?
     // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
     (typeof navigator !== 'undefined' && navigator && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
@@ -32619,19 +32752,19 @@ module.exports = {
 		]
 	],
 	"_from": "axios@>=0.16.0 <0.17.0",
-	"_id": "axios@0.16.0",
+	"_id": "axios@0.16.1",
 	"_inCache": true,
 	"_location": "/axios",
-	"_nodeVersion": "7.5.0",
+	"_nodeVersion": "6.10.1",
 	"_npmOperationalInternal": {
-		"host": "packages-12-west.internal.npmjs.com",
-		"tmp": "tmp/axios-0.16.0.tgz_1491013868789_0.13724043127149343"
+		"host": "packages-18-east.internal.npmjs.com",
+		"tmp": "tmp/axios-0.16.1.tgz_1491677517114_0.6866208903957158"
 	},
 	"_npmUser": {
 		"name": "nickuraltsev",
 		"email": "nick.uraltsev@gmail.com"
 	},
-	"_npmVersion": "4.1.2",
+	"_npmVersion": "3.10.10",
 	"_phantomChildren": {},
 	"_requested": {
 		"raw": "axios@^0.16.0",
@@ -32645,8 +32778,8 @@ module.exports = {
 	"_requiredBy": [
 		"/"
 	],
-	"_resolved": "https://registry.npmjs.org/axios/-/axios-0.16.0.tgz",
-	"_shasum": "6ed9771d815f429e7510f2838262957c4953d3b6",
+	"_resolved": "https://registry.npmjs.org/axios/-/axios-0.16.1.tgz",
+	"_shasum": "c0b6d26600842384b8f509e57111f0d2df8223ca",
 	"_shrinkwrap": null,
 	"_spec": "axios@^0.16.0",
 	"_where": "/Users/HristoOskov/dev/loom/loom-data-js",
@@ -32660,7 +32793,7 @@ module.exports = {
 		"url": "https://github.com/mzabriskie/axios/issues"
 	},
 	"dependencies": {
-		"follow-redirects": "1.0.0"
+		"follow-redirects": "^1.2.3"
 	},
 	"description": "Promise based HTTP client for the browser and node.js",
 	"devDependencies": {
@@ -32702,10 +32835,10 @@ module.exports = {
 	},
 	"directories": {},
 	"dist": {
-		"shasum": "6ed9771d815f429e7510f2838262957c4953d3b6",
-		"tarball": "https://registry.npmjs.org/axios/-/axios-0.16.0.tgz"
+		"shasum": "c0b6d26600842384b8f509e57111f0d2df8223ca",
+		"tarball": "https://registry.npmjs.org/axios/-/axios-0.16.1.tgz"
 	},
-	"gitHead": "19b794848047e51f5d8689cf48820c986df49d25",
+	"gitHead": "5c8095e48329dacaec1f8d43a9b84ed275fbd0ef",
 	"homepage": "https://github.com/mzabriskie/axios",
 	"keywords": [
 		"xhr",
@@ -32744,7 +32877,7 @@ module.exports = {
 		"version": "npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"
 	},
 	"typings": "./index.d.ts",
-	"version": "0.16.0"
+	"version": "0.16.1"
 };
 
 /***/ }),
@@ -35348,7 +35481,7 @@ var y = d * 365.25
  *  - `long` verbose formatting [false]
  *
  * @param {String|Number} val
- * @param {Object} options
+ * @param {Object} [options]
  * @throws {Error} throw an error if val is not a non-empty string or a number
  * @return {String|Number}
  * @api public
