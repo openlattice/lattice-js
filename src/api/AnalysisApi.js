@@ -71,7 +71,7 @@ export function getTopUtilizers(
 
   let url: string = `/${entitySetId}/${count}`;
   if (isNonEmptyString(fileType)) {
-    url = `${url}&fileType=${fileType}`;
+    url = `${url}?fileType=${fileType}`;
   }
 
   return getApiAxiosInstance(ANALYSIS_API)
