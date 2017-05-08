@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.22.1
+ * loom-data - v0.22.2
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -27884,7 +27884,7 @@ function getTopUtilizers(entitySetId, count, options, fileType) {
 
   var url = '/' + entitySetId + '/' + count;
   if ((0, _LangUtils.isNonEmptyString)(fileType)) {
-    url = url + '&fileType=' + fileType;
+    url = url + '?fileType=' + fileType;
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).post(url, options).then(function (axiosResponse) {
@@ -33563,7 +33563,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.22.1";
+var version = "v0.22.2";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
