@@ -66,6 +66,7 @@
 
     "flowtype/space-after-type-colon": ["error", "never"],
     "flowtype/space-before-type-colon": ["error", "always"],
+    "flowtype/no-types-missing-file-annotation": "warn",
 
     "import/order": [
       "warn",
