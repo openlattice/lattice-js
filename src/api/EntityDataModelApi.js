@@ -1418,3 +1418,26 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<> {
       return Promise.reject(error);
     });
 }
+
+export function getAllAvailableAssociationTypes(entityTypeId :UUID) :Promise<> {
+
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ASSOCIATION_TYPE_PATH}/${entityTypeId}/available`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
