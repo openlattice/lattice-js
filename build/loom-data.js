@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.22.2
+ * loom-data - v0.22.3
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -28661,6 +28661,7 @@ exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
 exports.updatePropertyTypeMetaData = updatePropertyTypeMetaData;
 exports.getAssociationTypeDetails = getAssociationTypeDetails;
+exports.getAllAvailableAssociationTypes = getAllAvailableAssociationTypes;
 
 var _immutable = __webpack_require__(4);
 
@@ -29977,6 +29978,26 @@ function getAssociationTypeDetails(associationTypeId) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DETAILED_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+function getAllAvailableAssociationTypes(entityTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + entityTypeId + '/available').then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33563,7 +33584,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.22.2";
+var version = "v0.22.3";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
