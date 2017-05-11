@@ -1543,6 +1543,41 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<> {
 }
 
 /**
+ * `GET /edm/association/type/{uuid}/available`
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.getAllAvailableAssociationTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAllAvailableAssociationTypes(entityTypeId :UUID) :Promise<> {
+
+  // TODO: backend returns Iterable<EntityType>, but the function name is getAllAvailableAssociationTypes, feels weird
+  // TODO: everything
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ASSOCIATION_TYPE_PATH}/${entityTypeId}/available`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `POST /edm/association/type`
  *
  * Creates a new AssociationType definition, if it doesn't exist.
