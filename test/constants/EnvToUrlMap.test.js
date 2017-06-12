@@ -4,7 +4,7 @@ import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 
 const URLS = {
   LOCAL: 'http://localhost:8080',
-  PROD: 'https://api.loom.digital'
+  PROD: 'https://api.openlattice.com'
 };
 
 describe('EnvToUrlMap', () => {
