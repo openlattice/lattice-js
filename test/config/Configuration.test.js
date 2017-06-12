@@ -101,11 +101,11 @@ describe('Configuration', () => {
       it('should throw if baseUrl is not https', () => {
 
         expect(() => {
-          Config.configure({ authToken: MOCK_JWT, baseUrl: 'http://api.loom.digital' });
+          Config.configure({ authToken: MOCK_JWT, baseUrl: 'http://api.openlattice.com' });
         }).toThrow();
 
         expect(() => {
-          Config.configure({ authToken: MOCK_JWT, baseUrl: 'http://api.thedataloom.com' });
+          Config.configure({ authToken: MOCK_JWT, baseUrl: 'http://api.openlattice.com' });
         }).toThrow();
 
       });
@@ -124,17 +124,17 @@ describe('Configuration', () => {
 
       it('should correctly set the base URL to the URL that is passed in', () => {
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.loom.digital' });
-        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.loom.digital');
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.openlattice.com' });
+        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.openlattice.com');
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.loom.digital' });
-        expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.loom.digital');
+        // Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.openlattice.com' });
+        // expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.openlattice.com');
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.thedataloom.com' });
-        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.thedataloom.com');
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.openlattice.com' });
+        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.openlattice.com');
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.thedataloom.com' });
-        expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.thedataloom.com');
+        // Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.openlattice.com' });
+        // expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.openlattice.com');
       });
 
       it(`should correctly set the base URL to ${EnvToUrlMap.get('LOCAL')}`, () => {
@@ -154,13 +154,13 @@ describe('Configuration', () => {
         Config.configure({ authToken: MOCK_JWT, baseUrl: 'api' });
         expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'api.loom.digital' });
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'api.openlattice.com' });
         expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'loom' });
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'openlattice' });
         expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'loom.digital' });
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'openlattice.com' });
         expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
 
         Config.configure({ authToken: MOCK_JWT, baseUrl: EnvToUrlMap.get('PROD') });
