@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.23.0
+ * loom-data - v0.23.1
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -12678,9 +12678,9 @@ var configObj = _immutable2.default.Map().withMutations(function (map) {
 /**
  * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
  * result in the same base URL:
- *   - "https://api.loom.digital"
- *   - "api.loom.digital"
- *   - "loom.digital"
+ *   - "https://api.openlattice.com"
+ *   - "api.openlattice.com"
+ *   - "openlattice"
  *   - "api"
  *
  * @memberof loom-data.Configuration
@@ -12711,7 +12711,7 @@ function configure(config) {
       configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
     }
     // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+    else if (config.baseUrl.startsWith('https://') && (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com') || config.baseUrl.endsWith('openlattice.com'))) {
         configObj = configObj.set('baseUrl', config.baseUrl);
       } else {
         var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
@@ -32261,7 +32261,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.23.0";
+var version = "v0.23.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -32809,7 +32809,7 @@ module.exports = {
 	"_resolved": "https://registry.npmjs.org/axios/-/axios-0.16.2.tgz",
 	"_shasum": "ba4f92f17167dfbab40983785454b9ac149c3c6d",
 	"_spec": "axios@^0.16.0",
-	"_where": "/Users/HristoOskov/dev/kryptnostic/loom-data-js",
+	"_where": "/Users/HristoOskov/dev/kryptnostic/loom/loom-data-js",
 	"author": {
 		"name": "Matt Zabriskie"
 	},
