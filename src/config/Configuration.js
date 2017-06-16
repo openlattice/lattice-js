@@ -34,9 +34,9 @@ let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string
 /**
  * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
  * result in the same base URL:
- *   - "https://api.loom.digital"
- *   - "api.loom.digital"
- *   - "loom.digital"
+ *   - "https://api.openlattice.com"
+ *   - "api.openlattice.com"
+ *   - "openlattice"
  *   - "api"
  *
  * @memberof loom-data.Configuration
@@ -69,8 +69,12 @@ function configure(config :Object) {
       configObj = configObj.set('baseUrl', EnvToUrlMap.get('LOCAL'));
     }
     // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') &&
-        (config.baseUrl.endsWith('loom.digital') || config.baseUrl.endsWith('thedataloom.com'))) {
+    else if (config.baseUrl.startsWith('https://')
+        && (
+          config.baseUrl.endsWith('loom.digital')
+          || config.baseUrl.endsWith('thedataloom.com')
+          || config.baseUrl.endsWith('openlattice.com')
+        )) {
       configObj = configObj.set('baseUrl', config.baseUrl);
     }
     else {
