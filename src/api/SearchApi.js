@@ -30,6 +30,7 @@ import {
 
 import {
   ADVANCED_PATH,
+  HOME_PATH,
   FQN_PATH,
   ORGANIZATIONS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
@@ -123,6 +124,34 @@ const START :string = 'start';
  *   }
  * );
  */
+
+export function loadHomePageEntitySets(start :number, maxHits :number) :Promise<> {
+  let errorMsg = '';
+
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .get(`/${HOME_PATH}/${start}/${maxHits}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+
+}
+
 export function searchEntitySetMetaData(searchOptions :Object) :Promise<> {
 
   let errorMsg = '';
