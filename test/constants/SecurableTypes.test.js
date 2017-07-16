@@ -1,5 +1,6 @@
 import SecurableTypes from '../../src/constants/types/SecurableTypes';
 
+const AssociationType :string = 'AssociationType';
 const ComplexType :string = 'ComplexType';
 const EdgeType :string = 'EdgeType';
 const EntitySet :string = 'EntitySet';
@@ -11,6 +12,11 @@ const Organization :string = 'Organization';
 const OrganizationRole :string = 'OrganizationRole';
 
 describe('SecurableTypes', () => {
+
+  it(`should expose "${AssociationType}"`, () => {
+    expect(SecurableTypes.AssociationType).toBeDefined();
+    expect(SecurableTypes.AssociationType).toEqual(AssociationType);
+  });
 
   it(`should expose "${ComplexType}"`, () => {
     expect(SecurableTypes.ComplexType).toBeDefined();
