@@ -46,6 +46,7 @@ import {
   ASSOCIATION_TYPE_PATH,
   COMPLEX_TYPE_PATH,
   DETAILED_PATH,
+  DST_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
   ENUM_TYPE_PATH,
@@ -53,7 +54,8 @@ import {
   IDS_PATH,
   NAMESPACE_PATH,
   PROPERTY_TYPE_PATH,
-  SCHEMA_PATH
+  SCHEMA_PATH,
+  SRC_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -2045,7 +2047,7 @@ export function addSrcEntityTypeToAssociationType(associationTypeId :UUID, entit
   }
 
   return getApiAxiosInstance(EDM_API)
-    .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/src/${entityTypeId}`)
+    .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${SRC_PATH}/${entityTypeId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -2089,7 +2091,7 @@ export function addDstEntityTypeToAssociationType(associationTypeId :UUID, entit
   }
 
   return getApiAxiosInstance(EDM_API)
-    .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/dst/${entityTypeId}`)
+    .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DST_PATH}/${entityTypeId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -2133,7 +2135,7 @@ export function removeSrcEntityTypeFromAssociationType(associationTypeId :UUID, 
   }
 
   return getApiAxiosInstance(EDM_API)
-    .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/src/${entityTypeId}`)
+    .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${SRC_PATH}/${entityTypeId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -2177,7 +2179,7 @@ export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, 
   }
 
   return getApiAxiosInstance(EDM_API)
-    .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/dst/${entityTypeId}`)
+    .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DST_PATH}/${entityTypeId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
