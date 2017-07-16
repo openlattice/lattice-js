@@ -66,6 +66,48 @@ const SEARCH_TERM :string = 'searchTerm';
 const START :string = 'start';
 
 /**
+ * `GET /search/home/{start}/{maxHits}`
+ *
+ * Executes a search over all existing entity sets to populate the home page
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {number} start
+ * @param {number} maxHits
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.loadHomePageEntitySets(0, 10);
+ */
+
+export function loadHomePageEntitySets(start :number, maxHits :number) :Promise<> {
+  let errorMsg = '';
+
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .get(`/${HOME_PATH}/${start}/${maxHits}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+
+}
+
+/**
  * `POST /search`
  *
  * Executes a search across all EntitySet metadata with the given parameters.
@@ -124,34 +166,6 @@ const START :string = 'start';
  *   }
  * );
  */
-
-export function loadHomePageEntitySets(start :number, maxHits :number) :Promise<> {
-  let errorMsg = '';
-
-  if (!isFinite(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isFinite(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(SEARCH_API)
-    .get(`/${HOME_PATH}/${start}/${maxHits}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-
-}
-
 export function searchEntitySetMetaData(searchOptions :Object) :Promise<> {
 
   let errorMsg = '';
