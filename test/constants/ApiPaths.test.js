@@ -35,6 +35,8 @@ const DETAILED_PATH :string = 'detailed';
 const ENUM_TYPE_PATH :string = 'enum/type';
 const HIERARCHY_PATH :string = 'hierarchy';
 const SCHEMA_PATH :string = 'schema';
+const SRC_PATH :string = 'src';
+const DST_PATH :string = 'dst';
 
 // OrganizationsApi specific paths
 const DESCRIPTION_PATH :string = 'description';
@@ -205,6 +207,16 @@ describe('ApiPaths', () => {
     it(`should expose "${SCHEMA_PATH}"`, () => {
       expect(ApiPaths.SCHEMA_PATH).toBeDefined();
       expect(ApiPaths.SCHEMA_PATH).toEqual(SCHEMA_PATH);
+    });
+
+    it(`should expose "${SRC_PATH}"`, () => {
+      expect(ApiPaths.SRC_PATH).toBeDefined();
+      expect(ApiPaths.SRC_PATH).toEqual(SRC_PATH);
+    });
+
+    it(`should expose "${DST_PATH}"`, () => {
+      expect(ApiPaths.DST_PATH).toBeDefined();
+      expect(ApiPaths.DST_PATH).toEqual(DST_PATH);
     });
 
   });

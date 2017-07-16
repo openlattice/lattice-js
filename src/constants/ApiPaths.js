@@ -37,6 +37,8 @@ export const DETAILED_PATH :string = 'detailed';
 export const ENUM_TYPE_PATH :string = 'enum/type';
 export const HIERARCHY_PATH :string = 'hierarchy';
 export const SCHEMA_PATH :string = 'schema';
+export const SRC_PATH :string = 'src';
+export const DST_PATH :string = 'dst';
 
 // OrganizationsApi specific paths
 export const DESCRIPTION_PATH :string = 'description';
@@ -51,4 +53,5 @@ export const USERS_PATH :string = 'users';
 export const ADVANCED_PATH :string = 'advanced';
 export const FQN_PATH :string = 'fqn';
 export const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
+export const SEARCH_ASSOCIATION_TYPES_PATH :string = 'association_types';
 export const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
