@@ -2010,3 +2010,179 @@ export function deleteEnumType(enumTypeId :UUID) :Promise<> {
       return Promise.reject(error);
     });
 }
+
+/**
+ * `PUT /edm/association/type/{uuid}/src/{uuid}`
+ *
+ * Updates the AssociationType src entity types for the given AssociationType UUID by adding the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.addSrcEntityTypeToAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function addSrcEntityTypeToAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/src/${entityTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /edm/association/type/{uuid}/dst/{uuid}`
+ *
+ * Updates the AssociationType dst entity types for the given AssociationType UUID by adding the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.addDstEntityTypeToAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function addDstEntityTypeToAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/dst/${entityTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}/src/{uuid}`
+ *
+ * Updates the AssociationType src entity types for the given AssociationType UUID by removing the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removeSrcEntityTypeFromAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function removeSrcEntityTypeFromAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/src/${entityTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}/dst/{uuid}`
+ *
+ * Updates the AssociationType dst entity types for the given AssociationType UUID by removing the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removeDstEntityTypeFromAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/dst/${entityTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
