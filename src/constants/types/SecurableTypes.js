@@ -2,7 +2,9 @@
  * @flow
  */
 
+// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
 const SecurableTypes = {
+  AssociationType: 'AssociationType',
   ComplexType: 'ComplexType',
   EdgeType: 'EdgeType',
   EntitySet: 'EntitySet',

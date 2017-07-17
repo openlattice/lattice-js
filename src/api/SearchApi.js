@@ -32,7 +32,9 @@ import {
   ADVANCED_PATH,
   FQN_PATH,
   ORGANIZATIONS_PATH,
+  SEARCH_ENTITY_SETS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
+  SEARCH_ASSOCIATION_TYPES_PATH,
   SEARCH_PROPERTY_TYPES_PATH
 } from '../constants/ApiPaths';
 
@@ -63,6 +65,62 @@ const PROPERTY_TYPE_IDS :string = 'pid';
 const SEARCH_FIELDS :string = 'searchFields';
 const SEARCH_TERM :string = 'searchTerm';
 const START :string = 'start';
+
+/**
+ * `GET /search/entity_sets/{start}/{maxHits}`
+ *
+ * Executes a search over all existing entity sets to populate the home page
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {number} start
+ * @param {number} maxHits
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.getEntitySets({
+ *   start: 0,
+ *   maxHits: 10
+ * });
+ */
+
+export function getEntitySets(searchOptions :Object) :Promise<> {
+  let errorMsg = '';
+
+  if (!isNonEmptyObject(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  const {
+    start,
+    maxHits
+  } = searchOptions;
+
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .get(`/${SEARCH_ENTITY_SETS_PATH}/${start}/${maxHits}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+
+}
 
 /**
  * `POST /search`
@@ -486,6 +544,74 @@ export function searchEntityTypes(searchOptions :Object) :Promise<> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${SEARCH_ENTITY_TYPES_PATH}`, data)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /search/entity_types`
+ *
+ * Executes a search across all EntityTypes to find ones that match the given search term.
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchAssociationTypes(
+ *   {
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+export function searchAssociationTypes(searchOptions :Object) :Promise<> {
+
+  let errorMsg = '';
+  if (!isNonEmptyObject(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  const data = {};
+  const {
+    start,
+    maxHits,
+    searchTerm
+  } = searchOptions;
+
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return getApiAxiosInstance(SEARCH_API)
+    .post(`/${SEARCH_ASSOCIATION_TYPES_PATH}`, data)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
