@@ -30,9 +30,9 @@ import {
 
 import {
   ADVANCED_PATH,
-  HOME_PATH,
   FQN_PATH,
   ORGANIZATIONS_PATH,
+  SEARCH_ENTITY_SETS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
   SEARCH_PROPERTY_TYPES_PATH
 } from '../constants/ApiPaths';
@@ -66,7 +66,7 @@ const SEARCH_TERM :string = 'searchTerm';
 const START :string = 'start';
 
 /**
- * `GET /search/home/{start}/{maxHits}`
+ * `GET /search/entity_sets/{start}/{maxHits}`
  *
  * Executes a search over all existing entity sets to populate the home page
  *
@@ -77,11 +77,25 @@ const START :string = 'start';
  * @returns {Promise}
  *
  * @example
- * SearchApi.loadHomePageEntitySets(0, 10);
+ * SearchApi.getEntitySets({
+ *   start: 0,
+ *   maxHits: 10
+ * });
  */
 
-export function loadHomePageEntitySets(start :number, maxHits :number) :Promise<> {
+export function getEntitySets(searchOptions :Object) :Promise<> {
   let errorMsg = '';
+
+  if (!isNonEmptyObject(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  const {
+    start,
+    maxHits
+  } = searchOptions;
 
   if (!isFinite(start) || start < 0) {
     errorMsg = 'invalid property: start must be a positive number';
@@ -96,7 +110,7 @@ export function loadHomePageEntitySets(start :number, maxHits :number) :Promise<
   }
 
   return getApiAxiosInstance(SEARCH_API)
-    .get(`/${HOME_PATH}/${start}/${maxHits}`)
+    .get(`/${SEARCH_ENTITY_SETS_PATH}/${start}/${maxHits}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
