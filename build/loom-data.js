@@ -1,6 +1,6 @@
 /*!
  * 
- * loom-data - v0.23.1
+ * loom-data - v0.24.0
  * JavaScript SDK for all Loom REST APIs
  * https://github.com/kryptnostic/loom-data-js
  * 
@@ -10555,8 +10555,13 @@ var TICKET_PATH = exports.TICKET_PATH = 'ticket';
 
 // EntityDataModelApi specific paths
 var ASSOCIATION_TYPE_PATH = exports.ASSOCIATION_TYPE_PATH = 'association/type';
+var COMPLEX_TYPE_PATH = exports.COMPLEX_TYPE_PATH = 'complex/type';
 var DETAILED_PATH = exports.DETAILED_PATH = 'detailed';
+var ENUM_TYPE_PATH = exports.ENUM_TYPE_PATH = 'enum/type';
+var HIERARCHY_PATH = exports.HIERARCHY_PATH = 'hierarchy';
 var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
+var SRC_PATH = exports.SRC_PATH = 'src';
+var DST_PATH = exports.DST_PATH = 'dst';
 
 // OrganizationsApi specific paths
 var DESCRIPTION_PATH = exports.DESCRIPTION_PATH = 'description';
@@ -10570,7 +10575,9 @@ var USERS_PATH = exports.USERS_PATH = 'users';
 // SearchApi specific paths
 var ADVANCED_PATH = exports.ADVANCED_PATH = 'advanced';
 var FQN_PATH = exports.FQN_PATH = 'fqn';
+var SEARCH_ENTITY_SETS_PATH = exports.SEARCH_ENTITY_SETS_PATH = 'entity_sets';
 var SEARCH_ENTITY_TYPES_PATH = exports.SEARCH_ENTITY_TYPES_PATH = 'entity_types';
+var SEARCH_ASSOCIATION_TYPES_PATH = exports.SEARCH_ASSOCIATION_TYPES_PATH = 'association_types';
 var SEARCH_PROPERTY_TYPES_PATH = exports.SEARCH_PROPERTY_TYPES_PATH = 'property_types';
 
 /***/ }),
@@ -12175,7 +12182,11 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+
+// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
 var SecurableTypes = {
+  AssociationType: 'AssociationType',
   ComplexType: 'ComplexType',
   EdgeType: 'EdgeType',
   EntitySet: 'EntitySet',
@@ -26848,6 +26859,7 @@ exports.deleteEntityType = deleteEntityType;
 exports.addPropertyTypeToEntityType = addPropertyTypeToEntityType;
 exports.removePropertyTypeFromEntityType = removePropertyTypeFromEntityType;
 exports.updateEntityTypeMetaData = updateEntityTypeMetaData;
+exports.getEntityTypeHierarchy = getEntityTypeHierarchy;
 exports.getPropertyType = getPropertyType;
 exports.getPropertyTypeId = getPropertyTypeId;
 exports.getAllPropertyTypes = getAllPropertyTypes;
@@ -26855,8 +26867,24 @@ exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
 exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
 exports.updatePropertyTypeMetaData = updatePropertyTypeMetaData;
+exports.getAssociationType = getAssociationType;
 exports.getAssociationTypeDetails = getAssociationTypeDetails;
 exports.getAllAvailableAssociationTypes = getAllAvailableAssociationTypes;
+exports.createAssociationType = createAssociationType;
+exports.deleteAssociationType = deleteAssociationType;
+exports.getComplexType = getComplexType;
+exports.getAllComplexTypes = getAllComplexTypes;
+exports.getComplexTypeHierarchy = getComplexTypeHierarchy;
+exports.createComplexType = createComplexType;
+exports.deleteComplexType = deleteComplexType;
+exports.getEnumType = getEnumType;
+exports.getAllEnumTypes = getAllEnumTypes;
+exports.createEnumType = createEnumType;
+exports.deleteEnumType = deleteEnumType;
+exports.addSrcEntityTypeToAssociationType = addSrcEntityTypeToAssociationType;
+exports.addDstEntityTypeToAssociationType = addDstEntityTypeToAssociationType;
+exports.removeSrcEntityTypeFromAssociationType = removeSrcEntityTypeFromAssociationType;
+exports.removeDstEntityTypeFromAssociationType = removeDstEntityTypeFromAssociationType;
 
 var _immutable = __webpack_require__(4);
 
@@ -26938,11 +26966,11 @@ var UpdateSchemaRequestActions = {
 /**
  * `GET /edm`
  *
- * Gets the entire Entity Data Model schema.
+ * Gets the entire Entity Data Model.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise} - a Promise that will resolve with the Entity Data Model schema as its fulfillment value
+ * @return {Promise<Object>} - a Promise that will resolve with the Entity Data Model as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntityDataModel();
@@ -26960,18 +26988,33 @@ function getEntityDataModel() {
 /**
  * `POST /edm`
  *
- * Gets the Entity Data Model schema, filtered by the given projection.
+ * Gets the Entity Data Model, filtered by the given projection.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise}
+ * @param {Object[]} projection - a Set of objects containing an ID, a SecurableType, and a Set of SecurableTypes
+ * @return {Promise<Object>} - a Promise that will resolve with the filtered Entity Data Model as its fulfillment value
  *
- * TODO: add documentation
- * TODO: add validation
- * TODO: add unit tests
- * TODO: create data models
+ * @example
+ * EntityDataModelApi.getEntityDataModelProjection(
+ *   [
+ *     {
+ *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "type": "EntitySet",
+ *       "include": [
+ *         "EntitySet",
+ *         "EntityType",
+ *         "PropertyTypeInEntitySet"
+ *       ]
+ *     }
+ *   ]
+ * );
  */
 function getEntityDataModelProjection(projection) {
+
+  // TODO: add validation
+  // TODO: add unit tests
+  // TODO: create data models
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/', projection).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -26995,11 +27038,11 @@ function getEntityDataModelProjection(projection) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
- * @return {Promise<Schema>}
+ * @return {Promise<Schema>} - a Promise that will resolve with the Schema definition as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getSchema(
- *   { namespace: "LOOM", name: "MySchema" }
+ *   { "namespace": "LOOM", "name": "MySchema" }
  * );
  */
 function getSchema(schemaFqn) {
@@ -27031,7 +27074,7 @@ function getSchema(schemaFqn) {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<Schema[]>}
+ * @return {Promise<Schema[]>} - a Promise that will resolve with all Schema definitions
  *
  * @example
  * EntityDataModelApi.getAllSchemas();
@@ -27054,7 +27097,8 @@ function getAllSchemas() {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {string} namespace
- * @return {Promise<Schema[]>}
+ * @return {Promise<Schema[]>} - a Promise that will resolve with the Schema definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllSchemasInNamespace("LOOM");
@@ -27078,17 +27122,17 @@ function getAllSchemasInNamespace(namespace) {
 }
 
 /**
- * Returns the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
+ * Generates the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
  * @param {string} fileType
- * @returns {string}
+ * @returns {string} - the direct file download URL
  *
  * @example
  * EntityDataModelApi.getSchemaFormatted(
- *   { namespace: "LOOM", name: "MySchema" },
+ *   { "namespace": "LOOM", "name": "MySchema" },
  *   "json"
  * );
  */
@@ -27117,19 +27161,19 @@ function getSchemaFileUrl(schemaFqn, fileType) {
 /**
  * `POST /edm/schema`
  *
- * Creates a new Schema definition, it it does not already exist.
+ * Creates a new Schema definition, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {Schema} schema
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.createSchema(
  *   {
- *     fqn: { namespace: "LOOM", name: "MySchema" },
- *     propertyTypes: [],
- *     entityTypes: []
+ *     "fqn": { "namespace": "LOOM", "name": "MySchema" },
+ *     "propertyTypes": [],
+ *     "entityTypes": []
  *   }
  * );
  */
@@ -27154,16 +27198,16 @@ function createSchema(schema) {
 /**
  * `PUT /edm/schema/{namespace}/{name}`
  *
- * Creates a new empty Schema definition for the given Schema FQN.
+ * Creates a new empty Schema definition for the given Schema FQN, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} schemaFqn
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.createEmptySchema(
- *   { namespace: "LOOM", name: "MySchema" }
+ *   { "namespace": "LOOM", "name": "MySchema" }
  * );
  */
 function createEmptySchema(schemaFqn) {
@@ -27199,16 +27243,16 @@ function createEmptySchema(schemaFqn) {
  * @param {string} action
  * @param {UUID[]} entityTypeIds
  * @param {UUID[]} propertyTypeIds
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updateSchema(
- *   { namespace: "LOOM", name: "MySchema" },
- *   action: "ADD",
- *   entityTypeIds: [
+ *   { "namespace": "LOOM", "name": "MySchema" },
+ *   "action": "ADD",
+ *   "entityTypeIds": [
  *     "ec6865e6-e60e-424b-a071-6a9c1603d735"
  *   ],
- *   propertyTypeIds: [
+ *   "propertyTypeIds": [
  *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
  *   ]
  * )
@@ -27291,7 +27335,7 @@ function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entitySetId
- * @return {Promise<EntitySet>}
+ * @return {Promise<EntitySet>} - a Promise that will resolve with the EntitySet definition as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -27322,7 +27366,7 @@ function getEntitySet(entitySetId) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {string} entitySetName
- * @return {Promise<UUID>}
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntitySetId("MyEntitySet");
@@ -27351,7 +27395,7 @@ function getEntitySetId(entitySetName) {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<EntitySet[]>}
+ * @return {Promise<EntitySet[]>} - a Promise that will resolve with all EntitySet definitions
  *
  * @example
  * EntityDataModelApi.getAllEntitySets();
@@ -27369,22 +27413,23 @@ function getAllEntitySets() {
 /**
  * `POST /edm/entity/set`
  *
- * Creates a new EntitySet definition.
+ * Creates new EntitySet definitions if they don't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {EntitySet[]} entitySets
- * @return {Promise<Map<string, UUID>>}
+ * @return {Promise<Map<string, UUID>>} - a Promise that will resolve with a Map as its fulfillment value, where
+ * the key is the EntitySet name and the value is the newly-created EntitySet UUID
  *
  * @example
  * EntityDataModelApi.createEntitySets(
  *   [
  *     {
- *       id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
- *       type: { namespace: "LOOM", name: "MyEntity" },
- *       name: "MyEntities",
- *       title: "My Entities",
- *       description: "a collection of MyEntity EntityTypes",
+ *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "type": { "namespace": "LOOM", "name": "MyEntity" },
+ *       "name": "MyEntities",
+ *       "title": "My Entities",
+ *       "description": "a collection of MyEntity EntityTypes",
  *     }
  *   ]
  * );
@@ -27416,8 +27461,8 @@ function createEntitySets(entitySets) {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entitySetId - the EntitySet UUID
- * @return {Promise}
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -27449,7 +27494,7 @@ function deleteEntitySet(entitySetId) {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {Object} metadata
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updateEntitySetMetaData(
@@ -27464,6 +27509,8 @@ function deleteEntitySet(entitySetId) {
  * );
  */
 function updateEntitySetMetaData(entitySetId, metadata) {
+
+  // TODO: create data model: MetaDataUpdate
 
   var errorMsg = '';
 
@@ -27530,7 +27577,7 @@ function updateEntitySetMetaData(entitySetId, metadata) {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entityTypeId - the EntityType UUID
+ * @param {UUID} entityTypeId
  * @return {Promise<EntityType>} - a Promise that will resolve with the EntityType definition as its fulfillment value
  *
  * @example
@@ -27562,11 +27609,11 @@ function getEntityType(entityTypeId) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} entityTypeFqn
- * @return {Promise<UUID>}
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getEntityTypeId(
- *   { namespace: "LOOM", name: "MyProperty" }
+ *   { "namespace": "LOOM", "name": "MyProperty" }
  * );
  */
 function getEntityTypeId(entityTypeFqn) {
@@ -27598,7 +27645,8 @@ function getEntityTypeId(entityTypeFqn) {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<EntityType[]>}
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with all EntityType definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllEntityTypes();
@@ -27614,9 +27662,21 @@ function getAllEntityTypes() {
 }
 
 /**
- * TODO: everything
+ * `GET /edm/association/type`
+ *
+ * Gets all association EntityType definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllAssociationEntityTypes();
  */
 function getAllAssociationEntityTypes() {
+
+  // TODO: everything
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
@@ -27629,7 +27689,7 @@ function getAllAssociationEntityTypes() {
 /**
  * `POST /edm/entity/type`
  *
- * Creates a new EntityType definition.
+ * Creates a new EntityType definition, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
@@ -27639,20 +27699,24 @@ function getAllAssociationEntityTypes() {
  * @example
  * EntityDataModelApi.createEntityType(
  *   {
- *     id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
- *     type: { namespace: "LOOM", name: "MyEntity" },
- *     schemas: [
- *       { namespace: "LOOM", name: "MySchema" }
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyEntity" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
  *     ],
- *     key: [
- *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     "key": [
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
  *     ],
- *     properties: [
+ *     "properties": [
  *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
  *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     ]
+ *     ],
+ *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *     "category": "EntityType"
  *   }
  * );
  */
@@ -27681,8 +27745,8 @@ function createEntityType(entityType) {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @param {UUID} entityTypeId - the EntityType UUID
- * @return {Promise}
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.deleteEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -27714,7 +27778,7 @@ function deleteEntityType(entityTypeId) {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {UUID} propertyTypeId
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.addPropertyTypeToEntityType(
@@ -27755,7 +27819,7 @@ function addPropertyTypeToEntityType(entityTypeId, propertyTypeId) {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {UUID} propertyTypeId
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.removePropertyTypeFromEntityType(
@@ -27796,13 +27860,13 @@ function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} entityTypeId
  * @param {Object} metadata
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updateEntityTypeMetaData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
- *     "type": { namespace: "LOOM", name: "UpdatedEntity" },
+ *     "type": { "namespace": "LOOM", "name": "UpdatedEntity" },
  *     "name": "MyEntity",
  *     "title": "MyEntity",
  *     "description": "MyEntity description",
@@ -27811,6 +27875,8 @@ function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
  * );
  */
 function updateEntityTypeMetaData(entityTypeId, metadata) {
+
+  // TODO: create data model: MetaDataUpdate
 
   var errorMsg = '';
 
@@ -27864,6 +27930,40 @@ function updateEntityTypeMetaData(entityTypeId, metadata) {
   });
 }
 
+/**
+ * `GET /edm/entity/type/{uuid}/hierarchy`
+ *
+ * Gets the EntityType hierarchy for the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getEntityTypeHierarchy(entityTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
 /*
  *
  * PropertyType APIs
@@ -27878,7 +27978,8 @@ function updateEntityTypeMetaData(entityTypeId, metadata) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
- * @return {Promise<PropertyType>}
+ * @return {Promise<PropertyType>} - a Promise that will resolve with the PropertyType definition
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -27909,7 +28010,7 @@ function getPropertyType(propertyTypeId) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {FullyQualifiedName} propertyTypeFqn
- * @return {Promise<UUID>}
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getPropertyTypeId(
@@ -27945,7 +28046,8 @@ function getPropertyTypeId(propertyTypeFqn) {
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
- * @return {Promise<PropertyType[]>}
+ * @return {Promise<PropertyType[]>} - a Promise that will resolve with all PropertyType definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllPropertyTypes();
@@ -27968,7 +28070,8 @@ function getAllPropertyTypes() {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {string} namespace
- * @return {Promise<PropertyType[]>}
+ * @return {Promise<PropertyType[]>} - a Promise that will resolve with the PropertyType definitions
+ * as its fulfillment value
  *
  * @example
  * EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
@@ -27994,22 +28097,26 @@ function getAllPropertyTypesInNamespace(namespace) {
 /**
  * `POST /edm/property/type`
  *
- * Creates a new PropertyType definition.
+ * Creates a new PropertyType definition, if it doesn't exist.
  *
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {PropertyType} propertyType
- * @return {Promise<UUID>} - a Promise that will resolve with the newly-created PropertyType UUID
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created PropertyType definition UUID
  *
  * @example
  * EntityDataModelApi.createPropertyType(
  *   {
- *     id: "ec6865e6-e60e-424b-a071-6a9c1603d735", // optional
- *     type: { namespace: "LOOM", name: "MyProperty" },
- *     datatype: "String",
- *     schemas: [
- *       { namespace: "LOOM", name: "MySchema" }
- *     ]
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyProperty" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
+ *     ],
+ *     "datatype": "String",
+ *     "piiField": false,
+ *     "analyzer": "STANDARD"
  *   }
  * );
  */
@@ -28039,8 +28146,7 @@ function createPropertyType(propertyType) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
- * @param {FullyQualifiedName} propertyTypeFqn
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.deletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -28072,13 +28178,13 @@ function deletePropertyType(propertyTypeId) {
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} propertyTypeId
  * @param {Object} metadata
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updatePropertyTypeMetaData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
- *     "type": { namespace: "LOOM", name: "UpdatedProperty" },
+ *     "type": { "namespace": "LOOM", "name": "UpdatedProperty" },
  *     "name": "MyProperty",
  *     "title": "MyProperty",
  *     "description": "MyProperty description",
@@ -28087,6 +28193,8 @@ function deletePropertyType(propertyTypeId) {
  * );
  */
 function updatePropertyTypeMetaData(propertyTypeId, metadata) {
+
+  // TODO: create data model: MetaDataUpdate
 
   var errorMsg = '';
 
@@ -28147,6 +28255,40 @@ function updatePropertyTypeMetaData(propertyTypeId, metadata) {
  */
 
 /**
+ * `GET /edm/association/type/{uuid}`
+ *
+ * Gets the AssociationType definition for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType definition
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAssociationType(associationTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
  * `GET /edm/association/type/{uuid}/detailed`
  *
  * Gets details about the AssociationType for the given AssociationType UUID.
@@ -28154,7 +28296,7 @@ function updatePropertyTypeMetaData(propertyTypeId, metadata) {
  * @static
  * @memberof loom-data.EntityDataModelApi
  * @param {UUID} associationTypeId
- * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType details
+ * @return {Promise<Object>} - a Promise that will resolve with the AssociationType details
  * as its fulfillment value
  *
  * @example
@@ -28180,8 +28322,20 @@ function getAssociationTypeDetails(associationTypeId) {
   });
 }
 
+/**
+ * `GET /edm/association/type/{uuid}/available`
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.getAllAvailableAssociationTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
 function getAllAvailableAssociationTypes(entityTypeId) {
 
+  // TODO: backend returns Iterable<EntityType>, but the function name is getAllAvailableAssociationTypes, feels weird
   // TODO: everything
 
   var errorMsg = '';
@@ -28193,6 +28347,571 @@ function getAllAvailableAssociationTypes(entityTypeId) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + entityTypeId + '/available').then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/association/type`
+ *
+ * Creates a new AssociationType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {AssociationType} associationType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created AssociationType definition UUID
+ *
+ * @example
+ * EntityDataModelApi.createAssociationType(
+ *   {
+ *     "entityType": { ... },
+ *     "src": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *     "dst": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
+ *     "bidirectional": true
+ *   }
+ * );
+ */
+function createAssociationType(associationType) {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidAssociationType(associationType)) {
+  //   errorMsg = 'invalid parameter: associationType must be a valid AssociationType';
+  //   LOG.error(errorMsg, associationType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ASSOCIATION_TYPE_PATH, associationType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}`
+ *
+ * Deletes the AssociationType definition for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteAssociationType(associationTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * ComplexType APIs
+ *
+ */
+
+/**
+ * `GET /edm/complex/type/{uuid}`
+ *
+ * Gets the ComplexType definition for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise<ComplexType>} - a Promise that will resolve with the ComplexType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getComplexType(complexTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/complex/type`
+ *
+ * Gets all ComplexType definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<ComplexType[]>} - a Promise that will resolve with all ComplexType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllComplexTypes();
+ */
+function getAllComplexTypes() {
+
+  // TODO: everything
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/complex/type/{uuid}/hierarchy`
+ *
+ * Gets the ComplexType hierarchy for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise<ComplexType[]>} - a Promise that will resolve with the ComplexType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getComplexTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getComplexTypeHierarchy(complexTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/complex/type`
+ *
+ * Creates a new ComplexType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {ComplexType} complexType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created ComplexType UUID
+ *
+ * @example
+ * EntityDataModelApi.createComplexType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyComplexType" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
+ *     ],
+ *     "properties": [
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     ],
+ *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *     "category": "ComplexType"
+ *   }
+ * );
+ */
+function createComplexType(complexType) {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidComplexType(complexType)) {
+  //   errorMsg = 'invalid parameter: complexType must be a valid ComplexType';
+  //   LOG.error(errorMsg, complexType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.COMPLEX_TYPE_PATH, complexType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/complex/type/{uuid}`
+ *
+ * Deletes the ComplexType definition for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteComplexType(complexTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EnumType APIs
+ *
+ */
+
+/**
+ * `GET /edm/enum/type/{uuid}`
+ *
+ * Gets the EnumType definition for the given EnumType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} enumTypeId
+ * @return {Promise<EnumType>} - a Promise that will resolve with the EnumType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getEnumType(enumTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(enumTypeId)) {
+    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
+    LOG.error(errorMsg, enumTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/enum/type`
+ *
+ * Gets all EnumType definitions.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @return {Promise<EnumType[]>} - a Promise that will resolve with all EnumType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllEnumTypes();
+ */
+function getAllEnumTypes() {
+
+  // TODO: everything
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/enum/type`
+ *
+ * Creates a new EnumType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {EnumType} enumType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created EnumType UUID
+ *
+ * @example
+ * EntityDataModelApi.createEnumType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LOOM", "name": "MyEnumType" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "members": [
+ *       "Blue", "Red", "Green"
+ *     ],
+ *     "schemas": [
+ *       { "namespace": "LOOM", "name": "MySchema" }
+ *     ],
+ *     "datatype": "String",
+ *     "flags": false,
+ *     "piiField": false,
+ *     "analyzer": "STANDARD"
+ *   }
+ * );
+ */
+function createEnumType(enumType) {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidEnumType(enumType)) {
+  //   errorMsg = 'invalid parameter: enumType must be a valid EnumType';
+  //   LOG.error(errorMsg, enumType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENUM_TYPE_PATH, enumType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/enum/type/{uuid}`
+ *
+ * Deletes the EnumType definition for the given EnumType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} enumTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteEnumType(enumTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(enumTypeId)) {
+    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
+    LOG.error(errorMsg, enumTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /edm/association/type/{uuid}/src/{uuid}`
+ *
+ * Updates the AssociationType src entity types for the given AssociationType UUID by adding the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.addSrcEntityTypeToAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function addSrcEntityTypeToAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /edm/association/type/{uuid}/dst/{uuid}`
+ *
+ * Updates the AssociationType dst entity types for the given AssociationType UUID by adding the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.addDstEntityTypeToAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function addDstEntityTypeToAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}/src/{uuid}`
+ *
+ * Updates the AssociationType src entity types for the given AssociationType UUID by removing the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removeSrcEntityTypeFromAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function removeSrcEntityTypeFromAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}/dst/{uuid}`
+ *
+ * Updates the AssociationType dst entity types for the given AssociationType UUID by removing the given EntityType UUID.
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removeDstEntityTypeFromAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function removeDstEntityTypeFromAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29987,11 +30706,13 @@ function updateRequestStatuses(statuses) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getEntitySets = getEntitySets;
 exports.searchEntitySetMetaData = searchEntitySetMetaData;
 exports.searchEntitySetData = searchEntitySetData;
 exports.advancedSearchEntitySetData = advancedSearchEntitySetData;
 exports.searchOrganizations = searchOrganizations;
 exports.searchEntityTypes = searchEntityTypes;
+exports.searchAssociationTypes = searchAssociationTypes;
 exports.searchEntityTypesByFQN = searchEntityTypesByFQN;
 exports.searchPropertyTypes = searchPropertyTypes;
 exports.searchPropertyTypesByFQN = searchPropertyTypesByFQN;
@@ -30051,6 +30772,57 @@ var PROPERTY_TYPE_IDS = 'pid';
 var SEARCH_FIELDS = 'searchFields';
 var SEARCH_TERM = 'searchTerm';
 var START = 'start';
+
+/**
+ * `GET /search/entity_sets/{start}/{maxHits}`
+ *
+ * Executes a search over all existing entity sets to populate the home page
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {number} start
+ * @param {number} maxHits
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.getEntitySets({
+ *   start: 0,
+ *   maxHits: 10
+ * });
+ */
+
+function getEntitySets(searchOptions) {
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.SEARCH_ENTITY_SETS_PATH + '/' + start + '/' + maxHits).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
 
 /**
  * `POST /search`
@@ -30456,6 +31228,70 @@ function searchEntityTypes(searchOptions) {
   data[SEARCH_TERM] = searchTerm;
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ENTITY_TYPES_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/entity_types`
+ *
+ * Executes a search across all EntityTypes to find ones that match the given search term.
+ *
+ * @static
+ * @memberof loom-data.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchAssociationTypes(
+ *   {
+ *     "searchTerm": "Loom",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchAssociationTypes(searchOptions) {
+
+  var errorMsg = '';
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ASSOCIATION_TYPES_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31783,7 +32619,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module loom-data
  */
 
-var version = "v0.23.1";
+var version = "v0.24.0";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -31858,22 +32694,22 @@ function placeHoldersCount (b64) {
 
 function byteLength (b64) {
   // base64 is 4/3 + up to two characters of the original data
-  return b64.length * 3 / 4 - placeHoldersCount(b64)
+  return (b64.length * 3 / 4) - placeHoldersCount(b64)
 }
 
 function toByteArray (b64) {
-  var i, j, l, tmp, placeHolders, arr
+  var i, l, tmp, placeHolders, arr
   var len = b64.length
   placeHolders = placeHoldersCount(b64)
 
-  arr = new Arr(len * 3 / 4 - placeHolders)
+  arr = new Arr((len * 3 / 4) - placeHolders)
 
   // if there are placeholders, only get up to the last complete 4 chars
   l = placeHolders > 0 ? len - 4 : len
 
   var L = 0
 
-  for (i = 0, j = 0; i < l; i += 4, j += 3) {
+  for (i = 0; i < l; i += 4) {
     tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)]
     arr[L++] = (tmp >> 16) & 0xFF
     arr[L++] = (tmp >> 8) & 0xFF
