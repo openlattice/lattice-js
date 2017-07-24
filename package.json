@@ -83,7 +83,7 @@
     "release:major": "npm version major -m \"releasing v%s\" && npm publish",
     "release:minor": "npm version minor -m \"releasing v%s\" && npm publish",
     "release:patch": "npm version patch -m \"releasing v%s\" && npm publish",
-    "preversion": "npm-run-all test",
+    "preversion": "npm-run-all lint test",
     "version": "npm-run-all clean --parallel build build:min && git add -A package.json build/",
     "postversion": "git push && git push --tags",
     "test": "better-npm-run test",
