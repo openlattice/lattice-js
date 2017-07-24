@@ -1,6 +1,6 @@
 import * as DataModels from '../../src/models/index';
 
-describe('Loom.DataModels', () => {
+describe('Lattice.DataModels', () => {
 
   it('should expose FullyQualifiedName', () => {
     expect(DataModels.FullyQualifiedName).toBeDefined();

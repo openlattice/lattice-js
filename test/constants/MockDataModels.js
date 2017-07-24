@@ -11,7 +11,7 @@ export const MOCK_ACL_KEY :string[] = [
 ];
 
 export const MOCK_FQN :Object = {
-  namespace: 'LOOM',
+  namespace: 'LATTICE',
   name: 'Data'
 };
 
@@ -51,15 +51,15 @@ export const MOCK_ENTITY_SET_DM :Object = {
   name: 'name',
   title: 'title',
   description: 'description',
-  contacts: ['LOOM']
+  contacts: ['LATTICE']
 };
 
 export const MOCK_ENTITY_TYPE_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  type: { namespace: 'LOOM', name: 'MockType' },
+  type: { namespace: 'LATTICE', name: 'MockType' },
   title: 'title',
   description: 'description',
-  schemas: [{ namespace: 'LOOM', name: 'MockSchema' }],
+  schemas: [{ namespace: 'LATTICE', name: 'MockSchema' }],
   key: [
     '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e',
     '4b08e1f9-4a00-4169-92ea-10e377070220'
@@ -101,7 +101,7 @@ export const MOCK_ORGANIZATION_DM :Object = {
   description: 'description',
   members: [{ type: 'USER', id: 'principalId_0' }],
   roles: [{ type: 'ROLE', id: 'principalId_1' }],
-  emails: ['kryptnostic.com']
+  emails: ['openlattice.com']
 };
 
 export const MOCK_PRINCIPAL_DM :Object = {
@@ -111,11 +111,11 @@ export const MOCK_PRINCIPAL_DM :Object = {
 
 export const MOCK_PROPERTY_TYPE_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  type: { namespace: 'LOOM', name: 'MockType' },
+  type: { namespace: 'LATTICE', name: 'MockType' },
   title: 'title',
   description: 'description',
   datatype: 'datatype',
-  schemas: [{ namespace: 'LOOM', name: 'MockSchema' }]
+  schemas: [{ namespace: 'LATTICE', name: 'MockSchema' }]
 };
 
 export const MOCK_REQUEST_DM :Object = {

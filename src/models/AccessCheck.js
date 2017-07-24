@@ -25,7 +25,7 @@ const LOG = new Logger('AccessCheck');
 
 /**
  * @class AccessCheck
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class AccessCheck {
 
@@ -41,7 +41,7 @@ export default class AccessCheck {
 
 /**
  * @class AclBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class AccessCheckBuilder {
 

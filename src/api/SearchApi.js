@@ -6,14 +6,14 @@
  * SearchApi...
  *
  * @module SearchApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.SearchApi.search...
+ * import Lattice from 'lattice';
+ * // Lattice.SearchApi.search...
  *
  * @example
- * import { SearchApi } from 'loom-data';
+ * import { SearchApi } from 'lattice';
  * // SearchApi.search...
  */
 
@@ -72,7 +72,7 @@ const START :string = 'start';
  * Executes a search over all existing entity sets to populate the home page
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {number} start
  * @param {number} maxHits
  * @returns {Promise}
@@ -128,14 +128,14 @@ export function getEntitySets(searchOptions :Object) :Promise<> {
  * Executes a search across all EntitySet metadata with the given parameters.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {Object} searchOptions
  * @returns {Promise}
  *
  * @example
  * SearchApi.searchEntitySetMetaData(
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "start": 0,
  *     "maxHits": 100
  *   }
@@ -162,7 +162,7 @@ export function getEntitySets(searchOptions :Object) :Promise<> {
  *
  * SearchApi.searchEntitySetMetaData(
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *     "start": 0,
  *     "maxHits": 100
@@ -171,7 +171,7 @@ export function getEntitySets(searchOptions :Object) :Promise<> {
  *
  * SearchApi.searchEntitySetMetaData(
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "propertyTypeIds": [
  *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *       "4b08e1f9-4a00-4169-92ea-10e377070220"
@@ -263,7 +263,7 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<> {
  * Executes a search over the data of the given EntitySet to find matches for the given search term.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {UUID} entitySetId
  * @param {Object} searchOptions
  * @returns {Promise}
@@ -272,7 +272,7 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<> {
  * SearchApi.searchEntitySetData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "start": 0,
  *     "maxHits": 100
  *   }
@@ -340,7 +340,7 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
  * Executes a search over the data of the given EntitySet to find matches for the given search (field, term) pairs.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {UUID} entitySetId
  * @param {Object} searchOptions
  * @returns {Promise}
@@ -350,7 +350,7 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
  *     "searchFields": {
- *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": "Loom"
+ *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": "Lattice"
  *     },
  *     "start": 0,
  *     "maxHits": 100
@@ -421,14 +421,14 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
  * Executes a search across all Organizations to find ones that match the given search term.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {Object} searchOptions
  * @returns {Promise}
  *
  * @example
  * SearchApi.searchOrganizations(
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "start": 0,
  *     "maxHits": 100
  *   }
@@ -490,14 +490,14 @@ export function searchOrganizations(searchOptions :Object) :Promise<> {
  * Executes a search across all EntityTypes to find ones that match the given search term.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {Object} searchOptions
  * @returns {Promise}
  *
  * @example
  * SearchApi.searchEntityTypes(
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "start": 0,
  *     "maxHits": 100
  *   }
@@ -559,14 +559,14 @@ export function searchEntityTypes(searchOptions :Object) :Promise<> {
  * Executes a search across all EntityTypes to find ones that match the given search term.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {Object} searchOptions
  * @returns {Promise}
  *
  * @example
  * SearchApi.searchAssociationTypes(
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "start": 0,
  *     "maxHits": 100
  *   }
@@ -627,14 +627,14 @@ export function searchAssociationTypes(searchOptions :Object) :Promise<> {
  * Executes a search across all EntityTypes to find ones that match the given FQN, including partial matches.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {Object} searchOptions
  * @returns {Promise}
  *
  * @example
  * SearchApi.searchEntityTypesByFQN(
  *   {
- *     "namespace": "LOOM",
+ *     "namespace": "LATTICE",
  *     "name": "MyEntityType",
  *     "start": 0,
  *     "maxHits": 100
@@ -705,14 +705,14 @@ export function searchEntityTypesByFQN(searchOptions :Object) :Promise<> {
  * Executes a search across all PropertyTypes to find ones that match the given search term.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {Object} searchOptions
  * @returns {Promise}
  *
  * @example
  * SearchApi.searchPropertyTypes(
  *   {
- *     "searchTerm": "Loom",
+ *     "searchTerm": "Lattice",
  *     "start": 0,
  *     "maxHits": 100
  *   }
@@ -774,14 +774,14 @@ export function searchPropertyTypes(searchOptions :Object) :Promise<> {
  * Executes a search across all PropertyTypes to find ones that match the given FQN, including partial matches.
  *
  * @static
- * @memberof loom-data.SearchApi
+ * @memberof lattice.SearchApi
  * @param {Object} searchOptions
  * @returns {Promise}
  *
  * @example
  * SearchApi.searchPropertyTypesByFQN(
  *   {
- *     "namespace": "LOOM",
+ *     "namespace": "LATTICE",
  *     "name": "MyPropertyType",
  *     "start": 0,
  *     "maxHits": 100

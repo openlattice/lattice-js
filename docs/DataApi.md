@@ -12,17 +12,17 @@
 
 ## DataApi
 
-DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel schema.
+DataApi gives access to OpenLattice's REST API for reading and writing data against an existing EntityDataModel schema.
 
 **Examples**
 
 ```javascript
-import Loom from 'loom-data';
-// Loom.DataApi.get...
+import Lattice from 'lattice';
+// Lattice.DataApi.get...
 ```
 
 ```javascript
-import { DataApi } from 'loom-data';
+import { DataApi } from 'lattice';
 // DataApi.get...
 ```
 

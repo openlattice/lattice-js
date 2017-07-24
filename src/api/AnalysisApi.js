@@ -6,14 +6,14 @@
  * AnalysisApi ...
  *
  * @module AnalysisApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.AnalysisApi.get...
+ * import Lattice from 'lattice';
+ * // Lattice.AnalysisApi.get...
  *
  * @example
- * import { AnalysisApi } from 'loom-data';
+ * import { AnalysisApi } from 'lattice';
  * // AnalysisApi.get...
  */
 
@@ -39,7 +39,7 @@ const LOG = new Logger('AnalysisApi');
  * Gets the top rows of data for the given EntitySet UUID.
  *
  * @static
- * @memberof loom-data.AnalysisApi
+ * @memberof lattice.AnalysisApi
  * @param {UUID} entitySetId
  * @param {number} count
  * @param {Object} options

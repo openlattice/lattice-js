@@ -13,12 +13,12 @@ AuthorizationApi ...
 **Examples**
 
 ```javascript
-import Loom from 'loom-data';
-// Loom.AuthorizationApi.check...
+import Lattice from 'lattice';
+// Lattice.AuthorizationApi.check...
 ```
 
 ```javascript
-import { AuthorizationApi } from 'loom-data';
+import { AuthorizationApi } from 'lattice';
 // AuthorizationApi.check...
 ```
 

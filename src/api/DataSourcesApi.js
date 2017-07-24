@@ -8,14 +8,14 @@
  * TODO: add description
  *
  * @module DataSourcesApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.DataSourcesApi.get...
+ * import Lattice from 'lattice';
+ * // Lattice.DataSourcesApi.get...
  *
  * @example
- * import { DataSourcesApi } from 'loom-data';
+ * import { DataSourcesApi } from 'lattice';
  * // DataSourcesApi.get...
  */
 
@@ -45,7 +45,7 @@ const LOG = new Logger('DataSourcesApi');
  * Gets the DataSource definition for the given DataSource UUID.
  *
  * @static
- * @memberof loom-data.DataSourcesApi
+ * @memberof lattice.DataSourcesApi
  * @param {UUID} dataSourceId
  * @returns {Promise<DataSource>} - a Promise that will resolve with the DataSource definition as its fulfillment value
  *
@@ -79,7 +79,7 @@ export function getDataSource(dataSourceId :UUID) :Promise<> {
  * Creates a new DataSource definition if it doesn't exist, or updates the existing DataSource definition.
  *
  * @static
- * @memberof loom-data.DataSourcesApi
+ * @memberof lattice.DataSourcesApi
  * @param {DataSource} dataSource
  * @returns {Promise<UUID>} - a Promise that will resolve with the newly-created DataSource UUID
  *
@@ -88,7 +88,7 @@ export function getDataSource(dataSourceId :UUID) :Promise<> {
  *   {
  *     "id": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *     "title": "My DataSource",
- *     "description": "a DataSource to be integrated into Loom",
+ *     "description": "a DataSource to be integrated",
  *     "entitySetIds": [
  *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
@@ -123,7 +123,7 @@ export function createOrUpdateDataSource(dataSource :DataSource) :Promise<> {
  * Deletes the DataSource definition for the given DataSource UUID.
  *
  * @static
- * @memberof loom-data.DataSourcesApi
+ * @memberof lattice.DataSourcesApi
  * @param {UUID} dataSourceId
  * @return {Promise} - a Promise that resolves without a value
  *
@@ -155,7 +155,7 @@ export function deleteDataSource(dataSourceId :UUID) :Promise<> {
  * `POST /datasource/{uuid}`
  *
  * @static
- * @memberof loom-data.DataSourcesApi
+ * @memberof lattice.DataSourcesApi
  * @param {UUID} dataSourceId
  * @returns {Promise<UUID>} - a Promise that will resolve with the sync UUID as its fulfillment value
  *
@@ -189,7 +189,7 @@ export function startSync(dataSourceId :UUID) :Promise<> {
  * `DELETE /datasource/{uuid}/{uuid}`
  *
  * @static
- * @memberof loom-data.DataSourcesApi
+ * @memberof lattice.DataSourcesApi
  * @param {UUID} dataSourceId
  * @param {UUID} syncId
  * @return {Promise} - a Promise that resolves without a value

@@ -3,17 +3,17 @@
  */
 
 /**
- * PrincipalsApi gives access to Loom's REST API for getting user data.
+ * PrincipalsApi gives access to OpenLattice's REST API for getting user data.
  *
  * @module PrincipalsApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.PrincipalsApi.get...
+ * import Lattice from 'lattice';
+ * // Lattice.PrincipalsApi.get...
  *
  * @example
- * import { PrincipalsApi } from 'loom-data';
+ * import { PrincipalsApi } from 'lattice';
  * // PrincipalsApi.get...
  */
 
@@ -46,7 +46,7 @@ const LOG = new Logger('PrincipalsApi');
  * `GET /principals/users/{userId}`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @param {string} userId
  * @return {Promise}
  */
@@ -75,7 +75,7 @@ export function getUser(userId :string) :Promise<> {
  * `GET /principals/users`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @return {Promise}
  */
 export function getAllUsers() :Promise<> {
@@ -95,7 +95,7 @@ export function getAllUsers() :Promise<> {
  * `GET /principals/roles/{role}`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @return {Promise}
  */
 export function getAllUsersForRole(role :string) :Promise<> {
@@ -123,7 +123,7 @@ export function getAllUsersForRole(role :string) :Promise<> {
  * `GET /principals/roles`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @return {Promise}
  */
 export function getAllUsersForAllRoles() :Promise<> {
@@ -143,7 +143,7 @@ export function getAllUsersForAllRoles() :Promise<> {
  * `PUT /principals/users/{userId}/roles/{role}`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @param {string} userId
  * @param {string} role
  * @return {Promise}
@@ -181,7 +181,7 @@ export function addRoleToUser(userId :string, role :string) :Promise<> {
  * `PUT /principals/users/{userId}/roles`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @param {string} userId
  * @param {string[]} roles
  * @return {Promise}
@@ -223,7 +223,7 @@ export function setUserRoles(userId :string, roles :string[]) :Promise<> {
  * `DELETE /principals/users/{userId}/roles/{role}`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @param {string} userId
  * @param {string} role
  * @return {Promise}
@@ -261,7 +261,7 @@ export function removeRoleFromUser(userId :string, role :string) :Promise<> {
  * `GET /principals/users/search/email/{searchQuery}`
  *
  * @static
- * @memberof loom-data.PrincipalsApi
+ * @memberof lattice.PrincipalsApi
  * @param {string} searchQuery
  * @return {Promise}
  *

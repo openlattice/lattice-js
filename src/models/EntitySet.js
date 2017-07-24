@@ -24,7 +24,7 @@ const LOG = new Logger('EntitySet');
 
 /**
  * @class EntitySet
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class EntitySet {
 
@@ -64,7 +64,7 @@ export default class EntitySet {
 
 /**
  * @class EntitySetBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class EntitySetBuilder {
 

@@ -6,14 +6,14 @@
  * AuthorizationApi ...
  *
  * @module AuthorizationApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.AuthorizationApi.check...
+ * import Lattice from 'lattice';
+ * // Lattice.AuthorizationApi.check...
  *
  * @example
- * import { AuthorizationApi } from 'loom-data';
+ * import { AuthorizationApi } from 'lattice';
  * // AuthorizationApi.check...
  */
 
@@ -59,7 +59,7 @@ const LOG = new Logger('AuthorizationApi');
  * Gets the Authorizations for the given AccessChecks.
  *
  * @static
- * @memberof loom-data.AuthorizationApi
+ * @memberof lattice.AuthorizationApi
  * @param {AccessCheck[]} queries
  * @returns {Promise<Authorization[]>} - a Promise that will resolve with the Authorizations as its fulfillment value
  *
@@ -106,7 +106,7 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<> {
  * Gets all authorized objects of the given SecurableType with the given Permission.
  *
  * @static
- * @memberof loom-data.AuthorizationApi
+ * @memberof lattice.AuthorizationApi
  * @param {SecurableType} securableType
  * @param {Permission} permission
  * @param {string} pagingToken (optional)

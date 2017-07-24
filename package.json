@@ -1,29 +1,29 @@
 {
-  "name": "loom-data",
+  "name": "lattice",
   "version": "0.24.0",
-  "homepage": "https://github.com/kryptnostic/loom-data-js",
-  "description": "JavaScript SDK for all Loom REST APIs",
+  "homepage": "https://github.com/openlattice/lattice-js",
+  "description": "JavaScript SDK for all OpenLattice REST APIs",
   "author": {
-    "name": "Kryptnostic, Inc.",
-    "email": "info@kryptnostic.com",
-    "url": "https://www.kryptnostic.com"
+    "name": "OpenLattice, Inc.",
+    "email": "support@openlattice.com",
+    "url": "https://openlattice.com"
   },
   "contributors": [
     {
       "name": "Hristo Oskov",
-      "email": "hristo@kryptnostic.com"
+      "email": "hristo@openlattice.com"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kryptnostic/loom-data-js.git"
+    "url": "git+https://github.com/openlattice/lattice-js.git"
   },
   "bugs": {
-    "url": "https://github.com/kryptnostic/loom-data-js/issues"
+    "url": "https://github.com/openlattice/lattice-js/issues"
   },
   "license": "Apache-2.0",
-  "main": "build/loom-data.node.js",
-  "browser": "build/loom-data.js",
+  "main": "build/lattice.node.js",
+  "browser": "build/lattice.js",
   "dependencies": {
     "axios": "^0.16.0",
     "immutable": "^3.8.1",
