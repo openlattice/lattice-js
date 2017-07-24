@@ -3,17 +3,17 @@
  */
 
 /**
- * DataApi gives access to Loom's REST API for reading and writing data against an existing EntityDataModel schema.
+ * DataApi gives access to OpenLattice's REST API for reading, writing data against an existing EntityDataModel schema.
  *
  * @module DataApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.DataApi.get...
+ * import Lattice from 'lattice';
+ * // Lattice.DataApi.get...
  *
  * @example
- * import { DataApi } from 'loom-data';
+ * import { DataApi } from 'lattice';
  * // DataApi.get...
  */
 
@@ -57,7 +57,7 @@ const LOG = new Logger('DataApi');
  * Gets all data for the given EntitySet UUID with respect to the given filters.
  *
  * @static
- * @memberof loom-data.DataApi
+ * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {UUID} syncId
  * @param {UUID[]} propertyTypeIds
@@ -119,7 +119,7 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
  * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
  *
  * @static
- * @memberof loom-data.DataApi
+ * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {string} fileType
  * @returns {string} - the direct file download URL
@@ -155,7 +155,7 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
  * Creates an entry for the given entity data.
  *
  * @static
- * @memberof loom-data.DataApi
+ * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {UUID} syncId
  * @param {Object} entities
@@ -219,7 +219,7 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
  * `PATCH /data/entitydata/{ticketId}/{syncId}`
  *
  * @static
- * @memberof loom-data.DataApi
+ * @memberof lattice.DataApi
  * @param {UUID} ticketId
  * @param {UUID} syncId
  * @param {Object} entities
@@ -280,7 +280,7 @@ export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) 
  * Acquires a sync ticket UUID for the given EntitySet UUID.
  *
  * @static
- * @memberof loom-data.DataApi
+ * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {UUID} syncId
  * @return {Promise<UUID>} - a Promise that will resolve with the acquired sync ticket UUID as its fulfillment value
@@ -324,7 +324,7 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
  * Releases the given sync ticket UUID.
  *
  * @static
- * @memberof loom-data.DataApi
+ * @memberof lattice.DataApi
  * @param {UUID} syncId
  * @return {Promise} - a Promise that resolves without a value
  *

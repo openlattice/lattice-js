@@ -12,12 +12,12 @@ AnalysisApi ...
 **Examples**
 
 ```javascript
-import Loom from 'loom-data';
-// Loom.AnalysisApi.get...
+import Lattice from 'lattice';
+// Lattice.AnalysisApi.get...
 ```
 
 ```javascript
-import { AnalysisApi } from 'loom-data';
+import { AnalysisApi } from 'lattice';
 // AnalysisApi.get...
 ```
 

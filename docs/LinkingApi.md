@@ -13,12 +13,12 @@ LinkingApi ...
 **Examples**
 
 ```javascript
-import Loom from 'loom-data';
-// Loom.LinkingApi.link...
+import Lattice from 'lattice';
+// Lattice.LinkingApi.link...
 ```
 
 ```javascript
-import { LinkingApi } from 'loom-data';
+import { LinkingApi } from 'lattice';
 // LinkingApi.link...
 ```
 

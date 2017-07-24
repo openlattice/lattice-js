@@ -13,28 +13,28 @@
  * ```
  *
  * @class FullyQualifiedName
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
  * // create from an object literal
  * const fqn = new FullyQualifiedName({
- *   namespace: "LOOM",
+ *   namespace: "LATTICE",
  *   name: "Data"
  * });
  *
  * @example
  * // create from separate "namespace" and "name" parameters
- * const fqn = new FullyQualifiedName("LOOM", "Data");
+ * const fqn = new FullyQualifiedName("LATTICE", "Data");
  *
  * @example
  * // create from a fully qualified name string, from which "namespace" and "name" will be parsed
- * const fqn = new FullyQualifiedName("LOOM.Data");
+ * const fqn = new FullyQualifiedName("LATTICE.Data");
  *
  * @example
  * // usage:
- * fqn.getNamespace(); // "LOOM"
+ * fqn.getNamespace(); // "LATTICE"
  * fqn.getName(); // "Data"
- * fqn.getFullyQualifiedName(); // "LOOM.Data"
+ * fqn.getFullyQualifiedName(); // "LATTICE.Data"
  */
 
 import isObject from 'lodash/isObject';

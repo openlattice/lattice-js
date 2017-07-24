@@ -51,17 +51,17 @@
 
 ## EntityDataModelApi
 
-EntityDataModelApi gives access to Loom's REST API for interacting with EntityDataModel (EDM) schemas.
+EntityDataModelApi gives access to OpenLattice's REST API for interacting with EntityDataModel (EDM) schemas.
 
 **Examples**
 
 ```javascript
-import Loom from 'loom-data';
-// Loom.EntityDataModelApi.get...
+import Lattice from 'lattice';
+// Lattice.EntityDataModelApi.get...
 ```
 
 ```javascript
-import { EntityDataModelApi } from 'loom-data';
+import { EntityDataModelApi } from 'lattice';
 // EntityDataModelApi.get...
 ```
 
@@ -123,7 +123,7 @@ Gets the Schema definition for the given Schema FQN.
 
 ```javascript
 EntityDataModelApi.getSchema(
-  { "namespace": "LOOM", "name": "MySchema" }
+  { "namespace": "LATTICE", "name": "MySchema" }
 );
 ```
 
@@ -156,7 +156,7 @@ Gets all Schema definitions under the given namespace.
 **Examples**
 
 ```javascript
-EntityDataModelApi.getAllSchemasInNamespace("LOOM");
+EntityDataModelApi.getAllSchemasInNamespace("LATTICE");
 ```
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Schema>>** a Promise that will resolve with the Schema definitions
@@ -175,7 +175,7 @@ Generates the URL to be used for a direct file download for the given Schema FQN
 
 ```javascript
 EntityDataModelApi.getSchemaFormatted(
-  { "namespace": "LOOM", "name": "MySchema" },
+  { "namespace": "LATTICE", "name": "MySchema" },
   "json"
 );
 ```
@@ -197,7 +197,7 @@ Creates a new Schema definition, if it doesn't exist.
 ```javascript
 EntityDataModelApi.createSchema(
   {
-    "fqn": { "namespace": "LOOM", "name": "MySchema" },
+    "fqn": { "namespace": "LATTICE", "name": "MySchema" },
     "propertyTypes": [],
     "entityTypes": []
   }
@@ -220,7 +220,7 @@ Creates a new empty Schema definition for the given Schema FQN, if it doesn't ex
 
 ```javascript
 EntityDataModelApi.createEmptySchema(
-  { "namespace": "LOOM", "name": "MySchema" }
+  { "namespace": "LATTICE", "name": "MySchema" }
 );
 ```
 
@@ -243,7 +243,7 @@ Updates the Schema definition for the given Schema FQN.
 
 ```javascript
 EntityDataModelApi.updateSchema(
-  { "namespace": "LOOM", "name": "MySchema" },
+  { "namespace": "LATTICE", "name": "MySchema" },
   "action": "ADD",
   "entityTypeIds": [
     "ec6865e6-e60e-424b-a071-6a9c1603d735"
@@ -323,7 +323,7 @@ EntityDataModelApi.createEntitySets(
   [
     {
       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
-      "type": { "namespace": "LOOM", "name": "MyEntity" },
+      "type": { "namespace": "LATTICE", "name": "MyEntity" },
       "name": "MyEntities",
       "title": "My Entities",
       "description": "a collection of MyEntity EntityTypes",
@@ -371,11 +371,11 @@ Updates the EntityType definition for the given EntityType UUID with the given m
 EntityDataModelApi.updateEntitySetMetaData(
   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   {
-    "type": { namespace: "LOOM", name: "UpdatedEntitySet" },
+    "type": { namespace: "LATTICE", name: "UpdatedEntitySet" },
     "name": "MyEntitySet",
     "title": "MyEntitySet",
     "description": "MyEntitySet description",
-    "contacts": ["support@kryptnostic.com"]
+    "contacts": ["support@openlattice.com"]
   }
 );
 ```
@@ -414,7 +414,7 @@ Gets the EntityType UUID for the given EntityType FQN.
 
 ```javascript
 EntityDataModelApi.getEntityTypeId(
-  { "namespace": "LOOM", "name": "MyProperty" }
+  { "namespace": "LATTICE", "name": "MyProperty" }
 );
 ```
 
@@ -466,11 +466,11 @@ Creates a new EntityType definition, if it doesn't exist.
 EntityDataModelApi.createEntityType(
   {
     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
-    "type": { "namespace": "LOOM", "name": "MyEntity" },
+    "type": { "namespace": "LATTICE", "name": "MyEntity" },
     "title": "title",
     "description": "description",
     "schemas": [
-      { "namespace": "LOOM", "name": "MySchema" }
+      { "namespace": "LATTICE", "name": "MySchema" }
     ],
     "key": [
       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
@@ -568,11 +568,11 @@ Updates the EntityType definition for the given EntityType UUID with the given m
 EntityDataModelApi.updateEntityTypeMetaData(
   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   {
-    "type": { "namespace": "LOOM", "name": "UpdatedEntity" },
+    "type": { "namespace": "LATTICE", "name": "UpdatedEntity" },
     "name": "MyEntity",
     "title": "MyEntity",
     "description": "MyEntity description",
-    "contacts": ["support@kryptnostic.com"]
+    "contacts": ["support@openlattice.com"]
   }
 );
 ```
@@ -631,7 +631,7 @@ Gets the PropertyType UUID for the given PropertyType FQN.
 
 ```javascript
 EntityDataModelApi.getPropertyTypeId(
-  { namespace: "LOOM", name: "MyProperty" }
+  { namespace: "LATTICE", name: "MyProperty" }
 );
 ```
 
@@ -665,7 +665,7 @@ Gets all PropertyType definitions under the given namespace.
 **Examples**
 
 ```javascript
-EntityDataModelApi.getAllPropertyTypesInNamespace("LOOM");
+EntityDataModelApi.getAllPropertyTypesInNamespace("LATTICE");
 ```
 
 Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;PropertyType>>** a Promise that will resolve with the PropertyType definitions
@@ -687,11 +687,11 @@ Creates a new PropertyType definition, if it doesn't exist.
 EntityDataModelApi.createPropertyType(
   {
     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
-    "type": { "namespace": "LOOM", "name": "MyProperty" },
+    "type": { "namespace": "LATTICE", "name": "MyProperty" },
     "title": "title",
     "description": "description",
     "schemas": [
-      { "namespace": "LOOM", "name": "MySchema" }
+      { "namespace": "LATTICE", "name": "MySchema" }
     ],
     "datatype": "String",
     "piiField": false,
@@ -737,11 +737,11 @@ Updates the PropertyType definition for the given PropertyType UUID with the giv
 EntityDataModelApi.updatePropertyTypeMetaData(
   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   {
-    "type": { "namespace": "LOOM", "name": "UpdatedProperty" },
+    "type": { "namespace": "LATTICE", "name": "UpdatedProperty" },
     "name": "MyProperty",
     "title": "MyProperty",
     "description": "MyProperty description",
-    "contacts": ["support@kryptnostic.com"]
+    "contacts": ["support@openlattice.com"]
   }
 );
 ```
@@ -897,11 +897,11 @@ Creates a new ComplexType definition, if it doesn't exist.
 EntityDataModelApi.createComplexType(
   {
     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
-    "type": { "namespace": "LOOM", "name": "MyComplexType" },
+    "type": { "namespace": "LATTICE", "name": "MyComplexType" },
     "title": "title",
     "description": "description",
     "schemas": [
-      { "namespace": "LOOM", "name": "MySchema" }
+      { "namespace": "LATTICE", "name": "MySchema" }
     ],
     "properties": [
       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
@@ -983,14 +983,14 @@ Creates a new EnumType definition, if it doesn't exist.
 EntityDataModelApi.createEnumType(
   {
     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
-    "type": { "namespace": "LOOM", "name": "MyEnumType" },
+    "type": { "namespace": "LATTICE", "name": "MyEnumType" },
     "title": "title",
     "description": "description",
     "members": [
       "Blue", "Red", "Green"
     ],
     "schemas": [
-      { "namespace": "LOOM", "name": "MySchema" }
+      { "namespace": "LATTICE", "name": "MySchema" }
     ],
     "datatype": "String",
     "flags": false,

@@ -35,6 +35,10 @@
           "body": 1,
           "parameters": 2
         },
+        "FunctionExpression": {
+          "body": 1,
+          "parameters": 2
+        },
         "SwitchCase": 1
       }
     ],

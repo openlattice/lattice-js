@@ -7,7 +7,7 @@ import {
   INVALID_SS_PARAMS
 } from '../constants/InvalidParams';
 
-const MOCK_NAMESPACE = 'LOOM';
+const MOCK_NAMESPACE = 'LATTICE';
 const MOCK_NAME = 'DATA';
 const MOCK_FQN_STRING = `${MOCK_NAMESPACE}.${MOCK_NAME}`;
 

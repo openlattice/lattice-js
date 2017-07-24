@@ -18,12 +18,12 @@ TODO: add description
 **Examples**
 
 ```javascript
-import Loom from 'loom-data';
-// Loom.DataSourcesApi.get...
+import Lattice from 'lattice';
+// Lattice.DataSourcesApi.get...
 ```
 
 ```javascript
-import { DataSourcesApi } from 'loom-data';
+import { DataSourcesApi } from 'lattice';
 // DataSourcesApi.get...
 ```
 
@@ -35,7 +35,7 @@ Gets the DataSource definition for the given DataSource UUID.
 
 **Parameters**
 
--   `dataSourceId` **UUID** 
+-   `dataSourceId` **UUID**
 
 **Examples**
 
@@ -53,7 +53,7 @@ Creates a new DataSource definition if it doesn't exist, or updates the existing
 
 **Parameters**
 
--   `dataSource` **DataSource** 
+-   `dataSource` **DataSource**
 
 **Examples**
 
@@ -62,7 +62,7 @@ DataSourcesApi.createOrUpdateDataSource(
   {
     "id": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
     "title": "My DataSource",
-    "description": "a DataSource to be integrated into Loom",
+    "description": "a DataSource to be integrated",
     "entitySetIds": [
       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
       "fae6af98-2675-45bd-9a5b-1619a87235a8"
@@ -81,7 +81,7 @@ Deletes the DataSource definition for the given DataSource UUID.
 
 **Parameters**
 
--   `dataSourceId` **UUID** 
+-   `dataSourceId` **UUID**
 
 **Examples**
 
@@ -97,7 +97,7 @@ Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 **Parameters**
 
--   `dataSourceId` **UUID** 
+-   `dataSourceId` **UUID**
 
 **Examples**
 
@@ -113,8 +113,8 @@ Returns **[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 **Parameters**
 
--   `dataSourceId` **UUID** 
--   `syncId` **UUID** 
+-   `dataSourceId` **UUID**
+-   `syncId` **UUID**
 
 **Examples**
 

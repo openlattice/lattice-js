@@ -1,4 +1,4 @@
-/* eslint-disable no-array-constructor, no-new-object, no-new-wrappers */
+/* eslint-disable no-array-constructor, no-new-object, no-new-wrappers, no-multi-spaces */
 const INVALID_PARAMS :any[] = [
   undefined,          // 0
   null,               // 1

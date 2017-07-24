@@ -3,17 +3,17 @@
  */
 
 /**
- * PermissionsApi gives access to Loom's REST API for managing ACLs on existing EntityDataModel schemas.
+ * PermissionsApi gives access to OpenLattice's REST API for managing ACLs on existing EntityDataModel schemas.
  *
  * @module PermissionsApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.PermissionsApi.get...
+ * import Lattice from 'lattice';
+ * // Lattice.PermissionsApi.get...
  *
  * @example
- * import { PermissionsApi } from 'loom-data';
+ * import { PermissionsApi } from 'lattice';
  * // PermissionsApi.get...
  */
 
@@ -43,7 +43,7 @@ const LOG = new Logger('PermissionsApi');
  * Gets the ACL for the given ACL Key, only if the user is the owner of the ACL Key.
  *
  * @static
- * @memberof loom-data.PermissionsApi
+ * @memberof lattice.PermissionsApi
  * @param {UUID[]} aclKey
  * @returns {Promise<Acl>}
  *
@@ -81,7 +81,7 @@ export function getAcl(aclKey :UUID[]) :Promise<> {
  * Updates the Ace for a particular ACL Key, only if the user is the owner of the ACL Key.
  *
  * @static
- * @memberof loom-data.PermissionsApi
+ * @memberof lattice.PermissionsApi
  * @param {AclData} aclData
  * @returns {Promise}
  *

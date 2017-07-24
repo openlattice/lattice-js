@@ -27,7 +27,7 @@ import {
   getMockAxiosInstance
 } from '../utils/MockDataUtils';
 
-const MOCK_USER_ID = 'kryptnostic';
+const MOCK_USER_ID = 'openlattice';
 const MOCK_ROLE = 'admin';
 
 let mockAxiosInstance = null;

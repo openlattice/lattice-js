@@ -25,7 +25,7 @@ const LOG = new Logger('LinkingEntityType');
 
 /**
  * @class LinkingEntityType
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class LinkingEntityType {
 
@@ -43,7 +43,7 @@ export default class LinkingEntityType {
 
 /**
  * @class LinkingEntityTypeBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class LinkingEntityTypeBuilder {
 

@@ -22,7 +22,7 @@ const LOG = new Logger('AclData');
 
 /**
  * @class AclData
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class AclData {
 
@@ -38,7 +38,7 @@ export default class AclData {
 
 /**
  * @class AclDataBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class AclDataBuilder {
 

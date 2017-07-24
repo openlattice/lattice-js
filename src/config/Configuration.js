@@ -4,7 +4,7 @@
 
 /**
  * @module Configuration
- * @memberof loom-data
+ * @memberof lattice
  */
 
 import Immutable from 'immutable';
@@ -39,10 +39,10 @@ let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string
  *   - "openlattice"
  *   - "api"
  *
- * @memberof loom-data.Configuration
+ * @memberof lattice.Configuration
  * @param {Object} config - an object literal containing all configuration options
  * @param {string} config.authToken - a Base64-encoded JWT auth token
- * @param {string} config.baseUrl - a full URL, or a simple URL identifier, defaults to https://api.loom.digital
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier
  */
 function configure(config :Object) {
 
@@ -69,12 +69,7 @@ function configure(config :Object) {
       configObj = configObj.set('baseUrl', EnvToUrlMap.get('LOCAL'));
     }
     // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://')
-        && (
-          config.baseUrl.endsWith('loom.digital')
-          || config.baseUrl.endsWith('thedataloom.com')
-          || config.baseUrl.endsWith('openlattice.com')
-        )) {
+    else if (config.baseUrl.startsWith('https://') && config.baseUrl.endsWith('openlattice.com')) {
       configObj = configObj.set('baseUrl', config.baseUrl);
     }
     else {

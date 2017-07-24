@@ -20,7 +20,7 @@ const LOG = new Logger('Schema');
 
 /**
  * @class Schema
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class Schema {
 
@@ -41,7 +41,7 @@ export default class Schema {
 
 /**
  * @class SchemaBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class SchemaBuilder {
 

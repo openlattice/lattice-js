@@ -20,12 +20,12 @@ We're trying to follow `SemVer`, so please make sure you're familiar with the ph
 - http://semver.org
 - https://docs.npmjs.com/misc/semver
 
-Until we reach `v1.0.0`, please **DO NOT** release a `major` version. To run the release script, make sure you're inside `loom-data-js`, and run one of the following commands:
+Until we reach `v1.0.0`, please **DO NOT** release a `major` version. To run the release script, make sure you're inside `lattice-js`, and run one of the following commands:
 
     npm run release:minor
     npm run release:patch
 
-Please take note of the release version; you'll see things like `releasing v0.1.2` and `loom-data@0.1.2`.
+Please take note of the release version; you'll see things like `releasing v0.1.2` and `lattice@0.1.2`.
 
 **IMPORTANT:** We're not done yet!
 

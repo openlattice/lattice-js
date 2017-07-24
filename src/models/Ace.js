@@ -27,7 +27,7 @@ const LOG = new Logger('Ace');
 
 /**
  * @class Ace
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class Ace {
 
@@ -43,7 +43,7 @@ export default class Ace {
 
 /**
  * @class AceBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class AceBuilder {
 

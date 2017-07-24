@@ -6,14 +6,14 @@
  * LinkingApi ...
  *
  * @module LinkingApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.LinkingApi.link...
+ * import Lattice from 'lattice';
+ * // Lattice.LinkingApi.link...
  *
  * @example
- * import { LinkingApi } from 'loom-data';
+ * import { LinkingApi } from 'lattice';
  * // LinkingApi.link...
  */
 
@@ -49,7 +49,7 @@ const LOG = new Logger('LinkingApi');
  * the given LinkingEntityType parameter.
  *
  * @static
- * @memberof loom-data.LinkingApi
+ * @memberof lattice.LinkingApi
  * @param {LinkingEntityType} linkingEntityType
  * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the newly-created EntityType
  * as its fulfillment value
@@ -96,7 +96,7 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
  * a call to LinkingApi.createLinkingEntityType() must have been made for this EntitySet's EntityType.
  *
  * @static
- * @memberof loom-data.LinkingApi
+ * @memberof lattice.LinkingApi
  * @param {LinkingEntitySet} linkingEntitySet
  * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the newly-created EntitySet
  * as its fulfillment value
@@ -144,7 +144,7 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
 //  * `POST /linking/set/{syncId}/{entitySetId}/{entityId}`
 //  *
 //  * @static
-//  * @memberof loom-data.LinkingApi
+//  * @memberof lattice.LinkingApi
 //  * @returns {Promise<UUID>}
 //  *
 //  * TODO: add documentation
@@ -161,7 +161,7 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
 //  * `PUT /linking/set/{syncId}/{entitySetId}/{entityId}`
 //  *
 //  * @static
-//  * @memberof loom-data.LinkingApi
+//  * @memberof lattice.LinkingApi
 //  * @returns {Promise}
 //  *
 //  * TODO: add documentation
@@ -178,7 +178,7 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
 //  * `DELETE /linking/set/{syncId}/{entitySetId}/{entityId}`
 //  *
 //  * @static
-//  * @memberof loom-data.LinkingApi
+//  * @memberof lattice.LinkingApi
 //  * @returns {Promise}
 //  *
 //  * TODO: add documentation
@@ -195,7 +195,7 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
 //  * `PUT /linking/set/{syncId}/{entitySetId}/{entityId}/{linkedEntityId}`
 //  *
 //  * @static
-//  * @memberof loom-data.LinkingApi
+//  * @memberof lattice.LinkingApi
 //  * @returns {Promise}
 //  *
 //  * TODO: add documentation
@@ -212,7 +212,7 @@ export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
 //  * `DELETE /linking/set/{syncId}/{entitySetId}/{entityId}/{linkedEntityId}`
 //  *
 //  * @static
-//  * @memberof loom-data.LinkingApi
+//  * @memberof lattice.LinkingApi
 //  * @returns {Promise}
 //  *
 //  * TODO: add documentation

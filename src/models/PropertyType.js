@@ -26,7 +26,7 @@ const LOG = new Logger('PropertyType');
 
 /**
  * @class PropertyType
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class PropertyType {
 
@@ -64,7 +64,7 @@ export default class PropertyType {
 
 /**
  * @class PropertyTypeBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class PropertyTypeBuilder {
 
