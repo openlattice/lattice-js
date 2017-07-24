@@ -1042,6 +1042,52 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
     });
 }
 
+
+/**
+ * `PATCH /edm/entity/type/{uuid}/property/type`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by reordering its properties as
+ * specified by the provided list
+ *
+ * @static
+ * @memberof loom-data.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeIds
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.reorderPropertyTypesInEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["4b08e1f9-4a00-4169-92ea-10e377070220", "a00e2ce8-912d-49c9-a259-e6c1ffebf053"]
+ * );
+ */
+export function reorderPropertyTypesInEntityType(entityTypeId :UUID, propertyTypeIds :UUID[]) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  else if (!isValidUuidArray(propertyTypeIds)) {
+    errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .patch(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${PROPERTY_TYPE_PATH}`, propertyTypeIds)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 /**
  * `PATCH /edm/entity/type/{uuid}`
  *
