@@ -852,6 +852,20 @@ export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<> {
  */
 export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promise<> {
 
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityId)) {
+    errorMsg = 'invalid parameter: entityId must be a valid UUID';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(SEARCH_API)
     .get(`/${entitySetId}/${entityId}`)
     .then((axiosResponse) => {
@@ -881,6 +895,20 @@ export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promis
  * ["3bf2a30d-fda0-4389-a1e6-8546b230efad","a62a47fe-e6a7-4536-85f1-fe935902a536"]);
  */
 export function searchEntityNeighborsBulk(entitySetId :UUID, entityIds :UUID[]) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuidArray(entityIds)) {
+    errorMsg = 'invalid parameter: entityIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entityIds);
+    return Promise.reject(errorMsg);
+  }
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${entitySetId}/${NEIGHBORS_PATH}`, entityIds)
