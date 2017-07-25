@@ -50,9 +50,9 @@ const USERS_PATH :string = 'users';
 // SearchApi specific paths
 const ADVANCED_PATH :string = 'advanced';
 const FQN_PATH :string = 'fqn';
+const NEIGHBORS_PATH :string = 'neighbors';
 const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
 const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
-const NEIGHBORS_PATH :string = 'neighbors';
 
 describe('ApiPaths', () => {
 
@@ -267,6 +267,11 @@ describe('ApiPaths', () => {
       expect(ApiPaths.FQN_PATH).toEqual(FQN_PATH);
     });
 
+    it(`should expose "${NEIGHBORS_PATH}"`, () => {
+      expect(ApiPaths.NEIGHBORS_PATH).toBeDefined();
+      expect(ApiPaths.NEIGHBORS_PATH).toEqual(NEIGHBORS_PATH);
+    });
+
     it(`should expose "${SEARCH_ENTITY_TYPES_PATH}"`, () => {
       expect(ApiPaths.SEARCH_ENTITY_TYPES_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_ENTITY_TYPES_PATH).toEqual(SEARCH_ENTITY_TYPES_PATH);
@@ -275,11 +280,6 @@ describe('ApiPaths', () => {
     it(`should expose "${SEARCH_PROPERTY_TYPES_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PROPERTY_TYPES_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_PROPERTY_TYPES_PATH).toEqual(SEARCH_PROPERTY_TYPES_PATH);
-    });
-
-    it(`should expose "${NEIGHBORS_PATH}"`, () => {
-      expect(ApiPaths.NEIGHBORS_PATH).toBeDefined();
-      expect(ApiPaths.NEIGHBORS_PATH).toEqual(NEIGHBORS_PATH);
     });
 
   });
