@@ -26,7 +26,7 @@ const LOG = new Logger('Organization');
 
 /**
  * @class Organization
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class Organization {
 
@@ -64,7 +64,7 @@ export default class Organization {
 
 /**
  * @class OrganizationBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class OrganizationBuilder {
 

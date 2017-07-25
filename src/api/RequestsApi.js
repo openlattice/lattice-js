@@ -8,14 +8,14 @@
  * TODO: add description
  *
  * @module RequestsApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.RequestsApi.get...
+ * import Lattice from 'lattice';
+ * // Lattice.RequestsApi.get...
  *
  * @example
- * import { RequestsApi } from 'loom-data';
+ * import { RequestsApi } from 'lattice';
  * // RequestsApi.get...
  */
 
@@ -64,7 +64,7 @@ const LOG = new Logger('RequestsApi');
  * TODO: add tests
  *
  * @static
- * @memberof loom-data.RequestsApi
+ * @memberof lattice.RequestsApi
  * @param {RequestState} state (optional)
  * @param {UUID[][]} aclKeys (optional)
  * @returns {Promise<RequestStatus[]>}
@@ -173,7 +173,7 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<> {
  * TODO: add description
  *
  * @static
- * @memberof loom-data.RequestsApi
+ * @memberof lattice.RequestsApi
  * @param {Request[]} requests
  * @returns {Promise}
  *
@@ -217,7 +217,7 @@ export function submitRequests(requests :Request[]) :Promise<> {
  * TODO: add description
  *
  * @static
- * @memberof loom-data.RequestsApi
+ * @memberof lattice.RequestsApi
  * @param {Status[]} statuses
  * @returns {Promise}
  *

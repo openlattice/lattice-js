@@ -52,6 +52,7 @@ export const USERS_PATH :string = 'users';
 // SearchApi specific paths
 export const ADVANCED_PATH :string = 'advanced';
 export const FQN_PATH :string = 'fqn';
+export const NEIGHBORS_PATH :string = 'neighbors';
 export const SEARCH_ENTITY_SETS_PATH :string = 'entity_sets';
 export const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
 export const SEARCH_ASSOCIATION_TYPES_PATH :string = 'association_types';

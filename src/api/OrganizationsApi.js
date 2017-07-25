@@ -6,14 +6,14 @@
  * OrganizationsApi ...
  *
  * @module OrganizationsApi
- * @memberof loom-data
+ * @memberof lattice
  *
  * @example
- * import Loom from 'loom-data';
- * // Loom.OrganizationsApi.get...
+ * import Lattice from 'lattice';
+ * // Lattice.OrganizationsApi.get...
  *
  * @example
- * import { OrganizationsApi } from 'loom-data';
+ * import { OrganizationsApi } from 'lattice';
  * // OrganizationsApi.get...
  */
 
@@ -66,7 +66,7 @@ const LOG = new Logger('OrganizationsApi');
  * Gets the information for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @returns {Promise<Organization>}
  *
@@ -100,7 +100,7 @@ export function getOrganization(organizationId :UUID) :Promise<> {
  * Gets all Organization information.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @returns {Promise<Organization[]>}
  *
  * @example
@@ -122,10 +122,10 @@ export function getAllOrganizations() {
 /**
  * `POST /organizations`
  *
- * Creates a new Organization, it it does not already exist.
+ * Creates a new Organization, if it does not already exist.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {Organization} organization
  * @returns {Promise<UUID>}
  *
@@ -171,7 +171,7 @@ export function createOrganization(organization :Organization) :Promise<> {
  * Deletes the Organization for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @returns {Promise}
  *
@@ -205,7 +205,7 @@ export function deleteOrganization(organizationId :UUID) :Promise<> {
  * Updates the title for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string} title
  * @returns {Promise}
@@ -255,7 +255,7 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<> {
  * Updates the description for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string} description
  * @returns {Promise}
@@ -305,7 +305,7 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
  * Gets the auto-approved email domains for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @returns {Promise<string[]>}
  *
@@ -339,7 +339,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
  * Adds the given email domain to the auto-approved email domains for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string} emailDomain
  * @returns {Promise}
@@ -347,7 +347,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
  * @example
  * OrganizationsApi.addAutoApprovedEmailDomain(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "kryptnostic.com"
+ *   "openlattice.com"
  * );
  */
 export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
@@ -383,7 +383,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
  * Adds the given email domains to the auto-approved email domains for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string[]} emailDomains
  * @returns {Promise}
@@ -392,7 +392,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
  * OrganizationsApi.addAutoApprovedEmailDomains(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   [
- *     "kryptnostic.com"
+ *     "openlattice.com"
  *   ]
  * );
  */
@@ -435,7 +435,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  * Sets the auto-approved email domains for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string[]} emailDomains
  * @returns {Promise}
@@ -444,7 +444,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  * OrganizationsApi.setAutoApprovedEmailDomains(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   [
- *     "kryptnostic.com"
+ *     "openlattice.com"
  *   ]
  * );
  */
@@ -487,7 +487,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  * Removes the given email domain from the auto-approved email domains for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string} emailDomain
  * @returns {Promise}
@@ -495,7 +495,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  * @example
  * OrganizationsApi.removeAutoApprovedEmailDomain(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "kryptnostic.com"
+ *   "openlattice.com"
  * );
  */
 export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
@@ -531,7 +531,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
  * Removes the given email domains from the auto-approved email domains for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string[]} emailDomains
  * @returns {Promise}
@@ -540,7 +540,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
  * OrganizationsApi.removeAutoApprovedEmailDomains(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   [
- *     "kryptnostic.com"
+ *     "openlattice.com"
  *   ]
  * );
  */
@@ -587,7 +587,7 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
  * Gets all Principals for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @returns {Promise<Principal[]>}
  *
@@ -620,7 +620,7 @@ export function getAllPrincipals(organizationId :UUID) {
  * Adds the given Principal to the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {PrincipalType} principalType
  * @param {string} principalId
@@ -672,7 +672,7 @@ export function addPrincipal(organizationId :UUID, principalType :PrincipalType,
  * Adds the given Principals to the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {Principal[]} principals
  * @returns {Promise}
@@ -725,7 +725,7 @@ export function addPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  * Sets the given Principals for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {Principal[]} principals
  * @returns {Promise}
@@ -777,7 +777,7 @@ export function setPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  * Removes the given Principal from the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {PrincipalType} principalType
  * @param {string} principalId
@@ -829,7 +829,7 @@ export function removePrincipal(organizationId :UUID, principalType :PrincipalTy
  * Removes the given Principals from the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {Principal[]} principals
  * @returns {Promise}
@@ -885,7 +885,7 @@ export function removePrincipals(organizationId :UUID, principals :Principal[]) 
  * Gets all Roles for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @returns {Promise<Principal[]>}
  *
@@ -919,7 +919,7 @@ export function getAllRoles(organizationId :UUID) {
  * Gets all Roles for the given Organization UUID.
  *
  * @static
- * @memberof loom-data.OrganizationsApi
+ * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @returns {Promise<Principal[]>}
  *

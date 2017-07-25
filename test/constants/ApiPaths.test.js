@@ -50,6 +50,7 @@ const USERS_PATH :string = 'users';
 // SearchApi specific paths
 const ADVANCED_PATH :string = 'advanced';
 const FQN_PATH :string = 'fqn';
+const NEIGHBORS_PATH :string = 'neighbors';
 const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
 const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
 
@@ -264,6 +265,11 @@ describe('ApiPaths', () => {
     it(`should expose "${FQN_PATH}"`, () => {
       expect(ApiPaths.FQN_PATH).toBeDefined();
       expect(ApiPaths.FQN_PATH).toEqual(FQN_PATH);
+    });
+
+    it(`should expose "${NEIGHBORS_PATH}"`, () => {
+      expect(ApiPaths.NEIGHBORS_PATH).toBeDefined();
+      expect(ApiPaths.NEIGHBORS_PATH).toEqual(NEIGHBORS_PATH);
     });
 
     it(`should expose "${SEARCH_ENTITY_TYPES_PATH}"`, () => {

@@ -18,7 +18,7 @@ const LOG = new Logger('Principal');
 
 /**
  * @class Principal
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class Principal {
 
@@ -44,7 +44,7 @@ export default class Principal {
 
 /**
  * @class PrincipalBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class PrincipalBuilder {
 

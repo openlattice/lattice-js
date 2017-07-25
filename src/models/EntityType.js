@@ -32,7 +32,7 @@ const LOG = new Logger('EntityType');
 
 /**
  * @class EntityType
- * @memberof loom-data
+ * @memberof lattice
  */
 export default class EntityType {
 
@@ -85,7 +85,7 @@ export default class EntityType {
 
 /**
  * @class EntityTypeBuilder
- * @memberof loom-data
+ * @memberof lattice
  */
 export class EntityTypeBuilder {
 

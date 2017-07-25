@@ -40,7 +40,7 @@ import {
 
 const MOCK_TITLE = 'MyOrganization';
 const MOCK_DESCRIPTION = 'what an organization';
-const MOCK_EMAIL_DOMAIN = 'kryptnostic.com';
+const MOCK_EMAIL_DOMAIN = 'openlattice.com';
 
 const MOCK_PRINCIPAL_TYPE = 'USER';
 const MOCK_PRINCIPAL_ID = 'principalId';
