@@ -47,6 +47,7 @@ export const MEMBERS_PATH :string = 'members';
 export const TITLE_PATH :string = 'title';
 
 // PrincipalsApi specific paths
+export const EMAIL_PATH :string = 'email';
 export const USERS_PATH :string = 'users';
 
 // SearchApi specific paths

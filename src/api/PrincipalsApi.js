@@ -17,8 +17,6 @@
  * // PrincipalsApi.get...
  */
 
-import isUndefined from 'lodash/isUndefined';
-
 import Logger from '../utils/Logger';
 
 import {
@@ -26,7 +24,8 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  ROLES_PATH,
+  EMAIL_PATH,
+  SEARCH_PATH,
   USERS_PATH
 } from '../constants/ApiPaths';
 
@@ -35,9 +34,7 @@ import {
 } from '../utils/AxiosUtils';
 
 import {
-  isEmptyArray,
-  isNonEmptyString,
-  isNonEmptyStringArray
+  isNonEmptyString
 } from '../utils/LangUtils';
 
 const LOG = new Logger('PrincipalsApi');
@@ -92,172 +89,6 @@ export function getAllUsers() :Promise<> {
 }
 
 /**
- * `GET /principals/roles/{role}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-export function getAllUsersForRole(role :string) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${ROLES_PATH}/${role}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /principals/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-export function getAllUsersForAllRoles() :Promise<> {
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${ROLES_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `PUT /principals/users/{userId}/roles/{role}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @param {string} role
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-export function addRoleToUser(userId :string, role :string) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .put(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `PUT /principals/users/{userId}/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @param {string[]} roles
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-export function setUserRoles(userId :string, roles :string[]) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  let userRoles = roles;
-  if (isUndefined(roles) || isEmptyArray(roles)) {
-    userRoles = [];
-  }
-  else if (!isNonEmptyStringArray(roles)) {
-    errorMsg = 'invalid parameter: roles must be an array of strings';
-    LOG.error(errorMsg, roles);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .put(`/${USERS_PATH}/${userId}/${ROLES_PATH}`, userRoles)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `DELETE /principals/users/{userId}/roles/{role}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @param {string} role
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-export function removeRoleFromUser(userId :string, role :string) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .delete(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `GET /principals/users/search/email/{searchQuery}`
  *
  * @static
@@ -278,7 +109,7 @@ export function searchAllUsersByEmail(searchQuery :string) :Promise<> {
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}/search/email/${searchQuery}`)
+    .get(`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${searchQuery}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

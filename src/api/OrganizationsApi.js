@@ -880,7 +880,48 @@ export function removePrincipals(organizationId :UUID, principals :Principal[]) 
 }
 
 /**
- * `GET /organizations/{uuid}/principals/roles`
+ * `GET /organizations/{orgId}/principals/roles/{roleId}`
+ *
+ * Gets the Role for the given Organization UUID corresponding to the given Role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} orgId
+ * @param {UUID} roleId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.getRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
+ */
+export function getRole(organizationId :UUID, roleId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /organizations/{orgId}/principals/roles`
  *
  * Gets all Roles for the given Organization UUID.
  *
@@ -914,7 +955,7 @@ export function getAllRoles(organizationId :UUID) {
 }
 
 /**
- * `GET /organizations/{uuid}/principals/members`
+ * `GET /organizations/{orgId}/principals/members`
  *
  * Gets all Roles for the given Organization UUID.
  *
@@ -938,6 +979,112 @@ export function getAllMembers(organizationId :UUID) {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
+ *
+ * Assigns the role identified by the given org UUID and role UUID to the member of the organization identified by
+ * the given member UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} orgId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.addRoleToMember(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "memberId"
+ * );
+ */
+export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${MEMBERS_PATH}/${memberId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
+ *
+ * Removes the role identified by the given org UUID and role UUID from the member of the organization identified by
+ * the given member UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} orgId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.removeRoleFromMember(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "memberId"
+ * );
+ */
+export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .delete(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${MEMBERS_PATH}/${memberId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

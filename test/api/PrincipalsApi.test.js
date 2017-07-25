@@ -8,7 +8,8 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  ROLES_PATH,
+  EMAIL_PATH,
+  SEARCH_PATH,
   USERS_PATH
 } from '../../src/constants/ApiPaths';
 
@@ -28,7 +29,7 @@ import {
 } from '../utils/MockDataUtils';
 
 const MOCK_USER_ID = 'openlattice';
-const MOCK_ROLE = 'admin';
+const MOCK_EMAIL = 'support@openlattice.com';
 
 let mockAxiosInstance = null;
 
@@ -45,8 +46,7 @@ describe('PrincipalsApi', () => {
 
   testGetUser();
   testGetAllUsers();
-  testGetAllUsersForRole();
-  testGetAllUsersForAllRoles();
+  testSearchAllUsersByEmail();
 });
 
 function testGetUser() {
@@ -117,14 +117,14 @@ function testGetAllUsers() {
   });
 }
 
-function testGetAllUsersForRole() {
+function testSearchAllUsersByEmail() {
 
-  describe('getAllUsersForRole()', () => {
+  describe('searchAllUsersByEmail()', () => {
 
-    const functionToTest :Function = PrincipalsApi.getAllUsersForRole;
+    const functionToTest :Function = PrincipalsApi.searchAllUsersByEmail;
 
     const validParams :any[] = [
-      MOCK_ROLE
+      MOCK_EMAIL
     ];
 
     const invalidParams :any[] = [
@@ -133,11 +133,11 @@ function testGetAllUsersForRole() {
 
     it('should send a GET request with the correct URL path', (done) => {
 
-      PrincipalsApi.getAllUsersForRole(...validParams)
+      PrincipalsApi.searchAllUsersByEmail(...validParams)
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${ROLES_PATH}/${MOCK_ROLE}`
+            `/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${MOCK_EMAIL}`
           );
           done();
         })
@@ -150,37 +150,6 @@ function testGetAllUsersForRole() {
     testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
     testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-
-  });
-}
-
-function testGetAllUsersForAllRoles() {
-
-  describe('getAllUsersForAllRoles()', () => {
-
-    const functionToTest :Function = PrincipalsApi.getAllUsersForAllRoles;
-
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
-
-    it('should send a GET request with the correct URL path', (done) => {
-
-      PrincipalsApi.getAllUsersForAllRoles()
-        .then(() => {
-          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${ROLES_PATH}`
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
-    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
-    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
 
   });
 }
