@@ -24,7 +24,8 @@ import {
 } from '../constants/InvalidParams';
 
 import {
-  MOCK_ORGANIZATION_DM
+  MOCK_ORGANIZATION_DM,
+  MOCK_ROLE_DM
 } from '../constants/MockDataModels';
 
 import {
@@ -56,11 +57,10 @@ const MOCK_ROLE_PRINCIPAL = {
 };
 
 const MOCK_MEMBER_ID = 'google-oauth2|850284592837234579086';
-const MOCK_ROLE_ID = 'fae6af98-2675-45bd-9a5b-1619a87235a8';
 
 let mockAxiosInstance = null;
 
-fdescribe('OrganizationsApi', () => {
+describe('OrganizationsApi', () => {
 
   beforeEach(() => {
     mockAxiosInstance = getMockAxiosInstance();
@@ -91,6 +91,10 @@ fdescribe('OrganizationsApi', () => {
   testRemovePrincipals();
   testGetRole();
   testGetAllRoles();
+  testCreateRole();
+  testDeleteRole();
+  testUpdateRoleTitle();
+  testUpdateRoleDescription();
   testGetAllMembers();
   testAddRoleToMember();
   testRemoveRoleFromMember();
@@ -926,7 +930,7 @@ function testGetRole() {
 
     const validParams :any[] = [
       MOCK_ORGANIZATION_DM.id,
-      MOCK_ROLE_ID
+      MOCK_ROLE_DM.id
     ];
 
     const invalidParams :any[] = [
@@ -940,7 +944,7 @@ function testGetRole() {
         .then(() => {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_ID}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}`
           );
           done();
         })
@@ -978,6 +982,177 @@ function testGetAllRoles() {
           expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.get).toHaveBeenCalledWith(
             `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
+  });
+}
+
+function testCreateRole() {
+
+  describe('createRole()', () => {
+
+    const functionToTest :Function = OrganizationsApi.createRole;
+
+    const validParams :any[] = [
+      MOCK_ROLE_DM
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_PARAMS
+    ];
+
+    it('should send a POST request with the correct URL path and data', (done) => {
+
+      OrganizationsApi.createRole(...validParams)
+        .then(() => {
+          expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith(
+            `/${ROLES_PATH}`,
+            MOCK_ROLE_DM
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
+  });
+}
+
+function testDeleteRole() {
+
+  describe('deleteRole()', () => {
+
+    const functionToTest :Function = OrganizationsApi.deleteRole;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_ROLE_DM.id
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS
+    ];
+
+    it('should send a DELETE request with the correct URL path', (done) => {
+
+      OrganizationsApi.deleteRole(...validParams)
+        .then(() => {
+          expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}`
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
+  });
+}
+
+function testUpdateRoleTitle() {
+
+  describe('updateRoleTitle()', () => {
+
+    const functionToTest :Function = OrganizationsApi.updateRoleTitle;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_ROLE_DM.id,
+      MOCK_TITLE
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
+    ];
+
+    it('should send a PUT request with the correct URL path and data', (done) => {
+
+      OrganizationsApi.updateRoleTitle(...validParams)
+        .then(() => {
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${TITLE_PATH}`,
+            MOCK_TITLE,
+            {
+              headers: {
+                'Content-Type': 'text/plain'
+              }
+            }
+          );
+          done();
+        })
+        .catch(() => {
+          done.fail();
+        });
+    });
+
+    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
+    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
+    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+
+  });
+}
+
+function testUpdateRoleDescription() {
+
+  describe('updateRoleDescription()', () => {
+
+    const functionToTest :Function = OrganizationsApi.updateRoleDescription;
+
+    const validParams :any[] = [
+      MOCK_ORGANIZATION_DM.id,
+      MOCK_ROLE_DM.id,
+      MOCK_DESCRIPTION
+    ];
+
+    const invalidParams :any[] = [
+      INVALID_SS_PARAMS,
+      INVALID_SS_PARAMS,
+      INVALID_PARAMS
+    ];
+
+    it('should send a PUT request with the correct URL path and data', (done) => {
+
+      OrganizationsApi.updateRoleDescription(...validParams)
+        .then(() => {
+          expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
+          expect(mockAxiosInstance.put).toHaveBeenCalledWith(
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${DESCRIPTION_PATH}`,
+            MOCK_DESCRIPTION,
+            {
+              headers: {
+                'Content-Type': 'text/plain'
+              }
+            }
           );
           done();
         })
@@ -1039,7 +1214,7 @@ function testAddRoleToMember() {
 
     const validParams :any[] = [
       MOCK_ORGANIZATION_DM.id,
-      MOCK_ROLE_ID,
+      MOCK_ROLE_DM.id,
       MOCK_MEMBER_ID
     ];
 
@@ -1056,7 +1231,7 @@ function testAddRoleToMember() {
           expect(mockAxiosInstance.put).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.put).toHaveBeenCalledWith(
             /* eslint-disable max-len */
-            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_ID}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
             /* eslint-enable */
           );
           done();
@@ -1082,7 +1257,7 @@ function testRemoveRoleFromMember() {
 
     const validParams :any[] = [
       MOCK_ORGANIZATION_DM.id,
-      MOCK_ROLE_ID,
+      MOCK_ROLE_DM.id,
       MOCK_MEMBER_ID
     ];
 
@@ -1099,7 +1274,7 @@ function testRemoveRoleFromMember() {
           expect(mockAxiosInstance.delete).toHaveBeenCalledTimes(1);
           expect(mockAxiosInstance.delete).toHaveBeenCalledWith(
             /* eslint-disable max-len */
-            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_ID}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
+            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
             /* eslint-enable */
           );
           done();

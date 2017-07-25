@@ -27,6 +27,10 @@ import Organization, {
   isValid as isValidOrganization
 } from '../models/Organization';
 
+import Role, {
+  isValid as isValidRole
+} from '../models/Role';
+
 import {
   ORGANIZATIONS_API
 } from '../constants/ApiNames';
@@ -886,7 +890,7 @@ export function removePrincipals(organizationId :UUID, principals :Principal[]) 
  *
  * @static
  * @memberof lattice.OrganizationsApi
- * @param {UUID} orgId
+ * @param {UUID} organizationId
  * @param {UUID} roleId
  * @return {Promise}
  *
@@ -955,6 +959,206 @@ export function getAllRoles(organizationId :UUID) {
 }
 
 /**
+ * `POST /organizations/roles`
+ *
+ * Creates a new role, if it does not already exist.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.createRole(
+ *   {
+ *     "id": "",
+ *     "organizationId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "title": "Admin",
+ *     "description": "The Administrator",
+ *   }
+ * );
+ */
+export function createRole(role :Role) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidRole(role)) {
+    errorMsg = 'invalid parameter: role must be a valid Role';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${ROLES_PATH}`, role)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/roles/{roleId}`
+ *
+ * Deletes the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.deleteRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
+ */
+export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .delete(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/title`
+ *
+ * Updates the title of the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} title
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateRoleTitle(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "ADMIN"
+ * );
+ */
+export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, title);
+    return Promise.reject(errorMsg);
+  }
+
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${TITLE_PATH}`, title, axiosConfig)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/description`
+ *
+ * Updates the description of the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} description
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateRoleDescription(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "The Administrator"
+ * );
+ */
+export function updateRoleDescription(organizationId :UUID, roleId :UUID, description :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, description);
+    return Promise.reject(errorMsg);
+  }
+
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${DESCRIPTION_PATH}`, description, axiosConfig)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /organizations/{orgId}/principals/members`
  *
  * Gets all Roles for the given Organization UUID.
@@ -967,7 +1171,7 @@ export function getAllRoles(organizationId :UUID) {
  * @example
  * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllMembers(organizationId :UUID) {
+export function getAllMembers(organizationId :UUID) :Promise<> {
 
   let errorMsg = '';
 
@@ -996,10 +1200,10 @@ export function getAllMembers(organizationId :UUID) {
  *
  * @static
  * @memberof lattice.OrganizationsApi
- * @param {UUID} orgId
+ * @param {UUID} organizationId
  * @param {UUID} roleId
  * @param {string} memberId
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * OrganizationsApi.addRoleToMember(
@@ -1049,10 +1253,10 @@ export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :st
  *
  * @static
  * @memberof lattice.OrganizationsApi
- * @param {UUID} orgId
+ * @param {UUID} organizationId
  * @param {UUID} roleId
  * @param {string} memberId
- * @return {Promise}
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * OrganizationsApi.removeRoleFromMember(
