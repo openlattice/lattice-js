@@ -35,7 +35,8 @@ import {
   SEARCH_ENTITY_SETS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
   SEARCH_ASSOCIATION_TYPES_PATH,
-  SEARCH_PROPERTY_TYPES_PATH
+  SEARCH_PROPERTY_TYPES_PATH,
+  NEIGHBORS_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -853,6 +854,36 @@ export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promis
 
   return getApiAxiosInstance(SEARCH_API)
     .get(`/${entitySetId}/${entityId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+
+/**
+ * `POST /search/{entityTypeId}/neighbors`
+ *
+ * Executes a search for all neighbors of all the entities specified, where all entities belong to the
+ * same entity set.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {UUID} entitySetId
+ * @param {UUID[]} entityIds
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntityNeighborsBulk("ec6865e6-e60e-424b-a071-6a9c1603d735",
+ * ["3bf2a30d-fda0-4389-a1e6-8546b230efad","a62a47fe-e6a7-4536-85f1-fe935902a536"]);
+ */
+export function searchEntityNeighborsBulk(entitySetId :UUID, entityIds :UUID[]) :Promise<> {
+
+  return getApiAxiosInstance(SEARCH_API)
+    .post(`/${entitySetId}/${NEIGHBORS_PATH}`, entityIds)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

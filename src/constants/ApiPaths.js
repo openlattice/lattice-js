@@ -56,3 +56,4 @@ export const SEARCH_ENTITY_SETS_PATH :string = 'entity_sets';
 export const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
 export const SEARCH_ASSOCIATION_TYPES_PATH :string = 'association_types';
 export const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
+export const NEIGHBORS_PATH :string = 'neighbors';

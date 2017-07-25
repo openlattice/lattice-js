@@ -52,6 +52,7 @@ const ADVANCED_PATH :string = 'advanced';
 const FQN_PATH :string = 'fqn';
 const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
 const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
+const NEIGHBORS_PATH :string = 'neighbors';
 
 describe('ApiPaths', () => {
 
@@ -274,6 +275,11 @@ describe('ApiPaths', () => {
     it(`should expose "${SEARCH_PROPERTY_TYPES_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PROPERTY_TYPES_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_PROPERTY_TYPES_PATH).toEqual(SEARCH_PROPERTY_TYPES_PATH);
+    });
+
+    it(`should expose "${NEIGHBORS_PATH}"`, () => {
+      expect(ApiPaths.NEIGHBORS_PATH).toBeDefined();
+      expect(ApiPaths.NEIGHBORS_PATH).toEqual(NEIGHBORS_PATH);
     });
 
   });
