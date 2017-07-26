@@ -95,7 +95,6 @@ describe('OrganizationsApi', () => {
   testDeleteRole();
   testUpdateRoleTitle();
   testUpdateRoleDescription();
-  testGetAllMembers();
   testAddRoleToMember();
   testRemoveRoleFromMember();
 });
@@ -1153,43 +1152,6 @@ function testUpdateRoleDescription() {
                 'Content-Type': 'text/plain'
               }
             }
-          );
-          done();
-        })
-        .catch(() => {
-          done.fail();
-        });
-    });
-
-    testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, ORGANIZATIONS_API);
-    testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
-    testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-
-  });
-}
-
-function testGetAllMembers() {
-
-  describe('getAllMembers()', () => {
-
-    const functionToTest :Function = OrganizationsApi.getAllMembers;
-
-    const validParams :any[] = [
-      MOCK_ORGANIZATION_DM.id
-    ];
-
-    const invalidParams :any[] = [
-      INVALID_SS_PARAMS
-    ];
-
-    it('should send a GET request with the correct URL path', (done) => {
-
-      OrganizationsApi.getAllMembers(...validParams)
-        .then(() => {
-          expect(mockAxiosInstance.get).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.get).toHaveBeenCalledWith(
-            `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`
           );
           done();
         })
