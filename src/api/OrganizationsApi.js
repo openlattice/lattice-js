@@ -590,6 +590,7 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
  *
  * Gets all Principals for the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -623,6 +624,7 @@ export function getAllPrincipals(organizationId :UUID) {
  *
  * Adds the given Principal to the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -675,6 +677,7 @@ export function addPrincipal(organizationId :UUID, principalType :PrincipalType,
  *
  * Adds the given Principals to the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -728,6 +731,7 @@ export function addPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  *
  * Sets the given Principals for the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -780,6 +784,7 @@ export function setPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  *
  * Removes the given Principal from the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -832,6 +837,7 @@ export function removePrincipal(organizationId :UUID, principalType :PrincipalTy
  *
  * Removes the given Principals from the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -1255,6 +1261,128 @@ export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberI
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${MEMBERS_PATH}/${memberId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /organizations/{orgId}/principals/members`
+ *
+ * Gets all Roles for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAllMembers(organizationId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/members/{memberId}`
+ *
+ * Adds the member identified by the given member UUID to the organization identified by the given org UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.addMemberToOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "memberId"
+ * );
+ */
+export function addMemberToOrganization(organizationId :UUID, memberId :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${memberId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/members/{memberId}`
+ *
+ * Removes the member identified by the given member UUID from the organization identified by the given org UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.removeMemberFromOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "memberId"
+ * );
+ */
+export function removeMemberFromOrganization(organizationId :UUID, memberId :string) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .delete(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${memberId}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
