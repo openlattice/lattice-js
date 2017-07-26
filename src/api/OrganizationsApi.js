@@ -1159,40 +1159,6 @@ export function updateRoleDescription(organizationId :UUID, roleId :UUID, descri
 }
 
 /**
- * `GET /organizations/{orgId}/principals/members`
- *
- * Gets all Roles for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Principal[]>}
- *
- * @example
- * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-export function getAllMembers(organizationId :UUID) :Promise<> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ORGANIZATIONS_API)
-    .get(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `PUT /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
  *
  * Assigns the role identified by the given org UUID and role UUID to the member of the organization identified by
