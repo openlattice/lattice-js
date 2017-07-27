@@ -45,6 +45,7 @@ const MEMBERS_PATH :string = 'members';
 const TITLE_PATH :string = 'title';
 
 // PrincipalsApi specific paths
+const EMAIL_PATH :string = 'email';
 const USERS_PATH :string = 'users';
 
 // SearchApi specific paths
@@ -247,6 +248,11 @@ describe('ApiPaths', () => {
   });
 
   describe('PrincipalsApi specific paths', () => {
+
+    it(`should expose "${EMAIL_PATH}"`, () => {
+      expect(ApiPaths.EMAIL_PATH).toBeDefined();
+      expect(ApiPaths.EMAIL_PATH).toEqual(EMAIL_PATH);
+    });
 
     it(`should expose "${USERS_PATH}"`, () => {
       expect(ApiPaths.USERS_PATH).toBeDefined();

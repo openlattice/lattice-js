@@ -1,6 +1,6 @@
 import * as Lattice from '../src/index';
 
-declare var __VERSION__ :string;
+declare var __VERSION__;
 
 describe('lattice-js', () => {
 

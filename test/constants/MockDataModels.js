@@ -130,6 +130,13 @@ export const MOCK_REQUEST_STATUS_DM :Object = {
   principal: MOCK_PRINCIPAL_DM
 };
 
+export const MOCK_ROLE_DM :Object = {
+  id: 'fae6af98-2675-45bd-9a5b-1619a87235a8',
+  organizationId: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
+  title: 'title',
+  description: 'description'
+};
+
 export const MOCK_SCHEMA_DM :Object = {
   fqn: MOCK_FQN,
   entityTypes: [MOCK_ENTITY_TYPE_DM],
