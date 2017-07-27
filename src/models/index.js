@@ -4,6 +4,7 @@
 
 import FullyQualifiedName from './FullyQualifiedName';
 
+import AccessCheck, { AccessCheckBuilder } from './AccessCheck';
 import Ace, { AceBuilder } from './Ace';
 import Acl, { AclBuilder } from './Acl';
 import AclData, { AclDataBuilder } from './AclData';
@@ -17,10 +18,13 @@ import Principal, { PrincipalBuilder } from './Principal';
 import PropertyType, { PropertyTypeBuilder } from './PropertyType';
 import Request, { RequestBuilder } from './Request';
 import RequestStatus, { RequestStatusBuilder } from './RequestStatus';
+import Role, { RoleBuilder } from './Role';
 import Schema, { SchemaBuilder } from './Schema';
 
 export {
   FullyQualifiedName,
+  AccessCheck,
+  AccessCheckBuilder,
   Ace,
   AceBuilder,
   Acl,
@@ -47,6 +51,8 @@ export {
   RequestBuilder,
   RequestStatus,
   RequestStatusBuilder,
+  Role,
+  RoleBuilder,
   Schema,
   SchemaBuilder
 };
