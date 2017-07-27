@@ -1,150 +1,170 @@
-import * as DataModels from '../../src/models/index';
+import * as Models from '../../src/models/index';
 
-describe('Lattice.DataModels', () => {
+describe('Lattice.Models', () => {
 
   it('should expose FullyQualifiedName', () => {
-    expect(DataModels.FullyQualifiedName).toBeDefined();
-    expect(DataModels.FullyQualifiedName).toEqual(jasmine.any(Function));
+    expect(Models.FullyQualifiedName).toBeDefined();
+    expect(Models.FullyQualifiedName).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose AccessCheck', () => {
+    expect(Models.AccessCheck).toBeDefined();
+    expect(Models.AccessCheck).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose AccessCheckBuilder', () => {
+    expect(Models.AccessCheckBuilder).toBeDefined();
+    expect(Models.AccessCheckBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose Ace', () => {
-    expect(DataModels.Ace).toBeDefined();
-    expect(DataModels.Ace).toEqual(jasmine.any(Function));
+    expect(Models.Ace).toBeDefined();
+    expect(Models.Ace).toEqual(jasmine.any(Function));
   });
 
   it('should expose AceBuilder', () => {
-    expect(DataModels.AceBuilder).toBeDefined();
-    expect(DataModels.AceBuilder).toEqual(jasmine.any(Function));
+    expect(Models.AceBuilder).toBeDefined();
+    expect(Models.AceBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose Acl', () => {
-    expect(DataModels.Acl).toBeDefined();
-    expect(DataModels.Acl).toEqual(jasmine.any(Function));
+    expect(Models.Acl).toBeDefined();
+    expect(Models.Acl).toEqual(jasmine.any(Function));
   });
 
   it('should expose AclBuilder', () => {
-    expect(DataModels.AclBuilder).toBeDefined();
-    expect(DataModels.AclBuilder).toEqual(jasmine.any(Function));
+    expect(Models.AclBuilder).toBeDefined();
+    expect(Models.AclBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose AclData', () => {
-    expect(DataModels.AclData).toBeDefined();
-    expect(DataModels.AclData).toEqual(jasmine.any(Function));
+    expect(Models.AclData).toBeDefined();
+    expect(Models.AclData).toEqual(jasmine.any(Function));
   });
 
   it('should expose AclDataBuilder', () => {
-    expect(DataModels.AclDataBuilder).toBeDefined();
-    expect(DataModels.AclDataBuilder).toEqual(jasmine.any(Function));
+    expect(Models.AclDataBuilder).toBeDefined();
+    expect(Models.AclDataBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose DataSource', () => {
-    expect(DataModels.DataSource).toBeDefined();
-    expect(DataModels.DataSource).toEqual(jasmine.any(Function));
+    expect(Models.DataSource).toBeDefined();
+    expect(Models.DataSource).toEqual(jasmine.any(Function));
   });
 
   it('should expose DataSourceBuilder', () => {
-    expect(DataModels.DataSourceBuilder).toBeDefined();
-    expect(DataModels.DataSourceBuilder).toEqual(jasmine.any(Function));
+    expect(Models.DataSourceBuilder).toBeDefined();
+    expect(Models.DataSourceBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose EntitySet', () => {
-    expect(DataModels.EntitySet).toBeDefined();
-    expect(DataModels.EntitySet).toEqual(jasmine.any(Function));
+    expect(Models.EntitySet).toBeDefined();
+    expect(Models.EntitySet).toEqual(jasmine.any(Function));
   });
 
   it('should expose EntitySetBuilder', () => {
-    expect(DataModels.EntitySetBuilder).toBeDefined();
-    expect(DataModels.EntitySetBuilder).toEqual(jasmine.any(Function));
+    expect(Models.EntitySetBuilder).toBeDefined();
+    expect(Models.EntitySetBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose EntityType', () => {
-    expect(DataModels.EntityType).toBeDefined();
-    expect(DataModels.EntityType).toEqual(jasmine.any(Function));
+    expect(Models.EntityType).toBeDefined();
+    expect(Models.EntityType).toEqual(jasmine.any(Function));
   });
 
   it('should expose EntityTypeBuilder', () => {
-    expect(DataModels.EntityTypeBuilder).toBeDefined();
-    expect(DataModels.EntityTypeBuilder).toEqual(jasmine.any(Function));
+    expect(Models.EntityTypeBuilder).toBeDefined();
+    expect(Models.EntityTypeBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose LinkingEntitySet', () => {
-    expect(DataModels.LinkingEntitySet).toBeDefined();
-    expect(DataModels.LinkingEntitySet).toEqual(jasmine.any(Function));
+    expect(Models.LinkingEntitySet).toBeDefined();
+    expect(Models.LinkingEntitySet).toEqual(jasmine.any(Function));
   });
 
   it('should expose LinkingEntitySetBuilder', () => {
-    expect(DataModels.LinkingEntitySetBuilder).toBeDefined();
-    expect(DataModels.LinkingEntitySetBuilder).toEqual(jasmine.any(Function));
+    expect(Models.LinkingEntitySetBuilder).toBeDefined();
+    expect(Models.LinkingEntitySetBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose LinkingEntityType', () => {
-    expect(DataModels.LinkingEntityType).toBeDefined();
-    expect(DataModels.LinkingEntityType).toEqual(jasmine.any(Function));
+    expect(Models.LinkingEntityType).toBeDefined();
+    expect(Models.LinkingEntityType).toEqual(jasmine.any(Function));
   });
 
   it('should expose LinkingEntityTypeBuilder', () => {
-    expect(DataModels.LinkingEntityTypeBuilder).toBeDefined();
-    expect(DataModels.LinkingEntityTypeBuilder).toEqual(jasmine.any(Function));
+    expect(Models.LinkingEntityTypeBuilder).toBeDefined();
+    expect(Models.LinkingEntityTypeBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose Organization', () => {
-    expect(DataModels.Organization).toBeDefined();
-    expect(DataModels.Organization).toEqual(jasmine.any(Function));
+    expect(Models.Organization).toBeDefined();
+    expect(Models.Organization).toEqual(jasmine.any(Function));
   });
 
   it('should expose OrganizationBuilder', () => {
-    expect(DataModels.OrganizationBuilder).toBeDefined();
-    expect(DataModels.OrganizationBuilder).toEqual(jasmine.any(Function));
+    expect(Models.OrganizationBuilder).toBeDefined();
+    expect(Models.OrganizationBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose Principal', () => {
-    expect(DataModels.Principal).toBeDefined();
-    expect(DataModels.Principal).toEqual(jasmine.any(Function));
+    expect(Models.Principal).toBeDefined();
+    expect(Models.Principal).toEqual(jasmine.any(Function));
   });
 
   it('should expose PrincipalBuilder', () => {
-    expect(DataModels.PrincipalBuilder).toBeDefined();
-    expect(DataModels.PrincipalBuilder).toEqual(jasmine.any(Function));
+    expect(Models.PrincipalBuilder).toBeDefined();
+    expect(Models.PrincipalBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose PropertyType', () => {
-    expect(DataModels.PropertyType).toBeDefined();
-    expect(DataModels.PropertyType).toEqual(jasmine.any(Function));
+    expect(Models.PropertyType).toBeDefined();
+    expect(Models.PropertyType).toEqual(jasmine.any(Function));
   });
 
   it('should expose PropertyTypeBuilder', () => {
-    expect(DataModels.PropertyTypeBuilder).toBeDefined();
-    expect(DataModels.PropertyTypeBuilder).toEqual(jasmine.any(Function));
+    expect(Models.PropertyTypeBuilder).toBeDefined();
+    expect(Models.PropertyTypeBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose Request', () => {
-    expect(DataModels.Request).toBeDefined();
-    expect(DataModels.Request).toEqual(jasmine.any(Function));
+    expect(Models.Request).toBeDefined();
+    expect(Models.Request).toEqual(jasmine.any(Function));
   });
 
   it('should expose RequestBuilder', () => {
-    expect(DataModels.RequestBuilder).toBeDefined();
-    expect(DataModels.RequestBuilder).toEqual(jasmine.any(Function));
+    expect(Models.RequestBuilder).toBeDefined();
+    expect(Models.RequestBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose RequestStatus', () => {
-    expect(DataModels.RequestStatus).toBeDefined();
-    expect(DataModels.RequestStatus).toEqual(jasmine.any(Function));
+    expect(Models.RequestStatus).toBeDefined();
+    expect(Models.RequestStatus).toEqual(jasmine.any(Function));
   });
 
   it('should expose RequestStatusBuilder', () => {
-    expect(DataModels.RequestStatusBuilder).toBeDefined();
-    expect(DataModels.RequestStatusBuilder).toEqual(jasmine.any(Function));
+    expect(Models.RequestStatusBuilder).toBeDefined();
+    expect(Models.RequestStatusBuilder).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose Role', () => {
+    expect(Models.Role).toBeDefined();
+    expect(Models.Role).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose RoleBuilder', () => {
+    expect(Models.RoleBuilder).toBeDefined();
+    expect(Models.RoleBuilder).toEqual(jasmine.any(Function));
   });
 
   it('should expose Schema', () => {
-    expect(DataModels.Schema).toBeDefined();
-    expect(DataModels.Schema).toEqual(jasmine.any(Function));
+    expect(Models.Schema).toBeDefined();
+    expect(Models.Schema).toEqual(jasmine.any(Function));
   });
 
   it('should expose SchemaBuilder', () => {
-    expect(DataModels.SchemaBuilder).toBeDefined();
-    expect(DataModels.SchemaBuilder).toEqual(jasmine.any(Function));
+    expect(Models.SchemaBuilder).toBeDefined();
+    expect(Models.SchemaBuilder).toEqual(jasmine.any(Function));
   });
 
 });
