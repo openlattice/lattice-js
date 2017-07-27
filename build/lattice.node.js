@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.25.0
+ * lattice - v0.26.0
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -4581,7 +4581,7 @@ var _isError = __webpack_require__(228);
 
 var _isError2 = _interopRequireDefault(_isError);
 
-var _isString = __webpack_require__(19);
+var _isString = __webpack_require__(18);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -4739,11 +4739,11 @@ var _isPlainObject = __webpack_require__(48);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-var _isString = __webpack_require__(19);
+var _isString = __webpack_require__(18);
 
 var _isString2 = _interopRequireDefault(_isString);
 
-var _isUndefined = __webpack_require__(17);
+var _isUndefined = __webpack_require__(19);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -4851,7 +4851,7 @@ var _EntitySet = __webpack_require__(23);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -10272,28 +10272,6 @@ module.exports = {
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var ANALYSIS_API = exports.ANALYSIS_API = 'AnalysisApi';
-var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
-var DATA_API = exports.DATA_API = 'DataApi';
-var DATA_SOURCES_API = exports.DATA_SOURCES_API = 'DataSourcesApi';
-var EDM_API = exports.EDM_API = 'EntityDataModelApi';
-var LINKING_API = exports.LINKING_API = 'LinkingApi';
-var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
-var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
-var REQUESTS_API = exports.REQUESTS_API = 'RequestsApi';
-var SEARCH_API = exports.SEARCH_API = 'SearchApi';
-var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var baseHas = __webpack_require__(230),
     hasPath = __webpack_require__(231);
 
@@ -10332,6 +10310,28 @@ module.exports = has;
 
 
 /***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ANALYSIS_API = exports.ANALYSIS_API = 'AnalysisApi';
+var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
+var DATA_API = exports.DATA_API = 'DataApi';
+var DATA_SOURCES_API = exports.DATA_SOURCES_API = 'DataSourcesApi';
+var EDM_API = exports.EDM_API = 'EntityDataModelApi';
+var LINKING_API = exports.LINKING_API = 'LinkingApi';
+var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
+var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
+var REQUESTS_API = exports.REQUESTS_API = 'RequestsApi';
+var SEARCH_API = exports.SEARCH_API = 'SearchApi';
+var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
+
+/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10353,7 +10353,7 @@ var _immutable2 = _interopRequireDefault(_immutable);
 
 var _Configuration = __webpack_require__(186);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -10599,6 +10599,7 @@ var MEMBERS_PATH = exports.MEMBERS_PATH = 'members';
 var TITLE_PATH = exports.TITLE_PATH = 'title';
 
 // PrincipalsApi specific paths
+var EMAIL_PATH = exports.EMAIL_PATH = 'email';
 var USERS_PATH = exports.USERS_PATH = 'users';
 
 // SearchApi specific paths
@@ -10983,34 +10984,6 @@ function isValid(principal) {
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is `undefined`.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
- * @example
- *
- * _.isUndefined(void 0);
- * // => true
- *
- * _.isUndefined(null);
- * // => false
- */
-function isUndefined(value) {
-  return value === undefined;
-}
-
-module.exports = isUndefined;
-
-
-/***/ }),
-/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11029,7 +11002,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -11317,7 +11290,7 @@ function isValid(entityType) {
 }
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(9),
@@ -11350,6 +11323,34 @@ function isString(value) {
 }
 
 module.exports = isString;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is `undefined`.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
+ * @example
+ *
+ * _.isUndefined(void 0);
+ * // => true
+ *
+ * _.isUndefined(null);
+ * // => false
+ */
+function isUndefined(value) {
+  return value === undefined;
+}
+
+module.exports = isUndefined;
 
 
 /***/ }),
@@ -11435,7 +11436,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -11656,7 +11657,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -11879,11 +11880,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isString = __webpack_require__(19);
+var _isString = __webpack_require__(18);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -24211,7 +24212,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -24350,7 +24351,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -24614,7 +24615,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -24936,7 +24937,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -24948,7 +24949,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -25095,7 +25096,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -25332,7 +25333,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -26273,19 +26274,19 @@ var _OrganizationsApi = __webpack_require__(297);
 
 var OrganizationsApi = _interopRequireWildcard(_OrganizationsApi);
 
-var _PermissionsApi = __webpack_require__(298);
+var _PermissionsApi = __webpack_require__(299);
 
 var PermissionsApi = _interopRequireWildcard(_PermissionsApi);
 
-var _PrincipalsApi = __webpack_require__(299);
+var _PrincipalsApi = __webpack_require__(300);
 
 var PrincipalsApi = _interopRequireWildcard(_PrincipalsApi);
 
-var _RequestsApi = __webpack_require__(300);
+var _RequestsApi = __webpack_require__(301);
 
 var RequestsApi = _interopRequireWildcard(_RequestsApi);
 
-var _SearchApi = __webpack_require__(301);
+var _SearchApi = __webpack_require__(302);
 
 var SearchApi = _interopRequireWildcard(_SearchApi);
 
@@ -26301,7 +26302,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.25.0";
+var version = "v0.26.0";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -26412,7 +26413,7 @@ var _EntitySet = __webpack_require__(23);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -29136,7 +29137,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -31074,7 +31075,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.checkAuthorizations = checkAuthorizations;
 exports.getAccessibleObjects = getAccessibleObjects;
 
-var _isUndefined = __webpack_require__(17);
+var _isUndefined = __webpack_require__(19);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -31094,7 +31095,7 @@ var _AccessCheck = __webpack_require__(167);
 
 var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -31242,7 +31243,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isUndefined = __webpack_require__(17);
+var _isUndefined = __webpack_require__(19);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -31250,7 +31251,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -31589,7 +31590,7 @@ var _DataSource = __webpack_require__(170);
 
 var _DataSource2 = _interopRequireDefault(_DataSource);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -31859,11 +31860,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isUndefined = __webpack_require__(17);
+var _isUndefined = __webpack_require__(19);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
@@ -31879,7 +31880,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _EntityType = __webpack_require__(18);
+var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
@@ -31891,7 +31892,7 @@ var _Schema = __webpack_require__(174);
 
 var _Schema2 = _interopRequireDefault(_Schema);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -33955,7 +33956,7 @@ var _LinkingEntityType = __webpack_require__(172);
 
 var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -34179,14 +34180,23 @@ exports.addAutoApprovedEmailDomains = addAutoApprovedEmailDomains;
 exports.setAutoApprovedEmailDomains = setAutoApprovedEmailDomains;
 exports.removeAutoApprovedEmailDomain = removeAutoApprovedEmailDomain;
 exports.removeAutoApprovedEmailDomains = removeAutoApprovedEmailDomains;
+exports.getRole = getRole;
+exports.getAllRoles = getAllRoles;
+exports.createRole = createRole;
+exports.deleteRole = deleteRole;
+exports.updateRoleTitle = updateRoleTitle;
+exports.updateRoleDescription = updateRoleDescription;
+exports.addRoleToMember = addRoleToMember;
+exports.removeRoleFromMember = removeRoleFromMember;
+exports.getAllMembers = getAllMembers;
+exports.addMemberToOrganization = addMemberToOrganization;
+exports.removeMemberFromOrganization = removeMemberFromOrganization;
 exports.getAllPrincipals = getAllPrincipals;
 exports.addPrincipal = addPrincipal;
 exports.addPrincipals = addPrincipals;
 exports.setPrincipals = setPrincipals;
 exports.removePrincipal = removePrincipal;
 exports.removePrincipals = removePrincipals;
-exports.getAllRoles = getAllRoles;
-exports.getAllMembers = getAllMembers;
 
 var _immutable = __webpack_require__(4);
 
@@ -34208,7 +34218,11 @@ var _Organization = __webpack_require__(173);
 
 var _Organization2 = _interopRequireDefault(_Organization);
 
-var _ApiNames = __webpack_require__(6);
+var _Role = __webpack_require__(298);
+
+var _Role2 = _interopRequireDefault(_Role);
+
+var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -34219,21 +34233,6 @@ var _LangUtils = __webpack_require__(2);
 var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * OrganizationsApi ...
- *
- * @module OrganizationsApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.OrganizationsApi.get...
- *
- * @example
- * import { OrganizationsApi } from 'lattice';
- * // OrganizationsApi.get...
- */
 
 var LOG = new _Logger2.default('OrganizationsApi');
 
@@ -34250,6 +34249,23 @@ var LOG = new _Logger2.default('OrganizationsApi');
  * @example
  * OrganizationsApi.getOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
+
+
+/**
+ * OrganizationsApi ...
+ *
+ * @module OrganizationsApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.OrganizationsApi.get...
+ *
+ * @example
+ * import { OrganizationsApi } from 'lattice';
+ * // OrganizationsApi.get...
+ */
+
 function getOrganization(organizationId) {
 
   var errorMsg = '';
@@ -34723,10 +34739,487 @@ function removeAutoApprovedEmailDomains(organizationId, emailDomains) {
 }
 
 /**
+ * `GET /organizations/{orgId}/principals/roles/{roleId}`
+ *
+ * Gets the Role for the given Organization UUID corresponding to the given Role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.getRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
+ */
+function getRole(organizationId, roleId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /organizations/{orgId}/principals/roles`
+ *
+ * Gets all Roles for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllRoles("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllRoles(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /organizations/roles`
+ *
+ * Creates a new role, if it does not already exist.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.createRole(
+ *   {
+ *     "id": "",
+ *     "organizationId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "title": "Admin",
+ *     "description": "The Administrator",
+ *   }
+ * );
+ */
+function createRole(role) {
+
+  var errorMsg = '';
+
+  if (!(0, _Role.isValid)(role)) {
+    errorMsg = 'invalid parameter: role must be a valid Role';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + _ApiPaths.ROLES_PATH, role).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/roles/{roleId}`
+ *
+ * Deletes the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.deleteRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
+ */
+function deleteRole(organizationId, roleId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/title`
+ *
+ * Updates the title of the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} title
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateRoleTitle(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "ADMIN"
+ * );
+ */
+function updateRoleTitle(organizationId, roleId, title) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, title);
+    return Promise.reject(errorMsg);
+  }
+
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/description`
+ *
+ * Updates the description of the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} description
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateRoleDescription(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "The Administrator"
+ * );
+ */
+function updateRoleDescription(organizationId, roleId, description) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, description);
+    return Promise.reject(errorMsg);
+  }
+
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
+ *
+ * Assigns the role identified by the given org UUID and role UUID to the member of the organization identified by
+ * the given member UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.addRoleToMember(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "memberId"
+ * );
+ */
+function addRoleToMember(organizationId, roleId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
+ *
+ * Removes the role identified by the given org UUID and role UUID from the member of the organization identified by
+ * the given member UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.removeRoleFromMember(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "memberId"
+ * );
+ */
+function removeRoleFromMember(organizationId, roleId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /organizations/{orgId}/principals/members`
+ *
+ * Gets all Roles for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllMembers(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/members/{memberId}`
+ *
+ * Adds the member identified by the given member UUID to the organization identified by the given org UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.addMemberToOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "memberId"
+ * );
+ */
+function addMemberToOrganization(organizationId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/members/{memberId}`
+ *
+ * Removes the member identified by the given member UUID from the organization identified by the given org UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.removeMemberFromOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "memberId"
+ * );
+ */
+function removeMemberFromOrganization(organizationId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
+ *
+ */
+
+/**
  * `GET /organizations/{uuid}/principals`
  *
  * Gets all Principals for the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -34757,6 +35250,7 @@ function getAllPrincipals(organizationId) {
  *
  * Adds the given Principal to the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -34806,6 +35300,7 @@ function addPrincipal(organizationId, principalType, principalId) {
  *
  * Adds the given Principals to the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -34856,6 +35351,7 @@ function addPrincipals(organizationId, principals) {
  *
  * Sets the given Principals for the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -34905,6 +35401,7 @@ function setPrincipals(organizationId, principals) {
  *
  * Removes the given Principal from the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -34954,6 +35451,7 @@ function removePrincipal(organizationId, principalType, principalId) {
  *
  * Removes the given Principals from the given Organization UUID.
  *
+ * @deprecated
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
@@ -35002,70 +35500,182 @@ function removePrincipals(organizationId, principals) {
   });
 }
 
+/***/ }),
+/* 298 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RoleBuilder = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.isValid = isValid;
+
+var _has = __webpack_require__(6);
+
+var _has2 = _interopRequireDefault(_has);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LOG = new _Logger2.default('Role');
+
 /**
- * `GET /organizations/{uuid}/principals/roles`
- *
- * Gets all Roles for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Principal[]>}
- *
- * @example
- * OrganizationsApi.getAllRoles("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ * @class Role
+ * @memberof lattice
  */
-function getAllRoles(organizationId) {
 
-  var errorMsg = '';
+var Role = function Role(id, organizationId, title, description) {
+  _classCallCheck(this, Role);
 
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
+  // required properties
+  this.organizationId = organizationId;
+  this.title = title;
+
+  // optional properties
+  if ((0, _LangUtils.isDefined)(id)) {
+    this.id = id;
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
+  if ((0, _LangUtils.isDefined)(description)) {
+    this.description = description;
+  }
+};
 
 /**
- * `GET /organizations/{uuid}/principals/members`
- *
- * Gets all Roles for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Principal[]>}
- *
- * @example
- * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ * @class RoleBuilder
+ * @memberof lattice
  */
-function getAllMembers(organizationId) {
 
-  var errorMsg = '';
 
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
+exports.default = Role;
+
+var RoleBuilder = exports.RoleBuilder = function () {
+  function RoleBuilder() {
+    _classCallCheck(this, RoleBuilder);
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
+  _createClass(RoleBuilder, [{
+    key: 'setId',
+    value: function setId(id) {
+
+      if (!(0, _LangUtils.isDefined)(id) || (0, _LangUtils.isEmptyString)(id)) {
+        return this;
+      }
+
+      if (!(0, _ValidationUtils.isValidUuid)(id)) {
+        throw new Error('invalid parameter: id must be a valid UUID');
+      }
+
+      this.id = id;
+      return this;
+    }
+  }, {
+    key: 'setOrganizationId',
+    value: function setOrganizationId(organizationId) {
+
+      if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+        throw new Error('invalid parameter: organizationId must be a valid UUID');
+      }
+
+      this.organizationId = organizationId;
+      return this;
+    }
+  }, {
+    key: 'setTitle',
+    value: function setTitle(title) {
+
+      if (!(0, _LangUtils.isNonEmptyString)(title)) {
+        throw new Error('invalid parameter: title must be a non-empty string');
+      }
+
+      this.title = title;
+      return this;
+    }
+  }, {
+    key: 'setDescription',
+    value: function setDescription(description) {
+
+      if (!(0, _LangUtils.isDefined)(description) || (0, _LangUtils.isEmptyString)(description)) {
+        return this;
+      }
+
+      if (!(0, _LangUtils.isNonEmptyString)(description)) {
+        throw new Error('invalid parameter: description must be a non-empty string');
+      }
+
+      this.description = description;
+      return this;
+    }
+  }, {
+    key: 'build',
+    value: function build() {
+
+      if (!this.organizationId) {
+        throw new Error('missing property: organizationId is a required property');
+      }
+
+      if (!this.title) {
+        throw new Error('missing property: title is a required property');
+      }
+
+      return new Role(this.id, this.organizationId, this.title, this.description);
+    }
+  }]);
+
+  return RoleBuilder;
+}();
+
+function isValid(role) {
+
+  if (!(0, _LangUtils.isDefined)(role)) {
+
+    LOG.error('invalid parameter: role must be defined', role);
+    return false;
+  }
+
+  try {
+
+    var roleBuilder = new RoleBuilder();
+
+    // required properties
+    roleBuilder.setOrganizationId(role.organizationId).setTitle(role.title).build();
+
+    // optional properties
+    if ((0, _has2.default)(role, 'id')) {
+      roleBuilder.setId(role.id);
+    }
+
+    if ((0, _has2.default)(role, 'description')) {
+      roleBuilder.setDescription(role.description);
+    }
+
+    roleBuilder.build();
+
+    return true;
+  } catch (e) {
+
+    LOG.error(e, role);
+    return false;
+  }
 }
 
 /***/ }),
-/* 298 */
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35085,7 +35695,7 @@ var _AclData = __webpack_require__(169);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -35199,7 +35809,7 @@ function updateAcl(aclData) {
 }
 
 /***/ }),
-/* 299 */
+/* 300 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35210,22 +35820,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getUser = getUser;
 exports.getAllUsers = getAllUsers;
-exports.getAllUsersForRole = getAllUsersForRole;
-exports.getAllUsersForAllRoles = getAllUsersForAllRoles;
-exports.addRoleToUser = addRoleToUser;
-exports.setUserRoles = setUserRoles;
-exports.removeRoleFromUser = removeRoleFromUser;
 exports.searchAllUsersByEmail = searchAllUsersByEmail;
-
-var _isUndefined = __webpack_require__(17);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
+exports.addRoleToUser = addRoleToUser;
+exports.removeRoleFromUser = removeRoleFromUser;
 
 var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -35234,6 +35837,18 @@ var _AxiosUtils = __webpack_require__(8);
 var _LangUtils = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('PrincipalsApi');
+
+/**
+ * `GET /principals/users/{userId}`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @param {string} userId
+ * @return {Promise}
+ */
+
 
 /**
  * PrincipalsApi gives access to OpenLattice's REST API for getting user data.
@@ -35250,16 +35865,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * // PrincipalsApi.get...
  */
 
-var LOG = new _Logger2.default('PrincipalsApi');
-
-/**
- * `GET /principals/users/{userId}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @return {Promise}
- */
 function getUser(userId) {
 
   var errorMsg = '';
@@ -35296,58 +35901,39 @@ function getAllUsers() {
 }
 
 /**
- * `GET /principals/roles/{role}`
+ * `GET /principals/users/search/email/{searchQuery}`
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-function getAllUsersForRole(role) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /principals/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-function getAllUsersForAllRoles() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /principals/users/{userId}/roles/{role}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @param {string} role
+ * @param {string} searchQuery
  * @return {Promise}
  *
  * TODO: add unit tests
  */
+function searchAllUsersByEmail(searchQuery) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchQuery)) {
+    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
+    LOG.error(errorMsg, searchQuery);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.SEARCH_PATH + '/' + _ApiPaths.EMAIL_PATH + '/' + searchQuery).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
+ *
+ */
+
 function addRoleToUser(userId, role) {
 
   var errorMsg = '';
@@ -35372,55 +35958,6 @@ function addRoleToUser(userId, role) {
   });
 }
 
-/**
- * `PUT /principals/users/{userId}/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @param {string[]} roles
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-function setUserRoles(userId, roles) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  var userRoles = roles;
-  if ((0, _isUndefined2.default)(roles) || (0, _LangUtils.isEmptyArray)(roles)) {
-    userRoles = [];
-  } else if (!(0, _LangUtils.isNonEmptyStringArray)(roles)) {
-    errorMsg = 'invalid parameter: roles must be an array of strings';
-    LOG.error(errorMsg, roles);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH, userRoles).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /principals/users/{userId}/roles/{role}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @param {string} role
- * @return {Promise}
- *
- * TODO: add unit tests
- */
 function removeRoleFromUser(userId, role) {
 
   var errorMsg = '';
@@ -35445,36 +35982,8 @@ function removeRoleFromUser(userId, role) {
   });
 }
 
-/**
- * `GET /principals/users/search/email/{searchQuery}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} searchQuery
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-function searchAllUsersByEmail(searchQuery) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(searchQuery)) {
-    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
-    LOG.error(errorMsg, searchQuery);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/search/email/' + searchQuery).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
 /***/ }),
-/* 300 */
+/* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35491,7 +36000,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(6);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -35511,7 +36020,7 @@ var _RequestStatus = __webpack_require__(36);
 
 var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -35736,7 +36245,7 @@ function updateRequestStatuses(statuses) {
 }
 
 /***/ }),
-/* 301 */
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35762,11 +36271,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isFinite = __webpack_require__(302);
+var _isFinite = __webpack_require__(303);
 
 var _isFinite2 = _interopRequireDefault(_isFinite);
 
-var _isString = __webpack_require__(19);
+var _isString = __webpack_require__(18);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -35774,7 +36283,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(6);
+var _ApiNames = __webpack_require__(7);
 
 var _ApiPaths = __webpack_require__(13);
 
@@ -36620,7 +37129,7 @@ function searchEntityNeighborsBulk(entitySetId, entityIds) {
 }
 
 /***/ }),
-/* 302 */
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(10);
