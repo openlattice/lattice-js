@@ -14,10 +14,10 @@ describe('lattice-js', () => {
     expect(Lattice.configure).toEqual(jasmine.any(Function));
   });
 
-  it('should expose DataModels', () => {
-    expect(Lattice.DataModels).toBeDefined();
-    expect(Lattice.DataModels).toEqual(jasmine.any(Object));
-    expect(Object.keys(Lattice.DataModels).length).toBeGreaterThan(0);
+  it('should expose Models', () => {
+    expect(Lattice.Models).toBeDefined();
+    expect(Lattice.Models).toEqual(jasmine.any(Object));
+    expect(Object.keys(Lattice.Models).length).toEqual(33);
   });
 
   it('should expose Types', () => {

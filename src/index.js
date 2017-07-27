@@ -11,7 +11,7 @@
  */
 
 import * as Types from './constants/types';
-import * as DataModels from './models';
+import * as Models from './models';
 
 import * as AnalysisApi from './api/AnalysisApi';
 import * as AuthorizationApi from './api/AuthorizationApi';
@@ -35,7 +35,7 @@ const version :string = __VERSION__;
 export {
   version,
   configure,
-  DataModels,
+  Models,
   Types,
   AnalysisApi,
   AuthorizationApi,
@@ -53,7 +53,7 @@ export {
 export default {
   version,
   configure,
-  DataModels,
+  Models,
   Types,
   AnalysisApi,
   AuthorizationApi,
