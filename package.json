@@ -67,7 +67,7 @@
     "npm-run-all": "^4.0.0",
     "phantomjs-prebuilt": "^2.1.13",
     "rimraf": "2.6.1",
-    "webpack": "^3.4.0",
+    "webpack": "^3.5.4",
     "webpack-dev-server": "^2.4.0"
   },
   "scripts": {
