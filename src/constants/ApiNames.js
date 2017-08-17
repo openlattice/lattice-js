@@ -12,4 +12,5 @@ export const ORGANIZATIONS_API :string = 'OrganizationsApi';
 export const PERMISSIONS_API :string = 'PermissionsApi';
 export const REQUESTS_API :string = 'RequestsApi';
 export const SEARCH_API :string = 'SearchApi';
+export const SYNC_API :string = 'SyncApi';
 export const PRINCIPALS_API :string = 'PrincipalsApi';
