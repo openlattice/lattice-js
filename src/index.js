@@ -24,6 +24,7 @@ import * as PermissionsApi from './api/PermissionsApi';
 import * as PrincipalsApi from './api/PrincipalsApi';
 import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
+import * as SyncApi from './api/SyncApi';
 
 import {
   configure
@@ -47,7 +48,8 @@ export {
   PermissionsApi,
   PrincipalsApi,
   RequestsApi,
-  SearchApi
+  SearchApi,
+  SyncApi
 };
 
 export default {
@@ -65,5 +67,6 @@ export default {
   PermissionsApi,
   PrincipalsApi,
   RequestsApi,
-  SearchApi
+  SearchApi,
+  SyncApi
 };

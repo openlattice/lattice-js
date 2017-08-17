@@ -20,7 +20,8 @@ import {
   PERMISSIONS_API,
   PRINCIPALS_API,
   REQUESTS_API,
-  SEARCH_API
+  SEARCH_API,
+  SYNC_API
 } from '../constants/ApiNames';
 
 import {
@@ -35,7 +36,8 @@ import {
   PERMISSIONS_PATH,
   PRINCIPALS_PATH,
   REQUESTS_PATH,
-  SEARCH_PATH
+  SEARCH_PATH,
+  SYNC_PATH
 } from '../constants/ApiPaths';
 
 let baseUrlToAxiosInstanceMap :Map<string, Object> = Immutable.Map();
@@ -67,6 +69,8 @@ function getApiBaseUrl(api :string) :string {
       return `${baseUrl}/${DATASTORE_PATH}/${REQUESTS_PATH}`;
     case SEARCH_API:
       return `${baseUrl}/${DATASTORE_PATH}/${SEARCH_PATH}`;
+    case SYNC_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${SYNC_PATH}`;
     default:
       throw new Error(`unknown API: no case implemented to handle the given API: ${api}`);
   }

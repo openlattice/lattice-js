@@ -13,6 +13,7 @@ const PERMISSIONS_PATH :string = 'permissions';
 const PRINCIPALS_PATH :string = 'principals';
 const REQUESTS_PATH :string = 'requests';
 const SEARCH_PATH :string = 'search';
+const SYNC_PATH :string = 'sync';
 
 // shared paths
 const ENTITY_SET_PATH :string = 'entity/set';
@@ -54,6 +55,9 @@ const FQN_PATH :string = 'fqn';
 const NEIGHBORS_PATH :string = 'neighbors';
 const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
 const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
+
+// SyncApi specific paths
+const CURRENT_PATH :string = 'current';
 
 describe('ApiPaths', () => {
 
@@ -117,6 +121,11 @@ describe('ApiPaths', () => {
     it(`should expose "${SEARCH_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_PATH).toEqual(SEARCH_PATH);
+    });
+
+    it(`should expose "${SYNC_PATH}"`, () => {
+      expect(ApiPaths.SYNC_PATH).toBeDefined();
+      expect(ApiPaths.SYNC_PATH).toEqual(SYNC_PATH);
     });
 
   });
@@ -286,6 +295,15 @@ describe('ApiPaths', () => {
     it(`should expose "${SEARCH_PROPERTY_TYPES_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PROPERTY_TYPES_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_PROPERTY_TYPES_PATH).toEqual(SEARCH_PROPERTY_TYPES_PATH);
+    });
+
+  });
+
+  describe('SyncApi specific paths', () => {
+
+    it(`should expose "${CURRENT_PATH}"`, () => {
+      expect(ApiPaths.CURRENT_PATH).toBeDefined();
+      expect(ApiPaths.CURRENT_PATH).toEqual(CURRENT_PATH);
     });
 
   });

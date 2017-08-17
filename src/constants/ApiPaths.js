@@ -15,6 +15,7 @@ export const PERMISSIONS_PATH :string = 'permissions';
 export const PRINCIPALS_PATH :string = 'principals';
 export const REQUESTS_PATH :string = 'requests';
 export const SEARCH_PATH :string = 'search';
+export const SYNC_PATH :string = 'sync';
 
 // shared paths
 export const ENTITY_SET_PATH :string = 'entity/set';
@@ -58,3 +59,6 @@ export const SEARCH_ENTITY_SETS_PATH :string = 'entity_sets';
 export const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
 export const SEARCH_ASSOCIATION_TYPES_PATH :string = 'association_types';
 export const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
+
+// SyncApi specific paths
+export const CURRENT_PATH :string = 'current';
