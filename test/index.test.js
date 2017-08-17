@@ -92,4 +92,10 @@ describe('lattice-js', () => {
     expect(Object.keys(Lattice.SearchApi).length).toBeGreaterThan(0);
   });
 
+  it('should expose SyncApi', () => {
+    expect(Lattice.SyncApi).toBeDefined();
+    expect(Lattice.SyncApi).toEqual(jasmine.any(Object));
+    expect(Object.keys(Lattice.SyncApi).length).toBeGreaterThan(0);
+  });
+
 });

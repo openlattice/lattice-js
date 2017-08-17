@@ -24,7 +24,6 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  SET_PATH,
   CURRENT_PATH
 } from '../constants/ApiPaths';
 
@@ -50,8 +49,6 @@ const LOG = new Logger('SyncApi');
 export function getCurrentSyncId(entitySetId :UUID) :Promise<> {
 
   // TODO: everything
-
-  let errorMsg = '';
 
   return getApiAxiosInstance(SYNC_API)
     .get(`/${entitySetId}/${CURRENT_PATH}`)
