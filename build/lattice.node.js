@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.27.0
+ * lattice - v0.28.0
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -4723,7 +4723,7 @@ exports.isNonEmptyObject = isNonEmptyObject;
 exports.isNonEmptyString = isNonEmptyString;
 exports.isNonEmptyStringArray = isNonEmptyStringArray;
 
-var _isArray = __webpack_require__(12);
+var _isArray = __webpack_require__(13);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
@@ -9965,6 +9965,29 @@ function isValidRequestStatusArray(statuses) {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ANALYSIS_API = exports.ANALYSIS_API = 'AnalysisApi';
+var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
+var DATA_API = exports.DATA_API = 'DataApi';
+var DATA_SOURCES_API = exports.DATA_SOURCES_API = 'DataSourcesApi';
+var EDM_API = exports.EDM_API = 'EntityDataModelApi';
+var LINKING_API = exports.LINKING_API = 'LinkingApi';
+var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
+var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
+var REQUESTS_API = exports.REQUESTS_API = 'RequestsApi';
+var SEARCH_API = exports.SEARCH_API = 'SearchApi';
+var SYNC_API = exports.SYNC_API = 'SyncApi';
+var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var bind = __webpack_require__(176);
 var isBuffer = __webpack_require__(264);
 
@@ -10269,7 +10292,7 @@ module.exports = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseHas = __webpack_require__(227),
@@ -10310,28 +10333,6 @@ module.exports = has;
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var ANALYSIS_API = exports.ANALYSIS_API = 'AnalysisApi';
-var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
-var DATA_API = exports.DATA_API = 'DataApi';
-var DATA_SOURCES_API = exports.DATA_SOURCES_API = 'DataSourcesApi';
-var EDM_API = exports.EDM_API = 'EntityDataModelApi';
-var LINKING_API = exports.LINKING_API = 'LinkingApi';
-var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
-var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
-var REQUESTS_API = exports.REQUESTS_API = 'RequestsApi';
-var SEARCH_API = exports.SEARCH_API = 'SearchApi';
-var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10353,9 +10354,9 @@ var _immutable2 = _interopRequireDefault(_immutable);
 
 var _Configuration = __webpack_require__(187);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10388,6 +10389,8 @@ function getApiBaseUrl(api) {
       return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.REQUESTS_PATH;
     case _ApiNames.SEARCH_API:
       return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.SEARCH_PATH;
+    case _ApiNames.SYNC_API:
+      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.SYNC_PATH;
     default:
       throw new Error('unknown API: no case implemented to handle the given API: ' + api);
   }
@@ -10515,38 +10518,6 @@ module.exports = isObjectLike;
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-module.exports = isArray;
-
-
-/***/ }),
-/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10567,6 +10538,7 @@ var PERMISSIONS_PATH = exports.PERMISSIONS_PATH = 'permissions';
 var PRINCIPALS_PATH = exports.PRINCIPALS_PATH = 'principals';
 var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
 var SEARCH_PATH = exports.SEARCH_PATH = 'search';
+var SYNC_PATH = exports.SYNC_PATH = 'sync';
 
 // shared paths
 var ENTITY_SET_PATH = exports.ENTITY_SET_PATH = 'entity/set';
@@ -10610,6 +10582,41 @@ var SEARCH_ENTITY_SETS_PATH = exports.SEARCH_ENTITY_SETS_PATH = 'entity_sets';
 var SEARCH_ENTITY_TYPES_PATH = exports.SEARCH_ENTITY_TYPES_PATH = 'entity_types';
 var SEARCH_ASSOCIATION_TYPES_PATH = exports.SEARCH_ASSOCIATION_TYPES_PATH = 'association_types';
 var SEARCH_PROPERTY_TYPES_PATH = exports.SEARCH_PROPERTY_TYPES_PATH = 'property_types';
+
+// SyncApi specific paths
+var CURRENT_PATH = exports.CURRENT_PATH = 'current';
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+module.exports = isArray;
+
 
 /***/ }),
 /* 14 */
@@ -11002,7 +11009,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -11294,7 +11301,7 @@ function isValid(entityType) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(9),
-    isArray = __webpack_require__(12),
+    isArray = __webpack_require__(13),
     isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
@@ -11436,7 +11443,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -11657,7 +11664,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -11880,7 +11887,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -12282,7 +12289,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -12676,7 +12683,7 @@ function isValid(requestStatus) {
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 var normalizeHeaderName = __webpack_require__(266);
 
 var DEFAULT_CONTENT_TYPE = {
@@ -12823,7 +12830,7 @@ module.exports = exports['default'];
 var baseKeys = __webpack_require__(191),
     getTag = __webpack_require__(193),
     isArguments = __webpack_require__(48),
-    isArray = __webpack_require__(12),
+    isArray = __webpack_require__(13),
     isArrayLike = __webpack_require__(205),
     isBuffer = __webpack_require__(206),
     isPrototype = __webpack_require__(42),
@@ -13158,7 +13165,7 @@ module.exports = isPlainObject;
 
 var Symbol = __webpack_require__(31),
     arrayMap = __webpack_require__(215),
-    isArray = __webpack_require__(12),
+    isArray = __webpack_require__(13),
     isSymbol = __webpack_require__(34);
 
 /** Used as references for various `Number` constants. */
@@ -24351,7 +24358,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -24615,7 +24622,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -24937,7 +24944,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -25096,7 +25103,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -25333,7 +25340,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -25721,7 +25728,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -26410,7 +26417,7 @@ exports.getConfig = getConfig;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SearchApi = exports.RequestsApi = exports.PrincipalsApi = exports.PermissionsApi = exports.OrganizationsApi = exports.LinkingApi = exports.EntityDataModelApi = exports.DataSourcesApi = exports.DataApi = exports.AuthorizationApi = exports.AnalysisApi = exports.Types = exports.Models = exports.configure = exports.version = undefined;
+exports.SyncApi = exports.SearchApi = exports.RequestsApi = exports.PrincipalsApi = exports.PermissionsApi = exports.OrganizationsApi = exports.LinkingApi = exports.EntityDataModelApi = exports.DataSourcesApi = exports.DataApi = exports.AuthorizationApi = exports.AnalysisApi = exports.Types = exports.Models = exports.configure = exports.version = undefined;
 
 var _types = __webpack_require__(189);
 
@@ -26464,9 +26471,15 @@ var _SearchApi = __webpack_require__(302);
 
 var SearchApi = _interopRequireWildcard(_SearchApi);
 
+var _SyncApi = __webpack_require__(304);
+
+var SyncApi = _interopRequireWildcard(_SyncApi);
+
 var _Configuration = __webpack_require__(187);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var version = "v0.28.0";
 
 /**
  * The `lattice.js` library is a layer on top of OpenLattice's REST APIs to simplify the process of reading data from
@@ -26475,8 +26488,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  *
  * @module lattice
  */
-
-var version = "v0.27.0";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -26493,6 +26504,7 @@ exports.PermissionsApi = PermissionsApi;
 exports.PrincipalsApi = PrincipalsApi;
 exports.RequestsApi = RequestsApi;
 exports.SearchApi = SearchApi;
+exports.SyncApi = SyncApi;
 exports.default = {
   version: version,
   configure: _Configuration.configure,
@@ -26508,7 +26520,8 @@ exports.default = {
   PermissionsApi: PermissionsApi,
   PrincipalsApi: PrincipalsApi,
   RequestsApi: RequestsApi,
-  SearchApi: SearchApi
+  SearchApi: SearchApi,
+  SyncApi: SyncApi
 };
 
 /***/ }),
@@ -27763,7 +27776,7 @@ module.exports = baseHas;
 
 var castPath = __webpack_require__(229),
     isArguments = __webpack_require__(48),
-    isArray = __webpack_require__(12),
+    isArray = __webpack_require__(13),
     isIndex = __webpack_require__(254),
     isLength = __webpack_require__(32),
     toKey = __webpack_require__(255);
@@ -27806,7 +27819,7 @@ module.exports = hasPath;
 /* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(12),
+var isArray = __webpack_require__(13),
     isKey = __webpack_require__(230),
     stringToPath = __webpack_require__(231),
     toString = __webpack_require__(52);
@@ -27833,7 +27846,7 @@ module.exports = castPath;
 /* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(12),
+var isArray = __webpack_require__(13),
     isSymbol = __webpack_require__(34);
 
 /** Used to match property names within property paths. */
@@ -29323,7 +29336,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -29406,7 +29419,7 @@ module.exports = __webpack_require__(263);
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 var bind = __webpack_require__(176);
 var Axios = __webpack_require__(265);
 var defaults = __webpack_require__(38);
@@ -29493,7 +29506,7 @@ function isSlowBuffer (obj) {
 
 
 var defaults = __webpack_require__(38);
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 var InterceptorManager = __webpack_require__(285);
 var dispatchRequest = __webpack_require__(286);
 var isAbsoluteURL = __webpack_require__(288);
@@ -29585,7 +29598,7 @@ module.exports = Axios;
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -29604,7 +29617,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 var settle = __webpack_require__(177);
 var buildURL = __webpack_require__(179);
 var parseHeaders = __webpack_require__(268);
@@ -29791,7 +29804,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 
 /**
  * Parse headers into an object
@@ -29835,7 +29848,7 @@ module.exports = function parseHeaders(headers) {
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -29953,7 +29966,7 @@ module.exports = btoa;
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -30013,7 +30026,7 @@ module.exports = (
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 var settle = __webpack_require__(177);
 var buildURL = __webpack_require__(179);
 var http = __webpack_require__(180);
@@ -30916,7 +30929,7 @@ module.exports = {"_from":"axios@^0.16.0","_id":"axios@0.16.2","_inBundle":false
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 
 function InterceptorManager() {
   this.handlers = [];
@@ -30975,7 +30988,7 @@ module.exports = InterceptorManager;
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 var transformData = __webpack_require__(287);
 var isCancel = __webpack_require__(185);
 var defaults = __webpack_require__(38);
@@ -31061,7 +31074,7 @@ module.exports = function dispatchRequest(config) {
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(6);
 
 /**
  * Transform the data for a request or a response
@@ -31281,7 +31294,7 @@ var _AccessCheck = __webpack_require__(35);
 
 var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -31421,6 +31434,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.getEntitySetData = getEntitySetData;
 exports.getEntitySetDataFileUrl = getEntitySetDataFileUrl;
 exports.createEntityData = createEntityData;
+exports.createEntityAndAssociationData = createEntityAndAssociationData;
 exports.storeEntityData = storeEntityData;
 exports.acquireSyncTicket = acquireSyncTicket;
 exports.releaseSyncTicket = releaseSyncTicket;
@@ -31437,9 +31451,9 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -31622,6 +31636,86 @@ function createEntityData(entitySetId, syncId, entities) {
 }
 
 /**
+ * `PATCH /data/entitydata`
+ *
+ * Creates entities linked by associations for the given entity data.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {Object} bulkDataCreation
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.createEntityAndAssociationData(
+ *   syncTickets: ["ec6865e6-e60e-424b-a071-6a9c1603d735", "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
+ *   entities: [
+ *     {
+ *       "key": {
+ *         "entitySetId": "entity_set_id_1",
+ *         "entityId": "entity_id_1",
+ *         "syncId": "sync_id_1"
+ *       },
+ *       "details": [
+ *         {
+ *           "uuid_1a": ["value_1a", "value_1b"],
+ *           "uuid_1b": ["value_1c", "value_1d"]
+ *         }
+ *       ]
+ *     },
+ *     {
+ *       "key": {
+ *         "entitySetId": "entity_set_id_2",
+ *         "entityId": "entity_id_2",
+ *         "syncId": "sync_id_2"
+ *       },
+ *       "details": [
+ *         {
+ *           "uuid_2a": ["value_2a", "value_2b"],
+ *           "uuid_2b": ["value_2c", "value_2d"]
+ *         }
+ *       ]
+ *     }
+ *   ],
+ *   associations: [
+ *     {
+ *       "key": {
+ *         "entitySetId": "entity_set_id_3",
+ *         "entityId": "entity_id_3",
+ *         "syncId": "sync_id_3"
+ *       },
+ *       "src": {
+ *         "entitySetId": "entity_set_id_1",
+ *         "entityId": "entity_id_1",
+ *         "syncId": "sync_id_1"
+ *       },
+ *       "dst": {
+ *         "entitySetId": "entity_set_id_2",
+ *         "entityId": "entity_id_2",
+ *         "syncId": "sync_id_2"
+ *       },
+ *       "details": [
+ *         {
+ *           "uuid_3a": ["value_3a", "value_3b"],
+ *           "uuid_3b": ["value_3c", "value_3d"]
+ *         }
+ *       ]
+ *     }
+ *   ]
+ * );
+ */
+function createEntityAndAssociationData(bulkDataCreation) {
+
+  var url = '/' + _ApiPaths.ENTITY_DATA_PATH;
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).patch(url, bulkDataCreation).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
  * `PATCH /data/entitydata/{ticketId}/{syncId}`
  *
  * @static
@@ -31776,7 +31870,7 @@ var _DataSource = __webpack_require__(170);
 
 var _DataSource2 = _interopRequireDefault(_DataSource);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -32046,7 +32140,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -32078,9 +32172,9 @@ var _Schema = __webpack_require__(175);
 
 var _Schema2 = _interopRequireDefault(_Schema);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -34142,9 +34236,9 @@ var _LinkingEntityType = __webpack_require__(172);
 
 var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -34408,9 +34502,9 @@ var _Role = __webpack_require__(174);
 
 var _Role2 = _interopRequireDefault(_Role);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -35707,7 +35801,7 @@ var _AclData = __webpack_require__(169);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -35840,9 +35934,9 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -36012,7 +36106,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(6);
+var _has = __webpack_require__(7);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -36032,7 +36126,7 @@ var _RequestStatus = __webpack_require__(37);
 
 var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -36295,9 +36389,9 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _ApiNames = __webpack_require__(7);
+var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(13);
+var _ApiPaths = __webpack_require__(12);
 
 var _AxiosUtils = __webpack_require__(8);
 
@@ -37181,6 +37275,72 @@ function isFinite(value) {
 
 module.exports = isFinite;
 
+
+/***/ }),
+/* 304 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getCurrentSyncId = getCurrentSyncId;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(12);
+
+var _AxiosUtils = __webpack_require__(8);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * SyncApi ...
+ *
+ * @module SyncApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.SyncApi.getCurrentSync...
+ *
+ * @example
+ * import { SyncApi } from 'lattice';
+ * // SyncApi.getCurrentSync...
+ */
+
+var LOG = new _Logger2.default('SyncApi');
+
+/**
+ * `GET /sync/{entitySetId}/current`
+ *
+ * Returns the current sync id for a given entity set
+ *
+ * @static
+ * @memberof lattice.
+ * @param {UUID} entitySetId
+ * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the current sync id for the entity set
+ *
+ * @example
+ * LinkingApi.getCurrentSyncId("e39dfdfa-a3e6-4f1f-b54b-646a723c3085");
+ */
+function getCurrentSyncId(entitySetId) {
+
+  // TODO: everything
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SYNC_API).get('/' + entitySetId + '/' + _ApiPaths.CURRENT_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
 
 /***/ })
 /******/ ]);
