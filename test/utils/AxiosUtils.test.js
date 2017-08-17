@@ -346,6 +346,32 @@ describe('AxiosUtils', () => {
 
     });
 
+    describe('SyncApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.SYNC_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SYNC_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.SYNC_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SYNC_PATH}`
+        );
+      });
+
+    });
+
   });
 
   describe('getApiAxiosInstance()', () => {

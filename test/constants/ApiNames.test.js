@@ -11,6 +11,7 @@ const PERMISSIONS_API :string = 'PermissionsApi';
 const PRINCIPALS_API :string = 'PrincipalsApi';
 const REQUESTS_API :string = 'RequestsApi';
 const SEARCH_API :string = 'SearchApi';
+const SYNC_API :string = 'SyncApi';
 
 describe('ApiNames', () => {
 
@@ -67,6 +68,11 @@ describe('ApiNames', () => {
   it(`should expose "${SEARCH_API}"`, () => {
     expect(ApiNames.SEARCH_API).toBeDefined();
     expect(ApiNames.SEARCH_API).toEqual(SEARCH_API);
+  });
+
+  it(`should expose "${SYNC_API}"`, () => {
+    expect(ApiNames.SYNC_API).toBeDefined();
+    expect(ApiNames.SYNC_API).toEqual(SYNC_API);
   });
 
 });
