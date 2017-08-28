@@ -9,8 +9,7 @@ import LinkingEntitySet, {
 } from '../models/LinkingEntitySet';
 
 import {
-  isDefined,
-  isNonEmptyArray
+  isDefined
 } from '../utils/LangUtils';
 
 import {
@@ -22,19 +21,19 @@ const LOG = new Logger('LinkingRequest');
 export default class LinkingRequest {
 
   linkingEntitySet :LinkingEntitySet;
-  propertyTypes :UUID[];
+  propertyTypeIds :UUID[];
 
-  constructor(linkingEntitySet :LinkingEntitySet, propertyTypes :UUID[]) {
+  constructor(linkingEntitySet :LinkingEntitySet, propertyTypeIds :UUID[]) {
 
     this.linkingEntitySet = linkingEntitySet;
-    this.propertyTypes = propertyTypes;
+    this.propertyTypeIds = propertyTypeIds;
   }
 }
 
 export class LinkingRequestBuilder {
 
   linkingEntitySet :LinkingEntitySet;
-  propertyTypes :UUID[];
+  propertyTypeIds :UUID[];
 
   setLinkingEntitySet(linkingEntitySet :LinkingEntitySet) :LinkingRequestBuilder {
 
@@ -46,17 +45,13 @@ export class LinkingRequestBuilder {
     return this;
   }
 
-  setPropertyTypes(propertyTypes :UUID[]) :LinkingRequestBuilder {
+  setPropertyTypeIds(propertyTypeIds :UUID[]) :LinkingRequestBuilder {
 
-    if (!isNonEmptyArray(propertyTypes)) {
-      throw new Error('invalid parameter: propertyTypes must be a non-empty array');
+    if (!isValidUuidArray(propertyTypeIds)) {
+      throw new Error('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
     }
 
-    if (!isValidUuidArray(propertyTypes)) {
-      throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
-    }
-
-    this.propertyTypes = propertyTypes;
+    this.propertyTypeIds = propertyTypeIds;
 
     return this;
   }
@@ -67,13 +62,13 @@ export class LinkingRequestBuilder {
       throw new Error('missing property: linkingEntitySet is a required property');
     }
 
-    if (!this.propertyTypes) {
-      throw new Error('missing property: propertyTypes is a required property');
+    if (!this.propertyTypeIds) {
+      throw new Error('missing property: propertyTypeIds is a required property');
     }
 
     return new LinkingRequest(
       this.linkingEntitySet,
-      this.propertyTypes
+      this.propertyTypeIds
     );
   }
 }
@@ -90,7 +85,7 @@ export function isValid(linkingRequest :any) :boolean {
 
     (new LinkingRequestBuilder())
       .setLinkingEntitySet(linkingRequest.linkingEntitySet)
-      .setPropertyTypes(linkingRequest.propertyTypes)
+      .setPropertyTypeIds(linkingRequest.propertyTypeIds)
       .build();
 
     return true;

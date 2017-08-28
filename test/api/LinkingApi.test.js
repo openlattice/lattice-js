@@ -8,7 +8,6 @@ import {
 } from '../../src/constants/ApiNames';
 
 import {
-  SET_PATH,
   TYPE_PATH
 } from '../../src/constants/ApiPaths';
 
@@ -17,8 +16,8 @@ import {
 } from '../constants/InvalidParams';
 
 import {
-  MOCK_LINKING_ENTITY_SET_DM,
-  MOCK_LINKING_ENTITY_TYPE_DM
+  MOCK_LINKING_ENTITY_TYPE_DM,
+  MOCK_LINKING_REQUEST_DM
 } from '../constants/MockDataModels';
 
 import {
@@ -91,7 +90,7 @@ function testLinkEntitySets() {
     const functionToTest :Function = LinkingApi.linkEntitySets;
 
     const validParams :any[] = [
-      MOCK_LINKING_ENTITY_SET_DM
+      MOCK_LINKING_REQUEST_DM
     ];
 
     const invalidParams :any[] = [
@@ -103,7 +102,7 @@ function testLinkEntitySets() {
       LinkingApi.linkEntitySets(...validParams)
         .then(() => {
           expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-          expect(mockAxiosInstance.post).toHaveBeenCalledWith(`/${SET_PATH}`, MOCK_LINKING_ENTITY_SET_DM);
+          expect(mockAxiosInstance.post).toHaveBeenCalledWith('/', MOCK_LINKING_REQUEST_DM);
           done();
         })
         .catch(() => {
