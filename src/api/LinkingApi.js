@@ -19,9 +19,9 @@
 
 import Logger from '../utils/Logger';
 
-import LinkingEntitySet, {
-  isValid as isValidLinkingEntitySet
-} from '../models/LinkingEntitySet';
+import LinkingRequest, {
+  isValid as isValidLinkingRequest
+} from '../models/LinkingRequest';
 
 import LinkingEntityType, {
   isValid as isValidLinkingEntityType
@@ -32,7 +32,6 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  SET_PATH,
   TYPE_PATH
 } from '../constants/ApiPaths';
 
@@ -117,20 +116,20 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
  *   }
  * );
  */
-export function linkEntitySets(linkingEntitySet :LinkingEntitySet) :Promise<> {
+export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<> {
 
   // TODO: everything
 
   let errorMsg = '';
 
-  if (!isValidLinkingEntitySet(linkingEntitySet)) {
-    errorMsg = 'invalid parameter: linkingEntitySet must be a valid LinkingEntitySet';
-    LOG.error(errorMsg, linkingEntitySet);
+  if (!isValidLinkingRequest(linkingRequest)) {
+    errorMsg = 'invalid parameter: linkingRequest must be a valid LinkingRequest';
+    LOG.error(errorMsg, linkingRequest);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(LINKING_API)
-    .post(`/${SET_PATH}`, linkingEntitySet)
+    .post('/', linkingRequest)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
