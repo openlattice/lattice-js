@@ -13,6 +13,7 @@ import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
 import LinkingEntitySet, { LinkingEntitySetBuilder } from './LinkingEntitySet';
 import LinkingEntityType, { LinkingEntityTypeBuilder } from './LinkingEntityType';
+import LinkingRequest, { LinkingRequestBuilder } from './LinkingRequest';
 import Organization, { OrganizationBuilder } from './Organization';
 import Principal, { PrincipalBuilder } from './Principal';
 import PropertyType, { PropertyTypeBuilder } from './PropertyType';
@@ -41,6 +42,8 @@ export {
   LinkingEntitySetBuilder,
   LinkingEntityType,
   LinkingEntityTypeBuilder,
+  LinkingRequest,
+  LinkingRequestBuilder,
   Organization,
   OrganizationBuilder,
   Principal,
