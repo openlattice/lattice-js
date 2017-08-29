@@ -97,6 +97,16 @@ describe('Lattice.Models', () => {
     expect(Models.LinkingEntityTypeBuilder).toEqual(jasmine.any(Function));
   });
 
+  it('should expose LinkingRequest', () => {
+    expect(Models.LinkingRequest).toBeDefined();
+    expect(Models.LinkingRequest).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose LinkingRequestBuilder', () => {
+    expect(Models.LinkingRequestBuilder).toBeDefined();
+    expect(Models.LinkingRequestBuilder).toEqual(jasmine.any(Function));
+  });
+
   it('should expose Organization', () => {
     expect(Models.Organization).toBeDefined();
     expect(Models.Organization).toEqual(jasmine.any(Function));
