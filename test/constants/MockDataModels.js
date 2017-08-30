@@ -95,6 +95,14 @@ export const MOCK_LINKING_ENTITY_TYPE_DM :Object = {
   deidentified: false
 };
 
+export const MOCK_LINKING_REQUEST_DM :Object = {
+  linkingEntitySet: MOCK_LINKING_ENTITY_SET_DM,
+  propertyTypeIds: [
+    '4b08e1f9-4a00-4169-92ea-10e377070220',
+    'ec6865e6-e60e-424b-a071-6a9c1603d735'
+  ]
+};
+
 export const MOCK_ORGANIZATION_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
   title: 'title',

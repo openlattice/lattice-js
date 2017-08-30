@@ -17,7 +17,7 @@ describe('lattice-js', () => {
   it('should expose Models', () => {
     expect(Lattice.Models).toBeDefined();
     expect(Lattice.Models).toEqual(jasmine.any(Object));
-    expect(Object.keys(Lattice.Models).length).toEqual(33);
+    expect(Object.keys(Lattice.Models).length).toEqual(35);
   });
 
   it('should expose Types', () => {
