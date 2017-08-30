@@ -18,7 +18,6 @@ import {
   ifDev,
   ifProd,
   ifMin,
-  ifNode,
   TARGET_ENV
 } from '../env.js';
 
@@ -92,8 +91,8 @@ export default {
     path: LIB_PATHS.BUILD,
     publicPath: '/',
     filename: ifMin(
-      ifNode(`${LIB_CONFIG.LIB_FILE_NAME}.node.min.js`, `${LIB_CONFIG.LIB_FILE_NAME}.min.js`),
-      ifNode(`${LIB_CONFIG.LIB_FILE_NAME}.node.js`, `${LIB_CONFIG.LIB_FILE_NAME}.js`)
+      `${LIB_CONFIG.LIB_FILE_NAME}.min.js`,
+      `${LIB_CONFIG.LIB_FILE_NAME}.js`
     )
   },
   module: {

@@ -22,8 +22,7 @@
     "url": "https://github.com/openlattice/lattice-js/issues"
   },
   "license": "Apache-2.0",
-  "main": "build/lattice.node.js",
-  "browser": "build/lattice.js",
+  "main": "build/lattice.js",
   "dependencies": {
     "axios": "^0.16.0",
     "immutable": "^3.8.1",
@@ -71,12 +70,8 @@
     "webpack-dev-server": "^2.4.0"
   },
   "scripts": {
-    "build": "npm-run-all --parallel build:prod build:prod:node",
-    "build:min": "npm-run-all --parallel build:prod:min build:prod:node:min",
-    "build:prod": "better-npm-run build:prod",
-    "build:prod:min": "better-npm-run build:prod:min",
-    "build:prod:node": "better-npm-run build:prod:node",
-    "build:prod:node:min": "better-npm-run build:prod:node:min",
+    "build": "better-npm-run build",
+    "build:min": "better-npm-run build:min",
     "clean": "rimraf build/*",
     "flow": "flow check",
     "lint": "eslint --config .eslintrc src test",
@@ -94,7 +89,7 @@
     "webpack-dev-server": "better-npm-run webpack-dev-server"
   },
   "betterScripts": {
-    "build:prod": {
+    "build": {
       "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
@@ -102,28 +97,12 @@
         "TARGET_ENV": "web"
       }
     },
-    "build:prod:min": {
+    "build:min": {
       "command": "webpack --config config/webpack/webpack.config.babel.js",
       "env": {
         "BUILD": "production",
         "MINIMIZE": "true",
         "TARGET_ENV": "web"
-      }
-    },
-    "build:prod:node": {
-      "command": "webpack --config config/webpack/webpack.config.babel.js",
-      "env": {
-        "BUILD": "production",
-        "MINIMIZE": "false",
-        "TARGET_ENV": "node"
-      }
-    },
-    "build:prod:node:min": {
-      "command": "webpack --config config/webpack/webpack.config.babel.js",
-      "env": {
-        "BUILD": "production",
-        "MINIMIZE": "true",
-        "TARGET_ENV": "node"
       }
     },
     "test": {
