@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.29.0
+ * lattice - v0.29.1
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -10559,6 +10559,7 @@ var ASSOCIATION_TYPE_PATH = exports.ASSOCIATION_TYPE_PATH = 'association/type';
 var COMPLEX_TYPE_PATH = exports.COMPLEX_TYPE_PATH = 'complex/type';
 var DETAILED_PATH = exports.DETAILED_PATH = 'detailed';
 var ENUM_TYPE_PATH = exports.ENUM_TYPE_PATH = 'enum/type';
+var FORCE_PATH = exports.FORCE_PATH = 'force';
 var HIERARCHY_PATH = exports.HIERARCHY_PATH = 'hierarchy';
 var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
 var SRC_PATH = exports.SRC_PATH = 'src';
@@ -26389,7 +26390,7 @@ var _Configuration = __webpack_require__(183);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.29.0";
+var version = "v0.29.1";
 
 /**
  * The `lattice.js` library is a layer on top of OpenLattice's REST APIs to simplify the process of reading data from
@@ -33089,6 +33090,7 @@ exports.createEntityType = createEntityType;
 exports.deleteEntityType = deleteEntityType;
 exports.addPropertyTypeToEntityType = addPropertyTypeToEntityType;
 exports.removePropertyTypeFromEntityType = removePropertyTypeFromEntityType;
+exports.forceRemovePropertyTypeFromEntityType = forceRemovePropertyTypeFromEntityType;
 exports.reorderPropertyTypesInEntityType = reorderPropertyTypesInEntityType;
 exports.updateEntityTypeMetaData = updateEntityTypeMetaData;
 exports.getEntityTypeHierarchy = getEntityTypeHierarchy;
@@ -33098,6 +33100,7 @@ exports.getAllPropertyTypes = getAllPropertyTypes;
 exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
 exports.createPropertyType = createPropertyType;
 exports.deletePropertyType = deletePropertyType;
+exports.forceDeletePropertyType = forceDeletePropertyType;
 exports.updatePropertyTypeMetaData = updatePropertyTypeMetaData;
 exports.getAssociationType = getAssociationType;
 exports.getAssociationTypeDetails = getAssociationTypeDetails;
@@ -33117,6 +33120,9 @@ exports.addSrcEntityTypeToAssociationType = addSrcEntityTypeToAssociationType;
 exports.addDstEntityTypeToAssociationType = addDstEntityTypeToAssociationType;
 exports.removeSrcEntityTypeFromAssociationType = removeSrcEntityTypeFromAssociationType;
 exports.removeDstEntityTypeFromAssociationType = removeDstEntityTypeFromAssociationType;
+exports.getAllEntitySetPropertyMetadata = getAllEntitySetPropertyMetadata;
+exports.getEntitySetPropertyMetadata = getEntitySetPropertyMetadata;
+exports.updateEntitySetPropertyMetadata = updateEntitySetPropertyMetadata;
 
 var _immutable = __webpack_require__(4);
 
@@ -34084,6 +34090,48 @@ function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
 }
 
 /**
+ * `DELETE /edm/entity/type/{uuid}/{uuid}/force`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID,
+ * regardless of whether or not there is data associated with the entity type.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removePropertyTypeFromEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function forceRemovePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
  * `PATCH /edm/entity/type/{uuid}/property/type`
  *
  * Updates the EntityType definition for the given EntityType UUID by reordering its properties as
@@ -34434,6 +34482,38 @@ function deletePropertyType(propertyTypeId) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/property/type/{uuid}/force`
+ *
+ * Deletes the PropertyType definition for the given PropertyType UUID regardless of
+ * whether or not there is data associated with it.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.forceDeletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function forceDeletePropertyType(propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -35186,6 +35266,143 @@ function removeDstEntityTypeFromAssociationType(associationTypeId, entityTypeId)
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/entity/set/{uuid}/property/type`
+ *
+ * Returns all property type metadata for an entity set
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.getAllEntitySetPropertyMetadata("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllEntitySetPropertyMetadata(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/entity/set/{uuid}/property/type/{uuid}`
+ *
+ * Returns specified property type metadata for an entity set
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.getEntitySetPropertyMetadata(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function getEntitySetPropertyMetadata(entitySetId, propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/entity/set/{uuid}/property/type/{uuid}`
+ *
+ * Updates the property type metadata for the given entity set.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @param {Object} metadata
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateEntitySetPropertyMetadata(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *   {
+ *     "title": "MyPropertyType",
+ *     "description": "MyPropertyType description",
+ *     "defaultShow": false
+ *   }
+ * );
+ */
+function updateEntitySetPropertyMetadata(entitySetId, propertyTypeId, metadata) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
