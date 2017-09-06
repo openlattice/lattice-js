@@ -50,6 +50,7 @@ import {
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
   ENUM_TYPE_PATH,
+  FORCE_PATH,
   HIERARCHY_PATH,
   IDS_PATH,
   NAMESPACE_PATH,
@@ -1042,6 +1043,51 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
     });
 }
 
+/**
+ * `DELETE /edm/entity/type/{uuid}/{uuid}/force`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID,
+ * regardless of whether or not there is data associated with the entity type.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removePropertyTypeFromEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function forceRemovePropertyTypeFromEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${propertyTypeId}/${FORCE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 
 /**
  * `PATCH /edm/entity/type/{uuid}/property/type`
@@ -1419,6 +1465,41 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /edm/property/type/{uuid}/force`
+ *
+ * Deletes the PropertyType definition for the given PropertyType UUID regardless of
+ * whether or not there is data associated with it.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.forceDeletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function forceDeletePropertyType(propertyTypeId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .delete(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}/${FORCE_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
@@ -2228,6 +2309,152 @@ export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, 
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DST_PATH}/${entityTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /edm/entity/set/{uuid}/property/type`
+ *
+ * Returns all property type metadata for an entity set
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.getAllEntitySetPropertyMetadata("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ENTITY_SET_PATH}/${entitySetId}/${PROPERTY_TYPE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /edm/entity/set/{uuid}/property/type/{uuid}`
+ *
+ * Returns specified property type metadata for an entity set
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.getEntitySetPropertyMetadata(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :UUID) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ENTITY_SET_PATH}/${entitySetId}/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /edm/entity/set/{uuid}/property/type/{uuid}`
+ *
+ * Updates the property type metadata for the given entity set.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @param {Object} metadata
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateEntitySetPropertyMetadata(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *   {
+ *     "title": "MyPropertyType",
+ *     "description": "MyPropertyType description",
+ *     "defaultShow": false
+ *   }
+ * );
+ */
+export function updateEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :UUID, metadata :Object) :Promise<> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'title') && !isNonEmptyString(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadata, 'description') && !isNonEmptyString(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .post(`/${ENTITY_SET_PATH}/${entitySetId}/${PROPERTY_TYPE_PATH}/${propertyTypeId}`, metadata)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
