@@ -18,7 +18,7 @@ describe('AclData', () => {
 
   describe('AclDataBuilder', () => {
 
-    let builder :AclDataBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new AclDataBuilder();

@@ -16,7 +16,7 @@ describe('Schema', () => {
 
   describe('SchemaBuilder', () => {
 
-    let builder :SchemaBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new SchemaBuilder();

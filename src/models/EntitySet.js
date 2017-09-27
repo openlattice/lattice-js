@@ -41,7 +41,8 @@ export default class EntitySet {
       name :string,
       title :string,
       description :?string,
-      contacts :string[]) {
+      contacts :string[]
+  ) {
 
     // required properties
     this.entityTypeId = entityTypeId;

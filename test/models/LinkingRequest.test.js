@@ -16,7 +16,7 @@ describe('LinkingRequest', () => {
 
   describe('LinkingRequestBuilder', () => {
 
-    let builder :LinkingRequestBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new LinkingRequestBuilder();

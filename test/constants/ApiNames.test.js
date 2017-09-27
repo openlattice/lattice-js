@@ -1,17 +1,17 @@
 import * as ApiNames from '../../src/constants/ApiNames';
 
-const ANALYSIS_API :string = 'AnalysisApi';
-const AUTHORIZATION_API :string = 'AuthorizationApi';
-const DATA_API :string = 'DataApi';
-const DATA_SOURCES_API :string = 'DataSourcesApi';
-const EDM_API :string = 'EntityDataModelApi';
-const LINKING_API :string = 'LinkingApi';
-const ORGANIZATIONS_API :string = 'OrganizationsApi';
-const PERMISSIONS_API :string = 'PermissionsApi';
-const PRINCIPALS_API :string = 'PrincipalsApi';
-const REQUESTS_API :string = 'RequestsApi';
-const SEARCH_API :string = 'SearchApi';
-const SYNC_API :string = 'SyncApi';
+const ANALYSIS_API = 'AnalysisApi';
+const AUTHORIZATION_API = 'AuthorizationApi';
+const DATA_API = 'DataApi';
+const DATA_SOURCES_API = 'DataSourcesApi';
+const EDM_API = 'EntityDataModelApi';
+const LINKING_API = 'LinkingApi';
+const ORGANIZATIONS_API = 'OrganizationsApi';
+const PERMISSIONS_API = 'PermissionsApi';
+const PRINCIPALS_API = 'PrincipalsApi';
+const REQUESTS_API = 'RequestsApi';
+const SEARCH_API = 'SearchApi';
+const SYNC_API = 'SyncApi';
 
 describe('ApiNames', () => {
 

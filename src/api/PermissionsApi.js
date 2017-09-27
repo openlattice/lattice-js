@@ -54,7 +54,7 @@ const LOG = new Logger('PermissionsApi');
  *   ]
  * );
  */
-export function getAcl(aclKey :UUID[]) :Promise<> {
+export function getAcl(aclKey :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -108,7 +108,7 @@ export function getAcl(aclKey :UUID[]) :Promise<> {
  *   }
  * );
  */
-export function updateAcl(aclData :AclData) :Promise<> {
+export function updateAcl(aclData :AclData) :Promise<*> {
 
   let errorMsg = '';
 

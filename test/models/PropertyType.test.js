@@ -19,7 +19,7 @@ describe('PropertyType', () => {
 
   describe('PropertyTypeBuilder', () => {
 
-    let builder :PropertyTypeBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new PropertyTypeBuilder();

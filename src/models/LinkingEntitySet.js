@@ -54,7 +54,7 @@ export class LinkingEntitySetBuilder {
       throw new Error('invalid parameter: linkingProperties must be a non-empty array');
     }
 
-    let errorMsg :string;
+    let errorMsg :string = '';
 
     const linkingPropertiesSet :Set<Map<UUID, UUID>> = Immutable.Set().withMutations((set :Set<Map<UUID, UUID>>) => {
       Immutable.fromJS(linkingProperties).forEach((property :Map<UUID, UUID>) => {

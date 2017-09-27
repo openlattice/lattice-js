@@ -18,7 +18,7 @@ describe('Principal', () => {
 
   describe('PrincipalBuilder', () => {
 
-    let builder :PrincipalBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new PrincipalBuilder();

@@ -38,7 +38,7 @@ GET_ALL_REQUEST_STATUSES_INVALID_PARAMS.push({
   state: 'invalid'
 });
 
-INVALID_PARAMS.forEach((invalidParam :any) => {
+INVALID_PARAMS.forEach((invalidParam) => {
 
   if (isDefined(invalidParam)) {
     GET_ALL_REQUEST_STATUSES_INVALID_PARAMS.push(
@@ -55,8 +55,8 @@ INVALID_PARAMS.forEach((invalidParam :any) => {
   });
 });
 
-INVALID_PARAMS.forEach((invalidParam1 :any) => {
-  INVALID_PARAMS.forEach((invalidParam2 :any) => {
+INVALID_PARAMS.forEach((invalidParam1) => {
+  INVALID_PARAMS.forEach((invalidParam2) => {
     GET_ALL_REQUEST_STATUSES_INVALID_PARAMS.push({
       state: invalidParam1,
       aclKeys: invalidParam2
@@ -96,8 +96,8 @@ function testGetAllRequestStatuses() {
     describe('get all RequestStatuses', () => {
 
       // TODO: temporary
-      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
-      const validParams :any[] = [];
+      const functionToTest = RequestsApi.getAllRequestStatuses;
+      const validParams = [];
       testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
       testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
 
@@ -122,8 +122,8 @@ function testGetAllRequestStatuses() {
     describe('get all RequestStatuses for the specified RequestState', () => {
 
       // TODO: temporary
-      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
-      const validParams :any[] = [{ state: RequestStateTypes.SUBMITTED }];
+      const functionToTest = RequestsApi.getAllRequestStatuses;
+      const validParams = [{ state: RequestStateTypes.SUBMITTED }];
       testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
       testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
 
@@ -148,8 +148,8 @@ function testGetAllRequestStatuses() {
     describe('get all RequestStatuses for the specified AclKeys', () => {
 
       // TODO: temporary
-      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
-      const validParams :any[] = [{ aclKeys: [MOCK_ACL_KEY] }];
+      const functionToTest = RequestsApi.getAllRequestStatuses;
+      const validParams = [{ aclKeys: [MOCK_ACL_KEY] }];
       testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, REQUESTS_API);
       testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams);
 
@@ -206,8 +206,8 @@ function testGetAllRequestStatuses() {
     describe('get all RequestStatuses for the specified RequestState and AclKeys', () => {
 
       // TODO: temporary
-      const functionToTest :Function = RequestsApi.getAllRequestStatuses;
-      const validParams :any[] = [{
+      const functionToTest = RequestsApi.getAllRequestStatuses;
+      const validParams = [{
         state: RequestStateTypes.SUBMITTED,
         aclKeys: [MOCK_ACL_KEY]
       }];
@@ -240,13 +240,13 @@ function testSubmitRequests() {
 
   describe('submitRequests()', () => {
 
-    const functionToTest :Function = RequestsApi.submitRequests;
+    const functionToTest = RequestsApi.submitRequests;
 
-    const validParams :any[] = [
+    const validParams = [
       [MOCK_REQUEST_DM]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 

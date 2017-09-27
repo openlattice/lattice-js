@@ -100,10 +100,10 @@ function testGetEntityDataModel() {
 
   describe('getEntityDataModel()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getEntityDataModel;
+    const functionToTest = EntityDataModelApi.getEntityDataModel;
 
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
+    const validParams = [];
+    const invalidParams = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -129,13 +129,13 @@ function testGetSchema() {
 
   describe('getSchema()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getSchema;
+    const functionToTest = EntityDataModelApi.getSchema;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -168,14 +168,14 @@ function testGetSchemaFileUrl() {
 
     const MOCK_FILE_TYPE = 'json';
 
-    const functionToTest :Function = EntityDataModelApi.getSchemaFileUrl;
+    const functionToTest = EntityDataModelApi.getSchemaFileUrl;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN,
       MOCK_FILE_TYPE
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -206,10 +206,10 @@ function testGetAllSchemas() {
 
   describe('getAllSchemas()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getAllSchemas;
+    const functionToTest = EntityDataModelApi.getAllSchemas;
 
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
+    const validParams = [];
+    const invalidParams = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -237,13 +237,13 @@ function testGetAllSchemasInNamespace() {
 
   describe('getAllSchemasInNamespace()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getAllSchemasInNamespace;
+    const functionToTest = EntityDataModelApi.getAllSchemasInNamespace;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN.namespace
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -274,13 +274,13 @@ function testCreateSchema() {
 
   describe('createSchema()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.createSchema;
+    const functionToTest = EntityDataModelApi.createSchema;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_SCHEMA_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -312,13 +312,13 @@ function testCreateEmptySchema() {
 
   describe('createEmptySchema()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.createEmptySchema;
+    const functionToTest = EntityDataModelApi.createEmptySchema;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -351,16 +351,16 @@ function testUpdateSchema() {
 
     const MOCK_ACTION = 'ADD';
 
-    const functionToTest :Function = EntityDataModelApi.updateSchema;
+    const functionToTest = EntityDataModelApi.updateSchema;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN,
       MOCK_ACTION,
       [MOCK_ENTITY_TYPE_DM.id],
       [MOCK_PROPERTY_TYPE_DM.id]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED,
@@ -399,13 +399,13 @@ function testGetEntitySet() {
 
   describe('getEntitySet()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getEntitySet;
+    const functionToTest = EntityDataModelApi.getEntitySet;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -436,13 +436,13 @@ function testGetEntitySetId() {
 
   describe('getEntitySetId()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getEntitySetId;
+    const functionToTest = EntityDataModelApi.getEntitySetId;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_DM.name
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -473,10 +473,10 @@ function testGetAllEntitySets() {
 
   describe('getAllEntitySets()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getAllEntitySets;
+    const functionToTest = EntityDataModelApi.getAllEntitySets;
 
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
+    const validParams = [];
+    const invalidParams = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -504,13 +504,13 @@ function testCreateEntitySets() {
 
   describe('createEntitySets()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.createEntitySets;
+    const functionToTest = EntityDataModelApi.createEntitySets;
 
-    const validParams :any[] = [
+    const validParams = [
       [MOCK_ENTITY_SET_DM]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -542,13 +542,13 @@ function testDeleteEntitySet() {
 
   describe('deleteEntitySet()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.deleteEntitySet;
+    const functionToTest = EntityDataModelApi.deleteEntitySet;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -579,14 +579,14 @@ function testUpdateEntitySetMetaData() {
 
   describe('updateEntitySetMetaData()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.updateEntitySetMetaData;
+    const functionToTest = EntityDataModelApi.updateEntitySetMetaData;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_DM.id,
       MOCK_METADATA_UPDATE
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -619,13 +619,13 @@ function testGetEntityType() {
 
   describe('getEntityType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getEntityType;
+    const functionToTest = EntityDataModelApi.getEntityType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_TYPE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -656,13 +656,13 @@ function testGetEntityTypeId() {
 
   describe('getEntityTypeId()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getEntityTypeId;
+    const functionToTest = EntityDataModelApi.getEntityTypeId;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -693,10 +693,10 @@ function testGetAllEntityTypes() {
 
   describe('getAllEntityTypes()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getAllEntityTypes;
+    const functionToTest = EntityDataModelApi.getAllEntityTypes;
 
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
+    const validParams = [];
+    const invalidParams = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -724,13 +724,13 @@ function testCreateEntityType() {
 
   describe('createEntityType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.createEntityType;
+    const functionToTest = EntityDataModelApi.createEntityType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_TYPE_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -762,13 +762,13 @@ function testDeleteEntityType() {
 
   describe('deleteEntityType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.deleteEntityType;
+    const functionToTest = EntityDataModelApi.deleteEntityType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_TYPE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -799,14 +799,14 @@ function testAddPropertyTypeToEntityType() {
 
   describe('addPropertyTypeToEntityType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.addPropertyTypeToEntityType;
+    const functionToTest = EntityDataModelApi.addPropertyTypeToEntityType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_TYPE_DM.id,
       MOCK_PROPERTY_TYPE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS
     ];
@@ -838,14 +838,14 @@ function testRemovePropertyTypeFromEntityType() {
 
   describe('removePropertyTypeFromEntityType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.removePropertyTypeFromEntityType;
+    const functionToTest = EntityDataModelApi.removePropertyTypeFromEntityType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_TYPE_DM.id,
       MOCK_PROPERTY_TYPE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS
     ];
@@ -877,14 +877,14 @@ function testUpdateEntityTypeMetaData() {
 
   describe('updateEntityTypeMetaData()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.updateEntityTypeMetaData;
+    const functionToTest = EntityDataModelApi.updateEntityTypeMetaData;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_TYPE_DM.id,
       MOCK_METADATA_UPDATE
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -917,13 +917,13 @@ function testGetPropertyType() {
 
   describe('getPropertyType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getPropertyType;
+    const functionToTest = EntityDataModelApi.getPropertyType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_PROPERTY_TYPE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -954,13 +954,13 @@ function testGetPropertyTypeId() {
 
   describe('getPropertyTypeId()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getPropertyTypeId;
+    const functionToTest = EntityDataModelApi.getPropertyTypeId;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -991,10 +991,10 @@ function testGetAllPropertyTypes() {
 
   describe('getAllPropertyTypes()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getAllPropertyTypes;
+    const functionToTest = EntityDataModelApi.getAllPropertyTypes;
 
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
+    const validParams = [];
+    const invalidParams = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -1022,13 +1022,13 @@ function testGetAllPropertyTypesInNamespace() {
 
   describe('getAllPropertyTypesInNamespace()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.getAllPropertyTypesInNamespace;
+    const functionToTest = EntityDataModelApi.getAllPropertyTypesInNamespace;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_FQN.namespace
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -1059,13 +1059,13 @@ function testCreatePropertyType() {
 
   describe('createPropertyType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.createPropertyType;
+    const functionToTest = EntityDataModelApi.createPropertyType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_PROPERTY_TYPE_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -1097,13 +1097,13 @@ function testDeletePropertyType() {
 
   describe('deletePropertyType()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.deletePropertyType;
+    const functionToTest = EntityDataModelApi.deletePropertyType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_PROPERTY_TYPE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -1134,14 +1134,14 @@ function testUpdatePropertyTypeMetaData() {
 
   describe('updatePropertyTypeMetaData()', () => {
 
-    const functionToTest :Function = EntityDataModelApi.updatePropertyTypeMetaData;
+    const functionToTest = EntityDataModelApi.updatePropertyTypeMetaData;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_PROPERTY_TYPE_DM.id,
       MOCK_METADATA_UPDATE
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];

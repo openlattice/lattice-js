@@ -18,7 +18,7 @@ describe('DataSource', () => {
 
   describe('DataSourceBuilder', () => {
 
-    let builder :DataSourceBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new DataSourceBuilder();

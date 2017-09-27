@@ -19,7 +19,7 @@ describe('EntitySet', () => {
 
   describe('EntitySetBuilder', () => {
 
-    let builder :EntitySetBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new EntitySetBuilder();

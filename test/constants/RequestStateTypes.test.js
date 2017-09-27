@@ -1,8 +1,8 @@
 import RequestStateTypes from '../../src/constants/types/RequestStateTypes';
 
-const APPROVED :string = 'APPROVED';
-const DECLINED :string = 'DECLINED';
-const SUBMITTED :string = 'SUBMITTED';
+const APPROVED = 'APPROVED';
+const DECLINED = 'DECLINED';
+const SUBMITTED = 'SUBMITTED';
 
 describe('RequestStateTypes', () => {
 

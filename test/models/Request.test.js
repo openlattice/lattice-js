@@ -21,7 +21,7 @@ describe('Request', () => {
 
   describe('RequestBuilder', () => {
 
-    let builder :RequestBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new RequestBuilder();

@@ -55,7 +55,8 @@ export default class EntityType {
       key :UUID[],
       properties :UUID[],
       baseType :?UUID,
-      category :?SecurableType) {
+      category :?SecurableType
+  ) {
 
     // required properties
     this.type = type;

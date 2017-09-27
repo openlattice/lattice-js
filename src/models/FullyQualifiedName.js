@@ -39,9 +39,10 @@
 
 import isObject from 'lodash/isObject';
 
-import {
-  isNonEmptyString
-} from '../utils/LangUtils';
+import Logger from '../utils/Logger';
+import { isNonEmptyString } from '../utils/LangUtils';
+
+const LOG = new Logger('FullyQualifiedName');
 
 type FqnObjectLiteral = {
   namespace :string,
@@ -106,8 +107,10 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
       return EMPTY_FQN;
     }
 
+    /* eslint-disable prefer-destructuring */
     namespace = fqnObj.namespace;
     name = fqnObj.name;
+    /* eslint-enable */
   }
   /*
    * case 2: two parameters
@@ -150,17 +153,23 @@ export default class FullyQualifiedName {
   constructor(...args :any[]) {
 
     if (args.length !== 1 && args.length !== 2) {
-      throw new Error(`invalid parameter count: FullyQualifiedName takes only 1 or 2 parameters, got ${args.length}`);
+      const error = `invalid parameter count: FullyQualifiedName takes only 1 or 2 parameters, got ${args.length}`;
+      LOG.error(error);
+      throw new Error(error);
     }
 
     const { namespace, name } = processArgs(...args);
 
     if (!isNonEmptyString(namespace)) {
-      throw new Error('invalid FQN: namespace must be a non-empty string');
+      const error = 'invalid FQN: namespace must be a non-empty string';
+      LOG.error(error);
+      throw new Error(error);
     }
 
     if (!isNonEmptyString(name)) {
-      throw new Error('invalid FQN: name must be a non-empty string');
+      const error = 'invalid FQN: name must be a non-empty string';
+      LOG.error(error);
+      throw new Error(error);
     }
 
     this.namespace = namespace;

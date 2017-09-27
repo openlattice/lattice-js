@@ -1,10 +1,10 @@
 import PermissionTypes from '../../src/constants/types/PermissionTypes';
 
-const DISCOVER :string = 'DISCOVER';
-const LINK :string = 'LINK';
-const OWNER :string = 'OWNER';
-const READ :string = 'READ';
-const WRITE :string = 'WRITE';
+const DISCOVER = 'DISCOVER';
+const LINK = 'LINK';
+const OWNER = 'OWNER';
+const READ = 'READ';
+const WRITE = 'WRITE';
 
 describe('PermissionTypes', () => {
 

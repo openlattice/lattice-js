@@ -18,7 +18,7 @@ describe('RequestStatus', () => {
 
   describe('RequestStatusBuilder', () => {
 
-    let builder :RequestStatusBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new RequestStatusBuilder();

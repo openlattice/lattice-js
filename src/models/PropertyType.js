@@ -43,7 +43,8 @@ export default class PropertyType {
       title :string,
       description :?string,
       datatype :string,
-      schemas :FullyQualifiedName[]) {
+      schemas :FullyQualifiedName[]
+  ) {
 
     // required properties
     this.type = type;
