@@ -49,13 +49,13 @@ function testGetDataSource() {
 
   describe('getDataSource()', () => {
 
-    const functionToTest :Function = DataSourcesApi.getDataSource;
+    const functionToTest = DataSourcesApi.getDataSource;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_DATA_SOURCE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -84,13 +84,13 @@ function testCreateOrUpdateDataSource() {
 
   describe('createOrUpdateDataSource()', () => {
 
-    const functionToTest :Function = DataSourcesApi.createOrUpdateDataSource;
+    const functionToTest = DataSourcesApi.createOrUpdateDataSource;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_DATA_SOURCE_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -119,13 +119,13 @@ function testDeleteDataSource() {
 
   describe('deleteDataSource()', () => {
 
-    const functionToTest :Function = DataSourcesApi.deleteDataSource;
+    const functionToTest = DataSourcesApi.deleteDataSource;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_DATA_SOURCE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -154,13 +154,13 @@ function testStartSync() {
 
   describe('startSync()', () => {
 
-    const functionToTest :Function = DataSourcesApi.startSync;
+    const functionToTest = DataSourcesApi.startSync;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_DATA_SOURCE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -189,14 +189,14 @@ function testSignalSyncCompleted() {
 
   describe('signalSyncCompleted()', () => {
 
-    const functionToTest :Function = DataSourcesApi.signalSyncCompleted;
+    const functionToTest = DataSourcesApi.signalSyncCompleted;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_DATA_SOURCE_DM.id,
       MOCK_SYNC_UUID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS
     ];

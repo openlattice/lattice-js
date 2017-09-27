@@ -37,7 +37,7 @@
     "babel-eslint": "^8.0.0",
     "babel-loader": "^7.1.0",
     "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-class-properties": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-flow": "^6.23.0",
@@ -66,8 +66,8 @@
     "npm-run-all": "^4.0.0",
     "phantomjs-prebuilt": "^2.1.13",
     "rimraf": "2.6.2",
-    "webpack": "^3.4.0",
-    "webpack-dev-server": "^2.4.0"
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.8.0"
   },
   "scripts": {
     "build": "better-npm-run build",

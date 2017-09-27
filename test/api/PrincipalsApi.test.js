@@ -53,13 +53,13 @@ function testGetUser() {
 
   describe('getUser()', () => {
 
-    const functionToTest :Function = PrincipalsApi.getUser;
+    const functionToTest = PrincipalsApi.getUser;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_USER_ID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -90,10 +90,10 @@ function testGetAllUsers() {
 
   describe('getAllUsers()', () => {
 
-    const functionToTest :Function = PrincipalsApi.getAllUsers;
+    const functionToTest = PrincipalsApi.getAllUsers;
 
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
+    const validParams = [];
+    const invalidParams = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -121,13 +121,13 @@ function testSearchAllUsersByEmail() {
 
   describe('searchAllUsersByEmail()', () => {
 
-    const functionToTest :Function = PrincipalsApi.searchAllUsersByEmail;
+    const functionToTest = PrincipalsApi.searchAllUsersByEmail;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_EMAIL
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 

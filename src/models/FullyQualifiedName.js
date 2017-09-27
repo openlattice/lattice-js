@@ -107,8 +107,10 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
       return EMPTY_FQN;
     }
 
+    /* eslint-disable prefer-destructuring */
     namespace = fqnObj.namespace;
     name = fqnObj.name;
+    /* eslint-enable */
   }
   /*
    * case 2: two parameters

@@ -103,7 +103,7 @@ const UpdateSchemaRequestActions :{[key :string] :string} = {
  * @example
  * EntityDataModelApi.getEntityDataModel();
  */
-export function getEntityDataModel() :Promise<> {
+export function getEntityDataModel() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get('/')
@@ -141,7 +141,7 @@ export function getEntityDataModel() :Promise<> {
  *   ]
  * );
  */
-export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
+export function getEntityDataModelProjection(projection :Object[]) :Promise<*> {
 
   // TODO: add validation
   // TODO: add unit tests
@@ -179,7 +179,7 @@ export function getEntityDataModelProjection(projection :Object[]) :Promise<> {
  *   { "namespace": "LATTICE", "name": "MySchema" }
  * );
  */
-export function getSchema(schemaFqn :FullyQualifiedName) :Promise<> {
+export function getSchema(schemaFqn :FullyQualifiedName) :Promise<*> {
 
   let errorMsg = '';
 
@@ -214,7 +214,7 @@ export function getSchema(schemaFqn :FullyQualifiedName) :Promise<> {
  * @example
  * EntityDataModelApi.getAllSchemas();
  */
-export function getAllSchemas() :Promise<> {
+export function getAllSchemas() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${SCHEMA_PATH}`)
@@ -241,7 +241,7 @@ export function getAllSchemas() :Promise<> {
  * @example
  * EntityDataModelApi.getAllSchemasInNamespace("LATTICE");
  */
-export function getAllSchemasInNamespace(namespace :string) :Promise<> {
+export function getAllSchemasInNamespace(namespace :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -316,7 +316,7 @@ export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string
  *   }
  * );
  */
-export function createSchema(schema :Schema) :Promise<> {
+export function createSchema(schema :Schema) :Promise<*> {
 
   let errorMsg = '';
 
@@ -352,7 +352,7 @@ export function createSchema(schema :Schema) :Promise<> {
  *   { "namespace": "LATTICE", "name": "MySchema" }
  * );
  */
-export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<> {
+export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<*> {
 
   let errorMsg = '';
 
@@ -404,7 +404,8 @@ export function updateSchema(
     schemaFqn :FullyQualifiedName,
     action :string,
     entityTypeIds :UUID[],
-    propertyTypeIds :UUID[]) :Promise<> {
+    propertyTypeIds :UUID[]
+) :Promise<*> {
 
   let errorMsg = '';
 
@@ -492,7 +493,7 @@ export function updateSchema(
  * @example
  * EntityDataModelApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getEntitySet(entitySetId :UUID) :Promise<> {
+export function getEntitySet(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -526,7 +527,7 @@ export function getEntitySet(entitySetId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getEntitySetId("MyEntitySet");
  */
-export function getEntitySetId(entitySetName :string) :Promise<> {
+export function getEntitySetId(entitySetName :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -558,7 +559,7 @@ export function getEntitySetId(entitySetName :string) :Promise<> {
  * @example
  * EntityDataModelApi.getAllEntitySets();
  */
-export function getAllEntitySets() :Promise<> {
+export function getAllEntitySets() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_SET_PATH}`)
@@ -595,7 +596,7 @@ export function getAllEntitySets() :Promise<> {
  *   ]
  * );
  */
-export function createEntitySets(entitySets :EntitySet[]) :Promise<> {
+export function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -631,7 +632,7 @@ export function createEntitySets(entitySets :EntitySet[]) :Promise<> {
  * @example
  * EntityDataModelApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteEntitySet(entitySetId :UUID) :Promise<> {
+export function deleteEntitySet(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -675,7 +676,7 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<> {
  *   }
  * );
  */
-export function updateEntitySetMetaData(entitySetId :UUID, metadata :Object) :Promise<> {
+export function updateEntitySetMetaData(entitySetId :UUID, metadata :Object) :Promise<*> {
 
   // TODO: create data model: MetaDataUpdate
 
@@ -753,7 +754,7 @@ export function updateEntitySetMetaData(entitySetId :UUID, metadata :Object) :Pr
  * @example
  * EntityDataModelApi.getEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getEntityType(entityTypeId :UUID) :Promise<> {
+export function getEntityType(entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -789,7 +790,7 @@ export function getEntityType(entityTypeId :UUID) :Promise<> {
  *   { "namespace": "LATTICE", "name": "MyProperty" }
  * );
  */
-export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
+export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<*> {
 
   let errorMsg = '';
 
@@ -825,7 +826,7 @@ export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<> {
  * @example
  * EntityDataModelApi.getAllEntityTypes();
  */
-export function getAllEntityTypes() :Promise<> {
+export function getAllEntityTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_TYPE_PATH}`)
@@ -851,7 +852,7 @@ export function getAllEntityTypes() :Promise<> {
  * @example
  * EntityDataModelApi.getAllAssociationEntityTypes();
  */
-export function getAllAssociationEntityTypes() :Promise<> {
+export function getAllAssociationEntityTypes() :Promise<*> {
 
   // TODO: everything
 
@@ -900,7 +901,7 @@ export function getAllAssociationEntityTypes() :Promise<> {
  *   }
  * );
  */
-export function createEntityType(entityType :EntityType) :Promise<> {
+export function createEntityType(entityType :EntityType) :Promise<*> {
 
   let errorMsg = '';
 
@@ -934,7 +935,7 @@ export function createEntityType(entityType :EntityType) :Promise<> {
  * @example
  * EntityDataModelApi.deleteEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteEntityType(entityTypeId :UUID) :Promise<> {
+export function deleteEntityType(entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -972,7 +973,7 @@ export function deleteEntityType(entityTypeId :UUID) :Promise<> {
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
+export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1016,7 +1017,7 @@ export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
+export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1061,7 +1062,7 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function forceRemovePropertyTypeFromEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<> {
+export function forceRemovePropertyTypeFromEntityType(entityTypeId :UUID, propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1107,7 +1108,7 @@ export function forceRemovePropertyTypeFromEntityType(entityTypeId :UUID, proper
  *   ["4b08e1f9-4a00-4169-92ea-10e377070220", "a00e2ce8-912d-49c9-a259-e6c1ffebf053"]
  * );
  */
-export function reorderPropertyTypesInEntityType(entityTypeId :UUID, propertyTypeIds :UUID[]) :Promise<> {
+export function reorderPropertyTypesInEntityType(entityTypeId :UUID, propertyTypeIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1157,7 +1158,7 @@ export function reorderPropertyTypesInEntityType(entityTypeId :UUID, propertyTyp
  *   }
  * );
  */
-export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :Promise<> {
+export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :Promise<*> {
 
   // TODO: create data model: MetaDataUpdate
 
@@ -1230,7 +1231,7 @@ export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :
  * @example
  * EntityDataModelApi.getEntityTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getEntityTypeHierarchy(entityTypeId :UUID) :Promise<> {
+export function getEntityTypeHierarchy(entityTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -1273,7 +1274,7 @@ export function getEntityTypeHierarchy(entityTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getPropertyType(propertyTypeId :UUID) :Promise<> {
+export function getPropertyType(propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1309,7 +1310,7 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<> {
  *   { namespace: "LATTICE", name: "MyProperty" }
  * );
  */
-export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<> {
+export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1345,7 +1346,7 @@ export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<
  * @example
  * EntityDataModelApi.getAllPropertyTypes();
  */
-export function getAllPropertyTypes() :Promise<> {
+export function getAllPropertyTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${PROPERTY_TYPE_PATH}`)
@@ -1372,7 +1373,7 @@ export function getAllPropertyTypes() :Promise<> {
  * @example
  * EntityDataModelApi.getAllPropertyTypesInNamespace("LATTICE");
  */
-export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
+export function getAllPropertyTypesInNamespace(namespace :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1419,7 +1420,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<> {
  *   }
  * );
  */
-export function createPropertyType(propertyType :PropertyType) :Promise<> {
+export function createPropertyType(propertyType :PropertyType) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1453,7 +1454,7 @@ export function createPropertyType(propertyType :PropertyType) :Promise<> {
  * @example
  * EntityDataModelApi.deletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
+export function deletePropertyType(propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1488,7 +1489,7 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.forceDeletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function forceDeletePropertyType(propertyTypeId :UUID) :Promise<> {
+export function forceDeletePropertyType(propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1532,7 +1533,7 @@ export function forceDeletePropertyType(propertyTypeId :UUID) :Promise<> {
  *   }
  * );
  */
-export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Object) :Promise<> {
+export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Object) :Promise<*> {
 
   // TODO: create data model: MetaDataUpdate
 
@@ -1611,7 +1612,7 @@ export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Objec
  * @example
  * EntityDataModelApi.getAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAssociationType(associationTypeId :UUID) :Promise<> {
+export function getAssociationType(associationTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -1648,7 +1649,7 @@ export function getAssociationType(associationTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getAssociationTypeDetails("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<> {
+export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -1682,7 +1683,7 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getAllAvailableAssociationTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllAvailableAssociationTypes(entityTypeId :UUID) :Promise<> {
+export function getAllAvailableAssociationTypes(entityTypeId :UUID) :Promise<*> {
 
   // TODO: backend returns Iterable<EntityType>, but the function name is getAllAvailableAssociationTypes, feels weird
   // TODO: everything
@@ -1726,7 +1727,7 @@ export function getAllAvailableAssociationTypes(entityTypeId :UUID) :Promise<> {
  *   }
  * );
  */
-export function createAssociationType(associationType :AssociationType) :Promise<> {
+export function createAssociationType(associationType :Object) :Promise<*> {
 
   // TODO: everything
 
@@ -1762,7 +1763,7 @@ export function createAssociationType(associationType :AssociationType) :Promise
  * @example
  * EntityDataModelApi.deleteAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteAssociationType(associationTypeId :UUID) :Promise<> {
+export function deleteAssociationType(associationTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -1804,7 +1805,7 @@ export function deleteAssociationType(associationTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getComplexType(complexTypeId :UUID) :Promise<> {
+export function getComplexType(complexTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -1840,7 +1841,7 @@ export function getComplexType(complexTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getAllComplexTypes();
  */
-export function getAllComplexTypes() :Promise<> {
+export function getAllComplexTypes() :Promise<*> {
 
   // TODO: everything
 
@@ -1869,7 +1870,7 @@ export function getAllComplexTypes() :Promise<> {
  * @example
  * EntityDataModelApi.getComplexTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getComplexTypeHierarchy(complexTypeId :UUID) :Promise<> {
+export function getComplexTypeHierarchy(complexTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -1922,7 +1923,7 @@ export function getComplexTypeHierarchy(complexTypeId :UUID) :Promise<> {
  *   }
  * );
  */
-export function createComplexType(complexType :ComplexType) :Promise<> {
+export function createComplexType(complexType :Object) :Promise<*> {
 
   // TODO: everything
 
@@ -1958,7 +1959,7 @@ export function createComplexType(complexType :ComplexType) :Promise<> {
  * @example
  * EntityDataModelApi.deleteComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteComplexType(complexTypeId :UUID) :Promise<> {
+export function deleteComplexType(complexTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -2000,7 +2001,7 @@ export function deleteComplexType(complexTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getEnumType(enumTypeId :UUID) :Promise<> {
+export function getEnumType(enumTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -2036,7 +2037,7 @@ export function getEnumType(enumTypeId :UUID) :Promise<> {
  * @example
  * EntityDataModelApi.getAllEnumTypes();
  */
-export function getAllEnumTypes() :Promise<> {
+export function getAllEnumTypes() :Promise<*> {
 
   // TODO: everything
 
@@ -2081,7 +2082,7 @@ export function getAllEnumTypes() :Promise<> {
  *   }
  * );
  */
-export function createEnumType(enumType :EnumType) :Promise<> {
+export function createEnumType(enumType :Object) :Promise<*> {
 
   // TODO: everything
 
@@ -2117,7 +2118,7 @@ export function createEnumType(enumType :EnumType) :Promise<> {
  * @example
  * EntityDataModelApi.deleteEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteEnumType(enumTypeId :UUID) :Promise<> {
+export function deleteEnumType(enumTypeId :UUID) :Promise<*> {
 
   // TODO: everything
 
@@ -2157,7 +2158,7 @@ export function deleteEnumType(enumTypeId :UUID) :Promise<> {
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function addSrcEntityTypeToAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+export function addSrcEntityTypeToAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -2201,7 +2202,7 @@ export function addSrcEntityTypeToAssociationType(associationTypeId :UUID, entit
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function addDstEntityTypeToAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+export function addDstEntityTypeToAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -2246,7 +2247,7 @@ export function addDstEntityTypeToAssociationType(associationTypeId :UUID, entit
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function removeSrcEntityTypeFromAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+export function removeSrcEntityTypeFromAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -2291,7 +2292,7 @@ export function removeSrcEntityTypeFromAssociationType(associationTypeId :UUID, 
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<> {
+export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -2326,12 +2327,12 @@ export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, 
  * @static
  * @memberof lattice.EntityDataModelApi
  * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without a value
+ * @return {Promise}
  *
  * @example
  * EntityDataModelApi.getAllEntitySetPropertyMetadata("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<> {
+export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -2361,7 +2362,7 @@ export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<> {
  * @memberof lattice.EntityDataModelApi
  * @param {UUID} entitySetId
  * @param {UUID} propertyTypeId
- * @return {Promise} - a Promise that resolves without a value
+ * @return {Promise}
  *
  * @example
  * EntityDataModelApi.getEntitySetPropertyMetadata(
@@ -2369,7 +2370,7 @@ export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<> {
  *   "4b08e1f9-4a00-4169-92ea-10e377070220"
  * );
  */
-export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :UUID) :Promise<> {
+export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -2419,7 +2420,11 @@ export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :
  *   }
  * );
  */
-export function updateEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :UUID, metadata :Object) :Promise<> {
+export function updateEntitySetPropertyMetadata(
+    entitySetId :UUID,
+    propertyTypeId :UUID,
+    metadata :Object
+) :Promise<*> {
 
   let errorMsg = '';
 

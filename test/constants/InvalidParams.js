@@ -1,5 +1,5 @@
 /* eslint-disable no-array-constructor, no-new-object, no-new-wrappers, no-multi-spaces */
-const INVALID_PARAMS :any[] = [
+const INVALID_PARAMS = [
   undefined,          // 0
   null,               // 1
   [],                 // 2
@@ -20,43 +20,43 @@ const INVALID_PARAMS :any[] = [
 ];
 /* eslint-enable */
 
-const INVALID_PARAMS_BOOLEANS_ALLOWED :any[] = INVALID_PARAMS.slice(0);
+const INVALID_PARAMS_BOOLEANS_ALLOWED = INVALID_PARAMS.slice(0);
 INVALID_PARAMS_BOOLEANS_ALLOWED.splice(9, 1); // remove "new Boolean(false)"
 INVALID_PARAMS_BOOLEANS_ALLOWED.splice(8, 1); // remove "new Boolean(true)"
 INVALID_PARAMS_BOOLEANS_ALLOWED.splice(7, 1); // remove "false"
 INVALID_PARAMS_BOOLEANS_ALLOWED.splice(6, 1); // remove "true"
 
-const INVALID_PARAMS_EMPTY_ARRAY_ALLOWED :any[] = INVALID_PARAMS.slice(0);
+const INVALID_PARAMS_EMPTY_ARRAY_ALLOWED = INVALID_PARAMS.slice(0);
 INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.splice(3, 1); // remove "new Array()"
 INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.splice(2, 1); // remove "[]"
 INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.splice(1, 1); // remove "null"
 INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.splice(0, 1); // remove "undefined"
 
-const INVALID_PARAMS_EMPTY_STRING_ALLOWED :any[] = INVALID_PARAMS.slice(0);
+const INVALID_PARAMS_EMPTY_STRING_ALLOWED = INVALID_PARAMS.slice(0);
 INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(15, 1); // remove "new String()"
 INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(14, 1); // remove "' '"
 INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(13, 1); // remove "''"
 INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(1, 1); // remove "null"
 INVALID_PARAMS_EMPTY_STRING_ALLOWED.splice(0, 1); // remove "undefined"
 
-const INVALID_PARAMS_NOT_DEFINED_ALLOWED :any[] = INVALID_PARAMS.slice(0);
+const INVALID_PARAMS_NOT_DEFINED_ALLOWED = INVALID_PARAMS.slice(0);
 INVALID_PARAMS_NOT_DEFINED_ALLOWED.splice(1, 1); // remove "null"
 INVALID_PARAMS_NOT_DEFINED_ALLOWED.splice(0, 1); // remove "undefined"
 
 // SS = special string, for cases where strings have to be of a specific format/value, such as UUIDs and Enums
-const INVALID_SS_PARAMS :any[] = INVALID_PARAMS.slice(0);
+const INVALID_SS_PARAMS = INVALID_PARAMS.slice(0);
 INVALID_SS_PARAMS.push('invalid_special_string_value');
 
-const INVALID_SS_PARAMS_BOOLEANS_ALLOWED :any[] = INVALID_PARAMS_BOOLEANS_ALLOWED.slice(0);
+const INVALID_SS_PARAMS_BOOLEANS_ALLOWED = INVALID_PARAMS_BOOLEANS_ALLOWED.slice(0);
 INVALID_SS_PARAMS_BOOLEANS_ALLOWED.push('invalid_special_string_value');
 
-const INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED :any[] = INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.slice(0);
+const INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED = INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.slice(0);
 INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.push('invalid_special_string_value');
 
-const INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED :any[] = INVALID_PARAMS_EMPTY_STRING_ALLOWED.slice(0);
+const INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED = INVALID_PARAMS_EMPTY_STRING_ALLOWED.slice(0);
 INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.push('invalid_special_string_value');
 
-const INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED :any[] = INVALID_PARAMS_NOT_DEFINED_ALLOWED.slice(0);
+const INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED = INVALID_PARAMS_NOT_DEFINED_ALLOWED.slice(0);
 INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED.splice(1, 1); // remove "null"
 INVALID_SS_PARAMS_NOT_DEFINED_ALLOWED.splice(0, 1); // remove "undefined"
 

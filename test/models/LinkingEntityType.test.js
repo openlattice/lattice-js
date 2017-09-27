@@ -16,7 +16,7 @@ describe('LinkingEntityType', () => {
 
   describe('LinkingEntityTypeBuilder', () => {
 
-    let builder :LinkingEntityTypeBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new LinkingEntityTypeBuilder();

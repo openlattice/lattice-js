@@ -18,7 +18,7 @@ describe('AccessCheck', () => {
 
   describe('AccessCheckBuilder', () => {
 
-    let builder :AccessCheckBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new AccessCheckBuilder();

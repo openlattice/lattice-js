@@ -34,8 +34,7 @@ import {
 //     });
 // }
 
-export function testApiFunctionShouldGetCorrectAxiosInstance(
-    functionToTest :Function, validParams :mixed[], apiName :string) {
+export function testApiFunctionShouldGetCorrectAxiosInstance(functionToTest, validParams, apiName) {
 
   // expects AxiosUtils.getApiAxiosInstance() to already have a spy attached to it
   it('should invoke getApiAxiosInstance() with the correct API', (done) => {
@@ -52,7 +51,7 @@ export function testApiFunctionShouldGetCorrectAxiosInstance(
   });
 }
 
-export function testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest :Function, validParams :mixed[]) {
+export function testApiFunctionShouldReturnPromiseOnValidParameters(functionToTest, validParams) {
 
   // expects AxiosUtils.getApiAxiosInstance() to already have a spy attached to it
   it('should return a Promise when given valid parameters', () => {
@@ -61,8 +60,7 @@ export function testApiFunctionShouldReturnPromiseOnValidParameters(functionToTe
   });
 }
 
-export function testApiFunctionShouldReturnNullOnInvalidParameters(
-    functionToTest :Function, validParams :mixed[], invalidParams :mixed[]) {
+export function testApiFunctionShouldReturnNullOnInvalidParameters(functionToTest, validParams, invalidParams) {
 
   it('should return null when given invalid parameters', () => {
 
@@ -71,9 +69,9 @@ export function testApiFunctionShouldReturnNullOnInvalidParameters(
     }
 
     for (let i = 0; i < validParams.length; i += 1) {
-      const invocationParams1 :mixed[] = validParams.slice(0);
-      const invocationParams2 :mixed[] = validParams.slice(0);
-      invalidParams[i].forEach((invalidInput :mixed) => {
+      const invocationParams1 = validParams.slice(0);
+      const invocationParams2 = validParams.slice(0);
+      invalidParams[i].forEach((invalidInput) => {
         invocationParams1[i] = invalidInput;
         invocationParams2[i] = [invalidInput];
         expect(functionToTest(...invocationParams1)).toEqual(null);
@@ -84,8 +82,7 @@ export function testApiFunctionShouldReturnNullOnInvalidParameters(
   });
 }
 
-export function testApiFunctionShouldNotThrowOnInvalidParameters(
-    functionToTest :Function, validParams :mixed[], invalidParams :mixed[]) {
+export function testApiFunctionShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams) {
 
   it('should not throw when given invalid parameters', () => {
 
@@ -93,19 +90,19 @@ export function testApiFunctionShouldNotThrowOnInvalidParameters(
       throw new Error('validParams.length should equal invalidParams.length');
     }
 
-    const invocations :mixed[] = [];
+    const invocations = [];
 
     if (validParams.length === 0) {
-      INVALID_PARAMS.forEach((invalidInput :mixed) => {
+      INVALID_PARAMS.forEach((invalidInput) => {
         invocations.push([invalidInput]);
         invocations.push([[invalidInput]]);
       });
     }
     else {
       for (let i = 0; i < validParams.length; i += 1) {
-        const invocationParams1 :mixed[] = validParams.slice(0);
-        const invocationParams2 :mixed[] = validParams.slice(0);
-        invalidParams[i].forEach((invalidInput :mixed) => {
+        const invocationParams1 = validParams.slice(0);
+        const invocationParams2 = validParams.slice(0);
+        invalidParams[i].forEach((invalidInput) => {
           invocationParams1[i] = invalidInput;
           invocationParams2[i] = [invalidInput];
           invocations.push(invocationParams1.slice(0));
@@ -115,7 +112,7 @@ export function testApiFunctionShouldNotThrowOnInvalidParameters(
     }
 
 
-    invocations.forEach((invocationParams :mixed[]) => {
+    invocations.forEach((invocationParams) => {
       expect(() => {
         const result = functionToTest(...invocationParams);
         if (result instanceof Promise) {
@@ -127,8 +124,7 @@ export function testApiFunctionShouldNotThrowOnInvalidParameters(
   });
 }
 
-export function testApiFunctionShouldRejectOnInvalidParameters(
-    functionToTest :Function, validParams :mixed[], invalidParams :mixed[]) {
+export function testApiFunctionShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams) {
 
   it('should reject when given invalid parameters', (done) => {
 
@@ -136,19 +132,19 @@ export function testApiFunctionShouldRejectOnInvalidParameters(
       throw new Error('validParams.length should equal invalidParams.length');
     }
 
-    const promises :Promise[] = [];
+    const promises = [];
 
     if (validParams.length === 0) {
-      INVALID_PARAMS.forEach((invalidInput :mixed) => {
+      INVALID_PARAMS.forEach((invalidInput) => {
         promises.push(functionToTest(invalidInput));
         promises.push(functionToTest([invalidInput]));
       });
     }
     else {
       for (let i = 0; i < validParams.length; i += 1) {
-        const invocationParams1 :mixed[] = validParams.slice(0);
-        const invocationParams2 :mixed[] = validParams.slice(0);
-        invalidParams[i].forEach((invalidInput :mixed) => {
+        const invocationParams1 = validParams.slice(0);
+        const invocationParams2 = validParams.slice(0);
+        invalidParams[i].forEach((invalidInput) => {
           invocationParams1[i] = invalidInput;
           invocationParams2[i] = [invalidInput];
           promises.push(functionToTest(...invocationParams1));

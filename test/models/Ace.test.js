@@ -18,7 +18,7 @@ describe('Ace', () => {
 
   describe('AceBuilder', () => {
 
-    let builder :AceBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new AceBuilder();

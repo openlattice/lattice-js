@@ -102,9 +102,9 @@ type StateAclKeysObject = {
   state :RequestState,
   aclKeys :UUID[][]
 };
-export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<> {
+export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<*> {
 
-  let errorMsg :string;
+  let errorMsg :string = '';
 
   // https://flowtype.org/docs/objects.html#sealed-object-types
   const axiosConfig = {};
@@ -188,9 +188,9 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<> {
  *   ]
  * );
  */
-export function submitRequests(requests :Request[]) :Promise<> {
+export function submitRequests(requests :Request[]) :Promise<*> {
 
-  let errorMsg :string;
+  let errorMsg :string = '';
 
   if (!isValidRequestArray(requests)) {
     errorMsg = 'invalid parameter: requests must be a non-empty array of valid Requests';
@@ -239,9 +239,9 @@ export function submitRequests(requests :Request[]) :Promise<> {
  *   ]
  * );
  */
-export function updateRequestStatuses(statuses :RequestStatus[]) :Promise<> {
+export function updateRequestStatuses(statuses :RequestStatus[]) :Promise<*> {
 
-  // let errorMsg :string;
+  // let errorMsg :string = '';
   //
   // if (!isValidRequestStatusArray(statuses)) {
   //   errorMsg = 'invalid parameter: statuses must be a non-empty array of valid Requests';

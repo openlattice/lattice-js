@@ -32,7 +32,8 @@ export default class DataSource {
       id :?UUID,
       title :string,
       description :?string,
-      entitySetIds :UUID[]) {
+      entitySetIds :UUID[]
+  ) {
 
     // required properties
     this.title = title;

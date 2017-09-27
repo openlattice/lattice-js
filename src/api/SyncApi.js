@@ -2,6 +2,8 @@
  * @flow
  */
 
+/* eslint-disable import/prefer-default-export */
+
 /**
  * SyncApi ...
  *
@@ -46,7 +48,7 @@ const LOG = new Logger('SyncApi');
  * @example
  * LinkingApi.getCurrentSyncId("e39dfdfa-a3e6-4f1f-b54b-646a723c3085");
  */
-export function getCurrentSyncId(entitySetId :UUID) :Promise<> {
+export function getCurrentSyncId(entitySetId :UUID) :Promise<*> {
 
   // TODO: everything
 

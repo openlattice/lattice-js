@@ -77,7 +77,7 @@ const LOG = new Logger('OrganizationsApi');
  * @example
  * OrganizationsApi.getOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getOrganization(organizationId :UUID) :Promise<> {
+export function getOrganization(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -110,7 +110,7 @@ export function getOrganization(organizationId :UUID) :Promise<> {
  * @example
  * OrganizationsApi.getAllOrganizations();
  */
-export function getAllOrganizations() {
+export function getAllOrganizations() :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get('/')
@@ -148,7 +148,7 @@ export function getAllOrganizations() {
  *   }
  * );
  */
-export function createOrganization(organization :Organization) :Promise<> {
+export function createOrganization(organization :Organization) :Promise<*> {
 
   let errorMsg = '';
 
@@ -182,7 +182,7 @@ export function createOrganization(organization :Organization) :Promise<> {
  * @example
  * OrganizationsApi.deleteOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteOrganization(organizationId :UUID) :Promise<> {
+export function deleteOrganization(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -220,7 +220,7 @@ export function deleteOrganization(organizationId :UUID) :Promise<> {
  *   "New Title"
  * );
  */
-export function updateTitle(organizationId :UUID, title :string) :Promise<> {
+export function updateTitle(organizationId :UUID, title :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -270,7 +270,7 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<> {
  *   "new description"
  * );
  */
-export function updateDescription(organizationId :UUID, description :string) :Promise<> {
+export function updateDescription(organizationId :UUID, description :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -316,7 +316,7 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
  * @example
  * OrganizationsApi.getAutoApprovedEmailDomains("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
+export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -354,7 +354,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<> {
  *   "openlattice.com"
  * );
  */
-export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
+export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -400,7 +400,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
  *   ]
  * );
  */
-export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
+export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -452,7 +452,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  *   ]
  * );
  */
-export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
+export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -502,7 +502,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  *   "openlattice.com"
  * );
  */
-export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<> {
+export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -548,7 +548,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
  *   ]
  * );
  */
-export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<> {
+export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -599,7 +599,7 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
  * @example
  * OrganizationsApi.getRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
  */
-export function getRole(organizationId :UUID, roleId :UUID) :Promise<> {
+export function getRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -639,7 +639,7 @@ export function getRole(organizationId :UUID, roleId :UUID) :Promise<> {
  * @example
  * OrganizationsApi.getAllRoles("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllRoles(organizationId :UUID) {
+export function getAllRoles(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -682,7 +682,7 @@ export function getAllRoles(organizationId :UUID) {
  *   }
  * );
  */
-export function createRole(role :Role) :Promise<> {
+export function createRole(role :Role) :Promise<*> {
 
   let errorMsg = '';
 
@@ -717,7 +717,7 @@ export function createRole(role :Role) :Promise<> {
  * @example
  * OrganizationsApi.deleteRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
  */
-export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<> {
+export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -763,7 +763,7 @@ export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<> {
  *   "ADMIN"
  * );
  */
-export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :string) :Promise<> {
+export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -821,7 +821,7 @@ export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :strin
  *   "The Administrator"
  * );
  */
-export function updateRoleDescription(organizationId :UUID, roleId :UUID, description :string) :Promise<> {
+export function updateRoleDescription(organizationId :UUID, roleId :UUID, description :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -880,7 +880,7 @@ export function updateRoleDescription(organizationId :UUID, roleId :UUID, descri
  *   "memberId"
  * );
  */
-export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<> {
+export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -933,7 +933,7 @@ export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :st
  *   "memberId"
  * );
  */
-export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<> {
+export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -979,7 +979,7 @@ export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberI
  * @example
  * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllMembers(organizationId :UUID) :Promise<> {
+export function getAllMembers(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1017,7 +1017,7 @@ export function getAllMembers(organizationId :UUID) :Promise<> {
  *   "memberId"
  * );
  */
-export function addMemberToOrganization(organizationId :UUID, memberId :string) :Promise<> {
+export function addMemberToOrganization(organizationId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1061,7 +1061,7 @@ export function addMemberToOrganization(organizationId :UUID, memberId :string) 
  *   "memberId"
  * );
  */
-export function removeMemberFromOrganization(organizationId :UUID, memberId :string) :Promise<> {
+export function removeMemberFromOrganization(organizationId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1108,7 +1108,7 @@ export function removeMemberFromOrganization(organizationId :UUID, memberId :str
  * @example
  * OrganizationsApi.getAllPrincipals("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllPrincipals(organizationId :UUID) {
+export function getAllPrincipals(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1148,7 +1148,7 @@ export function getAllPrincipals(organizationId :UUID) {
  *   "principalId"
  * );
  */
-export function addPrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<> {
+export function addPrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1201,7 +1201,7 @@ export function addPrincipal(organizationId :UUID, principalType :PrincipalType,
  *   ]
  * );
  */
-export function addPrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
+export function addPrincipals(organizationId :UUID, principals :Principal[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1255,7 +1255,7 @@ export function addPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  *   ]
  * );
  */
-export function setPrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
+export function setPrincipals(organizationId :UUID, principals :Principal[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1308,7 +1308,7 @@ export function setPrincipals(organizationId :UUID, principals :Principal[]) :Pr
  *   "principalId"
  * );
  */
-export function removePrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<> {
+export function removePrincipal(organizationId :UUID, principalType :PrincipalType, principalId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1361,7 +1361,7 @@ export function removePrincipal(organizationId :UUID, principalType :PrincipalTy
  *   ]
  * );
  */
-export function removePrincipals(organizationId :UUID, principals :Principal[]) :Promise<> {
+export function removePrincipals(organizationId :UUID, principals :Principal[]) :Promise<*> {
 
   let errorMsg = '';
 

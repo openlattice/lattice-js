@@ -57,13 +57,13 @@ function testCheckAuthorizations() {
 
   describe('checkAuthorizations()', () => {
 
-    const functionToTest :Function = AuthorizationApi.checkAuthorizations;
+    const functionToTest = AuthorizationApi.checkAuthorizations;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_QUERIES
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS_EMPTY_ARRAY_ALLOWED
     ];
 
@@ -92,15 +92,15 @@ function testGetAccessibleObjects() {
 
   describe('getAccessibleObjects()', () => {
 
-    const functionToTest :Function = AuthorizationApi.getAccessibleObjects;
+    const functionToTest = AuthorizationApi.getAccessibleObjects;
 
-    const validParams :any[] = [
+    const validParams = [
       SecurableTypes.EntityType,
       PermissionTypes.READ,
       MOCK_PAGING_TOKEN
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS_EMPTY_STRING_ALLOWED
@@ -115,6 +115,7 @@ function testGetAccessibleObjects() {
             // eslint-disable-next-line
             `/?objectType=${SecurableTypes.EntityType}&permission=${PermissionTypes.READ}&pagingToken=${MOCK_PAGING_TOKEN}`
           );
+          /* eslint-enable */
           done();
         })
         .catch(() => {

@@ -85,7 +85,7 @@ const START :string = 'start';
  * });
  */
 
-export function getEntitySets(searchOptions :Object) :Promise<> {
+export function getEntitySets(searchOptions :Object) :Promise<*> {
   let errorMsg = '';
 
   if (!isNonEmptyObject(searchOptions)) {
@@ -182,7 +182,7 @@ export function getEntitySets(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchEntitySetMetaData(searchOptions :Object) :Promise<> {
+export function searchEntitySetMetaData(searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -279,7 +279,7 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :Promise<> {
+export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -358,7 +358,7 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
  *   }
  * );
  */
-export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Object) :Promise<> {
+export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -435,7 +435,7 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
  *   }
  * );
  */
-export function searchOrganizations(searchOptions :Object) :Promise<> {
+export function searchOrganizations(searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -504,7 +504,7 @@ export function searchOrganizations(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchEntityTypes(searchOptions :Object) :Promise<> {
+export function searchEntityTypes(searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -573,7 +573,7 @@ export function searchEntityTypes(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchAssociationTypes(searchOptions :Object) :Promise<> {
+export function searchAssociationTypes(searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
   if (!isNonEmptyObject(searchOptions)) {
@@ -642,7 +642,7 @@ export function searchAssociationTypes(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchEntityTypesByFQN(searchOptions :Object) :Promise<> {
+export function searchEntityTypesByFQN(searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -719,7 +719,7 @@ export function searchEntityTypesByFQN(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchPropertyTypes(searchOptions :Object) :Promise<> {
+export function searchPropertyTypes(searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -789,7 +789,7 @@ export function searchPropertyTypes(searchOptions :Object) :Promise<> {
  *   }
  * );
  */
-export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<> {
+export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -850,7 +850,7 @@ export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<> {
 /**
  * TODO: everything
  */
-export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promise<> {
+export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -894,7 +894,7 @@ export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promis
  * SearchApi.searchEntityNeighborsBulk("ec6865e6-e60e-424b-a071-6a9c1603d735",
  * ["3bf2a30d-fda0-4389-a1e6-8546b230efad","a62a47fe-e6a7-4536-85f1-fe935902a536"]);
  */
-export function searchEntityNeighborsBulk(entitySetId :UUID, entityIds :UUID[]) :Promise<> {
+export function searchEntityNeighborsBulk(entitySetId :UUID, entityIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 

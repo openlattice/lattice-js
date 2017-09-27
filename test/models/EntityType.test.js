@@ -19,7 +19,7 @@ describe('EntityType', () => {
 
   describe('EntityTypeBuilder', () => {
 
-    let builder :EntityTypeBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new EntityTypeBuilder();

@@ -73,21 +73,21 @@ function testGetEntitySetData() {
 
   describe('getEntitySetData()', () => {
 
-    const functionToTest :Function = DataApi.getEntitySetData;
+    const functionToTest = DataApi.getEntitySetData;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_UUID,
       MOCK_SYNC_UUID,
       [MOCK_PROPERTY_TYPE_UUID]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED,
       INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
     ];
 
-    function testApi(invocationParams :mixed[], expectedParameters :mixed[], done :Function) {
+    function testApi(invocationParams, expectedParameters, done) {
 
       DataApi.getEntitySetData(...invocationParams)
         .then(() => {
@@ -104,13 +104,13 @@ function testGetEntitySetData() {
 
       it('+syncId, +propertyTypeIds', (done) => {
 
-        const invocationParams :mixed[] = [
+        const invocationParams = [
           MOCK_ENTITY_SET_UUID,
           MOCK_SYNC_UUID,
           [MOCK_PROPERTY_TYPE_UUID]
         ];
 
-        const expectedParameters :mixed[] = [
+        const expectedParameters = [
           `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
           {
             syncId: MOCK_SYNC_UUID,
@@ -123,13 +123,13 @@ function testGetEntitySetData() {
 
       it('+syncId, -propertyTypeIds', (done) => {
 
-        const invocationParams :mixed[] = [
+        const invocationParams = [
           MOCK_ENTITY_SET_UUID,
           MOCK_SYNC_UUID,
           undefined
         ];
 
-        const expectedParameters :mixed[] = [
+        const expectedParameters = [
           `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
           { syncId: MOCK_SYNC_UUID }
         ];
@@ -139,13 +139,13 @@ function testGetEntitySetData() {
 
       it('-syncId, +propertyTypeIds', (done) => {
 
-        const invocationParams :mixed[] = [
+        const invocationParams = [
           MOCK_ENTITY_SET_UUID,
           undefined,
           [MOCK_PROPERTY_TYPE_UUID]
         ];
 
-        const expectedParameters :mixed[] = [
+        const expectedParameters = [
           `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
           { properties: [MOCK_PROPERTY_TYPE_UUID] }
         ];
@@ -155,11 +155,11 @@ function testGetEntitySetData() {
 
       it('-syncId, -propertyTypeIds', (done) => {
 
-        const invocationParams :mixed[] = [
+        const invocationParams = [
           MOCK_ENTITY_SET_UUID
         ];
 
-        const expectedParameters :mixed[] = [
+        const expectedParameters = [
           `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
           {}
         ];
@@ -181,14 +181,14 @@ function testGetEntitySetDataFileUrl() {
 
   describe('getEntitySetDataFileUrl()', () => {
 
-    const functionToTest :Function = DataApi.getEntitySetDataFileUrl;
+    const functionToTest = DataApi.getEntitySetDataFileUrl;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_UUID,
       MOCK_FILE_TYPE
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -217,21 +217,21 @@ function testCreateEntityData() {
 
   describe('createEntityData()', () => {
 
-    const functionToTest :Function = DataApi.createEntityData;
+    const functionToTest = DataApi.createEntityData;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_UUID,
       MOCK_SYNC_UUID,
       MOCK_ENTITIES
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED,
       INVALID_PARAMS
     ];
 
-    function testApi(invocationParams :mixed[], expectedParameters :mixed[], done :Function) {
+    function testApi(invocationParams, expectedParameters, done) {
 
       DataApi.createEntityData(...invocationParams)
         .then(() => {
@@ -248,13 +248,13 @@ function testCreateEntityData() {
 
       it('+syncId', (done) => {
 
-        const invocationParams :mixed[] = [
+        const invocationParams = [
           MOCK_ENTITY_SET_UUID,
           MOCK_SYNC_UUID,
           MOCK_ENTITIES
         ];
 
-        const expectedParameters :mixed[] = [
+        const expectedParameters = [
           `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`,
           MOCK_ENTITIES
         ];
@@ -264,13 +264,13 @@ function testCreateEntityData() {
 
       it('-syncId', (done) => {
 
-        const invocationParams :mixed[] = [
+        const invocationParams = [
           MOCK_ENTITY_SET_UUID,
           undefined,
           MOCK_ENTITIES
         ];
 
-        const expectedParameters :mixed[] = [
+        const expectedParameters = [
           `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
           MOCK_ENTITIES
         ];
@@ -292,15 +292,15 @@ function testStoreEntityData() {
 
   describe('storeEntityData()', () => {
 
-    const functionToTest :Function = DataApi.storeEntityData;
+    const functionToTest = DataApi.storeEntityData;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_TICKET_UUID,
       MOCK_SYNC_UUID,
       MOCK_ENTITIES
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS
@@ -334,14 +334,14 @@ function testAcquireSyncTicket() {
 
   describe('acquireSyncTicket()', () => {
 
-    const functionToTest :Function = DataApi.acquireSyncTicket;
+    const functionToTest = DataApi.acquireSyncTicket;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_UUID,
       MOCK_SYNC_UUID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS
     ];
@@ -373,13 +373,13 @@ function testReleaseSyncTicket() {
 
   describe('releaseSyncTicket()', () => {
 
-    const functionToTest :Function = DataApi.releaseSyncTicket;
+    const functionToTest = DataApi.releaseSyncTicket;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_TICKET_UUID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 

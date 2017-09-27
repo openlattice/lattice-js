@@ -1,8 +1,8 @@
 import PrincipalTypes from '../../src/constants/types/PrincipalTypes';
 
-const ORGANIZATION :string = 'ORGANIZATION';
-const ROLE :string = 'ROLE';
-const USER :string = 'USER';
+const ORGANIZATION = 'ORGANIZATION';
+const ROLE = 'ROLE';
+const USER = 'USER';
 
 describe('PrincipalTypes', () => {
 

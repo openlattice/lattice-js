@@ -52,7 +52,7 @@ const LOG = new Logger('DataSourcesApi');
  * @example
  * DataSourcesApi.getDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
  */
-export function getDataSource(dataSourceId :UUID) :Promise<> {
+export function getDataSource(dataSourceId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -96,7 +96,7 @@ export function getDataSource(dataSourceId :UUID) :Promise<> {
  *   }
  * );
  */
-export function createOrUpdateDataSource(dataSource :DataSource) :Promise<> {
+export function createOrUpdateDataSource(dataSource :DataSource) :Promise<*> {
 
   let errorMsg = '';
 
@@ -130,7 +130,7 @@ export function createOrUpdateDataSource(dataSource :DataSource) :Promise<> {
  * @example
  * DataSourcesApi.deleteDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
  */
-export function deleteDataSource(dataSourceId :UUID) :Promise<> {
+export function deleteDataSource(dataSourceId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -162,7 +162,7 @@ export function deleteDataSource(dataSourceId :UUID) :Promise<> {
  * @example
  * DataSourcesApi.startSync("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
  */
-export function startSync(dataSourceId :UUID) :Promise<> {
+export function startSync(dataSourceId :UUID) :Promise<*> {
 
   // TODO: add description
 
@@ -200,7 +200,7 @@ export function startSync(dataSourceId :UUID) :Promise<> {
  *   "8f79e123-3411-4099-a41f-88e5d22d0e8d"
  * );
  */
-export function signalSyncCompleted(dataSourceId :UUID, syncId :UUID) :Promise<> {
+export function signalSyncCompleted(dataSourceId :UUID, syncId :UUID) :Promise<*> {
 
   // TODO: add description
 
