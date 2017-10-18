@@ -1636,6 +1636,34 @@ export function getAssociationType(associationTypeId :UUID) :Promise<*> {
 }
 
 /**
+ * `GET /edm/association/type`
+ *
+ * Gets all AssociationType definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<AssociationType[]>} - a Promise that will resolve with all AssociationType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllAssociationTypes();
+ */
+export function getAllAssociationTypes() :Promise<*> {
+
+  // TODO: everything
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${ASSOCIATION_TYPE_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /edm/association/type/{uuid}/detailed`
  *
  * Gets details about the AssociationType for the given AssociationType UUID.

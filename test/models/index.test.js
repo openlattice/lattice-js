@@ -47,6 +47,16 @@ describe('Lattice.Models', () => {
     expect(Models.AclDataBuilder).toEqual(jasmine.any(Function));
   });
 
+  it('should expose AssociationType', () => {
+    expect(Models.AssociationType).toBeDefined();
+    expect(Models.AssociationType).toEqual(jasmine.any(Function));
+  });
+
+  it('should expose AssociationTypeBuilder', () => {
+    expect(Models.AssociationTypeBuilder).toBeDefined();
+    expect(Models.AssociationTypeBuilder).toEqual(jasmine.any(Function));
+  });
+
   it('should expose DataSource', () => {
     expect(Models.DataSource).toBeDefined();
     expect(Models.DataSource).toEqual(jasmine.any(Function));
