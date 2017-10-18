@@ -3,11 +3,9 @@
  */
 
 import Immutable from 'immutable';
-
 import has from 'lodash/has';
 
 import FullyQualifiedName from './FullyQualifiedName';
-
 import SecurableTypes from '../constants/types/SecurableTypes';
 import Logger from '../utils/Logger';
 
@@ -81,6 +79,37 @@ export default class EntityType {
     if (isDefined(category)) {
       this.category = category;
     }
+  }
+
+  asImmutable() {
+
+    const entityTypeObj = {};
+
+    // required properties
+    entityTypeObj.type = this.type;
+    entityTypeObj.title = this.title;
+    entityTypeObj.schemas = this.schemas;
+    entityTypeObj.key = this.key;
+    entityTypeObj.properties = this.properties;
+
+    // optional properties
+    if (isDefined(this.id)) {
+      entityTypeObj.id = this.id;
+    }
+
+    if (isDefined(this.description)) {
+      entityTypeObj.description = this.description;
+    }
+
+    if (isDefined(this.baseType)) {
+      entityTypeObj.baseType = this.baseType;
+    }
+
+    if (isDefined(this.category)) {
+      entityTypeObj.category = this.category;
+    }
+
+    return Immutable.fromJS(entityTypeObj);
   }
 }
 
@@ -235,12 +264,19 @@ export class EntityTypeBuilder {
 
   build() :EntityType {
 
+    let errorMsg :string = '';
+
     if (!this.type) {
-      throw new Error('missing property: type is a required property');
+      errorMsg = 'missing property: type is a required property';
     }
 
     if (!this.title) {
-      throw new Error('missing property: title is a required property');
+      errorMsg = 'missing property: title is a required property';
+    }
+
+    if (errorMsg) {
+      LOG.error(errorMsg);
+      throw new Error(errorMsg);
     }
 
     if (!this.schemas) {
