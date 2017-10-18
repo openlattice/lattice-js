@@ -43,7 +43,8 @@ export default class Organization {
       description :?string,
       members :Principal[],
       roles :Principal[],
-      emails :string[]) {
+      emails :string[]
+  ) {
 
     // required properties
     this.title = title;

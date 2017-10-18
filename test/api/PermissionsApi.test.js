@@ -48,13 +48,13 @@ function testGetAcl() {
 
   describe('getAcl()', () => {
 
-    const functionToTest :Function = PermissionsApi.getAcl;
+    const functionToTest = PermissionsApi.getAcl;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ACL_KEY
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -86,13 +86,13 @@ function testUpdateAcl() {
 
   describe('updateAcl()', () => {
 
-    const functionToTest :Function = PermissionsApi.updateAcl;
+    const functionToTest = PermissionsApi.updateAcl;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ACL_DATA_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 

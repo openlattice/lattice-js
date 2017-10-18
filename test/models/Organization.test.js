@@ -18,7 +18,7 @@ describe('Organization', () => {
 
   describe('OrganizationBuilder', () => {
 
-    let builder :OrganizationBuilder = null;
+    let builder = null;
 
     beforeEach(() => {
       builder = new OrganizationBuilder();

@@ -1,15 +1,15 @@
 import SecurableTypes from '../../src/constants/types/SecurableTypes';
 
-const AssociationType :string = 'AssociationType';
-const ComplexType :string = 'ComplexType';
-const EdgeType :string = 'EdgeType';
-const EntitySet :string = 'EntitySet';
-const EntityType :string = 'EntityType';
-const DataSource :string = 'Datasource';
-const LinkingEntityType :string = 'LinkingEntityType';
-const PropertyTypeInEntitySet :string = 'PropertyTypeInEntitySet';
-const Organization :string = 'Organization';
-const OrganizationRole :string = 'OrganizationRole';
+const AssociationType = 'AssociationType';
+const ComplexType = 'ComplexType';
+const EdgeType = 'EdgeType';
+const EntitySet = 'EntitySet';
+const EntityType = 'EntityType';
+const DataSource = 'Datasource';
+const LinkingEntityType = 'LinkingEntityType';
+const PropertyTypeInEntitySet = 'PropertyTypeInEntitySet';
+const Organization = 'Organization';
+const OrganizationRole = 'OrganizationRole';
 
 describe('SecurableTypes', () => {
 

@@ -1,9 +1,9 @@
 import ActionTypes from '../../src/constants/types/ActionTypes';
 
-const ADD :string = 'ADD';
-const REMOVE :string = 'REMOVE';
-const SET :string = 'SET';
-const REQUEST :string = 'REQUEST';
+const ADD = 'ADD';
+const REMOVE = 'REMOVE';
+const SET = 'SET';
+const REQUEST = 'REQUEST';
 
 describe('ActionTypes', () => {
 

@@ -1,64 +1,64 @@
 import * as ApiPaths from '../../src/constants/ApiPaths';
 
 // base endpoint controller paths
-const ANALYSIS_PATH :string = 'analysis';
-const AUTHORIZATIONS_PATH :string = 'authorizations';
-const DATA_PATH :string = 'data';
-const DATA_SOURCES_PATH :string = 'datasource';
-const DATASTORE_PATH :string = 'datastore';
-const EDM_PATH :string = 'edm';
-const LINKING_PATH :string = 'linking';
-const ORGANIZATIONS_PATH :string = 'organizations';
-const PERMISSIONS_PATH :string = 'permissions';
-const PRINCIPALS_PATH :string = 'principals';
-const REQUESTS_PATH :string = 'requests';
-const SEARCH_PATH :string = 'search';
-const SYNC_PATH :string = 'sync';
+const ANALYSIS_PATH = 'analysis';
+const AUTHORIZATIONS_PATH = 'authorizations';
+const DATA_PATH = 'data';
+const DATA_SOURCES_PATH = 'datasource';
+const DATASTORE_PATH = 'datastore';
+const EDM_PATH = 'edm';
+const LINKING_PATH = 'linking';
+const ORGANIZATIONS_PATH = 'organizations';
+const PERMISSIONS_PATH = 'permissions';
+const PRINCIPALS_PATH = 'principals';
+const REQUESTS_PATH = 'requests';
+const SEARCH_PATH = 'search';
+const SYNC_PATH = 'sync';
 
 // shared paths
-const ENTITY_SET_PATH :string = 'entity/set';
-const ENTITY_TYPE_PATH :string = 'entity/type';
-const IDS_PATH :string = 'ids';
-const NAMESPACE_PATH :string = 'namespace';
-const PROPERTY_TYPE_PATH :string = 'property/type';
-const ROLES_PATH :string = 'roles';
-const SET_PATH :string = 'set';
-const TYPE_PATH :string = 'type';
+const ENTITY_SET_PATH = 'entity/set';
+const ENTITY_TYPE_PATH = 'entity/type';
+const IDS_PATH = 'ids';
+const NAMESPACE_PATH = 'namespace';
+const PROPERTY_TYPE_PATH = 'property/type';
+const ROLES_PATH = 'roles';
+const SET_PATH = 'set';
+const TYPE_PATH = 'type';
 
 // DataApi specific paths
-const ENTITY_DATA_PATH :string = 'entitydata';
-const TICKET_PATH :string = 'ticket';
+const ENTITY_DATA_PATH = 'entitydata';
+const TICKET_PATH = 'ticket';
 
 // EntityDataModelApi specific paths
-const ASSOCIATION_TYPE_PATH :string = 'association/type';
-const COMPLEX_TYPE_PATH :string = 'complex/type';
-const DETAILED_PATH :string = 'detailed';
-const ENUM_TYPE_PATH :string = 'enum/type';
-const FORCE_PATH :string = 'force';
-const HIERARCHY_PATH :string = 'hierarchy';
-const SCHEMA_PATH :string = 'schema';
-const SRC_PATH :string = 'src';
-const DST_PATH :string = 'dst';
+const ASSOCIATION_TYPE_PATH = 'association/type';
+const COMPLEX_TYPE_PATH = 'complex/type';
+const DETAILED_PATH = 'detailed';
+const ENUM_TYPE_PATH = 'enum/type';
+const FORCE_PATH = 'force';
+const HIERARCHY_PATH = 'hierarchy';
+const SCHEMA_PATH = 'schema';
+const SRC_PATH = 'src';
+const DST_PATH = 'dst';
 
 // OrganizationsApi specific paths
-const DESCRIPTION_PATH :string = 'description';
-const EMAIL_DOMAINS_PATH :string = 'email-domains';
-const MEMBERS_PATH :string = 'members';
-const TITLE_PATH :string = 'title';
+const DESCRIPTION_PATH = 'description';
+const EMAIL_DOMAINS_PATH = 'email-domains';
+const MEMBERS_PATH = 'members';
+const TITLE_PATH = 'title';
 
 // PrincipalsApi specific paths
-const EMAIL_PATH :string = 'email';
-const USERS_PATH :string = 'users';
+const EMAIL_PATH = 'email';
+const USERS_PATH = 'users';
 
 // SearchApi specific paths
-const ADVANCED_PATH :string = 'advanced';
-const FQN_PATH :string = 'fqn';
-const NEIGHBORS_PATH :string = 'neighbors';
-const SEARCH_ENTITY_TYPES_PATH :string = 'entity_types';
-const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
+const ADVANCED_PATH = 'advanced';
+const FQN_PATH = 'fqn';
+const NEIGHBORS_PATH = 'neighbors';
+const SEARCH_ENTITY_TYPES_PATH = 'entity_types';
+const SEARCH_PROPERTY_TYPES_PATH = 'property_types';
 
 // SyncApi specific paths
-const CURRENT_PATH :string = 'current';
+const CURRENT_PATH = 'current';
 
 describe('ApiPaths', () => {
 

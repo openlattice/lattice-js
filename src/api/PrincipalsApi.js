@@ -48,7 +48,7 @@ const LOG = new Logger('PrincipalsApi');
  * @param {string} userId
  * @return {Promise}
  */
-export function getUser(userId :string) :Promise<> {
+export function getUser(userId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -76,7 +76,7 @@ export function getUser(userId :string) :Promise<> {
  * @memberof lattice.PrincipalsApi
  * @return {Promise}
  */
-export function getAllUsers() :Promise<> {
+export function getAllUsers() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}`)
@@ -99,7 +99,7 @@ export function getAllUsers() :Promise<> {
  *
  * TODO: add unit tests
  */
-export function searchAllUsersByEmail(searchQuery :string) :Promise<> {
+export function searchAllUsersByEmail(searchQuery :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -126,7 +126,7 @@ export function searchAllUsersByEmail(searchQuery :string) :Promise<> {
  *
  */
 
-export function addRoleToUser(userId :string, role :string) :Promise<> {
+export function addRoleToUser(userId :string, role :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -153,7 +153,7 @@ export function addRoleToUser(userId :string, role :string) :Promise<> {
     });
 }
 
-export function removeRoleFromUser(userId :string, role :string) :Promise<> {
+export function removeRoleFromUser(userId :string, role :string) :Promise<*> {
 
   let errorMsg = '';
 

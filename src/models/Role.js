@@ -33,7 +33,8 @@ export default class Role {
       id :?UUID,
       organizationId :UUID,
       title :string,
-      description :?string) {
+      description :?string
+  ) {
 
     // required properties
     this.organizationId = organizationId;

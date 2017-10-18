@@ -74,13 +74,13 @@ function testSearchEntitySetMetaData() {
 
     function testSearchInvocation(searchOptions, expectedParameters) {
 
-      const functionToTest :Function = SearchApi.searchEntitySetMetaData;
+      const functionToTest = SearchApi.searchEntitySetMetaData;
 
-      const validParams :any[] = [
+      const validParams = [
         searchOptions
       ];
 
-      const invalidParams :any[] = [
+      const invalidParams = [
         INVALID_PARAMS
       ];
 
@@ -214,9 +214,9 @@ function testSearchEntitySetData() {
 
   describe('searchEntitySetData()', () => {
 
-    const functionToTest :Function = SearchApi.searchEntitySetData;
+    const functionToTest = SearchApi.searchEntitySetData;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_UUID,
       {
         searchTerm: MOCK_SEARCH_TERM,
@@ -225,7 +225,7 @@ function testSearchEntitySetData() {
       }
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -264,10 +264,10 @@ function testAdvancedSearchEntitySetData() {
 
   describe('advancedSearchEntitySetData()', () => {
 
-    const functionToTest :Function = SearchApi.advancedSearchEntitySetData;
+    const functionToTest = SearchApi.advancedSearchEntitySetData;
 
     // TODO: searchFields needs to be List<SearchDetails>
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ENTITY_SET_UUID,
       {
         searchFields: [
@@ -279,7 +279,7 @@ function testAdvancedSearchEntitySetData() {
       }
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -321,15 +321,15 @@ function testSearchOrganizations() {
 
   describe('searchOrganizations()', () => {
 
-    const functionToTest :Function = SearchApi.searchOrganizations;
+    const functionToTest = SearchApi.searchOrganizations;
 
-    const validParams :any[] = [{
+    const validParams = [{
       searchTerm: MOCK_SEARCH_TERM,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
     }];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -367,15 +367,15 @@ function testSearchEntityTypes() {
 
   describe('searchEntityTypes()', () => {
 
-    const functionToTest :Function = SearchApi.searchEntityTypes;
+    const functionToTest = SearchApi.searchEntityTypes;
 
-    const validParams :any[] = [{
+    const validParams = [{
       searchTerm: MOCK_SEARCH_TERM,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
     }];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -413,16 +413,16 @@ function testSearchEntityTypesByFQN() {
 
   describe('searchEntityTypesByFQN()', () => {
 
-    const functionToTest :Function = SearchApi.searchEntityTypesByFQN;
+    const functionToTest = SearchApi.searchEntityTypesByFQN;
 
-    const validParams :any[] = [{
+    const validParams = [{
       namespace: MOCK_NAMESPACE,
       name: MOCK_NAME,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
     }];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -461,15 +461,15 @@ function testSearchPropertyTypes() {
 
   describe('searchPropertyTypes()', () => {
 
-    const functionToTest :Function = SearchApi.searchPropertyTypes;
+    const functionToTest = SearchApi.searchPropertyTypes;
 
-    const validParams :any[] = [{
+    const validParams = [{
       searchTerm: MOCK_SEARCH_TERM,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
     }];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -507,16 +507,16 @@ function testSearchPropertyTypesByFQN() {
 
   describe('searchPropertyTypesByFQN()', () => {
 
-    const functionToTest :Function = SearchApi.searchPropertyTypesByFQN;
+    const functionToTest = SearchApi.searchPropertyTypesByFQN;
 
-    const validParams :any[] = [{
+    const validParams = [{
       namespace: MOCK_NAMESPACE,
       name: MOCK_NAME,
       start: MOCK_START,
       maxHits: MOCK_MAX_HITS
     }];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 

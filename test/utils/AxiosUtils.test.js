@@ -53,7 +53,7 @@ describe('AxiosUtils', () => {
 
     it('should implement a case to handle all APIs ', () => {
 
-      Object.values(ApiNames).forEach((api :string) => {
+      Object.values(ApiNames).forEach((api) => {
         expect(() => {
           AxiosUtils.getApiBaseUrl(api);
         }).not.toThrow();

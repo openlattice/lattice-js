@@ -52,13 +52,13 @@ function testCreateLinkingEntityType() {
 
   describe('createLinkingEntityType()', () => {
 
-    const functionToTest :Function = LinkingApi.createLinkingEntityType;
+    const functionToTest = LinkingApi.createLinkingEntityType;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_LINKING_ENTITY_TYPE_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -87,13 +87,13 @@ function testLinkEntitySets() {
 
   describe('linkEntitySets()', () => {
 
-    const functionToTest :Function = LinkingApi.linkEntitySets;
+    const functionToTest = LinkingApi.linkEntitySets;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_LINKING_REQUEST_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 

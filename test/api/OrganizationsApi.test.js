@@ -106,13 +106,13 @@ function testGetOrganization() {
 
   describe('getOrganization()', () => {
 
-    const functionToTest :Function = OrganizationsApi.getOrganization;
+    const functionToTest = OrganizationsApi.getOrganization;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -143,10 +143,10 @@ function testGetAllOrganizations() {
 
   describe('getAllOrganizations()', () => {
 
-    const functionToTest :Function = OrganizationsApi.getAllOrganizations;
+    const functionToTest = OrganizationsApi.getAllOrganizations;
 
-    const validParams :any[] = [];
-    const invalidParams :any[] = [];
+    const validParams = [];
+    const invalidParams = [];
 
     it('should send a GET request with the correct URL path', (done) => {
 
@@ -172,13 +172,13 @@ function testCreateOrganization() {
 
   describe('createOrganization()', () => {
 
-    const functionToTest :Function = OrganizationsApi.createOrganization;
+    const functionToTest = OrganizationsApi.createOrganization;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -210,13 +210,13 @@ function testDeleteOrganization() {
 
   describe('deleteOrganization()', () => {
 
-    const functionToTest :Function = OrganizationsApi.deleteOrganization;
+    const functionToTest = OrganizationsApi.deleteOrganization;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -247,14 +247,14 @@ function testUpdateTitle() {
 
   describe('updateTitle()', () => {
 
-    const functionToTest :Function = OrganizationsApi.updateTitle;
+    const functionToTest = OrganizationsApi.updateTitle;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_TITLE
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -292,14 +292,14 @@ function testUpdateDescription() {
 
   describe('updateDescription()', () => {
 
-    const functionToTest :Function = OrganizationsApi.updateDescription;
+    const functionToTest = OrganizationsApi.updateDescription;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_DESCRIPTION
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -337,13 +337,13 @@ function testGetAutoApprovedEmailDomains() {
 
   describe('getAutoApprovedEmailDomains()', () => {
 
-    const functionToTest :Function = OrganizationsApi.getAutoApprovedEmailDomains;
+    const functionToTest = OrganizationsApi.getAutoApprovedEmailDomains;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -374,14 +374,14 @@ function testAddAutoApprovedEmailDomain() {
 
   describe('addAutoApprovedEmailDomain()', () => {
 
-    const functionToTest :Function = OrganizationsApi.addAutoApprovedEmailDomain;
+    const functionToTest = OrganizationsApi.addAutoApprovedEmailDomain;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_EMAIL_DOMAIN
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -413,14 +413,14 @@ function testAddAutoApprovedEmailDomains() {
 
   describe('addAutoApprovedEmailDomains()', () => {
 
-    const functionToTest :Function = OrganizationsApi.addAutoApprovedEmailDomains;
+    const functionToTest = OrganizationsApi.addAutoApprovedEmailDomains;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       [MOCK_EMAIL_DOMAIN]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -469,14 +469,14 @@ function testSetAutoApprovedEmailDomains() {
 
   describe('setAutoApprovedEmailDomains()', () => {
 
-    const functionToTest :Function = OrganizationsApi.setAutoApprovedEmailDomains;
+    const functionToTest = OrganizationsApi.setAutoApprovedEmailDomains;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       [MOCK_EMAIL_DOMAIN]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -525,14 +525,14 @@ function testRemoveAutoApprovedEmailDomain() {
 
   describe('removeAutoApprovedEmailDomain()', () => {
 
-    const functionToTest :Function = OrganizationsApi.removeAutoApprovedEmailDomain;
+    const functionToTest = OrganizationsApi.removeAutoApprovedEmailDomain;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_EMAIL_DOMAIN
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -564,14 +564,14 @@ function testRemoveAutoApprovedEmailDomains() {
 
   describe('removeAutoApprovedEmailDomains()', () => {
 
-    const functionToTest :Function = OrganizationsApi.removeAutoApprovedEmailDomains;
+    const functionToTest = OrganizationsApi.removeAutoApprovedEmailDomains;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       [MOCK_EMAIL_DOMAIN]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -622,13 +622,13 @@ function testGetAllPrincipals() {
 
   describe('getAllPrincipals()', () => {
 
-    const functionToTest :Function = OrganizationsApi.getAllPrincipals;
+    const functionToTest = OrganizationsApi.getAllPrincipals;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -659,15 +659,15 @@ function testAddPrincipal() {
 
   describe('addPrincipal()', () => {
 
-    const functionToTest :Function = OrganizationsApi.addPrincipal;
+    const functionToTest = OrganizationsApi.addPrincipal;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_PRINCIPAL_TYPE,
       MOCK_PRINCIPAL_ID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS
@@ -700,14 +700,14 @@ function testAddPrincipals() {
 
   describe('addPrincipals()', () => {
 
-    const functionToTest :Function = OrganizationsApi.addPrincipals;
+    const functionToTest = OrganizationsApi.addPrincipals;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -761,14 +761,14 @@ function testSetPrincipals() {
 
   describe('setPrincipals()', () => {
 
-    const functionToTest :Function = OrganizationsApi.setPrincipals;
+    const functionToTest = OrganizationsApi.setPrincipals;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -822,15 +822,15 @@ function testRemovePrincipal() {
 
   describe('removePrincipal()', () => {
 
-    const functionToTest :Function = OrganizationsApi.removePrincipal;
+    const functionToTest = OrganizationsApi.removePrincipal;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_PRINCIPAL_TYPE,
       MOCK_PRINCIPAL_ID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS
@@ -863,14 +863,14 @@ function testRemovePrincipals() {
 
   describe('removePrincipals()', () => {
 
-    const functionToTest :Function = OrganizationsApi.removePrincipals;
+    const functionToTest = OrganizationsApi.removePrincipals;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -928,14 +928,14 @@ function testGetRole() {
 
   describe('getRole()', () => {
 
-    const functionToTest :Function = OrganizationsApi.getRole;
+    const functionToTest = OrganizationsApi.getRole;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_ROLE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS
     ];
@@ -967,13 +967,13 @@ function testGetAllRoles() {
 
   describe('getAllRoles()', () => {
 
-    const functionToTest :Function = OrganizationsApi.getAllRoles;
+    const functionToTest = OrganizationsApi.getAllRoles;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -1004,13 +1004,13 @@ function testCreateRole() {
 
   describe('createRole()', () => {
 
-    const functionToTest :Function = OrganizationsApi.createRole;
+    const functionToTest = OrganizationsApi.createRole;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ROLE_DM
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_PARAMS
     ];
 
@@ -1042,14 +1042,14 @@ function testDeleteRole() {
 
   describe('deleteRole()', () => {
 
-    const functionToTest :Function = OrganizationsApi.deleteRole;
+    const functionToTest = OrganizationsApi.deleteRole;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_ROLE_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS
     ];
@@ -1081,15 +1081,15 @@ function testUpdateRoleTitle() {
 
   describe('updateRoleTitle()', () => {
 
-    const functionToTest :Function = OrganizationsApi.updateRoleTitle;
+    const functionToTest = OrganizationsApi.updateRoleTitle;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_ROLE_DM.id,
       MOCK_TITLE
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS
@@ -1128,15 +1128,15 @@ function testUpdateRoleDescription() {
 
   describe('updateRoleDescription()', () => {
 
-    const functionToTest :Function = OrganizationsApi.updateRoleDescription;
+    const functionToTest = OrganizationsApi.updateRoleDescription;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_ROLE_DM.id,
       MOCK_DESCRIPTION
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS
@@ -1175,15 +1175,15 @@ function testAddRoleToMember() {
 
   describe('addRoleToMember()', () => {
 
-    const functionToTest :Function = OrganizationsApi.addRoleToMember;
+    const functionToTest = OrganizationsApi.addRoleToMember;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_ROLE_DM.id,
       MOCK_MEMBER_ID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS
@@ -1218,15 +1218,15 @@ function testRemoveRoleFromMember() {
 
   describe('removeRoleFromMember()', () => {
 
-    const functionToTest :Function = OrganizationsApi.removeRoleFromMember;
+    const functionToTest = OrganizationsApi.removeRoleFromMember;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_ROLE_DM.id,
       MOCK_MEMBER_ID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_SS_PARAMS,
       INVALID_PARAMS
@@ -1261,13 +1261,13 @@ function testGetAllMembers() {
 
   describe('getAllMembers()', () => {
 
-    const functionToTest :Function = OrganizationsApi.getAllMembers;
+    const functionToTest = OrganizationsApi.getAllMembers;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS
     ];
 
@@ -1298,14 +1298,14 @@ function testAddMemberToOrganization() {
 
   describe('addMemberToOrganization()', () => {
 
-    const functionToTest :Function = OrganizationsApi.addMemberToOrganization;
+    const functionToTest = OrganizationsApi.addMemberToOrganization;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_MEMBER_ID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];
@@ -1337,14 +1337,14 @@ function testRemoveMemberFromOrganization() {
 
   describe('removeMemberFromOrganization()', () => {
 
-    const functionToTest :Function = OrganizationsApi.removeMemberFromOrganization;
+    const functionToTest = OrganizationsApi.removeMemberFromOrganization;
 
-    const validParams :any[] = [
+    const validParams = [
       MOCK_ORGANIZATION_DM.id,
       MOCK_MEMBER_ID
     ];
 
-    const invalidParams :any[] = [
+    const invalidParams = [
       INVALID_SS_PARAMS,
       INVALID_PARAMS
     ];

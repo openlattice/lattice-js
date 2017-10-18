@@ -70,7 +70,7 @@ const LOG = new Logger('DataApi');
  *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
  * );
  */
-export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeIds :UUID[]) :Promise<> {
+export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -175,7 +175,7 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
  *   }
  * );
  */
-export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Object) :Promise<> {
+export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -283,7 +283,7 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
  *   ]
  * );
  */
-export function createEntityAndAssociationData(bulkDataCreation :Object) :Promise<> {
+export function createEntityAndAssociationData(bulkDataCreation :Object) :Promise<*> {
 
   const url :string = `/${ENTITY_DATA_PATH}`;
 
@@ -322,7 +322,7 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
  *   }
  * );
  */
-export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) :Promise<> {
+export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -374,7 +374,7 @@ export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) 
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
  * );
  */
-export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
+export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -414,7 +414,7 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<> {
  * @example
  * DataApi.acquireSyncTicket("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
  */
-export function releaseSyncTicket(ticketId :UUID) :Promise<> {
+export function releaseSyncTicket(ticketId :UUID) :Promise<*> {
 
   let errorMsg = '';
 

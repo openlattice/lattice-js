@@ -65,7 +65,7 @@ const LOG = new Logger('LinkingApi');
  *   }
  * );
  */
-export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :Promise<> {
+export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :Promise<*> {
 
   // TODO: everything
 
@@ -116,7 +116,7 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
  *   }
  * );
  */
-export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<> {
+export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<*> {
 
   // TODO: everything
 
@@ -151,7 +151,7 @@ export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<> {
 //  * TODO: add unit tests
 //  * TODO: create data models
 //  */
-// export function linkEntities() :Promise<> {
+// export function linkEntities() :Promise<*> {
 //
 //   return Promise.reject('LinkingApi.linkEntities() is not implemented');
 // }
@@ -168,7 +168,7 @@ export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<> {
 //  * TODO: add unit tests
 //  * TODO: create data models
 //  */
-// export function setLinkedEntities() :Promise<> {
+// export function setLinkedEntities() :Promise<*> {
 //
 //   return Promise.reject('LinkingApi.setLinkedEntities() is not implemented');
 // }
@@ -185,7 +185,7 @@ export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<> {
 //  * TODO: add unit tests
 //  * TODO: create data models
 //  */
-// export function removeLinkedEntities() :Promise<> {
+// export function removeLinkedEntities() :Promise<*> {
 //
 //   return Promise.reject('LinkingApi.removeLinkedEntities() is not implemented');
 // }
@@ -202,7 +202,7 @@ export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<> {
 //  * TODO: add unit tests
 //  * TODO: create data models
 //  */
-// export function addLinkedEntities() :Promise<> {
+// export function addLinkedEntities() :Promise<*> {
 //
 //   return Promise.reject('LinkingApi.addLinkedEntities() is not implemented');
 // }
@@ -219,7 +219,7 @@ export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<> {
 //  * TODO: add unit tests
 //  * TODO: create data models
 //  */
-// export function removeLinkedEntity() :Promise<> {
+// export function removeLinkedEntity() :Promise<*> {
 //
 //   return Promise.reject('LinkingApi.removeLinkedEntity() is not implemented');
 // }

@@ -73,7 +73,7 @@ const LOG = new Logger('AuthorizationApi');
  *   ]
  * );
  */
-export function checkAuthorizations(queries :AccessCheck[]) :Promise<> {
+export function checkAuthorizations(queries :AccessCheck[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -121,9 +121,12 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<> {
  * );
  */
 export function getAccessibleObjects(
-    securableType :SecurableType, permission :Permission, pagingToken :string) :Promise<> {
+    securableType :SecurableType,
+    permission :Permission,
+    pagingToken :string
+) :Promise<*> {
 
-  let errorMsg :string;
+  let errorMsg :string = '';
 
   if (!isNonEmptyString(securableType) || !SecurableTypes[securableType]) {
     errorMsg = 'invalid parameter: securableType must be a valid SecurableType';

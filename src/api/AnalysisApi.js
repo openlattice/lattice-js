@@ -2,6 +2,8 @@
  * @flow
  */
 
+/* eslint-disable import/prefer-default-export */
+
 /**
  * AnalysisApi ...
  *
@@ -65,7 +67,8 @@ export function getTopUtilizers(
     entitySetId :UUID,
     count :number,
     options :Object,
-    fileType :string) :Promise<> {
+    fileType :string
+) :Promise<*> {
 
   // TODO: everything
 
