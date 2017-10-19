@@ -8,6 +8,7 @@ import has from 'lodash/has';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
+import AnalyzerTypes from '../constants/types/AnalyzerTypes';
 import Logger from '../utils/Logger';
 
 import {
@@ -21,6 +22,8 @@ import {
   isValidUuid,
   isValidFqnArray
 } from '../utils/ValidationUtils';
+
+import type { Analyzer } from '../constants/types/AnalyzerTypes';
 
 const LOG = new Logger('PropertyType');
 
@@ -36,6 +39,8 @@ export default class PropertyType {
   description :?string;
   datatype :string;
   schemas :FullyQualifiedName[];
+  piiField :boolean;
+  analyzer :Analyzer;
 
   constructor(
       id :?UUID,
@@ -43,7 +48,9 @@ export default class PropertyType {
       title :string,
       description :?string,
       datatype :string,
-      schemas :FullyQualifiedName[]
+      schemas :FullyQualifiedName[],
+      piiField :boolean,
+      analyzer :Analyzer
   ) {
 
     // required properties
@@ -60,6 +67,44 @@ export default class PropertyType {
     if (isDefined(description)) {
       this.description = description;
     }
+
+    if (isDefined(piiField)) {
+      this.piiField = piiField;
+    }
+
+    if (isDefined(analyzer)) {
+      this.analyzer = analyzer;
+    }
+  }
+
+  asImmutable() {
+
+    const propertyTypeObj = {};
+
+    // required properties
+    propertyTypeObj.type = this.type;
+    propertyTypeObj.title = this.title;
+    propertyTypeObj.datatype = this.datatype;
+    propertyTypeObj.schemas = this.schemas;
+
+    // optional properties
+    if (isDefined(this.id)) {
+      propertyTypeObj.id = this.id;
+    }
+
+    if (isDefined(this.description)) {
+      propertyTypeObj.description = this.description;
+    }
+
+    if (isDefined(this.piiField)) {
+      propertyTypeObj.piiField = this.piiField;
+    }
+
+    if (isDefined(this.analyzer)) {
+      propertyTypeObj.analyzer = this.analyzer;
+    }
+
+    return Immutable.fromJS(propertyTypeObj);
   }
 }
 
@@ -75,6 +120,8 @@ export class PropertyTypeBuilder {
   description :?string;
   datatype :string;
   schemas :FullyQualifiedName[];
+  piiField :boolean;
+  analyzer :Analyzer;
 
   setId(propertyTypeId :?UUID) :PropertyTypeBuilder {
 
@@ -153,18 +200,53 @@ export class PropertyTypeBuilder {
     return this;
   }
 
+  setPii(pii :boolean) :PropertyTypeBuilder {
+
+    if (!isDefined(pii)) {
+      return this;
+    }
+
+    if (pii !== true && pii !== false) {
+      throw new Error('invalid parameter: pii must be a boolean');
+    }
+
+    this.piiField = pii;
+    return this;
+  }
+
+  setAnalyzer(analyzer :Analyzer) :PropertyTypeBuilder {
+
+    if (!isDefined(analyzer) || isEmptyString(analyzer)) {
+      return this;
+    }
+
+    if (analyzer !== AnalyzerTypes.METAPHONE && analyzer !== AnalyzerTypes.STANDARD) {
+      throw new Error('invalid parameter: analyzer must be one of ["METAPHONE","STANDARD"]');
+    }
+
+    this.analyzer = analyzer;
+    return this;
+  }
+
   build() :PropertyType {
 
+    let errorMsg :string = '';
+
     if (!this.type) {
-      throw new Error('missing property: type is a required property');
+      errorMsg = 'missing property: type is a required property';
     }
 
     if (!this.title) {
-      throw new Error('missing property: title is a required property');
+      errorMsg = 'missing property: title is a required property';
     }
 
     if (!this.datatype) {
-      throw new Error('missing property: datatype is a required property');
+      errorMsg = 'missing property: datatype is a required property';
+    }
+
+    if (errorMsg) {
+      LOG.error(errorMsg);
+      throw new Error(errorMsg);
     }
 
     if (!this.schemas) {
@@ -177,7 +259,9 @@ export class PropertyTypeBuilder {
       this.title,
       this.description,
       this.datatype,
-      this.schemas
+      this.schemas,
+      this.piiField,
+      this.analyzer
     );
   }
 }
@@ -208,6 +292,14 @@ export function isValid(propertyType :any) :boolean {
 
     if (has(propertyType, 'description')) {
       propertyTypeBuilder.setDescription(propertyType.description);
+    }
+
+    if (has(propertyType, 'piiField')) {
+      propertyTypeBuilder.setPii(propertyType.piiField);
+    }
+
+    if (has(propertyType, 'analyzer')) {
+      propertyTypeBuilder.setAnalyzer(propertyType.analyzer);
     }
 
     propertyTypeBuilder.build();
