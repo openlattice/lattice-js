@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "main": "build/lattice.js",
   "dependencies": {
-    "axios": "^0.16.0",
+    "axios": "^0.17.0",
     "immutable": "4.0.0-rc.8",
     "lodash": "^4.16.4",
     "loglevel": "^1.4.1",
