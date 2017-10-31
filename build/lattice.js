@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.30.0
+ * lattice - v0.30.1
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -27815,7 +27815,7 @@ var _Configuration = __webpack_require__(188);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.30.0";
+var version = "v0.30.1";
 
 /**
  * The `lattice.js` library is a layer on top of OpenLattice's REST APIs to simplify the process of reading data from
@@ -35263,8 +35263,9 @@ function getEntitySetId(entitySetName) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetName).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
@@ -38386,8 +38387,9 @@ function getAllPrincipals(organizationId) {
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
-  }).catch(function (e) {
-    LOG.error(e);
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
   });
 }
 
