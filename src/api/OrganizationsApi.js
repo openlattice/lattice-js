@@ -1123,8 +1123,9 @@ export function getAllPrincipals(organizationId :UUID) :Promise<*> {
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
-    .catch((e) => {
-      LOG.error(e);
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
     });
 }
 
