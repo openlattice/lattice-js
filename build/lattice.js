@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.30.1
+ * lattice - v0.30.2
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -10910,6 +10910,8 @@ var _immutable2 = _interopRequireDefault(_immutable);
 
 var _Configuration = __webpack_require__(188);
 
+var _LangUtils = __webpack_require__(2);
+
 var _ApiNames = __webpack_require__(5);
 
 var _ApiPaths = __webpack_require__(12);
@@ -10954,16 +10956,21 @@ function getApiBaseUrl(api) {
 
 function newAxiosInstance(baseUrl) {
 
-  var axiosInstance = _axios2.default.create({
+  var axiosConfigObj = {
     baseURL: baseUrl,
     headers: {
       common: {
-        Authorization: (0, _Configuration.getConfig)().get('authToken'),
         'Content-Type': 'application/json'
       }
     }
-  });
+  };
 
+  var authToken = (0, _Configuration.getConfig)().get('authToken');
+  if ((0, _LangUtils.isNonEmptyString)(authToken)) {
+    axiosConfigObj.headers.common.Authorization = authToken;
+  }
+
+  var axiosInstance = _axios2.default.create(axiosConfigObj);
   var newMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
   baseUrlToAxiosInstanceMap = newMap;
 }
@@ -27421,7 +27428,8 @@ module.exports = function xhrAdapter(config) {
     // For IE 8/9 CORS support
     // Only supports POST and GET calls and doesn't returns the response headers.
     // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if (process.env.NODE_ENV !== 'test' &&
+    if (!window.XMLHttpRequest &&
+        process.env.NODE_ENV !== 'test' &&
         typeof window !== 'undefined' &&
         window.XDomainRequest && !('withCredentials' in request) &&
         !isURLSameOrigin(config.url)) {
@@ -27463,7 +27471,7 @@ module.exports = function xhrAdapter(config) {
       var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
       var response = {
         data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
+        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
         status: request.status === 1223 ? 204 : request.status,
         statusText: request.status === 1223 ? 'No Content' : request.statusText,
         headers: responseHeaders,
@@ -27695,8 +27703,8 @@ var configObj = _immutable2.default.Map().withMutations(function (map) {
  *
  * @memberof lattice.Configuration
  * @param {Object} config - an object literal containing all configuration options
- * @param {string} config.authToken - a Base64-encoded JWT auth token
- * @param {string} config.baseUrl - a full URL, or a simple URL identifier
+ * @param {string} config.authToken - a Base64-encoded JWT auth token (optional)
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier (required)
  */
 function configure(config) {
 
@@ -27706,7 +27714,10 @@ function configure(config) {
     throw new Error(errorMsg);
   }
 
-  if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
+  // authToken is optional, so null and undefined are allowed
+  if (config.authToken === null || config.authToken === undefined) {
+    configObj = configObj.delete('authToken');
+  } else if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
     configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
   } else {
     var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
@@ -27815,7 +27826,7 @@ var _Configuration = __webpack_require__(188);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var version = "v0.30.1";
+var version = "v0.30.2";
 
 /**
  * The `lattice.js` library is a layer on top of OpenLattice's REST APIs to simplify the process of reading data from
@@ -33087,8 +33098,6 @@ var defaults = __webpack_require__(38);
 var utils = __webpack_require__(8);
 var InterceptorManager = __webpack_require__(279);
 var dispatchRequest = __webpack_require__(280);
-var isAbsoluteURL = __webpack_require__(282);
-var combineURLs = __webpack_require__(283);
 
 /**
  * Create a new instance of Axios
@@ -33119,11 +33128,6 @@ Axios.prototype.request = function request(config) {
 
   config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
   config.method = config.method.toLowerCase();
-
-  // Support baseURL config
-  if (config.baseURL && !isAbsoluteURL(config.url)) {
-    config.url = combineURLs(config.baseURL, config.url);
-  }
 
   // Hook up interceptors middleware
   var chain = [dispatchRequest, undefined];
@@ -33333,6 +33337,15 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 var utils = __webpack_require__(8);
 
+// Headers whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+var ignoreDuplicateOf = [
+  'age', 'authorization', 'content-length', 'content-type', 'etag',
+  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+  'referer', 'retry-after', 'user-agent'
+];
+
 /**
  * Parse headers into an object
  *
@@ -33360,7 +33373,14 @@ module.exports = function parseHeaders(headers) {
     val = utils.trim(line.substr(i + 1));
 
     if (key) {
-      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        return;
+      }
+      if (key === 'set-cookie') {
+        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+      } else {
+        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      }
     }
   });
 
@@ -33616,6 +33636,8 @@ var utils = __webpack_require__(8);
 var transformData = __webpack_require__(281);
 var isCancel = __webpack_require__(186);
 var defaults = __webpack_require__(38);
+var isAbsoluteURL = __webpack_require__(282);
+var combineURLs = __webpack_require__(283);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -33634,6 +33656,11 @@ function throwIfCancellationRequested(config) {
  */
 module.exports = function dispatchRequest(config) {
   throwIfCancellationRequested(config);
+
+  // Support baseURL config
+  if (config.baseURL && !isAbsoluteURL(config.url)) {
+    config.url = combineURLs(config.baseURL, config.url);
+  }
 
   // Ensure headers exist
   config.headers = config.headers || {};
