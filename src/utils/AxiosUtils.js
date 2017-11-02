@@ -5,9 +5,8 @@
 import Axios from 'axios';
 import Immutable from 'immutable';
 
-import {
-  getConfig
-} from '../config/Configuration';
+import { getConfig } from '../config/Configuration';
+import { isNonEmptyString } from '../utils/LangUtils';
 
 import {
   ANALYSIS_API,
@@ -78,16 +77,21 @@ function getApiBaseUrl(api :string) :string {
 
 function newAxiosInstance(baseUrl :string) {
 
-  const axiosInstance :Object = Axios.create({
+  const axiosConfigObj :Object = {
     baseURL: baseUrl,
     headers: {
       common: {
-        Authorization: getConfig().get('authToken'),
         'Content-Type': 'application/json'
       }
     }
-  });
+  };
 
+  const authToken :?string = getConfig().get('authToken');
+  if (isNonEmptyString(authToken)) {
+    axiosConfigObj.headers.common.Authorization = authToken;
+  }
+
+  const axiosInstance :Object = Axios.create(axiosConfigObj);
   const newMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
   baseUrlToAxiosInstanceMap = newMap;
 }
