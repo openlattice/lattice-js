@@ -41,8 +41,8 @@ let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string
  *
  * @memberof lattice.Configuration
  * @param {Object} config - an object literal containing all configuration options
- * @param {string} config.authToken - a Base64-encoded JWT auth token
- * @param {string} config.baseUrl - a full URL, or a simple URL identifier
+ * @param {string} config.authToken - a Base64-encoded JWT auth token (optional)
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier (required)
  */
 function configure(config :Object) {
 
@@ -52,7 +52,11 @@ function configure(config :Object) {
     throw new Error(errorMsg);
   }
 
-  if (isNonEmptyString(config.authToken)) {
+  // authToken is optional, so null and undefined are allowed
+  if (config.authToken === null || config.authToken === undefined) {
+    configObj = configObj.delete('authToken');
+  }
+  else if (isNonEmptyString(config.authToken)) {
     configObj = configObj.set('authToken', `Bearer ${config.authToken}`);
   }
   else {

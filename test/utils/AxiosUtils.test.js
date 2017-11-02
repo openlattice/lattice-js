@@ -434,6 +434,71 @@ describe('AxiosUtils', () => {
       expect(axiosInstance1).not.toEqual(axiosInstance2);
     });
 
+    it('should not set the Authorization header if authToken is not set', () => {
+
+      Config.configure({
+        baseUrl: 'localhost'
+      });
+
+      const axiosInstance = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
+      expect(Axios.create).toHaveBeenCalled();
+      expect(Axios.create).toHaveBeenCalledTimes(1);
+      expect(axiosInstance.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance.defaults.headers.common.Authorization).toBeUndefined();
+    });
+
+
+    it('should not set the Authorization header if the authToken changes to undefined', () => {
+
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
+      expect(Axios.create).toHaveBeenCalled();
+      expect(Axios.create).toHaveBeenCalledTimes(1);
+      expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance1.defaults.headers.common.Authorization).toEqual(`Bearer ${MOCK_AUTH_TOKEN}`);
+
+      Axios.create.calls.reset();
+      Config.configure({
+        baseUrl: 'localhost'
+      });
+
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
+      expect(Axios.create).toHaveBeenCalled();
+      expect(Axios.create).toHaveBeenCalledTimes(1);
+      expect(axiosInstance2.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance2.defaults.headers.common.Authorization).toBeUndefined();
+
+      expect(axiosInstance1).not.toBe(axiosInstance2);
+      expect(axiosInstance1).not.toEqual(axiosInstance2);
+    });
+
+    it('should set the Authorization header if the authToken changes and was previously undefined', () => {
+
+      Config.configure({
+        baseUrl: 'localhost'
+      });
+
+      const axiosInstance1 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
+      expect(Axios.create).toHaveBeenCalled();
+      expect(Axios.create).toHaveBeenCalledTimes(1);
+      expect(axiosInstance1.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance1.defaults.headers.common.Authorization).toBeUndefined();
+
+      Axios.create.calls.reset();
+      Config.configure({
+        authToken: 'foo_bar',
+        baseUrl: 'localhost'
+      });
+
+      const axiosInstance2 = AxiosUtils.getApiAxiosInstance(ApiNames.DATA_API);
+      expect(Axios.create).toHaveBeenCalled();
+      expect(Axios.create).toHaveBeenCalledTimes(1);
+      expect(axiosInstance2.defaults.baseURL).toEqual(DATA_API_BASE_URL);
+      expect(axiosInstance2.defaults.headers.common.Authorization).toEqual('Bearer foo_bar');
+
+      expect(axiosInstance1).not.toBe(axiosInstance2);
+      expect(axiosInstance1).not.toEqual(axiosInstance2);
+    });
+
   });
 
 });

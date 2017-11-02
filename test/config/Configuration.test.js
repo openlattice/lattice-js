@@ -53,11 +53,29 @@ describe('Configuration', () => {
 
     describe('authToken', () => {
 
-      it('should throw if authToken is missing', () => {
+      it('should not throw if authToken is missing', () => {
 
         expect(() => {
           Config.configure({ baseUrl: 'localhost' });
-        }).toThrow();
+        }).not.toThrow();
+      });
+
+      it('should not set the auth token if authToken is undefined', () => {
+
+        Config.configure({ baseUrl: 'localhost' });
+        expect(Config.getConfig().has('authToken')).toEqual(false);
+        expect(Config.getConfig().get('authToken')).toBeUndefined();
+
+        Config.configure({ authToken: undefined, baseUrl: 'localhost' });
+        expect(Config.getConfig().has('authToken')).toEqual(false);
+        expect(Config.getConfig().get('authToken')).toBeUndefined();
+      });
+
+      it('should not set the auth token if authToken is null', () => {
+
+        Config.configure({ authToken: null, baseUrl: 'localhost' });
+        expect(Config.getConfig().has('authToken')).toEqual(false);
+        expect(Config.getConfig().get('authToken')).toBeUndefined();
       });
 
       it('should throw if authToken is invalid', () => {
