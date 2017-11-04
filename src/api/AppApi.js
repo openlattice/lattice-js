@@ -145,6 +145,41 @@ export function getConfigurations(appId :UUID) :Promise<*> {
 }
 
 /**
+  * `GET /app/{appId}`
+  *
+  * Loads app with provided id
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID[]} appTypeIds
+  * @return {Promise<Schema>} - a Promise that will resolve with the details of an app
+  *
+  * @example
+  * AppApi.getApp("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+  */
+
+export function getApp(appId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${appId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
   * `GET /app/type`
   *
   * Loads app type objects for provided ids
@@ -160,6 +195,7 @@ export function getConfigurations(appId :UUID) :Promise<*> {
   *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
   * );
   */
+
 export function getAppTypeIds(appTypeIds :UUID) :Promise<*> {
 
   let errorMsg = '';
