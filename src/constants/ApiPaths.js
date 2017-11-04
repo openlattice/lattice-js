@@ -4,6 +4,7 @@
 
 // base endpoint controller paths
 export const ANALYSIS_PATH :string = 'analysis';
+export const APP_PATH :string = 'app';
 export const AUTHORIZATIONS_PATH :string = 'authorizations';
 export const DATA_PATH :string = 'data';
 export const DATA_SOURCES_PATH :string = 'datasource';
@@ -26,6 +27,11 @@ export const PROPERTY_TYPE_PATH :string = 'property/type';
 export const ROLES_PATH :string = 'roles';
 export const SET_PATH :string = 'set';
 export const TYPE_PATH :string = 'type';
+
+// AppApi specific paths
+export const BULK_PATH = 'bulk';
+export const CONFIG_PATH = 'config';
+export const INSTALL_PATH = 'install';
 
 // DataApi specific paths
 export const ENTITY_DATA_PATH :string = 'entitydata';

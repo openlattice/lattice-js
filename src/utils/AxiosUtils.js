@@ -10,6 +10,7 @@ import { isNonEmptyString } from '../utils/LangUtils';
 
 import {
   ANALYSIS_API,
+  APP_API,
   AUTHORIZATION_API,
   DATA_API,
   DATA_SOURCES_API,
@@ -25,6 +26,7 @@ import {
 
 import {
   ANALYSIS_PATH,
+  APP_PATH,
   AUTHORIZATIONS_PATH,
   DATA_PATH,
   DATASTORE_PATH,
@@ -48,6 +50,8 @@ function getApiBaseUrl(api :string) :string {
   switch (api) {
     case ANALYSIS_API:
       return `${baseUrl}/${DATASTORE_PATH}/${ANALYSIS_PATH}`;
+    case APP_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${APP_PATH}`;
     case AUTHORIZATION_API:
       return `${baseUrl}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`;
     case DATA_API:

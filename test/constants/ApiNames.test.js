@@ -1,6 +1,7 @@
 import * as ApiNames from '../../src/constants/ApiNames';
 
 const ANALYSIS_API = 'AnalysisApi';
+const APP_API = 'AppApi';
 const AUTHORIZATION_API = 'AuthorizationApi';
 const DATA_API = 'DataApi';
 const DATA_SOURCES_API = 'DataSourcesApi';
@@ -18,6 +19,11 @@ describe('ApiNames', () => {
   it(`should expose "${ANALYSIS_API}"`, () => {
     expect(ApiNames.ANALYSIS_API).toBeDefined();
     expect(ApiNames.ANALYSIS_API).toEqual(ANALYSIS_API);
+  });
+
+  it(`should expose "${APP_API}"`, () => {
+    expect(ApiNames.APP_API).toBeDefined();
+    expect(ApiNames.APP_API).toEqual(APP_API);
   });
 
   it(`should expose "${AUTHORIZATION_API}"`, () => {
