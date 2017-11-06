@@ -13,6 +13,7 @@ import {
   BULK_PATH,
   CONFIG_PATH,
   INSTALL_PATH,
+  LOOKUP_PATH,
   TYPE_PATH
 } from '../constants/ApiPaths';
 
@@ -170,6 +171,41 @@ export function getApp(appId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${appId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `GET /app/{appName}`
+  *
+  * Loads app with provided name
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID[]} appTypeIds
+  * @return {Promise<Schema>} - a Promise that will resolve with the details of an app
+  *
+  * @example
+  * AppApi.getAppByName("bhr");
+  */
+
+export function getAppByName(appName :String) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyString(appName)) {
+    errorMsg = 'invalid parameter: appName must be a non-empty string';
+    LOG.error(errorMsg, appName);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${LOOKUP_PATH}/${appName}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

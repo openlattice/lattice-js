@@ -31,6 +31,7 @@ export const TYPE_PATH :string = 'type';
 // AppApi specific paths
 export const BULK_PATH = 'bulk';
 export const CONFIG_PATH = 'config';
+export const LOOKUP_PATH = 'lookup';
 export const INSTALL_PATH = 'install';
 
 // DataApi specific paths

@@ -30,6 +30,7 @@ const TYPE_PATH = 'type';
 const BULK_PATH = 'bulk';
 const CONFIG_PATH = 'config';
 const INSTALL_PATH = 'install';
+const LOOKUP_PATH = 'lookup';
 
 // DataApi specific paths
 const ENTITY_DATA_PATH = 'entitydata';
@@ -201,6 +202,11 @@ describe('ApiPaths', () => {
     it(`should expose "${INSTALL_PATH}"`, () => {
       expect(ApiPaths.INSTALL_PATH).toBeDefined();
       expect(ApiPaths.INSTALL_PATH).toEqual(INSTALL_PATH);
+    });
+
+    it(`should expose "${LOOKUP_PATH}"`, () => {
+      expect(ApiPaths.LOOKUP_PATH).toBeDefined();
+      expect(ApiPaths.LOOKUP_PATH).toEqual(LOOKUP_PATH);
     });
 
   });
