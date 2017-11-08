@@ -19,6 +19,7 @@ export const SEARCH_PATH :string = 'search';
 export const SYNC_PATH :string = 'sync';
 
 // shared paths
+export const BULK_PATH :string = 'bulk';
 export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const IDS_PATH :string = 'ids';
@@ -29,10 +30,9 @@ export const SET_PATH :string = 'set';
 export const TYPE_PATH :string = 'type';
 
 // AppApi specific paths
-export const BULK_PATH = 'bulk';
-export const CONFIG_PATH = 'config';
-export const LOOKUP_PATH = 'lookup';
-export const INSTALL_PATH = 'install';
+export const CONFIG_PATH :string = 'config';
+export const LOOKUP_PATH :string = 'lookup';
+export const INSTALL_PATH :string = 'install';
 
 // DataApi specific paths
 export const ENTITY_DATA_PATH :string = 'entitydata';
