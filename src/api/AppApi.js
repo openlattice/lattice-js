@@ -229,7 +229,7 @@ export function getAppByName(appName :string) :Promise<*> {
   * ]);
   */
 
-export function getAppTypeIds(appTypeIds :UUID[]) :Promise<*> {
+export function getAppTypesForAppTypeIds(appTypeIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
