@@ -9,7 +9,6 @@ import {
 } from '../constants/ApiNames';
 
 import {
-  APP_PATH,
   BULK_PATH,
   CONFIG_PATH,
   INSTALL_PATH,
@@ -30,7 +29,7 @@ import {
   isValidUuidArray
 } from '../utils/ValidationUtils';
 
-const LOG = new Logger('EntityDataModelApi');
+const LOG = new Logger('AppApi');
 
 /**
   * `GET /app/`
@@ -39,14 +38,12 @@ const LOG = new Logger('EntityDataModelApi');
   *
   * @static
   * @memberof lattice.AppApi
-  * @return {Promise<Schema>} - a Promise that will resolve with a list of all apps
+  * @return {Promise<Object[]>} - a Promise that will resolve with a list of all apps
   *
   * @example
   * AppApi.getApps();
   */
 export function getApps() :Promise<*> {
-
-  let errorMsg = '';
 
   return getApiAxiosInstance(APP_API)
     .get('/')
@@ -69,7 +66,7 @@ export function getApps() :Promise<*> {
   * @param {UUID} appId
   * @param {UUID} organizationId
   * @param {string} prefix
-  * @return {Promise<Schema>} - a Promise that will resolve after creating an app for an organization
+  * @return {Promise} - a Promise that will resolve without a value after creating an app for an organization
   *
   * @example
   * AppApi.installApp(
@@ -119,7 +116,7 @@ export function installApp(appId :UUID, organizationId :UUID, prefix :string) :P
   * @static
   * @memberof lattice.AppApi
   * @param {UUID} appId
-  * @return {Promise<Schema>} - a Promise that will resolve with all available configurations for an app
+  * @return {Promise<Object[]>} - a Promise that will resolve with all available configurations for an app
   *
   * @example
   * AppApi.getConfigurations("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -152,8 +149,8 @@ export function getConfigurations(appId :UUID) :Promise<*> {
   *
   * @static
   * @memberof lattice.AppApi
-  * @param {UUID[]} appTypeIds
-  * @return {Promise<Schema>} - a Promise that will resolve with the details of an app
+  * @param {UUID} appId
+  * @return {Promise<Object>} - a Promise that will resolve with the details of an app
   *
   * @example
   * AppApi.getApp("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
@@ -187,14 +184,14 @@ export function getApp(appId :UUID) :Promise<*> {
   *
   * @static
   * @memberof lattice.AppApi
-  * @param {UUID[]} appTypeIds
-  * @return {Promise<Schema>} - a Promise that will resolve with the details of an app
+  * @param {string} appName
+  * @return {Promise<Object>} - a Promise that will resolve with the details of an app
   *
   * @example
   * AppApi.getAppByName("bhr");
   */
 
-export function getAppByName(appName :String) :Promise<*> {
+export function getAppByName(appName :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -223,16 +220,16 @@ export function getAppByName(appName :String) :Promise<*> {
   * @static
   * @memberof lattice.AppApi
   * @param {UUID[]} appTypeIds
-  * @return {Promise<Schema>} - a Promise that will resolve with a mapping from app type ids to app types
+  * @return {Promise<Object>} - a Promise that will resolve with a mapping from app type ids to app types
   *
   * @example
-  * AppApi.getAppTypeIds(
+  * AppApi.getAppTypeIds([
   *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
-  * );
+  * ]);
   */
 
-export function getAppTypeIds(appTypeIds :UUID) :Promise<*> {
+export function getAppTypeIds(appTypeIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
