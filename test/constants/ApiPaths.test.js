@@ -17,6 +17,7 @@ const SEARCH_PATH = 'search';
 const SYNC_PATH = 'sync';
 
 // shared paths
+const BULK_PATH = 'bulk';
 const ENTITY_SET_PATH = 'entity/set';
 const ENTITY_TYPE_PATH = 'entity/type';
 const IDS_PATH = 'ids';
@@ -27,7 +28,6 @@ const SET_PATH = 'set';
 const TYPE_PATH = 'type';
 
 // AppApi specific paths
-const BULK_PATH = 'bulk';
 const CONFIG_PATH = 'config';
 const INSTALL_PATH = 'install';
 const LOOKUP_PATH = 'lookup';
@@ -145,6 +145,11 @@ describe('ApiPaths', () => {
 
   describe('shared paths', () => {
 
+    it(`should expose "${BULK_PATH}"`, () => {
+      expect(ApiPaths.BULK_PATH).toBeDefined();
+      expect(ApiPaths.BULK_PATH).toEqual(BULK_PATH);
+    });
+
     it(`should expose "${ENTITY_SET_PATH}"`, () => {
       expect(ApiPaths.ENTITY_SET_PATH).toBeDefined();
       expect(ApiPaths.ENTITY_SET_PATH).toEqual(ENTITY_SET_PATH);
@@ -188,11 +193,6 @@ describe('ApiPaths', () => {
   });
 
   describe('AppApi specific paths', () => {
-
-    it(`should expose "${BULK_PATH}"`, () => {
-      expect(ApiPaths.BULK_PATH).toBeDefined();
-      expect(ApiPaths.BULK_PATH).toEqual(BULK_PATH);
-    });
 
     it(`should expose "${CONFIG_PATH}"`, () => {
       expect(ApiPaths.CONFIG_PATH).toBeDefined();

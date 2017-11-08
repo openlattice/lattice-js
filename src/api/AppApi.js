@@ -57,92 +57,6 @@ export function getApps() :Promise<*> {
 }
 
 /**
-  * `GET /app/install/{appId}/{organizationId}/{prefix}`
-  *
-  * Installs an app for an organization.
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @param {UUID} appId
-  * @param {UUID} organizationId
-  * @param {string} prefix
-  * @return {Promise} - a Promise that will resolve without a value after creating an app for an organization
-  *
-  * @example
-  * AppApi.installApp(
-  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
-  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
-  *   "app_prefix"
-  * );
-  */
-export function installApp(appId :UUID, organizationId :UUID, prefix :string) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(appId)) {
-    errorMsg = 'invalid parameter: appId must be a valid UUID';
-    LOG.error(errorMsg, appId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(prefix)) {
-    errorMsg = 'invalid parameter: prefix must be a non-empty string';
-    LOG.error(errorMsg, prefix);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(APP_API)
-    .get(`/${INSTALL_PATH}/${appId}/${organizationId}/${prefix}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
-  * `GET /app/config/{appId}`
-  *
-  * Loads all available configurations for a provided app id
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @param {UUID} appId
-  * @return {Promise<Object[]>} - a Promise that will resolve with all available configurations for an app
-  *
-  * @example
-  * AppApi.getConfigurations("ec6865e6-e60e-424b-a071-6a9c1603d735");
-  */
-export function getConfigurations(appId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(appId)) {
-    errorMsg = 'invalid parameter: appId must be a valid UUID';
-    LOG.error(errorMsg, appId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(APP_API)
-    .get(`/${CONFIG_PATH}/${appId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
   * `GET /app/{appId}`
   *
   * Loads app with provided id
@@ -241,6 +155,92 @@ export function getAppTypesForAppTypeIds(appTypeIds :UUID[]) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .post(`/${TYPE_PATH}/${BULK_PATH}`, appTypeIds)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `GET /app/config/{appId}`
+  *
+  * Loads all available configurations for a provided app id
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @return {Promise<Object[]>} - a Promise that will resolve with all available configurations for an app
+  *
+  * @example
+  * AppApi.getConfigurations("ec6865e6-e60e-424b-a071-6a9c1603d735");
+  */
+export function getConfigurations(appId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${CONFIG_PATH}/${appId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `GET /app/install/{appId}/{organizationId}/{prefix}`
+  *
+  * Installs an app for an organization.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @param {UUID} organizationId
+  * @param {string} prefix
+  * @return {Promise} - a Promise that will resolve without a value after creating an app for an organization
+  *
+  * @example
+  * AppApi.installApp(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+  *   "app_prefix"
+  * );
+  */
+export function installApp(appId :UUID, organizationId :UUID, prefix :string) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(prefix)) {
+    errorMsg = 'invalid parameter: prefix must be a non-empty string';
+    LOG.error(errorMsg, prefix);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${INSTALL_PATH}/${appId}/${organizationId}/${prefix}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
