@@ -4,6 +4,7 @@
 
 // base endpoint controller paths
 export const ANALYSIS_PATH :string = 'analysis';
+export const APP_PATH :string = 'app';
 export const AUTHORIZATIONS_PATH :string = 'authorizations';
 export const DATA_PATH :string = 'data';
 export const DATA_SOURCES_PATH :string = 'datasource';
@@ -18,6 +19,7 @@ export const SEARCH_PATH :string = 'search';
 export const SYNC_PATH :string = 'sync';
 
 // shared paths
+export const BULK_PATH :string = 'bulk';
 export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const IDS_PATH :string = 'ids';
@@ -26,6 +28,11 @@ export const PROPERTY_TYPE_PATH :string = 'property/type';
 export const ROLES_PATH :string = 'roles';
 export const SET_PATH :string = 'set';
 export const TYPE_PATH :string = 'type';
+
+// AppApi specific paths
+export const CONFIG_PATH :string = 'config';
+export const LOOKUP_PATH :string = 'lookup';
+export const INSTALL_PATH :string = 'install';
 
 // DataApi specific paths
 export const ENTITY_DATA_PATH :string = 'entitydata';

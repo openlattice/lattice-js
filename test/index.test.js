@@ -32,6 +32,12 @@ describe('lattice-js', () => {
     expect(Object.keys(Lattice.AnalysisApi).length).toBeGreaterThan(0);
   });
 
+  it('should expose AppApi', () => {
+    expect(Lattice.AppApi).toBeDefined();
+    expect(Lattice.AppApi).toEqual(jasmine.any(Object));
+    expect(Object.keys(Lattice.AppApi).length).toBeGreaterThan(0);
+  });
+
   it('should expose AuthorizationApi', () => {
     expect(Lattice.AuthorizationApi).toBeDefined();
     expect(Lattice.AuthorizationApi).toEqual(jasmine.any(Object));

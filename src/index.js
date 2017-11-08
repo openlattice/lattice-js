@@ -14,6 +14,7 @@ import * as Types from './constants/types';
 import * as Models from './models';
 
 import * as AnalysisApi from './api/AnalysisApi';
+import * as AppApi from './api/AppApi';
 import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
 import * as DataSourcesApi from './api/DataSourcesApi';
@@ -39,6 +40,7 @@ export {
   Models,
   Types,
   AnalysisApi,
+  AppApi,
   AuthorizationApi,
   DataApi,
   DataSourcesApi,
@@ -58,6 +60,7 @@ export default {
   Models,
   Types,
   AnalysisApi,
+  AppApi,
   AuthorizationApi,
   DataApi,
   DataSourcesApi,
