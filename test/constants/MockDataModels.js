@@ -107,9 +107,14 @@ export const MOCK_ORGANIZATION_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
   title: 'title',
   description: 'description',
+  principal: { type: 'ORGANIZATION', id: 'orgid' },
   members: [{ type: 'USER', id: 'principalId_0' }],
   roles: [{ type: 'ROLE', id: 'principalId_1' }],
-  emails: ['openlattice.com']
+  emails: ['openlattice.com'],
+  apps: [
+    '4b08e1f9-4a00-4169-92ea-10e377070220',
+    'ec6865e6-e60e-424b-a071-6a9c1603d735'
+  ]
 };
 
 export const MOCK_PRINCIPAL_DM :Object = {
@@ -142,7 +147,8 @@ export const MOCK_ROLE_DM :Object = {
   id: 'fae6af98-2675-45bd-9a5b-1619a87235a8',
   organizationId: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
   title: 'title',
-  description: 'description'
+  description: 'description',
+  principal: { type: 'ROLE', id: 'roleid' }
 };
 
 export const MOCK_SCHEMA_DM :Object = {

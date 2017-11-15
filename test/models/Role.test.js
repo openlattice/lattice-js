@@ -124,6 +124,30 @@ describe('Role', () => {
 
     });
 
+    describe('setPrincipal()', () => {
+
+      it('should throw when given invalid parameters', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(() => {
+            builder.setPrincipal(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setPrincipal();
+        }).toThrow();
+      });
+
+      it('should not throw when given valid parameters', () => {
+        expect(() => {
+          builder.setPrincipal(MOCK_ROLE_DM.principal);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('build()', () => {
 
       it('should throw when a required property has not been set', () => {
@@ -133,12 +157,23 @@ describe('Role', () => {
             .setId(MOCK_ROLE_DM.id)
             .setTitle(MOCK_ROLE_DM.title)
             .setDescription(MOCK_ROLE_DM.description)
+            .setPrincipal(MOCK_ROLE_DM.principal)
             .build();
         }).toThrow();
 
         expect(() => {
           (new RoleBuilder())
             .setId(MOCK_ROLE_DM.id)
+            .setOrganizationId(MOCK_ROLE_DM.organizationId)
+            .setDescription(MOCK_ROLE_DM.description)
+            .setPrincipal(MOCK_ROLE_DM.principal)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new RoleBuilder())
+            .setId(MOCK_ROLE_DM.id)
+            .setTitle(MOCK_ROLE_DM.title)
             .setOrganizationId(MOCK_ROLE_DM.organizationId)
             .setDescription(MOCK_ROLE_DM.description)
             .build();
@@ -152,6 +187,7 @@ describe('Role', () => {
             .setOrganizationId(MOCK_ROLE_DM.organizationId)
             .setTitle(MOCK_ROLE_DM.title)
             .setDescription(MOCK_ROLE_DM.description)
+            .setPrincipal(MOCK_ROLE_DM.principal)
             .build();
         }).not.toThrow();
 
@@ -160,6 +196,7 @@ describe('Role', () => {
             .setId(MOCK_ROLE_DM.id)
             .setOrganizationId(MOCK_ROLE_DM.organizationId)
             .setTitle(MOCK_ROLE_DM.title)
+            .setPrincipal(MOCK_ROLE_DM.principal)
             .build();
         }).not.toThrow();
       });
@@ -171,6 +208,7 @@ describe('Role', () => {
           .setOrganizationId(MOCK_ROLE_DM.organizationId)
           .setTitle(MOCK_ROLE_DM.title)
           .setDescription(MOCK_ROLE_DM.description)
+          .setPrincipal(MOCK_ROLE_DM.principal)
           .build();
 
         expect(org).toEqual(jasmine.any(Role));
@@ -186,6 +224,9 @@ describe('Role', () => {
 
         expect(org.description).toBeDefined();
         expect(org.description).toEqual(MOCK_ROLE_DM.description);
+
+        expect(org.principal).toBeDefined();
+        expect(org.principal).toEqual(MOCK_ROLE_DM.principal);
       });
 
     });
@@ -206,7 +247,8 @@ describe('Role', () => {
             MOCK_ROLE_DM.id,
             MOCK_ROLE_DM.organizationId,
             MOCK_ROLE_DM.title,
-            MOCK_ROLE_DM.description
+            MOCK_ROLE_DM.description,
+            MOCK_ROLE_DM.principal
           )
         )).toEqual(true);
       });
@@ -218,6 +260,7 @@ describe('Role', () => {
           .setOrganizationId(MOCK_ROLE_DM.organizationId)
           .setTitle(MOCK_ROLE_DM.title)
           .setDescription(MOCK_ROLE_DM.description)
+          .setPrincipal(MOCK_ROLE_DM.principal)
           .build();
 
         expect(isValid(role)).toEqual(true);
@@ -261,6 +304,12 @@ describe('Role', () => {
         });
       });
 
+      it('should return false when given an object literal with an invalid "principal" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ROLE_DM, { principal: invalidInput }))).toEqual(false);
+        });
+      });
+
       it('should return false when given an instance with an invalid "id" property', () => {
         INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
@@ -268,7 +317,8 @@ describe('Role', () => {
               invalidInput,
               MOCK_ROLE_DM.organizationId,
               MOCK_ROLE_DM.title,
-              MOCK_ROLE_DM.description
+              MOCK_ROLE_DM.description,
+              MOCK_ROLE_DM.principal
             )
           )).toEqual(false);
         });
@@ -281,7 +331,8 @@ describe('Role', () => {
               MOCK_ROLE_DM.id,
               invalidInput,
               MOCK_ROLE_DM.title,
-              MOCK_ROLE_DM.description
+              MOCK_ROLE_DM.description,
+              MOCK_ROLE_DM.principal
             )
           )).toEqual(false);
         });
@@ -294,7 +345,8 @@ describe('Role', () => {
               MOCK_ROLE_DM.id,
               MOCK_ROLE_DM.organizationId,
               invalidInput,
-              MOCK_ROLE_DM.description
+              MOCK_ROLE_DM.description,
+              MOCK_ROLE_DM.principal
             )
           )).toEqual(false);
         });
@@ -307,6 +359,21 @@ describe('Role', () => {
               MOCK_ROLE_DM.id,
               MOCK_ROLE_DM.organizationId,
               MOCK_ROLE_DM.title,
+              invalidInput,
+              MOCK_ROLE_DM.principal
+            )
+          )).toEqual(false);
+        });
+      });
+
+      it('should return false when given an instance with an invalid "principal" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid(
+            new Role(
+              MOCK_ROLE_DM.id,
+              MOCK_ROLE_DM.organizationId,
+              MOCK_ROLE_DM.title,
+              MOCK_ROLE_DM.description,
               invalidInput
             )
           )).toEqual(false);
