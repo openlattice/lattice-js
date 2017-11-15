@@ -41,7 +41,7 @@ export default class Organization {
   members :Principal[];
   roles :Principal[];
   emails :string[];
-  apps :UUID[]
+  apps :UUID[];
 
   constructor(
       id :?UUID,
