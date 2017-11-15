@@ -6,7 +6,10 @@ import Immutable from 'immutable';
 
 import has from 'lodash/has';
 
-import Principal from './Principal';
+import Principal, {
+  isValid as isValidPrincipal
+} from './Principal';
+
 import Logger from '../utils/Logger';
 
 import {
@@ -19,6 +22,7 @@ import {
 
 import {
   isValidUuid,
+  isValidUuidArray,
   isValidPrincipalArray
 } from '../utils/ValidationUtils';
 
@@ -33,24 +37,30 @@ export default class Organization {
   id :?UUID;
   title :string;
   description :?string;
+  principal :Principal;
   members :Principal[];
   roles :Principal[];
   emails :string[];
+  apps :UUID[]
 
   constructor(
       id :?UUID,
       title :string,
       description :?string,
+      principal :Principal,
       members :Principal[],
       roles :Principal[],
-      emails :string[]
+      emails :string[],
+      apps :UUID[]
   ) {
 
     // required properties
     this.title = title;
+    this.principal = principal;
     this.members = members;
     this.roles = roles;
     this.emails = emails;
+    this.apps = apps;
 
     // optional properties
     if (isDefined(id)) {
@@ -72,9 +82,11 @@ export class OrganizationBuilder {
   id :?UUID;
   title :string;
   description :?string;
+  principal :Principal;
   members :Principal[];
   roles :Principal[];
   emails :string[];
+  apps :UUID[];
 
   setId(id :?UUID) :OrganizationBuilder {
 
@@ -102,6 +114,7 @@ export class OrganizationBuilder {
 
   setDescription(description :?string) :OrganizationBuilder {
 
+
     if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
@@ -111,6 +124,16 @@ export class OrganizationBuilder {
     }
 
     this.description = description;
+    return this;
+  }
+
+  setPrincipal(principal :Principal) :OrganizationBuilder {
+
+    if (!isValidPrincipal(principal)) {
+      throw new Error('invalid parameter: principal must be a valid Principal');
+    }
+
+    this.principal = principal;
     return this;
   }
 
@@ -171,10 +194,32 @@ export class OrganizationBuilder {
     return this;
   }
 
+  setApps(apps :UUID[]) :OrganizationBuilder {
+    if (!isDefined(apps) || isEmptyArray(apps)) {
+      return this;
+    }
+
+    if (!isValidUuidArray(apps)) {
+      throw new Error('invalid parameter: apps must be a valid UUID array');
+    }
+
+    this.apps = Immutable.Set().withMutations((set :Set<Principal>) => {
+      apps.forEach((app :UUID) => {
+        set.add(app);
+      });
+    }).toJS();
+
+    return this;
+  }
+
   build() :Organization {
 
     if (!this.title) {
       throw new Error('missing property: title is a required property');
+    }
+
+    if (!this.principal) {
+      throw new Error('missing property: principal is a required property');
     }
 
     if (!this.members) {
@@ -189,13 +234,19 @@ export class OrganizationBuilder {
       this.emails = [];
     }
 
+    if (!this.apps) {
+      this.apps = [];
+    }
+
     return new Organization(
       this.id,
       this.title,
       this.description,
+      this.principal,
       this.members,
       this.roles,
-      this.emails
+      this.emails,
+      this.apps
     );
   }
 }
@@ -215,9 +266,11 @@ export function isValid(organization :any) :boolean {
     // required properties
     organizationBuilder
       .setTitle(organization.title)
+      .setPrincipal(organization.principal)
       .setMembers(organization.members)
       .setRoles(organization.roles)
       .setAutoApprovedEmails(organization.emails)
+      .setApps(organization.apps)
       .build();
 
     // optional properties

@@ -100,6 +100,30 @@ describe('Organization', () => {
 
     });
 
+    describe('setPrincipal()', () => {
+
+      it('should throw when given invalid parameters', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(() => {
+            builder.setPrincipal(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      it('should throw when not given any parameters', () => {
+        expect(() => {
+          builder.setPrincipal();
+        }).toThrow();
+      });
+
+      it('should not throw when given valid parameters', () => {
+        expect(() => {
+          builder.setPrincipal(MOCK_ORGANIZATION_DM.principal);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('setMembers()', () => {
 
       it('should throw when given invalid parameters', () => {
@@ -196,6 +220,38 @@ describe('Organization', () => {
 
     });
 
+    describe('setApps()', () => {
+
+      it('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+          expect(() => {
+            builder.setApps(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      it('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+          expect(() => {
+            builder.setApps([...MOCK_ORGANIZATION_DM.apps, invalidInput]);
+          }).toThrow();
+        });
+      });
+
+      it('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setApps();
+        }).not.toThrow();
+      });
+
+      it('should not throw when given valid parameters', () => {
+        expect(() => {
+          builder.setApps(MOCK_ORGANIZATION_DM.apps);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('build()', () => {
 
       it('should throw when a required property has not been set', () => {
@@ -211,9 +267,11 @@ describe('Organization', () => {
           (new OrganizationBuilder())
             .setTitle(MOCK_ORGANIZATION_DM.title)
             .setDescription(MOCK_ORGANIZATION_DM.description)
+            .setPrincipal(MOCK_ORGANIZATION_DM.principal)
             .setMembers(MOCK_ORGANIZATION_DM.members)
             .setRoles(MOCK_ORGANIZATION_DM.roles)
             .setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails)
+            .setApps(MOCK_ORGANIZATION_DM.apps)
             .build();
         }).not.toThrow();
 
@@ -221,20 +279,26 @@ describe('Organization', () => {
           (new OrganizationBuilder())
             .setId(MOCK_ORGANIZATION_DM.id)
             .setTitle(MOCK_ORGANIZATION_DM.title)
+            .setPrincipal(MOCK_ORGANIZATION_DM.principal)
             .setMembers(MOCK_ORGANIZATION_DM.members)
             .setRoles(MOCK_ORGANIZATION_DM.roles)
             .setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails)
+            .setApps(MOCK_ORGANIZATION_DM.apps)
             .build();
         }).not.toThrow();
       });
 
       it('should set required properties that are allowed to be empty', () => {
 
-        const org = builder.setTitle(MOCK_ORGANIZATION_DM.title).build();
+        const org = builder
+          .setTitle(MOCK_ORGANIZATION_DM.title)
+          .setPrincipal(MOCK_ORGANIZATION_DM.principal)
+          .build();
 
         expect(org.members).toEqual([]);
         expect(org.roles).toEqual([]);
         expect(org.emails).toEqual([]);
+        expect(org.apps).toEqual([]);
       });
 
       it('should return a valid instance', () => {
@@ -243,9 +307,11 @@ describe('Organization', () => {
           .setId(MOCK_ORGANIZATION_DM.id)
           .setTitle(MOCK_ORGANIZATION_DM.title)
           .setDescription(MOCK_ORGANIZATION_DM.description)
+          .setPrincipal(MOCK_ORGANIZATION_DM.principal)
           .setMembers(MOCK_ORGANIZATION_DM.members)
           .setRoles(MOCK_ORGANIZATION_DM.roles)
           .setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails)
+          .setApps(MOCK_ORGANIZATION_DM.apps)
           .build();
 
         expect(org).toEqual(jasmine.any(Organization));
@@ -259,6 +325,9 @@ describe('Organization', () => {
         expect(org.description).toBeDefined();
         expect(org.description).toEqual(MOCK_ORGANIZATION_DM.description);
 
+        expect(org.principal).toBeDefined();
+        expect(org.principal).toEqual(MOCK_ORGANIZATION_DM.principal);
+
         expect(org.members).toBeDefined();
         expect(org.members).toEqual(MOCK_ORGANIZATION_DM.members);
 
@@ -267,6 +336,9 @@ describe('Organization', () => {
 
         expect(org.emails).toBeDefined();
         expect(org.emails).toEqual(MOCK_ORGANIZATION_DM.emails);
+
+        expect(org.apps).toBeDefined();
+        expect(org.apps).toEqual(MOCK_ORGANIZATION_DM.apps);
       });
 
     });
@@ -287,8 +359,10 @@ describe('Organization', () => {
             MOCK_ORGANIZATION_DM.id,
             MOCK_ORGANIZATION_DM.title,
             MOCK_ORGANIZATION_DM.description,
+            MOCK_ORGANIZATION_DM.principal,
             MOCK_ORGANIZATION_DM.members,
-            MOCK_ORGANIZATION_DM.roles
+            MOCK_ORGANIZATION_DM.roles,
+            MOCK_ORGANIZATION_DM.apps
           )
         )).toEqual(true);
       });
@@ -299,8 +373,10 @@ describe('Organization', () => {
           .setId(MOCK_ORGANIZATION_DM.id)
           .setTitle(MOCK_ORGANIZATION_DM.title)
           .setDescription(MOCK_ORGANIZATION_DM.description)
+          .setPrincipal(MOCK_ORGANIZATION_DM.principal)
           .setMembers(MOCK_ORGANIZATION_DM.members)
           .setRoles(MOCK_ORGANIZATION_DM.roles)
+          .setApps(MOCK_ORGANIZATION_DM.apps)
           .build();
 
         expect(isValid(org)).toEqual(true);
@@ -338,6 +414,12 @@ describe('Organization', () => {
         });
       });
 
+      it('should return false when given an object literal with an invalid "principal" property', () => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { principal: invalidInput }))).toEqual(false);
+        });
+      });
+
       it('should return false when given an object literal with an invalid "members" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { members: invalidInput }))).toEqual(false);
@@ -356,6 +438,12 @@ describe('Organization', () => {
         });
       });
 
+      it('should return false when given an object literal with an invalid "apps" property', () => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { apps: invalidInput }))).toEqual(false);
+        });
+      });
+
       it('should return false when given an instance with an invalid "id" property', () => {
         INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
@@ -363,9 +451,11 @@ describe('Organization', () => {
               invalidInput,
               MOCK_ORGANIZATION_DM.title,
               MOCK_ORGANIZATION_DM.description,
+              MOCK_ORGANIZATION_DM.principal,
               MOCK_ORGANIZATION_DM.members,
               MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails
+              MOCK_ORGANIZATION_DM.emails,
+              MOCK_ORGANIZATION_DM.apps
             )
           )).toEqual(false);
         });
@@ -378,9 +468,11 @@ describe('Organization', () => {
               MOCK_ORGANIZATION_DM.id,
               invalidInput,
               MOCK_ORGANIZATION_DM.description,
+              MOCK_ORGANIZATION_DM.principal,
               MOCK_ORGANIZATION_DM.members,
               MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails
+              MOCK_ORGANIZATION_DM.emails,
+              MOCK_ORGANIZATION_DM.apps
             )
           )).toEqual(false);
         });
@@ -393,9 +485,28 @@ describe('Organization', () => {
               MOCK_ORGANIZATION_DM.id,
               MOCK_ORGANIZATION_DM.title,
               invalidInput,
+              MOCK_ORGANIZATION_DM.principal,
               MOCK_ORGANIZATION_DM.members,
               MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails
+              MOCK_ORGANIZATION_DM.emails,
+              MOCK_ORGANIZATION_DM.apps
+            )
+          )).toEqual(false);
+        });
+      });
+
+      it('should return false when given an instance with an invalid "principal" property', () => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(
+            new Organization(
+              MOCK_ORGANIZATION_DM.id,
+              MOCK_ORGANIZATION_DM.title,
+              MOCK_ORGANIZATION_DM.description,
+              invalidInput,
+              MOCK_ORGANIZATION_DM.members,
+              MOCK_ORGANIZATION_DM.roles,
+              MOCK_ORGANIZATION_DM.emails,
+              MOCK_ORGANIZATION_DM.apps
             )
           )).toEqual(false);
         });
@@ -408,6 +519,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION_DM.id,
               MOCK_ORGANIZATION_DM.title,
               MOCK_ORGANIZATION_DM.description,
+              MOCK_ORGANIZATION_DM.principal,
               invalidInput,
               MOCK_ORGANIZATION_DM.roles,
               MOCK_ORGANIZATION_DM.emails
@@ -423,9 +535,11 @@ describe('Organization', () => {
               MOCK_ORGANIZATION_DM.id,
               MOCK_ORGANIZATION_DM.title,
               MOCK_ORGANIZATION_DM.description,
+              MOCK_ORGANIZATION_DM.principal,
               MOCK_ORGANIZATION_DM.members,
               invalidInput,
-              MOCK_ORGANIZATION_DM.emails
+              MOCK_ORGANIZATION_DM.emails,
+              MOCK_ORGANIZATION_DM.apps
             )
           )).toEqual(false);
         });
@@ -438,8 +552,27 @@ describe('Organization', () => {
               MOCK_ORGANIZATION_DM.id,
               MOCK_ORGANIZATION_DM.title,
               MOCK_ORGANIZATION_DM.description,
+              MOCK_ORGANIZATION_DM.principal,
               MOCK_ORGANIZATION_DM.members,
               MOCK_ORGANIZATION_DM.roles,
+              invalidInput,
+              MOCK_ORGANIZATION_DM.apps
+            )
+          )).toEqual(false);
+        });
+      });
+
+      it('should return false when given an instance with an invalid "apps" property', () => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(
+            new Organization(
+              MOCK_ORGANIZATION_DM.id,
+              MOCK_ORGANIZATION_DM.title,
+              MOCK_ORGANIZATION_DM.description,
+              MOCK_ORGANIZATION_DM.principal,
+              MOCK_ORGANIZATION_DM.members,
+              MOCK_ORGANIZATION_DM.roles,
+              MOCK_ORGANIZATION_DM.emails,
               invalidInput
             )
           )).toEqual(false);

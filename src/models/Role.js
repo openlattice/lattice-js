@@ -4,6 +4,10 @@
 
 import has from 'lodash/has';
 
+import Principal, {
+  isValid as isValidPrincipal
+} from './Principal';
+
 import Logger from '../utils/Logger';
 
 import {
@@ -28,17 +32,20 @@ export default class Role {
   organizationId :UUID;
   title :string;
   description :?string;
+  principal :Principal
 
   constructor(
       id :?UUID,
       organizationId :UUID,
       title :string,
-      description :?string
+      description :?string,
+      principal :principal
   ) {
 
     // required properties
     this.organizationId = organizationId;
     this.title = title;
+    this.principal = principal;
 
     // optional properties
     if (isDefined(id)) {
@@ -61,6 +68,7 @@ export class RoleBuilder {
   organizationId :UUID;
   title :string;
   description :?string;
+  principal :Principal;
 
   setId(id :?UUID) :RoleBuilder {
 
@@ -110,6 +118,16 @@ export class RoleBuilder {
     return this;
   }
 
+  setPrincipal(principal :Principal) :RoleBuilder {
+
+    if (!isValidPrincipal(principal)) {
+      throw new Error('invalid parameter: principal must be a valid Principal');
+    }
+
+    this.principal = principal;
+    return this;
+  }
+
   build() :Role {
 
     if (!this.organizationId) {
@@ -120,11 +138,16 @@ export class RoleBuilder {
       throw new Error('missing property: title is a required property');
     }
 
+    if (!this.principal) {
+      throw new Error('missing property: principal is a required property');
+    }
+
     return new Role(
       this.id,
       this.organizationId,
       this.title,
-      this.description
+      this.description,
+      this.principal
     );
   }
 }
@@ -145,6 +168,7 @@ export function isValid(role :any) :boolean {
     roleBuilder
       .setOrganizationId(role.organizationId)
       .setTitle(role.title)
+      .setPrincipal(role.principal)
       .build();
 
     // optional properties

@@ -6,7 +6,8 @@
 const PrincipalTypes = {
   ORGANIZATION: 'ORGANIZATION',
   ROLE: 'ROLE',
-  USER: 'USER'
+  USER: 'USER',
+  APP: 'APP'
 };
 
 export type PrincipalType = $Keys<typeof PrincipalTypes>;
