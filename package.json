@@ -29,7 +29,8 @@
     "lodash": "^4.16.4",
     "loglevel": "^1.4.1",
     "moment": "^2.15.1",
-    "uuid-validate": "0.0.2"
+    "uuid-validate": "0.0.2",
+    "validator": "^9.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -51,7 +52,7 @@
     "eslint-plugin-flowtype": "^2.35.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jasmine": "^2.8.0",
-    "flow-bin": "^0.59.0",
+    "flow-bin": "^0.57.0",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.5.2",
     "json-loader": "^0.5.4",

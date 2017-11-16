@@ -1,8 +1,6 @@
 [ignore]
 .*/build/.*
-.*/node_modules/bluebird/.*
-.*/node_modules/fbjs/.*
-.*/node_modules/documentation/.*
+.*/node_modules/.*
 
 [libs]
 ./config/flow
