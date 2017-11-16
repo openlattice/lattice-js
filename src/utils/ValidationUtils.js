@@ -2,8 +2,6 @@
  * @flow
  */
 
-import validateUUID from 'uuid-validate';
-
 import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 
@@ -48,7 +46,15 @@ import type {
   Permission
 } from '../constants/types/PermissionTypes';
 
-const BASE_UUID :string = '00000000-0000-0000-0000-000000000000';
+/*
+ * https://github.com/mixer/uuid-validate
+ * https://github.com/chriso/validator.js
+ *
+ * this regular expression comes from isUUID() from the validator.js library. isUUID() defaults to checking "all"
+ * versions, but that means we lose validation against a specific version. for example, the regular expression returns
+ * true for '00000000-0000-0000-0000-000000000000', but this UUID is technically not valid.
+ */
+const BASE_UUID_PATTERN :RegExp = /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
 
 export function validateNonEmptyArray(value :any[], validatorFn :Function) :boolean {
 
@@ -67,7 +73,7 @@ export function validateNonEmptyArray(value :any[], validatorFn :Function) :bool
 
 export function isValidUuid(value :any) :boolean {
 
-  return validateUUID(value) || value === BASE_UUID;
+  return BASE_UUID_PATTERN.test(value);
 }
 
 export function isValidUuidArray(uuids :UUID[]) :boolean {
