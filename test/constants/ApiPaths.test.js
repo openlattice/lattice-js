@@ -2,6 +2,7 @@ import * as ApiPaths from '../../src/constants/ApiPaths';
 
 // base endpoint controller paths
 const ANALYSIS_PATH = 'analysis';
+const APP_PATH = 'app';
 const AUTHORIZATIONS_PATH = 'authorizations';
 const DATA_PATH = 'data';
 const DATA_SOURCES_PATH = 'datasource';
@@ -16,6 +17,7 @@ const SEARCH_PATH = 'search';
 const SYNC_PATH = 'sync';
 
 // shared paths
+const BULK_PATH = 'bulk';
 const ENTITY_SET_PATH = 'entity/set';
 const ENTITY_TYPE_PATH = 'entity/type';
 const IDS_PATH = 'ids';
@@ -24,6 +26,11 @@ const PROPERTY_TYPE_PATH = 'property/type';
 const ROLES_PATH = 'roles';
 const SET_PATH = 'set';
 const TYPE_PATH = 'type';
+
+// AppApi specific paths
+const CONFIG_PATH = 'config';
+const INSTALL_PATH = 'install';
+const LOOKUP_PATH = 'lookup';
 
 // DataApi specific paths
 const ENTITY_DATA_PATH = 'entitydata';
@@ -67,6 +74,11 @@ describe('ApiPaths', () => {
     it(`should expose "${ANALYSIS_PATH}"`, () => {
       expect(ApiPaths.ANALYSIS_PATH).toBeDefined();
       expect(ApiPaths.ANALYSIS_PATH).toEqual(ANALYSIS_PATH);
+    });
+
+    it(`should expose "${APP_PATH}"`, () => {
+      expect(ApiPaths.APP_PATH).toBeDefined();
+      expect(ApiPaths.APP_PATH).toEqual(APP_PATH);
     });
 
     it(`should expose "${AUTHORIZATIONS_PATH}"`, () => {
@@ -133,6 +145,11 @@ describe('ApiPaths', () => {
 
   describe('shared paths', () => {
 
+    it(`should expose "${BULK_PATH}"`, () => {
+      expect(ApiPaths.BULK_PATH).toBeDefined();
+      expect(ApiPaths.BULK_PATH).toEqual(BULK_PATH);
+    });
+
     it(`should expose "${ENTITY_SET_PATH}"`, () => {
       expect(ApiPaths.ENTITY_SET_PATH).toBeDefined();
       expect(ApiPaths.ENTITY_SET_PATH).toEqual(ENTITY_SET_PATH);
@@ -171,6 +188,25 @@ describe('ApiPaths', () => {
     it(`should expose "${TYPE_PATH}"`, () => {
       expect(ApiPaths.TYPE_PATH).toBeDefined();
       expect(ApiPaths.TYPE_PATH).toEqual(TYPE_PATH);
+    });
+
+  });
+
+  describe('AppApi specific paths', () => {
+
+    it(`should expose "${CONFIG_PATH}"`, () => {
+      expect(ApiPaths.CONFIG_PATH).toBeDefined();
+      expect(ApiPaths.CONFIG_PATH).toEqual(CONFIG_PATH);
+    });
+
+    it(`should expose "${INSTALL_PATH}"`, () => {
+      expect(ApiPaths.INSTALL_PATH).toBeDefined();
+      expect(ApiPaths.INSTALL_PATH).toEqual(INSTALL_PATH);
+    });
+
+    it(`should expose "${LOOKUP_PATH}"`, () => {
+      expect(ApiPaths.LOOKUP_PATH).toBeDefined();
+      expect(ApiPaths.LOOKUP_PATH).toEqual(LOOKUP_PATH);
     });
 
   });

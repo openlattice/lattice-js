@@ -66,10 +66,10 @@ function configure(config :Object) {
   }
 
   if (isNonEmptyString(config.baseUrl)) {
-    if (EnvToUrlMap.get('PROD').includes(config.baseUrl)) {
+    if (EnvToUrlMap.get('PROD', '').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', EnvToUrlMap.get('PROD'));
     }
-    else if (EnvToUrlMap.get('LOCAL').includes(config.baseUrl)) {
+    else if (EnvToUrlMap.get('LOCAL', '').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', EnvToUrlMap.get('LOCAL'));
     }
     // mild url validation to at least check the protocol and domain

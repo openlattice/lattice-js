@@ -88,7 +88,8 @@ export class LinkingEntitySetBuilder {
       throw new Error(errorMsg);
     }
     else {
-      this.linkingProperties = linkingPropertiesSet.toJS();
+      // type casting to "any" to avoid Flow error... I think immutable-js definitions need updates
+      this.linkingProperties = (linkingPropertiesSet.toJS() :any);
     }
 
     return this;

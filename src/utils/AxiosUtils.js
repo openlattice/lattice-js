@@ -2,14 +2,17 @@
  * @flow
  */
 
-import Axios from 'axios';
+import axios from 'axios';
 import Immutable from 'immutable';
+
+import type { Axios } from 'axios';
 
 import { getConfig } from '../config/Configuration';
 import { isNonEmptyString } from '../utils/LangUtils';
 
 import {
   ANALYSIS_API,
+  APP_API,
   AUTHORIZATION_API,
   DATA_API,
   DATA_SOURCES_API,
@@ -25,6 +28,7 @@ import {
 
 import {
   ANALYSIS_PATH,
+  APP_PATH,
   AUTHORIZATIONS_PATH,
   DATA_PATH,
   DATASTORE_PATH,
@@ -39,15 +43,17 @@ import {
   SYNC_PATH
 } from '../constants/ApiPaths';
 
-let baseUrlToAxiosInstanceMap :Map<string, Object> = Immutable.Map();
+let baseUrlToAxiosInstanceMap :Map<string, Axios> = Immutable.Map();
 
 function getApiBaseUrl(api :string) :string {
 
-  const baseUrl :string = getConfig().get('baseUrl');
+  const baseUrl :string = getConfig().get('baseUrl', '');
 
   switch (api) {
     case ANALYSIS_API:
       return `${baseUrl}/${DATASTORE_PATH}/${ANALYSIS_PATH}`;
+    case APP_API:
+      return `${baseUrl}/${DATASTORE_PATH}/${APP_PATH}`;
     case AUTHORIZATION_API:
       return `${baseUrl}/${DATASTORE_PATH}/${AUTHORIZATIONS_PATH}`;
     case DATA_API:
@@ -75,7 +81,7 @@ function getApiBaseUrl(api :string) :string {
   }
 }
 
-function newAxiosInstance(baseUrl :string) {
+function newAxiosInstance(baseUrl :string) :void {
 
   const axiosConfigObj :Object = {
     baseURL: baseUrl,
@@ -91,12 +97,12 @@ function newAxiosInstance(baseUrl :string) {
     axiosConfigObj.headers.common.Authorization = authToken;
   }
 
-  const axiosInstance :Object = Axios.create(axiosConfigObj);
+  const axiosInstance :Axios = axios.create(axiosConfigObj);
   const newMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
   baseUrlToAxiosInstanceMap = newMap;
 }
 
-function getApiAxiosInstance(api :string) :Object {
+function getApiAxiosInstance(api :string) :Axios {
 
   const baseUrl = getApiBaseUrl(api);
 
@@ -104,13 +110,15 @@ function getApiAxiosInstance(api :string) :Object {
     newAxiosInstance(baseUrl);
   }
 
-  const axiosInstance = baseUrlToAxiosInstanceMap.get(baseUrl);
+  // type casting to "any" to avoid Flow errors for now
+  const axiosInstance :any = baseUrlToAxiosInstanceMap.get(baseUrl);
   const axiosInstanceAuthToken = axiosInstance.defaults.headers.common.Authorization;
   if (axiosInstanceAuthToken !== getConfig().get('authToken')) {
     newAxiosInstance(baseUrl);
   }
 
-  return baseUrlToAxiosInstanceMap.get(baseUrl);
+  // type casting to "any" to avoid Flow errors for now
+  return (baseUrlToAxiosInstanceMap.get(baseUrl) :any);
 }
 
 export {

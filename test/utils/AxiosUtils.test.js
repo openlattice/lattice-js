@@ -86,6 +86,32 @@ describe('AxiosUtils', () => {
 
     });
 
+    describe('AppApi', () => {
+
+      it('should return the correct LOCAL URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.APP_API)).toEqual(
+          `${EnvToUrlMap.get('LOCAL')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.APP_PATH}`
+        );
+      });
+
+      it('should return the correct PROD URL', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'api'
+        });
+        expect(AxiosUtils.getApiBaseUrl(ApiNames.APP_API)).toEqual(
+          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.APP_PATH}`
+        );
+      });
+
+    });
+
     describe('AuthorizationApi', () => {
 
       it('should return the correct LOCAL URL', () => {
