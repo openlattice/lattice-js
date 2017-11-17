@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.31.0
+ * lattice - v0.31.1
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -13404,7 +13404,7 @@ var AccessCheckBuilder = exports.AccessCheckBuilder = function () {
       }
 
       if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
-        throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
+        throw new Error('invalid parameter: aclKey must be an array of valid UUIDs');
       }
 
       this.aclKey = aclKey;
@@ -13419,7 +13419,7 @@ var AccessCheckBuilder = exports.AccessCheckBuilder = function () {
       }
 
       if (!(0, _ValidationUtils.isValidPermissionArray)(permissions)) {
-        throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
+        throw new Error('invalid parameter: permissions must be an array of valid Permissions');
       }
 
       this.permissions = _immutable2.default.Set().withMutations(function (set) {
@@ -27889,7 +27889,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.31.0";
+var version = "v0.31.1";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
