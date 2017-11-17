@@ -55,7 +55,7 @@ export class AccessCheckBuilder {
     }
 
     if (!isValidUuidArray(aclKey)) {
-      throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
+      throw new Error('invalid parameter: aclKey must be an array of valid UUIDs');
     }
 
     this.aclKey = aclKey;
@@ -69,7 +69,7 @@ export class AccessCheckBuilder {
     }
 
     if (!isValidPermissionArray(permissions)) {
-      throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
+      throw new Error('invalid parameter: permissions must be an array of valid Permissions');
     }
 
     this.permissions = Immutable.Set().withMutations((set :Set<Permission>) => {

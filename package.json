@@ -75,6 +75,7 @@
     "build:min": "better-npm-run build:min",
     "clean": "rimraf build/*",
     "flow": "flow check",
+    "lib": "better-npm-run webpack-dev-server",
     "lint": "eslint --config .eslintrc src test",
     "release:major": "npm version major -m \"releasing v%s\" && npm publish",
     "release:minor": "npm version minor -m \"releasing v%s\" && npm publish",
@@ -86,8 +87,7 @@
     "test:karma:run": "better-npm-run test:karma:run",
     "test:karma:start": "better-npm-run test:karma:start",
     "test:karma:watch": "better-npm-run test:karma:watch",
-    "test:karma:browser": "better-npm-run test:karma:browser",
-    "webpack-dev-server": "better-npm-run webpack-dev-server"
+    "test:karma:browser": "better-npm-run test:karma:browser"
   },
   "betterScripts": {
     "build": {
