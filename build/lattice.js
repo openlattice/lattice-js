@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.31.1
+ * lattice - v0.31.2
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -16,7 +16,7 @@
 		exports["Lattice"] = factory();
 	else
 		root["Lattice"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-//! version : 2.19.1
+//! version : 2.19.4
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -747,7 +747,7 @@ var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
 
 // any word (or two) characters or numbers including two/three word month in arabic.
 // includes scottish gaelic two word and hyphenated months
-var matchWord = /[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i;
+var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
 
 
 var regexes = {};
@@ -902,7 +902,7 @@ function get (mom, unit) {
 
 function set$1 (mom, unit, value) {
     if (mom.isValid() && !isNaN(value)) {
-        if (unit === 'FullYear' && isLeapYear(mom.year())) {
+        if (unit === 'FullYear' && isLeapYear(mom.year()) && mom.month() === 1 && mom.date() === 29) {
             mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value, mom.month(), daysInMonth(value, mom.month()));
         }
         else {
@@ -2008,10 +2008,11 @@ function defineLocale (name, config) {
 
 function updateLocale(name, config) {
     if (config != null) {
-        var locale, parentConfig = baseConfig;
+        var locale, tmpLocale, parentConfig = baseConfig;
         // MERGE
-        if (locales[name] != null) {
-            parentConfig = locales[name]._config;
+        tmpLocale = loadLocale(name);
+        if (tmpLocale != null) {
+            parentConfig = tmpLocale._config;
         }
         config = mergeConfigs(parentConfig, config);
         locale = new Locale(config);
@@ -2116,7 +2117,7 @@ function currentDateArray(config) {
 // note: all values past the year are optional and will default to the lowest possible value.
 // [year, month, day , hour, minute, second, millisecond]
 function configFromArray (config) {
-    var i, date, input = [], currentDate, yearToUse;
+    var i, date, input = [], currentDate, expectedWeekday, yearToUse;
 
     if (config._d) {
         return;
@@ -2166,6 +2167,8 @@ function configFromArray (config) {
     }
 
     config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
+    expectedWeekday = config._useUTC ? config._d.getUTCDay() : config._d.getDay();
+
     // Apply timezone offset from input. The actual utcOffset can be changed
     // with parseZone.
     if (config._tzm != null) {
@@ -2177,7 +2180,7 @@ function configFromArray (config) {
     }
 
     // check for mismatching day of week
-    if (config._w && typeof config._w.d !== 'undefined' && config._w.d !== config._d.getDay()) {
+    if (config._w && typeof config._w.d !== 'undefined' && config._w.d !== expectedWeekday) {
         getParsingFlags(config).weekdayMismatch = true;
     }
 }
@@ -3753,7 +3756,7 @@ addRegexToken('Do', function (isStrict, locale) {
 
 addParseToken(['D', 'DD'], DATE);
 addParseToken('Do', function (input, array) {
-    array[DATE] = toInt(input.match(match1to2)[0], 10);
+    array[DATE] = toInt(input.match(match1to2)[0]);
 });
 
 // MOMENTS
@@ -4565,7 +4568,7 @@ addParseToken('x', function (input, array, config) {
 // Side effect imports
 
 
-hooks.version = '2.19.1';
+hooks.version = '2.19.4';
 
 setHookCallback(createLocal);
 
@@ -10878,7 +10881,7 @@ var _LangUtils = __webpack_require__(2);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11218,7 +11221,7 @@ function forEach(obj, fn) {
   }
 
   // Force an array if not already something iterable
-  if (typeof obj !== 'object' && !isArray(obj)) {
+  if (typeof obj !== 'object') {
     /*eslint no-param-reassign:0*/
     obj = [obj];
   }
@@ -11318,55 +11321,6 @@ module.exports = {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(32),
-    getRawTag = __webpack_require__(199),
-    objectToString = __webpack_require__(200);
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
-
-module.exports = baseGetTag;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var freeGlobal = __webpack_require__(163);
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-module.exports = root;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -11398,6 +11352,9 @@ var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
 var ROLES_PATH = exports.ROLES_PATH = 'roles';
 var SET_PATH = exports.SET_PATH = 'set';
 var TYPE_PATH = exports.TYPE_PATH = 'type';
+
+// AnalysisApi specific paths
+var TYPES_PATH = exports.TYPES_PATH = 'types';
 
 // AppApi specific paths
 var CONFIG_PATH = exports.CONFIG_PATH = 'config';
@@ -11440,6 +11397,55 @@ var SEARCH_PROPERTY_TYPES_PATH = exports.SEARCH_PROPERTY_TYPES_PATH = 'property_
 
 // SyncApi specific paths
 var CURRENT_PATH = exports.CURRENT_PATH = 'current';
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(32),
+    getRawTag = __webpack_require__(199),
+    objectToString = __webpack_require__(200);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(163);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
 
 /***/ }),
 /* 12 */
@@ -12268,7 +12274,7 @@ function isValid(entityType) {
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     isArray = __webpack_require__(13),
     isObjectLike = __webpack_require__(12);
 
@@ -13248,7 +13254,7 @@ module.exports = function(module) {
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(11);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -13301,7 +13307,7 @@ module.exports = isLength;
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     isObjectLike = __webpack_require__(12);
 
 /** `Object#toString` result references. */
@@ -17104,7 +17110,7 @@ return esDo;
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
-//! locale : Spanish(United State) [es-us]
+//! locale : Spanish (United States) [es-us]
 //! author : bustta : https://github.com/bustta
 
 ;(function (global, factory) {
@@ -18781,8 +18787,7 @@ return hr;
 
 var weekEndings = 'vasárnap hétfőn kedden szerdán csütörtökön pénteken szombaton'.split(' ');
 function translate(number, withoutSuffix, key, isFuture) {
-    var num = number,
-        suffix;
+    var num = number;
     switch (key) {
         case 's':
             return (isFuture || withoutSuffix) ? 'néhány másodperc' : 'néhány másodperce';
@@ -25426,7 +25431,7 @@ module.exports = overArg;
 /* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     isObject = __webpack_require__(30);
 
 /** `Object#toString` result references. */
@@ -25513,7 +25518,7 @@ module.exports = toSource;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(16),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -25567,7 +25572,7 @@ module.exports = isArguments;
 /* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     getPrototype = __webpack_require__(216),
     isObjectLike = __webpack_require__(12);
 
@@ -25998,7 +26003,7 @@ function isValid(aclData) {
 /* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     isObjectLike = __webpack_require__(12);
 
 /** `Object#toString` result references. */
@@ -27479,8 +27484,7 @@ module.exports = function xhrAdapter(config) {
     // For IE 8/9 CORS support
     // Only supports POST and GET calls and doesn't returns the response headers.
     // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if (!window.XMLHttpRequest &&
-        process.env.NODE_ENV !== 'test' &&
+    if (process.env.NODE_ENV !== 'test' &&
         typeof window !== 'undefined' &&
         window.XDomainRequest && !('withCredentials' in request) &&
         !isURLSameOrigin(config.url)) {
@@ -27889,7 +27893,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.31.1";
+var version = "v0.31.2";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -28269,6 +28273,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
        *
        */
 
+      self.name = name;
+
       self.levels = { "TRACE": 0, "DEBUG": 1, "INFO": 2, "WARN": 3,
           "ERROR": 4, "SILENT": 5};
 
@@ -28349,6 +28355,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
         }
 
         return defaultLogger;
+    };
+
+    defaultLogger.getLoggers = function getLoggers() {
+        return _loggersByName;
     };
 
     return defaultLogger;
@@ -28670,7 +28680,7 @@ var DataView = __webpack_require__(196),
     Promise = __webpack_require__(204),
     Set = __webpack_require__(205),
     WeakMap = __webpack_require__(206),
-    baseGetTag = __webpack_require__(9),
+    baseGetTag = __webpack_require__(10),
     toSource = __webpack_require__(164);
 
 /** `Object#toString` result references. */
@@ -28730,7 +28740,7 @@ module.exports = getTag;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(16),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -28928,7 +28938,7 @@ module.exports = isMasked;
 /* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(11);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -28960,7 +28970,7 @@ module.exports = getValue;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(16),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -28973,7 +28983,7 @@ module.exports = Promise;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(16),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -28986,7 +28996,7 @@ module.exports = Set;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(16),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -28998,7 +29008,7 @@ module.exports = WeakMap;
 /* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     isObjectLike = __webpack_require__(12);
 
 /** `Object#toString` result references. */
@@ -29061,7 +29071,7 @@ module.exports = isArrayLike;
 /* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(10),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(11),
     stubFalse = __webpack_require__(210);
 
 /** Detect free variable `exports`. */
@@ -29163,7 +29173,7 @@ module.exports = isTypedArray;
 /* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     isLength = __webpack_require__(33),
     isObjectLike = __webpack_require__(12);
 
@@ -29278,7 +29288,7 @@ module.exports = nodeUtil;
 /* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(9),
+var baseGetTag = __webpack_require__(10),
     isObjectLike = __webpack_require__(12),
     isPlainObject = __webpack_require__(167);
 
@@ -30879,6 +30889,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getTopUtilizers = getTopUtilizers;
+exports.getNeighborTypes = getNeighborTypes;
 
 var _Logger = __webpack_require__(1);
 
@@ -30886,9 +30897,13 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
+var _ApiPaths = __webpack_require__(9);
+
 var _AxiosUtils = __webpack_require__(6);
 
 var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30949,6 +30964,37 @@ function getTopUtilizers(entitySetId, count, options, fileType) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).post(url, options).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /analysis/{uuid}/types`
+ *
+ * Gets all available association types and neighbor types for a given entity set id
+ *
+ * @static
+ * @memberof lattice.AnalysisApi
+ * @param {UUID} entitySetId
+ * @returns {Promise<Set<Object>} - a Promise that will resolve with the data as its fulfillment value
+ *
+ * @example
+ * AnalysisApi.getNeighborTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getNeighborTypes(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).get('/' + entitySetId + '/' + _ApiPaths.TYPES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31028,7 +31074,7 @@ module.exports.default = axios;
 /*!
  * Determine if an object is a Buffer
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <https://feross.org>
  * @license  MIT
  */
 
@@ -31896,7 +31942,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
@@ -32301,7 +32347,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
@@ -33028,7 +33074,7 @@ var _Schema2 = _interopRequireDefault(_Schema);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
@@ -35329,7 +35375,7 @@ var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
@@ -35595,7 +35641,7 @@ var _Role2 = _interopRequireDefault(_Role);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
@@ -37028,7 +37074,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
@@ -37483,7 +37529,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
@@ -38330,7 +38376,7 @@ function searchEntityNeighborsBulk(entitySetId, entityIds) {
 /* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(11);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeIsFinite = root.isFinite;
@@ -38386,7 +38432,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(5);
 
-var _ApiPaths = __webpack_require__(11);
+var _ApiPaths = __webpack_require__(9);
 
 var _AxiosUtils = __webpack_require__(6);
 
