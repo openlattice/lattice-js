@@ -26,12 +26,20 @@ import {
 } from '../constants/ApiNames';
 
 import {
+  TYPES_PATH
+} from '../constants/ApiPaths';
+
+import {
   getApiAxiosInstance
 } from '../utils/AxiosUtils';
 
 import {
   isNonEmptyString
 } from '../utils/LangUtils';
+
+import {
+  isValidUuid
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('AnalysisApi');
 
@@ -79,6 +87,40 @@ export function getTopUtilizers(
 
   return getApiAxiosInstance(ANALYSIS_API)
     .post(url, options)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /analysis/{uuid}/types`
+ *
+ * Gets all available association types and neighbor types for a given entity set id
+ *
+ * @static
+ * @memberof lattice.AnalysisApi
+ * @param {UUID} entitySetId
+ * @returns {Promise<Set<Object>} - a Promise that will resolve with the data as its fulfillment value
+ *
+ * @example
+ * AnalysisApi.getNeighborTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getNeighborTypes(entitySetId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ANALYSIS_API)
+    .get(`/${entitySetId}/${TYPES_PATH}`)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })

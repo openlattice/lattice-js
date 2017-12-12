@@ -27,6 +27,9 @@ const ROLES_PATH = 'roles';
 const SET_PATH = 'set';
 const TYPE_PATH = 'type';
 
+// AnalysisApi specific paths
+const TYPES_PATH = 'types';
+
 // AppApi specific paths
 const CONFIG_PATH = 'config';
 const INSTALL_PATH = 'install';
@@ -188,6 +191,15 @@ describe('ApiPaths', () => {
     it(`should expose "${TYPE_PATH}"`, () => {
       expect(ApiPaths.TYPE_PATH).toBeDefined();
       expect(ApiPaths.TYPE_PATH).toEqual(TYPE_PATH);
+    });
+
+  });
+
+  describe('AnalysisApi specific paths', () => {
+
+    it(`should expose "${TYPES_PATH}"`, () => {
+      expect(ApiPaths.TYPES_PATH).toBeDefined();
+      expect(ApiPaths.TYPES_PATH).toEqual(TYPES_PATH);
     });
 
   });
