@@ -29,6 +29,9 @@ export const ROLES_PATH :string = 'roles';
 export const SET_PATH :string = 'set';
 export const TYPE_PATH :string = 'type';
 
+// AnalysisApi specific paths
+export const TYPES_PATH :string = 'types';
+
 // AppApi specific paths
 export const CONFIG_PATH :string = 'config';
 export const LOOKUP_PATH :string = 'lookup';
