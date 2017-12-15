@@ -437,6 +437,51 @@ export function releaseSyncTicket(ticketId :UUID) :Promise<*> {
 }
 
 /**
+ * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
+ *
+ * Deletes the entity with the specified id from the entity set with the specified id.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.deleteEntityFromEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ * )
+});
+ */
+export function deleteEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${ENTITY_DATA_PATH}/${entitySetId}/${entityKeyId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PUT /data/entitydata/{entitySetId}/{entityKeyId}`
  *
  * Replaces the entity values for the specified entityKeyId.
