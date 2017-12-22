@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.31.2
+ * lattice - v0.31.3
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -11362,6 +11362,7 @@ var LOOKUP_PATH = exports.LOOKUP_PATH = 'lookup';
 var INSTALL_PATH = exports.INSTALL_PATH = 'install';
 
 // DataApi specific paths
+var COUNT_PATH = exports.COUNT_PATH = 'count';
 var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
 var TICKET_PATH = exports.TICKET_PATH = 'ticket';
 
@@ -27742,7 +27743,7 @@ var LOG = new _Logger2.default('Configuration');
 var configObj = _immutable2.default.Map().withMutations(function (map) {
 
   if (true) {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
+    map.set('baseUrl', _EnvToUrlMap2.default.get('PRODUCTION'));
   } else {
     map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
   }
@@ -27781,9 +27782,9 @@ function configure(config) {
   }
 
   if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
-    if (_EnvToUrlMap2.default.get('PROD', '').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PROD'));
-    } else if (_EnvToUrlMap2.default.get('LOCAL', '').includes(config.baseUrl)) {
+    if (config.baseUrl === 'production' || _EnvToUrlMap2.default.get('PRODUCTION', '').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PRODUCTION'));
+    } else if (config.baseUrl === 'localhost' || _EnvToUrlMap2.default.get('LOCAL', '').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
     }
     // mild url validation to at least check the protocol and domain
@@ -27893,7 +27894,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.31.2";
+var version = "v0.31.3";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -31911,7 +31912,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var ENVIRONMENT_URLS = _immutable2.default.Map({
   LOCAL: 'http://localhost:8080',
-  PROD: 'https://api.openlattice.com'
+  STAGING: 'https://api.staging.openlattice.com',
+  PRODUCTION: 'https://api.openlattice.com'
 });
 
 /* eslint-disable import/prefer-default-export */
@@ -32332,6 +32334,9 @@ exports.createEntityAndAssociationData = createEntityAndAssociationData;
 exports.storeEntityData = storeEntityData;
 exports.acquireSyncTicket = acquireSyncTicket;
 exports.releaseSyncTicket = releaseSyncTicket;
+exports.deleteEntityFromEntitySet = deleteEntityFromEntitySet;
+exports.replaceEntityInEntitySet = replaceEntityInEntitySet;
+exports.getEntitySetSize = getEntitySetSize;
 
 var _immutable = __webpack_require__(4);
 
@@ -32730,6 +32735,126 @@ function releaseSyncTicket(ticketId) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + ticketId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
+ *
+ * Deletes the entity with the specified id from the entity set with the specified id.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.deleteEntityFromEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ * )
+});
+ */
+function deleteEntityFromEntitySet(entitySetId, entityKeyId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /data/entitydata/{entitySetId}/{entityKeyId}`
+ *
+ * Replaces the entity values for the specified entityKeyId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @param {Object} entity
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.replaceEntityInEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "uuid_1a": ["value_1a", "value_1b"],
+ *     "uuid_1b": ["value_1c", "value_1d"]
+ *   }
+ * )
+});
+ */
+function replaceEntityInEntitySet(entitySetId, entityKeyId, entity) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /data/{entitySetId}/count`
+ *
+ * Returns the number of entities in the specified entity set
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without the entity count
+ *
+ * @example
+ * DataApi.getEntitySetSize("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e")
+ */
+function getEntitySetSize(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + _ApiPaths.COUNT_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -37063,6 +37188,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getUser = getUser;
+exports.getAllRoles = getAllRoles;
 exports.getAllUsers = getAllUsers;
 exports.searchAllUsersByEmail = searchAllUsersByEmail;
 exports.addRoleToUser = addRoleToUser;
@@ -37120,6 +37246,23 @@ function getUser(userId) {
   }
 
   return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /principals/roles`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise}
+ */
+function getAllRoles() {
+
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
