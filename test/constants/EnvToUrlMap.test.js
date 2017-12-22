@@ -31,7 +31,7 @@ describe('EnvToUrlMap', () => {
   });
 
   it('should have the correct PROD URL', () => {
-    expect(EnvToUrlMap.get('PROD')).toEqual(URLS.PROD);
+    expect(EnvToUrlMap.get('PRODUCTION')).toEqual(URLS.PROD);
   });
 
 });

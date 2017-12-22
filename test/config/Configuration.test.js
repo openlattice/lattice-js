@@ -144,15 +144,6 @@ describe('Configuration', () => {
 
         Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.openlattice.com' });
         expect(Config.getConfig().get('baseUrl')).toEqual('https://api.openlattice.com');
-
-        // Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.openlattice.com' });
-        // expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.openlattice.com');
-
-        Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://api.openlattice.com' });
-        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.openlattice.com');
-
-        // Config.configure({ authToken: MOCK_JWT, baseUrl: 'https://stg.openlattice.com' });
-        // expect(Config.getConfig().get('baseUrl')).toEqual('https://stg.openlattice.com');
       });
 
       it(`should correctly set the base URL to ${EnvToUrlMap.get('LOCAL')}`, () => {
@@ -167,22 +158,25 @@ describe('Configuration', () => {
         expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('LOCAL'));
       });
 
-      it(`should correctly set the base URL to ${EnvToUrlMap.get('PROD')}`, () => {
+      it(`should correctly set the base URL to ${EnvToUrlMap.get('PRODUCTION')}`, () => {
+
+        Config.configure({ authToken: MOCK_JWT, baseUrl: 'production' });
+        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PRODUCTION'));
 
         Config.configure({ authToken: MOCK_JWT, baseUrl: 'api' });
-        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
+        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PRODUCTION'));
 
         Config.configure({ authToken: MOCK_JWT, baseUrl: 'api.openlattice.com' });
-        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
+        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PRODUCTION'));
 
         Config.configure({ authToken: MOCK_JWT, baseUrl: 'openlattice' });
-        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
+        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PRODUCTION'));
 
         Config.configure({ authToken: MOCK_JWT, baseUrl: 'openlattice.com' });
-        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
+        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PRODUCTION'));
 
-        Config.configure({ authToken: MOCK_JWT, baseUrl: EnvToUrlMap.get('PROD') });
-        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PROD'));
+        Config.configure({ authToken: MOCK_JWT, baseUrl: EnvToUrlMap.get('PRODUCTION') });
+        expect(Config.getConfig().get('baseUrl')).toEqual(EnvToUrlMap.get('PRODUCTION'));
       });
 
     });
