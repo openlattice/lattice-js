@@ -70,6 +70,26 @@ export function getUser(userId :string) :Promise<*> {
 }
 
 /**
+ * `GET /principals/roles`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise}
+ */
+export function getAllRoles() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${ROLES_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /principals/users`
  *
  * @static

@@ -28,6 +28,7 @@ import {
 } from '../constants/ApiNames';
 
 import {
+  COUNT_PATH,
   ENTITY_DATA_PATH,
   TICKET_PATH
 } from '../constants/ApiPaths';
@@ -434,6 +435,136 @@ export function releaseSyncTicket(ticketId :UUID) :Promise<*> {
       return Promise.reject(error);
     });
 }
+
+/**
+ * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
+ *
+ * Deletes the entity with the specified id from the entity set with the specified id.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.deleteEntityFromEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ * )
+});
+ */
+export function deleteEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${ENTITY_DATA_PATH}/${entitySetId}/${entityKeyId}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /data/entitydata/{entitySetId}/{entityKeyId}`
+ *
+ * Replaces the entity values for the specified entityKeyId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @param {Object} entity
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.replaceEntityInEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "uuid_1a": ["value_1a", "value_1b"],
+ *     "uuid_1b": ["value_1c", "value_1d"]
+ *   }
+ * )
+});
+ */
+export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .put(`/${ENTITY_DATA_PATH}/${entitySetId}/${entityKeyId}`, entity)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /data/{entitySetId}/count`
+ *
+ * Returns the number of entities in the specified entity set
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without the entity count
+ *
+ * @example
+ * DataApi.getEntitySetSize("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e")
+ */
+export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .get(`/${entitySetId}/${COUNT_PATH}`)
+    .then((axiosResponse) => {
+      return axiosResponse.data;
+    })
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 
 // TODO: createAssociationData()
 // TODO: storeAssociationData()
