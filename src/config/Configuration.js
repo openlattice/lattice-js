@@ -24,7 +24,7 @@ const LOG = new Logger('Configuration');
 let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string, any>) => {
 
   if (__PROD__) {
-    map.set('baseUrl', EnvToUrlMap.get('PROD'));
+    map.set('baseUrl', EnvToUrlMap.get('PRODUCTION'));
   }
   else {
     map.set('baseUrl', EnvToUrlMap.get('LOCAL'));
@@ -66,10 +66,10 @@ function configure(config :Object) {
   }
 
   if (isNonEmptyString(config.baseUrl)) {
-    if (EnvToUrlMap.get('PROD', '').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', EnvToUrlMap.get('PROD'));
+    if (config.baseUrl === 'production' || EnvToUrlMap.get('PRODUCTION', '').includes(config.baseUrl)) {
+      configObj = configObj.set('baseUrl', EnvToUrlMap.get('PRODUCTION'));
     }
-    else if (EnvToUrlMap.get('LOCAL', '').includes(config.baseUrl)) {
+    else if (config.baseUrl === 'localhost' || EnvToUrlMap.get('LOCAL', '').includes(config.baseUrl)) {
       configObj = configObj.set('baseUrl', EnvToUrlMap.get('LOCAL'));
     }
     // mild url validation to at least check the protocol and domain

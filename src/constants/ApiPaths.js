@@ -38,6 +38,7 @@ export const LOOKUP_PATH :string = 'lookup';
 export const INSTALL_PATH :string = 'install';
 
 // DataApi specific paths
+export const COUNT_PATH :string = 'count';
 export const ENTITY_DATA_PATH :string = 'entitydata';
 export const TICKET_PATH :string = 'ticket';
 

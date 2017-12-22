@@ -36,6 +36,7 @@ const INSTALL_PATH = 'install';
 const LOOKUP_PATH = 'lookup';
 
 // DataApi specific paths
+const COUNT_PATH = 'count';
 const ENTITY_DATA_PATH = 'entitydata';
 const TICKET_PATH = 'ticket';
 
@@ -224,6 +225,11 @@ describe('ApiPaths', () => {
   });
 
   describe('DataApi specific paths', () => {
+
+    it(`should expose "${COUNT_PATH}"`, () => {
+      expect(ApiPaths.COUNT_PATH).toBeDefined();
+      expect(ApiPaths.COUNT_PATH).toEqual(COUNT_PATH);
+    });
 
     it(`should expose "${ENTITY_DATA_PATH}"`, () => {
       expect(ApiPaths.ENTITY_DATA_PATH).toBeDefined();

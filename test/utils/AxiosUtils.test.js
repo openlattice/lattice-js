@@ -80,7 +80,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.ANALYSIS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.ANALYSIS_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.ANALYSIS_PATH}`
         );
       });
 
@@ -106,7 +106,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.APP_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.APP_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.APP_PATH}`
         );
       });
 
@@ -132,7 +132,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.AUTHORIZATION_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.AUTHORIZATIONS_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.AUTHORIZATIONS_PATH}`
         );
       });
 
@@ -158,7 +158,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.DATA_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_PATH}`
         );
       });
 
@@ -184,7 +184,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.DATA_SOURCES_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_SOURCES_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.DATA_SOURCES_PATH}`
         );
       });
 
@@ -210,7 +210,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.EDM_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.EDM_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.EDM_PATH}`
         );
       });
 
@@ -236,7 +236,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.LINKING_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.LINKING_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.LINKING_PATH}`
         );
       });
 
@@ -262,7 +262,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.ORGANIZATIONS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.ORGANIZATIONS_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.ORGANIZATIONS_PATH}`
         );
       });
 
@@ -288,7 +288,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.PERMISSIONS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PERMISSIONS_PATH}`
         );
       });
 
@@ -314,7 +314,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.PRINCIPALS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PRINCIPALS_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.PRINCIPALS_PATH}`
         );
       });
 
@@ -340,7 +340,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.REQUESTS_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.REQUESTS_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.REQUESTS_PATH}`
         );
       });
 
@@ -366,7 +366,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.SEARCH_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SEARCH_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SEARCH_PATH}`
         );
       });
 
@@ -392,7 +392,7 @@ describe('AxiosUtils', () => {
           baseUrl: 'api'
         });
         expect(AxiosUtils.getApiBaseUrl(ApiNames.SYNC_API)).toEqual(
-          `${EnvToUrlMap.get('PROD')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SYNC_PATH}`
+          `${EnvToUrlMap.get('PRODUCTION')}/${ApiPaths.DATASTORE_PATH}/${ApiPaths.SYNC_PATH}`
         );
       });
 
