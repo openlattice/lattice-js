@@ -30,7 +30,8 @@ import {
 import {
   COUNT_PATH,
   ENTITY_DATA_PATH,
-  TICKET_PATH
+  TICKET_PATH,
+  UPDATE_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -521,7 +522,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
   }
 
   return getApiAxiosInstance(DATA_API)
-    .put(`/${ENTITY_DATA_PATH}/${entitySetId}/${entityKeyId}`, entity)
+    .put(`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${entitySetId}/${entityKeyId}`, entity)
     .then((axiosResponse) => {
       return axiosResponse.data;
     })
