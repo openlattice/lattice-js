@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.31.3
+ * lattice - v0.31.4
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -11365,6 +11365,7 @@ var INSTALL_PATH = exports.INSTALL_PATH = 'install';
 var COUNT_PATH = exports.COUNT_PATH = 'count';
 var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
 var TICKET_PATH = exports.TICKET_PATH = 'ticket';
+var UPDATE_PATH = exports.UPDATE_PATH = 'update';
 
 // EntityDataModelApi specific paths
 var ASSOCIATION_TYPE_PATH = exports.ASSOCIATION_TYPE_PATH = 'association/type';
@@ -27894,7 +27895,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.31.3";
+var version = "v0.31.4";
 
 exports.version = version;
 exports.configure = _Configuration.configure;
@@ -32823,7 +32824,7 @@ function replaceEntityInEntitySet(entitySetId, entityKeyId, entity) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
+  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.UPDATE_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
