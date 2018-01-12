@@ -29,10 +29,10 @@ export default class DataSource {
   entitySetIds :UUID[];
 
   constructor(
-      id :?UUID,
-      title :string,
-      description :?string,
-      entitySetIds :UUID[]
+    id :?UUID,
+    title :string,
+    description :?string,
+    entitySetIds :UUID[]
   ) {
 
     // required properties

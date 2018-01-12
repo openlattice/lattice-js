@@ -44,14 +44,14 @@ export default class Organization {
   apps :UUID[];
 
   constructor(
-      id :?UUID,
-      title :string,
-      description :?string,
-      principal :Principal,
-      members :Principal[],
-      roles :Principal[],
-      emails :string[],
-      apps :UUID[]
+    id :?UUID,
+    title :string,
+    description :?string,
+    principal :Principal,
+    members :Principal[],
+    roles :Principal[],
+    emails :string[],
+    apps :UUID[]
   ) {
 
     // required properties

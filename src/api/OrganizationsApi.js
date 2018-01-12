@@ -89,9 +89,7 @@ export function getOrganization(organizationId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -114,9 +112,7 @@ export function getAllOrganizations() :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get('/')
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -160,9 +156,7 @@ export function createOrganization(organization :Organization) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .post('/', organization)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -194,9 +188,7 @@ export function deleteOrganization(organizationId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -244,9 +236,7 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${TITLE_PATH}`, title, axiosConfig)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -294,9 +284,7 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${DESCRIPTION_PATH}`, description, axiosConfig)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -328,9 +316,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${EMAIL_DOMAINS_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -372,9 +358,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${EMAIL_DOMAINS_PATH}/${emailDomain}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -424,9 +408,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .post(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, emailDomainSet)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -476,9 +458,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${EMAIL_DOMAINS_PATH}`, emailDomainSet)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -520,9 +500,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${EMAIL_DOMAINS_PATH}/${emailDomain}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -576,9 +554,7 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
       method: 'delete',
       data: emailDomainSet
     })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -617,9 +593,7 @@ export function getRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -651,9 +625,7 @@ export function getAllRoles(organizationId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -694,9 +666,7 @@ export function createRole(role :Role) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .post(`/${ROLES_PATH}`, role)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -735,9 +705,7 @@ export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -793,9 +761,7 @@ export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :strin
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${TITLE_PATH}`, title, axiosConfig)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -851,9 +817,7 @@ export function updateRoleDescription(organizationId :UUID, roleId :UUID, descri
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${DESCRIPTION_PATH}`, description, axiosConfig)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -904,9 +868,7 @@ export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :st
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${MEMBERS_PATH}/${memberId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -957,9 +919,7 @@ export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberI
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${MEMBERS_PATH}/${memberId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -991,9 +951,7 @@ export function getAllMembers(organizationId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1035,9 +993,7 @@ export function addMemberToOrganization(organizationId :UUID, memberId :string) 
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${memberId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1079,9 +1035,7 @@ export function removeMemberFromOrganization(organizationId :UUID, memberId :str
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${memberId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1120,9 +1074,7 @@ export function getAllPrincipals(organizationId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${PRINCIPALS_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1173,9 +1125,7 @@ export function addPrincipal(organizationId :UUID, principalType :PrincipalType,
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${PRINCIPALS_PATH}/${principalType}/${principalId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1227,9 +1177,7 @@ export function addPrincipals(organizationId :UUID, principals :Principal[]) :Pr
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .post(`/${organizationId}/${PRINCIPALS_PATH}`, data)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1280,9 +1228,7 @@ export function setPrincipals(organizationId :UUID, principals :Principal[]) :Pr
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .put(`/${organizationId}/${PRINCIPALS_PATH}`, data)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1333,9 +1279,7 @@ export function removePrincipal(organizationId :UUID, principalType :PrincipalTy
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${PRINCIPALS_PATH}/${principalType}/${principalId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1390,9 +1334,7 @@ export function removePrincipals(organizationId :UUID, principals :Principal[]) 
       method: 'delete',
       data
     })
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

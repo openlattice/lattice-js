@@ -78,77 +78,57 @@ export function isValidUuid(value :any) :boolean {
 
 export function isValidUuidArray(uuids :UUID[]) :boolean {
 
-  return validateNonEmptyArray(uuids, (id :UUID) => {
-    return isValidUuid(id);
-  });
+  return validateNonEmptyArray(uuids, (id :UUID) => isValidUuid(id));
 }
 
 export function isValidFqnArray(fqns :FullyQualifiedName[]) :boolean {
 
-  return validateNonEmptyArray(fqns, (fqn :FullyQualifiedName) => {
-    return FullyQualifiedName.isValid(fqn);
-  });
+  return validateNonEmptyArray(fqns, (fqn :FullyQualifiedName) => FullyQualifiedName.isValid(fqn));
 }
 
 export function isValidEntitySetArray(entitySets :EntitySet[]) :boolean {
 
-  return validateNonEmptyArray(entitySets, (entitySet :EntitySet) => {
-    return isValidEntitySet(entitySet);
-  });
+  return validateNonEmptyArray(entitySets, (entitySet :EntitySet) => isValidEntitySet(entitySet));
 }
 
 export function isValidEntityTypeArray(entityTypes :EntityType[]) :boolean {
 
-  return validateNonEmptyArray(entityTypes, (entityType :EntityType) => {
-    return isValidEntityType(entityType);
-  });
+  return validateNonEmptyArray(entityTypes, (entityType :EntityType) => isValidEntityType(entityType));
 }
 
 export function isValidPropertyTypeArray(propertyTypes :PropertyType[]) :boolean {
 
-  return validateNonEmptyArray(propertyTypes, (propertyType :PropertyType) => {
-    return isValidPropertyType(propertyType);
-  });
+  return validateNonEmptyArray(propertyTypes, (propertyType :PropertyType) => isValidPropertyType(propertyType));
 }
 
 export function isValidAceArray(aces :Ace[]) :boolean {
 
-  return validateNonEmptyArray(aces, (ace :Ace) => {
-    return isValidAce(ace);
-  });
+  return validateNonEmptyArray(aces, (ace :Ace) => isValidAce(ace));
 }
 
 export function isValidPermissionArray(permissions :Permission[]) :boolean {
 
-  return validateNonEmptyArray(permissions, (permission :Permission) => {
-    return isNonEmptyString(permission) && PermissionTypes[permission];
-  });
+  return validateNonEmptyArray(permissions, (permission :Permission) => (
+    isNonEmptyString(permission) && PermissionTypes[permission]
+  ));
 }
 
 export function isValidPrincipalArray(principals :Principal[]) :boolean {
 
-  return validateNonEmptyArray(principals, (principal :Principal) => {
-    return isValidPrincipal(principal);
-  });
+  return validateNonEmptyArray(principals, (principal :Principal) => isValidPrincipal(principal));
 }
 
 export function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
 
-  return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => {
-    return isValidAccessCheck(accessCheck);
-  });
+  return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => isValidAccessCheck(accessCheck));
 }
 
 export function isValidRequestArray(requests :Request[]) :boolean {
 
-  return validateNonEmptyArray(requests, (request :Request) => {
-    return isValidRequest(request);
-  });
+  return validateNonEmptyArray(requests, (request :Request) => isValidRequest(request));
 }
 
 export function isValidRequestStatusArray(statuses :RequestStatus[]) :boolean {
 
-  return validateNonEmptyArray(statuses, (requestStatus :RequestStatus) => {
-    return isValidRequestStatus(requestStatus);
-  });
+  return validateNonEmptyArray(statuses, (requestStatus :RequestStatus) => isValidRequestStatus(requestStatus));
 }

@@ -16,9 +16,7 @@ import EnvToUrlMap from '../../src/constants/EnvToUrlMap';
 let Config = null;
 
 const context = require.context('../../src', true, /\.js$/);
-const moduleIds = context.keys().map((module) => {
-  return String(context.resolve(module));
-});
+const moduleIds = context.keys().map(module => String(context.resolve(module)));
 
 /*
  * end hack
