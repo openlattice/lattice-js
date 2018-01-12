@@ -64,13 +64,8 @@ export class LinkingEntitySetBuilder {
           return;
         }
 
-        const allKeysUuids = property.keySeq().every((key :UUID) => {
-          return isValidUuid(key);
-        });
-
-        const allValuesUuids = property.valueSeq().every((value :UUID) => {
-          return isValidUuid(value);
-        });
+        const allKeysUuids = property.keySeq().every((key :UUID) => isValidUuid(key));
+        const allValuesUuids = property.valueSeq().every((value :UUID) => isValidUuid(value));
 
         if (!allKeysUuids) {
           errorMsg = 'invalid parameter: linkingProperties entry keys must all be UUIDs';

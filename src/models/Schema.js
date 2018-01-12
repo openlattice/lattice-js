@@ -29,9 +29,9 @@ export default class Schema {
   propertyTypes :PropertyType[];
 
   constructor(
-      fqn :FullyQualifiedName,
-      entityTypes :EntityType[],
-      propertyTypes :PropertyType[]
+    fqn :FullyQualifiedName,
+    entityTypes :EntityType[],
+    propertyTypes :PropertyType[]
   ) {
 
     this.fqn = fqn;
