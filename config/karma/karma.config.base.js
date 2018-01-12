@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 
 import webpackConfig from '../webpack/webpack.config.babel.js';
-import { ifTest } from '../env.js';
+import { ifTest } from '../lib/env.config.js';
 
 export default function getBaseKarmaConfig(theKarmaConfigObject) {
 

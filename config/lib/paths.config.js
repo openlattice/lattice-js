@@ -4,7 +4,7 @@ import path from 'path';
 
 import LIB_CONFIG from './lib.config.js';
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 
 const BUILD = path.resolve(ROOT, 'build');
 const NODE = path.resolve(ROOT, 'node_modules');

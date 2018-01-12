@@ -17,13 +17,13 @@ import {
   isNonEmptyString
 } from '../utils/LangUtils';
 
-declare var __PROD__ :boolean;
+declare var __ENV_PROD__ :boolean;
 
 const LOG = new Logger('Configuration');
 
 let configObj :Map<string, any> = Immutable.Map().withMutations((map :Map<string, any>) => {
 
-  if (__PROD__) {
+  if (__ENV_PROD__) {
     map.set('baseUrl', EnvToUrlMap.get('PRODUCTION'));
   }
   else {

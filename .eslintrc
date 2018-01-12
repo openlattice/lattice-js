@@ -6,8 +6,7 @@
   "parser": "babel-eslint",
   "env": {
     "browser": true,
-    "jasmine": true,
-    "node": true
+    "jest": true
   },
   "plugins": [
     "flowtype",

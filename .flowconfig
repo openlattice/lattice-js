@@ -4,4 +4,3 @@
 
 [libs]
 ./config/flow
-./node_modules/immutable/dist/immutable.js.flow

@@ -19,16 +19,14 @@ const ifProd = ifElse(isProd);
 const ifTest = ifElse(isTest);
 
 const ifMin = ifElse(MINIMIZE === 'true');
-const ifNode = ifElse(TARGET_ENV === 'node');
 
 export {
+  TARGET_ENV,
   isDev,
   isProd,
   isTest,
   ifDev,
   ifProd,
   ifTest,
-  ifMin,
-  ifNode,
-  TARGET_ENV
+  ifMin
 };

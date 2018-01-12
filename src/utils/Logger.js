@@ -9,8 +9,8 @@ import isEmpty from 'lodash/isEmpty';
 import isError from 'lodash/isError';
 import isString from 'lodash/isString';
 
-declare var __DEV__;
-declare var __TEST__;
+declare var __ENV_DEV__;
+declare var __ENV_TEST__;
 
 const LOG_LEVELS = {
   TRACE: 'trace',
@@ -22,10 +22,10 @@ const LOG_LEVELS = {
 
 const TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-if (__DEV__) {
+if (__ENV_DEV__) {
   log.setLevel(log.levels.TRACE);
 }
-else if (__TEST__) {
+else if (__ENV_TEST__) {
   log.setLevel(log.levels.SILENT);
 }
 else {

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import PACKAGE from '../package.json';
+import PACKAGE from '../../package.json';
 
 const BANNER = `
 ${PACKAGE.name} - v${PACKAGE.version}

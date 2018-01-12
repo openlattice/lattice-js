@@ -27,9 +27,7 @@ import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
 import * as SyncApi from './api/SyncApi';
 
-import {
-  configure
-} from './config/Configuration';
+import { configure } from './config/Configuration';
 
 declare var __VERSION__ :string;
 const version :string = __VERSION__;

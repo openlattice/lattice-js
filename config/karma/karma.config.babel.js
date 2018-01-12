@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 
 import getBaseKarmaConfig from './karma.config.base.js';
-import { isTest } from '../env.js';
+import { isTest } from '../lib/env.config.js';
 
 const FILE_MATCHERS = {
 

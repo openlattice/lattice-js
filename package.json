@@ -28,16 +28,13 @@
     "immutable": "4.0.0-rc.9",
     "lodash": "^4.16.4",
     "loglevel": "^1.4.1",
-    "moment": "^2.20.0",
-    "uuid-validate": "0.0.2",
-    "validator": "^9.1.1"
+    "moment": "^2.20.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.0",
-    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-class-properties": "^6.24.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
@@ -45,29 +42,20 @@
     "better-npm-run": "0.1.0",
     "bluebird": "^3.4.6",
     "documentation": "^5.3.0",
+
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-import-resolver-webpack": "^0.8.4",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-flowtype": "^2.41.0",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jasmine": "^2.8.0",
+    "eslint-plugin-jest": "^21.6.0",
     "flow-bin": "^0.63.0",
-    "jasmine": "^2.5.2",
-    "jasmine-core": "^2.5.2",
-    "json-loader": "^0.5.4",
-    "karma": "^2.0.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-jasmine": "^1.0.2",
-    "karma-jasmine-diff-reporter": "^1.0.0",
-    "karma-jasmine-html-reporter": "^0.2.2",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-spec-reporter": "0.0.31",
-    "karma-webpack": "^2.0.9",
+    "jest": "^22.0.6",
     "npm-run-all": "^4.0.0",
-    "phantomjs-prebuilt": "^2.1.13",
     "rimraf": "2.6.2",
-    "webpack": "^3.6.0",
+    "uglifyjs-webpack-plugin": "^1.1.4",
+    "webpack": "^3.8.0",
     "webpack-dev-server": "^2.10.0"
   },
   "scripts": {
@@ -83,11 +71,8 @@
     "preversion": "npm-run-all lint test",
     "version": "npm-run-all clean --parallel build build:min && git add -A package.json build/",
     "postversion": "git push && git push --tags",
-    "test": "better-npm-run test",
-    "test:karma:run": "better-npm-run test:karma:run",
-    "test:karma:start": "better-npm-run test:karma:start",
-    "test:karma:watch": "better-npm-run test:karma:watch",
-    "test:karma:browser": "better-npm-run test:karma:browser"
+    "test": "jest --config config/jest/jest.config.js",
+    "test:watch": "jest --config config/jest/jest.config.js --watch"
   },
   "betterScripts": {
     "build": {
@@ -110,36 +95,6 @@
       "command": "karma start config/karma/karma.config.js",
       "env": {
         "BUILD": "test"
-      }
-    },
-    "test:karma:run": {
-      "command": "karma run config/karma/karma.config.js --",
-      "env": {
-        "BUILD": "test"
-      }
-    },
-    "test:karma:start": {
-      "command": "karma start config/karma/karma.config.js --singleRun=false",
-      "env": {
-        "BUILD": "test"
-      }
-    },
-    "test:karma:watch": {
-      "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true",
-      "env": {
-        "BUILD": "test"
-      }
-    },
-    "test:karma:browser": {
-      "command": "karma start config/karma/karma.config.js --singleRun=false --autoWatch=true --browsers=Chrome --reporters=kjhtml",
-      "env": {
-        "BUILD": "test"
-      }
-    },
-    "webpack-dev-server": {
-      "command": "webpack-dev-server --config config/webpack/webpack.config.babel.js --port 9100 --content-base build/",
-      "env": {
-        "BUILD": "development"
       }
     }
   }
