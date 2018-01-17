@@ -35,11 +35,11 @@ export default class Role {
   principal :Principal
 
   constructor(
-      id :?UUID,
-      organizationId :UUID,
-      title :string,
-      description :?string,
-      principal :principal
+    id :?UUID,
+    organizationId :UUID,
+    title :string,
+    description :?string,
+    principal :principal
   ) {
 
     // required properties

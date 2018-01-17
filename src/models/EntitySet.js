@@ -36,12 +36,12 @@ export default class EntitySet {
   contacts :string[];
 
   constructor(
-      id :?UUID,
-      entityTypeId :UUID,
-      name :string,
-      title :string,
-      description :?string,
-      contacts :string[]
+    id :?UUID,
+    entityTypeId :UUID,
+    name :string,
+    title :string,
+    description :?string,
+    contacts :string[]
   ) {
 
     // required properties

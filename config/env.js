@@ -1,27 +1,25 @@
-/*
- * @flow
- */
-
-function ifElse(condition :boolean) :Function {
-  return (isTrue :any, isFalse :any) => {
+/* eslint-disable arrow-body-style */
+function ifElse(condition) {
+  return (isTrue, isFalse) => {
     return condition ? isTrue : isFalse;
   };
 }
+/* eslint-enable */
 
-const BUILD :string = process.env.BUILD || 'development';
-const MINIMIZE :string = process.env.MINIMIZE || 'false';
-const TARGET_ENV :string = process.env.TARGET_ENV || 'web';
+const BUILD = process.env.BUILD || 'development';
+const MINIMIZE = process.env.MINIMIZE || 'false';
+const TARGET_ENV = process.env.TARGET_ENV || 'web';
 
-const isDev :boolean = BUILD === 'development';
-const isProd :boolean = BUILD === 'production';
-const isTest :boolean = BUILD === 'test';
+const isDev = BUILD === 'development';
+const isProd = BUILD === 'production';
+const isTest = BUILD === 'test';
 
-const ifDev :Function = ifElse(isDev);
-const ifProd :Function = ifElse(isProd);
-const ifTest :Function = ifElse(isTest);
+const ifDev = ifElse(isDev);
+const ifProd = ifElse(isProd);
+const ifTest = ifElse(isTest);
 
-const ifMin :Function = ifElse(MINIMIZE === 'true');
-const ifNode :Function = ifElse(TARGET_ENV === 'node');
+const ifMin = ifElse(MINIMIZE === 'true');
+const ifNode = ifElse(TARGET_ENV === 'node');
 
 export {
   isDev,

@@ -108,9 +108,7 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${ENTITY_DATA_PATH}/${entitySetId}`, data)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -208,9 +206,7 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
 
   return getApiAxiosInstance(DATA_API)
     .put(url, entities)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -291,9 +287,7 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
 
   return getApiAxiosInstance(DATA_API)
     .patch(url, bulkDataCreation)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -350,9 +344,7 @@ export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) 
 
   return getApiAxiosInstance(DATA_API)
     .patch(`/${ENTITY_DATA_PATH}/${TICKET_PATH}/${ticketId}/${syncId}`, entities)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -394,9 +386,7 @@ export function acquireSyncTicket(entitySetId :UUID, syncId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${TICKET_PATH}/${entitySetId}/${syncId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -428,9 +418,7 @@ export function releaseSyncTicket(ticketId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .delete(`/${TICKET_PATH}/${ticketId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -473,9 +461,7 @@ export function deleteEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) 
 
   return getApiAxiosInstance(DATA_API)
     .delete(`/${ENTITY_DATA_PATH}/${entitySetId}/${entityKeyId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -523,9 +509,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
 
   return getApiAxiosInstance(DATA_API)
     .put(`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${entitySetId}/${entityKeyId}`, entity)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -557,9 +541,7 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .get(`/${entitySetId}/${COUNT_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

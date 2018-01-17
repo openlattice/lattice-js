@@ -158,9 +158,7 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<*> {
 
   return getApiAxiosInstance(REQUESTS_API)
     .request(axiosConfig)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -202,9 +200,7 @@ export function submitRequests(requests :Request[]) :Promise<*> {
 
   return getApiAxiosInstance(REQUESTS_API)
     .put('/', requests)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -253,9 +249,7 @@ export function updateRequestStatuses(statuses :RequestStatus[]) :Promise<*> {
 
   return getApiAxiosInstance(REQUESTS_API)
     .patch('/', statuses)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

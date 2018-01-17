@@ -1,7 +1,3 @@
-/*
- * @flow
- */
-
 /* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies, import/extensions */
 
 import Webpack from 'webpack';
@@ -21,10 +17,8 @@ import {
   TARGET_ENV
 } from '../env.js';
 
-function compact(arr :Array<any>) :Array<any> {
-  return arr.filter((element :any) => {
-    return !!element;
-  });
+function compact(arr) {
+  return arr.filter(element => !!element);
 }
 
 /*
