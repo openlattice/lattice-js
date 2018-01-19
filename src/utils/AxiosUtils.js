@@ -92,9 +92,9 @@ function newAxiosInstance(baseUrl :string) :void {
     }
   };
 
-  const authToken :?string = getConfig().get('authToken');
+  const authToken :string = getConfig().get('authToken', '');
   if (isNonEmptyString(authToken)) {
-    axiosConfigObj.headers.common.Authorization = authToken;
+    axiosConfigObj.headers.common.Authorization = `Bearer ${authToken}`;
   }
 
   const axiosInstance :Axios = axios.create(axiosConfigObj);
@@ -112,8 +112,9 @@ function getApiAxiosInstance(api :string) :Axios {
 
   // type casting to "any" to avoid Flow errors for now
   const axiosInstance :any = baseUrlToAxiosInstanceMap.get(baseUrl);
-  const axiosInstanceAuthToken = axiosInstance.defaults.headers.common.Authorization;
-  if (axiosInstanceAuthToken !== getConfig().get('authToken')) {
+  const axiosInstanceAuthToken :string = axiosInstance.defaults.headers.common.Authorization;
+  const configAuthToken :string = getConfig().get('authToken', '');
+  if (axiosInstanceAuthToken !== `Bearer ${configAuthToken}`) {
     newAxiosInstance(baseUrl);
   }
 

@@ -4,12 +4,13 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/src/index.js',
-    '**/src/*.js'
+    '**/src/**/*.js'
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/build/',
     '<rootDir>/config/',
-    '<rootDir>/flow-typed/'
+    '<rootDir>/flow-typed/',
+    '<rootDir>/src/utils/testing/Invalid.js'
   ],
   coverageDirectory: '<rootDir>/coverage',
   globals: {
