@@ -46,6 +46,7 @@ const DEFINE_PLUGIN = new Webpack.DefinePlugin({
   __ENV_DEV__: JSON.stringify(isDev),
   __ENV_PROD__: JSON.stringify(isProd),
   __ENV_TEST__: JSON.stringify(isTest),
+  __PACKAGE__: JSON.stringify(PACKAGE.name),
   __VERSION__: JSON.stringify(`v${PACKAGE.version}`)
 });
 

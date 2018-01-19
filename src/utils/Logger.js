@@ -9,8 +9,10 @@ import isEmpty from 'lodash/isEmpty';
 import isError from 'lodash/isError';
 import isString from 'lodash/isString';
 
-declare var __ENV_DEV__;
-declare var __ENV_TEST__;
+// injected by Webpack.DefinePlugin
+declare var __ENV_DEV__ :boolean;
+declare var __ENV_TEST__ :boolean;
+declare var __PACKAGE__ :string;
 
 const LOG_LEVELS = {
   TRACE: 'trace',
@@ -37,20 +39,20 @@ function isNonEmptyString(value :any) {
   return isString(value) && !isEmpty(value);
 }
 
-function getMessagePrefix(loggerLevel, loggerName) {
+function getMessagePrefix(loggerLevel :string, loggerName :string) {
 
-  return `[${moment().format(TIMESTAMP_FORMAT)} ${loggerLevel.toUpperCase()} ${loggerName}]`;
+  return `[${moment().format(TIMESTAMP_FORMAT)} ${loggerLevel.toUpperCase()} ${__PACKAGE__}] ${loggerName}`;
 }
 
 export default class Logger {
 
-  name :string;
   logger :Object;
+  name :string;
 
   constructor(name :string) {
 
+    this.logger = log.getLogger(`${__PACKAGE__} : ${name}`);
     this.name = name;
-    this.logger = log.getLogger(name);
   }
 
   log(logLevel :string, message :any, ...args :any[]) {
