@@ -1,4 +1,4 @@
-import ActionTypes from '../../src/constants/types/ActionTypes';
+import ActionTypes from './ActionTypes';
 
 const ADD = 'ADD';
 const REMOVE = 'REMOVE';
@@ -7,22 +7,22 @@ const REQUEST = 'REQUEST';
 
 describe('ActionTypes', () => {
 
-  it(`should expose "${ADD}"`, () => {
+  test(`should export "${ADD}"`, () => {
     expect(ActionTypes.ADD).toBeDefined();
     expect(ActionTypes.ADD).toEqual(ADD);
   });
 
-  it(`should expose "${REMOVE}"`, () => {
+  test(`should export "${REMOVE}"`, () => {
     expect(ActionTypes.REMOVE).toBeDefined();
     expect(ActionTypes.REMOVE).toEqual(REMOVE);
   });
 
-  it(`should expose "${SET}"`, () => {
+  test(`should export "${SET}"`, () => {
     expect(ActionTypes.SET).toBeDefined();
     expect(ActionTypes.SET).toEqual(SET);
   });
 
-  it(`should expose "${REQUEST}"`, () => {
+  test(`should export "${REQUEST}"`, () => {
     expect(ActionTypes.REQUEST).toBeDefined();
     expect(ActionTypes.REQUEST).toEqual(REQUEST);
   });

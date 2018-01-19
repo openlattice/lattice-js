@@ -1,4 +1,4 @@
-import RequestStateTypes from '../../src/constants/types/RequestStateTypes';
+import RequestStateTypes from './RequestStateTypes';
 
 const APPROVED = 'APPROVED';
 const DECLINED = 'DECLINED';
@@ -6,17 +6,17 @@ const SUBMITTED = 'SUBMITTED';
 
 describe('RequestStateTypes', () => {
 
-  it(`should expose "${APPROVED}"`, () => {
+  test(`should export "${APPROVED}"`, () => {
     expect(RequestStateTypes.APPROVED).toBeDefined();
     expect(RequestStateTypes.APPROVED).toEqual(APPROVED);
   });
 
-  it(`should expose "${DECLINED}"`, () => {
+  test(`should export "${DECLINED}"`, () => {
     expect(RequestStateTypes.DECLINED).toBeDefined();
     expect(RequestStateTypes.DECLINED).toEqual(DECLINED);
   });
 
-  it(`should expose "${SUBMITTED}"`, () => {
+  test(`should export "${SUBMITTED}"`, () => {
     expect(RequestStateTypes.SUBMITTED).toBeDefined();
     expect(RequestStateTypes.SUBMITTED).toEqual(SUBMITTED);
   });

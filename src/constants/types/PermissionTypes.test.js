@@ -1,4 +1,4 @@
-import PermissionTypes from '../../src/constants/types/PermissionTypes';
+import PermissionTypes from './PermissionTypes';
 
 const DISCOVER = 'DISCOVER';
 const LINK = 'LINK';
@@ -8,27 +8,27 @@ const WRITE = 'WRITE';
 
 describe('PermissionTypes', () => {
 
-  it(`should expose "${DISCOVER}"`, () => {
+  test(`should export "${DISCOVER}"`, () => {
     expect(PermissionTypes.DISCOVER).toBeDefined();
     expect(PermissionTypes.DISCOVER).toEqual(DISCOVER);
   });
 
-  it(`should expose "${LINK}"`, () => {
+  test(`should export "${LINK}"`, () => {
     expect(PermissionTypes.LINK).toBeDefined();
     expect(PermissionTypes.LINK).toEqual(LINK);
   });
 
-  it(`should expose "${OWNER}"`, () => {
+  test(`should export "${OWNER}"`, () => {
     expect(PermissionTypes.OWNER).toBeDefined();
     expect(PermissionTypes.OWNER).toEqual(OWNER);
   });
 
-  it(`should expose "${READ}"`, () => {
+  test(`should export "${READ}"`, () => {
     expect(PermissionTypes.READ).toBeDefined();
     expect(PermissionTypes.READ).toEqual(READ);
   });
 
-  it(`should expose "${WRITE}"`, () => {
+  test(`should export "${WRITE}"`, () => {
     expect(PermissionTypes.WRITE).toBeDefined();
     expect(PermissionTypes.WRITE).toEqual(WRITE);
   });

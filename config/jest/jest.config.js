@@ -4,7 +4,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/src/index.js',
-    '**/src/config/*.js'
+    '**/src/*.js'
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/build/',

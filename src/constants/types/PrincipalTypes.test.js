@@ -1,4 +1,4 @@
-import PrincipalTypes from '../../src/constants/types/PrincipalTypes';
+import PrincipalTypes from './PrincipalTypes';
 
 const ORGANIZATION = 'ORGANIZATION';
 const ROLE = 'ROLE';
@@ -7,22 +7,22 @@ const APP = 'APP';
 
 describe('PrincipalTypes', () => {
 
-  it(`should expose "${ORGANIZATION}"`, () => {
+  test(`should export "${ORGANIZATION}"`, () => {
     expect(PrincipalTypes.ORGANIZATION).toBeDefined();
     expect(PrincipalTypes.ORGANIZATION).toEqual(ORGANIZATION);
   });
 
-  it(`should expose "${ROLE}"`, () => {
+  test(`should export "${ROLE}"`, () => {
     expect(PrincipalTypes.ROLE).toBeDefined();
     expect(PrincipalTypes.ROLE).toEqual(ROLE);
   });
 
-  it(`should expose "${USER}"`, () => {
+  test(`should export "${USER}"`, () => {
     expect(PrincipalTypes.USER).toBeDefined();
     expect(PrincipalTypes.USER).toEqual(USER);
   });
 
-  it(`should expose "${APP}"`, () => {
+  test(`should export "${APP}"`, () => {
     expect(PrincipalTypes.APP).toBeDefined();
     expect(PrincipalTypes.APP).toEqual(APP);
   });

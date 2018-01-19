@@ -1,4 +1,4 @@
-import SecurableTypes from '../../src/constants/types/SecurableTypes';
+import SecurableTypes from './SecurableTypes';
 
 const AssociationType = 'AssociationType';
 const ComplexType = 'ComplexType';
@@ -13,52 +13,52 @@ const OrganizationRole = 'OrganizationRole';
 
 describe('SecurableTypes', () => {
 
-  it(`should expose "${AssociationType}"`, () => {
+  test(`should export "${AssociationType}"`, () => {
     expect(SecurableTypes.AssociationType).toBeDefined();
     expect(SecurableTypes.AssociationType).toEqual(AssociationType);
   });
 
-  it(`should expose "${ComplexType}"`, () => {
+  test(`should export "${ComplexType}"`, () => {
     expect(SecurableTypes.ComplexType).toBeDefined();
     expect(SecurableTypes.ComplexType).toEqual(ComplexType);
   });
 
-  it(`should expose "${EdgeType}"`, () => {
+  test(`should export "${EdgeType}"`, () => {
     expect(SecurableTypes.EdgeType).toBeDefined();
     expect(SecurableTypes.EdgeType).toEqual(EdgeType);
   });
 
-  it(`should expose "${EntitySet}"`, () => {
+  test(`should export "${EntitySet}"`, () => {
     expect(SecurableTypes.EntitySet).toBeDefined();
     expect(SecurableTypes.EntitySet).toEqual(EntitySet);
   });
 
-  it(`should expose "${EntityType}"`, () => {
+  test(`should export "${EntityType}"`, () => {
     expect(SecurableTypes.EntityType).toBeDefined();
     expect(SecurableTypes.EntityType).toEqual(EntityType);
   });
 
-  it(`should expose "${DataSource}"`, () => {
+  test(`should export "${DataSource}"`, () => {
     expect(SecurableTypes.DataSource).toBeDefined();
     expect(SecurableTypes.DataSource).toEqual(DataSource);
   });
 
-  it(`should expose "${LinkingEntityType}"`, () => {
+  test(`should export "${LinkingEntityType}"`, () => {
     expect(SecurableTypes.LinkingEntityType).toBeDefined();
     expect(SecurableTypes.LinkingEntityType).toEqual(LinkingEntityType);
   });
 
-  it(`should expose "${PropertyTypeInEntitySet}"`, () => {
+  test(`should export "${PropertyTypeInEntitySet}"`, () => {
     expect(SecurableTypes.PropertyTypeInEntitySet).toBeDefined();
     expect(SecurableTypes.PropertyTypeInEntitySet).toEqual(PropertyTypeInEntitySet);
   });
 
-  it(`should expose "${Organization}"`, () => {
+  test(`should export "${Organization}"`, () => {
     expect(SecurableTypes.Organization).toBeDefined();
     expect(SecurableTypes.Organization).toEqual(Organization);
   });
 
-  it(`should expose "${OrganizationRole}"`, () => {
+  test(`should export "${OrganizationRole}"`, () => {
     expect(SecurableTypes.OrganizationRole).toBeDefined();
     expect(SecurableTypes.OrganizationRole).toEqual(OrganizationRole);
   });
