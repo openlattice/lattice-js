@@ -1,18 +1,7 @@
-import PrincipalTypes from '../../src/constants/types/PrincipalTypes';
-
-import Principal, {
-  PrincipalBuilder,
-  isValid
-} from '../../src/models/Principal';
-
-import {
-  INVALID_PARAMS,
-  INVALID_SS_PARAMS
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_PRINCIPAL_DM
-} from '../constants/MockDataModels';
+import Principal, { PrincipalBuilder, isValid } from './Principal';
+import { PrincipalTypes } from '../constants/types';
+import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { MOCK_PRINCIPAL_DM } from '../utils/testing/MockDataModels';
 
 describe('Principal', () => {
 
@@ -30,21 +19,21 @@ describe('Principal', () => {
 
     describe('setType()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setType(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setType();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         Object.values(PrincipalTypes).forEach((type) => {
           expect(() => {
             builder.setType(type);
@@ -56,7 +45,7 @@ describe('Principal', () => {
 
     describe('setId()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
@@ -64,13 +53,13 @@ describe('Principal', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setId();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setId(MOCK_PRINCIPAL_DM.id);
         }).not.toThrow();
@@ -80,7 +69,7 @@ describe('Principal', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new PrincipalBuilder())
@@ -95,7 +84,7 @@ describe('Principal', () => {
         }).toThrow();
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const principal = builder
           .setType(MOCK_PRINCIPAL_DM.type)
@@ -119,11 +108,11 @@ describe('Principal', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_PRINCIPAL_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid instance ', () => {
+      test('should return true when given a valid instance ', () => {
         expect(isValid(
           new Principal(
             MOCK_PRINCIPAL_DM.type, MOCK_PRINCIPAL_DM.id
@@ -131,7 +120,7 @@ describe('Principal', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const principal = (new PrincipalBuilder())
           .setType(MOCK_PRINCIPAL_DM.type)
@@ -145,30 +134,30 @@ describe('Principal', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "type" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "type" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PRINCIPAL_DM, { type: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "id" property', () => {
+      test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PRINCIPAL_DM, { id: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an instance with an invalid "type" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an instance with an invalid "type" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
             new Principal(
               invalidInput, MOCK_PRINCIPAL_DM.id
@@ -177,7 +166,7 @@ describe('Principal', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "id" property', () => {
+      test('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Principal(
