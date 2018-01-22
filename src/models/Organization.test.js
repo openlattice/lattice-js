@@ -1,18 +1,12 @@
-import Organization, {
-  OrganizationBuilder,
-  isValid
-} from '../../src/models/Organization';
+import Organization, { OrganizationBuilder, isValid } from './Organization';
+import { MOCK_ORGANIZATION_DM } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
   INVALID_PARAMS_EMPTY_STRING_ALLOWED,
-  INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_ORGANIZATION_DM
-} from '../constants/MockDataModels';
+  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED
+} from '../utils/testing/Invalid';
 
 describe('Organization', () => {
 
@@ -30,21 +24,21 @@ describe('Organization', () => {
 
     describe('setId()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setId();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setId(MOCK_ORGANIZATION_DM.id);
         }).not.toThrow();
@@ -54,7 +48,7 @@ describe('Organization', () => {
 
     describe('setTitle()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setTitle(invalidInput);
@@ -62,13 +56,13 @@ describe('Organization', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setTitle();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setTitle(MOCK_ORGANIZATION_DM.title);
         }).not.toThrow();
@@ -78,7 +72,7 @@ describe('Organization', () => {
 
     describe('setDescription()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
@@ -86,13 +80,13 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setDescription();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setDescription(MOCK_ORGANIZATION_DM.description);
         }).not.toThrow();
@@ -102,7 +96,7 @@ describe('Organization', () => {
 
     describe('setPrincipal()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setPrincipal(invalidInput);
@@ -110,13 +104,13 @@ describe('Organization', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setPrincipal();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setPrincipal(MOCK_ORGANIZATION_DM.principal);
         }).not.toThrow();
@@ -126,7 +120,7 @@ describe('Organization', () => {
 
     describe('setMembers()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setMembers(invalidInput);
@@ -134,7 +128,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setMembers([...MOCK_ORGANIZATION_DM.members, invalidInput]);
@@ -142,13 +136,13 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setMembers();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setMembers(MOCK_ORGANIZATION_DM.members);
         }).not.toThrow();
@@ -158,7 +152,7 @@ describe('Organization', () => {
 
     describe('setRoles()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setRoles(invalidInput);
@@ -166,7 +160,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setRoles([...MOCK_ORGANIZATION_DM.roles, invalidInput]);
@@ -174,13 +168,13 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setRoles();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setRoles(MOCK_ORGANIZATION_DM.roles);
         }).not.toThrow();
@@ -190,7 +184,7 @@ describe('Organization', () => {
 
     describe('setAutoApprovedEmails()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setAutoApprovedEmails(invalidInput);
@@ -198,7 +192,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setAutoApprovedEmails([...MOCK_ORGANIZATION_DM.emails, invalidInput]);
@@ -206,13 +200,13 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setAutoApprovedEmails();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails);
         }).not.toThrow();
@@ -222,7 +216,7 @@ describe('Organization', () => {
 
     describe('setApps()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setApps(invalidInput);
@@ -230,7 +224,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setApps([...MOCK_ORGANIZATION_DM.apps, invalidInput]);
@@ -238,13 +232,13 @@ describe('Organization', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setApps();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setApps(MOCK_ORGANIZATION_DM.apps);
         }).not.toThrow();
@@ -254,14 +248,14 @@ describe('Organization', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new OrganizationBuilder()).build();
         }).toThrow();
       });
 
-      it('should not throw when an optional property has not been set', () => {
+      test('should not throw when an optional property has not been set', () => {
 
         expect(() => {
           (new OrganizationBuilder())
@@ -288,7 +282,7 @@ describe('Organization', () => {
         }).not.toThrow();
       });
 
-      it('should set required properties that are allowed to be empty', () => {
+      test('should set required properties that are allowed to be empty', () => {
 
         const org = builder
           .setTitle(MOCK_ORGANIZATION_DM.title)
@@ -301,7 +295,7 @@ describe('Organization', () => {
         expect(org.apps).toEqual([]);
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const org = builder
           .setId(MOCK_ORGANIZATION_DM.id)
@@ -349,11 +343,11 @@ describe('Organization', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_ORGANIZATION_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid object instance ', () => {
+      test('should return true when given a valid object instance ', () => {
         expect(isValid(
           new Organization(
             MOCK_ORGANIZATION_DM.id,
@@ -367,7 +361,7 @@ describe('Organization', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const org = (new OrganizationBuilder())
           .setId(MOCK_ORGANIZATION_DM.id)
@@ -386,66 +380,66 @@ describe('Organization', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "id" property', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { id: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "title" property', () => {
+      test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { title: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "description" property', () => {
+      test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "principal" property', () => {
+      test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { principal: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "members" property', () => {
+      test('should return false when given an object literal with an invalid "members" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { members: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "roles" property', () => {
+      test('should return false when given an object literal with an invalid "roles" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { roles: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "emails" property', () => {
+      test('should return false when given an object literal with an invalid "emails" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { emails: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "apps" property', () => {
+      test('should return false when given an object literal with an invalid "apps" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { apps: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+      test('should return false when given an instance with an invalid "id" property', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
               invalidInput,
@@ -461,7 +455,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "title" property', () => {
+      test('should return false when given an instance with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -478,7 +472,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "description" property', () => {
+      test('should return false when given an instance with an invalid "description" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -495,7 +489,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "principal" property', () => {
+      test('should return false when given an instance with an invalid "principal" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -512,7 +506,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "members" property', () => {
+      test('should return false when given an instance with an invalid "members" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -528,7 +522,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "roles" property', () => {
+      test('should return false when given an instance with an invalid "roles" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -545,7 +539,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "emails" property', () => {
+      test('should return false when given an instance with an invalid "emails" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -562,7 +556,7 @@ describe('Organization', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "apps" property', () => {
+      test('should return false when given an instance with an invalid "apps" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
