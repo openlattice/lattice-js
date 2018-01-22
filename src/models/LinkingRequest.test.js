@@ -1,16 +1,6 @@
-import LinkingRequest, {
-  LinkingRequestBuilder,
-  isValid
-} from '../../src/models/LinkingRequest';
-
-import {
-  INVALID_PARAMS,
-  INVALID_SS_PARAMS
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_LINKING_REQUEST_DM
-} from '../constants/MockDataModels';
+import LinkingRequest, { LinkingRequestBuilder, isValid } from './LinkingRequest';
+import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { MOCK_LINKING_REQUEST_DM } from '../utils/testing/MockDataModels';
 
 describe('LinkingRequest', () => {
 
@@ -28,7 +18,7 @@ describe('LinkingRequest', () => {
 
     describe('setLinkingEntitySet()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setLinkingEntitySet(invalidInput);
@@ -36,13 +26,13 @@ describe('LinkingRequest', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setLinkingEntitySet();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setLinkingEntitySet(MOCK_LINKING_REQUEST_DM.linkingEntitySet);
         }).not.toThrow();
@@ -52,8 +42,8 @@ describe('LinkingRequest', () => {
 
     describe('setPropertyTypeIds()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setPropertyTypeIds(invalidInput);
           }).toThrow();
@@ -63,21 +53,21 @@ describe('LinkingRequest', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setPropertyTypeIds([...MOCK_LINKING_REQUEST_DM.propertyTypeIds, invalidInput]);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setPropertyTypeIds();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setPropertyTypeIds(MOCK_LINKING_REQUEST_DM.propertyTypeIds);
         }).not.toThrow();
@@ -87,7 +77,7 @@ describe('LinkingRequest', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new LinkingRequestBuilder())
@@ -102,7 +92,7 @@ describe('LinkingRequest', () => {
         }).toThrow();
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const linkingRequest = builder
           .setLinkingEntitySet(MOCK_LINKING_REQUEST_DM.linkingEntitySet)
@@ -126,11 +116,11 @@ describe('LinkingRequest', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_LINKING_REQUEST_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid instance ', () => {
+      test('should return true when given a valid instance ', () => {
         expect(isValid(
           new LinkingRequest(
             MOCK_LINKING_REQUEST_DM.linkingEntitySet, MOCK_LINKING_REQUEST_DM.propertyTypeIds
@@ -138,7 +128,7 @@ describe('LinkingRequest', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const linkingRequest = (new LinkingRequestBuilder())
           .setLinkingEntitySet(MOCK_LINKING_REQUEST_DM.linkingEntitySet)
@@ -152,17 +142,17 @@ describe('LinkingRequest', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "linkingEntitySet" property', () => {
+      test('should return false when given an object literal with an invalid "linkingEntitySet" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(
             isValid(Object.assign({}, MOCK_LINKING_REQUEST_DM, { linkingEntitySet: invalidInput }))
@@ -170,8 +160,8 @@ describe('LinkingRequest', () => {
         });
       });
 
-      it('should return false when given an object literal with an invalid "propertyTypeIds" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "propertyTypeIds" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(
             isValid(Object.assign({}, MOCK_LINKING_REQUEST_DM, { propertyTypeIds: invalidInput }))
           ).toEqual(false);
@@ -181,7 +171,7 @@ describe('LinkingRequest', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "linkingEntitySet" property', () => {
+      test('should return false when given an instance with an invalid "linkingEntitySet" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingRequest(
@@ -191,8 +181,8 @@ describe('LinkingRequest', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "propertyTypeIds" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an instance with an invalid "propertyTypeIds" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingRequest(
               MOCK_LINKING_REQUEST_DM.linkingEntitySet, invalidInput
