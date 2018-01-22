@@ -19,7 +19,7 @@ describe('Ace', () => {
 
     describe('setPrincipal()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setPrincipal(invalidInput);
@@ -27,13 +27,13 @@ describe('Ace', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setPrincipal();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setPrincipal(MOCK_ACE_DM.principal);
         }).not.toThrow();
@@ -43,7 +43,7 @@ describe('Ace', () => {
 
     describe('setPermissions()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(invalidInput);
@@ -54,7 +54,7 @@ describe('Ace', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
@@ -62,13 +62,13 @@ describe('Ace', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setPermissions();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         Object.values(PermissionTypes).forEach((type) => {
           expect(() => {
             builder.setPermissions([type]);
@@ -80,20 +80,20 @@ describe('Ace', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new AceBuilder()).build();
         }).toThrow();
       });
 
-      it('should set required properties that are allowed to be empty', () => {
+      test('should set required properties that are allowed to be empty', () => {
 
         const ace = builder.setPrincipal(MOCK_ACE_DM.principal).build();
         expect(ace.permissions).toEqual([]);
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const ace = builder
           .setPrincipal(MOCK_ACE_DM.principal)
@@ -117,11 +117,11 @@ describe('Ace', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_ACE_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid object instance ', () => {
+      test('should return true when given a valid object instance ', () => {
         expect(isValid(
           new Ace(
             MOCK_ACE_DM.principal, MOCK_ACE_DM.permissions
@@ -129,7 +129,7 @@ describe('Ace', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const ace = (new AceBuilder())
           .setPrincipal(MOCK_ACE_DM.principal)
@@ -143,30 +143,30 @@ describe('Ace', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "principal" property', () => {
+      test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ACE_DM, { principal: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "permissions" property', () => {
+      test('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: [invalidInput] }))).toEqual(false);
         });
       });
 
-      it('should return false when given an instance with an invalid "principal" property', () => {
+      test('should return false when given an instance with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
@@ -176,7 +176,7 @@ describe('Ace', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "permissions" property', () => {
+      test('should return false when given an instance with an invalid "permissions" property', () => {
         INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
