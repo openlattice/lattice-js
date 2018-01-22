@@ -1,21 +1,14 @@
-import PermissionTypes from '../../src/constants/types/PermissionTypes';
-
-import Request, {
-  RequestBuilder,
-  isValid
-} from '../../src/models/Request';
+import Request, { RequestBuilder, isValid } from './Request';
+import { PermissionTypes } from '../constants/types';
+import { MOCK_REQUEST_DM } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
   INVALID_PARAMS_EMPTY_STRING_ALLOWED,
-  INVALID_SS_PARAMS,
-  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_REQUEST_DM
-} from '../constants/MockDataModels';
+  INVALID_PARAMS_SS,
+  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
+} from '../utils/testing/Invalid';
 
 describe('Request', () => {
 
@@ -33,8 +26,8 @@ describe('Request', () => {
 
     describe('setAclKey()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setAclKey(invalidInput);
           }).toThrow();
@@ -44,21 +37,21 @@ describe('Request', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setAclKey([...MOCK_REQUEST_DM.aclKey, invalidInput]);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setAclKey();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setAclKey(MOCK_REQUEST_DM.aclKey);
         }).not.toThrow();
@@ -68,8 +61,8 @@ describe('Request', () => {
 
     describe('setPermissions()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(invalidInput);
           }).toThrow();
@@ -79,21 +72,21 @@ describe('Request', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
           }).toThrow();
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setPermissions();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         Object.values(PermissionTypes).forEach((type) => {
           expect(() => {
             builder.setPermissions([type]);
@@ -105,7 +98,7 @@ describe('Request', () => {
 
     describe('setReason()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setReason(invalidInput);
@@ -113,13 +106,13 @@ describe('Request', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setReason();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setReason(MOCK_REQUEST_DM.reason);
         }).not.toThrow();
@@ -129,14 +122,14 @@ describe('Request', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new RequestBuilder()).build();
         }).toThrow();
       });
 
-      it('should not throw when an optional property has not been set', () => {
+      test('should not throw when an optional property has not been set', () => {
 
         expect(() => {
           (new RequestBuilder())
@@ -145,7 +138,7 @@ describe('Request', () => {
         }).not.toThrow();
       });
 
-      it('should set required properties that are allowed to be empty', () => {
+      test('should set required properties that are allowed to be empty', () => {
 
         const request = builder
           .setAclKey(MOCK_REQUEST_DM.aclKey)
@@ -154,7 +147,7 @@ describe('Request', () => {
         expect(request.permissions).toEqual([]);
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const request = builder
           .setAclKey(MOCK_REQUEST_DM.aclKey)
@@ -182,11 +175,11 @@ describe('Request', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_REQUEST_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid object instance ', () => {
+      test('should return true when given a valid object instance ', () => {
         expect(isValid(
           new Request(
             MOCK_REQUEST_DM.aclKey, MOCK_REQUEST_DM.permissions, MOCK_REQUEST_DM.reason
@@ -194,7 +187,7 @@ describe('Request', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const request = (new RequestBuilder())
           .setAclKey(MOCK_REQUEST_DM.aclKey)
@@ -209,37 +202,37 @@ describe('Request', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "aclKey" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "aclKey" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { aclKey: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { aclKey: [invalidInput] }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "permissions" property', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "permissions" property', () => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { permissions: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { permissions: [invalidInput] }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "reason" property', () => {
+      test('should return false when given an object literal with an invalid "reason" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { reason: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an instance with an invalid "aclKey" property', () => {
+      test('should return false when given an instance with an invalid "aclKey" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Request(
@@ -254,7 +247,7 @@ describe('Request', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "permissions" property', () => {
+      test('should return false when given an instance with an invalid "permissions" property', () => {
         INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Request(
@@ -269,7 +262,7 @@ describe('Request', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "reason" property', () => {
+      test('should return false when given an instance with an invalid "reason" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Request(
