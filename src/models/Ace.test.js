@@ -1,18 +1,7 @@
-import PermissionTypes from '../../src/constants/types/PermissionTypes';
-
-import Ace, {
-  AceBuilder,
-  isValid
-} from '../../src/models/Ace';
-
-import {
-  INVALID_PARAMS,
-  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_ACE_DM
-} from '../constants/MockDataModels';
+import Ace, { AceBuilder, isValid } from './Ace';
+import { PermissionTypes } from '../constants/types';
+import { INVALID_PARAMS, INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED } from '../utils/testing/Invalid';
+import { MOCK_ACE_DM } from '../utils/testing/MockDataModels';
 
 describe('Ace', () => {
 
@@ -55,7 +44,7 @@ describe('Ace', () => {
     describe('setPermissions()', () => {
 
       it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(invalidInput);
           }).toThrow();
@@ -66,7 +55,7 @@ describe('Ace', () => {
       });
 
       it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
           }).toThrow();
@@ -171,7 +160,7 @@ describe('Ace', () => {
       });
 
       it('should return false when given an object literal with an invalid "permissions" property', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: [invalidInput] }))).toEqual(false);
         });
@@ -188,7 +177,7 @@ describe('Ace', () => {
       });
 
       it('should return false when given an instance with an invalid "permissions" property', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
               MOCK_ACE_DM.principal, invalidInput
