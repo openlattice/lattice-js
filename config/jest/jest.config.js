@@ -11,6 +11,7 @@ module.exports = {
     '<rootDir>/config/',
     '<rootDir>/flow-typed/',
     '<rootDir>/src/models/template.js',
+    '<rootDir>/src/models/template.test.js',
     '<rootDir>/src/utils/Logger.js',
     '<rootDir>/src/utils/testing/'
   ],

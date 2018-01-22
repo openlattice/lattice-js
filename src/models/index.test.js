@@ -1,4 +1,4 @@
-import * as Models from '../../src/models/index';
+import * as Models from './index';
 
 describe('Lattice.Models', () => {
 
