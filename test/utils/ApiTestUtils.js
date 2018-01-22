@@ -2,7 +2,7 @@
 
 import BBPromise from 'bluebird';
 
-import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as AxiosUtils from '../../src/utils/axios';
 
 import {
   INVALID_PARAMS

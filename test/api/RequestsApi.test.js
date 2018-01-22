@@ -2,7 +2,7 @@
 
 import RequestStateTypes from '../../src/constants/types/RequestStateTypes';
 
-import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as AxiosUtils from '../../src/utils/axios';
 import * as RequestsApi from '../../src/api/RequestsApi';
 
 import {

@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 
-import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as AxiosUtils from '../../src/utils/axios';
 import * as PermissionsApi from '../../src/api/PermissionsApi';
 
 import {

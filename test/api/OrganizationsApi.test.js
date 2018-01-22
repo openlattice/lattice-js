@@ -2,7 +2,7 @@
 
 import Principal from '../../src/models/Principal';
 
-import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as AxiosUtils from '../../src/utils/axios';
 import * as OrganizationsApi from '../../src/api/OrganizationsApi';
 
 import {

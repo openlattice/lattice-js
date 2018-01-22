@@ -37,7 +37,7 @@ import {
 import {
   getApiBaseUrl,
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isEmptyArray,

@@ -10,7 +10,7 @@ module.exports = {
     '<rootDir>/build/',
     '<rootDir>/config/',
     '<rootDir>/flow-typed/',
-    '<rootDir>/src/utils/testing/Invalid.js'
+    '<rootDir>/src/utils/testing/'
   ],
   coverageDirectory: '<rootDir>/coverage',
   globals: {

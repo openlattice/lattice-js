@@ -1,12 +1,12 @@
 /* eslint-disable global-require */
 
-import { randomId } from '../utils/Utils';
+import { genRandomString } from '../utils/Utils';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_NOT_DEFINED_ALLOWED
 } from '../utils/testing/Invalid';
 
-const MOCK_AUTH_TOKEN = `${randomId()}.${randomId()}.${randomId()}`;
+const MOCK_AUTH_TOKEN = `${genRandomString()}.${genRandomString()}.${genRandomString()}`;
 
 let Config = null;
 

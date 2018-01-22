@@ -3,7 +3,7 @@
 import PermissionTypes from '../../src/constants/types/PermissionTypes';
 import SecurableTypes from '../../src/constants/types/SecurableTypes';
 
-import * as AxiosUtils from '../../src/utils/AxiosUtils';
+import * as AxiosUtils from '../../src/utils/axios';
 import * as AuthorizationApi from '../../src/api/AuthorizationApi';
 
 import {
