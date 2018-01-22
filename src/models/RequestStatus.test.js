@@ -1,18 +1,7 @@
-import RequestStateTypes from '../../src/constants/types/RequestStateTypes';
-
-import RequestStatus, {
-  RequestStatusBuilder,
-  isValid
-} from '../../src/models/RequestStatus';
-
-import {
-  INVALID_PARAMS,
-  INVALID_SS_PARAMS
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_REQUEST_STATUS_DM
-} from '../constants/MockDataModels';
+import RequestStatus, { RequestStatusBuilder, isValid } from './RequestStatus';
+import { RequestStateTypes } from '../constants/types';
+import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { MOCK_REQUEST_STATUS_DM } from '../utils/testing/MockDataModels';
 
 describe('RequestStatus', () => {
 
@@ -30,7 +19,7 @@ describe('RequestStatus', () => {
 
     describe('setRequest()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setRequest(invalidInput);
@@ -38,13 +27,13 @@ describe('RequestStatus', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setRequest();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setRequest(MOCK_REQUEST_STATUS_DM.request);
         }).not.toThrow();
@@ -54,21 +43,21 @@ describe('RequestStatus', () => {
 
     describe('setRequestState()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setRequestState(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setRequestState();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         Object.values(RequestStateTypes).forEach((type) => {
           expect(() => {
             builder.setRequestState(type);
@@ -80,7 +69,7 @@ describe('RequestStatus', () => {
 
     describe('setPrincipal()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setPrincipal(invalidInput);
@@ -88,13 +77,13 @@ describe('RequestStatus', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setPrincipal();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setPrincipal(MOCK_REQUEST_STATUS_DM.principal);
         }).not.toThrow();
@@ -104,7 +93,7 @@ describe('RequestStatus', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new RequestStatusBuilder())
@@ -128,7 +117,7 @@ describe('RequestStatus', () => {
         }).toThrow();
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const requestStatus = builder
           .setRequest(MOCK_REQUEST_STATUS_DM.request)
@@ -156,11 +145,11 @@ describe('RequestStatus', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_REQUEST_STATUS_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid object instance ', () => {
+      test('should return true when given a valid object instance ', () => {
         expect(isValid(
           new RequestStatus(
             MOCK_REQUEST_STATUS_DM.request, MOCK_REQUEST_STATUS_DM.state, MOCK_REQUEST_STATUS_DM.principal
@@ -168,7 +157,7 @@ describe('RequestStatus', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const requestStatus = (new RequestStatusBuilder())
           .setRequest(MOCK_REQUEST_STATUS_DM.request)
@@ -183,35 +172,35 @@ describe('RequestStatus', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "request" property', () => {
+      test('should return false when given an object literal with an invalid "request" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_REQUEST_STATUS_DM, { request: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "state" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "state" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_REQUEST_STATUS_DM, { state: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "principal" property', () => {
+      test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_REQUEST_STATUS_DM, { principal: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an instance with an invalid "request" property', () => {
+      test('should return false when given an instance with an invalid "request" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new RequestStatus(
@@ -221,8 +210,8 @@ describe('RequestStatus', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "state" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an instance with an invalid "state" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
             new RequestStatus(
               MOCK_REQUEST_STATUS_DM.request, invalidInput, MOCK_REQUEST_STATUS_DM.principal
@@ -231,7 +220,7 @@ describe('RequestStatus', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "principal" property', () => {
+      test('should return false when given an instance with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new RequestStatus(
