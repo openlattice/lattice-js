@@ -10,6 +10,8 @@ module.exports = {
     '<rootDir>/build/',
     '<rootDir>/config/',
     '<rootDir>/flow-typed/',
+    '<rootDir>/src/models/template.js',
+    '<rootDir>/src/utils/Logger.js',
     '<rootDir>/src/utils/testing/'
   ],
   coverageDirectory: '<rootDir>/coverage',

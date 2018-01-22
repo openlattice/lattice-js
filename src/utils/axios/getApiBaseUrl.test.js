@@ -4,7 +4,7 @@ import getApiBaseUrl from './getApiBaseUrl';
 import * as ApiNames from '../../constants/ApiNames';
 import * as ApiPaths from '../../constants/ApiPaths';
 import * as Config from '../../config/Configuration';
-import { INVALID_PARAMS_SPECIAL_STRINGS } from '../testing/Invalid';
+import { INVALID_PARAMS_SS } from '../testing/Invalid';
 import { genRandomString } from '../testing/MockDataUtils';
 
 /*
@@ -47,7 +47,7 @@ Config.getConfig.mockImplementation(() => Immutable.fromJS({
 describe('AxiosUtils : getApiBaseUrl()', () => {
 
   test('should throw if the given API is invalid', () => {
-    INVALID_PARAMS_SPECIAL_STRINGS.forEach((invalid) => {
+    INVALID_PARAMS_SS.forEach((invalid) => {
       expect(() => {
         getApiBaseUrl(invalid);
       }).toThrow();

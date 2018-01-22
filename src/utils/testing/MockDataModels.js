@@ -2,9 +2,11 @@
  * @flow
  */
 
-import PrincipalTypes from '../../src/constants/types/PrincipalTypes';
-import RequestStateTypes from '../../src/constants/types/RequestStateTypes';
-import SecurableTypes from '../../src/constants/types/SecurableTypes';
+import {
+  PrincipalTypes,
+  RequestStateTypes,
+  SecurableTypes
+} from '../../constants/types';
 
 export const MOCK_ACL_KEY :string[] = [
   'ec6865e6-e60e-424b-a071-6a9c1603d735'

@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 
 import newAxiosInstance from './newAxiosInstance';
 import * as Config from '../../config/Configuration';
-import { INVALID_PARAMS_SPECIAL_STRINGS } from '../testing/Invalid';
+import { INVALID_PARAMS_SS } from '../testing/Invalid';
 import { genMockAuthToken, genMockBaseUrl } from '../testing/MockDataUtils';
 
 const axiosCreateSpy = jest.spyOn(Axios, 'create');
@@ -28,7 +28,7 @@ describe('AxiosUtils : newAxiosInstance()', () => {
   });
 
   test('should throw if the given URL is invalid', () => {
-    INVALID_PARAMS_SPECIAL_STRINGS.forEach((invalid) => {
+    INVALID_PARAMS_SS.forEach((invalid) => {
       expect(() => {
         newAxiosInstance(invalid);
       }).toThrow();
