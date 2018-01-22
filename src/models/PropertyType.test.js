@@ -1,19 +1,13 @@
-import PropertyType, {
-  PropertyTypeBuilder,
-  isValid
-} from '../../src/models/PropertyType';
+import PropertyType, { PropertyTypeBuilder, isValid } from './PropertyType';
+import { MOCK_PROPERTY_TYPE_DM } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_EMPTY_STRING_ALLOWED,
-  INVALID_SS_PARAMS,
-  INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED,
-  INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_PROPERTY_TYPE_DM
-} from '../constants/MockDataModels';
+  INVALID_PARAMS_SS,
+  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
+  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED
+} from '../utils/testing/Invalid';
 
 describe('PropertyType', () => {
 
@@ -31,21 +25,21 @@ describe('PropertyType', () => {
 
     describe('setId()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setId();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setId(MOCK_PROPERTY_TYPE_DM.id);
         }).not.toThrow();
@@ -55,21 +49,21 @@ describe('PropertyType', () => {
 
     describe('setType()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setType(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setType();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setType(MOCK_PROPERTY_TYPE_DM.type);
         }).not.toThrow();
@@ -79,7 +73,7 @@ describe('PropertyType', () => {
 
     describe('setTitle()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setTitle(invalidInput);
@@ -87,13 +81,13 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setTitle();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setTitle(MOCK_PROPERTY_TYPE_DM.title);
         }).not.toThrow();
@@ -103,7 +97,7 @@ describe('PropertyType', () => {
 
     describe('setDescription()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
@@ -111,13 +105,13 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setDescription();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setDescription(MOCK_PROPERTY_TYPE_DM.description);
         }).not.toThrow();
@@ -127,7 +121,7 @@ describe('PropertyType', () => {
 
     describe('setDataType()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setDataType(invalidInput);
@@ -135,13 +129,13 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setDataType();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setDataType(MOCK_PROPERTY_TYPE_DM.datatype);
         }).not.toThrow();
@@ -151,8 +145,8 @@ describe('PropertyType', () => {
 
     describe('setSchemas()', () => {
 
-      it('should throw when given invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setSchemas(invalidInput);
           }).toThrow();
@@ -162,21 +156,21 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setSchemas([...MOCK_PROPERTY_TYPE_DM.schemas, invalidInput]);
           }).toThrow();
         });
       });
 
-      it('should not throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setSchemas();
         }).not.toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setSchemas(MOCK_PROPERTY_TYPE_DM.schemas);
         }).not.toThrow();
@@ -186,7 +180,7 @@ describe('PropertyType', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new PropertyTypeBuilder())
@@ -211,7 +205,7 @@ describe('PropertyType', () => {
 
       });
 
-      it('should set required properties that are allowed to be empty', () => {
+      test('should set required properties that are allowed to be empty', () => {
 
         const org = builder
           .setType(MOCK_PROPERTY_TYPE_DM.type)
@@ -222,7 +216,7 @@ describe('PropertyType', () => {
         expect(org.schemas).toEqual([]);
       });
 
-      it('should not throw when an optional property has not been set', () => {
+      test('should not throw when an optional property has not been set', () => {
 
         expect(() => {
           (new PropertyTypeBuilder())
@@ -245,7 +239,7 @@ describe('PropertyType', () => {
         }).not.toThrow();
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const propertyType = builder
           .setId(MOCK_PROPERTY_TYPE_DM.id)
@@ -285,11 +279,11 @@ describe('PropertyType', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_PROPERTY_TYPE_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid instance ', () => {
+      test('should return true when given a valid instance ', () => {
         expect(isValid(
           new PropertyType(
             MOCK_PROPERTY_TYPE_DM.id,
@@ -302,7 +296,7 @@ describe('PropertyType', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const propertyType = (new PropertyTypeBuilder())
           .setId(MOCK_PROPERTY_TYPE_DM.id)
@@ -320,54 +314,54 @@ describe('PropertyType', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "id" property', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { id: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "type" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "type" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { type: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "title" property', () => {
+      test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { title: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "description" property', () => {
+      test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "datatype" property', () => {
+      test('should return false when given an object literal with an invalid "datatype" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { datatype: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "schemas" property', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+      test('should return false when given an object literal with an invalid "schemas" property', () => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE_DM, { schemas: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_SS_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+      test('should return false when given an instance with an invalid "id" property', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
               invalidInput,
@@ -381,8 +375,8 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "type" property', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given an instance with an invalid "type" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
               MOCK_PROPERTY_TYPE_DM.id,
@@ -396,7 +390,7 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "title" property', () => {
+      test('should return false when given an instance with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
@@ -411,7 +405,7 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "description" property', () => {
+      test('should return false when given an instance with an invalid "description" property', () => {
         INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
@@ -426,7 +420,7 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "datatype" property', () => {
+      test('should return false when given an instance with an invalid "datatype" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
@@ -441,8 +435,8 @@ describe('PropertyType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "schemas" property', () => {
-        INVALID_SS_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+      test('should return false when given an instance with an invalid "schemas" property', () => {
+        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
               MOCK_PROPERTY_TYPE_DM.id,
