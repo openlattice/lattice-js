@@ -1,11 +1,7 @@
 /* eslint-disable no-use-before-define, no-new */
-
-import FullyQualifiedName from '../../src/models/FullyQualifiedName';
-
-import {
-  INVALID_PARAMS,
-  INVALID_SS_PARAMS
-} from '../constants/InvalidParams';
+import FullyQualifiedName from './FullyQualifiedName';
+import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { MOCK_ENTITY_TYPE_DM } from '../utils/testing/MockDataModels';
 
 const MOCK_NAMESPACE = 'LATTICE';
 const MOCK_NAME = 'DATA';
@@ -27,21 +23,21 @@ describe('FullyQualifiedName', () => {
         fqn = null;
       });
 
-      it('should be an instance of FullyQualifiedName', () => {
+      test('should be an instance of FullyQualifiedName', () => {
         expect(fqn).toEqual(jasmine.any(FullyQualifiedName));
       });
 
-      it('should set the correct namespace', () => {
+      test('should set the correct namespace', () => {
         expect(fqn.namespace).toEqual(MOCK_NAMESPACE);
         expect(fqn.getNamespace()).toEqual(MOCK_NAMESPACE);
       });
 
-      it('should set the correct name', () => {
+      test('should set the correct name', () => {
         expect(fqn.name).toEqual(MOCK_NAME);
         expect(fqn.getName()).toEqual(MOCK_NAME);
       });
 
-      it('should return the correct FQN string', () => {
+      test('should return the correct FQN string', () => {
         expect(fqn.getFullyQualifiedName()).toEqual(MOCK_FQN_STRING);
         expect(fqn.valueOf()).toEqual(MOCK_FQN_STRING);
       });
@@ -50,21 +46,21 @@ describe('FullyQualifiedName', () => {
 
     describe('validation', () => {
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           new FullyQualifiedName();
         }).toThrow();
       });
 
-      it('should throw when given 1 invalid parameter', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should throw when given 1 invalid parameter', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             new FullyQualifiedName(invalidInput);
           }).toThrow();
         });
       });
 
-      it('should throw when given 2 invalid parameters', () => {
+      test('should throw when given 2 invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput1) => {
           INVALID_PARAMS.forEach((invalidInput2) => {
             expect(() => {
@@ -74,7 +70,7 @@ describe('FullyQualifiedName', () => {
         });
       });
 
-      it('should throw when given 3 or more parameters', () => {
+      test('should throw when given 3 or more parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             new FullyQualifiedName(invalidInput, invalidInput, invalidInput);
@@ -90,15 +86,15 @@ describe('FullyQualifiedName', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid namespace and a valid name', () => {
+      test('should return true when given a valid namespace and a valid name', () => {
         expect(FullyQualifiedName.isValid(MOCK_NAMESPACE, MOCK_NAME)).toEqual(true);
       });
 
-      it('should return true when given a valid FQN object literal', () => {
+      test('should return true when given a valid FQN object literal', () => {
         expect(FullyQualifiedName.isValid({ namespace: MOCK_NAMESPACE, name: MOCK_NAME })).toEqual(true);
       });
 
-      it('should return true when given a valid FullyQualifiedName instance', () => {
+      test('should return true when given a valid FullyQualifiedName instance', () => {
         expect(FullyQualifiedName.isValid(new FullyQualifiedName(MOCK_NAMESPACE, MOCK_NAME))).toEqual(true);
       });
 
@@ -106,17 +102,17 @@ describe('FullyQualifiedName', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(FullyQualifiedName.isValid()).toEqual(false);
       });
 
-      it('should return false when given 1 invalid parameter', () => {
-        INVALID_SS_PARAMS.forEach((invalidInput) => {
+      test('should return false when given 1 invalid parameter', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(FullyQualifiedName.isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given 2 invalid parameters', () => {
+      test('should return false when given 2 invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput1) => {
           INVALID_PARAMS.forEach((invalidInput2) => {
             expect(FullyQualifiedName.isValid(invalidInput1, invalidInput2)).toEqual(false);
@@ -124,25 +120,25 @@ describe('FullyQualifiedName', () => {
         });
       });
 
-      it('should return false when given 3 or more parameters', () => {
+      test('should return false when given 3 or more parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(FullyQualifiedName.isValid(invalidInput, invalidInput, invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an FQN object literal with an invalid namespace', () => {
+      test('should return false when given an FQN object literal with an invalid namespace', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(FullyQualifiedName.isValid({ namespace: invalidInput, name: MOCK_NAME })).toEqual(false);
         });
       });
 
-      it('should return false when given an FQN object literal with an invalid name', () => {
+      test('should return false when given an FQN object literal with an invalid name', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(FullyQualifiedName.isValid({ namespace: MOCK_NAMESPACE, name: invalidInput })).toEqual(false);
         });
       });
 
-      it('should return false when given an instance of FullyQualifiedName with an invalid namespace', () => {
+      test('should return false when given an instance of FullyQualifiedName with an invalid namespace', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           const fqn = new FullyQualifiedName(MOCK_NAMESPACE, MOCK_NAME);
           fqn.namespace = invalidInput;
@@ -150,7 +146,7 @@ describe('FullyQualifiedName', () => {
         });
       });
 
-      it('should return false when given an instance of FullyQualifiedName with an invalid name', () => {
+      test('should return false when given an instance of FullyQualifiedName with an invalid name', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           const fqn = new FullyQualifiedName(MOCK_NAMESPACE, MOCK_NAME);
           fqn.name = invalidInput;
