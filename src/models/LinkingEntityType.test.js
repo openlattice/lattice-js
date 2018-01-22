@@ -1,16 +1,6 @@
-import LinkingEntityType, {
-  LinkingEntityTypeBuilder,
-  isValid
-} from '../../src/models/LinkingEntityType';
-
-import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_BOOLEANS_ALLOWED
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_LINKING_ENTITY_TYPE_DM
-} from '../constants/MockDataModels';
+import LinkingEntityType, { LinkingEntityTypeBuilder, isValid } from './LinkingEntityType';
+import { INVALID_PARAMS, INVALID_PARAMS_BOOLEANS_ALLOWED } from '../utils/testing/Invalid';
+import { MOCK_LINKING_ENTITY_TYPE_DM } from '../utils/testing/MockDataModels';
 
 describe('LinkingEntityType', () => {
 
@@ -28,7 +18,7 @@ describe('LinkingEntityType', () => {
 
     describe('setEntityType()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntityType(invalidInput);
@@ -36,13 +26,13 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setEntityType();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType);
         }).not.toThrow();
@@ -52,7 +42,7 @@ describe('LinkingEntityType', () => {
 
     describe('setEntityTypeIds()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntityTypeIds(invalidInput);
@@ -63,7 +53,7 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntityTypeIds([...MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds, invalidInput]);
@@ -71,13 +61,13 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setEntityTypeIds();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setEntityTypeIds(MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds);
         }).not.toThrow();
@@ -87,7 +77,7 @@ describe('LinkingEntityType', () => {
 
     describe('setDeidentified()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setDeidentified(invalidInput);
@@ -95,13 +85,13 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setDeidentified();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setDeidentified(true);
         }).not.toThrow();
@@ -114,7 +104,7 @@ describe('LinkingEntityType', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new LinkingEntityTypeBuilder())
@@ -129,7 +119,7 @@ describe('LinkingEntityType', () => {
         }).toThrow();
       });
 
-      it('should not throw when an optional property has not been set', () => {
+      test('should not throw when an optional property has not been set', () => {
 
         expect(() => {
           (new LinkingEntityTypeBuilder())
@@ -139,7 +129,7 @@ describe('LinkingEntityType', () => {
         }).not.toThrow();
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const linkingEntityType = builder
           .setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType)
@@ -167,11 +157,11 @@ describe('LinkingEntityType', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_LINKING_ENTITY_TYPE_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid instance ', () => {
+      test('should return true when given a valid instance ', () => {
         expect(isValid(
           new LinkingEntityType(
             MOCK_LINKING_ENTITY_TYPE_DM.entityType, MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds, false
@@ -179,7 +169,7 @@ describe('LinkingEntityType', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const linkingEntityType = (new LinkingEntityTypeBuilder())
           .setEntityType(MOCK_LINKING_ENTITY_TYPE_DM.entityType)
@@ -194,23 +184,23 @@ describe('LinkingEntityType', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "entityType" property', () => {
+      test('should return false when given an object literal with an invalid "entityType" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityType: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "entityTypeIds" property', () => {
+      test('should return false when given an object literal with an invalid "entityTypeIds" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(
             isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityTypeIds: invalidInput }))
@@ -221,7 +211,7 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should return false when given an object literal with an invalid "deidentified" property', () => {
+      test('should return false when given an object literal with an invalid "deidentified" property', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
           expect(
             isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { deidentified: invalidInput }))
@@ -229,7 +219,7 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "entityType" property', () => {
+      test('should return false when given an instance with an invalid "entityType" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntityType(
@@ -239,7 +229,7 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "entityTypeIds" property', () => {
+      test('should return false when given an instance with an invalid "entityTypeIds" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntityType(
@@ -254,7 +244,7 @@ describe('LinkingEntityType', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "deidentified" property', () => {
+      test('should return false when given an instance with an invalid "deidentified" property', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntityType(
