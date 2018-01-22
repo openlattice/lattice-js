@@ -1,15 +1,6 @@
-import LinkingEntitySet, {
-  LinkingEntitySetBuilder,
-  isValid
-} from '../../src/models/LinkingEntitySet';
-
-import {
-  INVALID_PARAMS
-} from '../constants/InvalidParams';
-
-import {
-  MOCK_LINKING_ENTITY_SET_DM
-} from '../constants/MockDataModels';
+import LinkingEntitySet, { LinkingEntitySetBuilder, isValid } from './LinkingEntitySet';
+import { INVALID_PARAMS } from '../utils/testing/Invalid';
+import { MOCK_LINKING_ENTITY_SET_DM } from '../utils/testing/MockDataModels';
 
 describe('LinkingEntitySet', () => {
 
@@ -27,7 +18,7 @@ describe('LinkingEntitySet', () => {
 
     describe('setEntitySet()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setEntitySet(invalidInput);
@@ -35,13 +26,13 @@ describe('LinkingEntitySet', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setEntitySet();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setEntitySet(MOCK_LINKING_ENTITY_SET_DM.entitySet);
         }).not.toThrow();
@@ -51,7 +42,7 @@ describe('LinkingEntitySet', () => {
 
     describe('setLinkingProperties()', () => {
 
-      it('should throw when given invalid parameters', () => {
+      test('should throw when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setLinkingProperties(invalidInput);
@@ -62,7 +53,7 @@ describe('LinkingEntitySet', () => {
         });
       });
 
-      it('should throw when given a mix of valid and invalid parameters', () => {
+      test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setLinkingProperties([...MOCK_LINKING_ENTITY_SET_DM.linkingProperties, invalidInput]);
@@ -70,13 +61,13 @@ describe('LinkingEntitySet', () => {
         });
       });
 
-      it('should throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setLinkingProperties();
         }).toThrow();
       });
 
-      it('should not throw when given valid parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setLinkingProperties(MOCK_LINKING_ENTITY_SET_DM.linkingProperties);
         }).not.toThrow();
@@ -86,7 +77,7 @@ describe('LinkingEntitySet', () => {
 
     describe('build()', () => {
 
-      it('should throw when a required property has not been set', () => {
+      test('should throw when a required property has not been set', () => {
 
         expect(() => {
           (new LinkingEntitySetBuilder())
@@ -101,7 +92,7 @@ describe('LinkingEntitySet', () => {
         }).toThrow();
       });
 
-      it('should return a valid instance', () => {
+      test('should return a valid instance', () => {
 
         const linkingEntitySet = builder
           .setEntitySet(MOCK_LINKING_ENTITY_SET_DM.entitySet)
@@ -125,11 +116,11 @@ describe('LinkingEntitySet', () => {
 
     describe('valid', () => {
 
-      it('should return true when given a valid object literal', () => {
+      test('should return true when given a valid object literal', () => {
         expect(isValid(MOCK_LINKING_ENTITY_SET_DM)).toEqual(true);
       });
 
-      it('should return true when given a valid instance ', () => {
+      test('should return true when given a valid instance ', () => {
         expect(isValid(
           new LinkingEntitySet(
             MOCK_LINKING_ENTITY_SET_DM.entitySet, MOCK_LINKING_ENTITY_SET_DM.linkingProperties
@@ -137,7 +128,7 @@ describe('LinkingEntitySet', () => {
         )).toEqual(true);
       });
 
-      it('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given an instance constructed by the builder', () => {
 
         const linkingEntitySet = (new LinkingEntitySetBuilder())
           .setEntitySet(MOCK_LINKING_ENTITY_SET_DM.entitySet)
@@ -151,23 +142,23 @@ describe('LinkingEntitySet', () => {
 
     describe('invalid', () => {
 
-      it('should return false when not given any parameters', () => {
+      test('should return false when not given any parameters', () => {
         expect(isValid()).toEqual(false);
       });
 
-      it('should return false when given invalid parameters', () => {
+      test('should return false when given invalid parameters', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(invalidInput)).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "entitySet" property', () => {
+      test('should return false when given an object literal with an invalid "entitySet" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_LINKING_ENTITY_SET_DM, { entitySet: invalidInput }))).toEqual(false);
         });
       });
 
-      it('should return false when given an object literal with an invalid "linkingProperties" property', () => {
+      test('should return false when given an object literal with an invalid "linkingProperties" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(
             isValid(Object.assign({}, MOCK_LINKING_ENTITY_SET_DM, { linkingProperties: invalidInput }))
@@ -178,7 +169,7 @@ describe('LinkingEntitySet', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "entitySet" property', () => {
+      test('should return false when given an instance with an invalid "entitySet" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntitySet(
@@ -188,7 +179,7 @@ describe('LinkingEntitySet', () => {
         });
       });
 
-      it('should return false when given an instance with an invalid "linkingProperties" property', () => {
+      test('should return false when given an instance with an invalid "linkingProperties" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntitySet(
