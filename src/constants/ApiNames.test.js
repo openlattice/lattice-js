@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import * as ApiNames from './ApiNames';
 
 /* eslint-disable key-spacing */
-const API_NAMES_MAP = Immutable.OrderedMap({
+const EXPECTED_APIS = Immutable.OrderedMap({
   ANALYSIS_API      : 'AnalysisApi',
   APP_API           : 'AppApi',
   AUTHORIZATION_API : 'AuthorizationApi',
@@ -22,9 +22,15 @@ const API_NAMES_MAP = Immutable.OrderedMap({
 
 describe('ApiNames', () => {
 
-  test('should be kept in sync with test file', () => {
-    expect(Object.keys(ApiNames)).toEqual(API_NAMES_MAP.keySeq().toJS());
-    expect(Object.values(ApiNames)).toEqual(API_NAMES_MAP.valueSeq().toJS());
+  test('should only export expected APIs', () => {
+    expect(Immutable.OrderedMap(ApiNames)).toEqual(EXPECTED_APIS);
+  });
+
+  EXPECTED_APIS.forEach((value, key) => {
+    test(`should export "${key}: ${value}"`, () => {
+      expect(ApiNames).toHaveProperty(key);
+      expect(ApiNames[key]).toEqual(value);
+    });
   });
 
 });
