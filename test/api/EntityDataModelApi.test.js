@@ -40,7 +40,7 @@ import {
 
 import {
   getMockAxiosInstance
-} from '../utils/MockDataUtils';
+} from '../utils/MockUtils';
 
 const EDM_API_BASE_URL = AxiosUtils.getApiBaseUrl(EDM_API);
 

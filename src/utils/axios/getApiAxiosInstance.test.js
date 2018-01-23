@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import getApiAxiosInstance from './getApiAxiosInstance';
 import getApiBaseUrl from './getApiBaseUrl';
 import * as Config from '../../config/Configuration';
-import { genMockAuthToken, genMockBaseUrl, genRandomString } from '../testing/MockDataUtils';
+import { genMockAuthToken, genMockBaseUrl, genRandomString } from '../testing/MockUtils';
 
 const axiosCreateSpy = jest.spyOn(Axios, 'create');
 

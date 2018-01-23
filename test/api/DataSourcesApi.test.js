@@ -4,7 +4,7 @@ import * as AxiosUtils from '../../src/utils/axios';
 import * as DataSourcesApi from '../../src/api/DataSourcesApi';
 
 import { DATA_SOURCES_API } from '../../src/constants/ApiNames';
-import { getMockAxiosInstance } from '../utils/MockDataUtils';
+import { getMockAxiosInstance } from '../utils/MockUtils';
 
 import {
   INVALID_PARAMS,

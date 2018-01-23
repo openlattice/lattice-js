@@ -26,7 +26,7 @@ import {
 
 import {
   getMockAxiosInstance
-} from '../utils/MockDataUtils';
+} from '../utils/MockUtils';
 
 const MOCK_USER_ID = 'openlattice';
 const MOCK_EMAIL = 'support@openlattice.com';

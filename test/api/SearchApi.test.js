@@ -29,7 +29,7 @@ import {
 
 import {
   getMockAxiosInstance
-} from '../utils/MockDataUtils';
+} from '../utils/MockUtils';
 
 const MOCK_START = 20;
 const MOCK_MAX_HITS = 100;

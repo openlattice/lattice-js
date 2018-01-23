@@ -5,7 +5,7 @@ import * as ApiNames from '../../constants/ApiNames';
 import * as ApiPaths from '../../constants/ApiPaths';
 import * as Config from '../../config/Configuration';
 import { INVALID_PARAMS_SS } from '../testing/Invalid';
-import { genRandomString } from '../testing/MockDataUtils';
+import { genRandomString } from '../testing/MockUtils';
 
 /*
  * helpers

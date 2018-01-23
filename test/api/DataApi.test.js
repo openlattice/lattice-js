@@ -29,7 +29,7 @@ import {
 
 import {
   getMockAxiosInstance
-} from '../utils/MockDataUtils';
+} from '../utils/MockUtils';
 
 const DATA_API_BASE_URL = AxiosUtils.getApiBaseUrl(DATA_API);
 

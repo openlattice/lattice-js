@@ -37,7 +37,7 @@ import {
 
 import {
   getMockAxiosInstance
-} from '../utils/MockDataUtils';
+} from '../utils/MockUtils';
 
 const MOCK_TITLE = 'MyOrganization';
 const MOCK_DESCRIPTION = 'what an organization';

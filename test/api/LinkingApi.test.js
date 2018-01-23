@@ -22,7 +22,7 @@ import {
 
 import {
   getMockAxiosInstance
-} from '../utils/MockDataUtils';
+} from '../utils/MockUtils';
 
 import {
   testApiFunctionShouldGetCorrectAxiosInstance,

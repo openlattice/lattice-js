@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import newAxiosInstance from './newAxiosInstance';
 import * as Config from '../../config/Configuration';
 import { INVALID_PARAMS_SS } from '../testing/Invalid';
-import { genMockAuthToken, genMockBaseUrl } from '../testing/MockDataUtils';
+import { genMockAuthToken, genMockBaseUrl } from '../testing/MockUtils';
 
 const axiosCreateSpy = jest.spyOn(Axios, 'create');
 
