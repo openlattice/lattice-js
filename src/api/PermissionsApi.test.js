@@ -5,7 +5,7 @@ import * as PermissionsApi from './PermissionsApi';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import { MOCK_ACL_KEY, MOCK_ACL_DATA_DM } from '../utils/testing/MockDataModels';
-import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
+import { genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
   testApiShouldNotThrowOnInvalidParameters,
