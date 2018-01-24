@@ -52,7 +52,7 @@
     "eslint-plugin-flowtype": "^2.41.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jasmine": "^2.8.0",
-    "flow-bin": "^0.63.0",
+    "flow-bin": "^0.64.0",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.5.2",
     "json-loader": "^0.5.4",
