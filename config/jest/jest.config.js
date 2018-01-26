@@ -25,9 +25,7 @@ module.exports = {
   },
   modulePathIgnorePatterns: [
     '<rootDir>/build/',
-    '<rootDir>/flow-typed/',
-    '<rootDir>/src/models/template.js',
-    '<rootDir>/src/models/template.test.js'
+    '<rootDir>/flow-typed/'
   ],
   rootDir: '../..'
 };
