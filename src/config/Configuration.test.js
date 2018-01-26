@@ -1,6 +1,6 @@
 /* eslint-disable global-require */
 
-import { genRandomString } from '../utils/Utils';
+import { genRandomString } from '../utils/testing/MockUtils';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_NOT_DEFINED_ALLOWED

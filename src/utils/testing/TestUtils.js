@@ -186,6 +186,7 @@ function testApiShouldRejectOnInvalidParameters(functionToTest, validParams, inv
 }
 
 export {
+  assertApiShouldSendCorrectHttpRequest,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnNullOnInvalidParameters,
