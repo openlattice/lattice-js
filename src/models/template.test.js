@@ -1,12 +1,5 @@
-import Model, {
-  ModelBuilder,
-  isValid
-} from '../../src/models/template';
-
-import {
-  INVALID_PARAMS,
-  INVALID_SS_PARAMS
-} from '../constants/InvalidParams';
+import Model, { ModelBuilder, isValid } from './Model';
+import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../constants/Invalid';
 
 const MOCK_MODEL_DM = {
   id: 'e39dfdfa-a3e6-4f1f-b54b-646a723c3085'
