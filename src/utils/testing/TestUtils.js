@@ -9,16 +9,35 @@ import { getMockAxiosInstance } from './MockUtils';
 export const OBJECT_TAG = '[object Object]';
 
 // AxiosUtils.getApiAxiosInstance() is expected to be mocked with jest.mock() in the test file
-function assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, httpMethod) {
+function assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, axiosFunction) {
 
   const mockAxiosInstance = getMockAxiosInstance();
   AxiosUtils.getApiAxiosInstance.mockImplementationOnce(() => mockAxiosInstance);
-  expect.assertions(2);
+  expect.assertions(7);
   return functionToTest(...functionParams)
     .then(() => {
-      expect(mockAxiosInstance[httpMethod]).toHaveBeenCalledTimes(1);
-      expect(mockAxiosInstance[httpMethod]).toHaveBeenCalledWith(...requestParams);
+      ['delete', 'get', 'patch', 'post', 'put', 'request']
+        .filter(fn => (fn !== axiosFunction))
+        .forEach((fn) => {
+          expect(mockAxiosInstance[fn]).not.toHaveBeenCalled();
+        });
+      expect(mockAxiosInstance[axiosFunction.toLowerCase()]).toHaveBeenCalledTimes(1);
+      expect(mockAxiosInstance[axiosFunction.toLowerCase()]).toHaveBeenCalledWith(...requestParams);
     });
+}
+
+function testApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, axiosFunction) {
+
+  if (axiosFunction.toLowerCase() === 'request') {
+    test(`should send a ${requestParams[0].method.toUpperCase()} request with the correct params`, () => {
+      return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, axiosFunction);
+    });
+  }
+  else {
+    test(`should send a ${axiosFunction.toUpperCase()} request with the correct params`, () => {
+      return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, axiosFunction);
+    });
+  }
 }
 
 function testApiShouldSendCorrectDeleteRequest(functionToTest, functionParams, requestParams) {
@@ -193,6 +212,7 @@ export {
   testApiShouldReturnPromise,
   testApiShouldSendCorrectDeleteRequest,
   testApiShouldSendCorrectGetRequest,
+  testApiShouldSendCorrectHttpRequest,
   testApiShouldSendCorrectPatchRequest,
   testApiShouldSendCorrectPostRequest,
   testApiShouldSendCorrectPutRequest,

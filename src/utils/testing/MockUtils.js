@@ -37,15 +37,10 @@ function getMockAxiosInstance() :Object {
 
   const mockAxiosInstance = {};
 
-  [
-    'delete',
-    'get',
-    'patch',
-    'post',
-    'put',
-    'request'
-  ].forEach((method) => {
-    mockAxiosInstance[method] = jest.fn().mockReturnValue(getMockPromise());
+  ['delete', 'get', 'patch', 'post', 'put', 'request'].forEach((httpMethod) => {
+    mockAxiosInstance[httpMethod] = jest.fn()
+      .mockName(httpMethod)
+      .mockReturnValue(getMockPromise());
   });
 
   return mockAxiosInstance;
