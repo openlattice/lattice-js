@@ -120,7 +120,7 @@ function testApiShouldReturnNullOnInvalidParameters(functionToTest, validParams,
 }
 
 // AxiosUtils.getApiAxiosInstance() is expected to be mocked with jest.mock() in the test file
-function testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams) {
+function testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams = [], invalidParams = []) {
 
   test('should not throw when given invalid parameters', () => {
 
