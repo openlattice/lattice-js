@@ -197,7 +197,7 @@ describe('Role', () => {
 
       test('should return a valid instance', () => {
 
-        const org = builder
+        const role = builder
           .setId(MOCK_ROLE_DM.id)
           .setOrganizationId(MOCK_ROLE_DM.organizationId)
           .setTitle(MOCK_ROLE_DM.title)
@@ -205,22 +205,22 @@ describe('Role', () => {
           .setPrincipal(MOCK_ROLE_DM.principal)
           .build();
 
-        expect(org).toEqual(jasmine.any(Role));
+        expect(role).toBeInstanceOf(Role);
 
-        expect(org.id).toBeDefined();
-        expect(org.id).toEqual(MOCK_ROLE_DM.id);
+        expect(role.id).toBeDefined();
+        expect(role.id).toEqual(MOCK_ROLE_DM.id);
 
-        expect(org.organizationId).toBeDefined();
-        expect(org.organizationId).toEqual(MOCK_ROLE_DM.organizationId);
+        expect(role.organizationId).toBeDefined();
+        expect(role.organizationId).toEqual(MOCK_ROLE_DM.organizationId);
 
-        expect(org.title).toBeDefined();
-        expect(org.title).toEqual(MOCK_ROLE_DM.title);
+        expect(role.title).toBeDefined();
+        expect(role.title).toEqual(MOCK_ROLE_DM.title);
 
-        expect(org.description).toBeDefined();
-        expect(org.description).toEqual(MOCK_ROLE_DM.description);
+        expect(role.description).toBeDefined();
+        expect(role.description).toEqual(MOCK_ROLE_DM.description);
 
-        expect(org.principal).toBeDefined();
-        expect(org.principal).toEqual(MOCK_ROLE_DM.principal);
+        expect(role.principal).toBeDefined();
+        expect(role.principal).toEqual(MOCK_ROLE_DM.principal);
       });
 
     });

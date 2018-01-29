@@ -108,7 +108,7 @@ describe('Acl', () => {
           .setAces(MOCK_ACL_DM.aces)
           .build();
 
-        expect(acl).toEqual(jasmine.any(Acl));
+        expect(acl).toBeInstanceOf(Acl);
 
         expect(acl.aclKey).toBeDefined();
         expect(acl.aclKey).toEqual(MOCK_ACL_DM.aclKey);

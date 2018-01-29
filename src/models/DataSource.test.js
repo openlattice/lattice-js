@@ -175,7 +175,7 @@ describe('DataSource', () => {
           .setEntitySetIds(MOCK_DATA_SOURCE_DM.entitySetIds)
           .build();
 
-        expect(dataSource).toEqual(jasmine.any(DataSource));
+        expect(dataSource).toBeInstanceOf(DataSource);
 
         expect(dataSource.id).toBeDefined();
         expect(dataSource.id).toEqual(MOCK_DATA_SOURCE_DM.id);

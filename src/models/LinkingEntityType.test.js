@@ -137,7 +137,7 @@ describe('LinkingEntityType', () => {
           .setDeidentified(true)
           .build();
 
-        expect(linkingEntityType).toEqual(jasmine.any(LinkingEntityType));
+        expect(linkingEntityType).toBeInstanceOf(LinkingEntityType);
 
         expect(linkingEntityType.entityType).toBeDefined();
         expect(linkingEntityType.entityType).toEqual(MOCK_LINKING_ENTITY_TYPE_DM.entityType);

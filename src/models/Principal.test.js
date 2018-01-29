@@ -91,7 +91,7 @@ describe('Principal', () => {
           .setId(MOCK_PRINCIPAL_DM.id)
           .build();
 
-        expect(principal).toEqual(jasmine.any(Principal));
+        expect(principal).toBeInstanceOf(Principal);
 
         expect(principal.type).toBeDefined();
         expect(principal.type).toEqual(MOCK_PRINCIPAL_DM.type);

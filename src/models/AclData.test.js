@@ -91,7 +91,7 @@ describe('AclData', () => {
           .setAction(MOCK_ACL_DATA_DM.action)
           .build();
 
-        expect(acl).toEqual(jasmine.any(AclData));
+        expect(acl).toBeInstanceOf(AclData);
 
         expect(acl.acl).toBeDefined();
         expect(acl.acl).toEqual(MOCK_ACL_DATA_DM.acl);

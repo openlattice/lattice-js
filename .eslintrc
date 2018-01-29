@@ -79,7 +79,7 @@
       {
         "devDependencies": [
           "config/**",
-          "test/**",
+          "src/utils/testing/**",
           "**/*.test.js"
         ]
       }

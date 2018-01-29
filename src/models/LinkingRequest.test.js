@@ -99,7 +99,7 @@ describe('LinkingRequest', () => {
           .setPropertyTypeIds(MOCK_LINKING_REQUEST_DM.propertyTypeIds)
           .build();
 
-        expect(linkingRequest).toEqual(jasmine.any(LinkingRequest));
+        expect(linkingRequest).toBeInstanceOf(LinkingRequest);
 
         expect(linkingRequest.linkingEntitySet).toBeDefined();
         expect(linkingRequest.linkingEntitySet).toEqual(MOCK_LINKING_REQUEST_DM.linkingEntitySet);

@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define, no-new */
 import FullyQualifiedName from './FullyQualifiedName';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ENTITY_TYPE_DM } from '../utils/testing/MockDataModels';
 
 const MOCK_NAMESPACE = 'LATTICE';
 const MOCK_NAME = 'DATA';
@@ -24,7 +23,7 @@ describe('FullyQualifiedName', () => {
       });
 
       test('should be an instance of FullyQualifiedName', () => {
-        expect(fqn).toEqual(jasmine.any(FullyQualifiedName));
+        expect(fqn).toBeInstanceOf(FullyQualifiedName);
       });
 
       test('should set the correct namespace', () => {

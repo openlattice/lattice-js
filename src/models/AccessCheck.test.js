@@ -105,7 +105,7 @@ describe('AccessCheck', () => {
           .setPermissions(MOCK_ACCESS_CHECK_DM.permissions)
           .build();
 
-        expect(accessCheck).toEqual(jasmine.any(AccessCheck));
+        expect(accessCheck).toBeInstanceOf(AccessCheck);
 
         expect(accessCheck.aclKey).toBeDefined();
         expect(accessCheck.aclKey).toEqual(MOCK_ACCESS_CHECK_DM.aclKey);

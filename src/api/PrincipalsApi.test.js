@@ -5,7 +5,7 @@ import * as PrincipalsApi from './PrincipalsApi';
 import { PRINCIPALS_API } from '../constants/ApiNames';
 import { EMAIL_PATH, SEARCH_PATH, USERS_PATH } from '../constants/ApiPaths';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
-import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
+import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
   testApiShouldNotThrowOnInvalidParameters,
@@ -14,8 +14,6 @@ import {
   testApiShouldSendCorrectGetRequest,
   testApiShouldUseCorrectAxiosInstance
 } from '../utils/testing/TestUtils';
-
-const MOCK_EMAIL = 'support@openlattice.com';
 
 /*
  * mocks

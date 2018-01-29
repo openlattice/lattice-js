@@ -100,7 +100,7 @@ describe('Ace', () => {
           .setPermissions(MOCK_ACE_DM.permissions)
           .build();
 
-        expect(ace).toEqual(jasmine.any(Ace));
+        expect(ace).toBeInstanceOf(Ace);
 
         expect(ace.principal).toBeDefined();
         expect(ace.principal).toEqual(MOCK_ACE_DM.principal);

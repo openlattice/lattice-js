@@ -369,7 +369,7 @@ describe('EntityType', () => {
           .setCategory(MOCK_ENTITY_TYPE_DM.category)
           .build();
 
-        expect(entityType).toEqual(jasmine.any(EntityType));
+        expect(entityType).toBeInstanceOf(EntityType);
 
         expect(entityType.id).toBeDefined();
         expect(entityType.id).toEqual(MOCK_ENTITY_TYPE_DM.id);

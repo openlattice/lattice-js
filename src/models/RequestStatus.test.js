@@ -125,7 +125,7 @@ describe('RequestStatus', () => {
           .setPrincipal(MOCK_REQUEST_STATUS_DM.principal)
           .build();
 
-        expect(requestStatus).toEqual(jasmine.any(RequestStatus));
+        expect(requestStatus).toBeInstanceOf(RequestStatus);
 
         expect(requestStatus.request).toBeDefined();
         expect(requestStatus.request).toEqual(MOCK_REQUEST_STATUS_DM.request);

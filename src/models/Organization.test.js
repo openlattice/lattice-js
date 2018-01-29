@@ -308,7 +308,7 @@ describe('Organization', () => {
           .setApps(MOCK_ORGANIZATION_DM.apps)
           .build();
 
-        expect(org).toEqual(jasmine.any(Organization));
+        expect(org).toBeInstanceOf(Organization);
 
         expect(org.id).toBeDefined();
         expect(org.id).toEqual(MOCK_ORGANIZATION_DM.id);

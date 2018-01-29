@@ -145,7 +145,7 @@ describe('Schema', () => {
           .setPropertyTypes(MOCK_SCHEMA_DM.propertyTypes)
           .build();
 
-        expect(schema).toEqual(jasmine.any(Schema));
+        expect(schema).toBeInstanceOf(Schema);
 
         expect(schema.fqn).toBeDefined();
         expect(schema.fqn).toEqual(MOCK_SCHEMA_DM.fqn);

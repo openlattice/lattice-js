@@ -155,7 +155,7 @@ describe('Request', () => {
           .setReason(MOCK_REQUEST_DM.reason)
           .build();
 
-        expect(request).toEqual(jasmine.any(Request));
+        expect(request).toBeInstanceOf(Request);
 
         expect(request.aclKey).toBeDefined();
         expect(request.aclKey).toEqual(MOCK_REQUEST_DM.aclKey);

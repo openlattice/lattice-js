@@ -249,7 +249,7 @@ describe('EntitySet', () => {
           .setContacts(MOCK_ENTITY_SET_DM.contacts)
           .build();
 
-        expect(entitySet).toEqual(jasmine.any(EntitySet));
+        expect(entitySet).toBeInstanceOf(EntitySet);
 
         expect(entitySet.id).toBeDefined();
         expect(entitySet.id).toEqual(MOCK_ENTITY_SET_DM.id);

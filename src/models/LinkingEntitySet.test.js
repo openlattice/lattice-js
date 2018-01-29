@@ -99,7 +99,7 @@ describe('LinkingEntitySet', () => {
           .setLinkingProperties(MOCK_LINKING_ENTITY_SET_DM.linkingProperties)
           .build();
 
-        expect(linkingEntitySet).toEqual(jasmine.any(LinkingEntitySet));
+        expect(linkingEntitySet).toBeInstanceOf(LinkingEntitySet);
 
         expect(linkingEntitySet.entitySet).toBeDefined();
         expect(linkingEntitySet.entitySet).toEqual(MOCK_LINKING_ENTITY_SET_DM.entitySet);
