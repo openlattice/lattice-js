@@ -31,7 +31,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 const LOG = new Logger('SyncApi');
 
