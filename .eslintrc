@@ -1,18 +1,17 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "airbnb-base",
     "plugin:flowtype/recommended"
   ],
-  "parser": "babel-eslint",
-  "env": {
-    "browser": true,
-    "jasmine": true,
-    "node": true
-  },
   "plugins": [
     "flowtype",
-    "jasmine"
+    "jest"
   ],
+  "env": {
+    "browser": true,
+    "jest": true
+  },
   "settings": {
     "flowtype": {
       "onlyFilesWithFlowAnnotation": true
@@ -80,7 +79,7 @@
       {
         "devDependencies": [
           "config/**",
-          "test/**",
+          "src/utils/testing/**",
           "**/*.test.js"
         ]
       }
@@ -93,9 +92,10 @@
     ],
     "import/prefer-default-export": "warn",
 
-    "jasmine/no-focused-tests": "error",
-    "jasmine/no-disabled-tests": "error",
-    "jasmine/no-spec-dupes": ["error", "branch"],
-    "jasmine/no-suite-dupes": ["error", "branch"],
+    "jest/no-disabled-tests": "error",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
   }
 }

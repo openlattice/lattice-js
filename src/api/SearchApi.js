@@ -41,7 +41,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isDefined,

@@ -10,9 +10,6 @@
  * @module lattice
  */
 
-import * as Types from './constants/types';
-import * as Models from './models';
-
 import * as AnalysisApi from './api/AnalysisApi';
 import * as AppApi from './api/AppApi';
 import * as AuthorizationApi from './api/AuthorizationApi';
@@ -27,18 +24,15 @@ import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
 import * as SyncApi from './api/SyncApi';
 
-import {
-  configure
-} from './config/Configuration';
+import * as Types from './constants/types';
+import * as Models from './models';
+import { configure } from './config/Configuration';
 
+// injected by Webpack.DefinePlugin
 declare var __VERSION__ :string;
 const version :string = __VERSION__;
 
 export {
-  version,
-  configure,
-  Models,
-  Types,
   AnalysisApi,
   AppApi,
   AuthorizationApi,
@@ -51,14 +45,15 @@ export {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
-  SyncApi
+  SyncApi,
+
+  Models,
+  Types,
+  configure,
+  version
 };
 
 export default {
-  version,
-  configure,
-  Models,
-  Types,
   AnalysisApi,
   AppApi,
   AuthorizationApi,
@@ -71,5 +66,10 @@ export default {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
-  SyncApi
+  SyncApi,
+
+  Models,
+  Types,
+  configure,
+  version
 };
