@@ -488,8 +488,7 @@ export function deleteEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) 
  *     "uuid_1a": ["value_1a", "value_1b"],
  *     "uuid_1b": ["value_1c", "value_1d"]
  *   }
- * )
-});
+ * );
  */
 export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
 
@@ -504,6 +503,14 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
   if (!isValidUuid(entityKeyId)) {
     errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate "entity" structure
+
+  if (!isNonEmptyObject(entity)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty object';
+    LOG.error(errorMsg, entity);
     return Promise.reject(errorMsg);
   }
 
@@ -529,15 +536,14 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
  * @return {Promise} - a Promise that resolves without a value
  *
  * @example
- * DataApi.replaceEntityInEntitySet(
+ * DataApi.replaceEntityInEntitySetUsingFqns(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
  *     "namespace1.name1": ["value_1a", "value_1b"],
  *     "namespace2.name2": ["value_1c", "value_1d"]
  *   }
- * )
-});
+ * );
  */
 export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
 
@@ -552,6 +558,14 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
   if (!isValidUuid(entityKeyId)) {
     errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate "entity" structure
+
+  if (!isNonEmptyObject(entity)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty object';
+    LOG.error(errorMsg, entity);
     return Promise.reject(errorMsg);
   }
 
