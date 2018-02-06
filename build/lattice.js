@@ -1,10 +1,10 @@
 /*!
  * 
- * lattice - v0.31.4
+ * lattice - v0.32.0
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
- * Copyright (c) 2014-2016, OpenLattice, Inc. All rights reserved.
+ * Copyright (c) 2017-2018, OpenLattice, Inc. All rights reserved.
  * 
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -79,7 +79,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 188);
+/******/ 	return __webpack_require__(__webpack_require__.s = 192);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-//! version : 2.19.4
+//! version : 2.20.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -747,7 +747,7 @@ var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
 
 // any word (or two) characters or numbers including two/three word month in arabic.
 // includes scottish gaelic two word and hyphenated months
-var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
+var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
 
 
 var regexes = {};
@@ -1930,7 +1930,7 @@ function loadLocale(name) {
         try {
             oldLocale = globalLocale._abbr;
             var aliasedRequire = require;
-            __webpack_require__(192)("./" + name);
+            __webpack_require__(195)("./" + name);
             getSetGlobalLocale(oldLocale);
         } catch (e) {}
     }
@@ -3388,19 +3388,24 @@ function toString () {
     return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
 }
 
-function toISOString() {
+function toISOString(keepOffset) {
     if (!this.isValid()) {
         return null;
     }
-    var m = this.clone().utc();
+    var utc = keepOffset !== true;
+    var m = utc ? this.clone().utc() : this;
     if (m.year() < 0 || m.year() > 9999) {
-        return formatMoment(m, 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
+        return formatMoment(m, utc ? 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYYYY-MM-DD[T]HH:mm:ss.SSSZ');
     }
     if (isFunction(Date.prototype.toISOString)) {
         // native implementation is ~50x faster, use it when we can
-        return this.toDate().toISOString();
+        if (utc) {
+            return this.toDate().toISOString();
+        } else {
+            return new Date(this._d.valueOf()).toISOString().replace('Z', formatMoment(m, 'Z'));
+        }
     }
-    return formatMoment(m, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
+    return formatMoment(m, utc ? 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYY-MM-DD[T]HH:mm:ss.SSSZ');
 }
 
 /**
@@ -4568,7 +4573,7 @@ addParseToken('x', function (input, array, config) {
 // Side effect imports
 
 
-hooks.version = '2.19.4';
+hooks.version = '2.20.1';
 
 setHookCallback(createLocal);
 
@@ -4600,11 +4605,24 @@ hooks.relativeTimeThreshold = getSetRelativeTimeThreshold;
 hooks.calendarFormat        = getCalendarFormat;
 hooks.prototype             = proto;
 
+// currently HTML5 input type only supports 24-hour formats
+hooks.HTML5_FMT = {
+    DATETIME_LOCAL: 'YYYY-MM-DDTHH:mm',             // <input type="datetime-local" />
+    DATETIME_LOCAL_SECONDS: 'YYYY-MM-DDTHH:mm:ss',  // <input type="datetime-local" step="1" />
+    DATETIME_LOCAL_MS: 'YYYY-MM-DDTHH:mm:ss.SSS',   // <input type="datetime-local" step="0.001" />
+    DATE: 'YYYY-MM-DD',                             // <input type="date" />
+    TIME: 'HH:mm',                                  // <input type="time" />
+    TIME_SECONDS: 'HH:mm:ss',                       // <input type="time" step="1" />
+    TIME_MS: 'HH:mm:ss.SSS',                        // <input type="time" step="0.001" />
+    WEEK: 'YYYY-[W]WW',                             // <input type="week" />
+    MONTH: 'YYYY-MM'                                // <input type="month" />
+};
+
 return hooks;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)(module)))
 
 /***/ }),
 /* 1 */
@@ -4619,7 +4637,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _loglevel = __webpack_require__(191);
+var _loglevel = __webpack_require__(194);
 
 var _loglevel2 = _interopRequireDefault(_loglevel);
 
@@ -4627,11 +4645,11 @@ var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _isEmpty = __webpack_require__(159);
+var _isEmpty = __webpack_require__(160);
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
-var _isError = __webpack_require__(215);
+var _isError = __webpack_require__(218);
 
 var _isError2 = _interopRequireDefault(_isError);
 
@@ -4645,6 +4663,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// injected by Webpack.DefinePlugin
 var LOG_LEVELS = {
   TRACE: 'trace',
   DEBUG: 'debug',
@@ -4670,15 +4689,15 @@ function isNonEmptyString(value) {
 
 function getMessagePrefix(loggerLevel, loggerName) {
 
-  return '[' + (0, _moment2.default)().format(TIMESTAMP_FORMAT) + ' ' + loggerLevel.toUpperCase() + ' ' + loggerName + ']';
+  return '[' + (0, _moment2.default)().format(TIMESTAMP_FORMAT) + ' ' + loggerLevel.toUpperCase() + ' ' + "lattice" + '] ' + loggerName;
 }
 
 var Logger = function () {
   function Logger(name) {
     _classCallCheck(this, Logger);
 
+    this.logger = _loglevel2.default.getLogger("lattice" + ' : ' + name);
     this.name = name;
-    this.logger = _loglevel2.default.getLogger(name);
   }
 
   _createClass(Logger, [{
@@ -4756,7 +4775,6 @@ var Logger = function () {
 }();
 
 exports.default = Logger;
-module.exports = exports['default'];
 
 /***/ }),
 /* 2 */
@@ -4781,15 +4799,15 @@ var _isArray = __webpack_require__(13);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
-var _isEmpty = __webpack_require__(159);
+var _isEmpty = __webpack_require__(160);
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
-var _isNull = __webpack_require__(217);
+var _isNull = __webpack_require__(220);
 
 var _isNull2 = _interopRequireDefault(_isNull);
 
-var _isPlainObject = __webpack_require__(167);
+var _isPlainObject = __webpack_require__(168);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
@@ -4797,11 +4815,11 @@ var _isString = __webpack_require__(18);
 
 var _isString2 = _interopRequireDefault(_isString);
 
-var _isUndefined = __webpack_require__(19);
+var _isUndefined = __webpack_require__(20);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _trim = __webpack_require__(218);
+var _trim = __webpack_require__(221);
 
 var _trim2 = _interopRequireDefault(_trim);
 
@@ -4881,11 +4899,11 @@ exports.isValidAccessCheckArray = isValidAccessCheckArray;
 exports.isValidRequestArray = isValidRequestArray;
 exports.isValidRequestStatusArray = isValidRequestStatusArray;
 
-var _PermissionTypes = __webpack_require__(26);
+var _PermissionTypes = __webpack_require__(34);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(16);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -4897,7 +4915,7 @@ var _Ace = __webpack_require__(36);
 
 var _Ace2 = _interopRequireDefault(_Ace);
 
-var _EntitySet = __webpack_require__(23);
+var _EntitySet = __webpack_require__(24);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
@@ -4909,15 +4927,15 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _PropertyType = __webpack_require__(24);
+var _PropertyType = __webpack_require__(25);
 
 var _PropertyType2 = _interopRequireDefault(_PropertyType);
 
-var _Request = __webpack_require__(25);
+var _Request = __webpack_require__(26);
 
 var _Request2 = _interopRequireDefault(_Request);
 
-var _RequestStatus = __webpack_require__(37);
+var _RequestStatus = __webpack_require__(39);
 
 var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
 
@@ -10850,10 +10868,10 @@ var EDM_API = exports.EDM_API = 'EntityDataModelApi';
 var LINKING_API = exports.LINKING_API = 'LinkingApi';
 var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
 var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
+var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
 var REQUESTS_API = exports.REQUESTS_API = 'RequestsApi';
 var SEARCH_API = exports.SEARCH_API = 'SearchApi';
 var SYNC_API = exports.SYNC_API = 'SyncApi';
-var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
 
 /***/ }),
 /* 6 */
@@ -10867,155 +10885,28 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getApiAxiosInstance = exports.getApiBaseUrl = undefined;
 
-var _axios = __webpack_require__(262);
+var _getApiBaseUrl = __webpack_require__(169);
 
-var _axios2 = _interopRequireDefault(_axios);
+var _getApiBaseUrl2 = _interopRequireDefault(_getApiBaseUrl);
 
-var _immutable = __webpack_require__(4);
+var _getApiAxiosInstance = __webpack_require__(234);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _Configuration = __webpack_require__(187);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
+var _getApiAxiosInstance2 = _interopRequireDefault(_getApiAxiosInstance);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var baseUrlToAxiosInstanceMap = _immutable2.default.Map();
-
-function getApiBaseUrl(api) {
-
-  var baseUrl = (0, _Configuration.getConfig)().get('baseUrl', '');
-
-  switch (api) {
-    case _ApiNames.ANALYSIS_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.ANALYSIS_PATH;
-    case _ApiNames.APP_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.APP_PATH;
-    case _ApiNames.AUTHORIZATION_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.AUTHORIZATIONS_PATH;
-    case _ApiNames.DATA_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.DATA_PATH;
-    case _ApiNames.DATA_SOURCES_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.DATA_SOURCES_PATH;
-    case _ApiNames.EDM_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.EDM_PATH;
-    case _ApiNames.LINKING_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.LINKING_PATH;
-    case _ApiNames.ORGANIZATIONS_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.ORGANIZATIONS_PATH;
-    case _ApiNames.PERMISSIONS_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.PERMISSIONS_PATH;
-    case _ApiNames.PRINCIPALS_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.PRINCIPALS_PATH;
-    case _ApiNames.REQUESTS_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.REQUESTS_PATH;
-    case _ApiNames.SEARCH_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.SEARCH_PATH;
-    case _ApiNames.SYNC_API:
-      return baseUrl + '/' + _ApiPaths.DATASTORE_PATH + '/' + _ApiPaths.SYNC_PATH;
-    default:
-      throw new Error('unknown API: no case implemented to handle the given API: ' + api);
-  }
-}
-
-function newAxiosInstance(baseUrl) {
-
-  var axiosConfigObj = {
-    baseURL: baseUrl,
-    headers: {
-      common: {
-        'Content-Type': 'application/json'
-      }
-    }
-  };
-
-  var authToken = (0, _Configuration.getConfig)().get('authToken');
-  if ((0, _LangUtils.isNonEmptyString)(authToken)) {
-    axiosConfigObj.headers.common.Authorization = authToken;
-  }
-
-  var axiosInstance = _axios2.default.create(axiosConfigObj);
-  var newMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
-  baseUrlToAxiosInstanceMap = newMap;
-}
-
-function getApiAxiosInstance(api) {
-
-  var baseUrl = getApiBaseUrl(api);
-
-  if (!baseUrlToAxiosInstanceMap.has(baseUrl)) {
-    newAxiosInstance(baseUrl);
-  }
-
-  // type casting to "any" to avoid Flow errors for now
-  var axiosInstance = baseUrlToAxiosInstanceMap.get(baseUrl);
-  var axiosInstanceAuthToken = axiosInstance.defaults.headers.common.Authorization;
-  if (axiosInstanceAuthToken !== (0, _Configuration.getConfig)().get('authToken')) {
-    newAxiosInstance(baseUrl);
-  }
-
-  // type casting to "any" to avoid Flow errors for now
-  return baseUrlToAxiosInstanceMap.get(baseUrl);
-}
-
-exports.getApiBaseUrl = getApiBaseUrl;
-exports.getApiAxiosInstance = getApiAxiosInstance;
+exports.getApiBaseUrl = _getApiBaseUrl2.default;
+exports.getApiAxiosInstance = _getApiAxiosInstance2.default;
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseHas = __webpack_require__(231),
-    hasPath = __webpack_require__(232);
-
-/**
- * Checks if `path` is a direct property of `object`.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Object
- * @param {Object} object The object to query.
- * @param {Array|string} path The path to check.
- * @returns {boolean} Returns `true` if `path` exists, else `false`.
- * @example
- *
- * var object = { 'a': { 'b': 2 } };
- * var other = _.create({ 'a': _.create({ 'b': 2 }) });
- *
- * _.has(object, 'a');
- * // => true
- *
- * _.has(object, 'a.b');
- * // => true
- *
- * _.has(object, ['a', 'b']);
- * // => true
- *
- * _.has(other, 'a');
- * // => false
- */
-function has(object, path) {
-  return object != null && hasPath(object, path, baseHas);
-}
-
-module.exports = has;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
-var bind = __webpack_require__(181);
-var isBuffer = __webpack_require__(264);
+var bind = __webpack_require__(173);
+var isBuffer = __webpack_require__(238);
 
 /*global toString:true*/
 
@@ -11318,6 +11209,47 @@ module.exports = {
 
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseHas = __webpack_require__(258),
+    hasPath = __webpack_require__(259);
+
+/**
+ * Checks if `path` is a direct property of `object`.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @param {Array|string} path The path to check.
+ * @returns {boolean} Returns `true` if `path` exists, else `false`.
+ * @example
+ *
+ * var object = { 'a': { 'b': 2 } };
+ * var other = _.create({ 'a': _.create({ 'b': 2 }) });
+ *
+ * _.has(object, 'a');
+ * // => true
+ *
+ * _.has(object, 'a.b');
+ * // => true
+ *
+ * _.has(object, ['a', 'b']);
+ * // => true
+ *
+ * _.has(other, 'a');
+ * // => false
+ */
+function has(object, path) {
+  return object != null && hasPath(object, path, baseHas);
+}
+
+module.exports = has;
+
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11404,9 +11336,9 @@ var CURRENT_PATH = exports.CURRENT_PATH = 'current';
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(32),
-    getRawTag = __webpack_require__(199),
-    objectToString = __webpack_require__(200);
+var Symbol = __webpack_require__(28),
+    getRawTag = __webpack_require__(202),
+    objectToString = __webpack_require__(203);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -11438,7 +11370,7 @@ module.exports = baseGetTag;
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(163);
+var freeGlobal = __webpack_require__(164);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -11536,7 +11468,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _PrincipalTypes = __webpack_require__(27);
+var _PrincipalTypes = __webpack_require__(37);
 
 var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
 
@@ -11657,6 +11589,29 @@ function isValid(principal) {
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var baseIsNative = __webpack_require__(200),
+    getValue = __webpack_require__(206);
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = getValue(object, key);
+  return baseIsNative(value) ? value : undefined;
+}
+
+module.exports = getNative;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -11701,7 +11656,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
  * fqn.getFullyQualifiedName(); // "LATTICE.Data"
  */
 
-var _isObject = __webpack_require__(30);
+var _isObject = __webpack_require__(29);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
@@ -11895,30 +11850,6 @@ FullyQualifiedName.toString = function () {
 };
 
 exports.default = FullyQualifiedName;
-module.exports = exports['default'];
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseIsNative = __webpack_require__(197),
-    getValue = __webpack_require__(203);
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = getValue(object, key);
-  return baseIsNative(value) ? value : undefined;
-}
-
-module.exports = getNative;
-
 
 /***/ }),
 /* 17 */
@@ -11940,15 +11871,15 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(16);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _SecurableTypes = __webpack_require__(29);
+var _SecurableTypes = __webpack_require__(38);
 
 var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
 
@@ -12310,6 +12241,116 @@ module.exports = isString;
 
 /***/ }),
 /* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getConfig = exports.configure = undefined;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// injected by Webpack.DefinePlugin
+var LOG = new _Logger2.default('Configuration');
+
+/**
+ * @module Configuration
+ * @memberof lattice
+ */
+
+var ENV_URLS = _immutable2.default.fromJS({
+  LOCAL: 'http://localhost:8080',
+  STAGING: 'https://api.staging.openlattice.com',
+  PRODUCTION: 'https://api.openlattice.com'
+});
+
+var configuration = _immutable2.default.fromJS({
+  authToken: '',
+  baseUrl: ENV_URLS.get('LOCAL')
+});
+
+function setAuthToken(config) {
+
+  // authToken is optional, so null and undefined are allowed
+  if (config.authToken === null || config.authToken === undefined) {
+    LOG.warn('authToken has not been configured, expect errors');
+    configuration = configuration.delete('authToken');
+  } else if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
+    // TODO: add at least some minimal validation checks against the authToken string
+    configuration = configuration.set('authToken', config.authToken);
+  } else {
+    var errorMsg = 'invalid parameter - authToken must be a non-empty string';
+    LOG.error(errorMsg, config.authToken);
+    throw new Error(errorMsg);
+  }
+}
+
+function setBaseUrl(config) {
+
+  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
+    if (config.baseUrl === 'localhost') {
+      configuration = configuration.set('baseUrl', ENV_URLS.get('LOCAL'));
+    } else if (config.baseUrl === 'staging') {
+      configuration = configuration.set('baseUrl', ENV_URLS.get('STAGING'));
+    } else if (config.baseUrl === 'production') {
+      configuration = configuration.set('baseUrl', ENV_URLS.get('PRODUCTION'));
+    }
+    // mild url validation to at least check the protocol and domain
+    else if (config.baseUrl.startsWith('https://') && config.baseUrl.endsWith('openlattice.com')) {
+        configuration = configuration.set('baseUrl', config.baseUrl);
+      } else {
+        var errorMsg = 'invalid parameter - baseUrl must be a valid URL';
+        LOG.error(errorMsg, config.baseUrl);
+        throw new Error(errorMsg);
+      }
+  } else {
+    var _errorMsg = 'invalid parameter - baseUrl must be a non-empty string';
+    LOG.error(_errorMsg, config.baseUrl);
+    throw new Error(_errorMsg);
+  }
+}
+
+/**
+ * @memberof lattice.Configuration
+ * @param {Object} config - an object literal containing all configuration options
+ * @param {string} config.authToken - a Base64-encoded JWT auth token (optional)
+ * @param {string} config.baseUrl - a full URL, or a simple URL identifier (required)
+ */
+function configure(config) {
+
+  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
+    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
+    LOG.error(errorMsg, config);
+    throw new Error(errorMsg);
+  }
+
+  setAuthToken(config);
+  setBaseUrl(config);
+}
+
+function getConfig() {
+
+  return configuration;
+}
+
+exports.configure = configure;
+exports.getConfig = getConfig;
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports) {
 
 /**
@@ -12337,10 +12378,10 @@ module.exports = isUndefined;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(16);
+var getNative = __webpack_require__(15);
 
 /* Built-in method references that are verified to be native. */
 var nativeCreate = getNative(Object, 'create');
@@ -12349,10 +12390,10 @@ module.exports = nativeCreate;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var eq = __webpack_require__(249);
+var eq = __webpack_require__(276);
 
 /**
  * Gets the index at which the `key` is found in `array` of key-value pairs.
@@ -12376,10 +12417,10 @@ module.exports = assocIndexOf;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isKeyable = __webpack_require__(254);
+var isKeyable = __webpack_require__(281);
 
 /**
  * Gets the data for `map`.
@@ -12400,7 +12441,7 @@ module.exports = getMapData;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12419,7 +12460,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -12621,7 +12662,7 @@ function isValid(entitySet) {
 }
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12640,15 +12681,15 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _FullyQualifiedName = __webpack_require__(16);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _AnalyzerTypes = __webpack_require__(40);
+var _AnalyzerTypes = __webpack_require__(180);
 
 var _AnalyzerTypes2 = _interopRequireDefault(_AnalyzerTypes);
 
@@ -12938,7 +12979,7 @@ function isValid(propertyType) {
 }
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12957,7 +12998,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -13090,105 +13131,47 @@ function isValid(request) {
 }
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-var PermissionTypes = {
-  DISCOVER: 'DISCOVER',
-  LINK: 'LINK',
-  OWNER: 'OWNER',
-  READ: 'READ',
-  WRITE: 'WRITE'
-};
-
-exports.default = PermissionTypes;
-module.exports = exports['default'];
-
-/***/ }),
 /* 27 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-var PrincipalTypes = {
-  APP: 'APP',
-  ORGANIZATION: 'ORGANIZATION',
-  ROLE: 'ROLE',
-  USER: 'USER'
+module.exports = function(module) {
+	if(!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if(!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
 };
 
-exports.default = PrincipalTypes;
-module.exports = exports['default'];
 
 /***/ }),
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+var root = __webpack_require__(11);
 
+/** Built-in value references. */
+var Symbol = root.Symbol;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+module.exports = Symbol;
 
-
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-var RequestStateTypes = {
-  APPROVED: 'APPROVED',
-  DECLINED: 'DECLINED',
-  SUBMITTED: 'SUBMITTED'
-};
-
-exports.default = RequestStateTypes;
-module.exports = exports['default'];
 
 /***/ }),
 /* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-var SecurableTypes = {
-  AssociationType: 'AssociationType',
-  ComplexType: 'ComplexType',
-  EdgeType: 'EdgeType',
-  EntitySet: 'EntitySet',
-  EntityType: 'EntityType',
-  DataSource: 'Datasource',
-  LinkingEntityType: 'LinkingEntityType',
-  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
-  Organization: 'Organization',
-  OrganizationRole: 'OrganizationRole'
-};
-
-exports.default = SecurableTypes;
-module.exports = exports['default'];
-
-/***/ }),
-/* 30 */
 /***/ (function(module, exports) {
 
 /**
@@ -13225,47 +13208,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 31 */
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var root = __webpack_require__(11);
-
-/** Built-in value references. */
-var Symbol = root.Symbol;
-
-module.exports = Symbol;
-
-
-/***/ }),
-/* 33 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -13306,7 +13249,7 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 34 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
@@ -13341,6 +13284,149 @@ module.exports = isSymbol;
 
 
 /***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(7);
+var normalizeHeaderName = __webpack_require__(240);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(175);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(175);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(174)))
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = assertString;
+function assertString(input) {
+  var isString = typeof input === 'string' || input instanceof String;
+
+  if (!isString) {
+    throw new TypeError('This library (validator.js) validates strings only');
+  }
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+
+// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
+var PermissionTypes = {
+  DISCOVER: 'DISCOVER',
+  LINK: 'LINK',
+  OWNER: 'OWNER',
+  READ: 'READ',
+  WRITE: 'WRITE'
+};
+
+exports.default = PermissionTypes;
+
+/***/ }),
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13360,7 +13446,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -13626,6 +13712,56 @@ function isValid(ace) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+
+// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
+var PrincipalTypes = {
+  APP: 'APP',
+  ORGANIZATION: 'ORGANIZATION',
+  ROLE: 'ROLE',
+  USER: 'USER'
+};
+
+exports.default = PrincipalTypes;
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+
+// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
+var SecurableTypes = {
+  AssociationType: 'AssociationType',
+  ComplexType: 'ComplexType',
+  EdgeType: 'EdgeType',
+  EntitySet: 'EntitySet',
+  EntityType: 'EntityType',
+  DataSource: 'Datasource',
+  LinkingEntityType: 'LinkingEntityType',
+  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
+  Organization: 'Organization',
+  OrganizationRole: 'OrganizationRole'
+};
+
+exports.default = SecurableTypes;
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.RequestStatusBuilder = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13636,7 +13772,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _RequestStateTypes = __webpack_require__(28);
+var _RequestStateTypes = __webpack_require__(40);
 
 var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
 
@@ -13644,7 +13780,7 @@ var _Principal = __webpack_require__(14);
 
 var _Principal2 = _interopRequireDefault(_Principal);
 
-var _Request = __webpack_require__(25);
+var _Request = __webpack_require__(26);
 
 var _Request2 = _interopRequireDefault(_Request);
 
@@ -13748,107 +13884,7 @@ function isValid(requestStatus) {
 }
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(8);
-var normalizeHeaderName = __webpack_require__(266);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(183);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(183);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(182)))
-
-/***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13860,36 +13896,13 @@ Object.defineProperty(exports, "__esModule", {
 
 
 // TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-var ActionTypes = {
-  ADD: 'ADD',
-  REMOVE: 'REMOVE',
-  SET: 'SET',
-  REQUEST: 'REQUEST'
+var RequestStateTypes = {
+  APPROVED: 'APPROVED',
+  DECLINED: 'DECLINED',
+  SUBMITTED: 'SUBMITTED'
 };
 
-exports.default = ActionTypes;
-module.exports = exports['default'];
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var METAPHONE = 'METAPHONE';
-var STANDARD = 'STANDARD';
-
-var AnalyzerTypes = {
-  METAPHONE: METAPHONE,
-  STANDARD: STANDARD
-};
-
-exports.default = AnalyzerTypes;
-module.exports = exports['default'];
+exports.default = RequestStateTypes;
 
 /***/ }),
 /* 41 */
@@ -13943,6 +13956,7 @@ var af = moment.defineLocale('af', {
         future : 'oor %s',
         past : '%s gelede',
         s : '\'n paar sekondes',
+        ss : '%d sekondes',
         m : '\'n minuut',
         mm : '%d minute',
         h : '\'n uur',
@@ -14032,18 +14046,18 @@ var pluralize = function (u) {
     };
 };
 var months = [
-    'كانون الثاني يناير',
-    'شباط فبراير',
-    'آذار مارس',
-    'نيسان أبريل',
-    'أيار مايو',
-    'حزيران يونيو',
-    'تموز يوليو',
-    'آب أغسطس',
-    'أيلول سبتمبر',
-    'تشرين الأول أكتوبر',
-    'تشرين الثاني نوفمبر',
-    'كانون الأول ديسمبر'
+    'يناير',
+    'فبراير',
+    'مارس',
+    'أبريل',
+    'مايو',
+    'يونيو',
+    'يوليو',
+    'أغسطس',
+    'سبتمبر',
+    'أكتوبر',
+    'نوفمبر',
+    'ديسمبر'
 ];
 
 var ar = moment.defineLocale('ar', {
@@ -14084,6 +14098,7 @@ var ar = moment.defineLocale('ar', {
         future : 'بعد %s',
         past : 'منذ %s',
         s : pluralize('s'),
+        ss : pluralize('s'),
         m : pluralize('m'),
         mm : pluralize('m'),
         h : pluralize('h'),
@@ -14158,6 +14173,7 @@ var arDz = moment.defineLocale('ar-dz', {
         future : 'في %s',
         past : 'منذ %s',
         s : 'ثوان',
+        ss : '%d ثانية',
         m : 'دقيقة',
         mm : '%d دقائق',
         h : 'ساعة',
@@ -14222,6 +14238,7 @@ var arKw = moment.defineLocale('ar-kw', {
         future : 'في %s',
         past : 'منذ %s',
         s : 'ثوان',
+        ss : '%d ثانية',
         m : 'دقيقة',
         mm : '%d دقائق',
         h : 'ساعة',
@@ -14345,6 +14362,7 @@ var arLy = moment.defineLocale('ar-ly', {
         future : 'بعد %s',
         past : 'منذ %s',
         s : pluralize('s'),
+        ss : pluralize('s'),
         m : pluralize('m'),
         mm : pluralize('m'),
         h : pluralize('h'),
@@ -14418,6 +14436,7 @@ var arMa = moment.defineLocale('ar-ma', {
         future : 'في %s',
         past : 'منذ %s',
         s : 'ثوان',
+        ss : '%d ثانية',
         m : 'دقيقة',
         mm : '%d دقائق',
         h : 'ساعة',
@@ -14518,6 +14537,7 @@ var arSa = moment.defineLocale('ar-sa', {
         future : 'في %s',
         past : 'منذ %s',
         s : 'ثوان',
+        ss : '%d ثانية',
         m : 'دقيقة',
         mm : '%d دقائق',
         h : 'ساعة',
@@ -14592,6 +14612,7 @@ var arTn = moment.defineLocale('ar-tn', {
         future: 'في %s',
         past: 'منذ %s',
         s: 'ثوان',
+        ss : '%d ثانية',
         m: 'دقيقة',
         mm: '%d دقائق',
         h: 'ساعة',
@@ -14677,6 +14698,7 @@ var az = moment.defineLocale('az', {
         future : '%s sonra',
         past : '%s əvvəl',
         s : 'birneçə saniyyə',
+        ss : '%d saniyə',
         m : 'bir dəqiqə',
         mm : '%d dəqiqə',
         h : 'bir saat',
@@ -14747,6 +14769,7 @@ function plural(word, num) {
 }
 function relativeTimeWithPlural(number, withoutSuffix, key) {
     var format = {
+        'ss': withoutSuffix ? 'секунда_секунды_секунд' : 'секунду_секунды_секунд',
         'mm': withoutSuffix ? 'хвіліна_хвіліны_хвілін' : 'хвіліну_хвіліны_хвілін',
         'hh': withoutSuffix ? 'гадзіна_гадзіны_гадзін' : 'гадзіну_гадзіны_гадзін',
         'dd': 'дзень_дні_дзён',
@@ -14916,6 +14939,7 @@ var bg = moment.defineLocale('bg', {
         future : 'след %s',
         past : 'преди %s',
         s : 'няколко секунди',
+        ss : '%d секунди',
         m : 'минута',
         mm : '%d минути',
         h : 'час',
@@ -15000,6 +15024,7 @@ var bm = moment.defineLocale('bm', {
         future : '%s kɔnɔ',
         past : 'a bɛ %s bɔ',
         s : 'sanga dama dama',
+        ss : 'sekondi %d',
         m : 'miniti kelen',
         mm : 'miniti %d',
         h : 'lɛrɛ kelen',
@@ -15088,6 +15113,7 @@ var bn = moment.defineLocale('bn', {
         future : '%s পরে',
         past : '%s আগে',
         s : 'কয়েক সেকেন্ড',
+        ss : '%d সেকেন্ড',
         m : 'এক মিনিট',
         mm : '%d মিনিট',
         h : 'এক ঘন্টা',
@@ -15212,6 +15238,7 @@ var bo = moment.defineLocale('bo', {
         future : '%s ལ་',
         past : '%s སྔན་ལ',
         s : 'ལམ་སང',
+        ss : '%d སྐར་ཆ།',
         m : 'སྐར་མ་གཅིག',
         mm : '%d སྐར་མ',
         h : 'ཆུ་ཚོད་གཅིག',
@@ -15356,6 +15383,7 @@ var br = moment.defineLocale('br', {
         future : 'a-benn %s',
         past : '%s \'zo',
         s : 'un nebeud segondennoù',
+        ss : '%d eilenn',
         m : 'ur vunutenn',
         mm : relativeTimeWithMutation,
         h : 'un eur',
@@ -15402,6 +15430,15 @@ return br;
 function translate(number, withoutSuffix, key) {
     var result = number + ' ';
     switch (key) {
+        case 'ss':
+            if (number === 1) {
+                result += 'sekunda';
+            } else if (number === 2 || number === 3 || number === 4) {
+                result += 'sekunde';
+            } else {
+                result += 'sekundi';
+            }
+            return result;
         case 'm':
             return withoutSuffix ? 'jedna minuta' : 'jedne minute';
         case 'mm':
@@ -15507,6 +15544,7 @@ var bs = moment.defineLocale('bs', {
         future : 'za %s',
         past   : 'prije %s',
         s      : 'par sekundi',
+        ss     : translate,
         m      : translate,
         mm     : translate,
         h      : translate,
@@ -15591,6 +15629,7 @@ var ca = moment.defineLocale('ca', {
         future : 'd\'aquí %s',
         past : 'fa %s',
         s : 'uns segons',
+        ss : '%d segons',
         m : 'un minut',
         mm : '%d minuts',
         h : 'una hora',
@@ -15649,6 +15688,13 @@ function translate(number, withoutSuffix, key, isFuture) {
     switch (key) {
         case 's':  // a few seconds / in a few seconds / a few seconds ago
             return (withoutSuffix || isFuture) ? 'pár sekund' : 'pár sekundami';
+        case 'ss': // 9 seconds / in 9 seconds / 9 seconds ago
+            if (withoutSuffix || isFuture) {
+                return result + (plural(number) ? 'sekundy' : 'sekund');
+            } else {
+                return result + 'sekundami';
+            }
+            break;
         case 'm':  // a minute / in a minute / a minute ago
             return withoutSuffix ? 'minuta' : (isFuture ? 'minutu' : 'minutou');
         case 'mm': // 9 minutes / in 9 minutes / 9 minutes ago
@@ -15777,6 +15823,7 @@ var cs = moment.defineLocale('cs', {
         future : 'za %s',
         past : 'před %s',
         s : translate,
+        ss : translate,
         m : translate,
         mm : translate,
         h : translate,
@@ -15845,6 +15892,7 @@ var cv = moment.defineLocale('cv', {
         },
         past : '%s каялла',
         s : 'пӗр-ик ҫеккунт',
+        ss : '%d ҫеккунт',
         m : 'пӗр минут',
         mm : '%d минут',
         h : 'пӗр сехет',
@@ -15913,6 +15961,7 @@ var cy = moment.defineLocale('cy', {
         future: 'mewn %s',
         past: '%s yn ôl',
         s: 'ychydig eiliadau',
+        ss: '%d eiliad',
         m: 'munud',
         mm: '%d munud',
         h: 'awr',
@@ -15996,6 +16045,7 @@ var da = moment.defineLocale('da', {
         future : 'om %s',
         past : '%s siden',
         s : 'få sekunder',
+        ss : '%d sekunder',
         m : 'et minut',
         mm : '%d minutter',
         h : 'en time',
@@ -16079,6 +16129,7 @@ var de = moment.defineLocale('de', {
         future : 'in %s',
         past : 'vor %s',
         s : 'ein paar Sekunden',
+        ss : '%d Sekunden',
         m : processRelativeTime,
         mm : '%d Minuten',
         h : processRelativeTime,
@@ -16163,6 +16214,7 @@ var deAt = moment.defineLocale('de-at', {
         future : 'in %s',
         past : 'vor %s',
         s : 'ein paar Sekunden',
+        ss : '%d Sekunden',
         m : processRelativeTime,
         mm : '%d Minuten',
         h : processRelativeTime,
@@ -16227,12 +16279,12 @@ var deCh = moment.defineLocale('de-ch', {
     weekdaysMin : 'So_Mo_Di_Mi_Do_Fr_Sa'.split('_'),
     weekdaysParseExact : true,
     longDateFormat : {
-        LT: 'HH.mm',
-        LTS: 'HH.mm.ss',
+        LT: 'HH:mm',
+        LTS: 'HH:mm:ss',
         L : 'DD.MM.YYYY',
         LL : 'D. MMMM YYYY',
-        LLL : 'D. MMMM YYYY HH.mm',
-        LLLL : 'dddd, D. MMMM YYYY HH.mm'
+        LLL : 'D. MMMM YYYY HH:mm',
+        LLLL : 'dddd, D. MMMM YYYY HH:mm'
     },
     calendar : {
         sameDay: '[heute um] LT [Uhr]',
@@ -16246,6 +16298,7 @@ var deCh = moment.defineLocale('de-ch', {
         future : 'in %s',
         past : 'vor %s',
         s : 'ein paar Sekunden',
+        ss : '%d Sekunden',
         m : processRelativeTime,
         mm : '%d Minuten',
         h : processRelativeTime,
@@ -16347,6 +16400,7 @@ var dv = moment.defineLocale('dv', {
         future : 'ތެރޭގައި %s',
         past : 'ކުރިން %s',
         s : 'ސިކުންތުކޮޅެއް',
+        ss : 'd% ސިކުންތު',
         m : 'މިނިޓެއް',
         mm : 'މިނިޓު %d',
         h : 'ގަޑިއިރެއް',
@@ -16456,6 +16510,7 @@ var el = moment.defineLocale('el', {
         future : 'σε %s',
         past : '%s πριν',
         s : 'λίγα δευτερόλεπτα',
+        ss : '%d δευτερόλεπτα',
         m : 'ένα λεπτό',
         mm : '%d λεπτά',
         h : 'μία ώρα',
@@ -16521,6 +16576,7 @@ var enAu = moment.defineLocale('en-au', {
         future : 'in %s',
         past : '%s ago',
         s : 'a few seconds',
+        ss : '%d seconds',
         m : 'a minute',
         mm : '%d minutes',
         h : 'an hour',
@@ -16593,6 +16649,7 @@ var enCa = moment.defineLocale('en-ca', {
         future : 'in %s',
         past : '%s ago',
         s : 'a few seconds',
+        ss : '%d seconds',
         m : 'a minute',
         mm : '%d minutes',
         h : 'an hour',
@@ -16661,6 +16718,7 @@ var enGb = moment.defineLocale('en-gb', {
         future : 'in %s',
         past : '%s ago',
         s : 'a few seconds',
+        ss : '%d seconds',
         m : 'a minute',
         mm : '%d minutes',
         h : 'an hour',
@@ -16733,6 +16791,7 @@ var enIe = moment.defineLocale('en-ie', {
         future : 'in %s',
         past : '%s ago',
         s : 'a few seconds',
+        ss : '%d seconds',
         m : 'a minute',
         mm : '%d minutes',
         h : 'an hour',
@@ -16805,6 +16864,7 @@ var enNz = moment.defineLocale('en-nz', {
         future : 'in %s',
         past : '%s ago',
         s : 'a few seconds',
+        ss : '%d seconds',
         m : 'a minute',
         mm : '%d minutes',
         h : 'an hour',
@@ -16890,6 +16950,7 @@ var eo = moment.defineLocale('eo', {
         future : 'post %s',
         past : 'antaŭ %s',
         s : 'sekundoj',
+        ss : '%d sekundoj',
         m : 'minuto',
         mm : '%d minutoj',
         h : 'horo',
@@ -16987,6 +17048,7 @@ var es = moment.defineLocale('es', {
         future : 'en %s',
         past : 'hace %s',
         s : 'unos segundos',
+        ss : '%d segundos',
         m : 'un minuto',
         mm : '%d minutos',
         h : 'una hora',
@@ -17083,6 +17145,7 @@ var esDo = moment.defineLocale('es-do', {
         future : 'en %s',
         past : 'hace %s',
         s : 'unos segundos',
+        ss : '%d segundos',
         m : 'un minuto',
         mm : '%d minutos',
         h : 'una hora',
@@ -17142,12 +17205,12 @@ var esUs = moment.defineLocale('es-us', {
     weekdaysMin : 'do_lu_ma_mi_ju_vi_sá'.split('_'),
     weekdaysParseExact : true,
     longDateFormat : {
-        LT : 'H:mm',
-        LTS : 'H:mm:ss',
+        LT : 'h:mm A',
+        LTS : 'h:mm:ss A',
         L : 'MM/DD/YYYY',
         LL : 'MMMM [de] D [de] YYYY',
-        LLL : 'MMMM [de] D [de] YYYY H:mm',
-        LLLL : 'dddd, MMMM [de] D [de] YYYY H:mm'
+        LLL : 'MMMM [de] D [de] YYYY h:mm A',
+        LLLL : 'dddd, MMMM [de] D [de] YYYY h:mm A'
     },
     calendar : {
         sameDay : function () {
@@ -17171,6 +17234,7 @@ var esUs = moment.defineLocale('es-us', {
         future : 'en %s',
         past : 'hace %s',
         s : 'unos segundos',
+        ss : '%d segundos',
         m : 'un minuto',
         mm : '%d minutos',
         h : 'una hora',
@@ -17214,6 +17278,7 @@ return esUs;
 function processRelativeTime(number, withoutSuffix, key, isFuture) {
     var format = {
         's' : ['mõne sekundi', 'mõni sekund', 'paar sekundit'],
+        'ss': [number + 'sekundi', number + 'sekundit'],
         'm' : ['ühe minuti', 'üks minut'],
         'mm': [number + ' minuti', number + ' minutit'],
         'h' : ['ühe tunni', 'tund aega', 'üks tund'],
@@ -17256,6 +17321,7 @@ var et = moment.defineLocale('et', {
         future : '%s pärast',
         past   : '%s tagasi',
         s      : processRelativeTime,
+        ss     : processRelativeTime,
         m      : processRelativeTime,
         mm     : processRelativeTime,
         h      : processRelativeTime,
@@ -17327,6 +17393,7 @@ var eu = moment.defineLocale('eu', {
         future : '%s barru',
         past : 'duela %s',
         s : 'segundo batzuk',
+        ss : '%d segundo',
         m : 'minutu bat',
         mm : '%d minutu',
         h : 'ordu bat',
@@ -17429,6 +17496,7 @@ var fa = moment.defineLocale('fa', {
         future : 'در %s',
         past : '%s پیش',
         s : 'چند ثانیه',
+        ss : 'ثانیه d%',
         m : 'یک دقیقه',
         mm : '%d دقیقه',
         h : 'یک ساعت',
@@ -17488,6 +17556,8 @@ function translate(number, withoutSuffix, key, isFuture) {
     switch (key) {
         case 's':
             return isFuture ? 'muutaman sekunnin' : 'muutama sekunti';
+        case 'ss':
+            return isFuture ? 'sekunnin' : 'sekuntia';
         case 'm':
             return isFuture ? 'minuutin' : 'minuutti';
         case 'mm':
@@ -17551,6 +17621,7 @@ var fi = moment.defineLocale('fi', {
         future : '%s päästä',
         past : '%s sitten',
         s : translate,
+        ss : translate,
         m : translate,
         mm : translate,
         h : translate,
@@ -17616,6 +17687,7 @@ var fo = moment.defineLocale('fo', {
         future : 'um %s',
         past : '%s síðani',
         s : 'fá sekund',
+        ss : '%d sekundir',
         m : 'ein minutt',
         mm : '%d minuttir',
         h : 'ein tími',
@@ -17661,7 +17733,7 @@ var fr = moment.defineLocale('fr', {
     monthsParseExact : true,
     weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
     weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-    weekdaysMin : 'Di_Lu_Ma_Me_Je_Ve_Sa'.split('_'),
+    weekdaysMin : 'di_lu_ma_me_je_ve_sa'.split('_'),
     weekdaysParseExact : true,
     longDateFormat : {
         LT : 'HH:mm',
@@ -17683,6 +17755,7 @@ var fr = moment.defineLocale('fr', {
         future : 'dans %s',
         past : 'il y a %s',
         s : 'quelques secondes',
+        ss : '%d secondes',
         m : 'une minute',
         mm : '%d minutes',
         h : 'une heure',
@@ -17749,7 +17822,7 @@ var frCa = moment.defineLocale('fr-ca', {
     monthsParseExact : true,
     weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
     weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-    weekdaysMin : 'Di_Lu_Ma_Me_Je_Ve_Sa'.split('_'),
+    weekdaysMin : 'di_lu_ma_me_je_ve_sa'.split('_'),
     weekdaysParseExact : true,
     longDateFormat : {
         LT : 'HH:mm',
@@ -17771,6 +17844,7 @@ var frCa = moment.defineLocale('fr-ca', {
         future : 'dans %s',
         past : 'il y a %s',
         s : 'quelques secondes',
+        ss : '%d secondes',
         m : 'une minute',
         mm : '%d minutes',
         h : 'une heure',
@@ -17828,7 +17902,7 @@ var frCh = moment.defineLocale('fr-ch', {
     monthsParseExact : true,
     weekdays : 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
     weekdaysShort : 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-    weekdaysMin : 'Di_Lu_Ma_Me_Je_Ve_Sa'.split('_'),
+    weekdaysMin : 'di_lu_ma_me_je_ve_sa'.split('_'),
     weekdaysParseExact : true,
     longDateFormat : {
         LT : 'HH:mm',
@@ -17850,6 +17924,7 @@ var frCh = moment.defineLocale('fr-ch', {
         future : 'dans %s',
         past : 'il y a %s',
         s : 'quelques secondes',
+        ss : '%d secondes',
         m : 'une minute',
         mm : '%d minutes',
         h : 'une heure',
@@ -17944,6 +18019,7 @@ var fy = moment.defineLocale('fy', {
         future : 'oer %s',
         past : '%s lyn',
         s : 'in pear sekonden',
+        ss : '%d sekonden',
         m : 'ien minút',
         mm : '%d minuten',
         h : 'ien oere',
@@ -18024,6 +18100,7 @@ var gd = moment.defineLocale('gd', {
         future : 'ann an %s',
         past : 'bho chionn %s',
         s : 'beagan diogan',
+        ss : '%d diogan',
         m : 'mionaid',
         mm : '%d mionaidean',
         h : 'uair',
@@ -18109,6 +18186,7 @@ var gl = moment.defineLocale('gl', {
         },
         past : 'hai %s',
         s : 'uns segundos',
+        ss : '%d segundos',
         m : 'un minuto',
         mm : '%d minutos',
         h : 'unha hora',
@@ -18151,6 +18229,7 @@ return gl;
 function processRelativeTime(number, withoutSuffix, key, isFuture) {
     var format = {
         's': ['thodde secondanim', 'thodde second'],
+        'ss': [number + ' secondanim', number + ' second'],
         'm': ['eka mintan', 'ek minute'],
         'mm': [number + ' mintanim', number + ' mintam'],
         'h': ['eka horan', 'ek hor'],
@@ -18194,6 +18273,7 @@ var gomLatn = moment.defineLocale('gom-latn', {
         future : '%s',
         past : '%s adim',
         s : processRelativeTime,
+        ss : processRelativeTime,
         m : processRelativeTime,
         mm : processRelativeTime,
         h : processRelativeTime,
@@ -18327,6 +18407,7 @@ var gu = moment.defineLocale('gu', {
         future: '%s મા',
         past: '%s પેહલા',
         s: 'અમુક પળો',
+        ss: '%d સેકંડ',
         m: 'એક મિનિટ',
         mm: '%d મિનિટ',
         h: 'એક કલાક',
@@ -18436,6 +18517,7 @@ var he = moment.defineLocale('he', {
         future : 'בעוד %s',
         past : 'לפני %s',
         s : 'מספר שניות',
+        ss : '%d שניות',
         m : 'דקה',
         mm : '%d דקות',
         h : 'שעה',
@@ -18560,6 +18642,7 @@ var hi = moment.defineLocale('hi', {
         future : '%s में',
         past : '%s पहले',
         s : 'कुछ ही क्षण',
+        ss : '%d सेकंड',
         m : 'एक मिनट',
         mm : '%d मिनट',
         h : 'एक घंटा',
@@ -18640,6 +18723,15 @@ return hi;
 function translate(number, withoutSuffix, key) {
     var result = number + ' ';
     switch (key) {
+        case 'ss':
+            if (number === 1) {
+                result += 'sekunda';
+            } else if (number === 2 || number === 3 || number === 4) {
+                result += 'sekunde';
+            } else {
+                result += 'sekundi';
+            }
+            return result;
         case 'm':
             return withoutSuffix ? 'jedna minuta' : 'jedne minute';
         case 'mm':
@@ -18748,6 +18840,7 @@ var hr = moment.defineLocale('hr', {
         future : 'za %s',
         past   : 'prije %s',
         s      : 'par sekundi',
+        ss     : translate,
         m      : translate,
         mm     : translate,
         h      : translate,
@@ -18793,6 +18886,8 @@ function translate(number, withoutSuffix, key, isFuture) {
     switch (key) {
         case 's':
             return (isFuture || withoutSuffix) ? 'néhány másodperc' : 'néhány másodperce';
+        case 'ss':
+            return num + (isFuture || withoutSuffix) ? ' másodperc' : ' másodperce';
         case 'm':
             return 'egy' + (isFuture || withoutSuffix ? ' perc' : ' perce');
         case 'mm':
@@ -18861,6 +18956,7 @@ var hu = moment.defineLocale('hu', {
         future : '%s múlva',
         past : '%s',
         s : translate,
+        ss : translate,
         m : translate,
         mm : translate,
         h : translate,
@@ -18933,6 +19029,7 @@ var hyAm = moment.defineLocale('hy-am', {
         future : '%s հետո',
         past : '%s առաջ',
         s : 'մի քանի վայրկյան',
+        ss : '%d վայրկյան',
         m : 'րոպե',
         mm : '%d րոպե',
         h : 'ժամ',
@@ -19051,6 +19148,7 @@ var id = moment.defineLocale('id', {
         future : 'dalam %s',
         past : '%s yang lalu',
         s : 'beberapa detik',
+        ss : '%d detik',
         m : 'semenit',
         mm : '%d menit',
         h : 'sejam',
@@ -19101,6 +19199,11 @@ function translate(number, withoutSuffix, key, isFuture) {
     switch (key) {
         case 's':
             return withoutSuffix || isFuture ? 'nokkrar sekúndur' : 'nokkrum sekúndum';
+        case 'ss':
+            if (plural(number)) {
+                return result + (withoutSuffix || isFuture ? 'sekúndur' : 'sekúndum');
+            }
+            return result + 'sekúnda';
         case 'm':
             return withoutSuffix ? 'mínúta' : 'mínútu';
         case 'mm':
@@ -19181,6 +19284,7 @@ var is = moment.defineLocale('is', {
         future : 'eftir %s',
         past : 'fyrir %s síðan',
         s : translate,
+        ss : translate,
         m : translate,
         mm : translate,
         h : 'klukkustund',
@@ -19233,7 +19337,7 @@ var it = moment.defineLocale('it', {
         L : 'DD/MM/YYYY',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
-        LLLL : 'dddd, D MMMM YYYY HH:mm'
+        LLLL : 'dddd D MMMM YYYY HH:mm'
     },
     calendar : {
         sameDay: '[Oggi alle] LT',
@@ -19256,6 +19360,7 @@ var it = moment.defineLocale('it', {
         },
         past : '%s fa',
         s : 'alcuni secondi',
+        ss : '%d secondi',
         m : 'un minuto',
         mm : '%d minuti',
         h : 'un\'ora',
@@ -19347,6 +19452,7 @@ var ja = moment.defineLocale('ja', {
         future : '%s後',
         past : '%s前',
         s : '数秒',
+        ss : '%d秒',
         m : '1分',
         mm : '%d分',
         h : '1時間',
@@ -19431,6 +19537,7 @@ var jv = moment.defineLocale('jv', {
         future : 'wonten ing %s',
         past : '%s ingkang kepengker',
         s : 'sawetawis detik',
+        ss : '%d detik',
         m : 'setunggal menit',
         mm : '%d menit',
         h : 'setunggal jam',
@@ -19512,6 +19619,7 @@ var ka = moment.defineLocale('ka', {
             }
         },
         s : 'რამდენიმე წამი',
+        ss : '%d წამი',
         m : 'წუთი',
         mm : '%d წუთი',
         h : 'საათი',
@@ -19611,6 +19719,7 @@ var kk = moment.defineLocale('kk', {
         future : '%s ішінде',
         past : '%s бұрын',
         s : 'бірнеше секунд',
+        ss : '%d секунд',
         m : 'бір минут',
         mm : '%d минут',
         h : 'бір сағат',
@@ -19680,6 +19789,7 @@ var km = moment.defineLocale('km', {
         future: '%sទៀត',
         past: '%sមុន',
         s: 'ប៉ុន្មានវិនាទី',
+        ss: '%d វិនាទី',
         m: 'មួយនាទី',
         mm: '%d នាទី',
         h: 'មួយម៉ោង',
@@ -19769,6 +19879,7 @@ var kn = moment.defineLocale('kn', {
         future : '%s ನಂತರ',
         past : '%s ಹಿಂದೆ',
         s : 'ಕೆಲವು ಕ್ಷಣಗಳು',
+        ss : '%d ಸೆಕೆಂಡುಗಳು',
         m : 'ಒಂದು ನಿಮಿಷ',
         mm : '%d ನಿಮಿಷ',
         h : 'ಒಂದು ಗಂಟೆ',
@@ -19986,6 +20097,7 @@ var ky = moment.defineLocale('ky', {
         future : '%s ичинде',
         past : '%s мурун',
         s : 'бирнече секунд',
+        ss : '%d секунд',
         m : 'бир мүнөт',
         mm : '%d мүнөт',
         h : 'бир саат',
@@ -20132,6 +20244,7 @@ var lb = moment.defineLocale('lb', {
         future : processFutureTime,
         past : processPastTime,
         s : 'e puer Sekonnen',
+        ss : '%d Sekonnen',
         m : processRelativeTime,
         mm : '%d Minutten',
         h : processRelativeTime,
@@ -20209,6 +20322,7 @@ var lo = moment.defineLocale('lo', {
         future : 'ອີກ %s',
         past : '%sຜ່ານມາ',
         s : 'ບໍ່ເທົ່າໃດວິນາທີ',
+        ss : '%d ວິນາທີ' ,
         m : '1 ນາທີ',
         mm : '%d ນາທີ',
         h : '1 ຊົ່ວໂມງ',
@@ -20247,6 +20361,7 @@ return lo;
 
 
 var units = {
+    'ss' : 'sekundė_sekundžių_sekundes',
     'm' : 'minutė_minutės_minutę',
     'mm': 'minutės_minučių_minutes',
     'h' : 'valanda_valandos_valandą',
@@ -20327,6 +20442,7 @@ var lt = moment.defineLocale('lt', {
         future : 'po %s',
         past : 'prieš %s',
         s : translateSeconds,
+        ss : translate,
         m : translateSingular,
         mm : translate,
         h : translateSingular,
@@ -20370,6 +20486,7 @@ return lt;
 
 
 var units = {
+    'ss': 'sekundes_sekundēm_sekunde_sekundes'.split('_'),
     'm': 'minūtes_minūtēm_minūte_minūtes'.split('_'),
     'mm': 'minūtes_minūtēm_minūte_minūtes'.split('_'),
     'h': 'stundas_stundām_stunda_stundas'.split('_'),
@@ -20431,6 +20548,7 @@ var lv = moment.defineLocale('lv', {
         future : 'pēc %s',
         past : 'pirms %s',
         s : relativeSeconds,
+        ss : relativeTimeWithPlural,
         m : relativeTimeWithSingular,
         mm : relativeTimeWithPlural,
         h : relativeTimeWithSingular,
@@ -20472,6 +20590,7 @@ return lv;
 
 var translator = {
     words: { //Different grammatical cases
+        ss: ['sekund', 'sekunda', 'sekundi'],
         m: ['jedan minut', 'jednog minuta'],
         mm: ['minut', 'minuta', 'minuta'],
         h: ['jedan sat', 'jednog sata'],
@@ -20547,6 +20666,7 @@ var me = moment.defineLocale('me', {
         future : 'za %s',
         past   : 'prije %s',
         s      : 'nekoliko sekundi',
+        ss     : translator.translate,
         m      : translator.translate,
         mm     : translator.translate,
         h      : translator.translate,
@@ -20616,6 +20736,7 @@ var mi = moment.defineLocale('mi', {
         future: 'i roto i %s',
         past: '%s i mua',
         s: 'te hēkona ruarua',
+        ss: '%d hēkona',
         m: 'he meneti',
         mm: '%d meneti',
         h: 'te haora',
@@ -20693,6 +20814,7 @@ var mk = moment.defineLocale('mk', {
         future : 'после %s',
         past : 'пред %s',
         s : 'неколку секунди',
+        ss : '%d секунди',
         m : 'минута',
         mm : '%d минути',
         h : 'час',
@@ -20777,6 +20899,7 @@ var ml = moment.defineLocale('ml', {
         future : '%s കഴിഞ്ഞ്',
         past : '%s മുൻപ്',
         s : 'അൽപ നിമിഷങ്ങൾ',
+        ss : '%d സെക്കൻഡ്',
         m : 'ഒരു മിനിറ്റ്',
         mm : '%d മിനിറ്റ്',
         h : 'ഒരു മണിക്കൂർ',
@@ -20868,6 +20991,7 @@ function relativeTimeMr(number, withoutSuffix, string, isFuture)
     if (withoutSuffix) {
         switch (string) {
             case 's': output = 'काही सेकंद'; break;
+            case 'ss': output = '%d सेकंद'; break;
             case 'm': output = 'एक मिनिट'; break;
             case 'mm': output = '%d मिनिटे'; break;
             case 'h': output = 'एक तास'; break;
@@ -20883,6 +21007,7 @@ function relativeTimeMr(number, withoutSuffix, string, isFuture)
     else {
         switch (string) {
             case 's': output = 'काही सेकंदां'; break;
+            case 'ss': output = '%d सेकंदां'; break;
             case 'm': output = 'एका मिनिटा'; break;
             case 'mm': output = '%d मिनिटां'; break;
             case 'h': output = 'एका तासा'; break;
@@ -20925,6 +21050,7 @@ var mr = moment.defineLocale('mr', {
         future: '%sमध्ये',
         past: '%sपूर्वी',
         s: relativeTimeMr,
+        ss: relativeTimeMr,
         m: relativeTimeMr,
         mm: relativeTimeMr,
         h: relativeTimeMr,
@@ -21050,6 +21176,7 @@ var ms = moment.defineLocale('ms', {
         future : 'dalam %s',
         past : '%s yang lepas',
         s : 'beberapa saat',
+        ss : '%d saat',
         m : 'seminit',
         mm : '%d minit',
         h : 'sejam',
@@ -21138,6 +21265,7 @@ var msMy = moment.defineLocale('ms-my', {
         future : 'dalam %s',
         past : '%s yang lepas',
         s : 'beberapa saat',
+        ss : '%d saat',
         m : 'seminit',
         mm : '%d minit',
         h : 'sejam',
@@ -21162,6 +21290,72 @@ return msMy;
 
 /***/ }),
 /* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+//! moment.js locale configuration
+//! locale : Maltese (Malta) [mt]
+//! author : Alessandro Maruccia : https://github.com/alesma
+
+;(function (global, factory) {
+    true ? factory(__webpack_require__(0)) :
+   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+   factory(global.moment)
+}(this, (function (moment) { 'use strict';
+
+
+var mt = moment.defineLocale('mt', {
+    months : 'Jannar_Frar_Marzu_April_Mejju_Ġunju_Lulju_Awwissu_Settembru_Ottubru_Novembru_Diċembru'.split('_'),
+    monthsShort : 'Jan_Fra_Mar_Apr_Mej_Ġun_Lul_Aww_Set_Ott_Nov_Diċ'.split('_'),
+    weekdays : 'Il-Ħadd_It-Tnejn_It-Tlieta_L-Erbgħa_Il-Ħamis_Il-Ġimgħa_Is-Sibt'.split('_'),
+    weekdaysShort : 'Ħad_Tne_Tli_Erb_Ħam_Ġim_Sib'.split('_'),
+    weekdaysMin : 'Ħa_Tn_Tl_Er_Ħa_Ġi_Si'.split('_'),
+    longDateFormat : {
+        LT : 'HH:mm',
+        LTS : 'HH:mm:ss',
+        L : 'DD/MM/YYYY',
+        LL : 'D MMMM YYYY',
+        LLL : 'D MMMM YYYY HH:mm',
+        LLLL : 'dddd, D MMMM YYYY HH:mm'
+    },
+    calendar : {
+        sameDay : '[Illum fil-]LT',
+        nextDay : '[Għada fil-]LT',
+        nextWeek : 'dddd [fil-]LT',
+        lastDay : '[Il-bieraħ fil-]LT',
+        lastWeek : 'dddd [li għadda] [fil-]LT',
+        sameElse : 'L'
+    },
+    relativeTime : {
+        future : 'f’ %s',
+        past : '%s ilu',
+        s : 'ftit sekondi',
+        ss : '%d sekondi',
+        m : 'minuta',
+        mm : '%d minuti',
+        h : 'siegħa',
+        hh : '%d siegħat',
+        d : 'ġurnata',
+        dd : '%d ġranet',
+        M : 'xahar',
+        MM : '%d xhur',
+        y : 'sena',
+        yy : '%d sni'
+    },
+    dayOfMonthOrdinalParse : /\d{1,2}º/,
+    ordinal: '%dº',
+    week : {
+        dow : 1, // Monday is the first day of the week.
+        doy : 4  // The week that contains Jan 4th is the first week of the year.
+    }
+});
+
+return mt;
+
+})));
+
+
+/***/ }),
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21229,6 +21423,7 @@ var my = moment.defineLocale('my', {
         future: 'လာမည့် %s မှာ',
         past: 'လွန်ခဲ့သော %s က',
         s: 'စက္ကန်.အနည်းငယ်',
+        ss : '%d စက္ကန့်',
         m: 'တစ်မိနစ်',
         mm: '%d မိနစ်',
         h: 'တစ်နာရီ',
@@ -21262,7 +21457,7 @@ return my;
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21305,6 +21500,7 @@ var nb = moment.defineLocale('nb', {
         future : 'om %s',
         past : '%s siden',
         s : 'noen sekunder',
+        ss : '%d sekunder',
         m : 'ett minutt',
         mm : '%d minutter',
         h : 'en time',
@@ -21330,7 +21526,7 @@ return nb;
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21435,6 +21631,7 @@ var ne = moment.defineLocale('ne', {
         future : '%sमा',
         past : '%s अगाडि',
         s : 'केही क्षण',
+        ss : '%d सेकेण्ड',
         m : 'एक मिनेट',
         mm : '%d मिनेट',
         h : 'एक घण्टा',
@@ -21458,7 +21655,7 @@ return ne;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21524,6 +21721,7 @@ var nl = moment.defineLocale('nl', {
         future : 'over %s',
         past : '%s geleden',
         s : 'een paar seconden',
+        ss : '%d seconden',
         m : 'één minuut',
         mm : '%d minuten',
         h : 'één uur',
@@ -21551,7 +21749,7 @@ return nl;
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21617,6 +21815,7 @@ var nlBe = moment.defineLocale('nl-be', {
         future : 'over %s',
         past : '%s geleden',
         s : 'een paar seconden',
+        ss : '%d seconden',
         m : 'één minuut',
         mm : '%d minuten',
         h : 'één uur',
@@ -21644,7 +21843,7 @@ return nlBe;
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21684,6 +21883,7 @@ var nn = moment.defineLocale('nn', {
         future : 'om %s',
         past : '%s sidan',
         s : 'nokre sekund',
+        ss : '%d sekund',
         m : 'eit minutt',
         mm : '%d minutt',
         h : 'ein time',
@@ -21709,7 +21909,7 @@ return nn;
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21775,6 +21975,7 @@ var paIn = moment.defineLocale('pa-in', {
         future : '%s ਵਿੱਚ',
         past : '%s ਪਿਛਲੇ',
         s : 'ਕੁਝ ਸਕਿੰਟ',
+        ss : '%d ਸਕਿੰਟ',
         m : 'ਇਕ ਮਿੰਟ',
         mm : '%d ਮਿੰਟ',
         h : 'ਇੱਕ ਘੰਟਾ',
@@ -21838,7 +22039,7 @@ return paIn;
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21860,6 +22061,8 @@ function plural(n) {
 function translate(number, withoutSuffix, key) {
     var result = number + ' ';
     switch (key) {
+        case 'ss':
+            return result + (plural(number) ? 'sekundy' : 'sekund');
         case 'm':
             return withoutSuffix ? 'minuta' : 'minutę';
         case 'mm':
@@ -21942,6 +22145,7 @@ var pl = moment.defineLocale('pl', {
         future : 'za %s',
         past : '%s temu',
         s : 'kilka sekund',
+        ss : translate,
         m : translate,
         mm : translate,
         h : translate,
@@ -21967,7 +22171,7 @@ return pl;
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22012,6 +22216,7 @@ var pt = moment.defineLocale('pt', {
         future : 'em %s',
         past : 'há %s',
         s : 'segundos',
+        ss : '%d segundos',
         m : 'um minuto',
         mm : '%d minutos',
         h : 'uma hora',
@@ -22037,7 +22242,7 @@ return pt;
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22104,7 +22309,7 @@ return ptBr;
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22121,6 +22326,7 @@ return ptBr;
 
 function relativeTimeWithPlural(number, withoutSuffix, key) {
     var format = {
+            'ss': 'secunde',
             'mm': 'minute',
             'hh': 'ore',
             'dd': 'zile',
@@ -22161,6 +22367,7 @@ var ro = moment.defineLocale('ro', {
         future : 'peste %s',
         past : '%s în urmă',
         s : 'câteva secunde',
+        ss : relativeTimeWithPlural,
         m : 'un minut',
         mm : relativeTimeWithPlural,
         h : 'o oră',
@@ -22184,7 +22391,7 @@ return ro;
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22206,6 +22413,7 @@ function plural(word, num) {
 }
 function relativeTimeWithPlural(number, withoutSuffix, key) {
     var format = {
+        'ss': withoutSuffix ? 'секунда_секунды_секунд' : 'секунду_секунды_секунд',
         'mm': withoutSuffix ? 'минута_минуты_минут' : 'минуту_минуты_минут',
         'hh': 'час_часа_часов',
         'dd': 'день_дня_дней',
@@ -22257,12 +22465,12 @@ var ru = moment.defineLocale('ru', {
     // Выражение, которое соотвествует только сокращённым формам
     monthsShortStrictRegex: /^(янв\.|февр?\.|мар[т.]|апр\.|ма[яй]|июн[ья.]|июл[ья.]|авг\.|сент?\.|окт\.|нояб?\.|дек\.)/i,
     longDateFormat : {
-        LT : 'HH:mm',
-        LTS : 'HH:mm:ss',
+        LT : 'H:mm',
+        LTS : 'H:mm:ss',
         L : 'DD.MM.YYYY',
         LL : 'D MMMM YYYY г.',
-        LLL : 'D MMMM YYYY г., HH:mm',
-        LLLL : 'dddd, D MMMM YYYY г., HH:mm'
+        LLL : 'D MMMM YYYY г., H:mm',
+        LLLL : 'dddd, D MMMM YYYY г., H:mm'
     },
     calendar : {
         sameDay: '[Сегодня в] LT',
@@ -22318,6 +22526,7 @@ var ru = moment.defineLocale('ru', {
         future : 'через %s',
         past : '%s назад',
         s : 'несколько секунд',
+        ss : relativeTimeWithPlural,
         m : relativeTimeWithPlural,
         mm : relativeTimeWithPlural,
         h : 'час',
@@ -22372,7 +22581,7 @@ return ru;
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22446,6 +22655,7 @@ var sd = moment.defineLocale('sd', {
         future : '%s پوء',
         past : '%s اڳ',
         s : 'چند سيڪنڊ',
+        ss : '%d سيڪنڊ',
         m : 'هڪ منٽ',
         mm : '%d منٽ',
         h : 'هڪ ڪلاڪ',
@@ -22475,7 +22685,7 @@ return sd;
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22516,6 +22726,7 @@ var se = moment.defineLocale('se', {
         future : '%s geažes',
         past : 'maŋit %s',
         s : 'moadde sekunddat',
+        ss: '%d sekunddat',
         m : 'okta minuhta',
         mm : '%d minuhtat',
         h : 'okta diimmu',
@@ -22541,7 +22752,7 @@ return se;
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22583,6 +22794,7 @@ var si = moment.defineLocale('si', {
         future : '%sකින්',
         past : '%sකට පෙර',
         s : 'තත්පර කිහිපය',
+        ss : 'තත්පර %d',
         m : 'මිනිත්තුව',
         mm : 'මිනිත්තු %d',
         h : 'පැය',
@@ -22617,7 +22829,7 @@ return si;
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22642,6 +22854,13 @@ function translate(number, withoutSuffix, key, isFuture) {
     switch (key) {
         case 's':  // a few seconds / in a few seconds / a few seconds ago
             return (withoutSuffix || isFuture) ? 'pár sekúnd' : 'pár sekundami';
+        case 'ss': // 9 seconds / in 9 seconds / 9 seconds ago
+            if (withoutSuffix || isFuture) {
+                return result + (plural(number) ? 'sekundy' : 'sekúnd');
+            } else {
+                return result + 'sekundami';
+            }
+            break;
         case 'm':  // a minute / in a minute / a minute ago
             return withoutSuffix ? 'minúta' : (isFuture ? 'minútu' : 'minútou');
         case 'mm': // 9 minutes / in 9 minutes / 9 minutes ago
@@ -22747,6 +22966,7 @@ var sk = moment.defineLocale('sk', {
         future : 'za %s',
         past : 'pred %s',
         s : translate,
+        ss : translate,
         m : translate,
         mm : translate,
         h : translate,
@@ -22772,7 +22992,7 @@ return sk;
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22791,6 +23011,17 @@ function processRelativeTime(number, withoutSuffix, key, isFuture) {
     switch (key) {
         case 's':
             return withoutSuffix || isFuture ? 'nekaj sekund' : 'nekaj sekundami';
+        case 'ss':
+            if (number === 1) {
+                result += withoutSuffix ? 'sekundo' : 'sekundi';
+            } else if (number === 2) {
+                result += withoutSuffix || isFuture ? 'sekundi' : 'sekundah';
+            } else if (number < 5) {
+                result += withoutSuffix || isFuture ? 'sekunde' : 'sekundah';
+            } else {
+                result += withoutSuffix || isFuture ? 'sekund' : 'sekund';
+            }
+            return result;
         case 'm':
             return withoutSuffix ? 'ena minuta' : 'eno minuto';
         case 'mm':
@@ -22914,6 +23145,7 @@ var sl = moment.defineLocale('sl', {
         future : 'čez %s',
         past   : 'pred %s',
         s      : processRelativeTime,
+        ss     : processRelativeTime,
         m      : processRelativeTime,
         mm     : processRelativeTime,
         h      : processRelativeTime,
@@ -22939,7 +23171,7 @@ return sl;
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22989,6 +23221,7 @@ var sq = moment.defineLocale('sq', {
         future : 'në %s',
         past : '%s më parë',
         s : 'disa sekonda',
+        ss : '%d sekonda',
         m : 'një minutë',
         mm : '%d minuta',
         h : 'një orë',
@@ -23014,7 +23247,7 @@ return sq;
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23030,6 +23263,7 @@ return sq;
 
 var translator = {
     words: { //Different grammatical cases
+        ss: ['sekunda', 'sekunde', 'sekundi'],
         m: ['jedan minut', 'jedne minute'],
         mm: ['minut', 'minute', 'minuta'],
         h: ['jedan sat', 'jednog sata'],
@@ -23104,6 +23338,7 @@ var sr = moment.defineLocale('sr', {
         future : 'za %s',
         past   : 'pre %s',
         s      : 'nekoliko sekundi',
+        ss     : translator.translate,
         m      : translator.translate,
         mm     : translator.translate,
         h      : translator.translate,
@@ -23129,7 +23364,7 @@ return sr;
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23145,6 +23380,7 @@ return sr;
 
 var translator = {
     words: { //Different grammatical cases
+        ss: ['секунда', 'секунде', 'секунди'],
         m: ['један минут', 'једне минуте'],
         mm: ['минут', 'минуте', 'минута'],
         h: ['један сат', 'једног сата'],
@@ -23219,6 +23455,7 @@ var srCyrl = moment.defineLocale('sr-cyrl', {
         future : 'за %s',
         past   : 'пре %s',
         s      : 'неколико секунди',
+        ss     : translator.translate,
         m      : translator.translate,
         mm     : translator.translate,
         h      : translator.translate,
@@ -23244,7 +23481,7 @@ return srCyrl;
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23286,6 +23523,7 @@ var ss = moment.defineLocale('ss', {
         future : 'nga %s',
         past : 'wenteka nga %s',
         s : 'emizuzwana lomcane',
+        ss : '%d mzuzwana',
         m : 'umzuzu',
         mm : '%d emizuzu',
         h : 'lihora',
@@ -23338,7 +23576,7 @@ return ss;
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23380,6 +23618,7 @@ var sv = moment.defineLocale('sv', {
         future : 'om %s',
         past : 'för %s sedan',
         s : 'några sekunder',
+        ss : '%d sekunder',
         m : 'en minut',
         mm : '%d minuter',
         h : 'en timme',
@@ -23412,7 +23651,7 @@ return sv;
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23453,6 +23692,7 @@ var sw = moment.defineLocale('sw', {
         future : '%s baadaye',
         past : 'tokea %s',
         s : 'hivi punde',
+        ss : 'sekunde %d',
         m : 'dakika moja',
         mm : 'dakika %d',
         h : 'saa limoja',
@@ -23476,7 +23716,7 @@ return sw;
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23541,6 +23781,7 @@ var ta = moment.defineLocale('ta', {
         future : '%s இல்',
         past : '%s முன்',
         s : 'ஒரு சில விநாடிகள்',
+        ss : '%d விநாடிகள்',
         m : 'ஒரு நிமிடம்',
         mm : '%d நிமிடங்கள்',
         h : 'ஒரு மணி நேரம்',
@@ -23611,7 +23852,7 @@ return ta;
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23652,6 +23893,7 @@ var te = moment.defineLocale('te', {
         future : '%s లో',
         past : '%s క్రితం',
         s : 'కొన్ని క్షణాలు',
+        ss : '%d సెకన్లు',
         m : 'ఒక నిమిషం',
         mm : '%d నిమిషాలు',
         h : 'ఒక గంట',
@@ -23705,7 +23947,7 @@ return te;
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23746,6 +23988,7 @@ var tet = moment.defineLocale('tet', {
         future : 'iha %s',
         past : '%s liuba',
         s : 'minutu balun',
+        ss : 'minutu %d',
         m : 'minutu ida',
         mm : 'minutus %d',
         h : 'horas ida',
@@ -23778,7 +24021,7 @@ return tet;
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23831,6 +24074,7 @@ var th = moment.defineLocale('th', {
         future : 'อีก %s',
         past : '%sที่แล้ว',
         s : 'ไม่กี่วินาที',
+        ss : '%d วินาที',
         m : '1 นาที',
         mm : '%d นาที',
         h : '1 ชั่วโมง',
@@ -23850,7 +24094,7 @@ return th;
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23890,6 +24134,7 @@ var tlPh = moment.defineLocale('tl-ph', {
         future : 'sa loob ng %s',
         past : '%s ang nakalipas',
         s : 'ilang segundo',
+        ss : '%d segundo',
         m : 'isang minuto',
         mm : '%d minuto',
         h : 'isang oras',
@@ -23917,7 +24162,7 @@ return tlPh;
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23960,6 +24205,8 @@ function translatePast(output) {
 function translate(number, withoutSuffix, string, isFuture) {
     var numberNoun = numberAsNoun(number);
     switch (string) {
+        case 'ss':
+            return numberNoun + ' lup';
         case 'mm':
             return numberNoun + ' tup';
         case 'hh':
@@ -24017,6 +24264,7 @@ var tlh = moment.defineLocale('tlh', {
         future : translateFuture,
         past : translatePast,
         s : 'puS lup',
+        ss : translate,
         m : 'wa’ tup',
         mm : translate,
         h : 'wa’ rep',
@@ -24042,7 +24290,7 @@ return tlh;
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24104,6 +24352,7 @@ var tr = moment.defineLocale('tr', {
         future : '%s sonra',
         past : '%s önce',
         s : 'birkaç saniye',
+        ss : '%d saniye',
         m : 'bir dakika',
         mm : '%d dakika',
         h : 'bir saat',
@@ -24137,7 +24386,7 @@ return tr;
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24191,6 +24440,7 @@ var tzl = moment.defineLocale('tzl', {
         future : 'osprei %s',
         past : 'ja%s',
         s : processRelativeTime,
+        ss : processRelativeTime,
         m : processRelativeTime,
         mm : processRelativeTime,
         h : processRelativeTime,
@@ -24213,6 +24463,7 @@ var tzl = moment.defineLocale('tzl', {
 function processRelativeTime(number, withoutSuffix, key, isFuture) {
     var format = {
         's': ['viensas secunds', '\'iensas secunds'],
+        'ss': [number + ' secunds', '' + number + ' secunds'],
         'm': ['\'n míut', '\'iens míut'],
         'mm': [number + ' míuts', '' + number + ' míuts'],
         'h': ['\'n þora', '\'iensa þora'],
@@ -24233,7 +24484,7 @@ return tzl;
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24273,6 +24524,7 @@ var tzm = moment.defineLocale('tzm', {
         future : 'ⴷⴰⴷⵅ ⵙ ⵢⴰⵏ %s',
         past : 'ⵢⴰⵏ %s',
         s : 'ⵉⵎⵉⴽ',
+        ss : '%d ⵉⵎⵉⴽ',
         m : 'ⵎⵉⵏⵓⴺ',
         mm : '%d ⵎⵉⵏⵓⴺ',
         h : 'ⵙⴰⵄⴰ',
@@ -24296,7 +24548,7 @@ return tzm;
 
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24336,6 +24588,7 @@ var tzmLatn = moment.defineLocale('tzm-latn', {
         future : 'dadkh s yan %s',
         past : 'yan %s',
         s : 'imik',
+        ss : '%d imik',
         m : 'minuḍ',
         mm : '%d minuḍ',
         h : 'saɛa',
@@ -24359,7 +24612,7 @@ return tzmLatn;
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24380,6 +24633,7 @@ function plural(word, num) {
 }
 function relativeTimeWithPlural(number, withoutSuffix, key) {
     var format = {
+        'ss': withoutSuffix ? 'секунда_секунди_секунд' : 'секунду_секунди_секунд',
         'mm': withoutSuffix ? 'хвилина_хвилини_хвилин' : 'хвилину_хвилини_хвилин',
         'hh': withoutSuffix ? 'година_години_годин' : 'годину_години_годин',
         'dd': 'день_дні_днів',
@@ -24461,6 +24715,7 @@ var uk = moment.defineLocale('uk', {
         future : 'за %s',
         past : '%s тому',
         s : 'декілька секунд',
+        ss : relativeTimeWithPlural,
         m : relativeTimeWithPlural,
         mm : relativeTimeWithPlural,
         h : 'годину',
@@ -24515,7 +24770,7 @@ return uk;
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24590,6 +24845,7 @@ var ur = moment.defineLocale('ur', {
         future : '%s بعد',
         past : '%s قبل',
         s : 'چند سیکنڈ',
+        ss : '%d سیکنڈ',
         m : 'ایک منٹ',
         mm : '%d منٹ',
         h : 'ایک گھنٹہ',
@@ -24619,7 +24875,7 @@ return ur;
 
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24659,6 +24915,7 @@ var uz = moment.defineLocale('uz', {
         future : 'Якин %s ичида',
         past : 'Бир неча %s олдин',
         s : 'фурсат',
+        ss : '%d фурсат',
         m : 'бир дакика',
         mm : '%d дакика',
         h : 'бир соат',
@@ -24682,7 +24939,7 @@ return uz;
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24722,6 +24979,7 @@ var uzLatn = moment.defineLocale('uz-latn', {
         future : 'Yaqin %s ichida',
         past : 'Bir necha %s oldin',
         s : 'soniya',
+        ss : '%d soniya',
         m : 'bir daqiqa',
         mm : '%d daqiqa',
         h : 'bir soat',
@@ -24745,7 +25003,7 @@ return uzLatn;
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24802,6 +25060,7 @@ var vi = moment.defineLocale('vi', {
         future : '%s tới',
         past : '%s trước',
         s : 'vài giây',
+        ss : '%d giây' ,
         m : 'một phút',
         mm : '%d phút',
         h : 'một giờ',
@@ -24829,7 +25088,7 @@ return vi;
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24870,6 +25129,7 @@ var xPseudo = moment.defineLocale('x-pseudo', {
         future : 'í~ñ %s',
         past : '%s á~gó',
         s : 'á ~féw ~sécó~ñds',
+        ss : '%d s~écóñ~ds',
         m : 'á ~míñ~úté',
         mm : '%d m~íñú~tés',
         h : 'á~ñ hó~úr',
@@ -24902,7 +25162,7 @@ return xPseudo;
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24942,6 +25202,7 @@ var yo = moment.defineLocale('yo', {
         future : 'ní %s',
         past : '%s kọjá',
         s : 'ìsẹjú aayá die',
+        ss :'aayá %d',
         m : 'ìsẹjú kan',
         mm : 'ìsẹjú %d',
         h : 'wákati kan',
@@ -24967,7 +25228,7 @@ return yo;
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24991,14 +25252,14 @@ var zhCn = moment.defineLocale('zh-cn', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'YYYY年MMMD日',
-        LL : 'YYYY年MMMD日',
-        LLL : 'YYYY年MMMD日Ah点mm分',
-        LLLL : 'YYYY年MMMD日ddddAh点mm分',
-        l : 'YYYY年MMMD日',
-        ll : 'YYYY年MMMD日',
-        lll : 'YYYY年MMMD日 HH:mm',
-        llll : 'YYYY年MMMD日dddd HH:mm'
+        L : 'YYYY/MM/DD',
+        LL : 'YYYY年M月D日',
+        LLL : 'YYYY年M月D日Ah点mm分',
+        LLLL : 'YYYY年M月D日ddddAh点mm分',
+        l : 'YYYY/M/D',
+        ll : 'YYYY年M月D日',
+        lll : 'YYYY年M月D日 HH:mm',
+        llll : 'YYYY年M月D日dddd HH:mm'
     },
     meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
     meridiemHour: function (hour, meridiem) {
@@ -25059,6 +25320,7 @@ var zhCn = moment.defineLocale('zh-cn', {
         future : '%s内',
         past : '%s前',
         s : '几秒',
+        ss : '%d 秒',
         m : '1 分钟',
         mm : '%d 分钟',
         h : '1 小时',
@@ -25083,7 +25345,7 @@ return zhCn;
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25108,14 +25370,14 @@ var zhHk = moment.defineLocale('zh-hk', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'YYYY年MMMD日',
-        LL : 'YYYY年MMMD日',
-        LLL : 'YYYY年MMMD日 HH:mm',
-        LLLL : 'YYYY年MMMD日dddd HH:mm',
-        l : 'YYYY年MMMD日',
-        ll : 'YYYY年MMMD日',
-        lll : 'YYYY年MMMD日 HH:mm',
-        llll : 'YYYY年MMMD日dddd HH:mm'
+        L : 'YYYY/MM/DD',
+        LL : 'YYYY年M月D日',
+        LLL : 'YYYY年M月D日 HH:mm',
+        LLLL : 'YYYY年M月D日dddd HH:mm',
+        l : 'YYYY/M/D',
+        ll : 'YYYY年M月D日',
+        lll : 'YYYY年M月D日 HH:mm',
+        llll : 'YYYY年M月D日dddd HH:mm'
     },
     meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
     meridiemHour : function (hour, meridiem) {
@@ -25174,6 +25436,7 @@ var zhHk = moment.defineLocale('zh-hk', {
         future : '%s內',
         past : '%s前',
         s : '幾秒',
+        ss : '%d 秒',
         m : '1 分鐘',
         mm : '%d 分鐘',
         h : '1 小時',
@@ -25193,7 +25456,7 @@ return zhHk;
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25217,14 +25480,14 @@ var zhTw = moment.defineLocale('zh-tw', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'YYYY年MMMD日',
-        LL : 'YYYY年MMMD日',
-        LLL : 'YYYY年MMMD日 HH:mm',
-        LLLL : 'YYYY年MMMD日dddd HH:mm',
-        l : 'YYYY年MMMD日',
-        ll : 'YYYY年MMMD日',
-        lll : 'YYYY年MMMD日 HH:mm',
-        llll : 'YYYY年MMMD日dddd HH:mm'
+        L : 'YYYY/MM/DD',
+        LL : 'YYYY年M月D日',
+        LLL : 'YYYY年M月D日 HH:mm',
+        LLLL : 'YYYY年M月D日dddd HH:mm',
+        l : 'YYYY/M/D',
+        ll : 'YYYY年M月D日',
+        lll : 'YYYY年M月D日 HH:mm',
+        llll : 'YYYY年M月D日dddd HH:mm'
     },
     meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
     meridiemHour : function (hour, meridiem) {
@@ -25283,6 +25546,7 @@ var zhTw = moment.defineLocale('zh-tw', {
         future : '%s內',
         past : '%s前',
         s : '幾秒',
+        ss : '%d 秒',
         m : '1 分鐘',
         mm : '%d 分鐘',
         h : '1 小時',
@@ -25302,17 +25566,17 @@ return zhTw;
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseKeys = __webpack_require__(193),
-    getTag = __webpack_require__(195),
-    isArguments = __webpack_require__(166),
+var baseKeys = __webpack_require__(196),
+    getTag = __webpack_require__(198),
+    isArguments = __webpack_require__(167),
     isArray = __webpack_require__(13),
-    isArrayLike = __webpack_require__(208),
-    isBuffer = __webpack_require__(209),
-    isPrototype = __webpack_require__(160),
-    isTypedArray = __webpack_require__(211);
+    isArrayLike = __webpack_require__(211),
+    isBuffer = __webpack_require__(212),
+    isPrototype = __webpack_require__(161),
+    isTypedArray = __webpack_require__(214);
 
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
@@ -25385,7 +25649,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -25409,7 +25673,7 @@ module.exports = isPrototype;
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports) {
 
 /**
@@ -25430,11 +25694,11 @@ module.exports = overArg;
 
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
-    isObject = __webpack_require__(30);
+    isObject = __webpack_require__(29);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -25473,7 +25737,7 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -25481,10 +25745,10 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 module.exports = freeGlobal;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(198)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(201)))
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -25516,10 +25780,10 @@ module.exports = toSource;
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(16),
+var getNative = __webpack_require__(15),
     root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
@@ -25529,10 +25793,10 @@ module.exports = Map;
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsArguments = __webpack_require__(207),
+var baseIsArguments = __webpack_require__(210),
     isObjectLike = __webpack_require__(12);
 
 /** Used for built-in method references. */
@@ -25571,11 +25835,11 @@ module.exports = isArguments;
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
-    getPrototype = __webpack_require__(216),
+    getPrototype = __webpack_require__(219),
     isObjectLike = __webpack_require__(12);
 
 /** `Object#toString` result references. */
@@ -25639,13 +25903,67 @@ module.exports = isPlainObject;
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(32),
-    arrayMap = __webpack_require__(219),
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Immutable$OrderedMap;
+
+exports.default = getApiBaseUrl;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _ApiNames = __webpack_require__(5);
+
+var ApiNames = _interopRequireWildcard(_ApiNames);
+
+var _ApiPaths = __webpack_require__(9);
+
+var ApiPaths = _interopRequireWildcard(_ApiPaths);
+
+var _Configuration = __webpack_require__(19);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/* eslint-disable key-spacing */
+var API_TO_PATH_MAP = _immutable2.default.OrderedMap((_Immutable$OrderedMap = {}, _defineProperty(_Immutable$OrderedMap, ApiNames.ANALYSIS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.ANALYSIS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.APP_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.APP_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.AUTHORIZATION_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.AUTHORIZATIONS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.DATA_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.DATA_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.DATA_SOURCES_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.DATA_SOURCES_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.EDM_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.EDM_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.LINKING_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.LINKING_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.ORGANIZATIONS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.ORGANIZATIONS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.PERMISSIONS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.PERMISSIONS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.PRINCIPALS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.PRINCIPALS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.REQUESTS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.REQUESTS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.SEARCH_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.SEARCH_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.SYNC_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.SYNC_PATH), _Immutable$OrderedMap));
+/* eslint-enable */
+
+function getApiBaseUrl(api) {
+
+  if (!(0, _LangUtils.isNonEmptyString)(api)) {
+    throw new Error('invalid parameter: api must be a non-empty string');
+  }
+
+  if (!API_TO_PATH_MAP.has(api)) {
+    throw new Error('unknown api: ' + api);
+  }
+
+  return (0, _Configuration.getConfig)().get('baseUrl') + '/' + API_TO_PATH_MAP.get(api);
+}
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(28),
+    arrayMap = __webpack_require__(222),
     isArray = __webpack_require__(13),
-    isSymbol = __webpack_require__(34);
+    isSymbol = __webpack_require__(31);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -25682,12 +26000,12 @@ module.exports = baseToString;
 
 
 /***/ }),
-/* 169 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseFindIndex = __webpack_require__(223),
-    baseIsNaN = __webpack_require__(224),
-    strictIndexOf = __webpack_require__(225);
+var baseFindIndex = __webpack_require__(226),
+    baseIsNaN = __webpack_require__(227),
+    strictIndexOf = __webpack_require__(228);
 
 /**
  * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
@@ -25708,10 +26026,10 @@ module.exports = baseIndexOf;
 
 
 /***/ }),
-/* 170 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseToString = __webpack_require__(168);
+var baseToString = __webpack_require__(170);
 
 /**
  * Converts `value` to a string. An empty string is returned for `null`
@@ -25742,302 +26060,510 @@ module.exports = toString;
 
 
 /***/ }),
-/* 171 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.AclBuilder = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-exports.isValid = isValid;
-
-var _has = __webpack_require__(7);
-
-var _has2 = _interopRequireDefault(_has);
-
-var _Ace = __webpack_require__(36);
-
-var _Ace2 = _interopRequireDefault(_Ace);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var LOG = new _Logger2.default('Acl');
-
-/**
- * @class Acl
- * @memberof lattice
- */
-
-var Acl = function Acl(aclKey, aces) {
-  _classCallCheck(this, Acl);
-
-  this.aclKey = aclKey;
-  this.aces = aces;
-};
-
-/**
- * @class AclBuilder
- * @memberof lattice
- */
-
-
-exports.default = Acl;
-
-var AclBuilder = exports.AclBuilder = function () {
-  function AclBuilder() {
-    _classCallCheck(this, AclBuilder);
-  }
-
-  _createClass(AclBuilder, [{
-    key: 'setAclKey',
-    value: function setAclKey(aclKey) {
-
-      if (!(0, _LangUtils.isDefined)(aclKey) || (0, _LangUtils.isEmptyArray)(aclKey)) {
-        return this;
-      }
-
-      if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
-        throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
-      }
-
-      this.aclKey = aclKey;
-      return this;
-    }
-  }, {
-    key: 'setAces',
-    value: function setAces(aces) {
-
-      if (!(0, _LangUtils.isDefined)(aces) || (0, _LangUtils.isEmptyArray)(aces)) {
-        return this;
-      }
-
-      if (!(0, _ValidationUtils.isValidAceArray)(aces)) {
-        throw new Error('invalid parameter: aces must be a non-empty array of valid Aces');
-      }
-
-      this.aces = aces;
-      return this;
-    }
-  }, {
-    key: 'build',
-    value: function build() {
-
-      if (!this.aclKey) {
-        this.aclKey = [];
-      }
-
-      if (!this.aces) {
-        this.aces = [];
-      }
-
-      return new Acl(this.aclKey, this.aces);
-    }
-  }]);
-
-  return AclBuilder;
-}();
-
-function isValid(acl) {
-
-  if (!(0, _LangUtils.isDefined)(acl)) {
-
-    LOG.error('invalid parameter: acl must be defined', acl);
-    return false;
-  }
-
-  if (!(0, _has2.default)(acl, 'aclKey') || !(0, _has2.default)(acl, 'aces')) {
-
-    LOG.error('missing properties: acl is missing required properties');
-    return false;
-  }
-
-  try {
-
-    new AclBuilder().setAclKey(acl.aclKey).setAces(acl.aces).build();
-
-    return true;
-  } catch (e) {
-
-    LOG.error(e, acl);
-    return false;
-  }
-}
-
-/***/ }),
-/* 172 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.AclDataBuilder = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-exports.isValid = isValid;
-
-var _ActionTypes = __webpack_require__(39);
-
-var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _Acl = __webpack_require__(171);
-
-var _Acl2 = _interopRequireDefault(_Acl);
-
-var _LangUtils = __webpack_require__(2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var LOG = new _Logger2.default('AclData');
-
-/**
- * @class AclData
- * @memberof lattice
- */
-
-var AclData = function AclData(acl, action) {
-  _classCallCheck(this, AclData);
-
-  this.acl = acl;
-  this.action = action;
-};
-
-/**
- * @class AclDataBuilder
- * @memberof lattice
- */
-
-
-exports.default = AclData;
-
-var AclDataBuilder = exports.AclDataBuilder = function () {
-  function AclDataBuilder() {
-    _classCallCheck(this, AclDataBuilder);
-  }
-
-  _createClass(AclDataBuilder, [{
-    key: 'setAcl',
-    value: function setAcl(acl) {
-
-      if (!(0, _Acl.isValid)(acl)) {
-        throw new Error('invalid parameter: acl must be a valid Acl');
-      }
-
-      this.acl = acl;
-      return this;
-    }
-  }, {
-    key: 'setAction',
-    value: function setAction(action) {
-
-      if (!(0, _LangUtils.isNonEmptyString)(action) || !_ActionTypes2.default[action]) {
-        throw new Error('invalid parameter: action must be a valid Action');
-      }
-
-      this.action = action;
-      return this;
-    }
-  }, {
-    key: 'build',
-    value: function build() {
-
-      if (!this.acl) {
-        throw new Error('missing property: acl is a required property');
-      }
-
-      if (!this.action) {
-        throw new Error('missing property: action is a required property');
-      }
-
-      return new AclData(this.acl, this.action);
-    }
-  }]);
-
-  return AclDataBuilder;
-}();
-
-function isValid(aclData) {
-
-  if (!(0, _LangUtils.isDefined)(aclData)) {
-
-    LOG.error('invalid parameter: aclData must be defined', aclData);
-    return false;
-  }
-
-  try {
-
-    new AclDataBuilder().setAcl(aclData.acl).setAction(aclData.action).build();
-
-    return true;
-  } catch (e) {
-
-    LOG.error(e, aclData);
-    return false;
-  }
-}
-
-/***/ }),
 /* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isObjectLike = __webpack_require__(12);
+"use strict";
 
-/** `Object#toString` result references. */
-var boolTag = '[object Boolean]';
 
-/**
- * Checks if `value` is classified as a boolean primitive or object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a boolean, else `false`.
- * @example
- *
- * _.isBoolean(false);
- * // => true
- *
- * _.isBoolean(null);
- * // => false
- */
-function isBoolean(value) {
-  return value === true || value === false ||
-    (isObjectLike(value) && baseGetTag(value) == boolTag);
-}
-
-module.exports = isBoolean;
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
 
 
 /***/ }),
 /* 174 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(7);
+var settle = __webpack_require__(241);
+var buildURL = __webpack_require__(243);
+var parseHeaders = __webpack_require__(244);
+var isURLSameOrigin = __webpack_require__(245);
+var createError = __webpack_require__(176);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(246);
+
+module.exports = function xhrAdapter(config) {
+  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    var requestData = config.data;
+    var requestHeaders = config.headers;
+
+    if (utils.isFormData(requestData)) {
+      delete requestHeaders['Content-Type']; // Let the browser set it
+    }
+
+    var request = new XMLHttpRequest();
+    var loadEvent = 'onreadystatechange';
+    var xDomain = false;
+
+    // For IE 8/9 CORS support
+    // Only supports POST and GET calls and doesn't returns the response headers.
+    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
+    if (process.env.NODE_ENV !== 'test' &&
+        typeof window !== 'undefined' &&
+        window.XDomainRequest && !('withCredentials' in request) &&
+        !isURLSameOrigin(config.url)) {
+      request = new window.XDomainRequest();
+      loadEvent = 'onload';
+      xDomain = true;
+      request.onprogress = function handleProgress() {};
+      request.ontimeout = function handleTimeout() {};
+    }
+
+    // HTTP basic authentication
+    if (config.auth) {
+      var username = config.auth.username || '';
+      var password = config.auth.password || '';
+      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    }
+
+    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+
+    // Set the request timeout in MS
+    request.timeout = config.timeout;
+
+    // Listen for ready state
+    request[loadEvent] = function handleLoad() {
+      if (!request || (request.readyState !== 4 && !xDomain)) {
+        return;
+      }
+
+      // The request errored out and we didn't get a response, this will be
+      // handled by onerror instead
+      // With one exception: request that using file: protocol, most browsers
+      // will return status as 0 even though it's a successful request
+      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+        return;
+      }
+
+      // Prepare the response
+      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var response = {
+        data: responseData,
+        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
+        status: request.status === 1223 ? 204 : request.status,
+        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+        headers: responseHeaders,
+        config: config,
+        request: request
+      };
+
+      settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle low level network errors
+    request.onerror = function handleError() {
+      // Real errors are hidden from us by the browser
+      // onerror should only fire if it's a network error
+      reject(createError('Network Error', config, null, request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle timeout
+    request.ontimeout = function handleTimeout() {
+      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
+        request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Add xsrf header
+    // This is only done if running in a standard browser environment.
+    // Specifically not if we're in a web worker, or react-native.
+    if (utils.isStandardBrowserEnv()) {
+      var cookies = __webpack_require__(247);
+
+      // Add xsrf header
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
+          cookies.read(config.xsrfCookieName) :
+          undefined;
+
+      if (xsrfValue) {
+        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // Add headers to the request
+    if ('setRequestHeader' in request) {
+      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+          // Remove Content-Type if data is undefined
+          delete requestHeaders[key];
+        } else {
+          // Otherwise add header to the request
+          request.setRequestHeader(key, val);
+        }
+      });
+    }
+
+    // Add withCredentials to request if needed
+    if (config.withCredentials) {
+      request.withCredentials = true;
+    }
+
+    // Add responseType to request if needed
+    if (config.responseType) {
+      try {
+        request.responseType = config.responseType;
+      } catch (e) {
+        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
+        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
+        if (config.responseType !== 'json') {
+          throw e;
+        }
+      }
+    }
+
+    // Handle progress if needed
+    if (typeof config.onDownloadProgress === 'function') {
+      request.addEventListener('progress', config.onDownloadProgress);
+    }
+
+    // Not all browsers support upload events
+    if (typeof config.onUploadProgress === 'function' && request.upload) {
+      request.upload.addEventListener('progress', config.onUploadProgress);
+    }
+
+    if (config.cancelToken) {
+      // Handle cancellation
+      config.cancelToken.promise.then(function onCanceled(cancel) {
+        if (!request) {
+          return;
+        }
+
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
+    }
+
+    if (requestData === undefined) {
+      requestData = null;
+    }
+
+    // Send the request
+    request.send(requestData);
+  });
+};
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(174)))
+
+/***/ }),
+/* 176 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var enhanceError = __webpack_require__(242);
+
+/**
+ * Create an Error with the specified message, config, error code, request and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, request, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, request, response);
+};
+
+
+/***/ }),
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+
+/***/ }),
+/* 178 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+
+/***/ }),
+/* 179 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = merge;
+function merge() {
+  var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var defaults = arguments[1];
+
+  for (var key in defaults) {
+    if (typeof obj[key] === 'undefined') {
+      obj[key] = defaults[key];
+    }
+  }
+  return obj;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 180 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var METAPHONE = 'METAPHONE';
+var STANDARD = 'STANDARD';
+
+var AnalyzerTypes = {
+  METAPHONE: METAPHONE,
+  STANDARD: STANDARD
+};
+
+exports.default = AnalyzerTypes;
+
+/***/ }),
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26056,7 +26582,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -26213,7 +26739,261 @@ function isValid(dataSource) {
 }
 
 /***/ }),
-/* 175 */
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SchemaBuilder = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.isValid = isValid;
+
+var _EntityType = __webpack_require__(17);
+
+var _EntityType2 = _interopRequireDefault(_EntityType);
+
+var _FullyQualifiedName = __webpack_require__(16);
+
+var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
+
+var _PropertyType = __webpack_require__(25);
+
+var _PropertyType2 = _interopRequireDefault(_PropertyType);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LOG = new _Logger2.default('Schema');
+
+/**
+ * @class Schema
+ * @memberof lattice
+ */
+
+var Schema = function Schema(fqn, entityTypes, propertyTypes) {
+  _classCallCheck(this, Schema);
+
+  this.fqn = fqn;
+  this.entityTypes = entityTypes;
+  this.propertyTypes = propertyTypes;
+};
+
+/**
+ * @class SchemaBuilder
+ * @memberof lattice
+ */
+
+
+exports.default = Schema;
+
+var SchemaBuilder = exports.SchemaBuilder = function () {
+  function SchemaBuilder() {
+    _classCallCheck(this, SchemaBuilder);
+  }
+
+  _createClass(SchemaBuilder, [{
+    key: 'setFullyQualifiedName',
+    value: function setFullyQualifiedName(fqn) {
+
+      if (!_FullyQualifiedName2.default.isValid(fqn)) {
+        throw new Error('invalid parameter: fqn must be a valid FQN');
+      }
+
+      this.fqn = fqn;
+      return this;
+    }
+  }, {
+    key: 'setEntityTypes',
+    value: function setEntityTypes(entityTypes) {
+
+      if (!(0, _ValidationUtils.isValidEntityTypeArray)(entityTypes)) {
+        throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
+      }
+
+      this.entityTypes = entityTypes;
+      return this;
+    }
+  }, {
+    key: 'setPropertyTypes',
+    value: function setPropertyTypes(propertyTypes) {
+
+      if (!(0, _ValidationUtils.isValidPropertyTypeArray)(propertyTypes)) {
+        throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
+      }
+
+      this.propertyTypes = propertyTypes;
+      return this;
+    }
+  }, {
+    key: 'build',
+    value: function build() {
+
+      if (!this.fqn) {
+        throw new Error('missing property: fqn is a required property');
+      }
+
+      if (!this.entityTypes) {
+        throw new Error('missing property: entityTypes is a required property');
+      }
+
+      if (!this.propertyTypes) {
+        throw new Error('missing property: propertyTypes is a required property');
+      }
+
+      return new Schema(this.fqn, this.entityTypes, this.propertyTypes);
+    }
+  }]);
+
+  return SchemaBuilder;
+}();
+
+function isValid(schema) {
+
+  if (!(0, _LangUtils.isDefined)(schema)) {
+
+    LOG.error('invalid parameter: schema must be defined', schema);
+    return false;
+  }
+
+  try {
+
+    new SchemaBuilder().setFullyQualifiedName(schema.fqn).setEntityTypes(schema.entityTypes).setPropertyTypes(schema.propertyTypes).build();
+
+    return true;
+  } catch (e) {
+
+    LOG.error(e, schema);
+    return false;
+  }
+}
+
+/***/ }),
+/* 183 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LinkingRequestBuilder = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.isValid = isValid;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LinkingEntitySet = __webpack_require__(184);
+
+var _LinkingEntitySet2 = _interopRequireDefault(_LinkingEntitySet);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LOG = new _Logger2.default('LinkingRequest');
+
+var LinkingRequest = function LinkingRequest(linkingEntitySet, propertyTypeIds) {
+  _classCallCheck(this, LinkingRequest);
+
+  this.linkingEntitySet = linkingEntitySet;
+  this.propertyTypeIds = propertyTypeIds;
+};
+
+exports.default = LinkingRequest;
+
+var LinkingRequestBuilder = exports.LinkingRequestBuilder = function () {
+  function LinkingRequestBuilder() {
+    _classCallCheck(this, LinkingRequestBuilder);
+  }
+
+  _createClass(LinkingRequestBuilder, [{
+    key: 'setLinkingEntitySet',
+    value: function setLinkingEntitySet(linkingEntitySet) {
+
+      if (!(0, _LinkingEntitySet.isValid)(linkingEntitySet)) {
+        throw new Error('invalid parameter: linkingEntitySet must be a valid LinkingEntitySet');
+      }
+
+      this.linkingEntitySet = linkingEntitySet;
+      return this;
+    }
+  }, {
+    key: 'setPropertyTypeIds',
+    value: function setPropertyTypeIds(propertyTypeIds) {
+
+      if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
+        throw new Error('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
+      }
+
+      this.propertyTypeIds = propertyTypeIds;
+
+      return this;
+    }
+  }, {
+    key: 'build',
+    value: function build() {
+
+      if (!this.linkingEntitySet) {
+        throw new Error('missing property: linkingEntitySet is a required property');
+      }
+
+      if (!this.propertyTypeIds) {
+        throw new Error('missing property: propertyTypeIds is a required property');
+      }
+
+      return new LinkingRequest(this.linkingEntitySet, this.propertyTypeIds);
+    }
+  }]);
+
+  return LinkingRequestBuilder;
+}();
+
+function isValid(linkingRequest) {
+
+  if (!(0, _LangUtils.isDefined)(linkingRequest)) {
+
+    LOG.error('invalid parameter: linkingRequest must be defined', linkingRequest);
+    return false;
+  }
+
+  try {
+
+    new LinkingRequestBuilder().setLinkingEntitySet(linkingRequest.linkingEntitySet).setPropertyTypeIds(linkingRequest.propertyTypeIds).build();
+
+    return true;
+  } catch (e) {
+
+    LOG.error(e, linkingRequest);
+    return false;
+  }
+}
+
+/***/ }),
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26236,7 +27016,7 @@ var _Logger = __webpack_require__(1);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _EntitySet = __webpack_require__(23);
+var _EntitySet = __webpack_require__(24);
 
 var _EntitySet2 = _interopRequireDefault(_EntitySet);
 
@@ -26296,7 +27076,6 @@ var LinkingEntitySetBuilder = exports.LinkingEntitySetBuilder = function () {
           var allKeysUuids = property.keySeq().every(function (key) {
             return (0, _ValidationUtils.isValidUuid)(key);
           });
-
           var allValuesUuids = property.valueSeq().every(function (value) {
             return (0, _ValidationUtils.isValidUuid)(value);
           });
@@ -26360,7 +27139,7 @@ function isValid(linkingEntitySet) {
 }
 
 /***/ }),
-/* 176 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26379,11 +27158,11 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _isBoolean = __webpack_require__(173);
+var _isBoolean = __webpack_require__(186);
 
 var _isBoolean2 = _interopRequireDefault(_isBoolean);
 
@@ -26519,117 +27298,42 @@ function isValid(linkingEntityType) {
 }
 
 /***/ }),
-/* 177 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+var baseGetTag = __webpack_require__(10),
+    isObjectLike = __webpack_require__(12);
 
+/** `Object#toString` result references. */
+var boolTag = '[object Boolean]';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.LinkingRequestBuilder = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-exports.isValid = isValid;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LinkingEntitySet = __webpack_require__(175);
-
-var _LinkingEntitySet2 = _interopRequireDefault(_LinkingEntitySet);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var LOG = new _Logger2.default('LinkingRequest');
-
-var LinkingRequest = function LinkingRequest(linkingEntitySet, propertyTypeIds) {
-  _classCallCheck(this, LinkingRequest);
-
-  this.linkingEntitySet = linkingEntitySet;
-  this.propertyTypeIds = propertyTypeIds;
-};
-
-exports.default = LinkingRequest;
-
-var LinkingRequestBuilder = exports.LinkingRequestBuilder = function () {
-  function LinkingRequestBuilder() {
-    _classCallCheck(this, LinkingRequestBuilder);
-  }
-
-  _createClass(LinkingRequestBuilder, [{
-    key: 'setLinkingEntitySet',
-    value: function setLinkingEntitySet(linkingEntitySet) {
-
-      if (!(0, _LinkingEntitySet.isValid)(linkingEntitySet)) {
-        throw new Error('invalid parameter: linkingEntitySet must be a valid LinkingEntitySet');
-      }
-
-      this.linkingEntitySet = linkingEntitySet;
-      return this;
-    }
-  }, {
-    key: 'setPropertyTypeIds',
-    value: function setPropertyTypeIds(propertyTypeIds) {
-
-      if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-        throw new Error('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
-      }
-
-      this.propertyTypeIds = propertyTypeIds;
-
-      return this;
-    }
-  }, {
-    key: 'build',
-    value: function build() {
-
-      if (!this.linkingEntitySet) {
-        throw new Error('missing property: linkingEntitySet is a required property');
-      }
-
-      if (!this.propertyTypeIds) {
-        throw new Error('missing property: propertyTypeIds is a required property');
-      }
-
-      return new LinkingRequest(this.linkingEntitySet, this.propertyTypeIds);
-    }
-  }]);
-
-  return LinkingRequestBuilder;
-}();
-
-function isValid(linkingRequest) {
-
-  if (!(0, _LangUtils.isDefined)(linkingRequest)) {
-
-    LOG.error('invalid parameter: linkingRequest must be defined', linkingRequest);
-    return false;
-  }
-
-  try {
-
-    new LinkingRequestBuilder().setLinkingEntitySet(linkingRequest.linkingEntitySet).setPropertyTypeIds(linkingRequest.propertyTypeIds).build();
-
-    return true;
-  } catch (e) {
-
-    LOG.error(e, linkingRequest);
-    return false;
-  }
+/**
+ * Checks if `value` is classified as a boolean primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a boolean, else `false`.
+ * @example
+ *
+ * _.isBoolean(false);
+ * // => true
+ *
+ * _.isBoolean(null);
+ * // => false
+ */
+function isBoolean(value) {
+  return value === true || value === false ||
+    (isObjectLike(value) && baseGetTag(value) == boolTag);
 }
 
+module.exports = isBoolean;
+
+
 /***/ }),
-/* 178 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26648,7 +27352,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -26910,7 +27614,7 @@ function isValid(organization) {
 }
 
 /***/ }),
-/* 179 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26925,7 +27629,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValid = isValid;
 
-var _has = __webpack_require__(7);
+var _has = __webpack_require__(8);
 
 var _has2 = _interopRequireDefault(_has);
 
@@ -27104,7 +27808,7 @@ function isValid(role) {
 }
 
 /***/ }),
-/* 180 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27113,23 +27817,163 @@ function isValid(role) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SchemaBuilder = undefined;
+exports.AclDataBuilder = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 exports.isValid = isValid;
 
-var _EntityType = __webpack_require__(17);
+var _ActionTypes = __webpack_require__(190);
 
-var _EntityType2 = _interopRequireDefault(_EntityType);
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
 
-var _FullyQualifiedName = __webpack_require__(15);
+var _Logger = __webpack_require__(1);
 
-var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
+var _Logger2 = _interopRequireDefault(_Logger);
 
-var _PropertyType = __webpack_require__(24);
+var _Acl = __webpack_require__(191);
 
-var _PropertyType2 = _interopRequireDefault(_PropertyType);
+var _Acl2 = _interopRequireDefault(_Acl);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LOG = new _Logger2.default('AclData');
+
+/**
+ * @class AclData
+ * @memberof lattice
+ */
+
+var AclData = function AclData(acl, action) {
+  _classCallCheck(this, AclData);
+
+  this.acl = acl;
+  this.action = action;
+};
+
+/**
+ * @class AclDataBuilder
+ * @memberof lattice
+ */
+
+
+exports.default = AclData;
+
+var AclDataBuilder = exports.AclDataBuilder = function () {
+  function AclDataBuilder() {
+    _classCallCheck(this, AclDataBuilder);
+  }
+
+  _createClass(AclDataBuilder, [{
+    key: 'setAcl',
+    value: function setAcl(acl) {
+
+      if (!(0, _Acl.isValid)(acl)) {
+        throw new Error('invalid parameter: acl must be a valid Acl');
+      }
+
+      this.acl = acl;
+      return this;
+    }
+  }, {
+    key: 'setAction',
+    value: function setAction(action) {
+
+      if (!(0, _LangUtils.isNonEmptyString)(action) || !_ActionTypes2.default[action]) {
+        throw new Error('invalid parameter: action must be a valid Action');
+      }
+
+      this.action = action;
+      return this;
+    }
+  }, {
+    key: 'build',
+    value: function build() {
+
+      if (!this.acl) {
+        throw new Error('missing property: acl is a required property');
+      }
+
+      if (!this.action) {
+        throw new Error('missing property: action is a required property');
+      }
+
+      return new AclData(this.acl, this.action);
+    }
+  }]);
+
+  return AclDataBuilder;
+}();
+
+function isValid(aclData) {
+
+  if (!(0, _LangUtils.isDefined)(aclData)) {
+
+    LOG.error('invalid parameter: aclData must be defined', aclData);
+    return false;
+  }
+
+  try {
+
+    new AclDataBuilder().setAcl(aclData.acl).setAction(aclData.action).build();
+
+    return true;
+  } catch (e) {
+
+    LOG.error(e, aclData);
+    return false;
+  }
+}
+
+/***/ }),
+/* 190 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+
+// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
+var ActionTypes = {
+  ADD: 'ADD',
+  REMOVE: 'REMOVE',
+  SET: 'SET',
+  REQUEST: 'REQUEST'
+};
+
+exports.default = ActionTypes;
+
+/***/ }),
+/* 191 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AclBuilder = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.isValid = isValid;
+
+var _has = __webpack_require__(8);
+
+var _has2 = _interopRequireDefault(_has);
+
+var _Ace = __webpack_require__(36);
+
+var _Ace2 = _interopRequireDefault(_Ace);
 
 var _Logger = __webpack_require__(1);
 
@@ -27143,571 +27987,110 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LOG = new _Logger2.default('Schema');
+var LOG = new _Logger2.default('Acl');
 
 /**
- * @class Schema
+ * @class Acl
  * @memberof lattice
  */
 
-var Schema = function Schema(fqn, entityTypes, propertyTypes) {
-  _classCallCheck(this, Schema);
+var Acl = function Acl(aclKey, aces) {
+  _classCallCheck(this, Acl);
 
-  this.fqn = fqn;
-  this.entityTypes = entityTypes;
-  this.propertyTypes = propertyTypes;
+  this.aclKey = aclKey;
+  this.aces = aces;
 };
 
 /**
- * @class SchemaBuilder
+ * @class AclBuilder
  * @memberof lattice
  */
 
 
-exports.default = Schema;
+exports.default = Acl;
 
-var SchemaBuilder = exports.SchemaBuilder = function () {
-  function SchemaBuilder() {
-    _classCallCheck(this, SchemaBuilder);
+var AclBuilder = exports.AclBuilder = function () {
+  function AclBuilder() {
+    _classCallCheck(this, AclBuilder);
   }
 
-  _createClass(SchemaBuilder, [{
-    key: 'setFullyQualifiedName',
-    value: function setFullyQualifiedName(fqn) {
+  _createClass(AclBuilder, [{
+    key: 'setAclKey',
+    value: function setAclKey(aclKey) {
 
-      if (!_FullyQualifiedName2.default.isValid(fqn)) {
-        throw new Error('invalid parameter: fqn must be a valid FQN');
+      if (!(0, _LangUtils.isDefined)(aclKey) || (0, _LangUtils.isEmptyArray)(aclKey)) {
+        return this;
       }
 
-      this.fqn = fqn;
+      if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
+        throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
+      }
+
+      this.aclKey = aclKey;
       return this;
     }
   }, {
-    key: 'setEntityTypes',
-    value: function setEntityTypes(entityTypes) {
+    key: 'setAces',
+    value: function setAces(aces) {
 
-      if (!(0, _ValidationUtils.isValidEntityTypeArray)(entityTypes)) {
-        throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
+      if (!(0, _LangUtils.isDefined)(aces) || (0, _LangUtils.isEmptyArray)(aces)) {
+        return this;
       }
 
-      this.entityTypes = entityTypes;
-      return this;
-    }
-  }, {
-    key: 'setPropertyTypes',
-    value: function setPropertyTypes(propertyTypes) {
-
-      if (!(0, _ValidationUtils.isValidPropertyTypeArray)(propertyTypes)) {
-        throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
+      if (!(0, _ValidationUtils.isValidAceArray)(aces)) {
+        throw new Error('invalid parameter: aces must be a non-empty array of valid Aces');
       }
 
-      this.propertyTypes = propertyTypes;
+      this.aces = aces;
       return this;
     }
   }, {
     key: 'build',
     value: function build() {
 
-      if (!this.fqn) {
-        throw new Error('missing property: fqn is a required property');
+      if (!this.aclKey) {
+        this.aclKey = [];
       }
 
-      if (!this.entityTypes) {
-        throw new Error('missing property: entityTypes is a required property');
+      if (!this.aces) {
+        this.aces = [];
       }
 
-      if (!this.propertyTypes) {
-        throw new Error('missing property: propertyTypes is a required property');
-      }
-
-      return new Schema(this.fqn, this.entityTypes, this.propertyTypes);
+      return new Acl(this.aclKey, this.aces);
     }
   }]);
 
-  return SchemaBuilder;
+  return AclBuilder;
 }();
 
-function isValid(schema) {
+function isValid(acl) {
 
-  if (!(0, _LangUtils.isDefined)(schema)) {
+  if (!(0, _LangUtils.isDefined)(acl)) {
 
-    LOG.error('invalid parameter: schema must be defined', schema);
+    LOG.error('invalid parameter: acl must be defined', acl);
+    return false;
+  }
+
+  if (!(0, _has2.default)(acl, 'aclKey') || !(0, _has2.default)(acl, 'aces')) {
+
+    LOG.error('missing properties: acl is missing required properties');
     return false;
   }
 
   try {
 
-    new SchemaBuilder().setFullyQualifiedName(schema.fqn).setEntityTypes(schema.entityTypes).setPropertyTypes(schema.propertyTypes).build();
+    new AclBuilder().setAclKey(acl.aclKey).setAces(acl.aces).build();
 
     return true;
   } catch (e) {
 
-    LOG.error(e, schema);
+    LOG.error(e, acl);
     return false;
   }
 }
 
 /***/ }),
-/* 181 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ }),
-/* 182 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 183 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(8);
-var settle = __webpack_require__(267);
-var buildURL = __webpack_require__(269);
-var parseHeaders = __webpack_require__(270);
-var isURLSameOrigin = __webpack_require__(271);
-var createError = __webpack_require__(184);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(272);
-
-module.exports = function xhrAdapter(config) {
-  return new Promise(function dispatchXhrRequest(resolve, reject) {
-    var requestData = config.data;
-    var requestHeaders = config.headers;
-
-    if (utils.isFormData(requestData)) {
-      delete requestHeaders['Content-Type']; // Let the browser set it
-    }
-
-    var request = new XMLHttpRequest();
-    var loadEvent = 'onreadystatechange';
-    var xDomain = false;
-
-    // For IE 8/9 CORS support
-    // Only supports POST and GET calls and doesn't returns the response headers.
-    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if (process.env.NODE_ENV !== 'test' &&
-        typeof window !== 'undefined' &&
-        window.XDomainRequest && !('withCredentials' in request) &&
-        !isURLSameOrigin(config.url)) {
-      request = new window.XDomainRequest();
-      loadEvent = 'onload';
-      xDomain = true;
-      request.onprogress = function handleProgress() {};
-      request.ontimeout = function handleTimeout() {};
-    }
-
-    // HTTP basic authentication
-    if (config.auth) {
-      var username = config.auth.username || '';
-      var password = config.auth.password || '';
-      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
-    }
-
-    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
-
-    // Set the request timeout in MS
-    request.timeout = config.timeout;
-
-    // Listen for ready state
-    request[loadEvent] = function handleLoad() {
-      if (!request || (request.readyState !== 4 && !xDomain)) {
-        return;
-      }
-
-      // The request errored out and we didn't get a response, this will be
-      // handled by onerror instead
-      // With one exception: request that using file: protocol, most browsers
-      // will return status as 0 even though it's a successful request
-      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
-        return;
-      }
-
-      // Prepare the response
-      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
-      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
-      var response = {
-        data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/axios/axios/issues/201)
-        status: request.status === 1223 ? 204 : request.status,
-        statusText: request.status === 1223 ? 'No Content' : request.statusText,
-        headers: responseHeaders,
-        config: config,
-        request: request
-      };
-
-      settle(resolve, reject, response);
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle low level network errors
-    request.onerror = function handleError() {
-      // Real errors are hidden from us by the browser
-      // onerror should only fire if it's a network error
-      reject(createError('Network Error', config, null, request));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle timeout
-    request.ontimeout = function handleTimeout() {
-      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
-        request));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Add xsrf header
-    // This is only done if running in a standard browser environment.
-    // Specifically not if we're in a web worker, or react-native.
-    if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(273);
-
-      // Add xsrf header
-      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
-          cookies.read(config.xsrfCookieName) :
-          undefined;
-
-      if (xsrfValue) {
-        requestHeaders[config.xsrfHeaderName] = xsrfValue;
-      }
-    }
-
-    // Add headers to the request
-    if ('setRequestHeader' in request) {
-      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
-        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
-          // Remove Content-Type if data is undefined
-          delete requestHeaders[key];
-        } else {
-          // Otherwise add header to the request
-          request.setRequestHeader(key, val);
-        }
-      });
-    }
-
-    // Add withCredentials to request if needed
-    if (config.withCredentials) {
-      request.withCredentials = true;
-    }
-
-    // Add responseType to request if needed
-    if (config.responseType) {
-      try {
-        request.responseType = config.responseType;
-      } catch (e) {
-        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
-        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
-        if (config.responseType !== 'json') {
-          throw e;
-        }
-      }
-    }
-
-    // Handle progress if needed
-    if (typeof config.onDownloadProgress === 'function') {
-      request.addEventListener('progress', config.onDownloadProgress);
-    }
-
-    // Not all browsers support upload events
-    if (typeof config.onUploadProgress === 'function' && request.upload) {
-      request.upload.addEventListener('progress', config.onUploadProgress);
-    }
-
-    if (config.cancelToken) {
-      // Handle cancellation
-      config.cancelToken.promise.then(function onCanceled(cancel) {
-        if (!request) {
-          return;
-        }
-
-        request.abort();
-        reject(cancel);
-        // Clean up request
-        request = null;
-      });
-    }
-
-    if (requestData === undefined) {
-      requestData = null;
-    }
-
-    // Send the request
-    request.send(requestData);
-  });
-};
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(182)))
-
-/***/ }),
-/* 184 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var enhanceError = __webpack_require__(268);
-
-/**
- * Create an Error with the specified message, config, error code, request and response.
- *
- * @param {string} message The error message.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- * @param {Object} [request] The request.
- * @param {Object} [response] The response.
- * @returns {Error} The created error.
- */
-module.exports = function createError(message, config, code, request, response) {
-  var error = new Error(message);
-  return enhanceError(error, config, code, request, response);
-};
-
-
-/***/ }),
-/* 185 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function isCancel(value) {
-  return !!(value && value.__CANCEL__);
-};
-
-
-/***/ }),
-/* 186 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
-
-
-/***/ }),
-/* 187 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27716,176 +28099,74 @@ module.exports = Cancel;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getConfig = exports.configure = undefined;
+exports.version = exports.configure = exports.Types = exports.Models = exports.SyncApi = exports.SearchApi = exports.RequestsApi = exports.PrincipalsApi = exports.PermissionsApi = exports.OrganizationsApi = exports.LinkingApi = exports.EntityDataModelApi = exports.DataSourcesApi = exports.DataApi = exports.AuthorizationApi = exports.AppApi = exports.AnalysisApi = undefined;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _EnvToUrlMap = __webpack_require__(281);
-
-var _EnvToUrlMap2 = _interopRequireDefault(_EnvToUrlMap);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LangUtils = __webpack_require__(2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @module Configuration
- * @memberof lattice
- */
-
-var LOG = new _Logger2.default('Configuration');
-
-var configObj = _immutable2.default.Map().withMutations(function (map) {
-
-  if (true) {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('PRODUCTION'));
-  } else {
-    map.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-  }
-});
-
-/**
- * baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
- * result in the same base URL:
- *   - "https://api.openlattice.com"
- *   - "api.openlattice.com"
- *   - "openlattice"
- *   - "api"
- *
- * @memberof lattice.Configuration
- * @param {Object} config - an object literal containing all configuration options
- * @param {string} config.authToken - a Base64-encoded JWT auth token (optional)
- * @param {string} config.baseUrl - a full URL, or a simple URL identifier (required)
- */
-function configure(config) {
-
-  if (!(0, _LangUtils.isNonEmptyObject)(config)) {
-    var errorMsg = 'invalid parameter - config must be a non-empty configuration object';
-    LOG.error(errorMsg, config);
-    throw new Error(errorMsg);
-  }
-
-  // authToken is optional, so null and undefined are allowed
-  if (config.authToken === null || config.authToken === undefined) {
-    configObj = configObj.delete('authToken');
-  } else if ((0, _LangUtils.isNonEmptyString)(config.authToken)) {
-    configObj = configObj.set('authToken', 'Bearer ' + config.authToken);
-  } else {
-    var _errorMsg = 'invalid parameter - authToken must be a non-empty string';
-    LOG.error(_errorMsg, config.authToken);
-    throw new Error(_errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
-    if (config.baseUrl === 'production' || _EnvToUrlMap2.default.get('PRODUCTION', '').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('PRODUCTION'));
-    } else if (config.baseUrl === 'localhost' || _EnvToUrlMap2.default.get('LOCAL', '').includes(config.baseUrl)) {
-      configObj = configObj.set('baseUrl', _EnvToUrlMap2.default.get('LOCAL'));
-    }
-    // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') && config.baseUrl.endsWith('openlattice.com')) {
-        configObj = configObj.set('baseUrl', config.baseUrl);
-      } else {
-        var _errorMsg2 = 'invalid parameter - baseUrl must be a valid URL';
-        LOG.error(_errorMsg2, config.baseUrl);
-        throw new Error(_errorMsg2);
-      }
-  } else {
-    var _errorMsg3 = 'invalid parameter - baseUrl must be a non-empty string';
-    LOG.error(_errorMsg3, config.baseUrl);
-    throw new Error(_errorMsg3);
-  }
-}
-
-function getConfig() {
-
-  return configObj;
-}
-
-exports.configure = configure;
-exports.getConfig = getConfig;
-
-/***/ }),
-/* 188 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SyncApi = exports.SearchApi = exports.RequestsApi = exports.PrincipalsApi = exports.PermissionsApi = exports.OrganizationsApi = exports.LinkingApi = exports.EntityDataModelApi = exports.DataSourcesApi = exports.DataApi = exports.AuthorizationApi = exports.AppApi = exports.AnalysisApi = exports.Types = exports.Models = exports.configure = exports.version = undefined;
-
-var _types = __webpack_require__(189);
-
-var Types = _interopRequireWildcard(_types);
-
-var _models = __webpack_require__(190);
-
-var Models = _interopRequireWildcard(_models);
-
-var _AnalysisApi = __webpack_require__(261);
+var _AnalysisApi = __webpack_require__(193);
 
 var AnalysisApi = _interopRequireWildcard(_AnalysisApi);
 
-var _AppApi = __webpack_require__(282);
+var _AppApi = __webpack_require__(287);
 
 var AppApi = _interopRequireWildcard(_AppApi);
 
-var _AuthorizationApi = __webpack_require__(283);
+var _AuthorizationApi = __webpack_require__(288);
 
 var AuthorizationApi = _interopRequireWildcard(_AuthorizationApi);
 
-var _DataApi = __webpack_require__(284);
+var _DataApi = __webpack_require__(289);
 
 var DataApi = _interopRequireWildcard(_DataApi);
 
-var _DataSourcesApi = __webpack_require__(285);
+var _DataSourcesApi = __webpack_require__(290);
 
 var DataSourcesApi = _interopRequireWildcard(_DataSourcesApi);
 
-var _EntityDataModelApi = __webpack_require__(286);
+var _EntityDataModelApi = __webpack_require__(291);
 
 var EntityDataModelApi = _interopRequireWildcard(_EntityDataModelApi);
 
-var _LinkingApi = __webpack_require__(287);
+var _LinkingApi = __webpack_require__(292);
 
 var LinkingApi = _interopRequireWildcard(_LinkingApi);
 
-var _OrganizationsApi = __webpack_require__(288);
+var _OrganizationsApi = __webpack_require__(293);
 
 var OrganizationsApi = _interopRequireWildcard(_OrganizationsApi);
 
-var _PermissionsApi = __webpack_require__(289);
+var _PermissionsApi = __webpack_require__(294);
 
 var PermissionsApi = _interopRequireWildcard(_PermissionsApi);
 
-var _PrincipalsApi = __webpack_require__(290);
+var _PrincipalsApi = __webpack_require__(295);
 
 var PrincipalsApi = _interopRequireWildcard(_PrincipalsApi);
 
-var _RequestsApi = __webpack_require__(291);
+var _RequestsApi = __webpack_require__(296);
 
 var RequestsApi = _interopRequireWildcard(_RequestsApi);
 
-var _SearchApi = __webpack_require__(292);
+var _SearchApi = __webpack_require__(297);
 
 var SearchApi = _interopRequireWildcard(_SearchApi);
 
-var _SyncApi = __webpack_require__(294);
+var _SyncApi = __webpack_require__(299);
 
 var SyncApi = _interopRequireWildcard(_SyncApi);
 
-var _Configuration = __webpack_require__(187);
+var _types = __webpack_require__(300);
+
+var Types = _interopRequireWildcard(_types);
+
+var _models = __webpack_require__(301);
+
+var Models = _interopRequireWildcard(_models);
+
+var _Configuration = __webpack_require__(19);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+// injected by Webpack.DefinePlugin
+
 
 /**
  * The `lattice.js` library is a layer on top of OpenLattice's REST APIs to simplify the process of reading data from
@@ -27895,12 +28176,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.31.4";
+var version = "v0.32.0";
 
-exports.version = version;
-exports.configure = _Configuration.configure;
-exports.Models = Models;
-exports.Types = Types;
 exports.AnalysisApi = AnalysisApi;
 exports.AppApi = AppApi;
 exports.AuthorizationApi = AuthorizationApi;
@@ -27914,11 +28191,11 @@ exports.PrincipalsApi = PrincipalsApi;
 exports.RequestsApi = RequestsApi;
 exports.SearchApi = SearchApi;
 exports.SyncApi = SyncApi;
+exports.Models = Models;
+exports.Types = Types;
+exports.configure = _Configuration.configure;
+exports.version = version;
 exports.default = {
-  version: version,
-  configure: _Configuration.configure,
-  Models: Models,
-  Types: Types,
   AnalysisApi: AnalysisApi,
   AppApi: AppApi,
   AuthorizationApi: AuthorizationApi,
@@ -27931,11 +28208,16 @@ exports.default = {
   PrincipalsApi: PrincipalsApi,
   RequestsApi: RequestsApi,
   SearchApi: SearchApi,
-  SyncApi: SyncApi
+  SyncApi: SyncApi,
+
+  Models: Models,
+  Types: Types,
+  configure: _Configuration.configure,
+  version: version
 };
 
 /***/ }),
-/* 189 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27944,171 +28226,122 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SecurableTypes = exports.RequestStateTypes = exports.PrincipalTypes = exports.PermissionTypes = exports.AnalyzerTypes = exports.ActionTypes = undefined;
+exports.getTopUtilizers = getTopUtilizers;
+exports.getNeighborTypes = getNeighborTypes;
 
-var _ActionTypes = __webpack_require__(39);
+var _Logger = __webpack_require__(1);
 
-var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+var _Logger2 = _interopRequireDefault(_Logger);
 
-var _AnalyzerTypes = __webpack_require__(40);
+var _ApiNames = __webpack_require__(5);
 
-var _AnalyzerTypes2 = _interopRequireDefault(_AnalyzerTypes);
+var _ApiPaths = __webpack_require__(9);
 
-var _PermissionTypes = __webpack_require__(26);
+var _axios = __webpack_require__(6);
 
-var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
+var _LangUtils = __webpack_require__(2);
 
-var _PrincipalTypes = __webpack_require__(27);
-
-var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
-
-var _RequestStateTypes = __webpack_require__(28);
-
-var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
-
-var _SecurableTypes = __webpack_require__(29);
-
-var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
+var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.ActionTypes = _ActionTypes2.default;
-exports.AnalyzerTypes = _AnalyzerTypes2.default;
-exports.PermissionTypes = _PermissionTypes2.default;
-exports.PrincipalTypes = _PrincipalTypes2.default;
-exports.RequestStateTypes = _RequestStateTypes2.default;
-exports.SecurableTypes = _SecurableTypes2.default;
+/* eslint-disable import/prefer-default-export */
+
+/**
+ * AnalysisApi ...
+ *
+ * @module AnalysisApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.AnalysisApi.get...
+ *
+ * @example
+ * import { AnalysisApi } from 'lattice';
+ * // AnalysisApi.get...
+ */
+
+var LOG = new _Logger2.default('AnalysisApi');
+
+/**
+ * `GET /analysis/{uuid}/{count}`
+ *
+ * Gets the top rows of data for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof lattice.AnalysisApi
+ * @param {UUID} entitySetId
+ * @param {number} count
+ * @param {Object} options
+ * @param {string} fileType (optional)
+ * @returns {Promise<SetMultimap<Object, Object>>} - a Promise that will resolve with the data as its fulfillment value
+ *
+ * @example
+ * AnalysisApi.getTopUtilizers(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   100,
+ *   {
+ *     "associationTypeId": "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *     "neighborTypeIds": [
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     ],
+ *     "utilizerIsSrc": false
+ *   }
+ *   "json"
+ * );
+ */
+function getTopUtilizers(entitySetId, count, options, fileType) {
+
+  // TODO: everything
+
+  var url = '/' + entitySetId + '/' + count;
+  if ((0, _LangUtils.isNonEmptyString)(fileType)) {
+    url = url + '?fileType=' + fileType;
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).post(url, options).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /analysis/{uuid}/types`
+ *
+ * Gets all available association types and neighbor types for a given entity set id
+ *
+ * @static
+ * @memberof lattice.AnalysisApi
+ * @param {UUID} entitySetId
+ * @returns {Promise<Set<Object>} - a Promise that will resolve with the data as its fulfillment value
+ *
+ * @example
+ * AnalysisApi.getNeighborTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getNeighborTypes(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).get('/' + entitySetId + '/' + _ApiPaths.TYPES_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
 
 /***/ }),
-/* 190 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SchemaBuilder = exports.Schema = exports.RoleBuilder = exports.Role = exports.RequestStatusBuilder = exports.RequestStatus = exports.RequestBuilder = exports.Request = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.LinkingRequestBuilder = exports.LinkingRequest = exports.LinkingEntityTypeBuilder = exports.LinkingEntityType = exports.LinkingEntitySetBuilder = exports.LinkingEntitySet = exports.FullyQualifiedName = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.DataSourceBuilder = exports.DataSource = exports.AssociationTypeBuilder = exports.AssociationType = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.AccessCheckBuilder = exports.AccessCheck = undefined;
-
-var _FullyQualifiedName = __webpack_require__(15);
-
-var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
-
-var _AccessCheck = __webpack_require__(35);
-
-var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
-
-var _Ace = __webpack_require__(36);
-
-var _Ace2 = _interopRequireDefault(_Ace);
-
-var _Acl = __webpack_require__(171);
-
-var _Acl2 = _interopRequireDefault(_Acl);
-
-var _AclData = __webpack_require__(172);
-
-var _AclData2 = _interopRequireDefault(_AclData);
-
-var _AssociationType = __webpack_require__(260);
-
-var _AssociationType2 = _interopRequireDefault(_AssociationType);
-
-var _DataSource = __webpack_require__(174);
-
-var _DataSource2 = _interopRequireDefault(_DataSource);
-
-var _EntitySet = __webpack_require__(23);
-
-var _EntitySet2 = _interopRequireDefault(_EntitySet);
-
-var _EntityType = __webpack_require__(17);
-
-var _EntityType2 = _interopRequireDefault(_EntityType);
-
-var _LinkingEntitySet = __webpack_require__(175);
-
-var _LinkingEntitySet2 = _interopRequireDefault(_LinkingEntitySet);
-
-var _LinkingEntityType = __webpack_require__(176);
-
-var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
-
-var _LinkingRequest = __webpack_require__(177);
-
-var _LinkingRequest2 = _interopRequireDefault(_LinkingRequest);
-
-var _Organization = __webpack_require__(178);
-
-var _Organization2 = _interopRequireDefault(_Organization);
-
-var _Principal = __webpack_require__(14);
-
-var _Principal2 = _interopRequireDefault(_Principal);
-
-var _PropertyType = __webpack_require__(24);
-
-var _PropertyType2 = _interopRequireDefault(_PropertyType);
-
-var _Request = __webpack_require__(25);
-
-var _Request2 = _interopRequireDefault(_Request);
-
-var _RequestStatus = __webpack_require__(37);
-
-var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
-
-var _Role = __webpack_require__(179);
-
-var _Role2 = _interopRequireDefault(_Role);
-
-var _Schema = __webpack_require__(180);
-
-var _Schema2 = _interopRequireDefault(_Schema);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.AccessCheck = _AccessCheck2.default;
-exports.AccessCheckBuilder = _AccessCheck.AccessCheckBuilder;
-exports.Ace = _Ace2.default;
-exports.AceBuilder = _Ace.AceBuilder;
-exports.Acl = _Acl2.default;
-exports.AclBuilder = _Acl.AclBuilder;
-exports.AclData = _AclData2.default;
-exports.AclDataBuilder = _AclData.AclDataBuilder;
-exports.AssociationType = _AssociationType2.default;
-exports.AssociationTypeBuilder = _AssociationType.AssociationTypeBuilder;
-exports.DataSource = _DataSource2.default;
-exports.DataSourceBuilder = _DataSource.DataSourceBuilder;
-exports.EntitySet = _EntitySet2.default;
-exports.EntitySetBuilder = _EntitySet.EntitySetBuilder;
-exports.EntityType = _EntityType2.default;
-exports.EntityTypeBuilder = _EntityType.EntityTypeBuilder;
-exports.FullyQualifiedName = _FullyQualifiedName2.default;
-exports.LinkingEntitySet = _LinkingEntitySet2.default;
-exports.LinkingEntitySetBuilder = _LinkingEntitySet.LinkingEntitySetBuilder;
-exports.LinkingEntityType = _LinkingEntityType2.default;
-exports.LinkingEntityTypeBuilder = _LinkingEntityType.LinkingEntityTypeBuilder;
-exports.LinkingRequest = _LinkingRequest2.default;
-exports.LinkingRequestBuilder = _LinkingRequest.LinkingRequestBuilder;
-exports.Organization = _Organization2.default;
-exports.OrganizationBuilder = _Organization.OrganizationBuilder;
-exports.Principal = _Principal2.default;
-exports.PrincipalBuilder = _Principal.PrincipalBuilder;
-exports.PropertyType = _PropertyType2.default;
-exports.PropertyTypeBuilder = _PropertyType.PropertyTypeBuilder;
-exports.Request = _Request2.default;
-exports.RequestBuilder = _Request.RequestBuilder;
-exports.RequestStatus = _RequestStatus2.default;
-exports.RequestStatusBuilder = _RequestStatus.RequestStatusBuilder;
-exports.Role = _Role2.default;
-exports.RoleBuilder = _Role.RoleBuilder;
-exports.Schema = _Schema2.default;
-exports.SchemaBuilder = _Schema.SchemaBuilder;
-
-/***/ }),
-/* 191 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -28368,7 +28601,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
 
 
 /***/ }),
-/* 192 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -28522,92 +28755,94 @@ var map = {
 	"./ms-my": 115,
 	"./ms-my.js": 115,
 	"./ms.js": 114,
-	"./my": 116,
-	"./my.js": 116,
-	"./nb": 117,
-	"./nb.js": 117,
-	"./ne": 118,
-	"./ne.js": 118,
-	"./nl": 119,
-	"./nl-be": 120,
-	"./nl-be.js": 120,
-	"./nl.js": 119,
-	"./nn": 121,
-	"./nn.js": 121,
-	"./pa-in": 122,
-	"./pa-in.js": 122,
-	"./pl": 123,
-	"./pl.js": 123,
-	"./pt": 124,
-	"./pt-br": 125,
-	"./pt-br.js": 125,
-	"./pt.js": 124,
-	"./ro": 126,
-	"./ro.js": 126,
-	"./ru": 127,
-	"./ru.js": 127,
-	"./sd": 128,
-	"./sd.js": 128,
-	"./se": 129,
-	"./se.js": 129,
-	"./si": 130,
-	"./si.js": 130,
-	"./sk": 131,
-	"./sk.js": 131,
-	"./sl": 132,
-	"./sl.js": 132,
-	"./sq": 133,
-	"./sq.js": 133,
-	"./sr": 134,
-	"./sr-cyrl": 135,
-	"./sr-cyrl.js": 135,
-	"./sr.js": 134,
-	"./ss": 136,
-	"./ss.js": 136,
-	"./sv": 137,
-	"./sv.js": 137,
-	"./sw": 138,
-	"./sw.js": 138,
-	"./ta": 139,
-	"./ta.js": 139,
-	"./te": 140,
-	"./te.js": 140,
-	"./tet": 141,
-	"./tet.js": 141,
-	"./th": 142,
-	"./th.js": 142,
-	"./tl-ph": 143,
-	"./tl-ph.js": 143,
-	"./tlh": 144,
-	"./tlh.js": 144,
-	"./tr": 145,
-	"./tr.js": 145,
-	"./tzl": 146,
-	"./tzl.js": 146,
-	"./tzm": 147,
-	"./tzm-latn": 148,
-	"./tzm-latn.js": 148,
-	"./tzm.js": 147,
-	"./uk": 149,
-	"./uk.js": 149,
-	"./ur": 150,
-	"./ur.js": 150,
-	"./uz": 151,
-	"./uz-latn": 152,
-	"./uz-latn.js": 152,
-	"./uz.js": 151,
-	"./vi": 153,
-	"./vi.js": 153,
-	"./x-pseudo": 154,
-	"./x-pseudo.js": 154,
-	"./yo": 155,
-	"./yo.js": 155,
-	"./zh-cn": 156,
-	"./zh-cn.js": 156,
-	"./zh-hk": 157,
-	"./zh-hk.js": 157,
-	"./zh-tw": 158,
-	"./zh-tw.js": 158
+	"./mt": 116,
+	"./mt.js": 116,
+	"./my": 117,
+	"./my.js": 117,
+	"./nb": 118,
+	"./nb.js": 118,
+	"./ne": 119,
+	"./ne.js": 119,
+	"./nl": 120,
+	"./nl-be": 121,
+	"./nl-be.js": 121,
+	"./nl.js": 120,
+	"./nn": 122,
+	"./nn.js": 122,
+	"./pa-in": 123,
+	"./pa-in.js": 123,
+	"./pl": 124,
+	"./pl.js": 124,
+	"./pt": 125,
+	"./pt-br": 126,
+	"./pt-br.js": 126,
+	"./pt.js": 125,
+	"./ro": 127,
+	"./ro.js": 127,
+	"./ru": 128,
+	"./ru.js": 128,
+	"./sd": 129,
+	"./sd.js": 129,
+	"./se": 130,
+	"./se.js": 130,
+	"./si": 131,
+	"./si.js": 131,
+	"./sk": 132,
+	"./sk.js": 132,
+	"./sl": 133,
+	"./sl.js": 133,
+	"./sq": 134,
+	"./sq.js": 134,
+	"./sr": 135,
+	"./sr-cyrl": 136,
+	"./sr-cyrl.js": 136,
+	"./sr.js": 135,
+	"./ss": 137,
+	"./ss.js": 137,
+	"./sv": 138,
+	"./sv.js": 138,
+	"./sw": 139,
+	"./sw.js": 139,
+	"./ta": 140,
+	"./ta.js": 140,
+	"./te": 141,
+	"./te.js": 141,
+	"./tet": 142,
+	"./tet.js": 142,
+	"./th": 143,
+	"./th.js": 143,
+	"./tl-ph": 144,
+	"./tl-ph.js": 144,
+	"./tlh": 145,
+	"./tlh.js": 145,
+	"./tr": 146,
+	"./tr.js": 146,
+	"./tzl": 147,
+	"./tzl.js": 147,
+	"./tzm": 148,
+	"./tzm-latn": 149,
+	"./tzm-latn.js": 149,
+	"./tzm.js": 148,
+	"./uk": 150,
+	"./uk.js": 150,
+	"./ur": 151,
+	"./ur.js": 151,
+	"./uz": 152,
+	"./uz-latn": 153,
+	"./uz-latn.js": 153,
+	"./uz.js": 152,
+	"./vi": 154,
+	"./vi.js": 154,
+	"./x-pseudo": 155,
+	"./x-pseudo.js": 155,
+	"./yo": 156,
+	"./yo.js": 156,
+	"./zh-cn": 157,
+	"./zh-cn.js": 157,
+	"./zh-hk": 158,
+	"./zh-hk.js": 158,
+	"./zh-tw": 159,
+	"./zh-tw.js": 159
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -28623,14 +28858,14 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 192;
+webpackContext.id = 195;
 
 /***/ }),
-/* 193 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isPrototype = __webpack_require__(160),
-    nativeKeys = __webpack_require__(194);
+var isPrototype = __webpack_require__(161),
+    nativeKeys = __webpack_require__(197);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -28662,10 +28897,10 @@ module.exports = baseKeys;
 
 
 /***/ }),
-/* 194 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(161);
+var overArg = __webpack_require__(162);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeKeys = overArg(Object.keys, Object);
@@ -28674,16 +28909,16 @@ module.exports = nativeKeys;
 
 
 /***/ }),
-/* 195 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var DataView = __webpack_require__(196),
-    Map = __webpack_require__(165),
-    Promise = __webpack_require__(204),
-    Set = __webpack_require__(205),
-    WeakMap = __webpack_require__(206),
+var DataView = __webpack_require__(199),
+    Map = __webpack_require__(166),
+    Promise = __webpack_require__(207),
+    Set = __webpack_require__(208),
+    WeakMap = __webpack_require__(209),
     baseGetTag = __webpack_require__(10),
-    toSource = __webpack_require__(164);
+    toSource = __webpack_require__(165);
 
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
@@ -28738,10 +28973,10 @@ module.exports = getTag;
 
 
 /***/ }),
-/* 196 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(16),
+var getNative = __webpack_require__(15),
     root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
@@ -28751,13 +28986,13 @@ module.exports = DataView;
 
 
 /***/ }),
-/* 197 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(162),
-    isMasked = __webpack_require__(201),
-    isObject = __webpack_require__(30),
-    toSource = __webpack_require__(164);
+var isFunction = __webpack_require__(163),
+    isMasked = __webpack_require__(204),
+    isObject = __webpack_require__(29),
+    toSource = __webpack_require__(165);
 
 /**
  * Used to match `RegExp`
@@ -28804,7 +29039,7 @@ module.exports = baseIsNative;
 
 
 /***/ }),
-/* 198 */
+/* 201 */
 /***/ (function(module, exports) {
 
 var g;
@@ -28831,10 +29066,10 @@ module.exports = g;
 
 
 /***/ }),
-/* 199 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(32);
+var Symbol = __webpack_require__(28);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -28883,7 +29118,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 200 */
+/* 203 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -28911,10 +29146,10 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 201 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var coreJsData = __webpack_require__(202);
+var coreJsData = __webpack_require__(205);
 
 /** Used to detect methods masquerading as native. */
 var maskSrcKey = (function() {
@@ -28937,7 +29172,7 @@ module.exports = isMasked;
 
 
 /***/ }),
-/* 202 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(11);
@@ -28949,7 +29184,7 @@ module.exports = coreJsData;
 
 
 /***/ }),
-/* 203 */
+/* 206 */
 /***/ (function(module, exports) {
 
 /**
@@ -28968,10 +29203,10 @@ module.exports = getValue;
 
 
 /***/ }),
-/* 204 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(16),
+var getNative = __webpack_require__(15),
     root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
@@ -28981,10 +29216,10 @@ module.exports = Promise;
 
 
 /***/ }),
-/* 205 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(16),
+var getNative = __webpack_require__(15),
     root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
@@ -28994,10 +29229,10 @@ module.exports = Set;
 
 
 /***/ }),
-/* 206 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getNative = __webpack_require__(16),
+var getNative = __webpack_require__(15),
     root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
@@ -29007,7 +29242,7 @@ module.exports = WeakMap;
 
 
 /***/ }),
-/* 207 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
@@ -29031,11 +29266,11 @@ module.exports = baseIsArguments;
 
 
 /***/ }),
-/* 208 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(162),
-    isLength = __webpack_require__(33);
+var isFunction = __webpack_require__(163),
+    isLength = __webpack_require__(30);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -29070,11 +29305,11 @@ module.exports = isArrayLike;
 
 
 /***/ }),
-/* 209 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(11),
-    stubFalse = __webpack_require__(210);
+    stubFalse = __webpack_require__(213);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -29112,10 +29347,10 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)(module)))
 
 /***/ }),
-/* 210 */
+/* 213 */
 /***/ (function(module, exports) {
 
 /**
@@ -29139,12 +29374,12 @@ module.exports = stubFalse;
 
 
 /***/ }),
-/* 211 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsTypedArray = __webpack_require__(212),
-    baseUnary = __webpack_require__(213),
-    nodeUtil = __webpack_require__(214);
+var baseIsTypedArray = __webpack_require__(215),
+    baseUnary = __webpack_require__(216),
+    nodeUtil = __webpack_require__(217);
 
 /* Node.js helper references. */
 var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -29172,11 +29407,11 @@ module.exports = isTypedArray;
 
 
 /***/ }),
-/* 212 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
-    isLength = __webpack_require__(33),
+    isLength = __webpack_require__(30),
     isObjectLike = __webpack_require__(12);
 
 /** `Object#toString` result references. */
@@ -29238,7 +29473,7 @@ module.exports = baseIsTypedArray;
 
 
 /***/ }),
-/* 213 */
+/* 216 */
 /***/ (function(module, exports) {
 
 /**
@@ -29258,10 +29493,10 @@ module.exports = baseUnary;
 
 
 /***/ }),
-/* 214 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(163);
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(164);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -29284,15 +29519,15 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)(module)))
 
 /***/ }),
-/* 215 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(10),
     isObjectLike = __webpack_require__(12),
-    isPlainObject = __webpack_require__(167);
+    isPlainObject = __webpack_require__(168);
 
 /** `Object#toString` result references. */
 var domExcTag = '[object DOMException]',
@@ -29329,10 +29564,10 @@ module.exports = isError;
 
 
 /***/ }),
-/* 216 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(161);
+var overArg = __webpack_require__(162);
 
 /** Built-in value references. */
 var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -29341,7 +29576,7 @@ module.exports = getPrototype;
 
 
 /***/ }),
-/* 217 */
+/* 220 */
 /***/ (function(module, exports) {
 
 /**
@@ -29369,15 +29604,15 @@ module.exports = isNull;
 
 
 /***/ }),
-/* 218 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseToString = __webpack_require__(168),
-    castSlice = __webpack_require__(220),
-    charsEndIndex = __webpack_require__(222),
-    charsStartIndex = __webpack_require__(226),
-    stringToArray = __webpack_require__(227),
-    toString = __webpack_require__(170);
+var baseToString = __webpack_require__(170),
+    castSlice = __webpack_require__(223),
+    charsEndIndex = __webpack_require__(225),
+    charsStartIndex = __webpack_require__(229),
+    stringToArray = __webpack_require__(230),
+    toString = __webpack_require__(172);
 
 /** Used to match leading and trailing whitespace. */
 var reTrim = /^\s+|\s+$/g;
@@ -29424,7 +29659,7 @@ module.exports = trim;
 
 
 /***/ }),
-/* 219 */
+/* 222 */
 /***/ (function(module, exports) {
 
 /**
@@ -29451,10 +29686,10 @@ module.exports = arrayMap;
 
 
 /***/ }),
-/* 220 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseSlice = __webpack_require__(221);
+var baseSlice = __webpack_require__(224);
 
 /**
  * Casts `array` to a slice if it's needed.
@@ -29475,7 +29710,7 @@ module.exports = castSlice;
 
 
 /***/ }),
-/* 221 */
+/* 224 */
 /***/ (function(module, exports) {
 
 /**
@@ -29512,10 +29747,10 @@ module.exports = baseSlice;
 
 
 /***/ }),
-/* 222 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIndexOf = __webpack_require__(169);
+var baseIndexOf = __webpack_require__(171);
 
 /**
  * Used by `_.trim` and `_.trimEnd` to get the index of the last string symbol
@@ -29537,7 +29772,7 @@ module.exports = charsEndIndex;
 
 
 /***/ }),
-/* 223 */
+/* 226 */
 /***/ (function(module, exports) {
 
 /**
@@ -29567,7 +29802,7 @@ module.exports = baseFindIndex;
 
 
 /***/ }),
-/* 224 */
+/* 227 */
 /***/ (function(module, exports) {
 
 /**
@@ -29585,7 +29820,7 @@ module.exports = baseIsNaN;
 
 
 /***/ }),
-/* 225 */
+/* 228 */
 /***/ (function(module, exports) {
 
 /**
@@ -29614,10 +29849,10 @@ module.exports = strictIndexOf;
 
 
 /***/ }),
-/* 226 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIndexOf = __webpack_require__(169);
+var baseIndexOf = __webpack_require__(171);
 
 /**
  * Used by `_.trim` and `_.trimStart` to get the index of the first string symbol
@@ -29640,12 +29875,12 @@ module.exports = charsStartIndex;
 
 
 /***/ }),
-/* 227 */
+/* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var asciiToArray = __webpack_require__(228),
-    hasUnicode = __webpack_require__(229),
-    unicodeToArray = __webpack_require__(230);
+var asciiToArray = __webpack_require__(231),
+    hasUnicode = __webpack_require__(232),
+    unicodeToArray = __webpack_require__(233);
 
 /**
  * Converts `string` to an array.
@@ -29664,7 +29899,7 @@ module.exports = stringToArray;
 
 
 /***/ }),
-/* 228 */
+/* 231 */
 /***/ (function(module, exports) {
 
 /**
@@ -29682,7 +29917,7 @@ module.exports = asciiToArray;
 
 
 /***/ }),
-/* 229 */
+/* 232 */
 /***/ (function(module, exports) {
 
 /** Used to compose unicode character classes. */
@@ -29714,7 +29949,7 @@ module.exports = hasUnicode;
 
 
 /***/ }),
-/* 230 */
+/* 233 */
 /***/ (function(module, exports) {
 
 /** Used to compose unicode character classes. */
@@ -29760,7 +29995,1310 @@ module.exports = unicodeToArray;
 
 
 /***/ }),
-/* 231 */
+/* 234 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getApiAxiosInstance;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _getApiBaseUrl = __webpack_require__(169);
+
+var _getApiBaseUrl2 = _interopRequireDefault(_getApiBaseUrl);
+
+var _newAxiosInstance = __webpack_require__(235);
+
+var _newAxiosInstance2 = _interopRequireDefault(_newAxiosInstance);
+
+var _Configuration = __webpack_require__(19);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var baseUrlToAxiosInstanceMap = _immutable2.default.Map();
+
+function getApiAxiosInstance(api) {
+
+  var axiosInstance = void 0;
+  var baseUrl = (0, _getApiBaseUrl2.default)(api);
+  if (!baseUrlToAxiosInstanceMap.has(baseUrl)) {
+    axiosInstance = (0, _newAxiosInstance2.default)(baseUrl);
+    baseUrlToAxiosInstanceMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
+  }
+
+  axiosInstance = baseUrlToAxiosInstanceMap.get(baseUrl);
+  var axiosInstanceAuthHeader = axiosInstance.defaults.headers.common.Authorization;
+  var configAuthToken = (0, _Configuration.getConfig)().get('authToken', '');
+
+  // the Axios instance Authorization header must equal "Bearer {auth_token}", where "auth_token" must equal the
+  // configured auth token. if that's not the case, we need a new Axios instance because the configured auth token
+  // has changed.
+  if (axiosInstanceAuthHeader !== 'Bearer ' + configAuthToken && ((0, _LangUtils.isNonEmptyString)(configAuthToken) || (0, _LangUtils.isNonEmptyString)(axiosInstanceAuthHeader))) {
+    axiosInstance = (0, _newAxiosInstance2.default)(baseUrl);
+    baseUrlToAxiosInstanceMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
+  }
+
+  // type casting to "any" to avoid Flow errors for now
+  return baseUrlToAxiosInstanceMap.get(baseUrl);
+}
+
+/***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = newAxiosInstance;
+
+var _axios = __webpack_require__(236);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _isURL = __webpack_require__(255);
+
+var _isURL2 = _interopRequireDefault(_isURL);
+
+var _Configuration = __webpack_require__(19);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function newAxiosInstance(baseUrl) {
+
+  if (!(0, _isURL2.default)(baseUrl)) {
+    throw new Error('invalid parameter: baseUrl must be a valid URL');
+  }
+
+  var axiosConfigObj = {
+    baseURL: baseUrl,
+    headers: {
+      common: {
+        'Content-Type': 'application/json'
+      }
+    }
+  };
+
+  var authToken = (0, _Configuration.getConfig)().get('authToken', '');
+  if ((0, _LangUtils.isNonEmptyString)(authToken)) {
+    axiosConfigObj.headers.common.Authorization = 'Bearer ' + authToken;
+  }
+
+  return _axios2.default.create(axiosConfigObj);
+}
+
+/***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(237);
+
+/***/ }),
+/* 237 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+var bind = __webpack_require__(173);
+var Axios = __webpack_require__(239);
+var defaults = __webpack_require__(32);
+
+/**
+ * Create an instance of Axios
+ *
+ * @param {Object} defaultConfig The default config for the instance
+ * @return {Axios} A new instance of Axios
+ */
+function createInstance(defaultConfig) {
+  var context = new Axios(defaultConfig);
+  var instance = bind(Axios.prototype.request, context);
+
+  // Copy axios.prototype to instance
+  utils.extend(instance, Axios.prototype, context);
+
+  // Copy context to instance
+  utils.extend(instance, context);
+
+  return instance;
+}
+
+// Create the default instance to be exported
+var axios = createInstance(defaults);
+
+// Expose Axios class to allow class inheritance
+axios.Axios = Axios;
+
+// Factory for creating new instances
+axios.create = function create(instanceConfig) {
+  return createInstance(utils.merge(defaults, instanceConfig));
+};
+
+// Expose Cancel & CancelToken
+axios.Cancel = __webpack_require__(178);
+axios.CancelToken = __webpack_require__(253);
+axios.isCancel = __webpack_require__(177);
+
+// Expose all/spread
+axios.all = function all(promises) {
+  return Promise.all(promises);
+};
+axios.spread = __webpack_require__(254);
+
+module.exports = axios;
+
+// Allow use of default import syntax in TypeScript
+module.exports.default = axios;
+
+
+/***/ }),
+/* 238 */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+// The _isBuffer check is for Safari 5-7 support, because it's missing
+// Object.prototype.constructor. Remove this eventually
+module.exports = function (obj) {
+  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+}
+
+function isBuffer (obj) {
+  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+// For Node v0.10 support. Remove this eventually.
+function isSlowBuffer (obj) {
+  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
+}
+
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var defaults = __webpack_require__(32);
+var utils = __webpack_require__(7);
+var InterceptorManager = __webpack_require__(248);
+var dispatchRequest = __webpack_require__(249);
+
+/**
+ * Create a new instance of Axios
+ *
+ * @param {Object} instanceConfig The default config for the instance
+ */
+function Axios(instanceConfig) {
+  this.defaults = instanceConfig;
+  this.interceptors = {
+    request: new InterceptorManager(),
+    response: new InterceptorManager()
+  };
+}
+
+/**
+ * Dispatch a request
+ *
+ * @param {Object} config The config specific for this request (merged with this.defaults)
+ */
+Axios.prototype.request = function request(config) {
+  /*eslint no-param-reassign:0*/
+  // Allow for axios('example/url'[, config]) a la fetch API
+  if (typeof config === 'string') {
+    config = utils.merge({
+      url: arguments[0]
+    }, arguments[1]);
+  }
+
+  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
+  config.method = config.method.toLowerCase();
+
+  // Hook up interceptors middleware
+  var chain = [dispatchRequest, undefined];
+  var promise = Promise.resolve(config);
+
+  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+    chain.push(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  while (chain.length) {
+    promise = promise.then(chain.shift(), chain.shift());
+  }
+
+  return promise;
+};
+
+// Provide aliases for supported request methods
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url
+    }));
+  };
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, data, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url,
+      data: data
+    }));
+  };
+});
+
+module.exports = Axios;
+
+
+/***/ }),
+/* 240 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+
+module.exports = function normalizeHeaderName(headers, normalizedName) {
+  utils.forEach(headers, function processHeader(value, name) {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = value;
+      delete headers[name];
+    }
+  });
+};
+
+
+/***/ }),
+/* 241 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var createError = __webpack_require__(176);
+
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */
+module.exports = function settle(resolve, reject, response) {
+  var validateStatus = response.config.validateStatus;
+  // Note: status is not exposed by XDomainRequest
+  if (!response.status || !validateStatus || validateStatus(response.status)) {
+    resolve(response);
+  } else {
+    reject(createError(
+      'Request failed with status code ' + response.status,
+      response.config,
+      null,
+      response.request,
+      response
+    ));
+  }
+};
+
+
+/***/ }),
+/* 242 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Update an Error with the specified config, error code, and response.
+ *
+ * @param {Error} error The error to update.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The error.
+ */
+module.exports = function enhanceError(error, config, code, request, response) {
+  error.config = config;
+  if (code) {
+    error.code = code;
+  }
+  error.request = request;
+  error.response = response;
+  return error;
+};
+
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      }
+
+      if (!utils.isArray(val)) {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+
+/***/ }),
+/* 244 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+
+// Headers whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+var ignoreDuplicateOf = [
+  'age', 'authorization', 'content-length', 'content-type', 'etag',
+  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+  'referer', 'retry-after', 'user-agent'
+];
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {};
+  var key;
+  var val;
+  var i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function parser(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        return;
+      }
+      if (key === 'set-cookie') {
+        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+      } else {
+        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      }
+    }
+  });
+
+  return parsed;
+};
+
+
+/***/ }),
+/* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs have full support of the APIs needed to test
+  // whether the request URL is of the same origin as current location.
+  (function standardBrowserEnv() {
+    var msie = /(msie|trident)/i.test(navigator.userAgent);
+    var urlParsingNode = document.createElement('a');
+    var originURL;
+
+    /**
+    * Parse a URL to discover it's components
+    *
+    * @param {String} url The URL to be parsed
+    * @returns {Object}
+    */
+    function resolveURL(url) {
+      var href = url;
+
+      if (msie) {
+        // IE needs attribute set twice to normalize properties
+        urlParsingNode.setAttribute('href', href);
+        href = urlParsingNode.href;
+      }
+
+      urlParsingNode.setAttribute('href', href);
+
+      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+      return {
+        href: urlParsingNode.href,
+        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+        host: urlParsingNode.host,
+        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+        hostname: urlParsingNode.hostname,
+        port: urlParsingNode.port,
+        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+                  urlParsingNode.pathname :
+                  '/' + urlParsingNode.pathname
+      };
+    }
+
+    originURL = resolveURL(window.location.href);
+
+    /**
+    * Determine if a URL shares the same origin as the current location
+    *
+    * @param {String} requestURL The URL to test
+    * @returns {boolean} True if URL shares the same origin, otherwise false
+    */
+    return function isURLSameOrigin(requestURL) {
+      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+      return (parsed.protocol === originURL.protocol &&
+            parsed.host === originURL.host);
+    };
+  })() :
+
+  // Non standard browser envs (web workers, react-native) lack needed support.
+  (function nonStandardBrowserEnv() {
+    return function isURLSameOrigin() {
+      return true;
+    };
+  })()
+);
+
+
+/***/ }),
+/* 246 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
+
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+function E() {
+  this.message = 'String contains an invalid character';
+}
+E.prototype = new Error;
+E.prototype.code = 5;
+E.prototype.name = 'InvalidCharacterError';
+
+function btoa(input) {
+  var str = String(input);
+  var output = '';
+  for (
+    // initialize result and counter
+    var block, charCode, idx = 0, map = chars;
+    // if the next str index does not exist:
+    //   change the mapping table to "="
+    //   check if d has no fractional digits
+    str.charAt(idx | 0) || (map = '=', idx % 1);
+    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
+    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+  ) {
+    charCode = str.charCodeAt(idx += 3 / 4);
+    if (charCode > 0xFF) {
+      throw new E();
+    }
+    block = block << 8 | charCode;
+  }
+  return output;
+}
+
+module.exports = btoa;
+
+
+/***/ }),
+/* 247 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs support document.cookie
+  (function standardBrowserEnv() {
+    return {
+      write: function write(name, value, expires, path, domain, secure) {
+        var cookie = [];
+        cookie.push(name + '=' + encodeURIComponent(value));
+
+        if (utils.isNumber(expires)) {
+          cookie.push('expires=' + new Date(expires).toGMTString());
+        }
+
+        if (utils.isString(path)) {
+          cookie.push('path=' + path);
+        }
+
+        if (utils.isString(domain)) {
+          cookie.push('domain=' + domain);
+        }
+
+        if (secure === true) {
+          cookie.push('secure');
+        }
+
+        document.cookie = cookie.join('; ');
+      },
+
+      read: function read(name) {
+        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+        return (match ? decodeURIComponent(match[3]) : null);
+      },
+
+      remove: function remove(name) {
+        this.write(name, '', Date.now() - 86400000);
+      }
+    };
+  })() :
+
+  // Non standard browser env (web workers, react-native) lack needed support.
+  (function nonStandardBrowserEnv() {
+    return {
+      write: function write() {},
+      read: function read() { return null; },
+      remove: function remove() {}
+    };
+  })()
+);
+
+
+/***/ }),
+/* 248 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+
+function InterceptorManager() {
+  this.handlers = [];
+}
+
+/**
+ * Add a new interceptor to the stack
+ *
+ * @param {Function} fulfilled The function to handle `then` for a `Promise`
+ * @param {Function} rejected The function to handle `reject` for a `Promise`
+ *
+ * @return {Number} An ID used to remove interceptor later
+ */
+InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+  this.handlers.push({
+    fulfilled: fulfilled,
+    rejected: rejected
+  });
+  return this.handlers.length - 1;
+};
+
+/**
+ * Remove an interceptor from the stack
+ *
+ * @param {Number} id The ID that was returned by `use`
+ */
+InterceptorManager.prototype.eject = function eject(id) {
+  if (this.handlers[id]) {
+    this.handlers[id] = null;
+  }
+};
+
+/**
+ * Iterate over all the registered interceptors
+ *
+ * This method is particularly useful for skipping over any
+ * interceptors that may have become `null` calling `eject`.
+ *
+ * @param {Function} fn The function to call for each interceptor
+ */
+InterceptorManager.prototype.forEach = function forEach(fn) {
+  utils.forEach(this.handlers, function forEachHandler(h) {
+    if (h !== null) {
+      fn(h);
+    }
+  });
+};
+
+module.exports = InterceptorManager;
+
+
+/***/ }),
+/* 249 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+var transformData = __webpack_require__(250);
+var isCancel = __webpack_require__(177);
+var defaults = __webpack_require__(32);
+var isAbsoluteURL = __webpack_require__(251);
+var combineURLs = __webpack_require__(252);
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+function throwIfCancellationRequested(config) {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested();
+  }
+}
+
+/**
+ * Dispatch a request to the server using the configured adapter.
+ *
+ * @param {object} config The config that is to be used for the request
+ * @returns {Promise} The Promise to be fulfilled
+ */
+module.exports = function dispatchRequest(config) {
+  throwIfCancellationRequested(config);
+
+  // Support baseURL config
+  if (config.baseURL && !isAbsoluteURL(config.url)) {
+    config.url = combineURLs(config.baseURL, config.url);
+  }
+
+  // Ensure headers exist
+  config.headers = config.headers || {};
+
+  // Transform request data
+  config.data = transformData(
+    config.data,
+    config.headers,
+    config.transformRequest
+  );
+
+  // Flatten headers
+  config.headers = utils.merge(
+    config.headers.common || {},
+    config.headers[config.method] || {},
+    config.headers || {}
+  );
+
+  utils.forEach(
+    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
+    function cleanHeaderConfig(method) {
+      delete config.headers[method];
+    }
+  );
+
+  var adapter = config.adapter || defaults.adapter;
+
+  return adapter(config).then(function onAdapterResolution(response) {
+    throwIfCancellationRequested(config);
+
+    // Transform response data
+    response.data = transformData(
+      response.data,
+      response.headers,
+      config.transformResponse
+    );
+
+    return response;
+  }, function onAdapterRejection(reason) {
+    if (!isCancel(reason)) {
+      throwIfCancellationRequested(config);
+
+      // Transform response data
+      if (reason && reason.response) {
+        reason.response.data = transformData(
+          reason.response.data,
+          reason.response.headers,
+          config.transformResponse
+        );
+      }
+    }
+
+    return Promise.reject(reason);
+  });
+};
+
+
+/***/ }),
+/* 250 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(7);
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Object|String} data The data to be transformed
+ * @param {Array} headers The headers for the request or response
+ * @param {Array|Function} fns A single function or Array of functions
+ * @returns {*} The resulting transformed data
+ */
+module.exports = function transformData(data, headers, fns) {
+  /*eslint no-param-reassign:0*/
+  utils.forEach(fns, function transform(fn) {
+    data = fn(data, headers);
+  });
+
+  return data;
+};
+
+
+/***/ }),
+/* 251 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Determines whether the specified URL is absolute
+ *
+ * @param {string} url The URL to test
+ * @returns {boolean} True if the specified URL is absolute, otherwise false
+ */
+module.exports = function isAbsoluteURL(url) {
+  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+  // by any combination of letters, digits, plus, period, or hyphen.
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+};
+
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Creates a new URL by combining the specified URLs
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} relativeURL The relative URL
+ * @returns {string} The combined URL
+ */
+module.exports = function combineURLs(baseURL, relativeURL) {
+  return relativeURL
+    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+    : baseURL;
+};
+
+
+/***/ }),
+/* 253 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Cancel = __webpack_require__(178);
+
+/**
+ * A `CancelToken` is an object that can be used to request cancellation of an operation.
+ *
+ * @class
+ * @param {Function} executor The executor function.
+ */
+function CancelToken(executor) {
+  if (typeof executor !== 'function') {
+    throw new TypeError('executor must be a function.');
+  }
+
+  var resolvePromise;
+  this.promise = new Promise(function promiseExecutor(resolve) {
+    resolvePromise = resolve;
+  });
+
+  var token = this;
+  executor(function cancel(message) {
+    if (token.reason) {
+      // Cancellation has already been requested
+      return;
+    }
+
+    token.reason = new Cancel(message);
+    resolvePromise(token.reason);
+  });
+}
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+  if (this.reason) {
+    throw this.reason;
+  }
+};
+
+/**
+ * Returns an object that contains a new `CancelToken` and a function that, when called,
+ * cancels the `CancelToken`.
+ */
+CancelToken.source = function source() {
+  var cancel;
+  var token = new CancelToken(function executor(c) {
+    cancel = c;
+  });
+  return {
+    token: token,
+    cancel: cancel
+  };
+};
+
+module.exports = CancelToken;
+
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Syntactic sugar for invoking a function and expanding an array for arguments.
+ *
+ * Common use case would be to use `Function.prototype.apply`.
+ *
+ *  ```js
+ *  function f(x, y, z) {}
+ *  var args = [1, 2, 3];
+ *  f.apply(null, args);
+ *  ```
+ *
+ * With `spread` this example can be re-written.
+ *
+ *  ```js
+ *  spread(function(x, y, z) {})([1, 2, 3]);
+ *  ```
+ *
+ * @param {Function} callback
+ * @returns {Function}
+ */
+module.exports = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr);
+  };
+};
+
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isURL;
+
+var _assertString = __webpack_require__(33);
+
+var _assertString2 = _interopRequireDefault(_assertString);
+
+var _isFQDN = __webpack_require__(256);
+
+var _isFQDN2 = _interopRequireDefault(_isFQDN);
+
+var _isIP = __webpack_require__(257);
+
+var _isIP2 = _interopRequireDefault(_isIP);
+
+var _merge = __webpack_require__(179);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var default_url_options = {
+  protocols: ['http', 'https', 'ftp'],
+  require_tld: true,
+  require_protocol: false,
+  require_host: true,
+  require_valid_protocol: true,
+  allow_underscores: false,
+  allow_trailing_dot: false,
+  allow_protocol_relative_urls: false
+};
+
+var wrapped_ipv6 = /^\[([^\]]+)\](?::([0-9]+))?$/;
+
+function isRegExp(obj) {
+  return Object.prototype.toString.call(obj) === '[object RegExp]';
+}
+
+function checkHost(host, matches) {
+  for (var i = 0; i < matches.length; i++) {
+    var match = matches[i];
+    if (host === match || isRegExp(match) && match.test(host)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function isURL(url, options) {
+  (0, _assertString2.default)(url);
+  if (!url || url.length >= 2083 || /[\s<>]/.test(url)) {
+    return false;
+  }
+  if (url.indexOf('mailto:') === 0) {
+    return false;
+  }
+  options = (0, _merge2.default)(options, default_url_options);
+  var protocol = void 0,
+      auth = void 0,
+      host = void 0,
+      hostname = void 0,
+      port = void 0,
+      port_str = void 0,
+      split = void 0,
+      ipv6 = void 0;
+
+  split = url.split('#');
+  url = split.shift();
+
+  split = url.split('?');
+  url = split.shift();
+
+  split = url.split('://');
+  if (split.length > 1) {
+    protocol = split.shift();
+    if (options.require_valid_protocol && options.protocols.indexOf(protocol) === -1) {
+      return false;
+    }
+  } else if (options.require_protocol) {
+    return false;
+  } else if (options.allow_protocol_relative_urls && url.substr(0, 2) === '//') {
+    split[0] = url.substr(2);
+  }
+  url = split.join('://');
+
+  if (url === '') {
+    return false;
+  }
+
+  split = url.split('/');
+  url = split.shift();
+
+  if (url === '' && !options.require_host) {
+    return true;
+  }
+
+  split = url.split('@');
+  if (split.length > 1) {
+    auth = split.shift();
+    if (auth.indexOf(':') >= 0 && auth.split(':').length > 2) {
+      return false;
+    }
+  }
+  hostname = split.join('@');
+
+  port_str = null;
+  ipv6 = null;
+  var ipv6_match = hostname.match(wrapped_ipv6);
+  if (ipv6_match) {
+    host = '';
+    ipv6 = ipv6_match[1];
+    port_str = ipv6_match[2] || null;
+  } else {
+    split = hostname.split(':');
+    host = split.shift();
+    if (split.length) {
+      port_str = split.join(':');
+    }
+  }
+
+  if (port_str !== null) {
+    port = parseInt(port_str, 10);
+    if (!/^[0-9]+$/.test(port_str) || port <= 0 || port > 65535) {
+      return false;
+    }
+  }
+
+  if (!(0, _isIP2.default)(host) && !(0, _isFQDN2.default)(host, options) && (!ipv6 || !(0, _isIP2.default)(ipv6, 6))) {
+    return false;
+  }
+
+  host = host || ipv6;
+
+  if (options.host_whitelist && !checkHost(host, options.host_whitelist)) {
+    return false;
+  }
+  if (options.host_blacklist && checkHost(host, options.host_blacklist)) {
+    return false;
+  }
+
+  return true;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isFQDN;
+
+var _assertString = __webpack_require__(33);
+
+var _assertString2 = _interopRequireDefault(_assertString);
+
+var _merge = __webpack_require__(179);
+
+var _merge2 = _interopRequireDefault(_merge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var default_fqdn_options = {
+  require_tld: true,
+  allow_underscores: false,
+  allow_trailing_dot: false
+};
+
+function isFQDN(str, options) {
+  (0, _assertString2.default)(str);
+  options = (0, _merge2.default)(options, default_fqdn_options);
+
+  /* Remove the optional trailing dot before checking validity */
+  if (options.allow_trailing_dot && str[str.length - 1] === '.') {
+    str = str.substring(0, str.length - 1);
+  }
+  var parts = str.split('.');
+  if (options.require_tld) {
+    var tld = parts.pop();
+    if (!parts.length || !/^([a-z\u00a1-\uffff]{2,}|xn[a-z0-9-]{2,})$/i.test(tld)) {
+      return false;
+    }
+    // disallow spaces
+    if (/[\s\u2002-\u200B\u202F\u205F\u3000\uFEFF\uDB40\uDC20]/.test(tld)) {
+      return false;
+    }
+  }
+  for (var part, i = 0; i < parts.length; i++) {
+    part = parts[i];
+    if (options.allow_underscores) {
+      part = part.replace(/_/g, '');
+    }
+    if (!/^[a-z\u00a1-\uffff0-9-]+$/i.test(part)) {
+      return false;
+    }
+    // disallow full-width chars
+    if (/[\uff01-\uff5e]/.test(part)) {
+      return false;
+    }
+    if (part[0] === '-' || part[part.length - 1] === '-') {
+      return false;
+    }
+  }
+  return true;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 257 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isIP;
+
+var _assertString = __webpack_require__(33);
+
+var _assertString2 = _interopRequireDefault(_assertString);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ipv4Maybe = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+var ipv6Block = /^[0-9A-F]{1,4}$/i;
+
+function isIP(str) {
+  var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  (0, _assertString2.default)(str);
+  version = String(version);
+  if (!version) {
+    return isIP(str, 4) || isIP(str, 6);
+  } else if (version === '4') {
+    if (!ipv4Maybe.test(str)) {
+      return false;
+    }
+    var parts = str.split('.').sort(function (a, b) {
+      return a - b;
+    });
+    return parts[3] <= 255;
+  } else if (version === '6') {
+    var blocks = str.split(':');
+    var foundOmissionBlock = false; // marker to indicate ::
+
+    // At least some OS accept the last 32 bits of an IPv6 address
+    // (i.e. 2 of the blocks) in IPv4 notation, and RFC 3493 says
+    // that '::ffff:a.b.c.d' is valid for IPv4-mapped IPv6 addresses,
+    // and '::a.b.c.d' is deprecated, but also valid.
+    var foundIPv4TransitionBlock = isIP(blocks[blocks.length - 1], 4);
+    var expectedNumberOfBlocks = foundIPv4TransitionBlock ? 7 : 8;
+
+    if (blocks.length > expectedNumberOfBlocks) {
+      return false;
+    }
+    // initial or final ::
+    if (str === '::') {
+      return true;
+    } else if (str.substr(0, 2) === '::') {
+      blocks.shift();
+      blocks.shift();
+      foundOmissionBlock = true;
+    } else if (str.substr(str.length - 2) === '::') {
+      blocks.pop();
+      blocks.pop();
+      foundOmissionBlock = true;
+    }
+
+    for (var i = 0; i < blocks.length; ++i) {
+      // test for a :: which can not be at the string start/end
+      // since those cases have been handled above
+      if (blocks[i] === '' && i > 0 && i < blocks.length - 1) {
+        if (foundOmissionBlock) {
+          return false; // multiple :: in address
+        }
+        foundOmissionBlock = true;
+      } else if (foundIPv4TransitionBlock && i === blocks.length - 1) {
+        // it has been checked before that the last
+        // block is a valid IPv4 address
+      } else if (!ipv6Block.test(blocks[i])) {
+        return false;
+      }
+    }
+    if (foundOmissionBlock) {
+      return blocks.length >= 1;
+    }
+    return blocks.length === expectedNumberOfBlocks;
+  }
+  return false;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 258 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -29785,15 +31323,15 @@ module.exports = baseHas;
 
 
 /***/ }),
-/* 232 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var castPath = __webpack_require__(233),
-    isArguments = __webpack_require__(166),
+var castPath = __webpack_require__(260),
+    isArguments = __webpack_require__(167),
     isArray = __webpack_require__(13),
-    isIndex = __webpack_require__(258),
-    isLength = __webpack_require__(33),
-    toKey = __webpack_require__(259);
+    isIndex = __webpack_require__(285),
+    isLength = __webpack_require__(30),
+    toKey = __webpack_require__(286);
 
 /**
  * Checks if `path` exists on `object`.
@@ -29830,13 +31368,13 @@ module.exports = hasPath;
 
 
 /***/ }),
-/* 233 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(13),
-    isKey = __webpack_require__(234),
-    stringToPath = __webpack_require__(235),
-    toString = __webpack_require__(170);
+    isKey = __webpack_require__(261),
+    stringToPath = __webpack_require__(262),
+    toString = __webpack_require__(172);
 
 /**
  * Casts `value` to a path array if it's not one.
@@ -29857,11 +31395,11 @@ module.exports = castPath;
 
 
 /***/ }),
-/* 234 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArray = __webpack_require__(13),
-    isSymbol = __webpack_require__(34);
+    isSymbol = __webpack_require__(31);
 
 /** Used to match property names within property paths. */
 var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
@@ -29892,10 +31430,10 @@ module.exports = isKey;
 
 
 /***/ }),
-/* 235 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var memoizeCapped = __webpack_require__(236);
+var memoizeCapped = __webpack_require__(263);
 
 /** Used to match property names within property paths. */
 var reLeadingDot = /^\./,
@@ -29926,10 +31464,10 @@ module.exports = stringToPath;
 
 
 /***/ }),
-/* 236 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var memoize = __webpack_require__(237);
+var memoize = __webpack_require__(264);
 
 /** Used as the maximum memoize cache size. */
 var MAX_MEMOIZE_SIZE = 500;
@@ -29958,10 +31496,10 @@ module.exports = memoizeCapped;
 
 
 /***/ }),
-/* 237 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var MapCache = __webpack_require__(238);
+var MapCache = __webpack_require__(265);
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -30037,14 +31575,14 @@ module.exports = memoize;
 
 
 /***/ }),
-/* 238 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var mapCacheClear = __webpack_require__(239),
-    mapCacheDelete = __webpack_require__(253),
-    mapCacheGet = __webpack_require__(255),
-    mapCacheHas = __webpack_require__(256),
-    mapCacheSet = __webpack_require__(257);
+var mapCacheClear = __webpack_require__(266),
+    mapCacheDelete = __webpack_require__(280),
+    mapCacheGet = __webpack_require__(282),
+    mapCacheHas = __webpack_require__(283),
+    mapCacheSet = __webpack_require__(284);
 
 /**
  * Creates a map cache object to store key-value pairs.
@@ -30075,12 +31613,12 @@ module.exports = MapCache;
 
 
 /***/ }),
-/* 239 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Hash = __webpack_require__(240),
-    ListCache = __webpack_require__(246),
-    Map = __webpack_require__(165);
+var Hash = __webpack_require__(267),
+    ListCache = __webpack_require__(273),
+    Map = __webpack_require__(166);
 
 /**
  * Removes all key-value entries from the map.
@@ -30102,14 +31640,14 @@ module.exports = mapCacheClear;
 
 
 /***/ }),
-/* 240 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hashClear = __webpack_require__(241),
-    hashDelete = __webpack_require__(242),
-    hashGet = __webpack_require__(243),
-    hashHas = __webpack_require__(244),
-    hashSet = __webpack_require__(245);
+var hashClear = __webpack_require__(268),
+    hashDelete = __webpack_require__(269),
+    hashGet = __webpack_require__(270),
+    hashHas = __webpack_require__(271),
+    hashSet = __webpack_require__(272);
 
 /**
  * Creates a hash object.
@@ -30140,10 +31678,10 @@ module.exports = Hash;
 
 
 /***/ }),
-/* 241 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(20);
+var nativeCreate = __webpack_require__(21);
 
 /**
  * Removes all key-value entries from the hash.
@@ -30161,7 +31699,7 @@ module.exports = hashClear;
 
 
 /***/ }),
-/* 242 */
+/* 269 */
 /***/ (function(module, exports) {
 
 /**
@@ -30184,10 +31722,10 @@ module.exports = hashDelete;
 
 
 /***/ }),
-/* 243 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(20);
+var nativeCreate = __webpack_require__(21);
 
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -30220,10 +31758,10 @@ module.exports = hashGet;
 
 
 /***/ }),
-/* 244 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(20);
+var nativeCreate = __webpack_require__(21);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -30249,10 +31787,10 @@ module.exports = hashHas;
 
 
 /***/ }),
-/* 245 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var nativeCreate = __webpack_require__(20);
+var nativeCreate = __webpack_require__(21);
 
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -30278,14 +31816,14 @@ module.exports = hashSet;
 
 
 /***/ }),
-/* 246 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var listCacheClear = __webpack_require__(247),
-    listCacheDelete = __webpack_require__(248),
-    listCacheGet = __webpack_require__(250),
-    listCacheHas = __webpack_require__(251),
-    listCacheSet = __webpack_require__(252);
+var listCacheClear = __webpack_require__(274),
+    listCacheDelete = __webpack_require__(275),
+    listCacheGet = __webpack_require__(277),
+    listCacheHas = __webpack_require__(278),
+    listCacheSet = __webpack_require__(279);
 
 /**
  * Creates an list cache object.
@@ -30316,7 +31854,7 @@ module.exports = ListCache;
 
 
 /***/ }),
-/* 247 */
+/* 274 */
 /***/ (function(module, exports) {
 
 /**
@@ -30335,10 +31873,10 @@ module.exports = listCacheClear;
 
 
 /***/ }),
-/* 248 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(21);
+var assocIndexOf = __webpack_require__(22);
 
 /** Used for built-in method references. */
 var arrayProto = Array.prototype;
@@ -30376,7 +31914,7 @@ module.exports = listCacheDelete;
 
 
 /***/ }),
-/* 249 */
+/* 276 */
 /***/ (function(module, exports) {
 
 /**
@@ -30419,10 +31957,10 @@ module.exports = eq;
 
 
 /***/ }),
-/* 250 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(21);
+var assocIndexOf = __webpack_require__(22);
 
 /**
  * Gets the list cache value for `key`.
@@ -30444,10 +31982,10 @@ module.exports = listCacheGet;
 
 
 /***/ }),
-/* 251 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(21);
+var assocIndexOf = __webpack_require__(22);
 
 /**
  * Checks if a list cache value for `key` exists.
@@ -30466,10 +32004,10 @@ module.exports = listCacheHas;
 
 
 /***/ }),
-/* 252 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assocIndexOf = __webpack_require__(21);
+var assocIndexOf = __webpack_require__(22);
 
 /**
  * Sets the list cache `key` to `value`.
@@ -30498,10 +32036,10 @@ module.exports = listCacheSet;
 
 
 /***/ }),
-/* 253 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(22);
+var getMapData = __webpack_require__(23);
 
 /**
  * Removes `key` and its value from the map.
@@ -30522,7 +32060,7 @@ module.exports = mapCacheDelete;
 
 
 /***/ }),
-/* 254 */
+/* 281 */
 /***/ (function(module, exports) {
 
 /**
@@ -30543,10 +32081,10 @@ module.exports = isKeyable;
 
 
 /***/ }),
-/* 255 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(22);
+var getMapData = __webpack_require__(23);
 
 /**
  * Gets the map value for `key`.
@@ -30565,10 +32103,10 @@ module.exports = mapCacheGet;
 
 
 /***/ }),
-/* 256 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(22);
+var getMapData = __webpack_require__(23);
 
 /**
  * Checks if a map value for `key` exists.
@@ -30587,10 +32125,10 @@ module.exports = mapCacheHas;
 
 
 /***/ }),
-/* 257 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getMapData = __webpack_require__(22);
+var getMapData = __webpack_require__(23);
 
 /**
  * Sets the map `key` to `value`.
@@ -30615,7 +32153,7 @@ module.exports = mapCacheSet;
 
 
 /***/ }),
-/* 258 */
+/* 285 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -30643,10 +32181,10 @@ module.exports = isIndex;
 
 
 /***/ }),
-/* 259 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isSymbol = __webpack_require__(34);
+var isSymbol = __webpack_require__(31);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -30670,7 +32208,6985 @@ module.exports = toKey;
 
 
 /***/ }),
-/* 260 */
+/* 287 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getApps = getApps;
+exports.getApp = getApp;
+exports.getAppByName = getAppByName;
+exports.getAppTypesForAppTypeIds = getAppTypesForAppTypeIds;
+exports.getConfigurations = getConfigurations;
+exports.installApp = installApp;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('AppApi');
+
+/**
+  * `GET /app/`
+  *
+  * Loads all apps.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @return {Promise<Object[]>} - a Promise that will resolve with a list of all apps
+  *
+  * @example
+  * AppApi.getApps();
+  */
+function getApps() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/').then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+  * `GET /app/{appId}`
+  *
+  * Loads app with provided id
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @return {Promise<Object>} - a Promise that will resolve with the details of an app
+  *
+  * @example
+  * AppApi.getApp("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+  */
+
+function getApp(appId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + appId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+  * `GET /app/{appName}`
+  *
+  * Loads app with provided name
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {string} appName
+  * @return {Promise<Object>} - a Promise that will resolve with the details of an app
+  *
+  * @example
+  * AppApi.getAppByName("bhr");
+  */
+
+function getAppByName(appName) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(appName)) {
+    errorMsg = 'invalid parameter: appName must be a non-empty string';
+    LOG.error(errorMsg, appName);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.LOOKUP_PATH + '/' + appName).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+  * `GET /app/type`
+  *
+  * Loads app type objects for provided ids
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID[]} appTypeIds
+  * @return {Promise<Object>} - a Promise that will resolve with a mapping from app type ids to app types
+  *
+  * @example
+  * AppApi.getAppTypeIds([
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+  * ]);
+  */
+
+function getAppTypesForAppTypeIds(appTypeIds) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuidArray)(appTypeIds)) {
+    errorMsg = 'invalid parameter: appTypeIds must be a valid UUID array';
+    LOG.error(errorMsg, appTypeIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _ApiPaths.TYPE_PATH + '/' + _ApiPaths.BULK_PATH, appTypeIds).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+  * `GET /app/config/{appId}`
+  *
+  * Loads all available configurations for a provided app id
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @return {Promise<Object[]>} - a Promise that will resolve with all available configurations for an app
+  *
+  * @example
+  * AppApi.getConfigurations("ec6865e6-e60e-424b-a071-6a9c1603d735");
+  */
+function getConfigurations(appId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.CONFIG_PATH + '/' + appId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+  * `GET /app/install/{appId}/{organizationId}/{prefix}`
+  *
+  * Installs an app for an organization.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @param {UUID} organizationId
+  * @param {string} prefix
+  * @return {Promise} - a Promise that will resolve without a value after creating an app for an organization
+  *
+  * @example
+  * AppApi.installApp(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+  *   "app_prefix"
+  * );
+  */
+function installApp(appId, organizationId, prefix) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(prefix)) {
+    errorMsg = 'invalid parameter: prefix must be a non-empty string';
+    LOG.error(errorMsg, prefix);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.INSTALL_PATH + '/' + appId + '/' + organizationId + '/' + prefix).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 288 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.checkAuthorizations = checkAuthorizations;
+exports.getAccessibleObjects = getAccessibleObjects;
+
+var _isUndefined = __webpack_require__(20);
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _PermissionTypes = __webpack_require__(34);
+
+var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
+
+var _SecurableTypes = __webpack_require__(38);
+
+var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _AccessCheck = __webpack_require__(35);
+
+var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
+
+var _ApiNames = __webpack_require__(5);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('AuthorizationApi');
+
+/**
+ * `POST /authorizations`
+ *
+ * Gets the Authorizations for the given AccessChecks.
+ *
+ * @static
+ * @memberof lattice.AuthorizationApi
+ * @param {AccessCheck[]} queries
+ * @returns {Promise<Authorization[]>} - a Promise that will resolve with the Authorizations as its fulfillment value
+ *
+ * @example
+ * AuthorizationApi.checkAuthorizations(
+ *   [
+ *     {
+ *       "aclKey": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
+ *       "permissions": ["READ"]
+ *     }
+ *   ]
+ * );
+ */
+
+
+/**
+ * AuthorizationApi ...
+ *
+ * @module AuthorizationApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.AuthorizationApi.check...
+ *
+ * @example
+ * import { AuthorizationApi } from 'lattice';
+ * // AuthorizationApi.check...
+ */
+
+function checkAuthorizations(queries) {
+
+  var errorMsg = '';
+
+  var accessChecks = queries;
+  if ((0, _isUndefined2.default)(queries) || (0, _LangUtils.isEmptyArray)(queries)) {
+    accessChecks = [];
+  } else if (!(0, _ValidationUtils.isValidAccessCheckArray)(queries)) {
+    errorMsg = 'invalid parameter: queries must be an array of valid AccessChecks';
+    LOG.error(errorMsg, queries);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: Immutable.Set() with tests
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.AUTHORIZATION_API).post('/', accessChecks).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /authorizations`
+ *
+ * Gets all authorized objects of the given SecurableType with the given Permission.
+ *
+ * @static
+ * @memberof lattice.AuthorizationApi
+ * @param {SecurableType} securableType
+ * @param {Permission} permission
+ * @param {string} pagingToken (optional)
+ * @returns {Promise<AuthorizedObjectsSearchResult>} - a Promise that will resolve with the authorized objects and a
+ * paging token as its fulfillment value
+ *
+ * @example
+ * AuthorizationApi.getAccessibleObjects(
+ *   "EntityType",
+ *   "READ",
+ *   "{pagingToken}"
+ * );
+ */
+function getAccessibleObjects(securableType, permission, pagingToken) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(securableType) || !_SecurableTypes2.default[securableType]) {
+    errorMsg = 'invalid parameter: securableType must be a valid SecurableType';
+    LOG.error(errorMsg, securableType);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(permission) || !_PermissionTypes2.default[permission]) {
+    errorMsg = 'invalid parameter: permission must be a valid Permission';
+    LOG.error(errorMsg, permission);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isDefined)(pagingToken) && !(0, _LangUtils.isNonEmptyString)(pagingToken)) {
+    errorMsg = 'invalid parameter: when given, pagingToken must be a non-empty string';
+    LOG.error(errorMsg, pagingToken);
+    return Promise.reject(errorMsg);
+  }
+
+  var url = '/?objectType=' + securableType + '&permission=' + permission;
+  if ((0, _LangUtils.isDefined)(pagingToken)) {
+    url = url + '&pagingToken=' + pagingToken;
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.AUTHORIZATION_API).get(url).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 289 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getEntitySetData = getEntitySetData;
+exports.getEntitySetDataFileUrl = getEntitySetDataFileUrl;
+exports.createEntityData = createEntityData;
+exports.createEntityAndAssociationData = createEntityAndAssociationData;
+exports.storeEntityData = storeEntityData;
+exports.acquireSyncTicket = acquireSyncTicket;
+exports.releaseSyncTicket = releaseSyncTicket;
+exports.deleteEntityFromEntitySet = deleteEntityFromEntitySet;
+exports.replaceEntityInEntitySet = replaceEntityInEntitySet;
+exports.replaceEntityInEntitySetUsingFqns = replaceEntityInEntitySetUsingFqns;
+exports.getEntitySetSize = getEntitySetSize;
+exports.getEntity = getEntity;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _isUndefined = __webpack_require__(20);
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * DataApi gives access to OpenLattice's REST API for reading, writing data against an existing EntityDataModel schema.
+ *
+ * @module DataApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.DataApi.get...
+ *
+ * @example
+ * import { DataApi } from 'lattice';
+ * // DataApi.get...
+ */
+
+var LOG = new _Logger2.default('DataApi');
+
+/**
+ * `POST /data/entitydata/{entitySetId}`
+ *
+ * Gets all data for the given EntitySet UUID with respect to the given filters.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} syncId
+ * @param {UUID[]} propertyTypeIds
+ * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
+ *
+ * @example
+ * DataApi.getSelectedEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
+ * );
+ */
+function getEntitySetData(entitySetId, syncId, propertyTypeIds) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+
+  if ((0, _ValidationUtils.isValidUuid)(syncId)) {
+    data.syncId = syncId;
+  } else if (!(0, _isUndefined2.default)(syncId) && !(0, _LangUtils.isEmptyString)(syncId)) {
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
+    data.properties = _immutable2.default.Set().withMutations(function (set) {
+      propertyTypeIds.forEach(function (propertyTypeId) {
+        set.add(propertyTypeId);
+      });
+    }).toJS();
+  } else if (!(0, _isUndefined2.default)(propertyTypeIds) && !(0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {string} fileType
+ * @returns {string} - the direct file download URL
+ *
+ * @example
+ * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
+ */
+function getEntitySetDataFileUrl(entitySetId, fileType) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return null;
+  }
+
+  // TODO: create an allowed file type constants map, and validate fileType against it
+
+  if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
+    errorMsg = 'invalid parameter: fileType must be a non-empty string';
+    LOG.error(errorMsg, fileType);
+    return null;
+  }
+
+  // eslint-disable-next-line
+  return (0, _axios.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + fileType.toLowerCase();
+}
+
+/**
+ * `PUT /data/entitydata/{entitySetId}/{syncId}`
+ *
+ * Creates an entry for the given entity data.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} syncId
+ * @param {Object} entities
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.createEntityData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "id_1": [
+ *       {
+ *         "uuid_1": ["value_1", "value_2"],
+ *         "uuid_2": ["value_3", "value_4"]
+ *       }
+ *     ]
+ *   }
+ * );
+ */
+function createEntityData(entitySetId, syncId, entities) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  var url = '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId;
+
+  if ((0, _ValidationUtils.isValidUuid)(syncId)) {
+    url = url + '/' + syncId;
+  } else if (!(0, _isUndefined2.default)(syncId) && !(0, _LangUtils.isEmptyString)(syncId)) {
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
+
+  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entities);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put(url, entities).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /data/entitydata`
+ *
+ * Creates entities linked by associations for the given entity data.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {Object} bulkDataCreation
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.createEntityAndAssociationData(
+ *   syncTickets: ["ec6865e6-e60e-424b-a071-6a9c1603d735", "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
+ *   entities: [
+ *     {
+ *       "key": {
+ *         "entitySetId": "entity_set_id_1",
+ *         "entityId": "entity_id_1",
+ *         "syncId": "sync_id_1"
+ *       },
+ *       "details": [
+ *         {
+ *           "uuid_1a": ["value_1a", "value_1b"],
+ *           "uuid_1b": ["value_1c", "value_1d"]
+ *         }
+ *       ]
+ *     },
+ *     {
+ *       "key": {
+ *         "entitySetId": "entity_set_id_2",
+ *         "entityId": "entity_id_2",
+ *         "syncId": "sync_id_2"
+ *       },
+ *       "details": [
+ *         {
+ *           "uuid_2a": ["value_2a", "value_2b"],
+ *           "uuid_2b": ["value_2c", "value_2d"]
+ *         }
+ *       ]
+ *     }
+ *   ],
+ *   associations: [
+ *     {
+ *       "key": {
+ *         "entitySetId": "entity_set_id_3",
+ *         "entityId": "entity_id_3",
+ *         "syncId": "sync_id_3"
+ *       },
+ *       "src": {
+ *         "entitySetId": "entity_set_id_1",
+ *         "entityId": "entity_id_1",
+ *         "syncId": "sync_id_1"
+ *       },
+ *       "dst": {
+ *         "entitySetId": "entity_set_id_2",
+ *         "entityId": "entity_id_2",
+ *         "syncId": "sync_id_2"
+ *       },
+ *       "details": [
+ *         {
+ *           "uuid_3a": ["value_3a", "value_3b"],
+ *           "uuid_3b": ["value_3c", "value_3d"]
+ *         }
+ *       ]
+ *     }
+ *   ]
+ * );
+ */
+function createEntityAndAssociationData(bulkDataCreation) {
+
+  var url = '/' + _ApiPaths.ENTITY_DATA_PATH;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).patch(url, bulkDataCreation).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /data/entitydata/{ticketId}/{syncId}`
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} ticketId
+ * @param {UUID} syncId
+ * @param {Object} entities
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.storeEntityData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "id_1": [
+ *       {
+ *         "uuid_1": ["value_1", "value_2"],
+ *         "uuid_2": ["value_3", "value_4"]
+ *       }
+ *     ]
+ *   }
+ * );
+ */
+function storeEntityData(ticketId, syncId, entities) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
+    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
+    LOG.error(errorMsg, ticketId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
+
+  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entities);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).patch('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.TICKET_PATH + '/' + ticketId + '/' + syncId, entities).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /data/ticket/{entitySetId}/{syncId}`
+ *
+ * Acquires a sync ticket UUID for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} syncId
+ * @return {Promise<UUID>} - a Promise that will resolve with the acquired sync ticket UUID as its fulfillment value
+ *
+ * @example
+ * DataApi.acquireSyncTicket(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ * );
+ */
+function acquireSyncTicket(entitySetId, syncId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.TICKET_PATH + '/' + entitySetId + '/' + syncId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /data/ticket/{ticketId}`
+ *
+ * Releases the given sync ticket UUID.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} syncId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.acquireSyncTicket("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ */
+function releaseSyncTicket(ticketId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
+    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
+    LOG.error(errorMsg, ticketId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + ticketId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
+ *
+ * Deletes the entity with the specified id from the entity set with the specified id.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.deleteEntityFromEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ * )
+});
+ */
+function deleteEntityFromEntitySet(entitySetId, entityKeyId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /data/entitydata/{entitySetId}/{entityKeyId}`
+ *
+ * Replaces the entity values for the specified entityKeyId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @param {Object} entity
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.replaceEntityInEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "uuid_1a": ["value_1a", "value_1b"],
+ *     "uuid_1b": ["value_1c", "value_1d"]
+ *   }
+ * );
+ */
+function replaceEntityInEntitySet(entitySetId, entityKeyId, entity) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate "entity" structure
+
+  if (!(0, _LangUtils.isNonEmptyObject)(entity)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty object';
+    LOG.error(errorMsg, entity);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.UPDATE_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /data/entitydata/update/{entitySetId}/{entityKeyId}`
+ *
+ * Replaces the entity values for the specified entityKeyId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @param {Object} entity
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.replaceEntityInEntitySetUsingFqns(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "namespace1.name1": ["value_1a", "value_1b"],
+ *     "namespace2.name2": ["value_1c", "value_1d"]
+ *   }
+ * );
+ */
+function replaceEntityInEntitySetUsingFqns(entitySetId, entityKeyId, entity) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate "entity" structure
+
+  if (!(0, _LangUtils.isNonEmptyObject)(entity)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty object';
+    LOG.error(errorMsg, entity);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.UPDATE_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /data/{entitySetId}/count`
+ *
+ * Returns the number of entities in the specified entity set
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves with the entity count
+ *
+ * @example
+ * DataApi.getEntitySetSize("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e")
+ */
+function getEntitySetSize(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + _ApiPaths.COUNT_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /data/{entitySetId}/{entityKeyId}`
+ *
+ * Returns a single entity, specified by its entitySetId and entityKeyId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves with the requested entity
+ *
+ * @example
+ *  * DataApi.getEntity("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
+  */
+function getEntity(entitySetId, entityKeyId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+// TODO: createAssociationData()
+// TODO: storeAssociationData()
+
+/***/ }),
+/* 290 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getDataSource = getDataSource;
+exports.createOrUpdateDataSource = createOrUpdateDataSource;
+exports.deleteDataSource = deleteDataSource;
+exports.startSync = startSync;
+exports.signalSyncCompleted = signalSyncCompleted;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _DataSource = __webpack_require__(181);
+
+var _DataSource2 = _interopRequireDefault(_DataSource);
+
+var _ApiNames = __webpack_require__(5);
+
+var _axios = __webpack_require__(6);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('DataSourcesApi');
+
+/**
+ * `GET /datasource/{uuid}`
+ *
+ * Gets the DataSource definition for the given DataSource UUID.
+ *
+ * @static
+ * @memberof lattice.DataSourcesApi
+ * @param {UUID} dataSourceId
+ * @returns {Promise<DataSource>} - a Promise that will resolve with the DataSource definition as its fulfillment value
+ *
+ * @example
+ * DataSourcesApi.getDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ */
+
+
+/**
+ * DataSourcesApi ...
+ *
+ * TODO: add description
+ *
+ * @module DataSourcesApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.DataSourcesApi.get...
+ *
+ * @example
+ * import { DataSourcesApi } from 'lattice';
+ * // DataSourcesApi.get...
+ */
+
+function getDataSource(dataSourceId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
+    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
+    LOG.error(errorMsg, dataSourceId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).get('/' + dataSourceId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /datasource`
+ *
+ * Creates a new DataSource definition if it doesn't exist, or updates the existing DataSource definition.
+ *
+ * @static
+ * @memberof lattice.DataSourcesApi
+ * @param {DataSource} dataSource
+ * @returns {Promise<UUID>} - a Promise that will resolve with the newly-created DataSource UUID
+ *
+ * @example
+ * DataSourcesApi.createOrUpdateDataSource(
+ *   {
+ *     "id": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *     "title": "My DataSource",
+ *     "description": "a DataSource to be integrated",
+ *     "entitySetIds": [
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     ]
+ *   }
+ * );
+ */
+function createOrUpdateDataSource(dataSource) {
+
+  var errorMsg = '';
+
+  if (!(0, _DataSource.isValid)(dataSource)) {
+    errorMsg = 'invalid parameter: dataSource must be a valid DataSource';
+    LOG.error(errorMsg, dataSource);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).post('/', dataSource).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /datasource/{uuid}`
+ *
+ * Deletes the DataSource definition for the given DataSource UUID.
+ *
+ * @static
+ * @memberof lattice.DataSourcesApi
+ * @param {UUID} dataSourceId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataSourcesApi.deleteDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ */
+function deleteDataSource(dataSourceId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
+    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
+    LOG.error(errorMsg, dataSourceId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).delete('/' + dataSourceId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /datasource/{uuid}`
+ *
+ * @static
+ * @memberof lattice.DataSourcesApi
+ * @param {UUID} dataSourceId
+ * @returns {Promise<UUID>} - a Promise that will resolve with the sync UUID as its fulfillment value
+ *
+ * @example
+ * DataSourcesApi.startSync("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ */
+function startSync(dataSourceId) {
+
+  // TODO: add description
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
+    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
+    LOG.error(errorMsg, dataSourceId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).post('/' + dataSourceId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /datasource/{uuid}/{uuid}`
+ *
+ * @static
+ * @memberof lattice.DataSourcesApi
+ * @param {UUID} dataSourceId
+ * @param {UUID} syncId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataSourcesApi.signalSyncCompleted(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "8f79e123-3411-4099-a41f-88e5d22d0e8d"
+ * );
+ */
+function signalSyncCompleted(dataSourceId, syncId) {
+
+  // TODO: add description
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
+    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
+    LOG.error(errorMsg, dataSourceId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
+    errorMsg = 'invalid parameter: syncId must be a valid UUID';
+    LOG.error(errorMsg, syncId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).delete('/' + dataSourceId + '/' + syncId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 291 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getEntityDataModel = getEntityDataModel;
+exports.getEntityDataModelProjection = getEntityDataModelProjection;
+exports.getSchema = getSchema;
+exports.getAllSchemas = getAllSchemas;
+exports.getAllSchemasInNamespace = getAllSchemasInNamespace;
+exports.getSchemaFileUrl = getSchemaFileUrl;
+exports.createSchema = createSchema;
+exports.createEmptySchema = createEmptySchema;
+exports.updateSchema = updateSchema;
+exports.getEntitySet = getEntitySet;
+exports.getEntitySetId = getEntitySetId;
+exports.getAllEntitySets = getAllEntitySets;
+exports.createEntitySets = createEntitySets;
+exports.deleteEntitySet = deleteEntitySet;
+exports.updateEntitySetMetaData = updateEntitySetMetaData;
+exports.getEntityType = getEntityType;
+exports.getEntityTypeId = getEntityTypeId;
+exports.getAllEntityTypes = getAllEntityTypes;
+exports.getAllAssociationEntityTypes = getAllAssociationEntityTypes;
+exports.createEntityType = createEntityType;
+exports.deleteEntityType = deleteEntityType;
+exports.addPropertyTypeToEntityType = addPropertyTypeToEntityType;
+exports.removePropertyTypeFromEntityType = removePropertyTypeFromEntityType;
+exports.forceRemovePropertyTypeFromEntityType = forceRemovePropertyTypeFromEntityType;
+exports.reorderPropertyTypesInEntityType = reorderPropertyTypesInEntityType;
+exports.updateEntityTypeMetaData = updateEntityTypeMetaData;
+exports.getEntityTypeHierarchy = getEntityTypeHierarchy;
+exports.getPropertyType = getPropertyType;
+exports.getPropertyTypeId = getPropertyTypeId;
+exports.getAllPropertyTypes = getAllPropertyTypes;
+exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
+exports.createPropertyType = createPropertyType;
+exports.deletePropertyType = deletePropertyType;
+exports.forceDeletePropertyType = forceDeletePropertyType;
+exports.updatePropertyTypeMetaData = updatePropertyTypeMetaData;
+exports.getAssociationType = getAssociationType;
+exports.getAllAssociationTypes = getAllAssociationTypes;
+exports.getAssociationTypeDetails = getAssociationTypeDetails;
+exports.getAllAvailableAssociationTypes = getAllAvailableAssociationTypes;
+exports.createAssociationType = createAssociationType;
+exports.deleteAssociationType = deleteAssociationType;
+exports.getComplexType = getComplexType;
+exports.getAllComplexTypes = getAllComplexTypes;
+exports.getComplexTypeHierarchy = getComplexTypeHierarchy;
+exports.createComplexType = createComplexType;
+exports.deleteComplexType = deleteComplexType;
+exports.getEnumType = getEnumType;
+exports.getAllEnumTypes = getAllEnumTypes;
+exports.createEnumType = createEnumType;
+exports.deleteEnumType = deleteEnumType;
+exports.addSrcEntityTypeToAssociationType = addSrcEntityTypeToAssociationType;
+exports.addDstEntityTypeToAssociationType = addDstEntityTypeToAssociationType;
+exports.removeSrcEntityTypeFromAssociationType = removeSrcEntityTypeFromAssociationType;
+exports.removeDstEntityTypeFromAssociationType = removeDstEntityTypeFromAssociationType;
+exports.getAllEntitySetPropertyMetadata = getAllEntitySetPropertyMetadata;
+exports.getEntitySetPropertyMetadata = getEntitySetPropertyMetadata;
+exports.updateEntitySetPropertyMetadata = updateEntitySetPropertyMetadata;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _has = __webpack_require__(8);
+
+var _has2 = _interopRequireDefault(_has);
+
+var _isUndefined = __webpack_require__(20);
+
+var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _EntitySet = __webpack_require__(24);
+
+var _EntitySet2 = _interopRequireDefault(_EntitySet);
+
+var _FullyQualifiedName = __webpack_require__(16);
+
+var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _EntityType = __webpack_require__(17);
+
+var _EntityType2 = _interopRequireDefault(_EntityType);
+
+var _PropertyType = __webpack_require__(25);
+
+var _PropertyType2 = _interopRequireDefault(_PropertyType);
+
+var _Schema = __webpack_require__(182);
+
+var _Schema2 = _interopRequireDefault(_Schema);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * EntityDataModelApi gives access to OpenLattice's REST API for interacting with EntityDataModel (EDM) schemas.
+ *
+ * @module EntityDataModelApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.EntityDataModelApi.get...
+ *
+ * @example
+ * import { EntityDataModelApi } from 'lattice';
+ * // EntityDataModelApi.get...
+ */
+
+var LOG = new _Logger2.default('EntityDataModelApi');
+
+var UpdateSchemaRequestActions = {
+  ADD: 'ADD',
+  REMOVE: 'REMOVE',
+  REPLACE: 'REPLACE'
+};
+
+/*
+ *
+ * EntityDataModel APIs
+ *
+ */
+
+/**
+ * `GET /edm`
+ *
+ * Gets the entire Entity Data Model.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<Object>} - a Promise that will resolve with the Entity Data Model as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityDataModel();
+ */
+function getEntityDataModel() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/').then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm`
+ *
+ * Gets the Entity Data Model, filtered by the given projection.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {Object[]} projection - a Set of objects containing an ID, a SecurableType, and a Set of SecurableTypes
+ * @return {Promise<Object>} - a Promise that will resolve with the filtered Entity Data Model as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityDataModelProjection(
+ *   [
+ *     {
+ *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "type": "EntitySet",
+ *       "include": [
+ *         "EntitySet",
+ *         "EntityType",
+ *         "PropertyTypeInEntitySet"
+ *       ]
+ *     }
+ *   ]
+ * );
+ */
+function getEntityDataModelProjection(projection) {
+
+  // TODO: add validation
+  // TODO: add unit tests
+  // TODO: create data models
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/', projection).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * Schema APIs
+ *
+ */
+
+/**
+ * `GET /edm/schema/{namespace}/{name}`
+ *
+ * Gets the Schema definition for the given Schema FQN.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {FullyQualifiedName} schemaFqn
+ * @return {Promise<Schema>} - a Promise that will resolve with the Schema definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getSchema(
+ *   { "namespace": "LATTICE", "name": "MySchema" }
+ * );
+ */
+function getSchema(schemaFqn) {
+
+  var errorMsg = '';
+
+  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
+  }
+
+  var namespace = schemaFqn.namespace,
+      name = schemaFqn.name;
+
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/schema`
+ *
+ * Gets all Schema definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<Schema[]>} - a Promise that will resolve with all Schema definitions
+ *
+ * @example
+ * EntityDataModelApi.getAllSchemas();
+ */
+function getAllSchemas() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/schema/{namespace}`
+ *
+ * Gets all Schema definitions under the given namespace.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {string} namespace
+ * @return {Promise<Schema[]>} - a Promise that will resolve with the Schema definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllSchemasInNamespace("LATTICE");
+ */
+function getAllSchemasInNamespace(namespace) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a non-empty string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * Generates the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {FullyQualifiedName} schemaFqn
+ * @param {string} fileType
+ * @returns {string} - the direct file download URL
+ *
+ * @example
+ * EntityDataModelApi.getSchemaFormatted(
+ *   { "namespace": "LATTICE", "name": "MySchema" },
+ *   "json"
+ * );
+ */
+function getSchemaFileUrl(schemaFqn, fileType) {
+
+  var errorMsg = '';
+
+  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return null;
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
+    errorMsg = 'invalid parameter: fileType must be a non-empty string';
+    LOG.error(errorMsg, fileType);
+    return null;
+  }
+
+  var namespace = schemaFqn.namespace,
+      name = schemaFqn.name;
+
+  return (0, _axios.getApiBaseUrl)(_ApiNames.EDM_API) + '/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType.toLowerCase();
+}
+
+/**
+ * `POST /edm/schema`
+ *
+ * Creates a new Schema definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {Schema} schema
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.createSchema(
+ *   {
+ *     "fqn": { "namespace": "LATTICE", "name": "MySchema" },
+ *     "propertyTypes": [],
+ *     "entityTypes": []
+ *   }
+ * );
+ */
+function createSchema(schema) {
+
+  var errorMsg = '';
+
+  if (!(0, _Schema.isValid)(schema)) {
+    errorMsg = 'invalid parameter: schema must be a valid Schema';
+    LOG.error(errorMsg, schema);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.SCHEMA_PATH, schema).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /edm/schema/{namespace}/{name}`
+ *
+ * Creates a new empty Schema definition for the given Schema FQN, if it doesn't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {FullyQualifiedName} schemaFqn
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.createEmptySchema(
+ *   { "namespace": "LATTICE", "name": "MySchema" }
+ * );
+ */
+function createEmptySchema(schemaFqn) {
+
+  var errorMsg = '';
+
+  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
+  }
+
+  var namespace = schemaFqn.namespace,
+      name = schemaFqn.name;
+
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /edm/schema/{namespace}/{name}`
+ *
+ * Updates the Schema definition for the given Schema FQN.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {FullyQualifiedName} schemaFqn
+ * @param {string} action
+ * @param {UUID[]} entityTypeIds
+ * @param {UUID[]} propertyTypeIds
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateSchema(
+ *   { "namespace": "LATTICE", "name": "MySchema" },
+ *   "action": "ADD",
+ *   "entityTypeIds": [
+ *     "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ *   ],
+ *   "propertyTypeIds": [
+ *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ *   ]
+ * )
+ */
+function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
+
+  var errorMsg = '';
+
+  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
+    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
+    LOG.error(errorMsg, schemaFqn);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(action) || !UpdateSchemaRequestActions[action]) {
+    errorMsg = 'invalid parameter: action must be a valid action';
+    LOG.error(errorMsg, action);
+    return Promise.reject(errorMsg);
+  }
+
+  var entityTypeIdsSet = void 0;
+  if ((0, _isUndefined2.default)(entityTypeIds) || (0, _LangUtils.isEmptyArray)(entityTypeIds)) {
+    entityTypeIdsSet = [];
+  } else if (!(0, _ValidationUtils.isValidUuidArray)(entityTypeIds)) {
+    errorMsg = 'invalid parameter: entityTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, entityTypeIds);
+    return Promise.reject(errorMsg);
+  } else {
+    entityTypeIdsSet = _immutable2.default.Set().withMutations(function (set) {
+      entityTypeIds.forEach(function (entityTypeId) {
+        set.add(entityTypeId);
+      });
+    }).toJS();
+  }
+
+  var propertyTypeIdsSet = void 0;
+  if ((0, _isUndefined2.default)(propertyTypeIds) || (0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
+    propertyTypeIdsSet = [];
+  } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
+    errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
+  } else {
+    propertyTypeIdsSet = _immutable2.default.Set().withMutations(function (set) {
+      propertyTypeIds.forEach(function (propertyTypeId) {
+        set.add(propertyTypeId);
+      });
+    }).toJS();
+  }
+
+  var namespace = schemaFqn.namespace,
+      name = schemaFqn.name;
+
+
+  var data = {
+    action: action,
+    entityTypes: entityTypeIdsSet,
+    propertyTypes: propertyTypeIdsSet
+  };
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EntitySet APIs
+ *
+ */
+
+/**
+ * `GET /edm/entity/set/{uuid}`
+ *
+ * Gets the EntitySet definition for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @return {Promise<EntitySet>} - a Promise that will resolve with the EntitySet definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getEntitySet(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/ids/entity/set/{name}`
+ *
+ * Gets the EntitySet UUID for the given EntitySet name.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {string} entitySetName
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntitySetId("MyEntitySet");
+ */
+function getEntitySetId(entitySetName) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
+    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
+    LOG.error(errorMsg, entitySetName);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetName).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/entity/set`
+ *
+ * Gets all EntitySet definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<EntitySet[]>} - a Promise that will resolve with all EntitySet definitions
+ *
+ * @example
+ * EntityDataModelApi.getAllEntitySets();
+ */
+function getAllEntitySets() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/entity/set`
+ *
+ * Creates new EntitySet definitions if they don't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {EntitySet[]} entitySets
+ * @return {Promise<Map<string, UUID>>} - a Promise that will resolve with a Map as its fulfillment value, where
+ * the key is the EntitySet name and the value is the newly-created EntitySet UUID
+ *
+ * @example
+ * EntityDataModelApi.createEntitySets(
+ *   [
+ *     {
+ *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "type": { "namespace": "LATTICE", "name": "MyEntity" },
+ *       "name": "MyEntities",
+ *       "title": "My Entities",
+ *       "description": "a collection of MyEntity EntityTypes",
+ *     }
+ *   ]
+ * );
+ */
+function createEntitySets(entitySets) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidEntitySetArray)(entitySets)) {
+    errorMsg = 'invalid parameter: entitySets must be a non-empty array of valid EntitySets';
+    LOG.error(errorMsg, entitySets);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: Immutable.Set() - entitySets needs to be Set<EntitySet>
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/entity/set/{uuid}`
+ *
+ * Deletes the EntitySet definition for the given EntitySet UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteEntitySet(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /edm/entity/set/{uuid}`
+ *
+ * Updates the EntityType definition for the given EntityType UUID with the given metadata.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {Object} metadata
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateEntitySetMetaData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "type": { namespace: "LATTICE", name: "UpdatedEntitySet" },
+ *     "name": "MyEntitySet",
+ *     "title": "MyEntitySet",
+ *     "description": "MyEntitySet description",
+ *     "contacts": ["support@openlattice.com"]
+ *   }
+ * );
+ */
+function updateEntitySetMetaData(entitySetId, metadata) {
+
+  // TODO: create data model: MetaDataUpdate
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'type') && !_FullyQualifiedName2.default.isValid(metadata.type)) {
+    errorMsg = 'invalid parameter: type must be a valid FQN';
+    LOG.error(errorMsg, metadata.type);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'name') && !(0, _LangUtils.isNonEmptyString)(metadata.name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, metadata.name);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'contacts') && !(0, _LangUtils.isNonEmptyStringArray)(metadata.contacts)) {
+    errorMsg = 'invalid parameter: contacts must be a non-empty string';
+    LOG.error(errorMsg, metadata.contacts);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId, metadata).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EntityType APIs
+ *
+ */
+
+/**
+ * `GET /edm/entity/type/{uuid}`
+ *
+ * Gets the EntityType definition for the given EntityType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise<EntityType>} - a Promise that will resolve with the EntityType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getEntityType(entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/ids/entity/type/{namespace}/{name}`
+ *
+ * Gets the EntityType UUID for the given EntityType FQN.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {FullyQualifiedName} entityTypeFqn
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityTypeId(
+ *   { "namespace": "LATTICE", "name": "MyProperty" }
+ * );
+ */
+function getEntityTypeId(entityTypeFqn) {
+
+  var errorMsg = '';
+
+  if (!_FullyQualifiedName2.default.isValid(entityTypeFqn)) {
+    errorMsg = 'invalid parameter: entityTypeFqn must be a valid FQN';
+    LOG.error(errorMsg, entityTypeFqn);
+    return Promise.reject(errorMsg);
+  }
+
+  var namespace = entityTypeFqn.namespace,
+      name = entityTypeFqn.name;
+
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/entity/type`
+ *
+ * Gets all EntityType definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with all EntityType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllEntityTypes();
+ */
+function getAllEntityTypes() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/association/type`
+ *
+ * Gets all association EntityType definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllAssociationEntityTypes();
+ */
+function getAllAssociationEntityTypes() {
+
+  // TODO: everything
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/entity/type`
+ *
+ * Creates a new EntityType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {EntityType} entityType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created EntityType UUID
+ *
+ * @example
+ * EntityDataModelApi.createEntityType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LATTICE", "name": "MyEntity" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "schemas": [
+ *       { "namespace": "LATTICE", "name": "MySchema" }
+ *     ],
+ *     "key": [
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
+ *     ],
+ *     "properties": [
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     ],
+ *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *     "category": "EntityType"
+ *   }
+ * );
+ */
+function createEntityType(entityType) {
+
+  var errorMsg = '';
+
+  if (!(0, _EntityType.isValid)(entityType)) {
+    errorMsg = 'invalid parameter: entityType must be a valid EntityType';
+    LOG.error(errorMsg, entityType);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/entity/type/{uuid}`
+ *
+ * Deletes the EntityType definition for the given EntityType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteEntityType(entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /edm/entity/type/{uuid}/{uuid}`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by adding the given PropertyType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.addPropertyTypeToEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function addPropertyTypeToEntityType(entityTypeId, propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/entity/type/{uuid}/{uuid}`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removePropertyTypeFromEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/entity/type/{uuid}/{uuid}/force`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID,
+ * regardless of whether or not there is data associated with the entity type.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removePropertyTypeFromEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function forceRemovePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /edm/entity/type/{uuid}/property/type`
+ *
+ * Updates the EntityType definition for the given EntityType UUID by reordering its properties as
+ * specified by the provided list
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeIds
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.reorderPropertyTypesInEntityType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["4b08e1f9-4a00-4169-92ea-10e377070220", "a00e2ce8-912d-49c9-a259-e6c1ffebf053"]
+ * );
+ */
+function reorderPropertyTypesInEntityType(entityTypeId, propertyTypeIds) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
+    errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyTypeIds).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /edm/entity/type/{uuid}`
+ *
+ * Updates the EntityType definition for the given EntityType UUID with the given metadata.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {Object} metadata
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateEntityTypeMetaData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "type": { "namespace": "LATTICE", "name": "UpdatedEntity" },
+ *     "name": "MyEntity",
+ *     "title": "MyEntity",
+ *     "description": "MyEntity description",
+ *     "contacts": ["support@openlattice.com"]
+ *   }
+ * );
+ */
+function updateEntityTypeMetaData(entityTypeId, metadata) {
+
+  // TODO: create data model: MetaDataUpdate
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'type') && !_FullyQualifiedName2.default.isValid(metadata.type)) {
+    errorMsg = 'invalid parameter: type must be a valid FQN';
+    LOG.error(errorMsg, metadata.type);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'name') && !(0, _LangUtils.isNonEmptyString)(metadata.name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, metadata.name);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'contacts') && !(0, _LangUtils.isNonEmptyStringArray)(metadata.contacts)) {
+    errorMsg = 'invalid parameter: contacts must be a non-empty string';
+    LOG.error(errorMsg, metadata.contacts);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId, metadata).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/entity/type/{uuid}/hierarchy`
+ *
+ * Gets the EntityType hierarchy for the given EntityType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getEntityTypeHierarchy(entityTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * PropertyType APIs
+ *
+ */
+
+/**
+ * `GET /edm/property/type/{uuid}`
+ *
+ * Gets the PropertyType definition for the given PropertyType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} propertyTypeId
+ * @return {Promise<PropertyType>} - a Promise that will resolve with the PropertyType definition
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getPropertyType(propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/ids/property/type/{namespace}/{name}`
+ *
+ * Gets the PropertyType UUID for the given PropertyType FQN.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {FullyQualifiedName} propertyTypeFqn
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getPropertyTypeId(
+ *   { namespace: "LATTICE", name: "MyProperty" }
+ * );
+ */
+function getPropertyTypeId(propertyTypeFqn) {
+
+  var errorMsg = '';
+
+  if (!_FullyQualifiedName2.default.isValid(propertyTypeFqn)) {
+    errorMsg = 'invalid parameter: propertyTypeFqn must be a valid FQN';
+    LOG.error(errorMsg, propertyTypeFqn);
+    return Promise.reject(errorMsg);
+  }
+
+  var namespace = propertyTypeFqn.namespace,
+      name = propertyTypeFqn.name;
+
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/property/type`
+ *
+ * Gets all PropertyType definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<PropertyType[]>} - a Promise that will resolve with all PropertyType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllPropertyTypes();
+ */
+function getAllPropertyTypes() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/property/type/namespace/{namespace}`
+ *
+ * Gets all PropertyType definitions under the given namespace.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {string} namespace
+ * @return {Promise<PropertyType[]>} - a Promise that will resolve with the PropertyType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllPropertyTypesInNamespace("LATTICE");
+ */
+function getAllPropertyTypesInNamespace(namespace) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a non-empty string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.NAMESPACE_PATH + '/' + namespace).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/property/type`
+ *
+ * Creates a new PropertyType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {PropertyType} propertyType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created PropertyType definition UUID
+ *
+ * @example
+ * EntityDataModelApi.createPropertyType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LATTICE", "name": "MyProperty" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "schemas": [
+ *       { "namespace": "LATTICE", "name": "MySchema" }
+ *     ],
+ *     "datatype": "String",
+ *     "piiField": false,
+ *     "analyzer": "STANDARD"
+ *   }
+ * );
+ */
+function createPropertyType(propertyType) {
+
+  var errorMsg = '';
+
+  if (!(0, _PropertyType.isValid)(propertyType)) {
+    errorMsg = 'invalid parameter: propertyType must be a valid PropertyType';
+    LOG.error(errorMsg, propertyType);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/property/type/{uuid}`
+ *
+ * Deletes the PropertyType definition for the given PropertyType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deletePropertyType(propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/property/type/{uuid}/force`
+ *
+ * Deletes the PropertyType definition for the given PropertyType UUID regardless of
+ * whether or not there is data associated with it.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} propertyTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.forceDeletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function forceDeletePropertyType(propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /edm/property/type/{uuid}`
+ *
+ * Updates the PropertyType definition for the given PropertyType UUID with the given metadata.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} propertyTypeId
+ * @param {Object} metadata
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updatePropertyTypeMetaData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "type": { "namespace": "LATTICE", "name": "UpdatedProperty" },
+ *     "name": "MyProperty",
+ *     "title": "MyProperty",
+ *     "description": "MyProperty description",
+ *     "contacts": ["support@openlattice.com"]
+ *   }
+ * );
+ */
+function updatePropertyTypeMetaData(propertyTypeId, metadata) {
+
+  // TODO: create data model: MetaDataUpdate
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'type') && !_FullyQualifiedName2.default.isValid(metadata.type)) {
+    errorMsg = 'invalid parameter: type must be a valid FQN';
+    LOG.error(errorMsg, metadata.type);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'name') && !(0, _LangUtils.isNonEmptyString)(metadata.name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, metadata.name);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'contacts') && !(0, _LangUtils.isNonEmptyStringArray)(metadata.contacts)) {
+    errorMsg = 'invalid parameter: contacts must be a non-empty string';
+    LOG.error(errorMsg, metadata.contacts);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * AssociationType APIs
+ *
+ */
+
+/**
+ * `GET /edm/association/type/{uuid}`
+ *
+ * Gets the AssociationType definition for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType definition
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAssociationType(associationTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/association/type`
+ *
+ * Gets all AssociationType definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<AssociationType[]>} - a Promise that will resolve with all AssociationType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllAssociationTypes();
+ */
+function getAllAssociationTypes() {
+
+  // TODO: everything
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/association/type/{uuid}/detailed`
+ *
+ * Gets details about the AssociationType for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise<Object>} - a Promise that will resolve with the AssociationType details
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAssociationTypeDetails("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAssociationTypeDetails(associationTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DETAILED_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/association/type/{uuid}/available`
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.getAllAvailableAssociationTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllAvailableAssociationTypes(entityTypeId) {
+
+  // TODO: backend returns Iterable<EntityType>, but the function name is getAllAvailableAssociationTypes, feels weird
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + entityTypeId + '/available').then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/association/type`
+ *
+ * Creates a new AssociationType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {AssociationType} associationType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created AssociationType definition UUID
+ *
+ * @example
+ * EntityDataModelApi.createAssociationType(
+ *   {
+ *     "entityType": { ... },
+ *     "src": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *     "dst": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
+ *     "bidirectional": true
+ *   }
+ * );
+ */
+function createAssociationType(associationType) {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidAssociationType(associationType)) {
+  //   errorMsg = 'invalid parameter: associationType must be a valid AssociationType';
+  //   LOG.error(errorMsg, associationType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ASSOCIATION_TYPE_PATH, associationType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}`
+ *
+ * Deletes the AssociationType definition for the given AssociationType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteAssociationType(associationTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * ComplexType APIs
+ *
+ */
+
+/**
+ * `GET /edm/complex/type/{uuid}`
+ *
+ * Gets the ComplexType definition for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise<ComplexType>} - a Promise that will resolve with the ComplexType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getComplexType(complexTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/complex/type`
+ *
+ * Gets all ComplexType definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<ComplexType[]>} - a Promise that will resolve with all ComplexType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllComplexTypes();
+ */
+function getAllComplexTypes() {
+
+  // TODO: everything
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/complex/type/{uuid}/hierarchy`
+ *
+ * Gets the ComplexType hierarchy for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise<ComplexType[]>} - a Promise that will resolve with the ComplexType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getComplexTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getComplexTypeHierarchy(complexTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/complex/type`
+ *
+ * Creates a new ComplexType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {ComplexType} complexType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created ComplexType UUID
+ *
+ * @example
+ * EntityDataModelApi.createComplexType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LATTICE", "name": "MyComplexType" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "schemas": [
+ *       { "namespace": "LATTICE", "name": "MySchema" }
+ *     ],
+ *     "properties": [
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     ],
+ *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *     "category": "ComplexType"
+ *   }
+ * );
+ */
+function createComplexType(complexType) {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidComplexType(complexType)) {
+  //   errorMsg = 'invalid parameter: complexType must be a valid ComplexType';
+  //   LOG.error(errorMsg, complexType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.COMPLEX_TYPE_PATH, complexType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/complex/type/{uuid}`
+ *
+ * Deletes the ComplexType definition for the given ComplexType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} complexTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteComplexType(complexTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
+    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
+    LOG.error(errorMsg, complexTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EnumType APIs
+ *
+ */
+
+/**
+ * `GET /edm/enum/type/{uuid}`
+ *
+ * Gets the EnumType definition for the given EnumType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} enumTypeId
+ * @return {Promise<EnumType>} - a Promise that will resolve with the EnumType definition as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getEnumType(enumTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(enumTypeId)) {
+    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
+    LOG.error(errorMsg, enumTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/enum/type`
+ *
+ * Gets all EnumType definitions.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<EnumType[]>} - a Promise that will resolve with all EnumType definitions
+ * as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getAllEnumTypes();
+ */
+function getAllEnumTypes() {
+
+  // TODO: everything
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/enum/type`
+ *
+ * Creates a new EnumType definition, if it doesn't exist.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {EnumType} enumType
+ * @return {Promise<UUID>} - a Promise that will resolve with the newly-created EnumType UUID
+ *
+ * @example
+ * EntityDataModelApi.createEnumType(
+ *   {
+ *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "type": { "namespace": "LATTICE", "name": "MyEnumType" },
+ *     "title": "title",
+ *     "description": "description",
+ *     "members": [
+ *       "Blue", "Red", "Green"
+ *     ],
+ *     "schemas": [
+ *       { "namespace": "LATTICE", "name": "MySchema" }
+ *     ],
+ *     "datatype": "String",
+ *     "flags": false,
+ *     "piiField": false,
+ *     "analyzer": "STANDARD"
+ *   }
+ * );
+ */
+function createEnumType(enumType) {
+
+  // TODO: everything
+
+  // let errorMsg = '';
+  //
+  // if (!isValidEnumType(enumType)) {
+  //   errorMsg = 'invalid parameter: enumType must be a valid EnumType';
+  //   LOG.error(errorMsg, enumType);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENUM_TYPE_PATH, enumType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/enum/type/{uuid}`
+ *
+ * Deletes the EnumType definition for the given EnumType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} enumTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.deleteEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteEnumType(enumTypeId) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(enumTypeId)) {
+    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
+    LOG.error(errorMsg, enumTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /edm/association/type/{uuid}/src/{uuid}`
+ *
+ * Updates the AssociationType src entity types for the given AssociationType UUID by adding the given EntityType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.addSrcEntityTypeToAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function addSrcEntityTypeToAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /edm/association/type/{uuid}/dst/{uuid}`
+ *
+ * Updates the AssociationType dst entity types for the given AssociationType UUID by adding the given EntityType UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.addDstEntityTypeToAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function addDstEntityTypeToAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}/src/{uuid}`
+ *
+ * Updates the AssociationType src entity types for the given AssociationType UUID by removing the given EntityType
+ * UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removeSrcEntityTypeFromAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function removeSrcEntityTypeFromAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /edm/association/type/{uuid}/dst/{uuid}`
+ *
+ * Updates the AssociationType dst entity types for the given AssociationType UUID by removing the given EntityType
+ * UUID.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} associationTypeId
+ * @param {UUID} entityTypeId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.removeDstEntityTypeFromAssociationType(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function removeDstEntityTypeFromAssociationType(associationTypeId, entityTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
+    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
+    LOG.error(errorMsg, associationTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/entity/set/{uuid}/property/type`
+ *
+ * Returns all property type metadata for an entity set
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.getAllEntitySetPropertyMetadata("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllEntitySetPropertyMetadata(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /edm/entity/set/{uuid}/property/type/{uuid}`
+ *
+ * Returns specified property type metadata for an entity set
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entitySetId
+ * @param {UUID} propertyTypeId
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.getEntitySetPropertyMetadata(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function getEntitySetPropertyMetadata(entitySetId, propertyTypeId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /edm/entity/set/{uuid}/property/type/{uuid}`
+ *
+ * Updates the property type metadata for the given entity set.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID} entityTypeId
+ * @param {UUID} propertyTypeId
+ * @param {Object} metadata
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateEntitySetPropertyMetadata(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220",
+ *   {
+ *     "title": "MyPropertyType",
+ *     "description": "MyPropertyType description",
+ *     "defaultShow": false
+ *   }
+ * );
+ */
+function updateEntitySetPropertyMetadata(entitySetId, propertyTypeId, metadata) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
+    errorMsg = 'invalid parameter: metadata must be a non-empty object';
+    LOG.error(errorMsg, metadata);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadata.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadata.description);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 292 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createLinkingEntityType = createLinkingEntityType;
+exports.linkEntitySets = linkEntitySets;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _LinkingRequest = __webpack_require__(183);
+
+var _LinkingRequest2 = _interopRequireDefault(_LinkingRequest);
+
+var _LinkingEntityType = __webpack_require__(185);
+
+var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * LinkingApi ...
+ *
+ * @module LinkingApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.LinkingApi.link...
+ *
+ * @example
+ * import { LinkingApi } from 'lattice';
+ * // LinkingApi.link...
+ */
+
+var LOG = new _Logger2.default('LinkingApi');
+
+/**
+ * `POST /linking/type`
+ *
+ * Creates a new EntityType definition which is the result of linking several EntityTypes definitions as specified by
+ * the given LinkingEntityType parameter.
+ *
+ * @static
+ * @memberof lattice.LinkingApi
+ * @param {LinkingEntityType} linkingEntityType
+ * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the newly-created EntityType
+ * as its fulfillment value
+ *
+ * @example
+ * LinkingApi.createLinkingEntityType(
+ *   {
+ *     "entityType": { ... },
+ *     "entityTypeIds": [
+ *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     ],
+ *     "deidentified": false
+ *   }
+ * );
+ */
+function createLinkingEntityType(linkingEntityType) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _LinkingEntityType.isValid)(linkingEntityType)) {
+    errorMsg = 'invalid parameter: linkingEntityType must be a valid LinkingEntityType';
+    LOG.error(errorMsg, linkingEntityType);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.TYPE_PATH, linkingEntityType).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /linking/set`
+ *
+ * Performs a linking operation on the EntitySet specified by the given LinkingEntitySet parameter. Before this call,
+ * a call to LinkingApi.createLinkingEntityType() must have been made for this EntitySet's EntityType.
+ *
+ * @static
+ * @memberof lattice.LinkingApi
+ * @param {LinkingEntitySet} linkingEntitySet
+ * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the newly-created EntitySet
+ * as its fulfillment value
+ *
+ * @example
+ * LinkingApi.linkEntitySets(
+ *   {
+ *     "entitySet": { ... },
+ *     "linkingProperties": [
+ *       {
+ *         '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e': '4b08e1f9-4a00-4169-92ea-10e377070220',
+ *         'e39dfdfa-a3e6-4f1f-b54b-646a723c3085': 'ec6865e6-e60e-424b-a071-6a9c1603d735'
+ *       },
+ *       {
+ *         'fae6af98-2675-45bd-9a5b-1619a87235a8': '8f79e123-3411-4099-a41f-88e5d22d0e8d'
+ *       }
+ *     ]
+ *   }
+ * );
+ */
+function linkEntitySets(linkingRequest) {
+
+  // TODO: everything
+
+  var errorMsg = '';
+
+  if (!(0, _LinkingRequest.isValid)(linkingRequest)) {
+    errorMsg = 'invalid parameter: linkingRequest must be a valid LinkingRequest';
+    LOG.error(errorMsg, linkingRequest);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/', linkingRequest).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+// /**
+//  * `POST /linking/set/{syncId}/{entitySetId}/{entityId}`
+//  *
+//  * @static
+//  * @memberof lattice.LinkingApi
+//  * @returns {Promise<UUID>}
+//  *
+//  * TODO: add documentation
+//  * TODO: add better validation
+//  * TODO: add unit tests
+//  * TODO: create data models
+//  */
+// export function linkEntities() :Promise<*> {
+//
+//   return Promise.reject('LinkingApi.linkEntities() is not implemented');
+// }
+//
+// /**
+//  * `PUT /linking/set/{syncId}/{entitySetId}/{entityId}`
+//  *
+//  * @static
+//  * @memberof lattice.LinkingApi
+//  * @returns {Promise}
+//  *
+//  * TODO: add documentation
+//  * TODO: add better validation
+//  * TODO: add unit tests
+//  * TODO: create data models
+//  */
+// export function setLinkedEntities() :Promise<*> {
+//
+//   return Promise.reject('LinkingApi.setLinkedEntities() is not implemented');
+// }
+//
+// /**
+//  * `DELETE /linking/set/{syncId}/{entitySetId}/{entityId}`
+//  *
+//  * @static
+//  * @memberof lattice.LinkingApi
+//  * @returns {Promise}
+//  *
+//  * TODO: add documentation
+//  * TODO: add better validation
+//  * TODO: add unit tests
+//  * TODO: create data models
+//  */
+// export function removeLinkedEntities() :Promise<*> {
+//
+//   return Promise.reject('LinkingApi.removeLinkedEntities() is not implemented');
+// }
+//
+// /**
+//  * `PUT /linking/set/{syncId}/{entitySetId}/{entityId}/{linkedEntityId}`
+//  *
+//  * @static
+//  * @memberof lattice.LinkingApi
+//  * @returns {Promise}
+//  *
+//  * TODO: add documentation
+//  * TODO: add better validation
+//  * TODO: add unit tests
+//  * TODO: create data models
+//  */
+// export function addLinkedEntities() :Promise<*> {
+//
+//   return Promise.reject('LinkingApi.addLinkedEntities() is not implemented');
+// }
+//
+// /**
+//  * `DELETE /linking/set/{syncId}/{entitySetId}/{entityId}/{linkedEntityId}`
+//  *
+//  * @static
+//  * @memberof lattice.LinkingApi
+//  * @returns {Promise}
+//  *
+//  * TODO: add documentation
+//  * TODO: add better validation
+//  * TODO: add unit tests
+//  * TODO: create data models
+//  */
+// export function removeLinkedEntity() :Promise<*> {
+//
+//   return Promise.reject('LinkingApi.removeLinkedEntity() is not implemented');
+// }
+
+/***/ }),
+/* 293 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getOrganization = getOrganization;
+exports.getAllOrganizations = getAllOrganizations;
+exports.createOrganization = createOrganization;
+exports.deleteOrganization = deleteOrganization;
+exports.updateTitle = updateTitle;
+exports.updateDescription = updateDescription;
+exports.getAutoApprovedEmailDomains = getAutoApprovedEmailDomains;
+exports.addAutoApprovedEmailDomain = addAutoApprovedEmailDomain;
+exports.addAutoApprovedEmailDomains = addAutoApprovedEmailDomains;
+exports.setAutoApprovedEmailDomains = setAutoApprovedEmailDomains;
+exports.removeAutoApprovedEmailDomain = removeAutoApprovedEmailDomain;
+exports.removeAutoApprovedEmailDomains = removeAutoApprovedEmailDomains;
+exports.getRole = getRole;
+exports.getAllRoles = getAllRoles;
+exports.createRole = createRole;
+exports.deleteRole = deleteRole;
+exports.updateRoleTitle = updateRoleTitle;
+exports.updateRoleDescription = updateRoleDescription;
+exports.addRoleToMember = addRoleToMember;
+exports.removeRoleFromMember = removeRoleFromMember;
+exports.getAllMembers = getAllMembers;
+exports.addMemberToOrganization = addMemberToOrganization;
+exports.removeMemberFromOrganization = removeMemberFromOrganization;
+exports.getAllPrincipals = getAllPrincipals;
+exports.addPrincipal = addPrincipal;
+exports.addPrincipals = addPrincipals;
+exports.setPrincipals = setPrincipals;
+exports.removePrincipal = removePrincipal;
+exports.removePrincipals = removePrincipals;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _PrincipalTypes = __webpack_require__(37);
+
+var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
+
+var _Principal = __webpack_require__(14);
+
+var _Principal2 = _interopRequireDefault(_Principal);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _Organization = __webpack_require__(187);
+
+var _Organization2 = _interopRequireDefault(_Organization);
+
+var _Role = __webpack_require__(188);
+
+var _Role2 = _interopRequireDefault(_Role);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('OrganizationsApi');
+
+/**
+ * `GET /organizations/{uuid}`
+ *
+ * Gets the information for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Organization>}
+ *
+ * @example
+ * OrganizationsApi.getOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+
+
+/**
+ * OrganizationsApi ...
+ *
+ * @module OrganizationsApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.OrganizationsApi.get...
+ *
+ * @example
+ * import { OrganizationsApi } from 'lattice';
+ * // OrganizationsApi.get...
+ */
+
+function getOrganization(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /organizations`
+ *
+ * Gets all Organization information.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @returns {Promise<Organization[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllOrganizations();
+ */
+function getAllOrganizations() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/').then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /organizations`
+ *
+ * Creates a new Organization, if it does not already exist.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {Organization} organization
+ * @returns {Promise<UUID>}
+ *
+ * @example
+ * OrganizationsApi.createOrganization(
+ *   {
+ *     id: "",
+ *     title: "MyOrganization",
+ *     description: "what an organization",
+ *     members: [
+ *       { type: "USER", id: "principalId_0" }
+ *     ],
+ *     roles: [
+ *       { type: "ROLE", id: "principalId_1" }
+ *     ]
+ *   }
+ * );
+ */
+function createOrganization(organization) {
+
+  var errorMsg = '';
+
+  if (!(0, _Organization.isValid)(organization)) {
+    errorMsg = 'invalid parameter: organization must be a valid Organization';
+    LOG.error(errorMsg, organization);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/', organization).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organization/{uuid}`
+ *
+ * Deletes the Organization for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.deleteOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function deleteOrganization(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{uuid}/title`
+ *
+ * Updates the title for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} title
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.updateTitle(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "New Title"
+ * );
+ */
+function updateTitle(organizationId, title) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, title);
+    return Promise.reject(errorMsg);
+  }
+
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{uuid}/description`
+ *
+ * Updates the description for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} description
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.updateDescription(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "new description"
+ * );
+ */
+function updateDescription(organizationId, description) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, description);
+    return Promise.reject(errorMsg);
+  }
+
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /organizations/{uuid}/email-domains`
+ *
+ * Gets the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<string[]>}
+ *
+ * @example
+ * OrganizationsApi.getAutoApprovedEmailDomains("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAutoApprovedEmailDomains(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{uuid}/email-domains/{domain}`
+ *
+ * Adds the given email domain to the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} emailDomain
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.addAutoApprovedEmailDomain(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "openlattice.com"
+ * );
+ */
+function addAutoApprovedEmailDomain(organizationId, emailDomain) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(emailDomain)) {
+    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
+    LOG.error(errorMsg);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /organizations/{uuid}/email-domains`
+ *
+ * Adds the given email domains to the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} emailDomains
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.addAutoApprovedEmailDomains(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     "openlattice.com"
+ *   ]
+ * );
+ */
+function addAutoApprovedEmailDomains(organizationId, emailDomains) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
+  }
+
+  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
+    emailDomains.forEach(function (emailDomain) {
+      set.add(emailDomain);
+    });
+  }).toJS();
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{uuid}/email-domains`
+ *
+ * Sets the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} emailDomains
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.setAutoApprovedEmailDomains(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     "openlattice.com"
+ *   ]
+ * );
+ */
+function setAutoApprovedEmailDomains(organizationId, emailDomains) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
+  }
+
+  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
+    emailDomains.forEach(function (emailDomain) {
+      set.add(emailDomain);
+    });
+  }).toJS();
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{uuid}/email-domains/{domain}`
+ *
+ * Removes the given email domain from the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} emailDomain
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.removeAutoApprovedEmailDomain(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "openlattice.com"
+ * );
+ */
+function removeAutoApprovedEmailDomain(organizationId, emailDomain) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(emailDomain)) {
+    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
+    LOG.error(errorMsg, emailDomain);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{uuid}/email-domains`
+ *
+ * Removes the given email domains from the auto-approved email domains for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} emailDomains
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.removeAutoApprovedEmailDomains(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     "openlattice.com"
+ *   ]
+ * );
+ */
+function removeAutoApprovedEmailDomains(organizationId, emailDomains) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
+    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
+    LOG.error(errorMsg, emailDomains);
+    return Promise.reject(errorMsg);
+  }
+
+  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
+    emailDomains.forEach(function (emailDomain) {
+      set.add(emailDomain);
+    });
+  }).toJS();
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).request({
+    url: '/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH,
+    method: 'delete',
+    data: emailDomainSet
+  }).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /organizations/{orgId}/principals/roles/{roleId}`
+ *
+ * Gets the Role for the given Organization UUID corresponding to the given Role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.getRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
+ */
+function getRole(organizationId, roleId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /organizations/{orgId}/principals/roles`
+ *
+ * Gets all Roles for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllRoles("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllRoles(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /organizations/roles`
+ *
+ * Creates a new role, if it does not already exist.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise}
+ *
+ * @example
+ * OrganizationsApi.createRole(
+ *   {
+ *     "id": "",
+ *     "organizationId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "title": "Admin",
+ *     "description": "The Administrator",
+ *   }
+ * );
+ */
+function createRole(role) {
+
+  var errorMsg = '';
+
+  if (!(0, _Role.isValid)(role)) {
+    errorMsg = 'invalid parameter: role must be a valid Role';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + _ApiPaths.ROLES_PATH, role).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/roles/{roleId}`
+ *
+ * Deletes the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.deleteRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
+ */
+function deleteRole(organizationId, roleId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/title`
+ *
+ * Updates the title of the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} title
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateRoleTitle(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "ADMIN"
+ * );
+ */
+function updateRoleTitle(organizationId, roleId, title) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, title);
+    return Promise.reject(errorMsg);
+  }
+
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/description`
+ *
+ * Updates the description of the role identified by the given org UUID and role UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} description
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateRoleDescription(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "The Administrator"
+ * );
+ */
+function updateRoleDescription(organizationId, roleId, description) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, description);
+    return Promise.reject(errorMsg);
+  }
+
+  var axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  };
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
+ *
+ * Assigns the role identified by the given org UUID and role UUID to the member of the organization identified by
+ * the given member UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.addRoleToMember(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "memberId"
+ * );
+ */
+function addRoleToMember(organizationId, roleId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
+ *
+ * Removes the role identified by the given org UUID and role UUID from the member of the organization identified by
+ * the given member UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.removeRoleFromMember(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   "memberId"
+ * );
+ */
+function removeRoleFromMember(organizationId, roleId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /organizations/{orgId}/principals/members`
+ *
+ * Gets all Roles for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllMembers(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/members/{memberId}`
+ *
+ * Adds the member identified by the given member UUID to the organization identified by the given org UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.addMemberToOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "memberId"
+ * );
+ */
+function addMemberToOrganization(organizationId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/principals/members/{memberId}`
+ *
+ * Removes the member identified by the given member UUID from the organization identified by the given org UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} memberId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.removeMemberFromOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "memberId"
+ * );
+ */
+function removeMemberFromOrganization(organizationId, memberId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
+    errorMsg = 'invalid parameter: memberId must be a non-empty string';
+    LOG.error(errorMsg, memberId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
+ *
+ */
+
+/**
+ * `GET /organizations/{uuid}/principals`
+ *
+ * Gets all Principals for the given Organization UUID.
+ *
+ * @deprecated
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Principal[]>}
+ *
+ * @example
+ * OrganizationsApi.getAllPrincipals("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getAllPrincipals(organizationId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{uuid}/principals/{type}/{id}`
+ *
+ * Adds the given Principal to the given Organization UUID.
+ *
+ * @deprecated
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {PrincipalType} principalType
+ * @param {string} principalId
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.addPrincipal(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "USER",
+ *   "principalId"
+ * );
+ */
+function addPrincipal(organizationId, principalType, principalId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(principalType) || !_PrincipalTypes2.default[principalType]) {
+    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
+    LOG.error(errorMsg, principalType);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(principalId)) {
+    errorMsg = 'invalid parameter: principalId must be a non-empty string';
+    LOG.error(errorMsg, principalId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /organizations/{uuid}/principals`
+ *
+ * Adds the given Principals to the given Organization UUID.
+ *
+ * @deprecated
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Principal[]} principals
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.addPrincipals(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     { type: "USER", id: "principalId" }
+ *   ]
+ * );
+ */
+function addPrincipals(organizationId, principals) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: alternative way to dedupe
+  var data = _immutable2.default.Set().withMutations(function (set) {
+    principals.forEach(function (principal) {
+      set.add(new _Principal2.default(principal.type, principal.id));
+    });
+  }).toJS();
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /organizations/{uuid}/principals`
+ *
+ * Sets the given Principals for the given Organization UUID.
+ *
+ * @deprecated
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Principal[]} principals
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.setPrincipals(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     { type: "USER", id: "principalId" }
+ *   ]
+ * );
+ */
+function setPrincipals(organizationId, principals) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = _immutable2.default.Set().withMutations(function (set) {
+    principals.forEach(function (principal) {
+      set.add(new _Principal2.default(principal.type, principal.id));
+    });
+  }).toJS();
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{uuid}/principals/{type}/{id}`
+ *
+ * Removes the given Principal from the given Organization UUID.
+ *
+ * @deprecated
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {PrincipalType} principalType
+ * @param {string} principalId
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.removePrincipal(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "USER",
+ *   "principalId"
+ * );
+ */
+function removePrincipal(organizationId, principalType, principalId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(principalType) || !_PrincipalTypes2.default[principalType]) {
+    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
+    LOG.error(errorMsg, principalType);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(principalId)) {
+    errorMsg = 'invalid parameter: principalId must be a non-empty string';
+    LOG.error(errorMsg, principalId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /organizations/{uuid}/principals`
+ *
+ * Removes the given Principals from the given Organization UUID.
+ *
+ * @deprecated
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Principal[]} principals
+ * @returns {Promise}
+ *
+ * @example
+ * OrganizationsApi.removePrincipals(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [
+ *     { type: "USER", id: "principalId" }
+ *   ]
+ * );
+ */
+function removePrincipals(organizationId, principals) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
+    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
+    LOG.error(errorMsg, principals);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = _immutable2.default.Set().withMutations(function (set) {
+    principals.forEach(function (principal) {
+      set.add(new _Principal2.default(principal.type, principal.id));
+    });
+  }).toJS();
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).request({
+    url: '/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH,
+    method: 'delete',
+    data: data
+  }).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 294 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getAcl = getAcl;
+exports.updateAcl = updateAcl;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _AclData = __webpack_require__(189);
+
+var _AclData2 = _interopRequireDefault(_AclData);
+
+var _ApiNames = __webpack_require__(5);
+
+var _axios = __webpack_require__(6);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('PermissionsApi');
+
+/**
+ * `POST /permissions`
+ *
+ * Gets the ACL for the given ACL Key, only if the user is the owner of the ACL Key.
+ *
+ * @static
+ * @memberof lattice.PermissionsApi
+ * @param {UUID[]} aclKey
+ * @returns {Promise<Acl>}
+ *
+ * @example
+ * PermissionsApi.getAcl(
+ *   [
+ *     { type: 'EntityType', id: 'ec6865e6-e60e-424b-a071-6a9c1603d735' }
+ *   ]
+ * );
+ */
+
+
+/**
+ * PermissionsApi gives access to OpenLattice's REST API for managing ACLs on existing EntityDataModel schemas.
+ *
+ * @module PermissionsApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.PermissionsApi.get...
+ *
+ * @example
+ * import { PermissionsApi } from 'lattice';
+ * // PermissionsApi.get...
+ */
+
+function getAcl(aclKey) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
+    errorMsg = 'invalid parameter: aclKey must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, aclKey);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/', aclKey).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /permissions`
+ *
+ * Updates the Ace for a particular ACL Key, only if the user is the owner of the ACL Key.
+ *
+ * @static
+ * @memberof lattice.PermissionsApi
+ * @param {AclData} aclData
+ * @returns {Promise}
+ *
+ * @example
+ * PermissionsApi.updateAcl(
+ *   {
+ *     action: 'ADD',
+ *     acl: {
+ *       aclKey: [
+ *         'ec6865e6-e60e-424b-a071-6a9c1603d735'
+ *       ],
+ *       aces: [
+ *         {
+ *           principal: {
+ *             type: 'USER',
+ *             id: 'principalId'
+ *           },
+ *           permissions: [
+ *             'READ'
+ *           ]
+ *         }
+ *       ]
+ *     }
+ *   }
+ * );
+ */
+function updateAcl(aclData) {
+
+  var errorMsg = '';
+
+  if (!(0, _AclData.isValid)(aclData)) {
+    errorMsg = 'invalid parameter: aclData must be a valid AclData object';
+    LOG.error(errorMsg, aclData);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).patch('/', aclData).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 295 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getUser = getUser;
+exports.getAllRoles = getAllRoles;
+exports.getAllUsers = getAllUsers;
+exports.searchAllUsersByEmail = searchAllUsersByEmail;
+exports.addRoleToUser = addRoleToUser;
+exports.removeRoleFromUser = removeRoleFromUser;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('PrincipalsApi');
+
+/**
+ * `GET /principals/users/{userId}`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @param {string} userId
+ * @return {Promise}
+ */
+
+
+/**
+ * PrincipalsApi gives access to OpenLattice's REST API for getting user data.
+ *
+ * @module PrincipalsApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.PrincipalsApi.get...
+ *
+ * @example
+ * import { PrincipalsApi } from 'lattice';
+ * // PrincipalsApi.get...
+ */
+
+function getUser(userId) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /principals/roles`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise}
+ */
+function getAllRoles() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /principals/users`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise}
+ */
+function getAllUsers() {
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /principals/users/search/email/{searchQuery}`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @param {string} searchQuery
+ * @return {Promise}
+ *
+ * TODO: add unit tests
+ */
+function searchAllUsersByEmail(searchQuery) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchQuery)) {
+    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
+    LOG.error(errorMsg, searchQuery);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.SEARCH_PATH + '/' + _ApiPaths.EMAIL_PATH + '/' + searchQuery).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/*
+ *
+ * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
+ *
+ */
+
+function addRoleToUser(userId, role) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(role)) {
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+function removeRoleFromUser(userId, role) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
+    errorMsg = 'invalid parameter: userId must be a non-empty string';
+    LOG.error(errorMsg, userId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(role)) {
+    errorMsg = 'invalid parameter: role must be a non-empty string';
+    LOG.error(errorMsg, role);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).delete('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 296 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getAllRequestStatuses = getAllRequestStatuses;
+exports.submitRequests = submitRequests;
+exports.updateRequestStatuses = updateRequestStatuses;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _has = __webpack_require__(8);
+
+var _has2 = _interopRequireDefault(_has);
+
+var _RequestStateTypes = __webpack_require__(40);
+
+var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _Request = __webpack_require__(26);
+
+var _Request2 = _interopRequireDefault(_Request);
+
+var _RequestStatus = __webpack_require__(39);
+
+var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
+
+var _ApiNames = __webpack_require__(5);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * RequestsApi ...
+ *
+ * TODO: add description
+ *
+ * @module RequestsApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.RequestsApi.get...
+ *
+ * @example
+ * import { RequestsApi } from 'lattice';
+ * // RequestsApi.get...
+ */
+
+var LOG = new _Logger2.default('RequestsApi');
+
+/**
+ * `GET /requests`
+ * `GET /requests/{state}`
+ * `POST /requests`
+ * `POST /requests/{state}`
+ *
+ * TODO: add description
+ * TODO: add tests
+ *
+ * @static
+ * @memberof lattice.RequestsApi
+ * @param {RequestState} state (optional)
+ * @param {UUID[][]} aclKeys (optional)
+ * @returns {Promise<RequestStatus[]>}
+ *
+ * @example
+ *
+ * RequestsApi.getAllStatuses();
+ *
+ * RequestsApi.getAllStatusesForState(
+ *   {
+ *     "state": "SUBMITTED"
+ *   }
+ * );
+ *
+ * RequestsApi.getAllRequestStatuses(
+ *   {
+ *     "aclKeys": [
+ *       ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
+ *       ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
+ *     ]
+ *   }
+ * );
+ *
+ * RequestsApi.getAllRequestStatuses(
+ *   {
+ *     "state": "SUBMITTED",
+ *     "aclKeys": [
+ *       ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
+ *       ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
+ *     ]
+ *   }
+ * );
+ */
+function getAllRequestStatuses(options) {
+
+  var errorMsg = '';
+
+  // https://flowtype.org/docs/objects.html#sealed-object-types
+  var axiosConfig = {};
+  axiosConfig.url = '/';
+  axiosConfig.method = 'get';
+
+  if ((0, _LangUtils.isDefined)(options) && !(0, _LangUtils.isNonEmptyObject)(options)) {
+    errorMsg = 'invalid parameter: when given, options must be a non-empty object literal';
+    LOG.error(errorMsg, options.state);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isNonEmptyObject)(options) && (0, _has2.default)(options, 'state')) {
+
+    if (!(0, _LangUtils.isNonEmptyString)(options.state) || !_RequestStateTypes2.default[options.state]) {
+      errorMsg = 'invalid parameter: when given, state must be a valid RequestState';
+      LOG.error(errorMsg, options.state);
+      return Promise.reject(errorMsg);
+    }
+
+    axiosConfig.url = '/' + options.state;
+  }
+
+  if ((0, _LangUtils.isNonEmptyObject)(options) && (0, _has2.default)(options, 'aclKeys')) {
+
+    if (!(0, _LangUtils.isNonEmptyArray)(options.aclKeys)) {
+      errorMsg = 'invalid parameter: when given, aclKeys must be a non-empty array of UUID arrays';
+      LOG.error(errorMsg, options.aclKeys);
+      return Promise.reject(errorMsg);
+    }
+
+    var aclKeysSet = _immutable2.default.Set().withMutations(function (set) {
+      for (var index = 0; index < options.aclKeys.length; index += 1) {
+        var aclKey = options.aclKeys[index];
+        if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
+          errorMsg = 'invalid parameter: when given, aclKeys[' + index + '] must be a non-empty array of UUIDs';
+          LOG.error(errorMsg, aclKey);
+          break;
+        }
+        set.add(_immutable2.default.List(aclKey));
+      }
+    });
+
+    axiosConfig.method = 'post';
+    axiosConfig.data = aclKeysSet.toJS();
+  }
+
+  if (errorMsg) {
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.REQUESTS_API).request(axiosConfig).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /requests`
+ *
+ * TODO: add description
+ *
+ * @static
+ * @memberof lattice.RequestsApi
+ * @param {Request[]} requests
+ * @returns {Promise}
+ *
+ * @example
+ * RequestsApi.submitRequests(
+ *   [
+ *     {
+ *       "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *       "permissions": ["READ"],
+ *       reason: "a good reason"
+ *     },
+ *   ]
+ * );
+ */
+function submitRequests(requests) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidRequestArray)(requests)) {
+    errorMsg = 'invalid parameter: requests must be a non-empty array of valid Requests';
+    LOG.error(errorMsg, requests);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: Immutable.Set() with unit tests
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.REQUESTS_API).put('/', requests).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PATCH /requests`
+ *
+ * TODO: add description
+ *
+ * @static
+ * @memberof lattice.RequestsApi
+ * @param {Status[]} statuses
+ * @returns {Promise}
+ *
+ * @example
+ * RequestsApi.updateRequestStatuses(
+ *   [
+ *     {
+ *       "request": {
+ *         "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *         "permissions": ["READ"],
+ *         reason: "a good reason"
+ *       },
+ *       "state": "SUBMITTED"
+ *       "principal": {
+ *         "type": "USER",
+ *         "id": "principalId"
+ *       }
+ *     }
+ *   ]
+ * );
+ */
+function updateRequestStatuses(statuses) {
+
+  // let errorMsg :string = '';
+  //
+  // if (!isValidRequestStatusArray(statuses)) {
+  //   errorMsg = 'invalid parameter: statuses must be a non-empty array of valid Requests';
+  //   LOG.error(errorMsg, statuses);
+  //   return Promise.reject(errorMsg);
+  // }
+
+  // TODO: Immutable.Set() with unit tests
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.REQUESTS_API).patch('/', statuses).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 297 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getEntitySets = getEntitySets;
+exports.searchEntitySetMetaData = searchEntitySetMetaData;
+exports.searchEntitySetData = searchEntitySetData;
+exports.advancedSearchEntitySetData = advancedSearchEntitySetData;
+exports.searchOrganizations = searchOrganizations;
+exports.searchEntityTypes = searchEntityTypes;
+exports.searchAssociationTypes = searchAssociationTypes;
+exports.searchEntityTypesByFQN = searchEntityTypesByFQN;
+exports.searchPropertyTypes = searchPropertyTypes;
+exports.searchPropertyTypesByFQN = searchPropertyTypesByFQN;
+exports.searchEntityNeighbors = searchEntityNeighbors;
+exports.searchEntityNeighborsBulk = searchEntityNeighborsBulk;
+
+var _immutable = __webpack_require__(4);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _isFinite = __webpack_require__(298);
+
+var _isFinite2 = _interopRequireDefault(_isFinite);
+
+var _isString = __webpack_require__(18);
+
+var _isString2 = _interopRequireDefault(_isString);
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+var _LangUtils = __webpack_require__(2);
+
+var _ValidationUtils = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var LOG = new _Logger2.default('SearchApi');
+
+/**
+ * SearchApi...
+ *
+ * @module SearchApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.SearchApi.search...
+ *
+ * @example
+ * import { SearchApi } from 'lattice';
+ * // SearchApi.search...
+ */
+
+var ENTITY_TYPE_ID = 'eid';
+var KEYWORD = 'kw';
+var MAX_HITS = 'maxHits';
+var NAME = 'name';
+var NAMESPACE = 'namespace';
+var PROPERTY_TYPE_IDS = 'pid';
+var SEARCH_FIELDS = 'searchFields';
+var SEARCH_TERM = 'searchTerm';
+var START = 'start';
+
+/**
+ * `GET /search/entity_sets/{start}/{maxHits}`
+ *
+ * Executes a search over all existing entity sets to populate the home page
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {number} start
+ * @param {number} maxHits
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.getEntitySets({
+ *   start: 0,
+ *   maxHits: 10
+ * });
+ */
+
+function getEntitySets(searchOptions) {
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.SEARCH_ENTITY_SETS_PATH + '/' + start + '/' + maxHits).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search`
+ *
+ * Executes a search across all EntitySet metadata with the given parameters.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntitySetMetaData(
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ *
+ * SearchApi.searchEntitySetMetaData(
+ *   {
+ *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ *
+ * SearchApi.searchEntitySetMetaData(
+ *   {
+ *     "propertyTypeIds": [
+ *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     ],
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ *
+ * SearchApi.searchEntitySetMetaData(
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ *
+ * SearchApi.searchEntitySetMetaData(
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "propertyTypeIds": [
+ *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *       "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     ],
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchEntitySetMetaData(searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm,
+      entityTypeId = searchOptions.entityTypeId,
+      propertyTypeIds = searchOptions.propertyTypeIds;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+
+  if ((0, _LangUtils.isDefined)(searchTerm)) {
+    if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+      errorMsg = 'invalid property: searchTerm must be a non-empty string';
+      LOG.error(errorMsg, searchTerm);
+      return Promise.reject(errorMsg);
+    }
+    data[KEYWORD] = searchTerm;
+  }
+
+  if ((0, _LangUtils.isDefined)(entityTypeId)) {
+    if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
+      errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+      LOG.error(errorMsg, entityTypeId);
+      return Promise.reject(errorMsg);
+    }
+    data[ENTITY_TYPE_ID] = entityTypeId;
+  }
+
+  if ((0, _LangUtils.isDefined)(propertyTypeIds)) {
+    if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
+      errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+      LOG.error(errorMsg, propertyTypeIds);
+      return Promise.reject(errorMsg);
+    }
+    data[PROPERTY_TYPE_IDS] = _immutable2.default.Set().withMutations(function (set) {
+      propertyTypeIds.forEach(function (id) {
+        set.add(id);
+      });
+    }).toJS();
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/', data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/{entitySetId}`
+ *
+ * Executes a search over the data of the given EntitySet to find matches for the given search term.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {UUID} entitySetId
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchEntitySetData(entitySetId, searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/advanced/{entitySetId}`
+ *
+ * Executes a search over the data of the given EntitySet to find matches for the given search (field, term) pairs.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {UUID} entitySetId
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "searchFields": {
+ *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": "Lattice"
+ *     },
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function advancedSearchEntitySetData(entitySetId, searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchFields = searchOptions.searchFields;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyArray)(searchFields)) {
+    errorMsg = 'invalid parameter: searchFields must be a non-empty array';
+    LOG.error(errorMsg, searchFields);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate searchFields
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_FIELDS] = searchFields;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ADVANCED_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/organizations`
+ *
+ * Executes a search across all Organizations to find ones that match the given search term.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchOrganizations(
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchOrganizations(searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ORGANIZATIONS_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/entity_types`
+ *
+ * Executes a search across all EntityTypes to find ones that match the given search term.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntityTypes(
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchEntityTypes(searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ENTITY_TYPES_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/entity_types`
+ *
+ * Executes a search across all EntityTypes to find ones that match the given search term.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchAssociationTypes(
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchAssociationTypes(searchOptions) {
+
+  var errorMsg = '';
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ASSOCIATION_TYPES_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/entity_types/fqn`
+ *
+ * Executes a search across all EntityTypes to find ones that match the given FQN, including partial matches.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntityTypesByFQN(
+ *   {
+ *     "namespace": "LATTICE",
+ *     "name": "MyEntityType",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchEntityTypesByFQN(searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      name = searchOptions.name,
+      namespace = searchOptions.namespace;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isDefined)(namespace) && !(0, _isString2.default)(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isDefined)(name) && !(0, _isString2.default)(name)) {
+    errorMsg = 'invalid parameter: name must be a string';
+    LOG.error(errorMsg, name);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[NAMESPACE] = namespace;
+  data[NAME] = name;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ENTITY_TYPES_PATH + '/' + _ApiPaths.FQN_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/property_types`
+ *
+ * Executes a search across all PropertyTypes to find ones that match the given search term.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchPropertyTypes(
+ *   {
+ *     "searchTerm": "Lattice",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchPropertyTypes(searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      searchTerm = searchOptions.searchTerm;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
+    errorMsg = 'invalid property: searchTerm must be a non-empty string';
+    LOG.error(errorMsg, searchTerm);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[SEARCH_TERM] = searchTerm;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_PROPERTY_TYPES_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/property_types/fqn`
+ *
+ * Executes a search across all PropertyTypes to find ones that match the given FQN, including partial matches.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchPropertyTypesByFQN(
+ *   {
+ *     "namespace": "LATTICE",
+ *     "name": "MyPropertyType",
+ *     "start": 0,
+ *     "maxHits": 100
+ *   }
+ * );
+ */
+function searchPropertyTypesByFQN(searchOptions) {
+
+  var errorMsg = '';
+
+  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
+    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  var data = {};
+  var start = searchOptions.start,
+      maxHits = searchOptions.maxHits,
+      name = searchOptions.name,
+      namespace = searchOptions.namespace;
+
+
+  if (!(0, _isFinite2.default)(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isDefined)(namespace) && !(0, _isString2.default)(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  if ((0, _LangUtils.isDefined)(name) && !(0, _isString2.default)(name)) {
+    errorMsg = 'invalid parameter: name must be a string';
+    LOG.error(errorMsg, name);
+    return Promise.reject(errorMsg);
+  }
+
+  data[START] = start;
+  data[MAX_HITS] = maxHits;
+  data[NAMESPACE] = namespace;
+  data[NAME] = name;
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_PROPERTY_TYPES_PATH + '/' + _ApiPaths.FQN_PATH, data).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * TODO: everything
+ */
+function searchEntityNeighbors(entitySetId, entityId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityId)) {
+    errorMsg = 'invalid parameter: entityId must be a valid UUID';
+    LOG.error(errorMsg, entityId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + entitySetId + '/' + entityId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /search/{entityTypeId}/neighbors`
+ *
+ * Executes a search for all neighbors of all the entities specified, where all entities belong to the
+ * same entity set.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {UUID} entitySetId
+ * @param {UUID[]} entityIds
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntityNeighborsBulk("ec6865e6-e60e-424b-a071-6a9c1603d735",
+ * ["3bf2a30d-fda0-4389-a1e6-8546b230efad","a62a47fe-e6a7-4536-85f1-fe935902a536"]);
+ */
+function searchEntityNeighborsBulk(entitySetId, entityIds) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuidArray)(entityIds)) {
+    errorMsg = 'invalid parameter: entityIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entityIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId + '/' + _ApiPaths.NEIGHBORS_PATH, entityIds).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 298 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(11);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeIsFinite = root.isFinite;
+
+/**
+ * Checks if `value` is a finite primitive number.
+ *
+ * **Note:** This method is based on
+ * [`Number.isFinite`](https://mdn.io/Number/isFinite).
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a finite number, else `false`.
+ * @example
+ *
+ * _.isFinite(3);
+ * // => true
+ *
+ * _.isFinite(Number.MIN_VALUE);
+ * // => true
+ *
+ * _.isFinite(Infinity);
+ * // => false
+ *
+ * _.isFinite('3');
+ * // => false
+ */
+function isFinite(value) {
+  return typeof value == 'number' && nativeIsFinite(value);
+}
+
+module.exports = isFinite;
+
+
+/***/ }),
+/* 299 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getCurrentSyncId = getCurrentSyncId;
+
+var _Logger = __webpack_require__(1);
+
+var _Logger2 = _interopRequireDefault(_Logger);
+
+var _ApiNames = __webpack_require__(5);
+
+var _ApiPaths = __webpack_require__(9);
+
+var _axios = __webpack_require__(6);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable import/prefer-default-export */
+
+/**
+ * SyncApi ...
+ *
+ * @module SyncApi
+ * @memberof lattice
+ *
+ * @example
+ * import Lattice from 'lattice';
+ * // Lattice.SyncApi.getCurrentSync...
+ *
+ * @example
+ * import { SyncApi } from 'lattice';
+ * // SyncApi.getCurrentSync...
+ */
+
+var LOG = new _Logger2.default('SyncApi');
+
+/**
+ * `GET /sync/{entitySetId}/current`
+ *
+ * Returns the current sync id for a given entity set
+ *
+ * @static
+ * @memberof lattice.
+ * @param {UUID} entitySetId
+ * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the current sync id for the entity set
+ *
+ * @example
+ * LinkingApi.getCurrentSyncId("e39dfdfa-a3e6-4f1f-b54b-646a723c3085");
+ */
+function getCurrentSyncId(entitySetId) {
+
+  // TODO: everything
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SYNC_API).get('/' + entitySetId + '/' + _ApiPaths.CURRENT_PATH).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/***/ }),
+/* 300 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SecurableTypes = exports.RequestStateTypes = exports.PrincipalTypes = exports.PermissionTypes = exports.AnalyzerTypes = exports.ActionTypes = undefined;
+
+var _ActionTypes = __webpack_require__(190);
+
+var _ActionTypes2 = _interopRequireDefault(_ActionTypes);
+
+var _AnalyzerTypes = __webpack_require__(180);
+
+var _AnalyzerTypes2 = _interopRequireDefault(_AnalyzerTypes);
+
+var _PermissionTypes = __webpack_require__(34);
+
+var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
+
+var _PrincipalTypes = __webpack_require__(37);
+
+var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
+
+var _RequestStateTypes = __webpack_require__(40);
+
+var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
+
+var _SecurableTypes = __webpack_require__(38);
+
+var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.ActionTypes = _ActionTypes2.default;
+exports.AnalyzerTypes = _AnalyzerTypes2.default;
+exports.PermissionTypes = _PermissionTypes2.default;
+exports.PrincipalTypes = _PrincipalTypes2.default;
+exports.RequestStateTypes = _RequestStateTypes2.default;
+exports.SecurableTypes = _SecurableTypes2.default;
+
+/***/ }),
+/* 301 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SchemaBuilder = exports.Schema = exports.RoleBuilder = exports.Role = exports.RequestStatusBuilder = exports.RequestStatus = exports.RequestBuilder = exports.Request = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.LinkingRequestBuilder = exports.LinkingRequest = exports.LinkingEntityTypeBuilder = exports.LinkingEntityType = exports.LinkingEntitySetBuilder = exports.LinkingEntitySet = exports.FullyQualifiedName = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.DataSourceBuilder = exports.DataSource = exports.AssociationTypeBuilder = exports.AssociationType = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.AccessCheckBuilder = exports.AccessCheck = undefined;
+
+var _FullyQualifiedName = __webpack_require__(16);
+
+var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
+
+var _AccessCheck = __webpack_require__(35);
+
+var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
+
+var _Ace = __webpack_require__(36);
+
+var _Ace2 = _interopRequireDefault(_Ace);
+
+var _Acl = __webpack_require__(191);
+
+var _Acl2 = _interopRequireDefault(_Acl);
+
+var _AclData = __webpack_require__(189);
+
+var _AclData2 = _interopRequireDefault(_AclData);
+
+var _AssociationType = __webpack_require__(302);
+
+var _AssociationType2 = _interopRequireDefault(_AssociationType);
+
+var _DataSource = __webpack_require__(181);
+
+var _DataSource2 = _interopRequireDefault(_DataSource);
+
+var _EntitySet = __webpack_require__(24);
+
+var _EntitySet2 = _interopRequireDefault(_EntitySet);
+
+var _EntityType = __webpack_require__(17);
+
+var _EntityType2 = _interopRequireDefault(_EntityType);
+
+var _LinkingEntitySet = __webpack_require__(184);
+
+var _LinkingEntitySet2 = _interopRequireDefault(_LinkingEntitySet);
+
+var _LinkingEntityType = __webpack_require__(185);
+
+var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
+
+var _LinkingRequest = __webpack_require__(183);
+
+var _LinkingRequest2 = _interopRequireDefault(_LinkingRequest);
+
+var _Organization = __webpack_require__(187);
+
+var _Organization2 = _interopRequireDefault(_Organization);
+
+var _Principal = __webpack_require__(14);
+
+var _Principal2 = _interopRequireDefault(_Principal);
+
+var _PropertyType = __webpack_require__(25);
+
+var _PropertyType2 = _interopRequireDefault(_PropertyType);
+
+var _Request = __webpack_require__(26);
+
+var _Request2 = _interopRequireDefault(_Request);
+
+var _RequestStatus = __webpack_require__(39);
+
+var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
+
+var _Role = __webpack_require__(188);
+
+var _Role2 = _interopRequireDefault(_Role);
+
+var _Schema = __webpack_require__(182);
+
+var _Schema2 = _interopRequireDefault(_Schema);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.AccessCheck = _AccessCheck2.default;
+exports.AccessCheckBuilder = _AccessCheck.AccessCheckBuilder;
+exports.Ace = _Ace2.default;
+exports.AceBuilder = _Ace.AceBuilder;
+exports.Acl = _Acl2.default;
+exports.AclBuilder = _Acl.AclBuilder;
+exports.AclData = _AclData2.default;
+exports.AclDataBuilder = _AclData.AclDataBuilder;
+exports.AssociationType = _AssociationType2.default;
+exports.AssociationTypeBuilder = _AssociationType.AssociationTypeBuilder;
+exports.DataSource = _DataSource2.default;
+exports.DataSourceBuilder = _DataSource.DataSourceBuilder;
+exports.EntitySet = _EntitySet2.default;
+exports.EntitySetBuilder = _EntitySet.EntitySetBuilder;
+exports.EntityType = _EntityType2.default;
+exports.EntityTypeBuilder = _EntityType.EntityTypeBuilder;
+exports.FullyQualifiedName = _FullyQualifiedName2.default;
+exports.LinkingEntitySet = _LinkingEntitySet2.default;
+exports.LinkingEntitySetBuilder = _LinkingEntitySet.LinkingEntitySetBuilder;
+exports.LinkingEntityType = _LinkingEntityType2.default;
+exports.LinkingEntityTypeBuilder = _LinkingEntityType.LinkingEntityTypeBuilder;
+exports.LinkingRequest = _LinkingRequest2.default;
+exports.LinkingRequestBuilder = _LinkingRequest.LinkingRequestBuilder;
+exports.Organization = _Organization2.default;
+exports.OrganizationBuilder = _Organization.OrganizationBuilder;
+exports.Principal = _Principal2.default;
+exports.PrincipalBuilder = _Principal.PrincipalBuilder;
+exports.PropertyType = _PropertyType2.default;
+exports.PropertyTypeBuilder = _PropertyType.PropertyTypeBuilder;
+exports.Request = _Request2.default;
+exports.RequestBuilder = _Request.RequestBuilder;
+exports.RequestStatus = _RequestStatus2.default;
+exports.RequestStatusBuilder = _RequestStatus.RequestStatusBuilder;
+exports.Role = _Role2.default;
+exports.RoleBuilder = _Role.RoleBuilder;
+exports.Schema = _Schema2.default;
+exports.SchemaBuilder = _Schema.SchemaBuilder;
+
+/***/ }),
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30689,7 +39205,7 @@ var _immutable = __webpack_require__(4);
 
 var _immutable2 = _interopRequireDefault(_immutable);
 
-var _isBoolean = __webpack_require__(173);
+var _isBoolean = __webpack_require__(186);
 
 var _isBoolean2 = _interopRequireDefault(_isBoolean);
 
@@ -30878,7752 +39394,6 @@ function isValid(associationType) {
     LOG.error(e, associationType);
     return false;
   }
-}
-
-/***/ }),
-/* 261 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getTopUtilizers = getTopUtilizers;
-exports.getNeighborTypes = getNeighborTypes;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* eslint-disable import/prefer-default-export */
-
-/**
- * AnalysisApi ...
- *
- * @module AnalysisApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.AnalysisApi.get...
- *
- * @example
- * import { AnalysisApi } from 'lattice';
- * // AnalysisApi.get...
- */
-
-var LOG = new _Logger2.default('AnalysisApi');
-
-/**
- * `GET /analysis/{uuid}/{count}`
- *
- * Gets the top rows of data for the given EntitySet UUID.
- *
- * @static
- * @memberof lattice.AnalysisApi
- * @param {UUID} entitySetId
- * @param {number} count
- * @param {Object} options
- * @param {string} fileType (optional)
- * @returns {Promise<SetMultimap<Object, Object>>} - a Promise that will resolve with the data as its fulfillment value
- *
- * @example
- * AnalysisApi.getTopUtilizers(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   100,
- *   {
- *     "associationTypeId": "8f79e123-3411-4099-a41f-88e5d22d0e8d",
- *     "neighborTypeIds": [
- *       "fae6af98-2675-45bd-9a5b-1619a87235a8",
- *       "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     ],
- *     "utilizerIsSrc": false
- *   }
- *   "json"
- * );
- */
-function getTopUtilizers(entitySetId, count, options, fileType) {
-
-  // TODO: everything
-
-  var url = '/' + entitySetId + '/' + count;
-  if ((0, _LangUtils.isNonEmptyString)(fileType)) {
-    url = url + '?fileType=' + fileType;
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).post(url, options).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /analysis/{uuid}/types`
- *
- * Gets all available association types and neighbor types for a given entity set id
- *
- * @static
- * @memberof lattice.AnalysisApi
- * @param {UUID} entitySetId
- * @returns {Promise<Set<Object>} - a Promise that will resolve with the data as its fulfillment value
- *
- * @example
- * AnalysisApi.getNeighborTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getNeighborTypes(entitySetId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).get('/' + entitySetId + '/' + _ApiPaths.TYPES_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 262 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(263);
-
-/***/ }),
-/* 263 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-var bind = __webpack_require__(181);
-var Axios = __webpack_require__(265);
-var defaults = __webpack_require__(38);
-
-/**
- * Create an instance of Axios
- *
- * @param {Object} defaultConfig The default config for the instance
- * @return {Axios} A new instance of Axios
- */
-function createInstance(defaultConfig) {
-  var context = new Axios(defaultConfig);
-  var instance = bind(Axios.prototype.request, context);
-
-  // Copy axios.prototype to instance
-  utils.extend(instance, Axios.prototype, context);
-
-  // Copy context to instance
-  utils.extend(instance, context);
-
-  return instance;
-}
-
-// Create the default instance to be exported
-var axios = createInstance(defaults);
-
-// Expose Axios class to allow class inheritance
-axios.Axios = Axios;
-
-// Factory for creating new instances
-axios.create = function create(instanceConfig) {
-  return createInstance(utils.merge(defaults, instanceConfig));
-};
-
-// Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(186);
-axios.CancelToken = __webpack_require__(279);
-axios.isCancel = __webpack_require__(185);
-
-// Expose all/spread
-axios.all = function all(promises) {
-  return Promise.all(promises);
-};
-axios.spread = __webpack_require__(280);
-
-module.exports = axios;
-
-// Allow use of default import syntax in TypeScript
-module.exports.default = axios;
-
-
-/***/ }),
-/* 264 */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-// The _isBuffer check is for Safari 5-7 support, because it's missing
-// Object.prototype.constructor. Remove this eventually
-module.exports = function (obj) {
-  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
-}
-
-function isBuffer (obj) {
-  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-}
-
-// For Node v0.10 support. Remove this eventually.
-function isSlowBuffer (obj) {
-  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
-}
-
-
-/***/ }),
-/* 265 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var defaults = __webpack_require__(38);
-var utils = __webpack_require__(8);
-var InterceptorManager = __webpack_require__(274);
-var dispatchRequest = __webpack_require__(275);
-
-/**
- * Create a new instance of Axios
- *
- * @param {Object} instanceConfig The default config for the instance
- */
-function Axios(instanceConfig) {
-  this.defaults = instanceConfig;
-  this.interceptors = {
-    request: new InterceptorManager(),
-    response: new InterceptorManager()
-  };
-}
-
-/**
- * Dispatch a request
- *
- * @param {Object} config The config specific for this request (merged with this.defaults)
- */
-Axios.prototype.request = function request(config) {
-  /*eslint no-param-reassign:0*/
-  // Allow for axios('example/url'[, config]) a la fetch API
-  if (typeof config === 'string') {
-    config = utils.merge({
-      url: arguments[0]
-    }, arguments[1]);
-  }
-
-  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
-  config.method = config.method.toLowerCase();
-
-  // Hook up interceptors middleware
-  var chain = [dispatchRequest, undefined];
-  var promise = Promise.resolve(config);
-
-  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
-    chain.unshift(interceptor.fulfilled, interceptor.rejected);
-  });
-
-  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
-    chain.push(interceptor.fulfilled, interceptor.rejected);
-  });
-
-  while (chain.length) {
-    promise = promise.then(chain.shift(), chain.shift());
-  }
-
-  return promise;
-};
-
-// Provide aliases for supported request methods
-utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
-  /*eslint func-names:0*/
-  Axios.prototype[method] = function(url, config) {
-    return this.request(utils.merge(config || {}, {
-      method: method,
-      url: url
-    }));
-  };
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  /*eslint func-names:0*/
-  Axios.prototype[method] = function(url, data, config) {
-    return this.request(utils.merge(config || {}, {
-      method: method,
-      url: url,
-      data: data
-    }));
-  };
-});
-
-module.exports = Axios;
-
-
-/***/ }),
-/* 266 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-
-module.exports = function normalizeHeaderName(headers, normalizedName) {
-  utils.forEach(headers, function processHeader(value, name) {
-    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
-      headers[normalizedName] = value;
-      delete headers[name];
-    }
-  });
-};
-
-
-/***/ }),
-/* 267 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var createError = __webpack_require__(184);
-
-/**
- * Resolve or reject a Promise based on response status.
- *
- * @param {Function} resolve A function that resolves the promise.
- * @param {Function} reject A function that rejects the promise.
- * @param {object} response The response.
- */
-module.exports = function settle(resolve, reject, response) {
-  var validateStatus = response.config.validateStatus;
-  // Note: status is not exposed by XDomainRequest
-  if (!response.status || !validateStatus || validateStatus(response.status)) {
-    resolve(response);
-  } else {
-    reject(createError(
-      'Request failed with status code ' + response.status,
-      response.config,
-      null,
-      response.request,
-      response
-    ));
-  }
-};
-
-
-/***/ }),
-/* 268 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Update an Error with the specified config, error code, and response.
- *
- * @param {Error} error The error to update.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- * @param {Object} [request] The request.
- * @param {Object} [response] The response.
- * @returns {Error} The error.
- */
-module.exports = function enhanceError(error, config, code, request, response) {
-  error.config = config;
-  if (code) {
-    error.code = code;
-  }
-  error.request = request;
-  error.response = response;
-  return error;
-};
-
-
-/***/ }),
-/* 269 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-
-function encode(val) {
-  return encodeURIComponent(val).
-    replace(/%40/gi, '@').
-    replace(/%3A/gi, ':').
-    replace(/%24/g, '$').
-    replace(/%2C/gi, ',').
-    replace(/%20/g, '+').
-    replace(/%5B/gi, '[').
-    replace(/%5D/gi, ']');
-}
-
-/**
- * Build a URL by appending params to the end
- *
- * @param {string} url The base of the url (e.g., http://www.google.com)
- * @param {object} [params] The params to be appended
- * @returns {string} The formatted url
- */
-module.exports = function buildURL(url, params, paramsSerializer) {
-  /*eslint no-param-reassign:0*/
-  if (!params) {
-    return url;
-  }
-
-  var serializedParams;
-  if (paramsSerializer) {
-    serializedParams = paramsSerializer(params);
-  } else if (utils.isURLSearchParams(params)) {
-    serializedParams = params.toString();
-  } else {
-    var parts = [];
-
-    utils.forEach(params, function serialize(val, key) {
-      if (val === null || typeof val === 'undefined') {
-        return;
-      }
-
-      if (utils.isArray(val)) {
-        key = key + '[]';
-      }
-
-      if (!utils.isArray(val)) {
-        val = [val];
-      }
-
-      utils.forEach(val, function parseValue(v) {
-        if (utils.isDate(v)) {
-          v = v.toISOString();
-        } else if (utils.isObject(v)) {
-          v = JSON.stringify(v);
-        }
-        parts.push(encode(key) + '=' + encode(v));
-      });
-    });
-
-    serializedParams = parts.join('&');
-  }
-
-  if (serializedParams) {
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-  }
-
-  return url;
-};
-
-
-/***/ }),
-/* 270 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-
-// Headers whose duplicates are ignored by node
-// c.f. https://nodejs.org/api/http.html#http_message_headers
-var ignoreDuplicateOf = [
-  'age', 'authorization', 'content-length', 'content-type', 'etag',
-  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
-  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
-  'referer', 'retry-after', 'user-agent'
-];
-
-/**
- * Parse headers into an object
- *
- * ```
- * Date: Wed, 27 Aug 2014 08:58:49 GMT
- * Content-Type: application/json
- * Connection: keep-alive
- * Transfer-Encoding: chunked
- * ```
- *
- * @param {String} headers Headers needing to be parsed
- * @returns {Object} Headers parsed into an object
- */
-module.exports = function parseHeaders(headers) {
-  var parsed = {};
-  var key;
-  var val;
-  var i;
-
-  if (!headers) { return parsed; }
-
-  utils.forEach(headers.split('\n'), function parser(line) {
-    i = line.indexOf(':');
-    key = utils.trim(line.substr(0, i)).toLowerCase();
-    val = utils.trim(line.substr(i + 1));
-
-    if (key) {
-      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
-        return;
-      }
-      if (key === 'set-cookie') {
-        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
-      } else {
-        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
-      }
-    }
-  });
-
-  return parsed;
-};
-
-
-/***/ }),
-/* 271 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-
-module.exports = (
-  utils.isStandardBrowserEnv() ?
-
-  // Standard browser envs have full support of the APIs needed to test
-  // whether the request URL is of the same origin as current location.
-  (function standardBrowserEnv() {
-    var msie = /(msie|trident)/i.test(navigator.userAgent);
-    var urlParsingNode = document.createElement('a');
-    var originURL;
-
-    /**
-    * Parse a URL to discover it's components
-    *
-    * @param {String} url The URL to be parsed
-    * @returns {Object}
-    */
-    function resolveURL(url) {
-      var href = url;
-
-      if (msie) {
-        // IE needs attribute set twice to normalize properties
-        urlParsingNode.setAttribute('href', href);
-        href = urlParsingNode.href;
-      }
-
-      urlParsingNode.setAttribute('href', href);
-
-      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
-      return {
-        href: urlParsingNode.href,
-        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
-        host: urlParsingNode.host,
-        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
-        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
-        hostname: urlParsingNode.hostname,
-        port: urlParsingNode.port,
-        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
-                  urlParsingNode.pathname :
-                  '/' + urlParsingNode.pathname
-      };
-    }
-
-    originURL = resolveURL(window.location.href);
-
-    /**
-    * Determine if a URL shares the same origin as the current location
-    *
-    * @param {String} requestURL The URL to test
-    * @returns {boolean} True if URL shares the same origin, otherwise false
-    */
-    return function isURLSameOrigin(requestURL) {
-      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
-      return (parsed.protocol === originURL.protocol &&
-            parsed.host === originURL.host);
-    };
-  })() :
-
-  // Non standard browser envs (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return function isURLSameOrigin() {
-      return true;
-    };
-  })()
-);
-
-
-/***/ }),
-/* 272 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
-
-var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-function E() {
-  this.message = 'String contains an invalid character';
-}
-E.prototype = new Error;
-E.prototype.code = 5;
-E.prototype.name = 'InvalidCharacterError';
-
-function btoa(input) {
-  var str = String(input);
-  var output = '';
-  for (
-    // initialize result and counter
-    var block, charCode, idx = 0, map = chars;
-    // if the next str index does not exist:
-    //   change the mapping table to "="
-    //   check if d has no fractional digits
-    str.charAt(idx | 0) || (map = '=', idx % 1);
-    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
-    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
-  ) {
-    charCode = str.charCodeAt(idx += 3 / 4);
-    if (charCode > 0xFF) {
-      throw new E();
-    }
-    block = block << 8 | charCode;
-  }
-  return output;
-}
-
-module.exports = btoa;
-
-
-/***/ }),
-/* 273 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-
-module.exports = (
-  utils.isStandardBrowserEnv() ?
-
-  // Standard browser envs support document.cookie
-  (function standardBrowserEnv() {
-    return {
-      write: function write(name, value, expires, path, domain, secure) {
-        var cookie = [];
-        cookie.push(name + '=' + encodeURIComponent(value));
-
-        if (utils.isNumber(expires)) {
-          cookie.push('expires=' + new Date(expires).toGMTString());
-        }
-
-        if (utils.isString(path)) {
-          cookie.push('path=' + path);
-        }
-
-        if (utils.isString(domain)) {
-          cookie.push('domain=' + domain);
-        }
-
-        if (secure === true) {
-          cookie.push('secure');
-        }
-
-        document.cookie = cookie.join('; ');
-      },
-
-      read: function read(name) {
-        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-        return (match ? decodeURIComponent(match[3]) : null);
-      },
-
-      remove: function remove(name) {
-        this.write(name, '', Date.now() - 86400000);
-      }
-    };
-  })() :
-
-  // Non standard browser env (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return {
-      write: function write() {},
-      read: function read() { return null; },
-      remove: function remove() {}
-    };
-  })()
-);
-
-
-/***/ }),
-/* 274 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-
-function InterceptorManager() {
-  this.handlers = [];
-}
-
-/**
- * Add a new interceptor to the stack
- *
- * @param {Function} fulfilled The function to handle `then` for a `Promise`
- * @param {Function} rejected The function to handle `reject` for a `Promise`
- *
- * @return {Number} An ID used to remove interceptor later
- */
-InterceptorManager.prototype.use = function use(fulfilled, rejected) {
-  this.handlers.push({
-    fulfilled: fulfilled,
-    rejected: rejected
-  });
-  return this.handlers.length - 1;
-};
-
-/**
- * Remove an interceptor from the stack
- *
- * @param {Number} id The ID that was returned by `use`
- */
-InterceptorManager.prototype.eject = function eject(id) {
-  if (this.handlers[id]) {
-    this.handlers[id] = null;
-  }
-};
-
-/**
- * Iterate over all the registered interceptors
- *
- * This method is particularly useful for skipping over any
- * interceptors that may have become `null` calling `eject`.
- *
- * @param {Function} fn The function to call for each interceptor
- */
-InterceptorManager.prototype.forEach = function forEach(fn) {
-  utils.forEach(this.handlers, function forEachHandler(h) {
-    if (h !== null) {
-      fn(h);
-    }
-  });
-};
-
-module.exports = InterceptorManager;
-
-
-/***/ }),
-/* 275 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-var transformData = __webpack_require__(276);
-var isCancel = __webpack_require__(185);
-var defaults = __webpack_require__(38);
-var isAbsoluteURL = __webpack_require__(277);
-var combineURLs = __webpack_require__(278);
-
-/**
- * Throws a `Cancel` if cancellation has been requested.
- */
-function throwIfCancellationRequested(config) {
-  if (config.cancelToken) {
-    config.cancelToken.throwIfRequested();
-  }
-}
-
-/**
- * Dispatch a request to the server using the configured adapter.
- *
- * @param {object} config The config that is to be used for the request
- * @returns {Promise} The Promise to be fulfilled
- */
-module.exports = function dispatchRequest(config) {
-  throwIfCancellationRequested(config);
-
-  // Support baseURL config
-  if (config.baseURL && !isAbsoluteURL(config.url)) {
-    config.url = combineURLs(config.baseURL, config.url);
-  }
-
-  // Ensure headers exist
-  config.headers = config.headers || {};
-
-  // Transform request data
-  config.data = transformData(
-    config.data,
-    config.headers,
-    config.transformRequest
-  );
-
-  // Flatten headers
-  config.headers = utils.merge(
-    config.headers.common || {},
-    config.headers[config.method] || {},
-    config.headers || {}
-  );
-
-  utils.forEach(
-    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
-    function cleanHeaderConfig(method) {
-      delete config.headers[method];
-    }
-  );
-
-  var adapter = config.adapter || defaults.adapter;
-
-  return adapter(config).then(function onAdapterResolution(response) {
-    throwIfCancellationRequested(config);
-
-    // Transform response data
-    response.data = transformData(
-      response.data,
-      response.headers,
-      config.transformResponse
-    );
-
-    return response;
-  }, function onAdapterRejection(reason) {
-    if (!isCancel(reason)) {
-      throwIfCancellationRequested(config);
-
-      // Transform response data
-      if (reason && reason.response) {
-        reason.response.data = transformData(
-          reason.response.data,
-          reason.response.headers,
-          config.transformResponse
-        );
-      }
-    }
-
-    return Promise.reject(reason);
-  });
-};
-
-
-/***/ }),
-/* 276 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(8);
-
-/**
- * Transform the data for a request or a response
- *
- * @param {Object|String} data The data to be transformed
- * @param {Array} headers The headers for the request or response
- * @param {Array|Function} fns A single function or Array of functions
- * @returns {*} The resulting transformed data
- */
-module.exports = function transformData(data, headers, fns) {
-  /*eslint no-param-reassign:0*/
-  utils.forEach(fns, function transform(fn) {
-    data = fn(data, headers);
-  });
-
-  return data;
-};
-
-
-/***/ }),
-/* 277 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determines whether the specified URL is absolute
- *
- * @param {string} url The URL to test
- * @returns {boolean} True if the specified URL is absolute, otherwise false
- */
-module.exports = function isAbsoluteURL(url) {
-  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
-  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
-  // by any combination of letters, digits, plus, period, or hyphen.
-  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
-};
-
-
-/***/ }),
-/* 278 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Creates a new URL by combining the specified URLs
- *
- * @param {string} baseURL The base URL
- * @param {string} relativeURL The relative URL
- * @returns {string} The combined URL
- */
-module.exports = function combineURLs(baseURL, relativeURL) {
-  return relativeURL
-    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
-    : baseURL;
-};
-
-
-/***/ }),
-/* 279 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Cancel = __webpack_require__(186);
-
-/**
- * A `CancelToken` is an object that can be used to request cancellation of an operation.
- *
- * @class
- * @param {Function} executor The executor function.
- */
-function CancelToken(executor) {
-  if (typeof executor !== 'function') {
-    throw new TypeError('executor must be a function.');
-  }
-
-  var resolvePromise;
-  this.promise = new Promise(function promiseExecutor(resolve) {
-    resolvePromise = resolve;
-  });
-
-  var token = this;
-  executor(function cancel(message) {
-    if (token.reason) {
-      // Cancellation has already been requested
-      return;
-    }
-
-    token.reason = new Cancel(message);
-    resolvePromise(token.reason);
-  });
-}
-
-/**
- * Throws a `Cancel` if cancellation has been requested.
- */
-CancelToken.prototype.throwIfRequested = function throwIfRequested() {
-  if (this.reason) {
-    throw this.reason;
-  }
-};
-
-/**
- * Returns an object that contains a new `CancelToken` and a function that, when called,
- * cancels the `CancelToken`.
- */
-CancelToken.source = function source() {
-  var cancel;
-  var token = new CancelToken(function executor(c) {
-    cancel = c;
-  });
-  return {
-    token: token,
-    cancel: cancel
-  };
-};
-
-module.exports = CancelToken;
-
-
-/***/ }),
-/* 280 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Syntactic sugar for invoking a function and expanding an array for arguments.
- *
- * Common use case would be to use `Function.prototype.apply`.
- *
- *  ```js
- *  function f(x, y, z) {}
- *  var args = [1, 2, 3];
- *  f.apply(null, args);
- *  ```
- *
- * With `spread` this example can be re-written.
- *
- *  ```js
- *  spread(function(x, y, z) {})([1, 2, 3]);
- *  ```
- *
- * @param {Function} callback
- * @returns {Function}
- */
-module.exports = function spread(callback) {
-  return function wrap(arr) {
-    return callback.apply(null, arr);
-  };
-};
-
-
-/***/ }),
-/* 281 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ENVIRONMENT_URLS = _immutable2.default.Map({
-  LOCAL: 'http://localhost:8080',
-  STAGING: 'https://api.staging.openlattice.com',
-  PRODUCTION: 'https://api.openlattice.com'
-});
-
-/* eslint-disable import/prefer-default-export */
-
-exports.default = ENVIRONMENT_URLS;
-module.exports = exports['default'];
-
-/***/ }),
-/* 282 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getApps = getApps;
-exports.getApp = getApp;
-exports.getAppByName = getAppByName;
-exports.getAppTypesForAppTypeIds = getAppTypesForAppTypeIds;
-exports.getConfigurations = getConfigurations;
-exports.installApp = installApp;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('AppApi');
-
-/**
-  * `GET /app/`
-  *
-  * Loads all apps.
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @return {Promise<Object[]>} - a Promise that will resolve with a list of all apps
-  *
-  * @example
-  * AppApi.getApps();
-  */
-function getApps() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.APP_API).get('/').then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
-  * `GET /app/{appId}`
-  *
-  * Loads app with provided id
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @param {UUID} appId
-  * @return {Promise<Object>} - a Promise that will resolve with the details of an app
-  *
-  * @example
-  * AppApi.getApp("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
-  */
-
-function getApp(appId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(appId)) {
-    errorMsg = 'invalid parameter: appId must be a valid UUID';
-    LOG.error(errorMsg, appId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + appId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
-  * `GET /app/{appName}`
-  *
-  * Loads app with provided name
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @param {string} appName
-  * @return {Promise<Object>} - a Promise that will resolve with the details of an app
-  *
-  * @example
-  * AppApi.getAppByName("bhr");
-  */
-
-function getAppByName(appName) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(appName)) {
-    errorMsg = 'invalid parameter: appName must be a non-empty string';
-    LOG.error(errorMsg, appName);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.LOOKUP_PATH + '/' + appName).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
-  * `GET /app/type`
-  *
-  * Loads app type objects for provided ids
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @param {UUID[]} appTypeIds
-  * @return {Promise<Object>} - a Promise that will resolve with a mapping from app type ids to app types
-  *
-  * @example
-  * AppApi.getAppTypeIds([
-  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
-  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
-  * ]);
-  */
-
-function getAppTypesForAppTypeIds(appTypeIds) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuidArray)(appTypeIds)) {
-    errorMsg = 'invalid parameter: appTypeIds must be a valid UUID array';
-    LOG.error(errorMsg, appTypeIds);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _ApiPaths.TYPE_PATH + '/' + _ApiPaths.BULK_PATH, appTypeIds).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
-  * `GET /app/config/{appId}`
-  *
-  * Loads all available configurations for a provided app id
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @param {UUID} appId
-  * @return {Promise<Object[]>} - a Promise that will resolve with all available configurations for an app
-  *
-  * @example
-  * AppApi.getConfigurations("ec6865e6-e60e-424b-a071-6a9c1603d735");
-  */
-function getConfigurations(appId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(appId)) {
-    errorMsg = 'invalid parameter: appId must be a valid UUID';
-    LOG.error(errorMsg, appId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.CONFIG_PATH + '/' + appId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
-  * `GET /app/install/{appId}/{organizationId}/{prefix}`
-  *
-  * Installs an app for an organization.
-  *
-  * @static
-  * @memberof lattice.AppApi
-  * @param {UUID} appId
-  * @param {UUID} organizationId
-  * @param {string} prefix
-  * @return {Promise} - a Promise that will resolve without a value after creating an app for an organization
-  *
-  * @example
-  * AppApi.installApp(
-  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
-  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
-  *   "app_prefix"
-  * );
-  */
-function installApp(appId, organizationId, prefix) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(appId)) {
-    errorMsg = 'invalid parameter: appId must be a valid UUID';
-    LOG.error(errorMsg, appId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(prefix)) {
-    errorMsg = 'invalid parameter: prefix must be a non-empty string';
-    LOG.error(errorMsg, prefix);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.INSTALL_PATH + '/' + appId + '/' + organizationId + '/' + prefix).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 283 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.checkAuthorizations = checkAuthorizations;
-exports.getAccessibleObjects = getAccessibleObjects;
-
-var _isUndefined = __webpack_require__(19);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-var _PermissionTypes = __webpack_require__(26);
-
-var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
-
-var _SecurableTypes = __webpack_require__(29);
-
-var _SecurableTypes2 = _interopRequireDefault(_SecurableTypes);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _AccessCheck = __webpack_require__(35);
-
-var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
-
-var _ApiNames = __webpack_require__(5);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('AuthorizationApi');
-
-/**
- * `POST /authorizations`
- *
- * Gets the Authorizations for the given AccessChecks.
- *
- * @static
- * @memberof lattice.AuthorizationApi
- * @param {AccessCheck[]} queries
- * @returns {Promise<Authorization[]>} - a Promise that will resolve with the Authorizations as its fulfillment value
- *
- * @example
- * AuthorizationApi.checkAuthorizations(
- *   [
- *     {
- *       "aclKey": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
- *       "permissions": ["READ"]
- *     }
- *   ]
- * );
- */
-
-
-/**
- * AuthorizationApi ...
- *
- * @module AuthorizationApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.AuthorizationApi.check...
- *
- * @example
- * import { AuthorizationApi } from 'lattice';
- * // AuthorizationApi.check...
- */
-
-function checkAuthorizations(queries) {
-
-  var errorMsg = '';
-
-  var accessChecks = queries;
-  if ((0, _isUndefined2.default)(queries) || (0, _LangUtils.isEmptyArray)(queries)) {
-    accessChecks = [];
-  } else if (!(0, _ValidationUtils.isValidAccessCheckArray)(queries)) {
-    errorMsg = 'invalid parameter: queries must be an array of valid AccessChecks';
-    LOG.error(errorMsg, queries);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: Immutable.Set() with tests
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.AUTHORIZATION_API).post('/', accessChecks).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /authorizations`
- *
- * Gets all authorized objects of the given SecurableType with the given Permission.
- *
- * @static
- * @memberof lattice.AuthorizationApi
- * @param {SecurableType} securableType
- * @param {Permission} permission
- * @param {string} pagingToken (optional)
- * @returns {Promise<AuthorizedObjectsSearchResult>} - a Promise that will resolve with the authorized objects and a
- * paging token as its fulfillment value
- *
- * @example
- * AuthorizationApi.getAccessibleObjects(
- *   "EntityType",
- *   "READ",
- *   "{pagingToken}"
- * );
- */
-function getAccessibleObjects(securableType, permission, pagingToken) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(securableType) || !_SecurableTypes2.default[securableType]) {
-    errorMsg = 'invalid parameter: securableType must be a valid SecurableType';
-    LOG.error(errorMsg, securableType);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(permission) || !_PermissionTypes2.default[permission]) {
-    errorMsg = 'invalid parameter: permission must be a valid Permission';
-    LOG.error(errorMsg, permission);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _LangUtils.isDefined)(pagingToken) && !(0, _LangUtils.isNonEmptyString)(pagingToken)) {
-    errorMsg = 'invalid parameter: when given, pagingToken must be a non-empty string';
-    LOG.error(errorMsg, pagingToken);
-    return Promise.reject(errorMsg);
-  }
-
-  var url = '/?objectType=' + securableType + '&permission=' + permission;
-  if ((0, _LangUtils.isDefined)(pagingToken)) {
-    url = url + '&pagingToken=' + pagingToken;
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.AUTHORIZATION_API).get(url).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 284 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getEntitySetData = getEntitySetData;
-exports.getEntitySetDataFileUrl = getEntitySetDataFileUrl;
-exports.createEntityData = createEntityData;
-exports.createEntityAndAssociationData = createEntityAndAssociationData;
-exports.storeEntityData = storeEntityData;
-exports.acquireSyncTicket = acquireSyncTicket;
-exports.releaseSyncTicket = releaseSyncTicket;
-exports.deleteEntityFromEntitySet = deleteEntityFromEntitySet;
-exports.replaceEntityInEntitySet = replaceEntityInEntitySet;
-exports.getEntitySetSize = getEntitySetSize;
-
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _isUndefined = __webpack_require__(19);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * DataApi gives access to OpenLattice's REST API for reading, writing data against an existing EntityDataModel schema.
- *
- * @module DataApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.DataApi.get...
- *
- * @example
- * import { DataApi } from 'lattice';
- * // DataApi.get...
- */
-
-var LOG = new _Logger2.default('DataApi');
-
-/**
- * `POST /data/entitydata/{entitySetId}`
- *
- * Gets all data for the given EntitySet UUID with respect to the given filters.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} syncId
- * @param {UUID[]} propertyTypeIds
- * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
- *
- * @example
- * DataApi.getSelectedEntitySetData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
- * );
- */
-function getEntitySetData(entitySetId, syncId, propertyTypeIds) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-
-  if ((0, _ValidationUtils.isValidUuid)(syncId)) {
-    data.syncId = syncId;
-  } else if (!(0, _isUndefined2.default)(syncId) && !(0, _LangUtils.isEmptyString)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-    data.properties = _immutable2.default.Set().withMutations(function (set) {
-      propertyTypeIds.forEach(function (propertyTypeId) {
-        set.add(propertyTypeId);
-      });
-    }).toJS();
-  } else if (!(0, _isUndefined2.default)(propertyTypeIds) && !(0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
-    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
-    LOG.error(errorMsg, propertyTypeIds);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {string} fileType
- * @returns {string} - the direct file download URL
- *
- * @example
- * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
- */
-function getEntitySetDataFileUrl(entitySetId, fileType) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return null;
-  }
-
-  // TODO: create an allowed file type constants map, and validate fileType against it
-
-  if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
-    errorMsg = 'invalid parameter: fileType must be a non-empty string';
-    LOG.error(errorMsg, fileType);
-    return null;
-  }
-
-  // eslint-disable-next-line
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + fileType.toLowerCase();
-}
-
-/**
- * `PUT /data/entitydata/{entitySetId}/{syncId}`
- *
- * Creates an entry for the given entity data.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} syncId
- * @param {Object} entities
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.createEntityData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   {
- *     "id_1": [
- *       {
- *         "uuid_1": ["value_1", "value_2"],
- *         "uuid_2": ["value_3", "value_4"]
- *       }
- *     ]
- *   }
- * );
- */
-function createEntityData(entitySetId, syncId, entities) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  var url = '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId;
-
-  if ((0, _ValidationUtils.isValidUuid)(syncId)) {
-    url = url + '/' + syncId;
-  } else if (!(0, _isUndefined2.default)(syncId) && !(0, _LangUtils.isEmptyString)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
-
-  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
-    errorMsg = 'invalid parameter: entities must be a non-empty object';
-    LOG.error(errorMsg, entities);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put(url, entities).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /data/entitydata`
- *
- * Creates entities linked by associations for the given entity data.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {Object} bulkDataCreation
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.createEntityAndAssociationData(
- *   syncTickets: ["ec6865e6-e60e-424b-a071-6a9c1603d735", "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
- *   entities: [
- *     {
- *       "key": {
- *         "entitySetId": "entity_set_id_1",
- *         "entityId": "entity_id_1",
- *         "syncId": "sync_id_1"
- *       },
- *       "details": [
- *         {
- *           "uuid_1a": ["value_1a", "value_1b"],
- *           "uuid_1b": ["value_1c", "value_1d"]
- *         }
- *       ]
- *     },
- *     {
- *       "key": {
- *         "entitySetId": "entity_set_id_2",
- *         "entityId": "entity_id_2",
- *         "syncId": "sync_id_2"
- *       },
- *       "details": [
- *         {
- *           "uuid_2a": ["value_2a", "value_2b"],
- *           "uuid_2b": ["value_2c", "value_2d"]
- *         }
- *       ]
- *     }
- *   ],
- *   associations: [
- *     {
- *       "key": {
- *         "entitySetId": "entity_set_id_3",
- *         "entityId": "entity_id_3",
- *         "syncId": "sync_id_3"
- *       },
- *       "src": {
- *         "entitySetId": "entity_set_id_1",
- *         "entityId": "entity_id_1",
- *         "syncId": "sync_id_1"
- *       },
- *       "dst": {
- *         "entitySetId": "entity_set_id_2",
- *         "entityId": "entity_id_2",
- *         "syncId": "sync_id_2"
- *       },
- *       "details": [
- *         {
- *           "uuid_3a": ["value_3a", "value_3b"],
- *           "uuid_3b": ["value_3c", "value_3d"]
- *         }
- *       ]
- *     }
- *   ]
- * );
- */
-function createEntityAndAssociationData(bulkDataCreation) {
-
-  var url = '/' + _ApiPaths.ENTITY_DATA_PATH;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).patch(url, bulkDataCreation).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /data/entitydata/{ticketId}/{syncId}`
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} ticketId
- * @param {UUID} syncId
- * @param {Object} entities
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.storeEntityData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   {
- *     "id_1": [
- *       {
- *         "uuid_1": ["value_1", "value_2"],
- *         "uuid_2": ["value_3", "value_4"]
- *       }
- *     ]
- *   }
- * );
- */
-function storeEntityData(ticketId, syncId, entities) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
-    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
-    LOG.error(errorMsg, ticketId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
-
-  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
-    errorMsg = 'invalid parameter: entities must be a non-empty object';
-    LOG.error(errorMsg, entities);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).patch('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.TICKET_PATH + '/' + ticketId + '/' + syncId, entities).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /data/ticket/{entitySetId}/{syncId}`
- *
- * Acquires a sync ticket UUID for the given EntitySet UUID.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} syncId
- * @return {Promise<UUID>} - a Promise that will resolve with the acquired sync ticket UUID as its fulfillment value
- *
- * @example
- * DataApi.acquireSyncTicket(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
- * );
- */
-function acquireSyncTicket(entitySetId, syncId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.TICKET_PATH + '/' + entitySetId + '/' + syncId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /data/ticket/{ticketId}`
- *
- * Releases the given sync ticket UUID.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} syncId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.acquireSyncTicket("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-function releaseSyncTicket(ticketId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
-    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
-    LOG.error(errorMsg, ticketId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + ticketId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
- *
- * Deletes the entity with the specified id from the entity set with the specified id.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.deleteEntityFromEntitySet(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
- * )
-});
- */
-function deleteEntityFromEntitySet(entitySetId, entityKeyId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /data/entitydata/{entitySetId}/{entityKeyId}`
- *
- * Replaces the entity values for the specified entityKeyId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @param {Object} entity
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.replaceEntityInEntitySet(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "uuid_1a": ["value_1a", "value_1b"],
- *     "uuid_1b": ["value_1c", "value_1d"]
- *   }
- * )
-});
- */
-function replaceEntityInEntitySet(entitySetId, entityKeyId, entity) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.UPDATE_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /data/{entitySetId}/count`
- *
- * Returns the number of entities in the specified entity set
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without the entity count
- *
- * @example
- * DataApi.getEntitySetSize("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e")
- */
-function getEntitySetSize(entitySetId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + _ApiPaths.COUNT_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-// TODO: createAssociationData()
-// TODO: storeAssociationData()
-
-/***/ }),
-/* 285 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getDataSource = getDataSource;
-exports.createOrUpdateDataSource = createOrUpdateDataSource;
-exports.deleteDataSource = deleteDataSource;
-exports.startSync = startSync;
-exports.signalSyncCompleted = signalSyncCompleted;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _DataSource = __webpack_require__(174);
-
-var _DataSource2 = _interopRequireDefault(_DataSource);
-
-var _ApiNames = __webpack_require__(5);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('DataSourcesApi');
-
-/**
- * `GET /datasource/{uuid}`
- *
- * Gets the DataSource definition for the given DataSource UUID.
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @returns {Promise<DataSource>} - a Promise that will resolve with the DataSource definition as its fulfillment value
- *
- * @example
- * DataSourcesApi.getDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-
-
-/**
- * DataSourcesApi ...
- *
- * TODO: add description
- *
- * @module DataSourcesApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.DataSourcesApi.get...
- *
- * @example
- * import { DataSourcesApi } from 'lattice';
- * // DataSourcesApi.get...
- */
-
-function getDataSource(dataSourceId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).get('/' + dataSourceId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /datasource`
- *
- * Creates a new DataSource definition if it doesn't exist, or updates the existing DataSource definition.
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {DataSource} dataSource
- * @returns {Promise<UUID>} - a Promise that will resolve with the newly-created DataSource UUID
- *
- * @example
- * DataSourcesApi.createOrUpdateDataSource(
- *   {
- *     "id": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *     "title": "My DataSource",
- *     "description": "a DataSource to be integrated",
- *     "entitySetIds": [
- *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
- *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     ]
- *   }
- * );
- */
-function createOrUpdateDataSource(dataSource) {
-
-  var errorMsg = '';
-
-  if (!(0, _DataSource.isValid)(dataSource)) {
-    errorMsg = 'invalid parameter: dataSource must be a valid DataSource';
-    LOG.error(errorMsg, dataSource);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).post('/', dataSource).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /datasource/{uuid}`
- *
- * Deletes the DataSource definition for the given DataSource UUID.
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataSourcesApi.deleteDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-function deleteDataSource(dataSourceId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).delete('/' + dataSourceId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /datasource/{uuid}`
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @returns {Promise<UUID>} - a Promise that will resolve with the sync UUID as its fulfillment value
- *
- * @example
- * DataSourcesApi.startSync("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-function startSync(dataSourceId) {
-
-  // TODO: add description
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).post('/' + dataSourceId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /datasource/{uuid}/{uuid}`
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @param {UUID} syncId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataSourcesApi.signalSyncCompleted(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "8f79e123-3411-4099-a41f-88e5d22d0e8d"
- * );
- */
-function signalSyncCompleted(dataSourceId, syncId) {
-
-  // TODO: add description
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).delete('/' + dataSourceId + '/' + syncId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 286 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getEntityDataModel = getEntityDataModel;
-exports.getEntityDataModelProjection = getEntityDataModelProjection;
-exports.getSchema = getSchema;
-exports.getAllSchemas = getAllSchemas;
-exports.getAllSchemasInNamespace = getAllSchemasInNamespace;
-exports.getSchemaFileUrl = getSchemaFileUrl;
-exports.createSchema = createSchema;
-exports.createEmptySchema = createEmptySchema;
-exports.updateSchema = updateSchema;
-exports.getEntitySet = getEntitySet;
-exports.getEntitySetId = getEntitySetId;
-exports.getAllEntitySets = getAllEntitySets;
-exports.createEntitySets = createEntitySets;
-exports.deleteEntitySet = deleteEntitySet;
-exports.updateEntitySetMetaData = updateEntitySetMetaData;
-exports.getEntityType = getEntityType;
-exports.getEntityTypeId = getEntityTypeId;
-exports.getAllEntityTypes = getAllEntityTypes;
-exports.getAllAssociationEntityTypes = getAllAssociationEntityTypes;
-exports.createEntityType = createEntityType;
-exports.deleteEntityType = deleteEntityType;
-exports.addPropertyTypeToEntityType = addPropertyTypeToEntityType;
-exports.removePropertyTypeFromEntityType = removePropertyTypeFromEntityType;
-exports.forceRemovePropertyTypeFromEntityType = forceRemovePropertyTypeFromEntityType;
-exports.reorderPropertyTypesInEntityType = reorderPropertyTypesInEntityType;
-exports.updateEntityTypeMetaData = updateEntityTypeMetaData;
-exports.getEntityTypeHierarchy = getEntityTypeHierarchy;
-exports.getPropertyType = getPropertyType;
-exports.getPropertyTypeId = getPropertyTypeId;
-exports.getAllPropertyTypes = getAllPropertyTypes;
-exports.getAllPropertyTypesInNamespace = getAllPropertyTypesInNamespace;
-exports.createPropertyType = createPropertyType;
-exports.deletePropertyType = deletePropertyType;
-exports.forceDeletePropertyType = forceDeletePropertyType;
-exports.updatePropertyTypeMetaData = updatePropertyTypeMetaData;
-exports.getAssociationType = getAssociationType;
-exports.getAllAssociationTypes = getAllAssociationTypes;
-exports.getAssociationTypeDetails = getAssociationTypeDetails;
-exports.getAllAvailableAssociationTypes = getAllAvailableAssociationTypes;
-exports.createAssociationType = createAssociationType;
-exports.deleteAssociationType = deleteAssociationType;
-exports.getComplexType = getComplexType;
-exports.getAllComplexTypes = getAllComplexTypes;
-exports.getComplexTypeHierarchy = getComplexTypeHierarchy;
-exports.createComplexType = createComplexType;
-exports.deleteComplexType = deleteComplexType;
-exports.getEnumType = getEnumType;
-exports.getAllEnumTypes = getAllEnumTypes;
-exports.createEnumType = createEnumType;
-exports.deleteEnumType = deleteEnumType;
-exports.addSrcEntityTypeToAssociationType = addSrcEntityTypeToAssociationType;
-exports.addDstEntityTypeToAssociationType = addDstEntityTypeToAssociationType;
-exports.removeSrcEntityTypeFromAssociationType = removeSrcEntityTypeFromAssociationType;
-exports.removeDstEntityTypeFromAssociationType = removeDstEntityTypeFromAssociationType;
-exports.getAllEntitySetPropertyMetadata = getAllEntitySetPropertyMetadata;
-exports.getEntitySetPropertyMetadata = getEntitySetPropertyMetadata;
-exports.updateEntitySetPropertyMetadata = updateEntitySetPropertyMetadata;
-
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _has = __webpack_require__(7);
-
-var _has2 = _interopRequireDefault(_has);
-
-var _isUndefined = __webpack_require__(19);
-
-var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-var _EntitySet = __webpack_require__(23);
-
-var _EntitySet2 = _interopRequireDefault(_EntitySet);
-
-var _FullyQualifiedName = __webpack_require__(15);
-
-var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _EntityType = __webpack_require__(17);
-
-var _EntityType2 = _interopRequireDefault(_EntityType);
-
-var _PropertyType = __webpack_require__(24);
-
-var _PropertyType2 = _interopRequireDefault(_PropertyType);
-
-var _Schema = __webpack_require__(180);
-
-var _Schema2 = _interopRequireDefault(_Schema);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * EntityDataModelApi gives access to OpenLattice's REST API for interacting with EntityDataModel (EDM) schemas.
- *
- * @module EntityDataModelApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.EntityDataModelApi.get...
- *
- * @example
- * import { EntityDataModelApi } from 'lattice';
- * // EntityDataModelApi.get...
- */
-
-var LOG = new _Logger2.default('EntityDataModelApi');
-
-var UpdateSchemaRequestActions = {
-  ADD: 'ADD',
-  REMOVE: 'REMOVE',
-  REPLACE: 'REPLACE'
-};
-
-/*
- *
- * EntityDataModel APIs
- *
- */
-
-/**
- * `GET /edm`
- *
- * Gets the entire Entity Data Model.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<Object>} - a Promise that will resolve with the Entity Data Model as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEntityDataModel();
- */
-function getEntityDataModel() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/').then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm`
- *
- * Gets the Entity Data Model, filtered by the given projection.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {Object[]} projection - a Set of objects containing an ID, a SecurableType, and a Set of SecurableTypes
- * @return {Promise<Object>} - a Promise that will resolve with the filtered Entity Data Model as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEntityDataModelProjection(
- *   [
- *     {
- *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *       "type": "EntitySet",
- *       "include": [
- *         "EntitySet",
- *         "EntityType",
- *         "PropertyTypeInEntitySet"
- *       ]
- *     }
- *   ]
- * );
- */
-function getEntityDataModelProjection(projection) {
-
-  // TODO: add validation
-  // TODO: add unit tests
-  // TODO: create data models
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/', projection).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * Schema APIs
- *
- */
-
-/**
- * `GET /edm/schema/{namespace}/{name}`
- *
- * Gets the Schema definition for the given Schema FQN.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
- * @return {Promise<Schema>} - a Promise that will resolve with the Schema definition as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getSchema(
- *   { "namespace": "LATTICE", "name": "MySchema" }
- * );
- */
-function getSchema(schemaFqn) {
-
-  var errorMsg = '';
-
-  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
-    return Promise.reject(errorMsg);
-  }
-
-  var namespace = schemaFqn.namespace,
-      name = schemaFqn.name;
-
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/schema`
- *
- * Gets all Schema definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<Schema[]>} - a Promise that will resolve with all Schema definitions
- *
- * @example
- * EntityDataModelApi.getAllSchemas();
- */
-function getAllSchemas() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/schema/{namespace}`
- *
- * Gets all Schema definitions under the given namespace.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {string} namespace
- * @return {Promise<Schema[]>} - a Promise that will resolve with the Schema definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllSchemasInNamespace("LATTICE");
- */
-function getAllSchemasInNamespace(namespace) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
-    errorMsg = 'invalid parameter: namespace must be a non-empty string';
-    LOG.error(errorMsg, namespace);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * Generates the URL to be used for a direct file download for the given Schema FQN formatted as the given file type.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
- * @param {string} fileType
- * @returns {string} - the direct file download URL
- *
- * @example
- * EntityDataModelApi.getSchemaFormatted(
- *   { "namespace": "LATTICE", "name": "MySchema" },
- *   "json"
- * );
- */
-function getSchemaFileUrl(schemaFqn, fileType) {
-
-  var errorMsg = '';
-
-  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
-    return null;
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(fileType)) {
-    errorMsg = 'invalid parameter: fileType must be a non-empty string';
-    LOG.error(errorMsg, fileType);
-    return null;
-  }
-
-  var namespace = schemaFqn.namespace,
-      name = schemaFqn.name;
-
-  return (0, _AxiosUtils.getApiBaseUrl)(_ApiNames.EDM_API) + '/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType.toLowerCase();
-}
-
-/**
- * `POST /edm/schema`
- *
- * Creates a new Schema definition, if it doesn't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {Schema} schema
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.createSchema(
- *   {
- *     "fqn": { "namespace": "LATTICE", "name": "MySchema" },
- *     "propertyTypes": [],
- *     "entityTypes": []
- *   }
- * );
- */
-function createSchema(schema) {
-
-  var errorMsg = '';
-
-  if (!(0, _Schema.isValid)(schema)) {
-    errorMsg = 'invalid parameter: schema must be a valid Schema';
-    LOG.error(errorMsg, schema);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.SCHEMA_PATH, schema).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /edm/schema/{namespace}/{name}`
- *
- * Creates a new empty Schema definition for the given Schema FQN, if it doesn't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.createEmptySchema(
- *   { "namespace": "LATTICE", "name": "MySchema" }
- * );
- */
-function createEmptySchema(schemaFqn) {
-
-  var errorMsg = '';
-
-  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
-    return Promise.reject(errorMsg);
-  }
-
-  var namespace = schemaFqn.namespace,
-      name = schemaFqn.name;
-
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /edm/schema/{namespace}/{name}`
- *
- * Updates the Schema definition for the given Schema FQN.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
- * @param {string} action
- * @param {UUID[]} entityTypeIds
- * @param {UUID[]} propertyTypeIds
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.updateSchema(
- *   { "namespace": "LATTICE", "name": "MySchema" },
- *   "action": "ADD",
- *   "entityTypeIds": [
- *     "ec6865e6-e60e-424b-a071-6a9c1603d735"
- *   ],
- *   "propertyTypeIds": [
- *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
- *   ]
- * )
- */
-function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
-
-  var errorMsg = '';
-
-  if (!_FullyQualifiedName2.default.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(action) || !UpdateSchemaRequestActions[action]) {
-    errorMsg = 'invalid parameter: action must be a valid action';
-    LOG.error(errorMsg, action);
-    return Promise.reject(errorMsg);
-  }
-
-  var entityTypeIdsSet = void 0;
-  if ((0, _isUndefined2.default)(entityTypeIds) || (0, _LangUtils.isEmptyArray)(entityTypeIds)) {
-    entityTypeIdsSet = [];
-  } else if (!(0, _ValidationUtils.isValidUuidArray)(entityTypeIds)) {
-    errorMsg = 'invalid parameter: entityTypeIds must be an array of valid UUIDs';
-    LOG.error(errorMsg, entityTypeIds);
-    return Promise.reject(errorMsg);
-  } else {
-    entityTypeIdsSet = _immutable2.default.Set().withMutations(function (set) {
-      entityTypeIds.forEach(function (entityTypeId) {
-        set.add(entityTypeId);
-      });
-    }).toJS();
-  }
-
-  var propertyTypeIdsSet = void 0;
-  if ((0, _isUndefined2.default)(propertyTypeIds) || (0, _LangUtils.isEmptyArray)(propertyTypeIds)) {
-    propertyTypeIdsSet = [];
-  } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-    errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
-    LOG.error(errorMsg, propertyTypeIds);
-    return Promise.reject(errorMsg);
-  } else {
-    propertyTypeIdsSet = _immutable2.default.Set().withMutations(function (set) {
-      propertyTypeIds.forEach(function (propertyTypeId) {
-        set.add(propertyTypeId);
-      });
-    }).toJS();
-  }
-
-  var namespace = schemaFqn.namespace,
-      name = schemaFqn.name;
-
-
-  var data = {
-    action: action,
-    entityTypes: entityTypeIdsSet,
-    propertyTypes: propertyTypeIdsSet
-  };
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * EntitySet APIs
- *
- */
-
-/**
- * `GET /edm/entity/set/{uuid}`
- *
- * Gets the EntitySet definition for the given EntitySet UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entitySetId
- * @return {Promise<EntitySet>} - a Promise that will resolve with the EntitySet definition as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getEntitySet(entitySetId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/ids/entity/set/{name}`
- *
- * Gets the EntitySet UUID for the given EntitySet name.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {string} entitySetName
- * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEntitySetId("MyEntitySet");
- */
-function getEntitySetId(entitySetName) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(entitySetName)) {
-    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
-    LOG.error(errorMsg, entitySetName);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetName).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/entity/set`
- *
- * Gets all EntitySet definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<EntitySet[]>} - a Promise that will resolve with all EntitySet definitions
- *
- * @example
- * EntityDataModelApi.getAllEntitySets();
- */
-function getAllEntitySets() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm/entity/set`
- *
- * Creates new EntitySet definitions if they don't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {EntitySet[]} entitySets
- * @return {Promise<Map<string, UUID>>} - a Promise that will resolve with a Map as its fulfillment value, where
- * the key is the EntitySet name and the value is the newly-created EntitySet UUID
- *
- * @example
- * EntityDataModelApi.createEntitySets(
- *   [
- *     {
- *       "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *       "type": { "namespace": "LATTICE", "name": "MyEntity" },
- *       "name": "MyEntities",
- *       "title": "My Entities",
- *       "description": "a collection of MyEntity EntityTypes",
- *     }
- *   ]
- * );
- */
-function createEntitySets(entitySets) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidEntitySetArray)(entitySets)) {
-    errorMsg = 'invalid parameter: entitySets must be a non-empty array of valid EntitySets';
-    LOG.error(errorMsg, entitySets);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: Immutable.Set() - entitySets needs to be Set<EntitySet>
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/entity/set/{uuid}`
- *
- * Deletes the EntitySet definition for the given EntitySet UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function deleteEntitySet(entitySetId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /edm/entity/set/{uuid}`
- *
- * Updates the EntityType definition for the given EntityType UUID with the given metadata.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {Object} metadata
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.updateEntitySetMetaData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "type": { namespace: "LATTICE", name: "UpdatedEntitySet" },
- *     "name": "MyEntitySet",
- *     "title": "MyEntitySet",
- *     "description": "MyEntitySet description",
- *     "contacts": ["support@openlattice.com"]
- *   }
- * );
- */
-function updateEntitySetMetaData(entitySetId, metadata) {
-
-  // TODO: create data model: MetaDataUpdate
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
-    errorMsg = 'invalid parameter: metadata must be a non-empty object';
-    LOG.error(errorMsg, metadata);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'type') && !_FullyQualifiedName2.default.isValid(metadata.type)) {
-    errorMsg = 'invalid parameter: type must be a valid FQN';
-    LOG.error(errorMsg, metadata.type);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'name') && !(0, _LangUtils.isNonEmptyString)(metadata.name)) {
-    errorMsg = 'invalid parameter: name must be a non-empty string';
-    LOG.error(errorMsg, metadata.name);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, metadata.title);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, metadata.description);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'contacts') && !(0, _LangUtils.isNonEmptyStringArray)(metadata.contacts)) {
-    errorMsg = 'invalid parameter: contacts must be a non-empty string';
-    LOG.error(errorMsg, metadata.contacts);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId, metadata).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * EntityType APIs
- *
- */
-
-/**
- * `GET /edm/entity/type/{uuid}`
- *
- * Gets the EntityType definition for the given EntityType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @return {Promise<EntityType>} - a Promise that will resolve with the EntityType definition as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getEntityType(entityTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/ids/entity/type/{namespace}/{name}`
- *
- * Gets the EntityType UUID for the given EntityType FQN.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} entityTypeFqn
- * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEntityTypeId(
- *   { "namespace": "LATTICE", "name": "MyProperty" }
- * );
- */
-function getEntityTypeId(entityTypeFqn) {
-
-  var errorMsg = '';
-
-  if (!_FullyQualifiedName2.default.isValid(entityTypeFqn)) {
-    errorMsg = 'invalid parameter: entityTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, entityTypeFqn);
-    return Promise.reject(errorMsg);
-  }
-
-  var namespace = entityTypeFqn.namespace,
-      name = entityTypeFqn.name;
-
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/entity/type`
- *
- * Gets all EntityType definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<EntityType[]>} - a Promise that will resolve with all EntityType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllEntityTypes();
- */
-function getAllEntityTypes() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/association/type`
- *
- * Gets all association EntityType definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllAssociationEntityTypes();
- */
-function getAllAssociationEntityTypes() {
-
-  // TODO: everything
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm/entity/type`
- *
- * Creates a new EntityType definition, if it doesn't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {EntityType} entityType
- * @return {Promise<UUID>} - a Promise that will resolve with the newly-created EntityType UUID
- *
- * @example
- * EntityDataModelApi.createEntityType(
- *   {
- *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *     "type": { "namespace": "LATTICE", "name": "MyEntity" },
- *     "title": "title",
- *     "description": "description",
- *     "schemas": [
- *       { "namespace": "LATTICE", "name": "MySchema" }
- *     ],
- *     "key": [
- *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
- *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
- *     ],
- *     "properties": [
- *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
- *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
- *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     ],
- *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
- *     "category": "EntityType"
- *   }
- * );
- */
-function createEntityType(entityType) {
-
-  var errorMsg = '';
-
-  if (!(0, _EntityType.isValid)(entityType)) {
-    errorMsg = 'invalid parameter: entityType must be a valid EntityType';
-    LOG.error(errorMsg, entityType);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/entity/type/{uuid}`
- *
- * Deletes the EntityType definition for the given EntityType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.deleteEntityType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function deleteEntityType(entityTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /edm/entity/type/{uuid}/{uuid}`
- *
- * Updates the EntityType definition for the given EntityType UUID by adding the given PropertyType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {UUID} propertyTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.addPropertyTypeToEntityType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function addPropertyTypeToEntityType(entityTypeId, propertyTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/entity/type/{uuid}/{uuid}`
- *
- * Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {UUID} propertyTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.removePropertyTypeFromEntityType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/entity/type/{uuid}/{uuid}/force`
- *
- * Updates the EntityType definition for the given EntityType UUID by removing the given PropertyType UUID,
- * regardless of whether or not there is data associated with the entity type.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {UUID} propertyTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.removePropertyTypeFromEntityType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function forceRemovePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /edm/entity/type/{uuid}/property/type`
- *
- * Updates the EntityType definition for the given EntityType UUID by reordering its properties as
- * specified by the provided list
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {UUID} propertyTypeIds
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.reorderPropertyTypesInEntityType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   ["4b08e1f9-4a00-4169-92ea-10e377070220", "a00e2ce8-912d-49c9-a259-e6c1ffebf053"]
- * );
- */
-function reorderPropertyTypesInEntityType(entityTypeId, propertyTypeIds) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  } else if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-    errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
-    LOG.error(errorMsg, propertyTypeIds);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyTypeIds).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /edm/entity/type/{uuid}`
- *
- * Updates the EntityType definition for the given EntityType UUID with the given metadata.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {Object} metadata
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.updateEntityTypeMetaData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "type": { "namespace": "LATTICE", "name": "UpdatedEntity" },
- *     "name": "MyEntity",
- *     "title": "MyEntity",
- *     "description": "MyEntity description",
- *     "contacts": ["support@openlattice.com"]
- *   }
- * );
- */
-function updateEntityTypeMetaData(entityTypeId, metadata) {
-
-  // TODO: create data model: MetaDataUpdate
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
-    errorMsg = 'invalid parameter: metadata must be a non-empty object';
-    LOG.error(errorMsg, metadata);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'type') && !_FullyQualifiedName2.default.isValid(metadata.type)) {
-    errorMsg = 'invalid parameter: type must be a valid FQN';
-    LOG.error(errorMsg, metadata.type);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'name') && !(0, _LangUtils.isNonEmptyString)(metadata.name)) {
-    errorMsg = 'invalid parameter: name must be a non-empty string';
-    LOG.error(errorMsg, metadata.name);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, metadata.title);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, metadata.description);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'contacts') && !(0, _LangUtils.isNonEmptyStringArray)(metadata.contacts)) {
-    errorMsg = 'invalid parameter: contacts must be a non-empty string';
-    LOG.error(errorMsg, metadata.contacts);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId, metadata).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/entity/type/{uuid}/hierarchy`
- *
- * Gets the EntityType hierarchy for the given EntityType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @return {Promise<EntityType[]>} - a Promise that will resolve with the EntityType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEntityTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getEntityTypeHierarchy(entityTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * PropertyType APIs
- *
- */
-
-/**
- * `GET /edm/property/type/{uuid}`
- *
- * Gets the PropertyType definition for the given PropertyType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} propertyTypeId
- * @return {Promise<PropertyType>} - a Promise that will resolve with the PropertyType definition
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getPropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getPropertyType(propertyTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/ids/property/type/{namespace}/{name}`
- *
- * Gets the PropertyType UUID for the given PropertyType FQN.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} propertyTypeFqn
- * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getPropertyTypeId(
- *   { namespace: "LATTICE", name: "MyProperty" }
- * );
- */
-function getPropertyTypeId(propertyTypeFqn) {
-
-  var errorMsg = '';
-
-  if (!_FullyQualifiedName2.default.isValid(propertyTypeFqn)) {
-    errorMsg = 'invalid parameter: propertyTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, propertyTypeFqn);
-    return Promise.reject(errorMsg);
-  }
-
-  var namespace = propertyTypeFqn.namespace,
-      name = propertyTypeFqn.name;
-
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/property/type`
- *
- * Gets all PropertyType definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<PropertyType[]>} - a Promise that will resolve with all PropertyType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllPropertyTypes();
- */
-function getAllPropertyTypes() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/property/type/namespace/{namespace}`
- *
- * Gets all PropertyType definitions under the given namespace.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {string} namespace
- * @return {Promise<PropertyType[]>} - a Promise that will resolve with the PropertyType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllPropertyTypesInNamespace("LATTICE");
- */
-function getAllPropertyTypesInNamespace(namespace) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
-    errorMsg = 'invalid parameter: namespace must be a non-empty string';
-    LOG.error(errorMsg, namespace);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.NAMESPACE_PATH + '/' + namespace).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm/property/type`
- *
- * Creates a new PropertyType definition, if it doesn't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {PropertyType} propertyType
- * @return {Promise<UUID>} - a Promise that will resolve with the newly-created PropertyType definition UUID
- *
- * @example
- * EntityDataModelApi.createPropertyType(
- *   {
- *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *     "type": { "namespace": "LATTICE", "name": "MyProperty" },
- *     "title": "title",
- *     "description": "description",
- *     "schemas": [
- *       { "namespace": "LATTICE", "name": "MySchema" }
- *     ],
- *     "datatype": "String",
- *     "piiField": false,
- *     "analyzer": "STANDARD"
- *   }
- * );
- */
-function createPropertyType(propertyType) {
-
-  var errorMsg = '';
-
-  if (!(0, _PropertyType.isValid)(propertyType)) {
-    errorMsg = 'invalid parameter: propertyType must be a valid PropertyType';
-    LOG.error(errorMsg, propertyType);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/property/type/{uuid}`
- *
- * Deletes the PropertyType definition for the given PropertyType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} propertyTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.deletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function deletePropertyType(propertyTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/property/type/{uuid}/force`
- *
- * Deletes the PropertyType definition for the given PropertyType UUID regardless of
- * whether or not there is data associated with it.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} propertyTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.forceDeletePropertyType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function forceDeletePropertyType(propertyTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /edm/property/type/{uuid}`
- *
- * Updates the PropertyType definition for the given PropertyType UUID with the given metadata.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} propertyTypeId
- * @param {Object} metadata
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.updatePropertyTypeMetaData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "type": { "namespace": "LATTICE", "name": "UpdatedProperty" },
- *     "name": "MyProperty",
- *     "title": "MyProperty",
- *     "description": "MyProperty description",
- *     "contacts": ["support@openlattice.com"]
- *   }
- * );
- */
-function updatePropertyTypeMetaData(propertyTypeId, metadata) {
-
-  // TODO: create data model: MetaDataUpdate
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
-    errorMsg = 'invalid parameter: metadata must be a non-empty object';
-    LOG.error(errorMsg, metadata);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'type') && !_FullyQualifiedName2.default.isValid(metadata.type)) {
-    errorMsg = 'invalid parameter: type must be a valid FQN';
-    LOG.error(errorMsg, metadata.type);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'name') && !(0, _LangUtils.isNonEmptyString)(metadata.name)) {
-    errorMsg = 'invalid parameter: name must be a non-empty string';
-    LOG.error(errorMsg, metadata.name);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, metadata.title);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, metadata.description);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'contacts') && !(0, _LangUtils.isNonEmptyStringArray)(metadata.contacts)) {
-    errorMsg = 'invalid parameter: contacts must be a non-empty string';
-    LOG.error(errorMsg, metadata.contacts);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * AssociationType APIs
- *
- */
-
-/**
- * `GET /edm/association/type/{uuid}`
- *
- * Gets the AssociationType definition for the given AssociationType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} associationTypeId
- * @return {Promise<AssociationType>} - a Promise that will resolve with the AssociationType definition
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAssociationType(associationTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
-    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
-    LOG.error(errorMsg, associationTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/association/type`
- *
- * Gets all AssociationType definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<AssociationType[]>} - a Promise that will resolve with all AssociationType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllAssociationTypes();
- */
-function getAllAssociationTypes() {
-
-  // TODO: everything
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/association/type/{uuid}/detailed`
- *
- * Gets details about the AssociationType for the given AssociationType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} associationTypeId
- * @return {Promise<Object>} - a Promise that will resolve with the AssociationType details
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAssociationTypeDetails("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAssociationTypeDetails(associationTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
-    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
-    LOG.error(errorMsg, associationTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DETAILED_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/association/type/{uuid}/available`
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.getAllAvailableAssociationTypes("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAllAvailableAssociationTypes(entityTypeId) {
-
-  // TODO: backend returns Iterable<EntityType>, but the function name is getAllAvailableAssociationTypes, feels weird
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + entityTypeId + '/available').then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm/association/type`
- *
- * Creates a new AssociationType definition, if it doesn't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {AssociationType} associationType
- * @return {Promise<UUID>} - a Promise that will resolve with the newly-created AssociationType definition UUID
- *
- * @example
- * EntityDataModelApi.createAssociationType(
- *   {
- *     "entityType": { ... },
- *     "src": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
- *     "dst": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
- *     "bidirectional": true
- *   }
- * );
- */
-function createAssociationType(associationType) {
-
-  // TODO: everything
-
-  // let errorMsg = '';
-  //
-  // if (!isValidAssociationType(associationType)) {
-  //   errorMsg = 'invalid parameter: associationType must be a valid AssociationType';
-  //   LOG.error(errorMsg, associationType);
-  //   return Promise.reject(errorMsg);
-  // }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ASSOCIATION_TYPE_PATH, associationType).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/association/type/{uuid}`
- *
- * Deletes the AssociationType definition for the given AssociationType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} associationTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.deleteAssociationType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function deleteAssociationType(associationTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
-    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
-    LOG.error(errorMsg, associationTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * ComplexType APIs
- *
- */
-
-/**
- * `GET /edm/complex/type/{uuid}`
- *
- * Gets the ComplexType definition for the given ComplexType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} complexTypeId
- * @return {Promise<ComplexType>} - a Promise that will resolve with the ComplexType definition as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getComplexType(complexTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
-    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
-    LOG.error(errorMsg, complexTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/complex/type`
- *
- * Gets all ComplexType definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<ComplexType[]>} - a Promise that will resolve with all ComplexType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllComplexTypes();
- */
-function getAllComplexTypes() {
-
-  // TODO: everything
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/complex/type/{uuid}/hierarchy`
- *
- * Gets the ComplexType hierarchy for the given ComplexType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} complexTypeId
- * @return {Promise<ComplexType[]>} - a Promise that will resolve with the ComplexType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getComplexTypeHierarchy("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getComplexTypeHierarchy(complexTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
-    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
-    LOG.error(errorMsg, complexTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm/complex/type`
- *
- * Creates a new ComplexType definition, if it doesn't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {ComplexType} complexType
- * @return {Promise<UUID>} - a Promise that will resolve with the newly-created ComplexType UUID
- *
- * @example
- * EntityDataModelApi.createComplexType(
- *   {
- *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *     "type": { "namespace": "LATTICE", "name": "MyComplexType" },
- *     "title": "title",
- *     "description": "description",
- *     "schemas": [
- *       { "namespace": "LATTICE", "name": "MySchema" }
- *     ],
- *     "properties": [
- *       "8f79e123-3411-4099-a41f-88e5d22d0e8d",
- *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
- *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     ],
- *     "baseType": "4b08e1f9-4a00-4169-92ea-10e377070220",
- *     "category": "ComplexType"
- *   }
- * );
- */
-function createComplexType(complexType) {
-
-  // TODO: everything
-
-  // let errorMsg = '';
-  //
-  // if (!isValidComplexType(complexType)) {
-  //   errorMsg = 'invalid parameter: complexType must be a valid ComplexType';
-  //   LOG.error(errorMsg, complexType);
-  //   return Promise.reject(errorMsg);
-  // }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.COMPLEX_TYPE_PATH, complexType).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/complex/type/{uuid}`
- *
- * Deletes the ComplexType definition for the given ComplexType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} complexTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.deleteComplexType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function deleteComplexType(complexTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(complexTypeId)) {
-    errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
-    LOG.error(errorMsg, complexTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * EnumType APIs
- *
- */
-
-/**
- * `GET /edm/enum/type/{uuid}`
- *
- * Gets the EnumType definition for the given EnumType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} enumTypeId
- * @return {Promise<EnumType>} - a Promise that will resolve with the EnumType definition as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getEnumType(enumTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(enumTypeId)) {
-    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
-    LOG.error(errorMsg, enumTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/enum/type`
- *
- * Gets all EnumType definitions.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @return {Promise<EnumType[]>} - a Promise that will resolve with all EnumType definitions
- * as its fulfillment value
- *
- * @example
- * EntityDataModelApi.getAllEnumTypes();
- */
-function getAllEnumTypes() {
-
-  // TODO: everything
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm/enum/type`
- *
- * Creates a new EnumType definition, if it doesn't exist.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {EnumType} enumType
- * @return {Promise<UUID>} - a Promise that will resolve with the newly-created EnumType UUID
- *
- * @example
- * EntityDataModelApi.createEnumType(
- *   {
- *     "id": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *     "type": { "namespace": "LATTICE", "name": "MyEnumType" },
- *     "title": "title",
- *     "description": "description",
- *     "members": [
- *       "Blue", "Red", "Green"
- *     ],
- *     "schemas": [
- *       { "namespace": "LATTICE", "name": "MySchema" }
- *     ],
- *     "datatype": "String",
- *     "flags": false,
- *     "piiField": false,
- *     "analyzer": "STANDARD"
- *   }
- * );
- */
-function createEnumType(enumType) {
-
-  // TODO: everything
-
-  // let errorMsg = '';
-  //
-  // if (!isValidEnumType(enumType)) {
-  //   errorMsg = 'invalid parameter: enumType must be a valid EnumType';
-  //   LOG.error(errorMsg, enumType);
-  //   return Promise.reject(errorMsg);
-  // }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENUM_TYPE_PATH, enumType).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/enum/type/{uuid}`
- *
- * Deletes the EnumType definition for the given EnumType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} enumTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.deleteEnumType("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function deleteEnumType(enumTypeId) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(enumTypeId)) {
-    errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
-    LOG.error(errorMsg, enumTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /edm/association/type/{uuid}/src/{uuid}`
- *
- * Updates the AssociationType src entity types for the given AssociationType UUID by adding the given EntityType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} associationTypeId
- * @param {UUID} entityTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.addSrcEntityTypeToAssociationType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function addSrcEntityTypeToAssociationType(associationTypeId, entityTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
-    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
-    LOG.error(errorMsg, associationTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /edm/association/type/{uuid}/dst/{uuid}`
- *
- * Updates the AssociationType dst entity types for the given AssociationType UUID by adding the given EntityType UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} associationTypeId
- * @param {UUID} entityTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.addDstEntityTypeToAssociationType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function addDstEntityTypeToAssociationType(associationTypeId, entityTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
-    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
-    LOG.error(errorMsg, associationTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/association/type/{uuid}/src/{uuid}`
- *
- * Updates the AssociationType src entity types for the given AssociationType UUID by removing the given EntityType
- * UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} associationTypeId
- * @param {UUID} entityTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.removeSrcEntityTypeFromAssociationType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function removeSrcEntityTypeFromAssociationType(associationTypeId, entityTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
-    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
-    LOG.error(errorMsg, associationTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /edm/association/type/{uuid}/dst/{uuid}`
- *
- * Updates the AssociationType dst entity types for the given AssociationType UUID by removing the given EntityType
- * UUID.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} associationTypeId
- * @param {UUID} entityTypeId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.removeDstEntityTypeFromAssociationType(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function removeDstEntityTypeFromAssociationType(associationTypeId, entityTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(associationTypeId)) {
-    errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
-    LOG.error(errorMsg, associationTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-    LOG.error(errorMsg, entityTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/entity/set/{uuid}/property/type`
- *
- * Returns all property type metadata for an entity set
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entitySetId
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.getAllEntitySetPropertyMetadata("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAllEntitySetPropertyMetadata(entitySetId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /edm/entity/set/{uuid}/property/type/{uuid}`
- *
- * Returns specified property type metadata for an entity set
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entitySetId
- * @param {UUID} propertyTypeId
- * @return {Promise}
- *
- * @example
- * EntityDataModelApi.getEntitySetPropertyMetadata(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-function getEntitySetPropertyMetadata(entitySetId, propertyTypeId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /edm/entity/set/{uuid}/property/type/{uuid}`
- *
- * Updates the property type metadata for the given entity set.
- *
- * @static
- * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
- * @param {UUID} propertyTypeId
- * @param {Object} metadata
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntityDataModelApi.updateEntitySetPropertyMetadata(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220",
- *   {
- *     "title": "MyPropertyType",
- *     "description": "MyPropertyType description",
- *     "defaultShow": false
- *   }
- * );
- */
-function updateEntitySetPropertyMetadata(entitySetId, propertyTypeId, metadata) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyObject)(metadata)) {
-    errorMsg = 'invalid parameter: metadata must be a non-empty object';
-    LOG.error(errorMsg, metadata);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'title') && !(0, _LangUtils.isNonEmptyString)(metadata.title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, metadata.title);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _has2.default)(metadata, 'description') && !(0, _LangUtils.isNonEmptyString)(metadata.description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, metadata.description);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 287 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createLinkingEntityType = createLinkingEntityType;
-exports.linkEntitySets = linkEntitySets;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _LinkingRequest = __webpack_require__(177);
-
-var _LinkingRequest2 = _interopRequireDefault(_LinkingRequest);
-
-var _LinkingEntityType = __webpack_require__(176);
-
-var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * LinkingApi ...
- *
- * @module LinkingApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.LinkingApi.link...
- *
- * @example
- * import { LinkingApi } from 'lattice';
- * // LinkingApi.link...
- */
-
-var LOG = new _Logger2.default('LinkingApi');
-
-/**
- * `POST /linking/type`
- *
- * Creates a new EntityType definition which is the result of linking several EntityTypes definitions as specified by
- * the given LinkingEntityType parameter.
- *
- * @static
- * @memberof lattice.LinkingApi
- * @param {LinkingEntityType} linkingEntityType
- * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the newly-created EntityType
- * as its fulfillment value
- *
- * @example
- * LinkingApi.createLinkingEntityType(
- *   {
- *     "entityType": { ... },
- *     "entityTypeIds": [
- *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
- *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     ],
- *     "deidentified": false
- *   }
- * );
- */
-function createLinkingEntityType(linkingEntityType) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _LinkingEntityType.isValid)(linkingEntityType)) {
-    errorMsg = 'invalid parameter: linkingEntityType must be a valid LinkingEntityType';
-    LOG.error(errorMsg, linkingEntityType);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.TYPE_PATH, linkingEntityType).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /linking/set`
- *
- * Performs a linking operation on the EntitySet specified by the given LinkingEntitySet parameter. Before this call,
- * a call to LinkingApi.createLinkingEntityType() must have been made for this EntitySet's EntityType.
- *
- * @static
- * @memberof lattice.LinkingApi
- * @param {LinkingEntitySet} linkingEntitySet
- * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the newly-created EntitySet
- * as its fulfillment value
- *
- * @example
- * LinkingApi.linkEntitySets(
- *   {
- *     "entitySet": { ... },
- *     "linkingProperties": [
- *       {
- *         '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e': '4b08e1f9-4a00-4169-92ea-10e377070220',
- *         'e39dfdfa-a3e6-4f1f-b54b-646a723c3085': 'ec6865e6-e60e-424b-a071-6a9c1603d735'
- *       },
- *       {
- *         'fae6af98-2675-45bd-9a5b-1619a87235a8': '8f79e123-3411-4099-a41f-88e5d22d0e8d'
- *       }
- *     ]
- *   }
- * );
- */
-function linkEntitySets(linkingRequest) {
-
-  // TODO: everything
-
-  var errorMsg = '';
-
-  if (!(0, _LinkingRequest.isValid)(linkingRequest)) {
-    errorMsg = 'invalid parameter: linkingRequest must be a valid LinkingRequest';
-    LOG.error(errorMsg, linkingRequest);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/', linkingRequest).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-// /**
-//  * `POST /linking/set/{syncId}/{entitySetId}/{entityId}`
-//  *
-//  * @static
-//  * @memberof lattice.LinkingApi
-//  * @returns {Promise<UUID>}
-//  *
-//  * TODO: add documentation
-//  * TODO: add better validation
-//  * TODO: add unit tests
-//  * TODO: create data models
-//  */
-// export function linkEntities() :Promise<*> {
-//
-//   return Promise.reject('LinkingApi.linkEntities() is not implemented');
-// }
-//
-// /**
-//  * `PUT /linking/set/{syncId}/{entitySetId}/{entityId}`
-//  *
-//  * @static
-//  * @memberof lattice.LinkingApi
-//  * @returns {Promise}
-//  *
-//  * TODO: add documentation
-//  * TODO: add better validation
-//  * TODO: add unit tests
-//  * TODO: create data models
-//  */
-// export function setLinkedEntities() :Promise<*> {
-//
-//   return Promise.reject('LinkingApi.setLinkedEntities() is not implemented');
-// }
-//
-// /**
-//  * `DELETE /linking/set/{syncId}/{entitySetId}/{entityId}`
-//  *
-//  * @static
-//  * @memberof lattice.LinkingApi
-//  * @returns {Promise}
-//  *
-//  * TODO: add documentation
-//  * TODO: add better validation
-//  * TODO: add unit tests
-//  * TODO: create data models
-//  */
-// export function removeLinkedEntities() :Promise<*> {
-//
-//   return Promise.reject('LinkingApi.removeLinkedEntities() is not implemented');
-// }
-//
-// /**
-//  * `PUT /linking/set/{syncId}/{entitySetId}/{entityId}/{linkedEntityId}`
-//  *
-//  * @static
-//  * @memberof lattice.LinkingApi
-//  * @returns {Promise}
-//  *
-//  * TODO: add documentation
-//  * TODO: add better validation
-//  * TODO: add unit tests
-//  * TODO: create data models
-//  */
-// export function addLinkedEntities() :Promise<*> {
-//
-//   return Promise.reject('LinkingApi.addLinkedEntities() is not implemented');
-// }
-//
-// /**
-//  * `DELETE /linking/set/{syncId}/{entitySetId}/{entityId}/{linkedEntityId}`
-//  *
-//  * @static
-//  * @memberof lattice.LinkingApi
-//  * @returns {Promise}
-//  *
-//  * TODO: add documentation
-//  * TODO: add better validation
-//  * TODO: add unit tests
-//  * TODO: create data models
-//  */
-// export function removeLinkedEntity() :Promise<*> {
-//
-//   return Promise.reject('LinkingApi.removeLinkedEntity() is not implemented');
-// }
-
-/***/ }),
-/* 288 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getOrganization = getOrganization;
-exports.getAllOrganizations = getAllOrganizations;
-exports.createOrganization = createOrganization;
-exports.deleteOrganization = deleteOrganization;
-exports.updateTitle = updateTitle;
-exports.updateDescription = updateDescription;
-exports.getAutoApprovedEmailDomains = getAutoApprovedEmailDomains;
-exports.addAutoApprovedEmailDomain = addAutoApprovedEmailDomain;
-exports.addAutoApprovedEmailDomains = addAutoApprovedEmailDomains;
-exports.setAutoApprovedEmailDomains = setAutoApprovedEmailDomains;
-exports.removeAutoApprovedEmailDomain = removeAutoApprovedEmailDomain;
-exports.removeAutoApprovedEmailDomains = removeAutoApprovedEmailDomains;
-exports.getRole = getRole;
-exports.getAllRoles = getAllRoles;
-exports.createRole = createRole;
-exports.deleteRole = deleteRole;
-exports.updateRoleTitle = updateRoleTitle;
-exports.updateRoleDescription = updateRoleDescription;
-exports.addRoleToMember = addRoleToMember;
-exports.removeRoleFromMember = removeRoleFromMember;
-exports.getAllMembers = getAllMembers;
-exports.addMemberToOrganization = addMemberToOrganization;
-exports.removeMemberFromOrganization = removeMemberFromOrganization;
-exports.getAllPrincipals = getAllPrincipals;
-exports.addPrincipal = addPrincipal;
-exports.addPrincipals = addPrincipals;
-exports.setPrincipals = setPrincipals;
-exports.removePrincipal = removePrincipal;
-exports.removePrincipals = removePrincipals;
-
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _PrincipalTypes = __webpack_require__(27);
-
-var _PrincipalTypes2 = _interopRequireDefault(_PrincipalTypes);
-
-var _Principal = __webpack_require__(14);
-
-var _Principal2 = _interopRequireDefault(_Principal);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _Organization = __webpack_require__(178);
-
-var _Organization2 = _interopRequireDefault(_Organization);
-
-var _Role = __webpack_require__(179);
-
-var _Role2 = _interopRequireDefault(_Role);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('OrganizationsApi');
-
-/**
- * `GET /organizations/{uuid}`
- *
- * Gets the information for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Organization>}
- *
- * @example
- * OrganizationsApi.getOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-
-
-/**
- * OrganizationsApi ...
- *
- * @module OrganizationsApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.OrganizationsApi.get...
- *
- * @example
- * import { OrganizationsApi } from 'lattice';
- * // OrganizationsApi.get...
- */
-
-function getOrganization(organizationId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /organizations`
- *
- * Gets all Organization information.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @returns {Promise<Organization[]>}
- *
- * @example
- * OrganizationsApi.getAllOrganizations();
- */
-function getAllOrganizations() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/').then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /organizations`
- *
- * Creates a new Organization, if it does not already exist.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {Organization} organization
- * @returns {Promise<UUID>}
- *
- * @example
- * OrganizationsApi.createOrganization(
- *   {
- *     id: "",
- *     title: "MyOrganization",
- *     description: "what an organization",
- *     members: [
- *       { type: "USER", id: "principalId_0" }
- *     ],
- *     roles: [
- *       { type: "ROLE", id: "principalId_1" }
- *     ]
- *   }
- * );
- */
-function createOrganization(organization) {
-
-  var errorMsg = '';
-
-  if (!(0, _Organization.isValid)(organization)) {
-    errorMsg = 'invalid parameter: organization must be a valid Organization';
-    LOG.error(errorMsg, organization);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/', organization).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organization/{uuid}`
- *
- * Deletes the Organization for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.deleteOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function deleteOrganization(organizationId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{uuid}/title`
- *
- * Updates the title for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string} title
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.updateTitle(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "New Title"
- * );
- */
-function updateTitle(organizationId, title) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, title);
-    return Promise.reject(errorMsg);
-  }
-
-  var axiosConfig = {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  };
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{uuid}/description`
- *
- * Updates the description for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string} description
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.updateDescription(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "new description"
- * );
- */
-function updateDescription(organizationId, description) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, description);
-    return Promise.reject(errorMsg);
-  }
-
-  var axiosConfig = {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  };
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /organizations/{uuid}/email-domains`
- *
- * Gets the auto-approved email domains for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<string[]>}
- *
- * @example
- * OrganizationsApi.getAutoApprovedEmailDomains("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAutoApprovedEmailDomains(organizationId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{uuid}/email-domains/{domain}`
- *
- * Adds the given email domain to the auto-approved email domains for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string} emailDomain
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.addAutoApprovedEmailDomain(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "openlattice.com"
- * );
- */
-function addAutoApprovedEmailDomain(organizationId, emailDomain) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(emailDomain)) {
-    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
-    LOG.error(errorMsg);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /organizations/{uuid}/email-domains`
- *
- * Adds the given email domains to the auto-approved email domains for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string[]} emailDomains
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.addAutoApprovedEmailDomains(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   [
- *     "openlattice.com"
- *   ]
- * );
- */
-function addAutoApprovedEmailDomains(organizationId, emailDomains) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
-    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
-    LOG.error(errorMsg, emailDomains);
-    return Promise.reject(errorMsg);
-  }
-
-  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
-    emailDomains.forEach(function (emailDomain) {
-      set.add(emailDomain);
-    });
-  }).toJS();
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{uuid}/email-domains`
- *
- * Sets the auto-approved email domains for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string[]} emailDomains
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.setAutoApprovedEmailDomains(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   [
- *     "openlattice.com"
- *   ]
- * );
- */
-function setAutoApprovedEmailDomains(organizationId, emailDomains) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
-    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
-    LOG.error(errorMsg, emailDomains);
-    return Promise.reject(errorMsg);
-  }
-
-  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
-    emailDomains.forEach(function (emailDomain) {
-      set.add(emailDomain);
-    });
-  }).toJS();
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organizations/{uuid}/email-domains/{domain}`
- *
- * Removes the given email domain from the auto-approved email domains for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string} emailDomain
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.removeAutoApprovedEmailDomain(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "openlattice.com"
- * );
- */
-function removeAutoApprovedEmailDomain(organizationId, emailDomain) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(emailDomain)) {
-    errorMsg = 'invalid parameter: emailDomain must be a non-empty string';
-    LOG.error(errorMsg, emailDomain);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organizations/{uuid}/email-domains`
- *
- * Removes the given email domains from the auto-approved email domains for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string[]} emailDomains
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.removeAutoApprovedEmailDomains(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   [
- *     "openlattice.com"
- *   ]
- * );
- */
-function removeAutoApprovedEmailDomains(organizationId, emailDomains) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyStringArray)(emailDomains)) {
-    errorMsg = 'invalid parameter: emailDomains must be a non-empty array of strings';
-    LOG.error(errorMsg, emailDomains);
-    return Promise.reject(errorMsg);
-  }
-
-  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
-    emailDomains.forEach(function (emailDomain) {
-      set.add(emailDomain);
-    });
-  }).toJS();
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).request({
-    url: '/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH,
-    method: 'delete',
-    data: emailDomainSet
-  }).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /organizations/{orgId}/principals/roles/{roleId}`
- *
- * Gets the Role for the given Organization UUID corresponding to the given Role UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} roleId
- * @return {Promise}
- *
- * @example
- * OrganizationsApi.getRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
- */
-function getRole(organizationId, roleId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
-    errorMsg = 'invalid parameter: roleId must be a valid UUID';
-    LOG.error(errorMsg, roleId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /organizations/{orgId}/principals/roles`
- *
- * Gets all Roles for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Principal[]>}
- *
- * @example
- * OrganizationsApi.getAllRoles("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAllRoles(organizationId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /organizations/roles`
- *
- * Creates a new role, if it does not already exist.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} roleId
- * @param {string} memberId
- * @return {Promise}
- *
- * @example
- * OrganizationsApi.createRole(
- *   {
- *     "id": "",
- *     "organizationId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *     "title": "Admin",
- *     "description": "The Administrator",
- *   }
- * );
- */
-function createRole(role) {
-
-  var errorMsg = '';
-
-  if (!(0, _Role.isValid)(role)) {
-    errorMsg = 'invalid parameter: role must be a valid Role';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + _ApiPaths.ROLES_PATH, role).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organizations/{orgId}/principals/roles/{roleId}`
- *
- * Deletes the role identified by the given org UUID and role UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} roleId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.deleteRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
- */
-function deleteRole(organizationId, roleId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
-    errorMsg = 'invalid parameter: roleId must be a valid UUID';
-    LOG.error(errorMsg, roleId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{orgId}/principals/roles/{roleId}/title`
- *
- * Updates the title of the role identified by the given org UUID and role UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} roleId
- * @param {string} title
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.updateRoleTitle(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
- *   "ADMIN"
- * );
- */
-function updateRoleTitle(organizationId, roleId, title) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
-    errorMsg = 'invalid parameter: roleId must be a valid UUID';
-    LOG.error(errorMsg, roleId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, title);
-    return Promise.reject(errorMsg);
-  }
-
-  var axiosConfig = {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  };
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{orgId}/principals/roles/{roleId}/description`
- *
- * Updates the description of the role identified by the given org UUID and role UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} roleId
- * @param {string} description
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.updateRoleDescription(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
- *   "The Administrator"
- * );
- */
-function updateRoleDescription(organizationId, roleId, description) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
-    errorMsg = 'invalid parameter: roleId must be a valid UUID';
-    LOG.error(errorMsg, roleId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, description);
-    return Promise.reject(errorMsg);
-  }
-
-  var axiosConfig = {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  };
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
- *
- * Assigns the role identified by the given org UUID and role UUID to the member of the organization identified by
- * the given member UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} roleId
- * @param {string} memberId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.addRoleToMember(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
- *   "memberId"
- * );
- */
-function addRoleToMember(organizationId, roleId, memberId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
-    errorMsg = 'invalid parameter: roleId must be a valid UUID';
-    LOG.error(errorMsg, roleId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
-    errorMsg = 'invalid parameter: memberId must be a non-empty string';
-    LOG.error(errorMsg, memberId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organizations/{orgId}/principals/roles/{roleId}/members/{memberId}`
- *
- * Removes the role identified by the given org UUID and role UUID from the member of the organization identified by
- * the given member UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} roleId
- * @param {string} memberId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.removeRoleFromMember(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
- *   "memberId"
- * );
- */
-function removeRoleFromMember(organizationId, roleId, memberId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(roleId)) {
-    errorMsg = 'invalid parameter: roleId must be a valid UUID';
-    LOG.error(errorMsg, roleId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
-    errorMsg = 'invalid parameter: memberId must be a non-empty string';
-    LOG.error(errorMsg, memberId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /organizations/{orgId}/principals/members`
- *
- * Gets all Roles for the given Organization UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Principal[]>}
- *
- * @example
- * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAllMembers(organizationId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{orgId}/principals/members/{memberId}`
- *
- * Adds the member identified by the given member UUID to the organization identified by the given org UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string} memberId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.addMemberToOrganization(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "memberId"
- * );
- */
-function addMemberToOrganization(organizationId, memberId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
-    errorMsg = 'invalid parameter: memberId must be a non-empty string';
-    LOG.error(errorMsg, memberId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organizations/{orgId}/principals/members/{memberId}`
- *
- * Removes the member identified by the given member UUID from the organization identified by the given org UUID.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string} memberId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.removeMemberFromOrganization(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "memberId"
- * );
- */
-function removeMemberFromOrganization(organizationId, memberId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(memberId)) {
-    errorMsg = 'invalid parameter: memberId must be a non-empty string';
-    LOG.error(errorMsg, memberId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
- *
- */
-
-/**
- * `GET /organizations/{uuid}/principals`
- *
- * Gets all Principals for the given Organization UUID.
- *
- * @deprecated
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Principal[]>}
- *
- * @example
- * OrganizationsApi.getAllPrincipals("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getAllPrincipals(organizationId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{uuid}/principals/{type}/{id}`
- *
- * Adds the given Principal to the given Organization UUID.
- *
- * @deprecated
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {PrincipalType} principalType
- * @param {string} principalId
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.addPrincipal(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "USER",
- *   "principalId"
- * );
- */
-function addPrincipal(organizationId, principalType, principalId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(principalType) || !_PrincipalTypes2.default[principalType]) {
-    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
-    LOG.error(errorMsg, principalType);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(principalId)) {
-    errorMsg = 'invalid parameter: principalId must be a non-empty string';
-    LOG.error(errorMsg, principalId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /organizations/{uuid}/principals`
- *
- * Adds the given Principals to the given Organization UUID.
- *
- * @deprecated
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {Principal[]} principals
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.addPrincipals(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   [
- *     { type: "USER", id: "principalId" }
- *   ]
- * );
- */
-function addPrincipals(organizationId, principals) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
-    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
-    LOG.error(errorMsg, principals);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: alternative way to dedupe
-  var data = _immutable2.default.Set().withMutations(function (set) {
-    principals.forEach(function (principal) {
-      set.add(new _Principal2.default(principal.type, principal.id));
-    });
-  }).toJS();
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /organizations/{uuid}/principals`
- *
- * Sets the given Principals for the given Organization UUID.
- *
- * @deprecated
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {Principal[]} principals
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.setPrincipals(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   [
- *     { type: "USER", id: "principalId" }
- *   ]
- * );
- */
-function setPrincipals(organizationId, principals) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
-    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
-    LOG.error(errorMsg, principals);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = _immutable2.default.Set().withMutations(function (set) {
-    principals.forEach(function (principal) {
-      set.add(new _Principal2.default(principal.type, principal.id));
-    });
-  }).toJS();
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organizations/{uuid}/principals/{type}/{id}`
- *
- * Removes the given Principal from the given Organization UUID.
- *
- * @deprecated
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {PrincipalType} principalType
- * @param {string} principalId
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.removePrincipal(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "USER",
- *   "principalId"
- * );
- */
-function removePrincipal(organizationId, principalType, principalId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(principalType) || !_PrincipalTypes2.default[principalType]) {
-    errorMsg = 'invalid parameter: principalType must be a valid PrincipalType';
-    LOG.error(errorMsg, principalType);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(principalId)) {
-    errorMsg = 'invalid parameter: principalId must be a non-empty string';
-    LOG.error(errorMsg, principalId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + principalType + '/' + principalId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /organizations/{uuid}/principals`
- *
- * Removes the given Principals from the given Organization UUID.
- *
- * @deprecated
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {Principal[]} principals
- * @returns {Promise}
- *
- * @example
- * OrganizationsApi.removePrincipals(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   [
- *     { type: "USER", id: "principalId" }
- *   ]
- * );
- */
-function removePrincipals(organizationId, principals) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidPrincipalArray)(principals)) {
-    errorMsg = 'invalid parameter: principals must be a non-empty array of valid Principals';
-    LOG.error(errorMsg, principals);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = _immutable2.default.Set().withMutations(function (set) {
-    principals.forEach(function (principal) {
-      set.add(new _Principal2.default(principal.type, principal.id));
-    });
-  }).toJS();
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).request({
-    url: '/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH,
-    method: 'delete',
-    data: data
-  }).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 289 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getAcl = getAcl;
-exports.updateAcl = updateAcl;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _AclData = __webpack_require__(172);
-
-var _AclData2 = _interopRequireDefault(_AclData);
-
-var _ApiNames = __webpack_require__(5);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('PermissionsApi');
-
-/**
- * `POST /permissions`
- *
- * Gets the ACL for the given ACL Key, only if the user is the owner of the ACL Key.
- *
- * @static
- * @memberof lattice.PermissionsApi
- * @param {UUID[]} aclKey
- * @returns {Promise<Acl>}
- *
- * @example
- * PermissionsApi.getAcl(
- *   [
- *     { type: 'EntityType', id: 'ec6865e6-e60e-424b-a071-6a9c1603d735' }
- *   ]
- * );
- */
-
-
-/**
- * PermissionsApi gives access to OpenLattice's REST API for managing ACLs on existing EntityDataModel schemas.
- *
- * @module PermissionsApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.PermissionsApi.get...
- *
- * @example
- * import { PermissionsApi } from 'lattice';
- * // PermissionsApi.get...
- */
-
-function getAcl(aclKey) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
-    errorMsg = 'invalid parameter: aclKey must be a non-empty array of valid UUIDs';
-    LOG.error(errorMsg, aclKey);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).post('/', aclKey).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /permissions`
- *
- * Updates the Ace for a particular ACL Key, only if the user is the owner of the ACL Key.
- *
- * @static
- * @memberof lattice.PermissionsApi
- * @param {AclData} aclData
- * @returns {Promise}
- *
- * @example
- * PermissionsApi.updateAcl(
- *   {
- *     action: 'ADD',
- *     acl: {
- *       aclKey: [
- *         'ec6865e6-e60e-424b-a071-6a9c1603d735'
- *       ],
- *       aces: [
- *         {
- *           principal: {
- *             type: 'USER',
- *             id: 'principalId'
- *           },
- *           permissions: [
- *             'READ'
- *           ]
- *         }
- *       ]
- *     }
- *   }
- * );
- */
-function updateAcl(aclData) {
-
-  var errorMsg = '';
-
-  if (!(0, _AclData.isValid)(aclData)) {
-    errorMsg = 'invalid parameter: aclData must be a valid AclData object';
-    LOG.error(errorMsg, aclData);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PERMISSIONS_API).patch('/', aclData).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 290 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getUser = getUser;
-exports.getAllRoles = getAllRoles;
-exports.getAllUsers = getAllUsers;
-exports.searchAllUsersByEmail = searchAllUsersByEmail;
-exports.addRoleToUser = addRoleToUser;
-exports.removeRoleFromUser = removeRoleFromUser;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('PrincipalsApi');
-
-/**
- * `GET /principals/users/{userId}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @return {Promise}
- */
-
-
-/**
- * PrincipalsApi gives access to OpenLattice's REST API for getting user data.
- *
- * @module PrincipalsApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.PrincipalsApi.get...
- *
- * @example
- * import { PrincipalsApi } from 'lattice';
- * // PrincipalsApi.get...
- */
-
-function getUser(userId) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /principals/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-function getAllRoles() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /principals/users`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-function getAllUsers() {
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `GET /principals/users/search/email/{searchQuery}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} searchQuery
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-function searchAllUsersByEmail(searchQuery) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(searchQuery)) {
-    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
-    LOG.error(errorMsg, searchQuery);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.SEARCH_PATH + '/' + _ApiPaths.EMAIL_PATH + '/' + searchQuery).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/*
- *
- * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
- *
- */
-
-function addRoleToUser(userId, role) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-function removeRoleFromUser(userId, role) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyString)(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).delete('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 291 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getAllRequestStatuses = getAllRequestStatuses;
-exports.submitRequests = submitRequests;
-exports.updateRequestStatuses = updateRequestStatuses;
-
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _has = __webpack_require__(7);
-
-var _has2 = _interopRequireDefault(_has);
-
-var _RequestStateTypes = __webpack_require__(28);
-
-var _RequestStateTypes2 = _interopRequireDefault(_RequestStateTypes);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _Request = __webpack_require__(25);
-
-var _Request2 = _interopRequireDefault(_Request);
-
-var _RequestStatus = __webpack_require__(37);
-
-var _RequestStatus2 = _interopRequireDefault(_RequestStatus);
-
-var _ApiNames = __webpack_require__(5);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * RequestsApi ...
- *
- * TODO: add description
- *
- * @module RequestsApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.RequestsApi.get...
- *
- * @example
- * import { RequestsApi } from 'lattice';
- * // RequestsApi.get...
- */
-
-var LOG = new _Logger2.default('RequestsApi');
-
-/**
- * `GET /requests`
- * `GET /requests/{state}`
- * `POST /requests`
- * `POST /requests/{state}`
- *
- * TODO: add description
- * TODO: add tests
- *
- * @static
- * @memberof lattice.RequestsApi
- * @param {RequestState} state (optional)
- * @param {UUID[][]} aclKeys (optional)
- * @returns {Promise<RequestStatus[]>}
- *
- * @example
- *
- * RequestsApi.getAllStatuses();
- *
- * RequestsApi.getAllStatusesForState(
- *   {
- *     "state": "SUBMITTED"
- *   }
- * );
- *
- * RequestsApi.getAllRequestStatuses(
- *   {
- *     "aclKeys": [
- *       ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
- *       ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
- *     ]
- *   }
- * );
- *
- * RequestsApi.getAllRequestStatuses(
- *   {
- *     "state": "SUBMITTED",
- *     "aclKeys": [
- *       ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"],
- *       ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
- *     ]
- *   }
- * );
- */
-function getAllRequestStatuses(options) {
-
-  var errorMsg = '';
-
-  // https://flowtype.org/docs/objects.html#sealed-object-types
-  var axiosConfig = {};
-  axiosConfig.url = '/';
-  axiosConfig.method = 'get';
-
-  if ((0, _LangUtils.isDefined)(options) && !(0, _LangUtils.isNonEmptyObject)(options)) {
-    errorMsg = 'invalid parameter: when given, options must be a non-empty object literal';
-    LOG.error(errorMsg, options.state);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _LangUtils.isNonEmptyObject)(options) && (0, _has2.default)(options, 'state')) {
-
-    if (!(0, _LangUtils.isNonEmptyString)(options.state) || !_RequestStateTypes2.default[options.state]) {
-      errorMsg = 'invalid parameter: when given, state must be a valid RequestState';
-      LOG.error(errorMsg, options.state);
-      return Promise.reject(errorMsg);
-    }
-
-    axiosConfig.url = '/' + options.state;
-  }
-
-  if ((0, _LangUtils.isNonEmptyObject)(options) && (0, _has2.default)(options, 'aclKeys')) {
-
-    if (!(0, _LangUtils.isNonEmptyArray)(options.aclKeys)) {
-      errorMsg = 'invalid parameter: when given, aclKeys must be a non-empty array of UUID arrays';
-      LOG.error(errorMsg, options.aclKeys);
-      return Promise.reject(errorMsg);
-    }
-
-    var aclKeysSet = _immutable2.default.Set().withMutations(function (set) {
-      for (var index = 0; index < options.aclKeys.length; index += 1) {
-        var aclKey = options.aclKeys[index];
-        if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
-          errorMsg = 'invalid parameter: when given, aclKeys[' + index + '] must be a non-empty array of UUIDs';
-          LOG.error(errorMsg, aclKey);
-          break;
-        }
-        set.add(_immutable2.default.List(aclKey));
-      }
-    });
-
-    axiosConfig.method = 'post';
-    axiosConfig.data = aclKeysSet.toJS();
-  }
-
-  if (errorMsg) {
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.REQUESTS_API).request(axiosConfig).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /requests`
- *
- * TODO: add description
- *
- * @static
- * @memberof lattice.RequestsApi
- * @param {Request[]} requests
- * @returns {Promise}
- *
- * @example
- * RequestsApi.submitRequests(
- *   [
- *     {
- *       "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
- *       "permissions": ["READ"],
- *       reason: "a good reason"
- *     },
- *   ]
- * );
- */
-function submitRequests(requests) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidRequestArray)(requests)) {
-    errorMsg = 'invalid parameter: requests must be a non-empty array of valid Requests';
-    LOG.error(errorMsg, requests);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: Immutable.Set() with unit tests
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.REQUESTS_API).put('/', requests).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /requests`
- *
- * TODO: add description
- *
- * @static
- * @memberof lattice.RequestsApi
- * @param {Status[]} statuses
- * @returns {Promise}
- *
- * @example
- * RequestsApi.updateRequestStatuses(
- *   [
- *     {
- *       "request": {
- *         "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
- *         "permissions": ["READ"],
- *         reason: "a good reason"
- *       },
- *       "state": "SUBMITTED"
- *       "principal": {
- *         "type": "USER",
- *         "id": "principalId"
- *       }
- *     }
- *   ]
- * );
- */
-function updateRequestStatuses(statuses) {
-
-  // let errorMsg :string = '';
-  //
-  // if (!isValidRequestStatusArray(statuses)) {
-  //   errorMsg = 'invalid parameter: statuses must be a non-empty array of valid Requests';
-  //   LOG.error(errorMsg, statuses);
-  //   return Promise.reject(errorMsg);
-  // }
-
-  // TODO: Immutable.Set() with unit tests
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.REQUESTS_API).patch('/', statuses).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 292 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getEntitySets = getEntitySets;
-exports.searchEntitySetMetaData = searchEntitySetMetaData;
-exports.searchEntitySetData = searchEntitySetData;
-exports.advancedSearchEntitySetData = advancedSearchEntitySetData;
-exports.searchOrganizations = searchOrganizations;
-exports.searchEntityTypes = searchEntityTypes;
-exports.searchAssociationTypes = searchAssociationTypes;
-exports.searchEntityTypesByFQN = searchEntityTypesByFQN;
-exports.searchPropertyTypes = searchPropertyTypes;
-exports.searchPropertyTypesByFQN = searchPropertyTypesByFQN;
-exports.searchEntityNeighbors = searchEntityNeighbors;
-exports.searchEntityNeighborsBulk = searchEntityNeighborsBulk;
-
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _isFinite = __webpack_require__(293);
-
-var _isFinite2 = _interopRequireDefault(_isFinite);
-
-var _isString = __webpack_require__(18);
-
-var _isString2 = _interopRequireDefault(_isString);
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-var _LangUtils = __webpack_require__(2);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('SearchApi');
-
-/**
- * SearchApi...
- *
- * @module SearchApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.SearchApi.search...
- *
- * @example
- * import { SearchApi } from 'lattice';
- * // SearchApi.search...
- */
-
-var ENTITY_TYPE_ID = 'eid';
-var KEYWORD = 'kw';
-var MAX_HITS = 'maxHits';
-var NAME = 'name';
-var NAMESPACE = 'namespace';
-var PROPERTY_TYPE_IDS = 'pid';
-var SEARCH_FIELDS = 'searchFields';
-var SEARCH_TERM = 'searchTerm';
-var START = 'start';
-
-/**
- * `GET /search/entity_sets/{start}/{maxHits}`
- *
- * Executes a search over all existing entity sets to populate the home page
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {number} start
- * @param {number} maxHits
- * @returns {Promise}
- *
- * @example
- * SearchApi.getEntitySets({
- *   start: 0,
- *   maxHits: 10
- * });
- */
-
-function getEntitySets(searchOptions) {
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.SEARCH_ENTITY_SETS_PATH + '/' + start + '/' + maxHits).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search`
- *
- * Executes a search across all EntitySet metadata with the given parameters.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchEntitySetMetaData(
- *   {
- *     "searchTerm": "Lattice",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- *
- * SearchApi.searchEntitySetMetaData(
- *   {
- *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- *
- * SearchApi.searchEntitySetMetaData(
- *   {
- *     "propertyTypeIds": [
- *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *       "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     ],
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- *
- * SearchApi.searchEntitySetMetaData(
- *   {
- *     "searchTerm": "Lattice",
- *     "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- *
- * SearchApi.searchEntitySetMetaData(
- *   {
- *     "searchTerm": "Lattice",
- *     "propertyTypeIds": [
- *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *       "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     ],
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchEntitySetMetaData(searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      searchTerm = searchOptions.searchTerm,
-      entityTypeId = searchOptions.entityTypeId,
-      propertyTypeIds = searchOptions.propertyTypeIds;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-
-  if ((0, _LangUtils.isDefined)(searchTerm)) {
-    if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-      errorMsg = 'invalid property: searchTerm must be a non-empty string';
-      LOG.error(errorMsg, searchTerm);
-      return Promise.reject(errorMsg);
-    }
-    data[KEYWORD] = searchTerm;
-  }
-
-  if ((0, _LangUtils.isDefined)(entityTypeId)) {
-    if (!(0, _ValidationUtils.isValidUuid)(entityTypeId)) {
-      errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
-      LOG.error(errorMsg, entityTypeId);
-      return Promise.reject(errorMsg);
-    }
-    data[ENTITY_TYPE_ID] = entityTypeId;
-  }
-
-  if ((0, _LangUtils.isDefined)(propertyTypeIds)) {
-    if (!(0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-      errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
-      LOG.error(errorMsg, propertyTypeIds);
-      return Promise.reject(errorMsg);
-    }
-    data[PROPERTY_TYPE_IDS] = _immutable2.default.Set().withMutations(function (set) {
-      propertyTypeIds.forEach(function (id) {
-        set.add(id);
-      });
-    }).toJS();
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/', data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/{entitySetId}`
- *
- * Executes a search over the data of the given EntitySet to find matches for the given search term.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {UUID} entitySetId
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchEntitySetData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "searchTerm": "Lattice",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchEntitySetData(entitySetId, searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      searchTerm = searchOptions.searchTerm;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-    errorMsg = 'invalid property: searchTerm must be a non-empty string';
-    LOG.error(errorMsg, searchTerm);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[SEARCH_TERM] = searchTerm;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/advanced/{entitySetId}`
- *
- * Executes a search over the data of the given EntitySet to find matches for the given search (field, term) pairs.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {UUID} entitySetId
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchEntitySetData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "searchFields": {
- *       "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": "Lattice"
- *     },
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function advancedSearchEntitySetData(entitySetId, searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      searchFields = searchOptions.searchFields;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyArray)(searchFields)) {
-    errorMsg = 'invalid parameter: searchFields must be a non-empty array';
-    LOG.error(errorMsg, searchFields);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate searchFields
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[SEARCH_FIELDS] = searchFields;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ADVANCED_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/organizations`
- *
- * Executes a search across all Organizations to find ones that match the given search term.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchOrganizations(
- *   {
- *     "searchTerm": "Lattice",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchOrganizations(searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      searchTerm = searchOptions.searchTerm;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-    errorMsg = 'invalid property: searchTerm must be a non-empty string';
-    LOG.error(errorMsg, searchTerm);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[SEARCH_TERM] = searchTerm;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ORGANIZATIONS_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/entity_types`
- *
- * Executes a search across all EntityTypes to find ones that match the given search term.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchEntityTypes(
- *   {
- *     "searchTerm": "Lattice",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchEntityTypes(searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      searchTerm = searchOptions.searchTerm;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-    errorMsg = 'invalid property: searchTerm must be a non-empty string';
-    LOG.error(errorMsg, searchTerm);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[SEARCH_TERM] = searchTerm;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ENTITY_TYPES_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/entity_types`
- *
- * Executes a search across all EntityTypes to find ones that match the given search term.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchAssociationTypes(
- *   {
- *     "searchTerm": "Lattice",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchAssociationTypes(searchOptions) {
-
-  var errorMsg = '';
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      searchTerm = searchOptions.searchTerm;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-    errorMsg = 'invalid property: searchTerm must be a non-empty string';
-    LOG.error(errorMsg, searchTerm);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[SEARCH_TERM] = searchTerm;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ASSOCIATION_TYPES_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/entity_types/fqn`
- *
- * Executes a search across all EntityTypes to find ones that match the given FQN, including partial matches.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchEntityTypesByFQN(
- *   {
- *     "namespace": "LATTICE",
- *     "name": "MyEntityType",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchEntityTypesByFQN(searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      name = searchOptions.name,
-      namespace = searchOptions.namespace;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _LangUtils.isDefined)(namespace) && !(0, _isString2.default)(namespace)) {
-    errorMsg = 'invalid parameter: namespace must be a string';
-    LOG.error(errorMsg, namespace);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _LangUtils.isDefined)(name) && !(0, _isString2.default)(name)) {
-    errorMsg = 'invalid parameter: name must be a string';
-    LOG.error(errorMsg, name);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[NAMESPACE] = namespace;
-  data[NAME] = name;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ENTITY_TYPES_PATH + '/' + _ApiPaths.FQN_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/property_types`
- *
- * Executes a search across all PropertyTypes to find ones that match the given search term.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchPropertyTypes(
- *   {
- *     "searchTerm": "Lattice",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchPropertyTypes(searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      searchTerm = searchOptions.searchTerm;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(searchTerm)) {
-    errorMsg = 'invalid property: searchTerm must be a non-empty string';
-    LOG.error(errorMsg, searchTerm);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[SEARCH_TERM] = searchTerm;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_PROPERTY_TYPES_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/property_types/fqn`
- *
- * Executes a search across all PropertyTypes to find ones that match the given FQN, including partial matches.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchPropertyTypesByFQN(
- *   {
- *     "namespace": "LATTICE",
- *     "name": "MyPropertyType",
- *     "start": 0,
- *     "maxHits": 100
- *   }
- * );
- */
-function searchPropertyTypesByFQN(searchOptions) {
-
-  var errorMsg = '';
-
-  if (!(0, _LangUtils.isNonEmptyObject)(searchOptions)) {
-    errorMsg = 'invalid parameter: searchOptions must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  var data = {};
-  var start = searchOptions.start,
-      maxHits = searchOptions.maxHits,
-      name = searchOptions.name,
-      namespace = searchOptions.namespace;
-
-
-  if (!(0, _isFinite2.default)(start) || start < 0) {
-    errorMsg = 'invalid property: start must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _isFinite2.default)(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: maxHits must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _LangUtils.isDefined)(namespace) && !(0, _isString2.default)(namespace)) {
-    errorMsg = 'invalid parameter: namespace must be a string';
-    LOG.error(errorMsg, namespace);
-    return Promise.reject(errorMsg);
-  }
-
-  if ((0, _LangUtils.isDefined)(name) && !(0, _isString2.default)(name)) {
-    errorMsg = 'invalid parameter: name must be a string';
-    LOG.error(errorMsg, name);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-  data[NAMESPACE] = namespace;
-  data[NAME] = name;
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_PROPERTY_TYPES_PATH + '/' + _ApiPaths.FQN_PATH, data).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * TODO: everything
- */
-function searchEntityNeighbors(entitySetId, entityId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityId)) {
-    errorMsg = 'invalid parameter: entityId must be a valid UUID';
-    LOG.error(errorMsg, entityId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + entitySetId + '/' + entityId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /search/{entityTypeId}/neighbors`
- *
- * Executes a search for all neighbors of all the entities specified, where all entities belong to the
- * same entity set.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {UUID} entitySetId
- * @param {UUID[]} entityIds
- * @returns {Promise}
- *
- * @example
- * SearchApi.searchEntityNeighborsBulk("ec6865e6-e60e-424b-a071-6a9c1603d735",
- * ["3bf2a30d-fda0-4389-a1e6-8546b230efad","a62a47fe-e6a7-4536-85f1-fe935902a536"]);
- */
-function searchEntityNeighborsBulk(entitySetId, entityIds) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuidArray)(entityIds)) {
-    errorMsg = 'invalid parameter: entityIds must be a non-empty array of valid UUIDs';
-    LOG.error(errorMsg, entityIds);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId + '/' + _ApiPaths.NEIGHBORS_PATH, entityIds).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 293 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var root = __webpack_require__(11);
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeIsFinite = root.isFinite;
-
-/**
- * Checks if `value` is a finite primitive number.
- *
- * **Note:** This method is based on
- * [`Number.isFinite`](https://mdn.io/Number/isFinite).
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a finite number, else `false`.
- * @example
- *
- * _.isFinite(3);
- * // => true
- *
- * _.isFinite(Number.MIN_VALUE);
- * // => true
- *
- * _.isFinite(Infinity);
- * // => false
- *
- * _.isFinite('3');
- * // => false
- */
-function isFinite(value) {
-  return typeof value == 'number' && nativeIsFinite(value);
-}
-
-module.exports = isFinite;
-
-
-/***/ }),
-/* 294 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getCurrentSyncId = getCurrentSyncId;
-
-var _Logger = __webpack_require__(1);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _ApiNames = __webpack_require__(5);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _AxiosUtils = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* eslint-disable import/prefer-default-export */
-
-/**
- * SyncApi ...
- *
- * @module SyncApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.SyncApi.getCurrentSync...
- *
- * @example
- * import { SyncApi } from 'lattice';
- * // SyncApi.getCurrentSync...
- */
-
-var LOG = new _Logger2.default('SyncApi');
-
-/**
- * `GET /sync/{entitySetId}/current`
- *
- * Returns the current sync id for a given entity set
- *
- * @static
- * @memberof lattice.
- * @param {UUID} entitySetId
- * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the current sync id for the entity set
- *
- * @example
- * LinkingApi.getCurrentSyncId("e39dfdfa-a3e6-4f1f-b54b-646a723c3085");
- */
-function getCurrentSyncId(entitySetId) {
-
-  // TODO: everything
-
-  return (0, _AxiosUtils.getApiAxiosInstance)(_ApiNames.SYNC_API).get('/' + entitySetId + '/' + _ApiPaths.CURRENT_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
 }
 
 /***/ })
