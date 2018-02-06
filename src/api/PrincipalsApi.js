@@ -32,7 +32,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isNonEmptyString
@@ -60,9 +60,7 @@ export function getUser(userId :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}/${userId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -80,9 +78,7 @@ export function getAllRoles() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${ROLES_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -100,9 +96,7 @@ export function getAllUsers() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -131,9 +125,7 @@ export function searchAllUsersByEmail(searchQuery :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${searchQuery}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -164,9 +156,7 @@ export function addRoleToUser(userId :string, role :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .put(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -191,9 +181,7 @@ export function removeRoleFromUser(userId :string, role :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .delete(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

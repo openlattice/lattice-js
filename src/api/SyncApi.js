@@ -31,7 +31,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 const LOG = new Logger('SyncApi');
 
@@ -54,9 +54,7 @@ export function getCurrentSyncId(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(SYNC_API)
     .get(`/${entitySetId}/${CURRENT_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

@@ -37,7 +37,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 const LOG = new Logger('LinkingApi');
 
@@ -79,9 +79,7 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
 
   return getApiAxiosInstance(LINKING_API)
     .post(`/${TYPE_PATH}`, linkingEntityType)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -130,9 +128,7 @@ export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<*> {
 
   return getApiAxiosInstance(LINKING_API)
     .post('/', linkingRequest)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

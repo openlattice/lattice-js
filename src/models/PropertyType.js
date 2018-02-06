@@ -43,14 +43,14 @@ export default class PropertyType {
   analyzer :Analyzer;
 
   constructor(
-      id :?UUID,
-      type :FullyQualifiedName,
-      title :string,
-      description :?string,
-      datatype :string,
-      schemas :FullyQualifiedName[],
-      piiField :boolean,
-      analyzer :Analyzer
+    id :?UUID,
+    type :FullyQualifiedName,
+    title :string,
+    description :?string,
+    datatype :string,
+    schemas :FullyQualifiedName[],
+    piiField :boolean,
+    analyzer :Analyzer
   ) {
 
     // required properties

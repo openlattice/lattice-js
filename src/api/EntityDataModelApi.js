@@ -62,7 +62,7 @@ import {
 import {
   getApiBaseUrl,
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isEmptyArray,
@@ -107,9 +107,7 @@ export function getEntityDataModel() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get('/')
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -149,9 +147,7 @@ export function getEntityDataModelProjection(projection :Object[]) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post('/', projection)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -193,9 +189,7 @@ export function getSchema(schemaFqn :FullyQualifiedName) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${SCHEMA_PATH}/${namespace}/${name}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -218,9 +212,7 @@ export function getAllSchemas() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${SCHEMA_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -253,9 +245,7 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${SCHEMA_PATH}/${namespace}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -328,9 +318,7 @@ export function createSchema(schema :Schema) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${SCHEMA_PATH}`, schema)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -366,9 +354,7 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .put(`/${SCHEMA_PATH}/${namespace}/${name}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -401,10 +387,10 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<*> {
  * )
  */
 export function updateSchema(
-    schemaFqn :FullyQualifiedName,
-    action :string,
-    entityTypeIds :UUID[],
-    propertyTypeIds :UUID[]
+  schemaFqn :FullyQualifiedName,
+  action :string,
+  entityTypeIds :UUID[],
+  propertyTypeIds :UUID[]
 ) :Promise<*> {
 
   let errorMsg = '';
@@ -465,9 +451,7 @@ export function updateSchema(
 
   return getApiAxiosInstance(EDM_API)
     .patch(`/${SCHEMA_PATH}/${namespace}/${name}`, data)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -505,9 +489,7 @@ export function getEntitySet(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_SET_PATH}/${entitySetId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -539,9 +521,7 @@ export function getEntitySetId(entitySetName :string) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${IDS_PATH}/${ENTITY_SET_PATH}/${entitySetName}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -564,9 +544,7 @@ export function getAllEntitySets() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_SET_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -611,9 +589,7 @@ export function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${ENTITY_SET_PATH}`, entitySets)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -645,9 +621,7 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ENTITY_SET_PATH}/${entitySetId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -727,9 +701,7 @@ export function updateEntitySetMetaData(entitySetId :UUID, metadata :Object) :Pr
 
   return getApiAxiosInstance(EDM_API)
     .patch(`/${ENTITY_SET_PATH}/${entitySetId}`, metadata)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -767,9 +739,7 @@ export function getEntityType(entityTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_TYPE_PATH}/${entityTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -805,9 +775,7 @@ export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${IDS_PATH}/${ENTITY_TYPE_PATH}/${namespace}/${name}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -831,9 +799,7 @@ export function getAllEntityTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_TYPE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -859,9 +825,7 @@ export function getAllAssociationEntityTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ASSOCIATION_TYPE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -914,9 +878,7 @@ export function createEntityType(entityType :EntityType) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${ENTITY_TYPE_PATH}`, entityType)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -948,9 +910,7 @@ export function deleteEntityType(entityTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ENTITY_TYPE_PATH}/${entityTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -992,9 +952,7 @@ export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :
 
   return getApiAxiosInstance(EDM_API)
     .put(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${propertyTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1036,9 +994,7 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${propertyTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1081,9 +1037,7 @@ export function forceRemovePropertyTypeFromEntityType(entityTypeId :UUID, proper
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${propertyTypeId}/${FORCE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1127,9 +1081,7 @@ export function reorderPropertyTypesInEntityType(entityTypeId :UUID, propertyTyp
 
   return getApiAxiosInstance(EDM_API)
     .patch(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${PROPERTY_TYPE_PATH}`, propertyTypeIds)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1209,9 +1161,7 @@ export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :
 
   return getApiAxiosInstance(EDM_API)
     .patch(`/${ENTITY_TYPE_PATH}/${entityTypeId}`, metadata)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1246,9 +1196,7 @@ export function getEntityTypeHierarchy(entityTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_TYPE_PATH}/${entityTypeId}/${HIERARCHY_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1287,9 +1235,7 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1325,9 +1271,7 @@ export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${IDS_PATH}/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1351,9 +1295,7 @@ export function getAllPropertyTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${PROPERTY_TYPE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1386,9 +1328,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${PROPERTY_TYPE_PATH}/${NAMESPACE_PATH}/${namespace}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1433,9 +1373,7 @@ export function createPropertyType(propertyType :PropertyType) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${PROPERTY_TYPE_PATH}`, propertyType)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1467,9 +1405,7 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1502,9 +1438,7 @@ export function forceDeletePropertyType(propertyTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}/${FORCE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1584,9 +1518,7 @@ export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Objec
 
   return getApiAxiosInstance(EDM_API)
     .patch(`/${PROPERTY_TYPE_PATH}/${propertyTypeId}`, metadata)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1627,9 +1559,7 @@ export function getAssociationType(associationTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1655,9 +1585,7 @@ export function getAllAssociationTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ASSOCIATION_TYPE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1692,9 +1620,7 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DETAILED_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1727,9 +1653,7 @@ export function getAllAvailableAssociationTypes(entityTypeId :UUID) :Promise<*> 
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ASSOCIATION_TYPE_PATH}/${entityTypeId}/available`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1770,9 +1694,7 @@ export function createAssociationType(associationType :Object) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${ASSOCIATION_TYPE_PATH}`, associationType)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1806,9 +1728,7 @@ export function deleteAssociationType(associationTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1848,9 +1768,7 @@ export function getComplexType(complexTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${COMPLEX_TYPE_PATH}/${complexTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1876,9 +1794,7 @@ export function getAllComplexTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${COMPLEX_TYPE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1913,9 +1829,7 @@ export function getComplexTypeHierarchy(complexTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${COMPLEX_TYPE_PATH}/${complexTypeId}/${HIERARCHY_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1966,9 +1880,7 @@ export function createComplexType(complexType :Object) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${COMPLEX_TYPE_PATH}`, complexType)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2002,9 +1914,7 @@ export function deleteComplexType(complexTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${COMPLEX_TYPE_PATH}/${complexTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2044,9 +1954,7 @@ export function getEnumType(enumTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENUM_TYPE_PATH}/${enumTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2072,9 +1980,7 @@ export function getAllEnumTypes() :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENUM_TYPE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2125,9 +2031,7 @@ export function createEnumType(enumType :Object) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${ENUM_TYPE_PATH}`, enumType)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2161,9 +2065,7 @@ export function deleteEnumType(enumTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ENUM_TYPE_PATH}/${enumTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2205,9 +2107,7 @@ export function addSrcEntityTypeToAssociationType(associationTypeId :UUID, entit
 
   return getApiAxiosInstance(EDM_API)
     .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${SRC_PATH}/${entityTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2249,9 +2149,7 @@ export function addDstEntityTypeToAssociationType(associationTypeId :UUID, entit
 
   return getApiAxiosInstance(EDM_API)
     .put(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DST_PATH}/${entityTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2294,9 +2192,7 @@ export function removeSrcEntityTypeFromAssociationType(associationTypeId :UUID, 
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${SRC_PATH}/${entityTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2339,9 +2235,7 @@ export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, 
 
   return getApiAxiosInstance(EDM_API)
     .delete(`/${ASSOCIATION_TYPE_PATH}/${associationTypeId}/${DST_PATH}/${entityTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2373,9 +2267,7 @@ export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_SET_PATH}/${entitySetId}/${PROPERTY_TYPE_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2417,9 +2309,7 @@ export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${ENTITY_SET_PATH}/${entitySetId}/${PROPERTY_TYPE_PATH}/${propertyTypeId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -2450,9 +2340,9 @@ export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :
  * );
  */
 export function updateEntitySetPropertyMetadata(
-    entitySetId :UUID,
-    propertyTypeId :UUID,
-    metadata :Object
+  entitySetId :UUID,
+  propertyTypeId :UUID,
+  metadata :Object
 ) :Promise<*> {
 
   let errorMsg = '';
@@ -2489,9 +2379,7 @@ export function updateEntitySetPropertyMetadata(
 
   return getApiAxiosInstance(EDM_API)
     .post(`/${ENTITY_SET_PATH}/${entitySetId}/${PROPERTY_TYPE_PATH}/${propertyTypeId}`, metadata)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

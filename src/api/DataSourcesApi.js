@@ -31,7 +31,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isValidUuid
@@ -64,9 +64,7 @@ export function getDataSource(dataSourceId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_SOURCES_API)
     .get(`/${dataSourceId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -108,9 +106,7 @@ export function createOrUpdateDataSource(dataSource :DataSource) :Promise<*> {
 
   return getApiAxiosInstance(DATA_SOURCES_API)
     .post('/', dataSource)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -142,9 +138,7 @@ export function deleteDataSource(dataSourceId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_SOURCES_API)
     .delete(`/${dataSourceId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -176,9 +170,7 @@ export function startSync(dataSourceId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_SOURCES_API)
     .post(`/${dataSourceId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -220,9 +212,7 @@ export function signalSyncCompleted(dataSourceId :UUID, syncId :UUID) :Promise<*
 
   return getApiAxiosInstance(DATA_SOURCES_API)
     .delete(`/${dataSourceId}/${syncId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

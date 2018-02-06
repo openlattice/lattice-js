@@ -1,18 +1,17 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "airbnb-base",
     "plugin:flowtype/recommended"
   ],
-  "parser": "babel-eslint",
-  "env": {
-    "browser": true,
-    "jasmine": true,
-    "node": true
-  },
   "plugins": [
     "flowtype",
-    "jasmine"
+    "jest"
   ],
+  "env": {
+    "browser": true,
+    "jest": true
+  },
   "settings": {
     "flowtype": {
       "onlyFilesWithFlowAnnotation": true
@@ -24,7 +23,7 @@
     }
   },
   "rules": {
-    "arrow-body-style": ["error", "always"],
+    "arrow-body-style": ["error", "as-needed"],
     "brace-style": ["error", "stroustrup"],
     "comma-dangle": ["error", "never"],
     "function-paren-newline": ["error", "consistent"],
@@ -34,11 +33,11 @@
       {
         "FunctionDeclaration": {
           "body": 1,
-          "parameters": 2
+          "parameters": 1
         },
         "FunctionExpression": {
           "body": 1,
-          "parameters": 2
+          "parameters": 1
         },
         "SwitchCase": 1
       }
@@ -67,24 +66,36 @@
       }
     ],
     "padded-blocks": "off",
+    "prefer-destructuring": "warn",
     "space-before-function-paren": ["error", "never"],
 
+    "flowtype/define-flow-type": "error",
     "flowtype/space-after-type-colon": ["error", "never"],
     "flowtype/space-before-type-colon": ["error", "always"],
     "flowtype/no-types-missing-file-annotation": "warn",
 
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "config/**",
+          "src/utils/testing/**",
+          "**/*.test.js"
+        ]
+      }
+    ],
     "import/order": [
       "warn",
       {
-        "groups": ["builtin", "external", "internal", ["sibling", "parent"], "index"]
+        "groups": ["builtin", "external", "internal", ["parent", "sibling"], "index"]
       }
     ],
-
     "import/prefer-default-export": "warn",
 
-    "jasmine/no-focused-tests": "error",
-    "jasmine/no-disabled-tests": "error",
-    "jasmine/no-spec-dupes": ["error", "branch"],
-    "jasmine/no-suite-dupes": ["error", "branch"],
+    "jest/no-disabled-tests": "error",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
   }
 }

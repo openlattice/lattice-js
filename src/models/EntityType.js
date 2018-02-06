@@ -45,15 +45,15 @@ export default class EntityType {
   category :?SecurableType;
 
   constructor(
-      id :?UUID,
-      type :FullyQualifiedName,
-      title :string,
-      description :?string,
-      schemas :FullyQualifiedName[],
-      key :UUID[],
-      properties :UUID[],
-      baseType :?UUID,
-      category :?SecurableType
+    id :?UUID,
+    type :FullyQualifiedName,
+    title :string,
+    description :?string,
+    schemas :FullyQualifiedName[],
+    key :UUID[],
+    properties :UUID[],
+    baseType :?UUID,
+    category :?SecurableType
   ) {
 
     // required properties

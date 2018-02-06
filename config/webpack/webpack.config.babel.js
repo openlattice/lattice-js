@@ -1,15 +1,10 @@
-/*
- * @flow
- */
-
 /* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies, import/extensions */
 
 import Webpack from 'webpack';
 
 import PACKAGE from '../../package.json';
-
-import LIB_CONFIG from '../lib.config.js';
-import LIB_PATHS from '../lib.paths.js';
+import LIB_CONFIG from '../lib/lib.config.js';
+import LIB_PATHS from '../lib/paths.config.js';
 
 import {
   isDev,
@@ -19,12 +14,10 @@ import {
   ifProd,
   ifMin,
   TARGET_ENV
-} from '../env.js';
+} from '../lib/env.config.js';
 
-function compact(arr :Array<any>) :Array<any> {
-  return arr.filter((element :any) => {
-    return !!element;
-  });
+function compact(arr) {
+  return arr.filter(element => !!element);
 }
 
 /*
@@ -40,11 +33,6 @@ const BABEL_LOADER = {
   ]
 };
 
-const JSON_LOADER = {
-  loader: 'json-loader',
-  test: /\.json$/
-};
-
 /*
  * plugins
  */
@@ -55,9 +43,10 @@ const BANNER_PLUGIN = new Webpack.BannerPlugin({
 });
 
 const DEFINE_PLUGIN = new Webpack.DefinePlugin({
-  __DEV__: JSON.stringify(isDev),
-  __PROD__: JSON.stringify(isProd),
-  __TEST__: JSON.stringify(isTest),
+  __ENV_DEV__: JSON.stringify(isDev),
+  __ENV_PROD__: JSON.stringify(isProd),
+  __ENV_TEST__: JSON.stringify(isTest),
+  __PACKAGE__: JSON.stringify(PACKAGE.name),
   __VERSION__: JSON.stringify(`v${PACKAGE.version}`)
 });
 
@@ -97,8 +86,7 @@ export default {
   },
   module: {
     rules: [
-      BABEL_LOADER,
-      JSON_LOADER
+      BABEL_LOADER
     ]
   },
   plugins: compact([

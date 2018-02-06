@@ -31,7 +31,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isNonEmptyString
@@ -72,10 +72,10 @@ const LOG = new Logger('AnalysisApi');
  * );
  */
 export function getTopUtilizers(
-    entitySetId :UUID,
-    count :number,
-    options :Object,
-    fileType :string
+  entitySetId :UUID,
+  count :number,
+  options :Object,
+  fileType :string
 ) :Promise<*> {
 
   // TODO: everything
@@ -87,9 +87,7 @@ export function getTopUtilizers(
 
   return getApiAxiosInstance(ANALYSIS_API)
     .post(url, options)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -121,9 +119,7 @@ export function getNeighborTypes(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ANALYSIS_API)
     .get(`/${entitySetId}/${TYPES_PATH}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

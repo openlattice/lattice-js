@@ -31,7 +31,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isDefined,
@@ -91,9 +91,7 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<*> {
 
   return getApiAxiosInstance(AUTHORIZATION_API)
     .post('/', accessChecks)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -121,9 +119,9 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<*> {
  * );
  */
 export function getAccessibleObjects(
-    securableType :SecurableType,
-    permission :Permission,
-    pagingToken :string
+  securableType :SecurableType,
+  permission :Permission,
+  pagingToken :string
 ) :Promise<*> {
 
   let errorMsg :string = '';
@@ -153,9 +151,7 @@ export function getAccessibleObjects(
 
   return getApiAxiosInstance(AUTHORIZATION_API)
     .get(url)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

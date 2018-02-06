@@ -18,7 +18,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isNonEmptyString
@@ -47,9 +47,7 @@ export function getApps() :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get('/')
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -82,9 +80,7 @@ export function getApp(appId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${appId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -117,9 +113,7 @@ export function getAppByName(appName :string) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${LOOKUP_PATH}/${appName}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -155,9 +149,7 @@ export function getAppTypesForAppTypeIds(appTypeIds :UUID[]) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .post(`/${TYPE_PATH}/${BULK_PATH}`, appTypeIds)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -189,9 +181,7 @@ export function getConfigurations(appId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${CONFIG_PATH}/${appId}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -241,9 +231,7 @@ export function installApp(appId :UUID, organizationId :UUID, prefix :string) :P
 
   return getApiAxiosInstance(APP_API)
     .get(`/${INSTALL_PATH}/${appId}/${organizationId}/${prefix}`)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

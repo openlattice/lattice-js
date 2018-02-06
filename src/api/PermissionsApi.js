@@ -29,7 +29,7 @@ import {
 
 import {
   getApiAxiosInstance
-} from '../utils/AxiosUtils';
+} from '../utils/axios';
 
 import {
   isValidUuidArray
@@ -66,9 +66,7 @@ export function getAcl(aclKey :UUID[]) :Promise<*> {
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post('/', aclKey)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -120,9 +118,7 @@ export function updateAcl(aclData :AclData) :Promise<*> {
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .patch('/', aclData)
-    .then((axiosResponse) => {
-      return axiosResponse.data;
-    })
+    .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

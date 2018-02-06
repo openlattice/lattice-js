@@ -28,10 +28,10 @@ export default class AssociationType {
   bidirectional :boolean;
 
   constructor(
-      entityType :EntityType,
-      sourceEntityTypeIds :UUID[],
-      destinationEntityTypeIds :UUID[],
-      bidirectional :boolean
+    entityType :EntityType,
+    sourceEntityTypeIds :UUID[],
+    destinationEntityTypeIds :UUID[],
+    bidirectional :boolean
   ) {
 
     // required properties
