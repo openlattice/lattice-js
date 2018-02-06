@@ -488,8 +488,7 @@ export function deleteEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) 
  *     "uuid_1a": ["value_1a", "value_1b"],
  *     "uuid_1b": ["value_1c", "value_1d"]
  *   }
- * )
-});
+ * );
  */
 export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
 
@@ -507,8 +506,71 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
     return Promise.reject(errorMsg);
   }
 
+  // TODO: validate "entity" structure
+
+  if (!isNonEmptyObject(entity)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty object';
+    LOG.error(errorMsg, entity);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(DATA_API)
     .put(`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${entitySetId}/${entityKeyId}`, entity)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /data/entitydata/update/{entitySetId}/{entityKeyId}`
+ *
+ * Replaces the entity values for the specified entityKeyId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @param {Object} entity
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.replaceEntityInEntitySetUsingFqns(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "namespace1.name1": ["value_1a", "value_1b"],
+ *     "namespace2.name2": ["value_1c", "value_1d"]
+ *   }
+ * );
+ */
+export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate "entity" structure
+
+  if (!isNonEmptyObject(entity)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty object';
+    LOG.error(errorMsg, entity);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post(`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${entitySetId}/${entityKeyId}`, entity)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -524,7 +586,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without the entity count
+ * @return {Promise} - a Promise that resolves with the entity count
  *
  * @example
  * DataApi.getEntitySetSize("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e")
@@ -541,6 +603,45 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .get(`/${entitySetId}/${COUNT_PATH}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /data/{entitySetId}/{entityKeyId}`
+ *
+ * Returns a single entity, specified by its entitySetId and entityKeyId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves with the requested entity
+ *
+ * @example
+ *  * DataApi.getEntity("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
+  */
+export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .get(`/${entitySetId}/${entityKeyId}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
