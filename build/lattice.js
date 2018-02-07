@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.32.1
+ * lattice - v0.32.2
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -12301,11 +12301,11 @@ function setAuthToken(config) {
 function setBaseUrl(config) {
 
   if ((0, _LangUtils.isNonEmptyString)(config.baseUrl)) {
-    if (config.baseUrl === 'localhost') {
+    if (config.baseUrl === 'localhost' || config.baseUrl === ENV_URLS.get('LOCAL')) {
       configuration = configuration.set('baseUrl', ENV_URLS.get('LOCAL'));
-    } else if (config.baseUrl === 'staging') {
+    } else if (config.baseUrl === 'staging' || config.baseUrl === ENV_URLS.get('STAGING')) {
       configuration = configuration.set('baseUrl', ENV_URLS.get('STAGING'));
-    } else if (config.baseUrl === 'production') {
+    } else if (config.baseUrl === 'production' || config.baseUrl === ENV_URLS.get('PRODUCTION')) {
       configuration = configuration.set('baseUrl', ENV_URLS.get('PRODUCTION'));
     }
     // mild url validation to at least check the protocol and domain
@@ -28176,7 +28176,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.32.1";
+var version = "v0.32.2";
 
 exports.AnalysisApi = AnalysisApi;
 exports.AppApi = AppApi;
