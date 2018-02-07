@@ -41,6 +41,12 @@ describe('AxiosUtils : newAxiosInstance()', () => {
     }).not.toThrow();
   });
 
+  test('should not throw if the given URL is localhost', () => {
+    expect(() => {
+      newAxiosInstance('http://localhost:8080');
+    }).not.toThrow();
+  });
+
   test('should create a new Axios instance with the correct Authorization header', () => {
 
     const mockBaseUrl = genMockBaseUrl();

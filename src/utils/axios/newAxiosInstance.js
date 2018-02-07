@@ -10,7 +10,7 @@ import { isNonEmptyString } from '../../utils/LangUtils';
 
 export default function newAxiosInstance(baseUrl :string) :Axios {
 
-  if (!isURL(baseUrl)) {
+  if (!isURL(baseUrl, { require_tld: false })) {
     throw new Error('invalid parameter: baseUrl must be a valid URL');
   }
 
