@@ -92,6 +92,12 @@
         "MINIMIZE": "true",
         "TARGET_ENV": "web"
       }
+    },
+    "webpack-dev-server": {
+      "command": "webpack-dev-server --config config/webpack/webpack.config.babel.js --port 9100 --content-base build/",
+      "env": {
+        "BUILD": "development"
+      }
     }
   }
 }
