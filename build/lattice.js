@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.32.0
+ * lattice - v0.32.1
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -28176,7 +28176,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.32.0";
+var version = "v0.32.1";
 
 exports.AnalysisApi = AnalysisApi;
 exports.AppApi = AppApi;
@@ -30079,7 +30079,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function newAxiosInstance(baseUrl) {
 
-  if (!(0, _isURL2.default)(baseUrl)) {
+  if (!(0, _isURL2.default)(baseUrl, { require_tld: false })) {
     throw new Error('invalid parameter: baseUrl must be a valid URL');
   }
 
