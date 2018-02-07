@@ -183,41 +183,47 @@ describe('Configuration', () => {
         }).toThrow();
       });
 
-      test('should correctly set baseUrl when a valid URL is passed in', () => {
+      test('should correctly set baseUrl to "http://localhost:8080"', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'localhost'
+        });
+        expect(Config.getConfig().get('baseUrl')).toEqual('http://localhost:8080');
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'http://localhost:8080'
+        });
+        expect(Config.getConfig().get('baseUrl')).toEqual('http://localhost:8080');
+      });
+
+      test('should correctly set baseUrl to "https://api.staging.openlattice.com"', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'staging'
+        });
+        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.staging.openlattice.com');
 
         Config.configure({
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'https://api.staging.openlattice.com'
         });
         expect(Config.getConfig().get('baseUrl')).toEqual('https://api.staging.openlattice.com');
+      });
+
+      test('should correctly set baseUrl to "https://api.openlattice.com"', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'production'
+        });
+        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.openlattice.com');
 
         Config.configure({
           authToken: MOCK_AUTH_TOKEN,
           baseUrl: 'https://api.openlattice.com'
-        });
-        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.openlattice.com');
-      });
-
-      test('should correctly set baseUrl to "http://localhost:8080"', () => {
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'localhost'
-        });
-        expect(Config.getConfig().get('baseUrl')).toEqual('http://localhost:8080');
-      });
-
-      test('should correctly set baseUrl to "https://api.staging.openlattice.com"', () => {
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'staging'
-        });
-        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.staging.openlattice.com');
-      });
-
-      test('should correctly set baseUrl to "https://api.openlattice.com"', () => {
-        Config.configure({
-          authToken: MOCK_AUTH_TOKEN,
-          baseUrl: 'production'
         });
         expect(Config.getConfig().get('baseUrl')).toEqual('https://api.openlattice.com');
       });
