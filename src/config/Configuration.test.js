@@ -183,6 +183,15 @@ describe('Configuration', () => {
         }).toThrow();
       });
 
+      test('should correctly set baseUrl when a valid URL is passed in', () => {
+
+        Config.configure({
+          authToken: MOCK_AUTH_TOKEN,
+          baseUrl: 'https://api.v2.openlattice.com'
+        });
+        expect(Config.getConfig().get('baseUrl')).toEqual('https://api.v2.openlattice.com');
+      });
+
       test('should correctly set baseUrl to "http://localhost:8080"', () => {
 
         Config.configure({
