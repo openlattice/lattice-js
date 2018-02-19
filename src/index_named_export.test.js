@@ -45,7 +45,7 @@ describe('lattice-js default export', () => {
 
   test('should export OrganizationsApi', () => {
     expect(Object.prototype.toString.call(Lattice.OrganizationsApi)).toEqual(OBJECT_TAG);
-    expect(Object.keys(Lattice.OrganizationsApi)).toHaveLength(29);
+    expect(Object.keys(Lattice.OrganizationsApi)).toHaveLength(23);
   });
 
   test('should export PermissionsApi', () => {

@@ -4,47 +4,17 @@
 
 import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
+import AccessCheck, { isValid as isValidAccessCheck } from '../models/AccessCheck';
+import Ace, { isValid as isValidAce } from '../models/Ace';
+import EntitySet, { isValid as isValidEntitySet } from '../models/EntitySet';
+import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
+import Principal, { isValid as isValidPrincipal } from '../models/Principal';
+import PropertyType, { isValid as isValidPropertyType } from '../models/PropertyType';
+import Request, { isValid as isValidRequest } from '../models/Request';
+import RequestStatus, { isValid as isValidRequestStatus } from '../models/RequestStatus';
+import { isNonEmptyArray, isNonEmptyString } from './LangUtils';
 
-import AccessCheck, {
-  isValid as isValidAccessCheck
-} from '../models/AccessCheck';
-
-import Ace, {
-  isValid as isValidAce
-} from '../models/Ace';
-
-import EntitySet, {
-  isValid as isValidEntitySet
-} from '../models/EntitySet';
-
-import EntityType, {
-  isValid as isValidEntityType
-} from '../models/EntityType';
-
-import Principal, {
-  isValid as isValidPrincipal
-} from '../models/Principal';
-
-import PropertyType, {
-  isValid as isValidPropertyType
-} from '../models/PropertyType';
-
-import Request, {
-  isValid as isValidRequest
-} from '../models/Request';
-
-import RequestStatus, {
-  isValid as isValidRequestStatus
-} from '../models/RequestStatus';
-
-import {
-  isNonEmptyArray,
-  isNonEmptyString
-} from './LangUtils';
-
-import type {
-  Permission
-} from '../constants/types/PermissionTypes';
+import type { Permission } from '../constants/types/PermissionTypes';
 
 /*
  * https://github.com/mixer/uuid-validate

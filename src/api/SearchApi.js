@@ -23,10 +23,9 @@ import isFinite from 'lodash/isFinite';
 import isString from 'lodash/isString';
 
 import Logger from '../utils/Logger';
-
-import {
-  SEARCH_API
-} from '../constants/ApiNames';
+import { SEARCH_API } from '../constants/ApiNames';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   ADVANCED_PATH,
@@ -40,20 +39,11 @@ import {
 } from '../constants/ApiPaths';
 
 import {
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
   isDefined,
   isNonEmptyArray,
   isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
-
-import {
-  isValidUuid,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
 
 const LOG = new Logger('SearchApi');
 

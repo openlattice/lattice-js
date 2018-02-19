@@ -4,9 +4,10 @@
 
 import Logger from '../utils/Logger';
 
-import {
-  APP_API
-} from '../constants/ApiNames';
+import { APP_API } from '../constants/ApiNames';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isNonEmptyString } from '../utils/LangUtils';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   BULK_PATH,
@@ -15,19 +16,6 @@ import {
   LOOKUP_PATH,
   TYPE_PATH
 } from '../constants/ApiPaths';
-
-import {
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidUuid,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
 
 const LOG = new Logger('AppApi');
 

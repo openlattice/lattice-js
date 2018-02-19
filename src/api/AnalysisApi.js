@@ -21,25 +21,11 @@
 
 import Logger from '../utils/Logger';
 
-import {
-  ANALYSIS_API
-} from '../constants/ApiNames';
-
-import {
-  TYPES_PATH
-} from '../constants/ApiPaths';
-
-import {
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidUuid
-} from '../utils/ValidationUtils';
+import { ANALYSIS_API } from '../constants/ApiNames';
+import { TYPES_PATH } from '../constants/ApiPaths';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isNonEmptyString } from '../utils/LangUtils';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 const LOG = new Logger('AnalysisApi');
 

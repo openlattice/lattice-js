@@ -4,15 +4,9 @@
 
 import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
+import { isDefined, isNonEmptyString } from '../utils/LangUtils';
 
-import {
-  isDefined,
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import type {
-  PrincipalType
-} from '../constants/types/PrincipalTypes';
+import type { PrincipalType } from '../constants/types/PrincipalTypes';
 
 const LOG = new Logger('Principal');
 

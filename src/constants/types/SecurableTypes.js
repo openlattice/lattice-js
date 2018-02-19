@@ -18,6 +18,4 @@ const SecurableTypes = {
 
 export type SecurableType = $Keys<typeof SecurableTypes>;
 
-export {
-  SecurableTypes as default
-};
+export { SecurableTypes as default };

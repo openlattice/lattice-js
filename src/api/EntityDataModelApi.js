@@ -18,7 +18,6 @@
  */
 
 import Immutable from 'immutable';
-
 import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
 
@@ -26,21 +25,12 @@ import EntitySet from '../models/EntitySet';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
-import EntityType, {
-  isValid as isValidEntityType
-} from '../models/EntityType';
+import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
+import PropertyType, { isValid as isValidPropertyType } from '../models/PropertyType';
+import Schema, { isValid as isValidSchema } from '../models/Schema';
 
-import PropertyType, {
-  isValid as isValidPropertyType
-} from '../models/PropertyType';
-
-import Schema, {
-  isValid as isValidSchema
-} from '../models/Schema';
-
-import {
-  EDM_API
-} from '../constants/ApiNames';
+import { EDM_API } from '../constants/ApiNames';
+import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 
 import {
   ASSOCIATION_TYPE_PATH,
@@ -58,11 +48,6 @@ import {
   SCHEMA_PATH,
   SRC_PATH
 } from '../constants/ApiPaths';
-
-import {
-  getApiBaseUrl,
-  getApiAxiosInstance
-} from '../utils/axios';
 
 import {
   isEmptyArray,

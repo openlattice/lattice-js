@@ -14,6 +14,4 @@ export type Analyzer =
   | typeof METAPHONE
   | typeof STANDARD;
 
-export {
-  AnalyzerTypes as default
-};
+export { AnalyzerTypes as default };

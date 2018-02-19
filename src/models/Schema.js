@@ -6,15 +6,8 @@ import EntityType from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
 import PropertyType from './PropertyType';
 import Logger from '../utils/Logger';
-
-import {
-  isDefined
-} from '../utils/LangUtils';
-
-import {
-  isValidEntityTypeArray,
-  isValidPropertyTypeArray
-} from '../utils/ValidationUtils';
+import { isDefined } from '../utils/LangUtils';
+import { isValidEntityTypeArray, isValidPropertyTypeArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Schema');
 

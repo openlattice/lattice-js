@@ -22,9 +22,7 @@ import {
   isValidUuidArray
 } from '../utils/ValidationUtils';
 
-import type {
-  SecurableType
-} from '../constants/types/SecurableTypes';
+import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('EntityType');
 

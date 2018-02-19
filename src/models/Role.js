@@ -4,21 +4,10 @@
 
 import has from 'lodash/has';
 
-import Principal, {
-  isValid as isValidPrincipal
-} from './Principal';
-
 import Logger from '../utils/Logger';
-
-import {
-  isDefined,
-  isEmptyString,
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidUuid
-} from '../utils/ValidationUtils';
+import Principal, { isValid as isValidPrincipal } from './Principal';
+import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Role');
 
@@ -39,7 +28,7 @@ export default class Role {
     organizationId :UUID,
     title :string,
     description :?string,
-    principal :principal
+    principal :Principal
   ) {
 
     // required properties
