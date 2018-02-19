@@ -23,7 +23,7 @@
     }
   },
   "rules": {
-    "arrow-body-style": ["error", "as-needed"],
+    "arrow-body-style": ["warn", "as-needed"],
     "brace-style": ["error", "stroustrup"],
     "comma-dangle": ["error", "never"],
     "function-paren-newline": ["error", "consistent"],

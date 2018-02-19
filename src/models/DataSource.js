@@ -3,21 +3,11 @@
  */
 
 import Immutable from 'immutable';
-
 import has from 'lodash/has';
 
 import Logger from '../utils/Logger';
-
-import {
-  isDefined,
-  isEmptyString,
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidUuid,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
+import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataSource');
 

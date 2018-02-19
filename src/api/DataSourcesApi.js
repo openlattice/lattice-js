@@ -21,21 +21,10 @@
 
 import Logger from '../utils/Logger';
 
-import DataSource, {
-  isValid as isValidDataSource
-} from '../models/DataSource';
-
-import {
-  DATA_SOURCES_API
-} from '../constants/ApiNames';
-
-import {
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
-  isValidUuid
-} from '../utils/ValidationUtils';
+import DataSource, { isValid as isValidDataSource } from '../models/DataSource';
+import { DATA_SOURCES_API } from '../constants/ApiNames';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataSourcesApi');
 

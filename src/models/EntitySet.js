@@ -3,10 +3,10 @@
  */
 
 import Immutable from 'immutable';
-
 import has from 'lodash/has';
 
 import Logger from '../utils/Logger';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 import {
   isDefined,
@@ -15,10 +15,6 @@ import {
   isNonEmptyString,
   isNonEmptyStringArray
 } from '../utils/LangUtils';
-
-import {
-  isValidUuid
-} from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntitySet');
 

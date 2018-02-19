@@ -18,10 +18,9 @@
  */
 
 import Logger from '../utils/Logger';
-
-import {
-  PRINCIPALS_API
-} from '../constants/ApiNames';
+import { PRINCIPALS_API } from '../constants/ApiNames';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isNonEmptyString } from '../utils/LangUtils';
 
 import {
   EMAIL_PATH,
@@ -29,14 +28,6 @@ import {
   SEARCH_PATH,
   USERS_PATH
 } from '../constants/ApiPaths';
-
-import {
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
-  isNonEmptyString
-} from '../utils/LangUtils';
 
 const LOG = new Logger('PrincipalsApi');
 

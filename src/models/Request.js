@@ -3,26 +3,14 @@
  */
 
 import Immutable from 'immutable';
-
 import has from 'lodash/has';
 import isString from 'lodash/isString';
 
 import Logger from '../utils/Logger';
+import { isDefined, isEmptyArray, isEmptyString } from '../utils/LangUtils';
+import { isValidPermissionArray, isValidUuidArray } from '../utils/ValidationUtils';
 
-import {
-  isDefined,
-  isEmptyArray,
-  isEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidPermissionArray,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
-
-import type {
-  Permission
-} from '../constants/types/PermissionTypes';
+import type { Permission } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('Request');
 

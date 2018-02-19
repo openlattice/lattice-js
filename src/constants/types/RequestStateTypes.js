@@ -11,6 +11,4 @@ const RequestStateTypes = {
 
 export type RequestState = $Keys<typeof RequestStateTypes>;
 
-export {
-  RequestStateTypes as default
-};
+export { RequestStateTypes as default };

@@ -13,6 +13,4 @@ const PermissionTypes = {
 
 export type Permission = $Keys<typeof PermissionTypes>;
 
-export {
-  PermissionTypes as default
-};
+export { PermissionTypes as default };

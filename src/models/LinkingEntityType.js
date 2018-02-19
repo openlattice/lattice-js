@@ -3,23 +3,13 @@
  */
 
 import Immutable from 'immutable';
-
 import has from 'lodash/has';
 import isBoolean from 'lodash/isBoolean';
 
 import Logger from '../utils/Logger';
-
-import EntityType, {
-  isValid as isValidEntityType
-} from '../models/EntityType';
-
-import {
-  isDefined
-} from '../utils/LangUtils';
-
-import {
-  isValidUuidArray
-} from '../utils/ValidationUtils';
+import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
+import { isDefined } from '../utils/LangUtils';
+import { isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('LinkingEntityType');
 

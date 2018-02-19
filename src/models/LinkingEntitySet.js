@@ -5,19 +5,9 @@
 import Immutable from 'immutable';
 
 import Logger from '../utils/Logger';
-
-import EntitySet, {
-  isValid as isValidEntitySet
-} from '../models/EntitySet';
-
-import {
-  isDefined,
-  isNonEmptyArray
-} from '../utils/LangUtils';
-
-import {
-  isValidUuid
-} from '../utils/ValidationUtils';
+import EntitySet, { isValid as isValidEntitySet } from '../models/EntitySet';
+import { isDefined, isNonEmptyArray } from '../utils/LangUtils';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 const LOG = new Logger('LinkingEntitySet');
 

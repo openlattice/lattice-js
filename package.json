@@ -66,7 +66,7 @@
     "clean": "rimraf build/*",
     "flow": "flow check",
     "lib": "better-npm-run webpack-dev-server",
-    "lint": "eslint --config .eslintrc src test",
+    "lint": "eslint --config .eslintrc src",
     "release:major": "npm version major -m \"releasing v%s\" && npm publish",
     "release:minor": "npm version minor -m \"releasing v%s\" && npm publish",
     "release:patch": "npm version patch -m \"releasing v%s\" && npm publish",
