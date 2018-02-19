@@ -19,16 +19,13 @@
 
 import Immutable from 'immutable';
 
-import PrincipalTypes from '../constants/types/PrincipalTypes';
-import Principal from '../models/Principal';
 import Logger from '../utils/Logger';
-
 import Organization, { isValid as isValidOrganization } from '../models/Organization';
 import Role, { isValid as isValidRole } from '../models/Role';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
-import { isValidUuid, isValidPrincipalArray } from '../utils/ValidationUtils';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 import {
   DESCRIPTION_PATH,
@@ -38,8 +35,6 @@ import {
   ROLES_PATH,
   TITLE_PATH
 } from '../constants/ApiPaths';
-
-import type { PrincipalType } from '../constants/types/PrincipalTypes';
 
 const LOG = new Logger('OrganizationsApi');
 
