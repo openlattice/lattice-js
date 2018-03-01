@@ -2,11 +2,13 @@
  * @flow
  */
 
+import Immutable from 'immutable';
+
 import EntityType from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
 import PropertyType from './PropertyType';
 import Logger from '../utils/Logger';
-import { isDefined } from '../utils/LangUtils';
+import { isDefined, isEmptyArray } from '../utils/LangUtils';
 import { isValidEntityTypeArray, isValidPropertyTypeArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Schema');
@@ -30,6 +32,18 @@ export default class Schema {
     this.fqn = fqn;
     this.entityTypes = entityTypes;
     this.propertyTypes = propertyTypes;
+  }
+
+  asImmutable() {
+
+    const plainObj = {};
+
+    // required properties
+    plainObj.fqn = this.fqn;
+    plainObj.entityTypes = this.entityTypes.map((entityType :EntityType) => entityType.asImmutable());
+    plainObj.propertyTypes = this.propertyTypes.map((propertyType :PropertyType) => propertyType.asImmutable());
+
+    return Immutable.fromJS(plainObj);
   }
 }
 
@@ -55,9 +69,15 @@ export class SchemaBuilder {
 
   setEntityTypes(entityTypes :EntityType[]) :SchemaBuilder {
 
+    if (!isDefined(entityTypes) || isEmptyArray(entityTypes)) {
+      return this;
+    }
+
     if (!isValidEntityTypeArray(entityTypes)) {
       throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
     }
+
+    // TODO: Immutable.Set() to dedupe
 
     this.entityTypes = entityTypes;
     return this;
@@ -65,9 +85,15 @@ export class SchemaBuilder {
 
   setPropertyTypes(propertyTypes :PropertyType[]) :SchemaBuilder {
 
+    if (!isDefined(propertyTypes) || isEmptyArray(propertyTypes)) {
+      return this;
+    }
+
     if (!isValidPropertyTypeArray(propertyTypes)) {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
     }
+
+    // TODO: Immutable.Set() to dedupe
 
     this.propertyTypes = propertyTypes;
     return this;
@@ -80,11 +106,11 @@ export class SchemaBuilder {
     }
 
     if (!this.entityTypes) {
-      throw new Error('missing property: entityTypes is a required property');
+      this.entityTypes = [];
     }
 
     if (!this.propertyTypes) {
-      throw new Error('missing property: propertyTypes is a required property');
+      this.propertyTypes = [];
     }
 
     return new Schema(
