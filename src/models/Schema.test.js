@@ -123,6 +123,16 @@ describe('Schema', () => {
 
       });
 
+      test('should set required properties that are allowed to be empty', () => {
+
+        const schema = builder
+          .setFullyQualifiedName(MOCK_SCHEMA_DM.fqn)
+          .build();
+
+        expect(schema.entityTypes).toEqual([]);
+        expect(schema.propertyTypes).toEqual([]);
+      });
+
       test('should return a valid instance', () => {
 
         const schema = builder
