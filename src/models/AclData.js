@@ -4,19 +4,10 @@
 
 import ActionTypes from '../constants/types/ActionTypes';
 import Logger from '../utils/Logger';
+import Acl, { isValid as isValidAcl } from './Acl';
+import { isDefined, isNonEmptyString } from '../utils/LangUtils';
 
-import Acl, {
-  isValid as isValidAcl
-} from './Acl';
-
-import {
-  isDefined,
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import type {
-  Action
-} from '../constants/types/ActionTypes';
+import type { Action } from '../constants/types/ActionTypes';
 
 const LOG = new Logger('AclData');
 

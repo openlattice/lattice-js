@@ -12,6 +12,4 @@ const ActionTypes = {
 
 export type Action = $Keys<typeof ActionTypes>;
 
-export {
-  ActionTypes as default
-};
+export { ActionTypes as default };

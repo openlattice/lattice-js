@@ -6,11 +6,7 @@ import Immutable from 'immutable';
 import isBoolean from 'lodash/isBoolean';
 
 import Logger from '../utils/Logger';
-
-import EntityType, {
-  isValid as isValidEntityType
-} from '../models/EntityType';
-
+import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
 import { isValidUuidArray } from '../utils/ValidationUtils';
 

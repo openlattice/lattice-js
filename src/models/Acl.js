@@ -6,16 +6,8 @@ import has from 'lodash/has';
 
 import Ace from './Ace';
 import Logger from '../utils/Logger';
-
-import {
-  isDefined,
-  isEmptyArray
-} from '../utils/LangUtils';
-
-import {
-  isValidAceArray,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
+import { isDefined, isEmptyArray } from '../utils/LangUtils';
+import { isValidAceArray, isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Acl');
 

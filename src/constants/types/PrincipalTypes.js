@@ -12,6 +12,4 @@ const PrincipalTypes = {
 
 export type PrincipalType = $Keys<typeof PrincipalTypes>;
 
-export {
-  PrincipalTypes as default
-};
+export { PrincipalTypes as default };

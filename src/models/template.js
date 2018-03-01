@@ -3,14 +3,8 @@
  */
 
 import Logger from '../utils/Logger';
-
-import {
-  isDefined
-} from '../utils/LangUtils';
-
-import {
-  isValidUuid
-} from '../utils/ValidationUtils';
+import { isDefined } from '../utils/LangUtils';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Model');
 

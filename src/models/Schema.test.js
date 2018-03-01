@@ -1,5 +1,5 @@
 import Schema, { SchemaBuilder, isValid } from './Schema';
-import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_SS, INVALID_PARAMS_EMPTY_ARRAY_ALLOWED } from '../utils/testing/Invalid';
 import { MOCK_SCHEMA_DM } from '../utils/testing/MockDataModels';
 
 describe('Schema', () => {
@@ -42,14 +42,8 @@ describe('Schema', () => {
 
     describe('setEntityTypes()', () => {
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setEntityTypes();
-        }).toThrow();
-      });
-
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setEntityTypes(invalidInput);
           }).toThrow();
@@ -60,11 +54,17 @@ describe('Schema', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setEntityTypes([...MOCK_SCHEMA_DM.entityTypes, invalidInput]);
           }).toThrow();
         });
+      });
+
+      test('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setEntityTypes();
+        }).not.toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -77,14 +77,8 @@ describe('Schema', () => {
 
     describe('setPropertyTypes()', () => {
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setPropertyTypes();
-        }).toThrow();
-      });
-
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPropertyTypes(invalidInput);
           }).toThrow();
@@ -95,11 +89,17 @@ describe('Schema', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setPropertyTypes([...MOCK_SCHEMA_DM.propertyTypes, invalidInput]);
           }).toThrow();
         });
+      });
+
+      test('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setPropertyTypes();
+        }).not.toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -121,20 +121,16 @@ describe('Schema', () => {
             .build();
         }).toThrow();
 
-        expect(() => {
-          (new SchemaBuilder())
-            .setFullyQualifiedName(MOCK_SCHEMA_DM.fqn)
-            .setPropertyTypes(MOCK_SCHEMA_DM.propertyTypes)
-            .build();
-        }).toThrow();
+      });
 
-        expect(() => {
-          (new SchemaBuilder())
-            .setFullyQualifiedName(MOCK_SCHEMA_DM.fqn)
-            .setEntityTypes(MOCK_SCHEMA_DM.entityTypes)
-            .build();
-        }).toThrow();
+      test('should set required properties that are allowed to be empty', () => {
 
+        const schema = builder
+          .setFullyQualifiedName(MOCK_SCHEMA_DM.fqn)
+          .build();
+
+        expect(schema.entityTypes).toEqual([]);
+        expect(schema.propertyTypes).toEqual([]);
       });
 
       test('should return a valid instance', () => {
@@ -209,14 +205,14 @@ describe('Schema', () => {
       });
 
       test('should return false when given an object literal with an invalid "entityTypes" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_SCHEMA_DM, { entityTypes: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_SCHEMA_DM, { entityTypes: [invalidInput] }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "propertyTypes" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_SCHEMA_DM, { propertyTypes: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_SCHEMA_DM, { propertyTypes: [invalidInput] }))).toEqual(false);
         });
@@ -233,7 +229,7 @@ describe('Schema', () => {
       });
 
       test('should return false when given an instance with an invalid "entityTypes" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Schema(
               MOCK_SCHEMA_DM.fqn, invalidInput, MOCK_SCHEMA_DM.propertyTypes
@@ -248,7 +244,7 @@ describe('Schema', () => {
       });
 
       test('should return false when given an instance with an invalid "propertyTypes" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new Schema(
               MOCK_SCHEMA_DM.fqn, MOCK_SCHEMA_DM.entityTypes, invalidInput

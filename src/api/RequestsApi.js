@@ -23,18 +23,12 @@ import Immutable from 'immutable';
 import has from 'lodash/has';
 
 import RequestStateTypes from '../constants/types/RequestStateTypes';
-import Logger from '../utils/Logger';
-
 import Request from '../models/Request';
 import RequestStatus from '../models/RequestStatus';
-
-import {
-  REQUESTS_API
-} from '../constants/ApiNames';
-
-import {
-  getApiAxiosInstance
-} from '../utils/axios';
+import Logger from '../utils/Logger';
+import { REQUESTS_API } from '../constants/ApiNames';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isValidRequestArray, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   isDefined,
@@ -43,14 +37,7 @@ import {
   isNonEmptyString
 } from '../utils/LangUtils';
 
-import {
-  isValidRequestArray,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
-
-import type {
-  RequestState
-} from '../constants/types/RequestStateTypes';
+import type { RequestState } from '../constants/types/RequestStateTypes';
 
 const LOG = new Logger('RequestsApi');
 

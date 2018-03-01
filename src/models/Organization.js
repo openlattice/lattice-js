@@ -3,14 +3,10 @@
  */
 
 import Immutable from 'immutable';
-
 import has from 'lodash/has';
 
-import Principal, {
-  isValid as isValidPrincipal
-} from './Principal';
-
 import Logger from '../utils/Logger';
+import Principal, { isValid as isValidPrincipal } from './Principal';
 
 import {
   isDefined,

@@ -3,18 +3,9 @@
  */
 
 import Logger from '../utils/Logger';
-
-import LinkingEntitySet, {
-  isValid as isValidLinkingEntitySet
-} from '../models/LinkingEntitySet';
-
-import {
-  isDefined
-} from '../utils/LangUtils';
-
-import {
-  isValidUuidArray
-} from '../utils/ValidationUtils';
+import LinkingEntitySet, { isValid as isValidLinkingEntitySet } from '../models/LinkingEntitySet';
+import { isDefined } from '../utils/LangUtils';
+import { isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('LinkingRequest');
 

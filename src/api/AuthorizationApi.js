@@ -19,37 +19,17 @@
 
 import isUndefined from 'lodash/isUndefined';
 
+import AccessCheck from '../models/AccessCheck';
 import PermissionTypes from '../constants/types/PermissionTypes';
 import SecurableTypes from '../constants/types/SecurableTypes';
 import Logger from '../utils/Logger';
+import { AUTHORIZATION_API } from '../constants/ApiNames';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isDefined, isEmptyArray, isNonEmptyString } from '../utils/LangUtils';
+import { isValidAccessCheckArray } from '../utils/ValidationUtils';
 
-import AccessCheck from '../models/AccessCheck';
-
-import {
-  AUTHORIZATION_API
-} from '../constants/ApiNames';
-
-import {
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
-  isDefined,
-  isEmptyArray,
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidAccessCheckArray
-} from '../utils/ValidationUtils';
-
-import type {
-  Permission
-} from '../constants/types/PermissionTypes';
-
-import type {
-  SecurableType
-} from '../constants/types/SecurableTypes';
+import type { Permission } from '../constants/types/PermissionTypes';
+import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('AuthorizationApi');
 

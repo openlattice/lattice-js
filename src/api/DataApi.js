@@ -18,14 +18,12 @@
  */
 
 import Immutable from 'immutable';
-
 import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
-
-import {
-  DATA_API
-} from '../constants/ApiNames';
+import { DATA_API } from '../constants/ApiNames';
+import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   COUNT_PATH,
@@ -35,21 +33,11 @@ import {
 } from '../constants/ApiPaths';
 
 import {
-  getApiBaseUrl,
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
   isEmptyArray,
   isEmptyString,
   isNonEmptyObject,
   isNonEmptyString
 } from '../utils/LangUtils';
-
-import {
-  isValidUuid,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataApi');
 

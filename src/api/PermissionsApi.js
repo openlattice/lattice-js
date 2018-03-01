@@ -18,22 +18,10 @@
  */
 
 import Logger from '../utils/Logger';
-
-import AclData, {
-  isValid as isValidAclData
-} from '../models/AclData';
-
-import {
-  PERMISSIONS_API
-} from '../constants/ApiNames';
-
-import {
-  getApiAxiosInstance
-} from '../utils/axios';
-
-import {
-  isValidUuidArray
-} from '../utils/ValidationUtils';
+import AclData, { isValid as isValidAclData } from '../models/AclData';
+import { PERMISSIONS_API } from '../constants/ApiNames';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('PermissionsApi');
 
@@ -48,11 +36,7 @@ const LOG = new Logger('PermissionsApi');
  * @returns {Promise<Acl>}
  *
  * @example
- * PermissionsApi.getAcl(
- *   [
- *     { type: 'EntityType', id: 'ec6865e6-e60e-424b-a071-6a9c1603d735' }
- *   ]
- * );
+ * PermissionsApi.getAcl(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
  */
 export function getAcl(aclKey :UUID[]) :Promise<*> {
 

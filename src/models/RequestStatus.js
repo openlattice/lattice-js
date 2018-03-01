@@ -4,23 +4,11 @@
 
 import Logger from '../utils/Logger';
 import RequestStateTypes from '../constants/types/RequestStateTypes';
+import Principal, { isValid as isValidPrincipal } from './Principal';
+import Request, { isValid as isValidRequest } from './Request';
+import { isDefined, isNonEmptyString } from '../utils/LangUtils';
 
-import Principal, {
-  isValid as isValidPrincipal
-} from './Principal';
-
-import Request, {
-  isValid as isValidRequest
-} from './Request';
-
-import {
-  isDefined,
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import type {
-  RequestState
-} from '../constants/types/RequestStateTypes';
+import type { RequestState } from '../constants/types/RequestStateTypes';
 
 const LOG = new Logger('RequestStatus');
 

@@ -6,20 +6,10 @@ import Immutable from 'immutable';
 import has from 'lodash/has';
 
 import Logger from '../utils/Logger';
+import { isDefined, isEmptyArray } from '../utils/LangUtils';
+import { isValidPermissionArray, isValidUuidArray } from '../utils/ValidationUtils';
 
-import {
-  isDefined,
-  isEmptyArray
-} from '../utils/LangUtils';
-
-import {
-  isValidPermissionArray,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
-
-import type {
-  Permission
-} from '../constants/types/PermissionTypes';
+import type { Permission } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AccessCheck');
 

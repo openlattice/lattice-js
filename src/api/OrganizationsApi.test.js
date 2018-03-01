@@ -1,7 +1,5 @@
 /* eslint-disable no-use-before-define */
 
-import Principal from '../models/Principal';
-import PrincipalTypes from '../constants/types/PrincipalTypes';
 import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
@@ -33,18 +31,6 @@ import {
 const MOCK_EMAIL_DOMAIN = 'openlattice.com';
 const MOCK_DESCRIPTION = genRandomString();
 const MOCK_TITLE = genRandomString();
-const MOCK_PRINCIPAL_ID = genRandomString();
-const MOCK_PRINCIPAL_TYPE = PrincipalTypes.USER;
-
-const MOCK_USER_PRINCIPAL = {
-  type: PrincipalTypes.USER,
-  id: genRandomString()
-};
-
-const MOCK_ROLE_PRINCIPAL = {
-  type: PrincipalTypes.ROLE,
-  id: genRandomString()
-};
 
 // const MOCK_MEMBER_ID = 'google-oauth2|850284592837234579086';
 const MOCK_MEMBER_ID = genRandomString();
@@ -74,12 +60,6 @@ describe('OrganizationsApi', () => {
   testSetAutoApprovedEmailDomains();
   testRemoveAutoApprovedEmailDomain();
   testRemoveAutoApprovedEmailDomains();
-  testGetAllPrincipals();
-  testAddPrincipal();
-  testAddPrincipals();
-  testSetPrincipals();
-  testRemovePrincipal();
-  testRemovePrincipals();
   testGetRole();
   testGetAllRoles();
   testCreateRole();
@@ -323,140 +303,6 @@ function testRemoveAutoApprovedEmailDomains() {
       url: `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
       method: 'delete',
       data: [MOCK_EMAIL_DOMAIN]
-    }];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
-  });
-}
-
-function testGetAllPrincipals() {
-
-  describe('getAllPrincipals()', () => {
-
-    const fnToTest = OrganizationsApi.getAllPrincipals;
-
-    const validParams = [MOCK_ORGANIZATION_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-  });
-}
-
-function testAddPrincipal() {
-
-  describe('addPrincipal()', () => {
-
-    const fnToTest = OrganizationsApi.addPrincipal;
-
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_PRINCIPAL_TYPE, MOCK_PRINCIPAL_ID];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MOCK_PRINCIPAL_TYPE}/${MOCK_PRINCIPAL_ID}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
-  });
-}
-
-function testAddPrincipals() {
-
-  describe('addPrincipals()', () => {
-
-    // TODO: add test for removing duplicates
-
-    const fnToTest = OrganizationsApi.addPrincipals;
-
-    const validParams = [MOCK_ORGANIZATION_DM.id, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
-      [
-        // TODO: figure out how to avoid having to do this...
-        new Principal(MOCK_USER_PRINCIPAL.type, MOCK_USER_PRINCIPAL.id),
-        new Principal(MOCK_ROLE_PRINCIPAL.type, MOCK_ROLE_PRINCIPAL.id)
-      ]
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-  });
-}
-
-function testSetPrincipals() {
-
-  describe('setPrincipals()', () => {
-
-    const fnToTest = OrganizationsApi.setPrincipals;
-
-    const validParams = [MOCK_ORGANIZATION_DM.id, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
-      [
-        // TODO: figure out how to avoid having to do this...
-        new Principal(MOCK_USER_PRINCIPAL.type, MOCK_USER_PRINCIPAL.id),
-        new Principal(MOCK_ROLE_PRINCIPAL.type, MOCK_ROLE_PRINCIPAL.id)
-      ]
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
-  });
-}
-
-function testRemovePrincipal() {
-
-  describe('removePrincipal()', () => {
-
-    const fnToTest = OrganizationsApi.removePrincipal;
-
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_PRINCIPAL_TYPE, MOCK_PRINCIPAL_ID];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MOCK_PRINCIPAL_TYPE}/${MOCK_PRINCIPAL_ID}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-  });
-}
-
-function testRemovePrincipals() {
-
-  describe('removePrincipals()', () => {
-
-    // TODO: add test for removing duplicates
-
-    const fnToTest = OrganizationsApi.removePrincipals;
-
-    const validParams = [MOCK_ORGANIZATION_DM.id, [MOCK_USER_PRINCIPAL, MOCK_ROLE_PRINCIPAL]];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [{
-      url: `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}`,
-      method: 'delete',
-      data: [
-        // TODO: figure out how to avoid having to do this...
-        new Principal(MOCK_USER_PRINCIPAL.type, MOCK_USER_PRINCIPAL.id),
-        new Principal(MOCK_ROLE_PRINCIPAL.type, MOCK_ROLE_PRINCIPAL.id)
-      ]
     }];
 
     testApiShouldReturnPromise(fnToTest, validParams);
