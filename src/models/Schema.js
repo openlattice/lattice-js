@@ -63,7 +63,7 @@ export class SchemaBuilder {
       throw new Error('invalid parameter: fqn must be a valid FQN');
     }
 
-    this.fqn = fqn;
+    this.fqn = new FullyQualifiedName(fqn);
     return this;
   }
 

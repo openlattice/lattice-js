@@ -38,6 +38,7 @@
  */
 
 import isObject from 'lodash/isObject';
+import isString from 'lodash/isString';
 import { isImmutable } from 'immutable';
 
 import Logger from '../utils/Logger';
@@ -50,21 +51,16 @@ type FqnObjectLiteral = {
   name :string
 };
 
-const EMPTY_FQN :FqnObjectLiteral = {
-  namespace: '',
-  name: ''
-};
-
 function parseFqnString(fullyQualifiedName :string) :FqnObjectLiteral {
 
   if (!isNonEmptyString(fullyQualifiedName)) {
-    return EMPTY_FQN;
+    return { namespace: '', name: '' };
   }
 
   const dotIndex = fullyQualifiedName.lastIndexOf('.');
 
   if (dotIndex === -1 || dotIndex === 0 || dotIndex === fullyQualifiedName.length - 1) {
-    return EMPTY_FQN;
+    return { namespace: '', name: '' };
   }
 
   const namespace :string = fullyQualifiedName.substring(0, dotIndex);
@@ -89,32 +85,34 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
    */
   if (args.length === 1) {
 
-    let fqnObj :FqnObjectLiteral = EMPTY_FQN;
+    let fqnObj :Object = {};
     if (isObject(args[0])) {
 
-      // if it's an object literal, it must have valid "namespace" and "name" properties
       const fqnArg :any = args[0];
-      if (isNonEmptyString(fqnArg.namespace) && isNonEmptyString(fqnArg.name)) {
-        fqnObj = fqnArg;
+
+      // if it's an immutable object or an object literal, it must have valid "namespace" and "name" properties
+      if (isImmutable(fqnArg)) {
+        if (isNonEmptyString(fqnArg.get('namespace'))) {
+          fqnObj.namespace = fqnArg.get('namespace');
+        }
+        if (isNonEmptyString(fqnArg.get('name'))) {
+          fqnObj.name = fqnArg.get('name');
+        }
       }
-      // since it's not a valid object literal, let's check if it a valid Immutable.Map
-      else if (isImmutable(fqnArg)) {
-        if (isNonEmptyString(fqnArg.get('namespace')) && isNonEmptyString(fqnArg.get('name'))) {
-          fqnObj = {
-            namespace: fqnArg.get('namespace'),
-            name: fqnArg.get('name')
-          };
+      else {
+        if (isNonEmptyString(fqnArg.namespace)) {
+          fqnObj.namespace = fqnArg.namespace;
+        }
+        if (isNonEmptyString(fqnArg.name)) {
+          fqnObj.name = fqnArg.name;
         }
       }
     }
-    else if (isNonEmptyString(args[0])) {
+    else if (isString(args[0])) {
 
       // if it's a string, it must be a properly formatted FullyQualifiedName string
       const fqnStr :string = args[0];
-      fqnObj = parseFqnString((fqnStr));
-    }
-    else {
-      return EMPTY_FQN;
+      fqnObj = parseFqnString(fqnStr);
     }
 
     /* eslint-disable prefer-destructuring */
@@ -127,20 +125,9 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
    *   - namespace
    *   - name
    */
-  else if (args.length === 2) {
+  else {
     namespace = (args[0] :string);
     name = (args[1] :string);
-  }
-  else {
-    return EMPTY_FQN;
-  }
-
-  if (!isNonEmptyString(namespace)) {
-    return EMPTY_FQN;
-  }
-
-  if (!isNonEmptyString(name)) {
-    return EMPTY_FQN;
   }
 
   return {
@@ -156,11 +143,19 @@ export default class FullyQualifiedName {
 
   static isValid = (...args :any[]) :boolean => {
 
+    if (args.length !== 1 && args.length !== 2) {
+      return false;
+    }
+
     const { namespace, name } = processArgs(...args);
     return isNonEmptyString(namespace) && isNonEmptyString(name);
   }
 
   static toString = (...args :any[]) :string => {
+
+    if (args.length !== 1 && args.length !== 2) {
+      return '';
+    }
 
     const { namespace, name } = processArgs(...args);
     return (isNonEmptyString(namespace) && isNonEmptyString(name))
@@ -204,7 +199,30 @@ export default class FullyQualifiedName {
     return this.name;
   }
 
+  /**
+   * @deprecated
+   */
   getFullyQualifiedName() :string {
+
+    return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
+      ? `${this.namespace}.${this.name}`
+      : '';
+  }
+
+  toObject() :FqnObjectLiteral {
+
+    return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
+      ? {
+        namespace: this.namespace,
+        name: this.name
+      }
+      : {
+        namespace: '',
+        name: ''
+      };
+  }
+
+  toString() :string {
 
     return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
       ? `${this.namespace}.${this.name}`
@@ -215,6 +233,6 @@ export default class FullyQualifiedName {
   valueOf() :string {
 
     // TODO: use Immutable.hash()
-    return this.getFullyQualifiedName();
+    return this.toString();
   }
 }
