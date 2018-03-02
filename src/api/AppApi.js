@@ -7,14 +7,15 @@ import Logger from '../utils/Logger';
 import { APP_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString } from '../utils/LangUtils';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidPermissionArray, isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   BULK_PATH,
   CONFIG_PATH,
   INSTALL_PATH,
   LOOKUP_PATH,
-  TYPE_PATH
+  TYPE_PATH,
+  UPDATE_PATH
 } from '../constants/ApiPaths';
 
 const LOG = new Logger('AppApi');
@@ -219,6 +220,502 @@ export function installApp(appId :UUID, organizationId :UUID, prefix :string) :P
 
   return getApiAxiosInstance(APP_API)
     .get(`/${INSTALL_PATH}/${appId}/${organizationId}/${prefix}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `POST /app`
+  *
+  * Creates a new app.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {Object} app
+  * @return {Promise} - a Promise that will resolve without a value after creating an app
+  *
+  * @example
+  * AppApi.createApp({
+  *   "name": "myapp",
+  *   "title": "My App",
+  *   "description": "This is my app.",
+  *   "appTypeIds": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+  *   "url": "https://openlattice.com/my_app"
+  * });
+  */
+export function createApp(app :Object) :Promise<*> {
+
+  return getApiAxiosInstance(APP_API)
+    .post('/', app)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `POST /app/type`
+  *
+  * Creates a new app type.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {Object} appType
+  * @return {Promise} - a Promise that will resolve without a value after creating an app type
+  *
+  * @example
+  * AppApi.createAppType({
+  *   "type": {
+  *     "namespace": "sample",
+  *     "name": "apptype"
+  *   },
+  *   "title": "Sample App Type",
+  *   "description": "This is a sample app type.",
+  *   "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735"
+  * });
+  */
+export function createAppType(appType :Object) :Promise<*> {
+
+  return getApiAxiosInstance(APP_API)
+    .post(`/${TYPE_PATH}`, appType)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `GET /app/type/{appId}`
+  *
+  * Loads app type with provided id
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appTypeId
+  * @return {Promise<Object>} - a Promise that will resolve with the details of an app type
+  *
+  * @example
+  * AppApi.getAppType("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+  */
+
+export function getAppType(appTypeId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appTypeId)) {
+    errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
+    LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${TYPE_PATH}/${appTypeId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `GET /app/type/lookup/{namespace}/{name}`
+  *
+  * Loads app type with provided namespace and name
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {string} namespace
+  * @param {string} name
+  * @return {Promise<Object>} - a Promise that will resolve with the details of an app type
+  *
+  * @example
+  * AppApi.getAppTypeByFqn("sample", "apptype");
+  */
+
+export function getAppTypeByFqn(namespace :string, name :string) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyString(namespace)) {
+    errorMsg = 'invalid parameter: namespace must be a non-empty string';
+    LOG.error(errorMsg, namespace);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, name);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${TYPE_PATH}/${LOOKUP_PATH}/${namespace}/${name}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `DELETE /app/{appId}`
+  *
+  * Deletes app with provided id
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @return {Promise<Object>} - a Promise that will resolve once the specified app has been deleted.
+  *
+  * @example
+  * AppApi.deleteApp("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+  */
+
+export function deleteApp(appId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .delete(`/${appId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `DELETE /app/type/{appTypeId}`
+  *
+  * Deletes app type with provided id
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @return {Promise<Object>} - a Promise that will resolve once the specified app type has been deleted.
+  *
+  * @example
+  * AppApi.deleteAppType("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+  */
+
+export function deleteAppType(appTypeId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appTypeId)) {
+    errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
+    LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .delete(`/${TYPE_PATH}/${appTypeId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `GET /app/update/{appId}/{appTypeId}`
+  *
+  * Adds an app type to an app.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @param {UUID} appTypeId
+  * @return {Promise<Object>} - a Promise that will resolve once an app type has been added to an app.
+  *
+  * @example
+  * AppApi.addAppTypeToApp(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+  * );
+  */
+
+export function addAppTypeToApp(appId :UUID, appTypeId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(appTypeId)) {
+    errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
+    LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${UPDATE_PATH}/${appId}/${appTypeId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `DELETE /app/update/{appId}/{appTypeId}`
+  *
+  * Removes an app type from an app.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @param {UUID} appTypeId
+  * @return {Promise<Object>} - a Promise that will resolve once an app type has been removed from an app.
+  *
+  * @example
+  * AppApi.removeAppTypeFromApp(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+  * );
+  */
+
+export function removeAppTypeFromApp(appId :UUID, appTypeId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(appTypeId)) {
+    errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
+    LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .delete(`/${UPDATE_PATH}/${appId}/${appTypeId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `GET /app/update/{organizationId}/{appId}/{appTypeId}/${entitySetId}`
+  *
+  * Updates an entity set used for a particular organization's app config.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} organizationId
+  * @param {UUID} appId
+  * @param {UUID} appTypeId
+  * @param {UUID} entitySetId
+  * @return {Promise<Object>} - a Promise that will resolve the app config has been
+  *   updated to incude the specified entity set.
+  *
+  * @example
+  * AppApi.updateAppEntitySetConfig(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+  *   "dc6465e6-285e-424b-c927-039c1603d739",
+  *   "c88be4b7-a623-d4d1-0bd5-da788719c16"
+  * );
+  */
+
+export function updateAppEntitySetConfig(
+  organizationId :UUID,
+  appId :UUID,
+  appTypeId :UUID,
+  entitySetId :UUID
+) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(appTypeId)) {
+    errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
+    LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .get(`/${UPDATE_PATH}/${organizationId}/${appId}/${appTypeId}/${entitySetId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `POST /app/update/{organizationId}/{appId}/{appTypeId}`
+  *
+  * Updates the required permissions for a particular organization's app config.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} organizationId
+  * @param {UUID} appId
+  * @param {UUID} appTypeId
+  * @param {UUID} entitySetId
+  * @return {Promise<Object>} - a Promise that will resolve the app config has been
+  *   updated to reflect the specified permissions.
+  *
+  * @example
+  * AppApi.updateAppEntitySetPermissionsConfig(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+  *   "dc6465e6-285e-424b-c927-039c1603d739",
+  *   ["READ", "WRITE"]
+  * );
+  */
+
+export function updateAppEntitySetPermissionsConfig(
+  organizationId :UUID,
+  appId :UUID,
+  appTypeId :UUID,
+  permissions :Permission[]
+) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(appTypeId)) {
+    errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
+    LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidPermissionArray(permissions)) {
+    errorMsg = 'invalid parameter: permissions must be a valid UUID';
+    LOG.error(errorMsg, permissions);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .post(`/${UPDATE_PATH}/${organizationId}/${appId}/${appTypeId}`, permissions)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `POST /app/update/{appId}`
+  *
+  * Updates the specified app's metadata.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @param {Object} metadataUpdate
+  * @return {Promise<Object>} - a Promise that will resolve the app metadata has been updated.
+  *
+  * @example
+  * AppApi.updateAppMetadata(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   {
+  *     "name": "newname",
+  *     "title": "New App Title"
+  *   }
+  * );
+  */
+
+export function updateAppMetadata(appId :UUID, metadataUpdate :Object) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appId)) {
+    errorMsg = 'invalid parameter: appId must be a valid UUID';
+    LOG.error(errorMsg, appId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .post(`/${UPDATE_PATH}/${appId}`, metadataUpdate)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+  * `POST /app/type/update/{appId}`
+  *
+  * Updates the specified app type's metadata.
+  *
+  * @static
+  * @memberof lattice.AppApi
+  * @param {UUID} appId
+  * @param {Object} metadataUpdate
+  * @return {Promise<Object>} - a Promise that will resolve the app type metadata has been updated.
+  *
+  * @example
+  * AppApi.updateAppTypeMetadata(
+  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+  *   {
+  *     "description": "this is a new description."
+  *   }
+  * );
+  */
+
+export function updateAppTypeMetadata(appTypeId :UUID, metadataUpdate :Object) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(appTypeId)) {
+    errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
+    LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(APP_API)
+    .post(`/${TYPE_PATH}/${UPDATE_PATH}/${appTypeId}`, metadataUpdate)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

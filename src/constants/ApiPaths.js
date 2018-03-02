@@ -28,6 +28,7 @@ export const PROPERTY_TYPE_PATH :string = 'property/type';
 export const ROLES_PATH :string = 'roles';
 export const SET_PATH :string = 'set';
 export const TYPE_PATH :string = 'type';
+export const UPDATE_PATH :string = 'update';
 
 // AnalysisApi specific paths
 export const TYPES_PATH :string = 'types';
@@ -41,7 +42,6 @@ export const INSTALL_PATH :string = 'install';
 export const COUNT_PATH :string = 'count';
 export const ENTITY_DATA_PATH :string = 'entitydata';
 export const TICKET_PATH :string = 'ticket';
-export const UPDATE_PATH :string = 'update';
 
 // EntityDataModelApi specific paths
 export const ASSOCIATION_TYPE_PATH :string = 'association/type';

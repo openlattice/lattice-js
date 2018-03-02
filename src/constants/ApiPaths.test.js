@@ -26,6 +26,7 @@ const PROPERTY_TYPE_PATH = 'property/type';
 const ROLES_PATH = 'roles';
 const SET_PATH = 'set';
 const TYPE_PATH = 'type';
+const UPDATE_PATH = 'update';
 
 // AnalysisApi specific paths
 const TYPES_PATH = 'types';
@@ -39,7 +40,6 @@ const LOOKUP_PATH = 'lookup';
 const COUNT_PATH = 'count';
 const ENTITY_DATA_PATH = 'entitydata';
 const TICKET_PATH = 'ticket';
-const UPDATE_PATH = 'update';
 
 // EntityDataModelApi specific paths
 const ASSOCIATION_TYPE_PATH = 'association/type';
@@ -195,6 +195,11 @@ describe('ApiPaths', () => {
       expect(ApiPaths.TYPE_PATH).toEqual(TYPE_PATH);
     });
 
+    it(`should expose "${UPDATE_PATH}"`, () => {
+      expect(ApiPaths.UPDATE_PATH).toBeDefined();
+      expect(ApiPaths.UPDATE_PATH).toEqual(UPDATE_PATH);
+    });
+
   });
 
   describe('AnalysisApi specific paths', () => {
@@ -240,11 +245,6 @@ describe('ApiPaths', () => {
     test(`should export "${TICKET_PATH}"`, () => {
       expect(ApiPaths.TICKET_PATH).toBeDefined();
       expect(ApiPaths.TICKET_PATH).toEqual(TICKET_PATH);
-    });
-
-    test(`should export "${UPDATE_PATH}"`, () => {
-      expect(ApiPaths.UPDATE_PATH).toBeDefined();
-      expect(ApiPaths.UPDATE_PATH).toEqual(UPDATE_PATH);
     });
 
   });
