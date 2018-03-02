@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.33.0
+ * lattice - v0.33.1
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -11523,6 +11523,10 @@ var _isObject = __webpack_require__(29);
 
 var _isObject2 = _interopRequireDefault(_isObject);
 
+var _isString = __webpack_require__(18);
+
+var _isString2 = _interopRequireDefault(_isString);
+
 var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(1);
@@ -11537,21 +11541,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var LOG = new _Logger2.default('FullyQualifiedName');
 
-var EMPTY_FQN = {
-  namespace: '',
-  name: ''
-};
-
 function parseFqnString(fullyQualifiedName) {
 
   if (!(0, _LangUtils.isNonEmptyString)(fullyQualifiedName)) {
-    return EMPTY_FQN;
+    return { namespace: '', name: '' };
   }
 
   var dotIndex = fullyQualifiedName.lastIndexOf('.');
 
   if (dotIndex === -1 || dotIndex === 0 || dotIndex === fullyQualifiedName.length - 1) {
-    return EMPTY_FQN;
+    return { namespace: '', name: '' };
   }
 
   var namespace = fullyQualifiedName.substring(0, dotIndex);
@@ -11576,30 +11575,32 @@ function processArgs() {
    */
   if (arguments.length === 1) {
 
-    var fqnObj = EMPTY_FQN;
+    var fqnObj = {};
     if ((0, _isObject2.default)(arguments.length <= 0 ? undefined : arguments[0])) {
 
-      // if it's an object literal, it must have valid "namespace" and "name" properties
       var fqnArg = arguments.length <= 0 ? undefined : arguments[0];
-      if ((0, _LangUtils.isNonEmptyString)(fqnArg.namespace) && (0, _LangUtils.isNonEmptyString)(fqnArg.name)) {
-        fqnObj = fqnArg;
-      }
-      // since it's not a valid object literal, let's check if it a valid Immutable.Map
-      else if ((0, _immutable.isImmutable)(fqnArg)) {
-          if ((0, _LangUtils.isNonEmptyString)(fqnArg.get('namespace')) && (0, _LangUtils.isNonEmptyString)(fqnArg.get('name'))) {
-            fqnObj = {
-              namespace: fqnArg.get('namespace'),
-              name: fqnArg.get('name')
-            };
-          }
+
+      // if it's an immutable object or an object literal, it must have valid "namespace" and "name" properties
+      if ((0, _immutable.isImmutable)(fqnArg)) {
+        if ((0, _LangUtils.isNonEmptyString)(fqnArg.get('namespace'))) {
+          fqnObj.namespace = fqnArg.get('namespace');
         }
-    } else if ((0, _LangUtils.isNonEmptyString)(arguments.length <= 0 ? undefined : arguments[0])) {
+        if ((0, _LangUtils.isNonEmptyString)(fqnArg.get('name'))) {
+          fqnObj.name = fqnArg.get('name');
+        }
+      } else {
+        if ((0, _LangUtils.isNonEmptyString)(fqnArg.namespace)) {
+          fqnObj.namespace = fqnArg.namespace;
+        }
+        if ((0, _LangUtils.isNonEmptyString)(fqnArg.name)) {
+          fqnObj.name = fqnArg.name;
+        }
+      }
+    } else if ((0, _isString2.default)(arguments.length <= 0 ? undefined : arguments[0])) {
 
       // if it's a string, it must be a properly formatted FullyQualifiedName string
       var fqnStr = arguments.length <= 0 ? undefined : arguments[0];
       fqnObj = parseFqnString(fqnStr);
-    } else {
-      return EMPTY_FQN;
     }
 
     /* eslint-disable prefer-destructuring */
@@ -11612,25 +11613,20 @@ function processArgs() {
    *   - namespace
    *   - name
    */
-  else if (arguments.length === 2) {
+  else {
       namespace = arguments.length <= 0 ? undefined : arguments[0];
       name = arguments.length <= 1 ? undefined : arguments[1];
-    } else {
-      return EMPTY_FQN;
     }
-
-  if (!(0, _LangUtils.isNonEmptyString)(namespace)) {
-    return EMPTY_FQN;
-  }
-
-  if (!(0, _LangUtils.isNonEmptyString)(name)) {
-    return EMPTY_FQN;
-  }
 
   return {
     namespace: namespace,
     name: name
   };
+}
+
+function toFqnString(namespace, name) {
+
+  return (0, _LangUtils.isNonEmptyString)(namespace) && (0, _LangUtils.isNonEmptyString)(name) ? namespace + '.' + name : '';
 }
 
 var FullyQualifiedName = function () {
@@ -11675,11 +11671,34 @@ var FullyQualifiedName = function () {
 
       return this.name;
     }
+
+    /**
+     * @deprecated
+     */
+
   }, {
     key: 'getFullyQualifiedName',
     value: function getFullyQualifiedName() {
 
-      return (0, _LangUtils.isNonEmptyString)(this.namespace) && (0, _LangUtils.isNonEmptyString)(this.name) ? this.namespace + '.' + this.name : '';
+      return this.toString();
+    }
+  }, {
+    key: 'toObject',
+    value: function toObject() {
+
+      return (0, _LangUtils.isNonEmptyString)(this.namespace) && (0, _LangUtils.isNonEmptyString)(this.name) ? {
+        namespace: this.namespace,
+        name: this.name
+      } : {
+        namespace: '',
+        name: ''
+      };
+    }
+  }, {
+    key: 'toString',
+    value: function toString() {
+
+      return toFqnString(this.namespace, this.name);
     }
 
     // for Immutable.js equality
@@ -11689,7 +11708,7 @@ var FullyQualifiedName = function () {
     value: function valueOf() {
 
       // TODO: use Immutable.hash()
-      return this.getFullyQualifiedName();
+      return this.toString();
     }
   }]);
 
@@ -11697,6 +11716,11 @@ var FullyQualifiedName = function () {
 }();
 
 FullyQualifiedName.isValid = function () {
+
+  if (arguments.length !== 1 && arguments.length !== 2) {
+    return false;
+  }
+
   var _processArgs2 = processArgs.apply(undefined, arguments),
       namespace = _processArgs2.namespace,
       name = _processArgs2.name;
@@ -11705,11 +11729,16 @@ FullyQualifiedName.isValid = function () {
 };
 
 FullyQualifiedName.toString = function () {
+
+  if (arguments.length !== 1 && arguments.length !== 2) {
+    return '';
+  }
+
   var _processArgs3 = processArgs.apply(undefined, arguments),
       namespace = _processArgs3.namespace,
       name = _processArgs3.name;
 
-  return (0, _LangUtils.isNonEmptyString)(namespace) && (0, _LangUtils.isNonEmptyString)(name) ? namespace + '.' + name : '';
+  return toFqnString(namespace, name);
 };
 
 exports.default = FullyQualifiedName;
@@ -26845,7 +26874,7 @@ var SchemaBuilder = exports.SchemaBuilder = function () {
         throw new Error('invalid parameter: fqn must be a valid FQN');
       }
 
-      this.fqn = fqn;
+      this.fqn = new _FullyQualifiedName2.default(fqn);
       return this;
     }
   }, {
@@ -28219,7 +28248,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.33.0";
+var version = "v0.33.1";
 
 exports.AnalysisApi = AnalysisApi;
 exports.AppApi = AppApi;
