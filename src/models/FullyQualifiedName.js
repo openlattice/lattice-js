@@ -136,6 +136,13 @@ function processArgs(...args :any[]) :FqnObjectLiteral {
   };
 }
 
+function toFqnString(namespace :any, name :any) :string {
+
+  return (isNonEmptyString(namespace) && isNonEmptyString(name))
+    ? `${namespace}.${name}`
+    : '';
+}
+
 export default class FullyQualifiedName {
 
   namespace :string;
@@ -158,9 +165,7 @@ export default class FullyQualifiedName {
     }
 
     const { namespace, name } = processArgs(...args);
-    return (isNonEmptyString(namespace) && isNonEmptyString(name))
-      ? `${namespace}.${name}`
-      : '';
+    return toFqnString(namespace, name);
   }
 
   constructor(...args :any[]) {
@@ -204,9 +209,7 @@ export default class FullyQualifiedName {
    */
   getFullyQualifiedName() :string {
 
-    return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
-      ? `${this.namespace}.${this.name}`
-      : '';
+    return this.toString();
   }
 
   toObject() :FqnObjectLiteral {
@@ -224,9 +227,7 @@ export default class FullyQualifiedName {
 
   toString() :string {
 
-    return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
-      ? `${this.namespace}.${this.name}`
-      : '';
+    return toFqnString(this.namespace, this.name);
   }
 
   // for Immutable.js equality
