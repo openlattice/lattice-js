@@ -154,41 +154,6 @@ describe('App', () => {
         }).toThrow();
       });
 
-      // test('should not throw when an optional property has not been set', () => {
-      //
-      //   expect(() => {
-      //     (new AppBuilder())
-      //       .setName(MOCK_APP_DM.name)
-      //       .setTitle(MOCK_APP_DM.title)
-      //       .setDescription(MOCK_APP_DM.description)
-      //       .setAppTypeIds(MOCK_APP_DM.appTypeIds)
-      //       .setUrl(MOCK_APP_DM.url)
-      //       .build();
-      //   }).not.toThrow();
-
-      // expect(() => {
-      //   (new AppBuilder())
-      //     .setName(MOCK_APP_DM.name)
-      //       .setTitle(MOCK_APP_DM.title)
-      //       .setDescription(MOCK_APP_DM.description)
-      //       .setAppTypeIds(MOCK_APP_DM.appTypeIds)
-      //       .setUrl(MOCK_APP_DM.url)
-      //     .build();
-      // }).not.toThrow();
-      // });
-
-      // test('should set required properties that are allowed to be empty', () => {
-      //
-      //   const app = builder
-      //     .setName(MOCK_APP_DM.name)
-      //     .setAppTypeIds(MOCK_APP_DM.appTypeIds)
-      //     .build();
-      //
-      //   expect(app.url).toEqual('');
-      //   expect(app.title).toEqual('');
-      //   expect(app.description).toEqual('');
-      // });
-      //
       test('should return a valid instance', () => {
 
         const app = builder
