@@ -42,7 +42,7 @@ export const MOCK_APP_DM :Object = {
   title: 'title',
   description: 'description',
   appTypeIds: ['ec6865e6-e60e-424b-a071-6a9c1603d735'],
-  url: ''
+  url: 'test.com'
 };
 
 export const MOCK_APP_TYPE_DM :Object = {

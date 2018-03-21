@@ -75,7 +75,7 @@
     "postversion": "git push && git push --tags",
     "test": "jest --config config/jest/jest.config.js",
     "test:travis": "jest --maxWorkers=4 --config config/jest/jest.config.js",
-    "test:watch": "jest --config config/jest/jest.config.js --watch"
+    "test:watch": "jest --config config/jest/jest.config.js --watch --coverage=false"
   },
   "betterScripts": {
     "build": {

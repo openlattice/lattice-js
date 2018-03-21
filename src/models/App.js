@@ -7,7 +7,6 @@ import Logger from '../utils/Logger';
 
 import {
   isDefined,
-  isEmptyArray,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -59,10 +58,6 @@ export class AppBuilder {
   url :string;
 
   setAppTypeIds(appTypeIds :UUID[]) :AppBuilder {
-    if (!isDefined(appTypeIds) || isEmptyArray(appTypeIds)) {
-      return this;
-    }
-
     if (!isValidUuidArray(appTypeIds)) {
       throw new Error('invalid parameter: appTypeIds must be a valid UUID array');
     }
