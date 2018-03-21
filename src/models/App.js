@@ -43,10 +43,6 @@ export default class App {
     this.title = title;
     this.url = url;
 
-    // optional properties
-    // if (isDefined(description)) {
-    //   this.description = description;
-    // }
   }
 }
 
@@ -71,8 +67,7 @@ export class AppBuilder {
       throw new Error('invalid parameter: appTypeIds must be a valid UUID array');
     }
 
-    // What do I put here????? (set :Set<Principal>)
-    this.appTypeIds = Immutable.Set().withMutations((set :Set<Principal>) => {
+    this.appTypeIds = Immutable.Set().withMutations((set :Set<UUID>) => {
       appTypeIds.forEach((appTypeId :UUID) => {
         set.add(appTypeId);
       });
@@ -172,11 +167,6 @@ export function isValid(app :any) :boolean {
       .setTitle(app.title)
       .setUrl(app.url)
       .build();
-
-    // optional properties
-    // if (has(app, 'description')) {
-    //   appBuilder.setDescription(app.description);
-    // }
 
     appBuilder.build();
 
