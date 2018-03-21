@@ -11,6 +11,7 @@ import {
 } from '../utils/LangUtils';
 
 import { isValidUuid } from '../utils/ValidationUtils';
+import FullyQualifiedName from './FullyQualifiedName';
 
 const LOG = new Logger('AppType');
 
@@ -22,29 +23,22 @@ export default class AppType {
 
   description :string;
   entityTypeId :UUID;
-  name :string;
-  namespace :string;
   title :string;
+  type :FullyQualifiedName;
 
   constructor(
     description :string,
     entityTypeId :UUID,
-    name :string,
-    namespace :string,
     title :string,
+    type :FullyQualifiedName,
   ) {
 
     // required properties
     this.description = description;
     this.entityTypeId = entityTypeId;
-    this.name = name;
-    this.namespace = namespace;
     this.title = title;
+    this.type = type;
 
-    // optional properties
-    // if (isDefined(description)) {
-    //   this.description = description;
-    // }
   }
 }
 
@@ -56,9 +50,8 @@ export class AppTypeBuilder {
 
   description :string;
   entityTypeId :UUID;
-  name :string;
-  namespace :string;
   title :string;
+  type :FullyQualifiedName;
 
   setDescription(description :string) :AppTypeBuilder {
 
@@ -80,26 +73,6 @@ export class AppTypeBuilder {
     return this;
   }
 
-  setName(name :string) :AppTypeBuilder {
-
-    if (!isNonEmptyString(name)) {
-      throw new Error('invalid parameter: name must be a non-empty string');
-    }
-
-    this.name = name;
-    return this;
-  }
-
-  setNamespace(namespace :string) :AppTypeBuilder {
-
-    if (!isNonEmptyString(namespace)) {
-      throw new Error('invalid parameter: namespace must be a non-empty string');
-    }
-
-    this.namespace = namespace;
-    return this;
-  }
-
   setTitle(title :string) :AppTypeBuilder {
 
     if (!isNonEmptyString(title)) {
@@ -107,6 +80,16 @@ export class AppTypeBuilder {
     }
 
     this.title = title;
+    return this;
+  }
+
+  setType(appTypeFqn :FullyQualifiedName) :AppTypeBuilder {
+
+    if (!FullyQualifiedName.isValid(appTypeFqn)) {
+      throw new Error('invalid parameter: appTypeFqn must be a valid FQN');
+    }
+
+    this.type = appTypeFqn;
     return this;
   }
 
@@ -120,23 +103,19 @@ export class AppTypeBuilder {
       throw new Error('missing property: entityTypeId is a required property');
     }
 
-    if (!this.name) {
-      throw new Error('missing property: name is a required property');
-    }
-
-    if (!this.namespace) {
-      throw new Error('missing property: namespace is a required property');
-    }
-
     if (!this.title) {
       throw new Error('missing property: title is a required property');
+    }
+
+    if (!this.type) {
+      throw new Error('missing property: type is a required property');
     }
 
     return new AppType(
       this.description,
       this.entityTypeId,
       this.title,
-      // 'type': {this.namespace, this.name} USE FQN Builder?
+      this.type
     );
   }
 }
@@ -157,15 +136,9 @@ export function isValid(appType :any) :boolean {
     appTypeBuilder
       .setEntityTypeId(appType.entityTypeId)
       .setDescription(appType.description)
-      .setName(appType.name)
-      .setNamespace(appType.namespace)
       .setTitle(appType.title)
+      .setType(appType.type)
       .build();
-
-    // optional properties
-    // if (has(appType, 'description')) {
-    //   appTypeBuilder.setDescription(appType.description);
-    // }
 
     appTypeBuilder.build();
 
