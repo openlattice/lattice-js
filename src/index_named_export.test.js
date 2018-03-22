@@ -75,7 +75,7 @@ describe('lattice-js default export', () => {
 
   test('should export Models', () => {
     expect(Object.prototype.toString.call(Lattice.Models)).toEqual(OBJECT_TAG);
-    expect(Object.keys(Lattice.Models)).toHaveLength(37);
+    expect(Object.keys(Lattice.Models)).toHaveLength(41);
   });
 
   test('should export Types', () => {

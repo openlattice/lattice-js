@@ -54,18 +54,7 @@ const DEV_PLUGINS = [
   new Webpack.NamedModulesPlugin()
 ];
 
-const PROD_PLUGINS = [
-  new Webpack.optimize.OccurrenceOrderPlugin(),
-  new Webpack.LoaderOptionsPlugin({
-    minimize: ifMin(true, false),
-    debug: false
-  }),
-  ifMin(
-    new Webpack.optimize.UglifyJsPlugin({
-      comments: false
-    })
-  )
-];
+const PROD_PLUGINS = [];
 
 /*
  * webpack config
@@ -74,6 +63,15 @@ const PROD_PLUGINS = [
 export default {
   bail: true,
   entry: LIB_PATHS.ENTRY,
+  mode: ifDev('development', 'production'),
+  module: {
+    rules: [
+      BABEL_LOADER
+    ]
+  },
+  optimization: {
+    minimize: ifMin(true, false)
+  },
   output: {
     library: LIB_CONFIG.LIB_NAMESPACE,
     libraryTarget: 'umd',
@@ -83,11 +81,6 @@ export default {
       `${LIB_CONFIG.LIB_FILE_NAME}.min.js`,
       `${LIB_CONFIG.LIB_FILE_NAME}.js`
     )
-  },
-  module: {
-    rules: [
-      BABEL_LOADER
-    ]
   },
   plugins: compact([
     ...ifDev(DEV_PLUGINS, []),
