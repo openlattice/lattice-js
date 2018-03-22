@@ -4,6 +4,7 @@
 
 import Logger from '../utils/Logger';
 
+import FullyQualifiedName from '../models/FullyQualifiedName';
 import { APP_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString } from '../utils/LangUtils';
