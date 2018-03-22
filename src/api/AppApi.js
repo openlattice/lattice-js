@@ -587,7 +587,6 @@ export function updateAppEntitySetConfig(
   * @param {UUID} organizationId
   * @param {UUID} appId
   * @param {UUID} appTypeId
-  * @param {UUID} entitySetId
   * @return {Promise<Object>} - a Promise that will resolve the app config has been
   *   updated to reflect the specified permissions.
   *
