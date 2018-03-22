@@ -8,9 +8,9 @@ import AccessCheck, { AccessCheckBuilder } from './AccessCheck';
 import Ace, { AceBuilder } from './Ace';
 import Acl, { AclBuilder } from './Acl';
 import AclData, { AclDataBuilder } from './AclData';
-import AssociationType, { AssociationTypeBuilder } from './AssociationType';
 import App, { AppBuilder } from './App';
 import AppType, { AppTypeBuilder } from './AppType';
+import AssociationType, { AssociationTypeBuilder } from './AssociationType';
 import DataSource, { DataSourceBuilder } from './DataSource';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
@@ -34,12 +34,12 @@ export {
   AclBuilder,
   AclData,
   AclDataBuilder,
-  AssociationType,
-  AssociationTypeBuilder,
   App,
   AppBuilder,
   AppType,
   AppTypeBuilder,
+  AssociationType,
+  AssociationTypeBuilder,
   DataSource,
   DataSourceBuilder,
   EntitySet,

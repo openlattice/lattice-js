@@ -87,17 +87,17 @@ export class AppTypeBuilder {
     return this;
   }
 
-  setId(id :?UUID) :AppTypeBuilder {
+  setId(appTypeId :?UUID) :AppTypeBuilder {
 
-    if (!isDefined(id) || isEmptyString(id)) {
+    if (!isDefined(appTypeId) || isEmptyString(appTypeId)) {
       return this;
     }
 
-    if (!isValidUuid(id)) {
-      throw new Error('invalid parameter: propertyTypeId must be a valid UUID');
+    if (!isValidUuid(appTypeId)) {
+      throw new Error('invalid parameter: appTypeId must be a valid UUID');
     }
 
-    this.id = id;
+    this.id = appTypeId;
     return this;
   }
 
