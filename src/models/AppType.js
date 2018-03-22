@@ -1,12 +1,12 @@
 /*
  * @flow
  */
-
-import 'immutable';
+import has from 'lodash/has';
 import Logger from '../utils/Logger';
 
 import {
   isDefined,
+  isEmptyString,
   isNonEmptyString
 } from '../utils/LangUtils';
 
@@ -21,23 +21,36 @@ const LOG = new Logger('AppType');
  */
 export default class AppType {
 
-  description :string;
+  description :?string;
   entityTypeId :UUID;
-  title :string;
+  id :?UUID;
+  title :?string;
   type :FullyQualifiedName;
 
   constructor(
-    description :string,
+    description :?string,
     entityTypeId :UUID,
-    title :string,
+    id :?UUID,
+    title :?string,
     type :FullyQualifiedName,
   ) {
 
     // required properties
-    this.description = description;
     this.entityTypeId = entityTypeId;
-    this.title = title;
     this.type = type;
+
+    // optional properties
+    if (isDefined(description)) {
+      this.description = description;
+    }
+
+    if (isDefined(id)) {
+      this.id = id;
+    }
+
+    if (isDefined(title)) {
+      this.title = title;
+    }
 
   }
 }
@@ -50,10 +63,14 @@ export class AppTypeBuilder {
 
   description :string;
   entityTypeId :UUID;
+  id :?UUID;
   title :string;
   type :FullyQualifiedName;
 
-  setDescription(description :string) :AppTypeBuilder {
+  setDescription(description :?string) :AppTypeBuilder {
+    if (!isDefined(description) || isEmptyString(description)) {
+      return this;
+    }
 
     if (!isNonEmptyString(description)) {
       throw new Error('invalid parameter: description must be a non-empty string');
@@ -73,7 +90,24 @@ export class AppTypeBuilder {
     return this;
   }
 
-  setTitle(title :string) :AppTypeBuilder {
+  setId(id :?UUID) :AppTypeBuilder {
+
+    if (!isDefined(id) || isEmptyString(id)) {
+      return this;
+    }
+
+    if (!isValidUuid(id)) {
+      throw new Error('invalid parameter: propertyTypeId must be a valid UUID');
+    }
+
+    this.id = id;
+    return this;
+  }
+
+  setTitle(title :?string) :AppTypeBuilder {
+    if (!isDefined(title) || isEmptyString(title)) {
+      return this;
+    }
 
     if (!isNonEmptyString(title)) {
       throw new Error('invalid parameter: title must be a non-empty string');
@@ -95,16 +129,8 @@ export class AppTypeBuilder {
 
   build() :AppType {
 
-    if (!this.description) {
-      throw new Error('missing property: description is a required property');
-    }
-
     if (!this.entityTypeId) {
       throw new Error('missing property: entityTypeId is a required property');
-    }
-
-    if (!this.title) {
-      throw new Error('missing property: title is a required property');
     }
 
     if (!this.type) {
@@ -114,6 +140,7 @@ export class AppTypeBuilder {
     return new AppType(
       this.description,
       this.entityTypeId,
+      this.id,
       this.title,
       this.type
     );
@@ -135,10 +162,22 @@ export function isValid(appType :any) :boolean {
     // required properties
     appTypeBuilder
       .setEntityTypeId(appType.entityTypeId)
-      .setDescription(appType.description)
-      .setTitle(appType.title)
       .setType(appType.type)
       .build();
+
+    // optional properties
+    if (has(appType, 'id')) {
+      appTypeBuilder.setId(appType.id);
+    }
+
+    if (has(appType, 'description')) {
+      appTypeBuilder.setDescription(appType.description);
+    }
+
+    if (has(appType, 'title')) {
+      appTypeBuilder.setTitle(appType.title);
+    }
+
 
     appTypeBuilder.build();
 

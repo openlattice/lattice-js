@@ -3,14 +3,20 @@
  */
 
 import Immutable from 'immutable';
+import has from 'lodash/has';
+
 import Logger from '../utils/Logger';
 
 import {
   isDefined,
+  isEmptyString,
   isNonEmptyString
 } from '../utils/LangUtils';
 
-import { isValidUuidArray } from '../utils/ValidationUtils';
+import {
+  isValidUuid,
+  isValidUuidArray
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('App');
 
@@ -21,27 +27,42 @@ const LOG = new Logger('App');
 export default class App {
 
   appTypeIds :UUID[];
-  description :string;
+  description :?string;
+  id :?UUID;
   name :string;
-  title :string;
-  url :string;
+  title :?string;
+  url :?string;
 
 
   constructor(
     appTypeIds :UUID[],
-    description :string,
+    description :?string,
+    id :?UUID,
     name :string,
-    title :string,
-    url :string
+    title :?string,
+    url :?string
   ) {
 
     // required properties
     this.appTypeIds = appTypeIds;
-    this.description = description;
     this.name = name;
-    this.title = title;
-    this.url = url;
 
+    // optional properties
+    if (isDefined(id)) {
+      this.id = id;
+    }
+
+    if (isDefined(description)) {
+      this.description = description;
+    }
+
+    if (isDefined(title)) {
+      this.title = title;
+    }
+
+    if (isDefined(url)) {
+      this.url = url;
+    }
   }
 }
 
@@ -53,6 +74,7 @@ export class AppBuilder {
 
   appTypeIds :UUID[];
   description :string;
+  id :?UUID;
   name :string;
   title :string;
   url :string;
@@ -71,13 +93,30 @@ export class AppBuilder {
     return this;
   }
 
-  setDescription(description :string) :AppBuilder {
+  setDescription(description :?string) :AppBuilder {
+    if (!isDefined(description) || isEmptyString(description)) {
+      return this;
+    }
 
     if (!isNonEmptyString(description)) {
       throw new Error('invalid parameter: description must be a non-empty string');
     }
 
     this.description = description;
+    return this;
+  }
+
+  setId(id :?UUID) :AppBuilder {
+
+    if (!isDefined(id) || isEmptyString(id)) {
+      return this;
+    }
+
+    if (!isValidUuid(id)) {
+      throw new Error('invalid parameter: propertyTypeId must be a valid UUID');
+    }
+
+    this.id = id;
     return this;
   }
 
@@ -91,7 +130,10 @@ export class AppBuilder {
     return this;
   }
 
-  setTitle(title :string) :AppBuilder {
+  setTitle(title :?string) :AppBuilder {
+    if (!isDefined(title) || isEmptyString(title)) {
+      return this;
+    }
 
     if (!isNonEmptyString(title)) {
       throw new Error('invalid parameter: title must be a non-empty string');
@@ -101,7 +143,10 @@ export class AppBuilder {
     return this;
   }
 
-  setUrl(url :string) :AppBuilder {
+  setUrl(url :?string) :AppBuilder {
+    if (!isDefined(url) || isEmptyString(url)) {
+      return this;
+    }
 
     if (!isNonEmptyString(url)) {
       throw new Error('invalid parameter: url must be a non-empty string');
@@ -117,24 +162,14 @@ export class AppBuilder {
       throw new Error('missing property: appTypeIds is a required property');
     }
 
-    if (!this.description) {
-      throw new Error('missing property: description is a required property');
-    }
-
     if (!this.name) {
       throw new Error('missing property: name is a required property');
-    }
-
-    if (!this.title) {
-      throw new Error('missing property: title is a required property');
-    }
-    if (!this.url) {
-      throw new Error('missing property: url is a required property');
     }
 
     return new App(
       this.appTypeIds,
       this.description,
+      this.id,
       this.name,
       this.title,
       this.url
@@ -157,11 +192,26 @@ export function isValid(app :any) :boolean {
     // required properties
     appBuilder
       .setAppTypeIds(app.appTypeIds)
-      .setDescription(app.description)
       .setName(app.name)
-      .setTitle(app.title)
-      .setUrl(app.url)
       .build();
+
+    // optional properties
+    if (has(app, 'id')) {
+      appBuilder.setId(app.id);
+    }
+
+    if (has(app, 'description')) {
+      appBuilder.setDescription(app.description);
+    }
+
+    if (has(app, 'title')) {
+      appBuilder.setTitle(app.title);
+    }
+
+    if (has(app, 'url')) {
+      appBuilder.setUrl(app.url);
+    }
+
 
     appBuilder.build();
 

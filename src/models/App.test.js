@@ -1,7 +1,11 @@
 import App, { AppBuilder, isValid } from './App';
 import { MOCK_APP_DM } from '../utils/testing/MockDataModels';
 
-import { INVALID_PARAMS } from '../utils/testing/Invalid';
+import {
+  INVALID_PARAMS,
+  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
+  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED
+} from '../utils/testing/Invalid';
 
 describe('App', () => {
 
@@ -44,17 +48,17 @@ describe('App', () => {
     describe('setTitle()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setTitle(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setTitle();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -68,22 +72,46 @@ describe('App', () => {
     describe('setDescription()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setDescription();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
         expect(() => {
           builder.setDescription(MOCK_APP_DM.description);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setId()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(() => {
+            builder.setId(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when not given any parameters', () => {
+        expect(() => {
+          builder.setId();
+        }).not.toThrow();
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          builder.setId(MOCK_APP_DM.id);
         }).not.toThrow();
       });
 
@@ -124,17 +152,17 @@ describe('App', () => {
     describe('setUrl()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             builder.setUrl(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should throw when not given any parameters', () => {
+      test('should not throw when not given any parameters', () => {
         expect(() => {
           builder.setUrl();
-        }).toThrow();
+        }).not.toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -150,8 +178,40 @@ describe('App', () => {
       test('should throw when a required property has not been set', () => {
 
         expect(() => {
+          (new AppBuilder())
+            .setAppTypeIds(MOCK_APP_DM.appTypeIds)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AppBuilder())
+            .setName(MOCK_APP_DM.name)
+            .build();
+        }).toThrow();
+
+        expect(() => {
           (new AppBuilder()).build();
         }).toThrow();
+      });
+
+      test('should not throw when an optional property has not been set', () => {
+
+        expect(() => {
+          (new AppBuilder())
+            .setName(MOCK_APP_DM.name)
+            .setTitle(MOCK_APP_DM.title)
+            .setDescription(MOCK_APP_DM.description)
+            .setAppTypeIds(MOCK_APP_DM.appTypeIds)
+            .build();
+        }).not.toThrow();
+
+        expect(() => {
+          (new AppBuilder())
+            .setId(MOCK_APP_DM.id)
+            .setName(MOCK_APP_DM.name)
+            .setAppTypeIds(MOCK_APP_DM.appTypeIds)
+            .build();
+        }).not.toThrow();
       });
 
       test('should return a valid instance', () => {
@@ -160,6 +220,7 @@ describe('App', () => {
           .setName(MOCK_APP_DM.name)
           .setTitle(MOCK_APP_DM.title)
           .setDescription(MOCK_APP_DM.description)
+          .setId(MOCK_APP_DM.id)
           .setAppTypeIds(MOCK_APP_DM.appTypeIds)
           .setUrl(MOCK_APP_DM.url)
           .build();
@@ -174,6 +235,9 @@ describe('App', () => {
 
         expect(app.description).toBeDefined();
         expect(app.description).toEqual(MOCK_APP_DM.description);
+
+        expect(app.id).toBeDefined();
+        expect(app.id).toEqual(MOCK_APP_DM.id);
 
         expect(app.appTypeIds).toBeDefined();
         expect(app.appTypeIds).toEqual(MOCK_APP_DM.appTypeIds);
@@ -199,6 +263,7 @@ describe('App', () => {
           new App(
             MOCK_APP_DM.appTypeIds,
             MOCK_APP_DM.description,
+            MOCK_APP_DM.id,
             MOCK_APP_DM.name,
             MOCK_APP_DM.title,
             MOCK_APP_DM.url
@@ -212,6 +277,7 @@ describe('App', () => {
           .setName(MOCK_APP_DM.name)
           .setTitle(MOCK_APP_DM.title)
           .setDescription(MOCK_APP_DM.description)
+          .setId(MOCK_APP_DM.id)
           .setAppTypeIds(MOCK_APP_DM.appTypeIds)
           .setUrl(MOCK_APP_DM.url)
           .build();
@@ -240,14 +306,20 @@ describe('App', () => {
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_DM, { title: invalidInput }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_DM, { description: invalidInput }))).toEqual(false);
+        });
+      });
+
+      test('should return false when given an object literal with an invalid "id" property', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_APP_DM, { id: invalidInput }))).toEqual(false);
         });
       });
 
@@ -258,7 +330,7 @@ describe('App', () => {
       });
 
       test('should return false when given an object literal with an invalid "url" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_DM, { url: invalidInput }))).toEqual(false);
         });
       });
@@ -278,12 +350,13 @@ describe('App', () => {
       });
 
       test('should return false when given an instance with an invalid "title" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new App(
               MOCK_APP_DM.name,
               invalidInput,
               MOCK_APP_DM.description,
+              MOCK_APP_DM.id,
               MOCK_APP_DM.appTypeIds,
               MOCK_APP_DM.url
             )
@@ -292,11 +365,27 @@ describe('App', () => {
       });
 
       test('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new App(
               MOCK_APP_DM.name,
               MOCK_APP_DM.title,
+              invalidInput,
+              MOCK_APP_DM.id,
+              MOCK_APP_DM.appTypeIds,
+              MOCK_APP_DM.url
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "id" property', () => {
+        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+          expect(isValid(
+            new App(
+              MOCK_APP_DM.name,
+              MOCK_APP_DM.title,
+              MOCK_APP_DM.description,
               invalidInput,
               MOCK_APP_DM.appTypeIds,
               MOCK_APP_DM.url
@@ -312,6 +401,7 @@ describe('App', () => {
               MOCK_APP_DM.name,
               MOCK_APP_DM.title,
               MOCK_APP_DM.description,
+              MOCK_APP_DM.id,
               invalidInput,
               MOCK_APP_DM.url
             )
@@ -320,12 +410,13 @@ describe('App', () => {
       });
 
       test('should return false when given an instance with an invalid "url" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new App(
               MOCK_APP_DM.name,
               MOCK_APP_DM.title,
               MOCK_APP_DM.description,
+              MOCK_APP_DM.id,
               MOCK_APP_DM.appTypeIds,
               invalidInput
             )
