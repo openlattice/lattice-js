@@ -334,8 +334,8 @@ export function getAppType(appTypeId :UUID) :Promise<*> {
   *
   * @example
   * AppApi.getAppTypeByFqn(
-      { "namespace": "LATTICE", "name": "AppType" }
-);
+  *   { "namespace": "LATTICE", "name": "AppType" }
+  * );
   */
 
 export function getAppTypeByFqn(appTypeFqn :FullyQualifiedName) :Promise<*> {
@@ -350,7 +350,6 @@ export function getAppTypeByFqn(appTypeFqn :FullyQualifiedName) :Promise<*> {
 
   const { namespace, name } = appTypeFqn;
 
-  // IS THIS PATH STILL CORRECT????
   return getApiAxiosInstance(APP_API)
     .get(`/${TYPE_PATH}/${LOOKUP_PATH}/${namespace}/${name}`)
     .then(axiosResponse => axiosResponse.data)
