@@ -9,6 +9,8 @@ import Ace, { AceBuilder } from './Ace';
 import Acl, { AclBuilder } from './Acl';
 import AclData, { AclDataBuilder } from './AclData';
 import AssociationType, { AssociationTypeBuilder } from './AssociationType';
+import App, { AppBuilder } from './App';
+import AppType, { AppTypeBuilder } from './AppType';
 import DataSource, { DataSourceBuilder } from './DataSource';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
@@ -34,6 +36,10 @@ export {
   AclDataBuilder,
   AssociationType,
   AssociationTypeBuilder,
+  App,
+  AppBuilder,
+  AppType,
+  AppTypeBuilder,
   DataSource,
   DataSourceBuilder,
   EntitySet,
