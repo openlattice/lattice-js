@@ -148,22 +148,22 @@ describe('AppType', () => {
 
         expect(() => {
           (new AppTypeBuilder())
-            .setEntityTypeId(MOCK_APP_TYPE_DM.entityTypeId)
             .setTitle(MOCK_APP_TYPE_DM.title)
+            .setType(MOCK_APP_TYPE_DM.type)
             .build();
         }).toThrow();
 
         expect(() => {
           (new AppTypeBuilder())
+            .setEntityTypeId(MOCK_APP_TYPE_DM.entityTypeId)
             .setType(MOCK_APP_TYPE_DM.type)
-            .setTitle(MOCK_APP_TYPE_DM.title)
             .build();
         }).toThrow();
 
         expect(() => {
           (new AppTypeBuilder())
-            .setType(MOCK_APP_TYPE_DM.type)
             .setEntityTypeId(MOCK_APP_TYPE_DM.entityTypeId)
+            .setTitle(MOCK_APP_TYPE_DM.title)
             .build();
         }).toThrow();
 

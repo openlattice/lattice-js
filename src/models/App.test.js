@@ -179,17 +179,33 @@ describe('App', () => {
 
         expect(() => {
           (new AppBuilder())
-            .setAppTypeIds(MOCK_APP_DM.appTypeIds)
-            .setTitle(MOCK_APP_DM.title)
             .setName(MOCK_APP_DM.name)
+            .setTitle(MOCK_APP_DM.title)
+            .setUrl(MOCK_APP_DM.url)
             .build();
         }).toThrow();
 
         expect(() => {
           (new AppBuilder())
+            .setAppTypeIds(MOCK_APP_DM.appTypeIds)
+            .setTitle(MOCK_APP_DM.title)
+            .setUrl(MOCK_APP_DM.url)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AppBuilder())
+            .setAppTypeIds(MOCK_APP_DM.appTypeIds)
             .setName(MOCK_APP_DM.name)
             .setUrl(MOCK_APP_DM.url)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AppBuilder())
             .setAppTypeIds(MOCK_APP_DM.appTypeIds)
+            .setName(MOCK_APP_DM.name)
+            .setTitle(MOCK_APP_DM.title)
             .build();
         }).toThrow();
 
