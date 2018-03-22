@@ -4,6 +4,7 @@
 
 import Logger from '../utils/Logger';
 
+import FullyQualifiedName from '../models/FullyQualifiedName';
 import { APP_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString } from '../utils/LangUtils';
@@ -329,29 +330,26 @@ export function getAppType(appTypeId :UUID) :Promise<*> {
   *
   * @static
   * @memberof lattice.AppApi
-  * @param {string} namespace
-  * @param {string} name
+  * @param {FullyQualifiedName} appTypeFqn
   * @return {Promise<Object>} - a Promise that will resolve with the details of an app type
   *
   * @example
-  * AppApi.getAppTypeByFqn("sample", "apptype");
+  * AppApi.getAppTypeByFqn(
+  *   { "namespace": "LATTICE", "name": "AppType" }
+  * );
   */
 
-export function getAppTypeByFqn(namespace :string, name :string) :Promise<*> {
+export function getAppTypeByFqn(appTypeFqn :FullyQualifiedName) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isNonEmptyString(namespace)) {
-    errorMsg = 'invalid parameter: namespace must be a non-empty string';
-    LOG.error(errorMsg, namespace);
+  if (!FullyQualifiedName.isValid(appTypeFqn)) {
+    errorMsg = 'invalid parameter: appTypeFqn must be a valid FQN';
+    LOG.error(errorMsg, appTypeFqn);
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(name)) {
-    errorMsg = 'invalid parameter: name must be a non-empty string';
-    LOG.error(errorMsg, name);
-    return Promise.reject(errorMsg);
-  }
+  const { namespace, name } = appTypeFqn;
 
   return getApiAxiosInstance(APP_API)
     .get(`/${TYPE_PATH}/${LOOKUP_PATH}/${namespace}/${name}`)
