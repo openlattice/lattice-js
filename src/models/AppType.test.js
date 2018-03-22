@@ -25,17 +25,17 @@ describe('AppType', () => {
     describe('setTitle()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setTitle(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setTitle();
-        }).not.toThrow();
+        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -149,12 +149,21 @@ describe('AppType', () => {
         expect(() => {
           (new AppTypeBuilder())
             .setEntityTypeId(MOCK_APP_TYPE_DM.entityTypeId)
+            .setTitle(MOCK_APP_TYPE_DM.title)
             .build();
         }).toThrow();
 
         expect(() => {
           (new AppTypeBuilder())
             .setType(MOCK_APP_TYPE_DM.type)
+            .setTitle(MOCK_APP_TYPE_DM.title)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          (new AppTypeBuilder())
+            .setType(MOCK_APP_TYPE_DM.type)
+            .setEntityTypeId(MOCK_APP_TYPE_DM.entityTypeId)
             .build();
         }).toThrow();
 
@@ -179,6 +188,7 @@ describe('AppType', () => {
             .setId(MOCK_APP_TYPE_DM.id)
             .setType(MOCK_APP_TYPE_DM.type)
             .setEntityTypeId(MOCK_APP_TYPE_DM.entityTypeId)
+            .setTitle(MOCK_APP_TYPE_DM.title)
             .build();
         }).not.toThrow();
       });
@@ -263,7 +273,7 @@ describe('AppType', () => {
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_TYPE_DM, { title: invalidInput }))).toEqual(false);
         });
       });
@@ -335,7 +345,7 @@ describe('AppType', () => {
       });
 
       test('should return false when given an instance with an invalid "title" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new AppType(
               MOCK_APP_TYPE_DM.description,

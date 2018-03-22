@@ -48,17 +48,17 @@ describe('App', () => {
     describe('setTitle()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setTitle(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setTitle();
-        }).not.toThrow();
+        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -152,17 +152,17 @@ describe('App', () => {
     describe('setUrl()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             builder.setUrl(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should throw when not given any parameters', () => {
         expect(() => {
           builder.setUrl();
-        }).not.toThrow();
+        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -180,12 +180,16 @@ describe('App', () => {
         expect(() => {
           (new AppBuilder())
             .setAppTypeIds(MOCK_APP_DM.appTypeIds)
+            .setTitle(MOCK_APP_DM.title)
+            .setName(MOCK_APP_DM.name)
             .build();
         }).toThrow();
 
         expect(() => {
           (new AppBuilder())
             .setName(MOCK_APP_DM.name)
+            .setUrl(MOCK_APP_DM.url)
+            .setAppTypeIds(MOCK_APP_DM.appTypeIds)
             .build();
         }).toThrow();
 
@@ -200,6 +204,7 @@ describe('App', () => {
           (new AppBuilder())
             .setName(MOCK_APP_DM.name)
             .setTitle(MOCK_APP_DM.title)
+            .setUrl(MOCK_APP_DM.url)
             .setDescription(MOCK_APP_DM.description)
             .setAppTypeIds(MOCK_APP_DM.appTypeIds)
             .build();
@@ -209,7 +214,9 @@ describe('App', () => {
           (new AppBuilder())
             .setId(MOCK_APP_DM.id)
             .setName(MOCK_APP_DM.name)
+            .setUrl(MOCK_APP_DM.url)
             .setAppTypeIds(MOCK_APP_DM.appTypeIds)
+            .setTitle(MOCK_APP_DM.title)
             .build();
         }).not.toThrow();
       });
@@ -306,7 +313,7 @@ describe('App', () => {
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_DM, { title: invalidInput }))).toEqual(false);
         });
       });
@@ -330,7 +337,7 @@ describe('App', () => {
       });
 
       test('should return false when given an object literal with an invalid "url" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_DM, { url: invalidInput }))).toEqual(false);
         });
       });
@@ -350,7 +357,7 @@ describe('App', () => {
       });
 
       test('should return false when given an instance with an invalid "title" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new App(
               MOCK_APP_DM.name,
@@ -410,7 +417,7 @@ describe('App', () => {
       });
 
       test('should return false when given an instance with an invalid "url" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new App(
               MOCK_APP_DM.name,

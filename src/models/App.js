@@ -30,8 +30,8 @@ export default class App {
   description :?string;
   id :?UUID;
   name :string;
-  title :?string;
-  url :?string;
+  title :string;
+  url :string;
 
 
   constructor(
@@ -39,13 +39,15 @@ export default class App {
     description :?string,
     id :?UUID,
     name :string,
-    title :?string,
-    url :?string
+    title :string,
+    url :string
   ) {
 
     // required properties
     this.appTypeIds = appTypeIds;
     this.name = name;
+    this.title = title;
+    this.url = url;
 
     // optional properties
     if (isDefined(id)) {
@@ -56,13 +58,6 @@ export default class App {
       this.description = description;
     }
 
-    if (isDefined(title)) {
-      this.title = title;
-    }
-
-    if (isDefined(url)) {
-      this.url = url;
-    }
   }
 }
 
@@ -73,7 +68,7 @@ export default class App {
 export class AppBuilder {
 
   appTypeIds :UUID[];
-  description :string;
+  description :?string;
   id :?UUID;
   name :string;
   title :string;
@@ -130,11 +125,7 @@ export class AppBuilder {
     return this;
   }
 
-  setTitle(title :?string) :AppBuilder {
-    if (!isDefined(title) || isEmptyString(title)) {
-      return this;
-    }
-
+  setTitle(title :string) :AppBuilder {
     if (!isNonEmptyString(title)) {
       throw new Error('invalid parameter: title must be a non-empty string');
     }
@@ -143,11 +134,7 @@ export class AppBuilder {
     return this;
   }
 
-  setUrl(url :?string) :AppBuilder {
-    if (!isDefined(url) || isEmptyString(url)) {
-      return this;
-    }
-
+  setUrl(url :string) :AppBuilder {
     if (!isNonEmptyString(url)) {
       throw new Error('invalid parameter: url must be a non-empty string');
     }
@@ -164,6 +151,14 @@ export class AppBuilder {
 
     if (!this.name) {
       throw new Error('missing property: name is a required property');
+    }
+
+    if (!this.title) {
+      throw new Error('missing property: title is a required property');
+    }
+
+    if (!this.url) {
+      throw new Error('missing property: url is a required property');
     }
 
     return new App(
@@ -193,6 +188,8 @@ export function isValid(app :any) :boolean {
     appBuilder
       .setAppTypeIds(app.appTypeIds)
       .setName(app.name)
+      .setTitle(app.title)
+      .setUrl(app.url)
       .build();
 
     // optional properties
@@ -203,15 +200,6 @@ export function isValid(app :any) :boolean {
     if (has(app, 'description')) {
       appBuilder.setDescription(app.description);
     }
-
-    if (has(app, 'title')) {
-      appBuilder.setTitle(app.title);
-    }
-
-    if (has(app, 'url')) {
-      appBuilder.setUrl(app.url);
-    }
-
 
     appBuilder.build();
 
