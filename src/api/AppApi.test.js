@@ -65,7 +65,7 @@ describe('AppApi', () => {
   testAddAppTypeToApp();
   testRemoveAppTypeFromApp();
   testUpdateAppEntitySetConfig();
-  testUpdateAppEntitySetPermissionsConfig();
+  testUpdateAppPermissionsConfig();
   testUpdateAppMetadata();
   testUpdateAppTypeMetadata();
 });
@@ -361,11 +361,11 @@ function testUpdateAppEntitySetConfig() {
   });
 }
 
-function testUpdateAppEntitySetPermissionsConfig() {
+function testUpdateAppPermissionsConfig() {
 
-  describe('updateAppEntitySetPermissionsConfig()', () => {
+  describe('updateAppPermissionsConfig()', () => {
 
-    const fnToTest = AppApi.updateAppEntitySetPermissionsConfig;
+    const fnToTest = AppApi.updateAppPermissionsConfig;
     const permissions = [PermissionTypes.READ, PermissionTypes.WRITE];
 
     const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, permissions];
