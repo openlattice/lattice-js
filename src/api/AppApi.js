@@ -350,6 +350,7 @@ export function getAppTypeByFqn(appTypeFqn :FullyQualifiedName) :Promise<*> {
 
   const { namespace, name } = appTypeFqn;
 
+  // IS THIS PATH STILL CORRECT????
   return getApiAxiosInstance(APP_API)
     .get(`/${TYPE_PATH}/${LOOKUP_PATH}/${namespace}/${name}`)
     .then(axiosResponse => axiosResponse.data)
