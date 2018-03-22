@@ -121,7 +121,7 @@ export function getAppByName(appName :string) :Promise<*> {
   * @return {Promise<Object>} - a Promise that will resolve with a mapping from app type ids to app types
   *
   * @example
-  * AppApi.getAppTypeIds([
+  * AppApi.getAppTypesForAppTypeIds([
   *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
   * ]);
