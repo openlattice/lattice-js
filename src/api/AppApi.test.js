@@ -351,7 +351,8 @@ function testUpdateAppEntitySetConfig() {
     const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, MOCK_ENTITY_SET_DM.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS];
     const axiosParams = [
-      `/${UPDATE_PATH}/${MOCK_ORGANIZATION_DM.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}/${MOCK_ENTITY_SET_DM.id}`];
+      `/${UPDATE_PATH}/${MOCK_ORGANIZATION_DM.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}/${MOCK_ENTITY_SET_DM.id}`
+    ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
@@ -370,10 +371,15 @@ function testUpdateAppConfigPermissions() {
 
     const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, permissions];
     const invalidParams = [
-      INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS, [INVALID_PARAMS_SS, INVALID_PARAMS_SS]];
+      INVALID_PARAMS_SS,
+      INVALID_PARAMS_SS,
+      INVALID_PARAMS_SS,
+      [INVALID_PARAMS_SS, INVALID_PARAMS_SS]
+    ];
     const axiosParams = [
       `/${UPDATE_PATH}/${MOCK_ORGANIZATION_DM.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}`,
-      permissions];
+      permissions
+    ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
