@@ -102,6 +102,8 @@ export function getAllUsers() :Promise<*> {
  * @return {Promise}
  *
  * TODO: add unit tests
+ * TODO: Changed from search/emai/l to search/. Go through usage of function
+ *
  */
 export function searchAllUsersByEmail(searchQuery :string) :Promise<*> {
 
