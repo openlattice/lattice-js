@@ -23,6 +23,7 @@ import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString } from '../utils/LangUtils';
 
 import {
+  EMAIL_PATH,
   ROLES_PATH,
   SEARCH_PATH,
   USERS_PATH
@@ -94,6 +95,35 @@ export function getAllUsers() :Promise<*> {
 }
 
 /**
+ * `GET /principals/users/search/email/{searchQuery}`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @param {string} emailSearchQuery
+ * @return {Promise}
+ *
+ * TODO: add unit tests
+ */
+export function searchAllUsersByEmail(emailSearchQuery :string) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyString(emailSearchQuery)) {
+    errorMsg = 'invalid parameter: emailSearchQuery must be a non-empty string';
+    LOG.error(errorMsg, emailSearchQuery);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${emailSearchQuery}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /principals/users/search/{searchQuery}`
  *
  * @static
@@ -102,10 +132,8 @@ export function getAllUsers() :Promise<*> {
  * @return {Promise}
  *
  * TODO: add unit tests
- * TODO: Changed from search/emai/l to search/. Go through usage of function
- *
  */
-export function searchAllUsersByEmail(searchQuery :string) :Promise<*> {
+export function searchAllUsers(searchQuery :string) :Promise<*> {
 
   let errorMsg = '';
 
