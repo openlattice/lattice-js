@@ -23,7 +23,6 @@ import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString } from '../utils/LangUtils';
 
 import {
-  EMAIL_PATH,
   ROLES_PATH,
   SEARCH_PATH,
   USERS_PATH
