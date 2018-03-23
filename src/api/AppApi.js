@@ -591,7 +591,7 @@ export function updateAppEntitySetConfig(
   *   updated to reflect the specified permissions.
   *
   * @example
-  * AppApi.updateAppPermissionsConfig(
+  * AppApi.updateAppConfigPermissions(
   *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
   *   "dc6465e6-285e-424b-c927-039c1603d739",
@@ -599,7 +599,7 @@ export function updateAppEntitySetConfig(
   * );
   */
 
-export function updateAppPermissionsConfig(
+export function updateAppConfigPermissions(
   organizationId :UUID,
   appId :UUID,
   appTypeId :UUID,
