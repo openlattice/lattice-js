@@ -1,13 +1,15 @@
 /*
  * @flow
  */
-
+import has from 'lodash/has';
 import Logger from '../utils/Logger';
 
 import FullyQualifiedName from '../models/FullyQualifiedName';
+import { isValid as isValidApp } from '../models/App';
+import { isValid as isValidAppType } from '../models/AppType';
 import { APP_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyString } from '../utils/LangUtils';
+import { isNonEmptyString, isNonEmptyObject } from '../utils/LangUtils';
 import { isValidPermissionArray, isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
@@ -121,7 +123,7 @@ export function getAppByName(appName :string) :Promise<*> {
   * @return {Promise<Object>} - a Promise that will resolve with a mapping from app type ids to app types
   *
   * @example
-  * AppApi.getAppTypeIds([
+  * AppApi.getAppTypesForAppTypeIds([
   *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
   * ]);
@@ -249,6 +251,14 @@ export function installApp(appId :UUID, organizationId :UUID, prefix :string) :P
   */
 export function createApp(app :Object) :Promise<*> {
 
+  let errorMsg = '';
+
+  if (!isValidApp(app)) {
+    errorMsg = 'invalid parameter: app must be a valid App';
+    LOG.error(errorMsg, app);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(APP_API)
     .post('/', app)
     .then(axiosResponse => axiosResponse.data)
@@ -280,6 +290,14 @@ export function createApp(app :Object) :Promise<*> {
   * });
   */
 export function createAppType(appType :Object) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidAppType(appType)) {
+    errorMsg = 'invalid parameter: appType must be a valid AppType';
+    LOG.error(errorMsg, appType);
+    return Promise.reject(errorMsg);
+  }
 
   return getApiAxiosInstance(APP_API)
     .post(`/${TYPE_PATH}`, appType)
@@ -587,12 +605,11 @@ export function updateAppEntitySetConfig(
   * @param {UUID} organizationId
   * @param {UUID} appId
   * @param {UUID} appTypeId
-  * @param {UUID} entitySetId
   * @return {Promise<Object>} - a Promise that will resolve the app config has been
   *   updated to reflect the specified permissions.
   *
   * @example
-  * AppApi.updateAppEntitySetPermissionsConfig(
+  * AppApi.updateAppConfigPermissions(
   *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
   *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
   *   "dc6465e6-285e-424b-c927-039c1603d739",
@@ -600,7 +617,7 @@ export function updateAppEntitySetConfig(
   * );
   */
 
-export function updateAppEntitySetPermissionsConfig(
+export function updateAppConfigPermissions(
   organizationId :UUID,
   appId :UUID,
   appTypeId :UUID,
@@ -628,7 +645,7 @@ export function updateAppEntitySetPermissionsConfig(
   }
 
   if (!isValidPermissionArray(permissions)) {
-    errorMsg = 'invalid parameter: permissions must be a valid UUID';
+    errorMsg = 'invalid parameter: permissions must be a valid permissions array';
     LOG.error(errorMsg, permissions);
     return Promise.reject(errorMsg);
   }
@@ -673,6 +690,48 @@ export function updateAppMetadata(appId :UUID, metadataUpdate :Object) :Promise<
     return Promise.reject(errorMsg);
   }
 
+  if (!isNonEmptyObject(metadataUpdate)) {
+    errorMsg = 'invalid parameter: metadataUpdate must be a non-empty object';
+    LOG.error(errorMsg, metadataUpdate);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'name') && !isNonEmptyString(metadataUpdate.name)) {
+    errorMsg = 'invalid parameter: name must be a non-empty string';
+    LOG.error(errorMsg, metadataUpdate.name);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'title') && !isNonEmptyString(metadataUpdate.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadataUpdate.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'description') && !isNonEmptyString(metadataUpdate.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadataUpdate.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'url') && !isNonEmptyString(metadataUpdate.url)) {
+    errorMsg = 'invalid parameter: url must be a non-empty string';
+    LOG.error(errorMsg, metadataUpdate.url);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'id') && !isValidUuid(metadataUpdate.id)) {
+    errorMsg = 'invalid parameter: id must be a valid UUID';
+    LOG.error(errorMsg, metadataUpdate.id);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'appTypeIds') && !isValidUuidArray(metadataUpdate.appTypeIds)) {
+    errorMsg = 'invalid parameter: appTypeIds must be a valid UUID array';
+    LOG.error(errorMsg, metadataUpdate.appTypeIds);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(APP_API)
     .post(`/${UPDATE_PATH}/${appId}`, metadataUpdate)
     .then(axiosResponse => axiosResponse.data)
@@ -709,6 +768,42 @@ export function updateAppTypeMetadata(appTypeId :UUID, metadataUpdate :Object) :
   if (!isValidUuid(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(metadataUpdate)) {
+    errorMsg = 'invalid parameter: metadataUpdate must be a non-empty object';
+    LOG.error(errorMsg, metadataUpdate);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'type') && !FullyQualifiedName.isValid(metadataUpdate.type)) {
+    errorMsg = 'invalid parameter: type must be a valid FQN';
+    LOG.error(errorMsg, metadataUpdate.type);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'title') && !isNonEmptyString(metadataUpdate.title)) {
+    errorMsg = 'invalid parameter: title must be a non-empty string';
+    LOG.error(errorMsg, metadataUpdate.title);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'entityTypeId') && !isValidUuid(metadataUpdate.entityTypeId)) {
+    errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
+    LOG.error(errorMsg, metadataUpdate.entityTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'description') && !isNonEmptyString(metadataUpdate.description)) {
+    errorMsg = 'invalid parameter: description must be a non-empty string';
+    LOG.error(errorMsg, metadataUpdate.description);
+    return Promise.reject(errorMsg);
+  }
+
+  if (has(metadataUpdate, 'id') && !isValidUuid(metadataUpdate.id)) {
+    errorMsg = 'invalid parameter: id must be a valid UUID';
+    LOG.error(errorMsg, metadataUpdate.id);
     return Promise.reject(errorMsg);
   }
 
