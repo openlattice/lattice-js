@@ -37,6 +37,23 @@ export const MOCK_ACL_DATA_DM :Object = {
   action: 'ADD'
 };
 
+export const MOCK_APP_DM :Object = {
+  name: 'name',
+  title: 'title',
+  description: 'description',
+  id: 'fae6af98-2675-45bd-9a5b-1619a87235a8',
+  appTypeIds: ['ec6865e6-e60e-424b-a071-6a9c1603d735'],
+  url: 'test.com'
+};
+
+export const MOCK_APP_TYPE_DM :Object = {
+  type: { namespace: 'LATTICE', name: 'MockType' },
+  title: 'title',
+  description: 'description',
+  id: 'fae6af98-2675-45bd-9a5b-1619a87235a8',
+  entityTypeId: 'ec6865e6-e60e-424b-a071-6a9c1603d735'
+};
+
 export const MOCK_DATA_SOURCE_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
   title: 'title',
