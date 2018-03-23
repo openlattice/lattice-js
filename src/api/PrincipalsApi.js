@@ -95,7 +95,7 @@ export function getAllUsers() :Promise<*> {
 }
 
 /**
- * `GET /principals/users/search/email/{searchQuery}`
+ * `GET /principals/users/search/{searchQuery}`
  *
  * @static
  * @memberof lattice.PrincipalsApi
@@ -115,7 +115,7 @@ export function searchAllUsersByEmail(searchQuery :string) :Promise<*> {
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${searchQuery}`)
+    .get(`/${USERS_PATH}/${SEARCH_PATH}/${searchQuery}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

@@ -82,7 +82,7 @@ function testSearchAllUsersByEmail() {
 
     const validParams = [mockEmail];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${mockEmail}`];
+    const axiosParams = [`/${USERS_PATH}/${SEARCH_PATH}/${mockEmail}`];
 
     testApiShouldReturnPromise(functionToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
