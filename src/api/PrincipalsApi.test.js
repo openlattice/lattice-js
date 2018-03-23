@@ -34,6 +34,7 @@ describe('PrincipalsApi', () => {
 
   testGetUser();
   testGetAllUsers();
+  testSearchAllUsers();
   testSearchAllUsersByEmail();
 });
 
@@ -83,6 +84,25 @@ function testSearchAllUsersByEmail() {
     const validParams = [mockEmail];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${mockEmail}`];
+
+    testApiShouldReturnPromise(functionToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+  });
+}
+
+function testSearchAllUsers() {
+
+  describe('searchAllUsers()', () => {
+
+    const functionToTest = PrincipalsApi.searchAllUsers;
+    const mockInput = `${genRandomString()}`;
+
+    const validParams = [mockInput];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = [`/${USERS_PATH}/${SEARCH_PATH}/${mockInput}`];
 
     testApiShouldReturnPromise(functionToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);

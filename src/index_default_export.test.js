@@ -55,7 +55,7 @@ describe('lattice-js default export', () => {
 
   test('should export PrincipalsApi', () => {
     expect(Object.prototype.toString.call(Lattice.PrincipalsApi)).toEqual(OBJECT_TAG);
-    expect(Object.keys(Lattice.PrincipalsApi)).toHaveLength(6);
+    expect(Object.keys(Lattice.PrincipalsApi)).toHaveLength(7);
   });
 
   test('should export RequestsApi', () => {
