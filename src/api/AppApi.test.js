@@ -448,6 +448,7 @@ function testUpdateAppMetadata() {
     const validParams7 = [MOCK_APP_DM.id, MOCK_METADATA_UPDATE7];
 
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+
     const axiosParams = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}`, MOCK_METADATA_UPDATE];
     const axiosParams2 = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}`, MOCK_METADATA_UPDATE2];
     const axiosParams3 = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}`, MOCK_METADATA_UPDATE3];
@@ -455,7 +456,6 @@ function testUpdateAppMetadata() {
     const axiosParams5 = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}`, MOCK_METADATA_UPDATE5];
     const axiosParams6 = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}`, MOCK_METADATA_UPDATE6];
     const axiosParams7 = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}`, MOCK_METADATA_UPDATE7];
-
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
@@ -514,14 +514,77 @@ function testUpdateAppTypeMetadata() {
       type: MOCK_FQN
     };
 
+    const MOCK_METADATA_UPDATE2 = {
+      description: genRandomString(),
+      id: genRandomUUID(),
+      title: genRandomString(),
+      type: MOCK_FQN
+    };
+
+    const MOCK_METADATA_UPDATE3 = {
+      description: genRandomString(),
+      entityTypeId: genRandomUUID(),
+      title: genRandomString(),
+      type: MOCK_FQN
+    };
+
+    const MOCK_METADATA_UPDATE4 = {
+      description: genRandomString(),
+      entityTypeId: genRandomUUID(),
+      id: genRandomUUID(),
+      type: MOCK_FQN
+    };
+
+    const MOCK_METADATA_UPDATE5 = {
+      description: genRandomString(),
+      entityTypeId: genRandomUUID(),
+      id: genRandomUUID(),
+      title: genRandomString()
+    };
+
     const validParams = [MOCK_APP_TYPE_DM.id, MOCK_METADATA_UPDATE];
+    const validParams2 = [MOCK_APP_TYPE_DM.id, MOCK_METADATA_UPDATE2];
+    const validParams3 = [MOCK_APP_TYPE_DM.id, MOCK_METADATA_UPDATE3];
+    const validParams4 = [MOCK_APP_TYPE_DM.id, MOCK_METADATA_UPDATE4];
+    const validParams5 = [MOCK_APP_TYPE_DM.id, MOCK_METADATA_UPDATE5];
+
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+
     const axiosParams = [`/${TYPE_PATH}/${UPDATE_PATH}/${MOCK_APP_TYPE_DM.id}`, MOCK_METADATA_UPDATE];
+    const axiosParams2 = [`/${TYPE_PATH}/${UPDATE_PATH}/${MOCK_APP_TYPE_DM.id}`, MOCK_METADATA_UPDATE2];
+    const axiosParams3 = [`/${TYPE_PATH}/${UPDATE_PATH}/${MOCK_APP_TYPE_DM.id}`, MOCK_METADATA_UPDATE3];
+    const axiosParams4 = [`/${TYPE_PATH}/${UPDATE_PATH}/${MOCK_APP_TYPE_DM.id}`, MOCK_METADATA_UPDATE4];
+    const axiosParams5 = [`/${TYPE_PATH}/${UPDATE_PATH}/${MOCK_APP_TYPE_DM.id}`, MOCK_METADATA_UPDATE5];
+
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectPostRequest(fnToTest, validParams, axiosParams);
+
+    testApiShouldReturnPromise(fnToTest, validParams2);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams2, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams2, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams2, invalidParams);
+    testApiShouldSendCorrectPostRequest(fnToTest, validParams2, axiosParams2);
+
+    testApiShouldReturnPromise(fnToTest, validParams3);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams3, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams3, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams3, invalidParams);
+    testApiShouldSendCorrectPostRequest(fnToTest, validParams3, axiosParams3);
+
+    testApiShouldReturnPromise(fnToTest, validParams4);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams4, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams4, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams4, invalidParams);
+    testApiShouldSendCorrectPostRequest(fnToTest, validParams4, axiosParams4);
+
+    testApiShouldReturnPromise(fnToTest, validParams5);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams5, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams5, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams5, invalidParams);
+    testApiShouldSendCorrectPostRequest(fnToTest, validParams5, axiosParams5);
   });
 }
