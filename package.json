@@ -45,7 +45,7 @@
     "documentation": "^7.0.0",
     "eslint": "^4.18.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-import-resolver-webpack": "^0.9.0",
+    "eslint-import-resolver-webpack": "^0.10.0",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-flowtype": "^2.41.0",
     "eslint-plugin-import": "^2.7.0",
