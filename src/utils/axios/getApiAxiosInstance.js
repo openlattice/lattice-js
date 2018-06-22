@@ -7,7 +7,7 @@ import Immutable from 'immutable';
 import getApiBaseUrl from './getApiBaseUrl';
 import newAxiosInstance from './newAxiosInstance';
 import { getConfig } from '../../config/Configuration';
-import { isNonEmptyString } from '../../utils/LangUtils';
+import { isNonEmptyString } from '../LangUtils';
 
 let baseUrlToAxiosInstanceMap :Map<string, Axios> = Immutable.Map();
 

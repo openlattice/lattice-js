@@ -42,6 +42,7 @@
         "SwitchCase": 1
       }
     ],
+    "lines-between-class-members": "off",
     "max-len": [
       "error",
       {

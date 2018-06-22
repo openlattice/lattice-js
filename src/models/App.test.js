@@ -1,4 +1,4 @@
-import App, { AppBuilder, isValid } from './App';
+import App, { AppBuilder, isValidApp as isValid } from './App';
 import { MOCK_APP_DM } from '../utils/testing/MockDataModels';
 
 import {

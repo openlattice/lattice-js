@@ -8,7 +8,7 @@ import isString from 'lodash/isString';
 
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray, isEmptyString } from '../utils/LangUtils';
-import { isValidPermissionArray, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidPermissionArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { Permission } from '../constants/types/PermissionTypes';
 
@@ -91,7 +91,7 @@ export class RequestBuilder {
   }
 }
 
-export function isValid(request :any) :boolean {
+export function isValidRequest(request :any) :boolean {
 
   if (!isDefined(request)) {
 
@@ -122,4 +122,9 @@ export function isValid(request :any) :boolean {
     LOG.error(e, request);
     return false;
   }
+}
+
+export function isValidRequestArray(requests :Request[]) :boolean {
+
+  return validateNonEmptyArray(requests, (request :Request) => isValidRequest(request));
 }

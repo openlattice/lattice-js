@@ -7,7 +7,7 @@ import has from 'lodash/has';
 
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidPermissionArray, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidPermissionArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { Permission } from '../constants/types/PermissionTypes';
 
@@ -85,7 +85,7 @@ export class AccessCheckBuilder {
   }
 }
 
-export function isValid(accessCheck :any) :boolean {
+export function isValidAccessCheck(accessCheck :any) :boolean {
 
   if (!isDefined(accessCheck)) {
 
@@ -113,4 +113,9 @@ export function isValid(accessCheck :any) :boolean {
     LOG.error(e, accessCheck);
     return false;
   }
+}
+
+export function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
+
+  return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => isValidAccessCheck(accessCheck));
 }

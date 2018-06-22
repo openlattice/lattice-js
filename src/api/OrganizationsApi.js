@@ -20,8 +20,8 @@
 import Immutable from 'immutable';
 
 import Logger from '../utils/Logger';
-import Organization, { isValid as isValidOrganization } from '../models/Organization';
-import Role, { isValid as isValidRole } from '../models/Role';
+import Organization, { isValidOrganization } from '../models/Organization';
+import Role, { isValidRole } from '../models/Role';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';

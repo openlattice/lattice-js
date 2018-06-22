@@ -5,6 +5,7 @@
 import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
+import { validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PrincipalType } from '../constants/types/PrincipalTypes';
 
@@ -79,7 +80,7 @@ export class PrincipalBuilder {
   }
 }
 
-export function isValid(principal :any) :boolean {
+export function isValidPrincipal(principal :any) :boolean {
 
   if (!isDefined(principal)) {
 
@@ -101,4 +102,9 @@ export function isValid(principal :any) :boolean {
     LOG.error(e, principal);
     return false;
   }
+}
+
+export function isValidPrincipalArray(principals :Principal[]) :boolean {
+
+  return validateNonEmptyArray(principals, (principal :Principal) => isValidPrincipal(principal));
 }

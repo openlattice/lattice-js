@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 
-import RequestStateTypes from '../../src/constants/types/RequestStateTypes';
+import RequestStateTypes from '../constants/types/RequestStateTypes';
 
 import * as AxiosUtils from '../utils/axios';
 import * as RequestsApi from './RequestsApi';

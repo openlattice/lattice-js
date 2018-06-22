@@ -123,7 +123,7 @@ export class DataSourceBuilder {
   }
 }
 
-export function isValid(dataSource :any) :boolean {
+export function isValidDataSource(dataSource :any) :boolean {
 
   if (!isDefined(dataSource)) {
 

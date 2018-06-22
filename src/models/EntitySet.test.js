@@ -1,4 +1,4 @@
-import EntitySet, { EntitySetBuilder, isValid } from './EntitySet';
+import EntitySet, { EntitySetBuilder, isValidEntitySet as isValid } from './EntitySet';
 import { MOCK_ENTITY_SET_DM } from '../utils/testing/MockDataModels';
 
 import {

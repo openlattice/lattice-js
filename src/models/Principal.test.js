@@ -1,4 +1,4 @@
-import Principal, { PrincipalBuilder, isValid } from './Principal';
+import Principal, { PrincipalBuilder, isValidPrincipal as isValid } from './Principal';
 import { PrincipalTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import { MOCK_PRINCIPAL_DM } from '../utils/testing/MockDataModels';

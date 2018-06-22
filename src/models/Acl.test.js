@@ -1,4 +1,4 @@
-import Acl, { AclBuilder, isValid } from './Acl';
+import Acl, { AclBuilder, isValidAcl as isValid } from './Acl';
 import { MOCK_ACL_DM } from '../utils/testing/MockDataModels';
 
 import {

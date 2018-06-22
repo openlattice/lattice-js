@@ -20,7 +20,8 @@ import {
 
 import {
   isValidUuid,
-  isValidFqnArray
+  isValidFqnArray,
+  validateNonEmptyArray
 } from '../utils/ValidationUtils';
 
 import type { Analyzer } from '../constants/types/AnalyzerTypes';
@@ -266,7 +267,7 @@ export class PropertyTypeBuilder {
   }
 }
 
-export function isValid(propertyType :any) :boolean {
+export function isValidPropertyType(propertyType :any) :boolean {
 
   if (!isDefined(propertyType)) {
 
@@ -311,4 +312,9 @@ export function isValid(propertyType :any) :boolean {
     LOG.error(e, propertyType);
     return false;
   }
+}
+
+export function isValidPropertyTypeArray(propertyTypes :PropertyType[]) :boolean {
+
+  return validateNonEmptyArray(propertyTypes, (propertyType :PropertyType) => isValidPropertyType(propertyType));
 }

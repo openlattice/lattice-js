@@ -6,7 +6,7 @@ import Immutable from 'immutable';
 import isBoolean from 'lodash/isBoolean';
 
 import Logger from '../utils/Logger';
-import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
+import EntityType, { isValidEntityType } from './EntityType';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
 import { isValidUuidArray } from '../utils/ValidationUtils';
 
@@ -154,7 +154,7 @@ export class AssociationTypeBuilder {
   }
 }
 
-export function isValid(associationType :any) :boolean {
+export function isValidAssociationType(associationType :any) :boolean {
 
   if (!isDefined(associationType)) {
 

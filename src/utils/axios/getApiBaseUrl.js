@@ -7,7 +7,7 @@ import Immutable from 'immutable';
 import * as ApiNames from '../../constants/ApiNames';
 import * as ApiPaths from '../../constants/ApiPaths';
 import { getConfig } from '../../config/Configuration';
-import { isNonEmptyString } from '../../utils/LangUtils';
+import { isNonEmptyString } from '../LangUtils';
 
 /* eslint-disable key-spacing */
 const API_TO_PATH_MAP :Map<string, string> = Immutable.OrderedMap({

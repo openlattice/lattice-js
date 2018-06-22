@@ -4,10 +4,10 @@
 
 import has from 'lodash/has';
 
-import Ace from './Ace';
+import Ace, { isValidAceArray } from './Ace';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidAceArray, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Acl');
 
@@ -78,7 +78,7 @@ export class AclBuilder {
   }
 }
 
-export function isValid(acl :any) :boolean {
+export function isValidAcl(acl :any) :boolean {
 
   if (!isDefined(acl)) {
 

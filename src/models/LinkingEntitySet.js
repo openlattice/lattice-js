@@ -5,7 +5,7 @@
 import Immutable from 'immutable';
 
 import Logger from '../utils/Logger';
-import EntitySet, { isValid as isValidEntitySet } from '../models/EntitySet';
+import EntitySet, { isValidEntitySet } from './EntitySet';
 import { isDefined, isNonEmptyArray } from '../utils/LangUtils';
 import { isValidUuid } from '../utils/ValidationUtils';
 
@@ -97,7 +97,7 @@ export class LinkingEntitySetBuilder {
   }
 }
 
-export function isValid(linkingEntitySet :any) :boolean {
+export function isValidLinkingEntitySet(linkingEntitySet :any) :boolean {
 
   if (!isDefined(linkingEntitySet)) {
 

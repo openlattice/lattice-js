@@ -21,7 +21,7 @@
 
 import Logger from '../utils/Logger';
 
-import DataSource, { isValid as isValidDataSource } from '../models/DataSource';
+import DataSource, { isValidDataSource } from '../models/DataSource';
 import { DATA_SOURCES_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isValidUuid } from '../utils/ValidationUtils';

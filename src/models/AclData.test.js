@@ -1,4 +1,4 @@
-import AclData, { AclDataBuilder, isValid } from './AclData';
+import AclData, { AclDataBuilder, isValidAclData as isValid } from './AclData';
 import { ActionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import { MOCK_ACL_DATA_DM } from '../utils/testing/MockDataModels';

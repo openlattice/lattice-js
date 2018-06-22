@@ -1,4 +1,4 @@
-import AppType, { AppTypeBuilder, isValid } from './AppType';
+import AppType, { AppTypeBuilder, isValidAppType as isValid } from './AppType';
 import { MOCK_APP_TYPE_DM } from '../utils/testing/MockDataModels';
 
 import {
