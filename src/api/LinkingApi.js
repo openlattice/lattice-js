@@ -18,8 +18,8 @@
  */
 
 import Logger from '../utils/Logger';
-import LinkingRequest, { isValid as isValidLinkingRequest } from '../models/LinkingRequest';
-import LinkingEntityType, { isValid as isValidLinkingEntityType } from '../models/LinkingEntityType';
+import LinkingRequest, { isValidLinkingRequest } from '../models/LinkingRequest';
+import LinkingEntityType, { isValidLinkingEntityType } from '../models/LinkingEntityType';
 import { LINKING_API } from '../constants/ApiNames';
 import { TYPE_PATH } from '../constants/ApiPaths';
 import { getApiAxiosInstance } from '../utils/axios';

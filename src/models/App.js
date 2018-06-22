@@ -172,7 +172,7 @@ export class AppBuilder {
   }
 }
 
-export function isValid(app :any) :boolean {
+export function isValidApp(app :any) :boolean {
 
   if (!isDefined(app)) {
 

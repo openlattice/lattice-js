@@ -1,4 +1,4 @@
-import EntityType, { EntityTypeBuilder, isValid } from './EntityType';
+import EntityType, { EntityTypeBuilder, isValidEntityType as isValid } from './EntityType';
 import { MOCK_ENTITY_TYPE_DM } from '../utils/testing/MockDataModels';
 
 import {

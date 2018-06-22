@@ -23,12 +23,12 @@ import Immutable from 'immutable';
 import has from 'lodash/has';
 
 import RequestStateTypes from '../constants/types/RequestStateTypes';
-import Request from '../models/Request';
+import Request, { isValidRequestArray } from '../models/Request';
 import RequestStatus from '../models/RequestStatus';
 import Logger from '../utils/Logger';
 import { REQUESTS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isValidRequestArray, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   isDefined,

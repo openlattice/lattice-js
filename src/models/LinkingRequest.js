@@ -3,7 +3,7 @@
  */
 
 import Logger from '../utils/Logger';
-import LinkingEntitySet, { isValid as isValidLinkingEntitySet } from '../models/LinkingEntitySet';
+import LinkingEntitySet, { isValidLinkingEntitySet } from './LinkingEntitySet';
 import { isDefined } from '../utils/LangUtils';
 import { isValidUuidArray } from '../utils/ValidationUtils';
 
@@ -64,7 +64,7 @@ export class LinkingRequestBuilder {
   }
 }
 
-export function isValid(linkingRequest :any) :boolean {
+export function isValidLinkingRequest(linkingRequest :any) :boolean {
 
   if (!isDefined(linkingRequest)) {
 

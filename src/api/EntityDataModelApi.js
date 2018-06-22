@@ -21,16 +21,17 @@ import Immutable from 'immutable';
 import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
 
-import EntitySet from '../models/EntitySet';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 
-import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
-import PropertyType, { isValid as isValidPropertyType } from '../models/PropertyType';
-import Schema, { isValid as isValidSchema } from '../models/Schema';
+import EntitySet, { isValidEntitySetArray } from '../models/EntitySet';
+import EntityType, { isValidEntityType } from '../models/EntityType';
+import PropertyType, { isValidPropertyType } from '../models/PropertyType';
+import Schema, { isValidSchema } from '../models/Schema';
 
 import { EDM_API } from '../constants/ApiNames';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   ASSOCIATION_TYPE_PATH,
@@ -55,12 +56,6 @@ import {
   isNonEmptyString,
   isNonEmptyStringArray
 } from '../utils/LangUtils';
-
-import {
-  isValidEntitySetArray,
-  isValidUuid,
-  isValidUuidArray
-} from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntityDataModelApi');
 
@@ -1058,7 +1053,7 @@ export function reorderPropertyTypesInEntityType(entityTypeId :UUID, propertyTyp
     return Promise.reject(errorMsg);
   }
 
-  else if (!isValidUuidArray(propertyTypeIds)) {
+  if (!isValidUuidArray(propertyTypeIds)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);

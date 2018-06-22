@@ -4,7 +4,7 @@
 
 import ActionTypes from '../constants/types/ActionTypes';
 import Logger from '../utils/Logger';
-import Acl, { isValid as isValidAcl } from './Acl';
+import Acl, { isValidAcl } from './Acl';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
 
 import type { Action } from '../constants/types/ActionTypes';
@@ -70,7 +70,7 @@ export class AclDataBuilder {
   }
 }
 
-export function isValid(aclData :any) :boolean {
+export function isValidAclData(aclData :any) :boolean {
 
   if (!isDefined(aclData)) {
 

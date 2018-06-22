@@ -7,7 +7,7 @@ import has from 'lodash/has';
 import isBoolean from 'lodash/isBoolean';
 
 import Logger from '../utils/Logger';
-import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
+import EntityType, { isValidEntityType } from './EntityType';
 import { isDefined } from '../utils/LangUtils';
 import { isValidUuidArray } from '../utils/ValidationUtils';
 
@@ -94,7 +94,7 @@ export class LinkingEntityTypeBuilder {
   }
 }
 
-export function isValid(linkingEntityType :any) :boolean {
+export function isValidLinkingEntityType(linkingEntityType :any) :boolean {
 
   if (!isDefined(linkingEntityType)) {
 

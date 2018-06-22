@@ -18,7 +18,7 @@
  */
 
 import Logger from '../utils/Logger';
-import AclData, { isValid as isValidAclData } from '../models/AclData';
+import AclData, { isValidAclData } from '../models/AclData';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isValidUuidArray } from '../utils/ValidationUtils';

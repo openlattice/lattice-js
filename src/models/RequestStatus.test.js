@@ -1,4 +1,4 @@
-import RequestStatus, { RequestStatusBuilder, isValid } from './RequestStatus';
+import RequestStatus, { RequestStatusBuilder, isValidRequestStatus as isValid } from './RequestStatus';
 import { RequestStateTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import { MOCK_REQUEST_STATUS_DM } from '../utils/testing/MockDataModels';

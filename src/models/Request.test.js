@@ -1,4 +1,4 @@
-import Request, { RequestBuilder, isValid } from './Request';
+import Request, { RequestBuilder, isValidRequest as isValid } from './Request';
 import { PermissionTypes } from '../constants/types';
 import { MOCK_REQUEST_DM } from '../utils/testing/MockDataModels';
 

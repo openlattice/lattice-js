@@ -19,7 +19,8 @@ import {
 import {
   isValidFqnArray,
   isValidUuid,
-  isValidUuidArray
+  isValidUuidArray,
+  validateNonEmptyArray
 } from '../utils/ValidationUtils';
 
 import type { SecurableType } from '../constants/types/SecurableTypes';
@@ -303,7 +304,7 @@ export class EntityTypeBuilder {
   }
 }
 
-export function isValid(entityType :any) :boolean {
+export function isValidEntityType(entityType :any) :boolean {
 
   if (!isDefined(entityType)) {
 
@@ -349,4 +350,9 @@ export function isValid(entityType :any) :boolean {
     LOG.error(e, entityType);
     return false;
   }
+}
+
+export function isValidEntityTypeArray(entityTypes :EntityType[]) :boolean {
+
+  return validateNonEmptyArray(entityTypes, (entityType :EntityType) => isValidEntityType(entityType));
 }

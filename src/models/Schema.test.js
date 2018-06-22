@@ -1,4 +1,4 @@
-import Schema, { SchemaBuilder, isValid } from './Schema';
+import Schema, { SchemaBuilder, isValidSchema as isValid } from './Schema';
 import { INVALID_PARAMS, INVALID_PARAMS_SS, INVALID_PARAMS_EMPTY_ARRAY_ALLOWED } from '../utils/testing/Invalid';
 import { MOCK_SCHEMA_DM } from '../utils/testing/MockDataModels';
 

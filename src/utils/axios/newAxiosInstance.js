@@ -6,7 +6,7 @@ import Axios from 'axios';
 import isURL from 'validator/lib/isURL';
 
 import { getConfig } from '../../config/Configuration';
-import { isNonEmptyString } from '../../utils/LangUtils';
+import { isNonEmptyString } from '../LangUtils';
 
 export default function newAxiosInstance(baseUrl :string) :Axios {
 
