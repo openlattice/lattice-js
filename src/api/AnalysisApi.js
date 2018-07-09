@@ -66,7 +66,7 @@ export function getTopUtilizers(
 
   // TODO: everything
 
-  let url: string = `/${entitySetId}/${count}`;
+  let url :string = `/${entitySetId}/${count}`;
   if (isNonEmptyString(fileType)) {
     url = `${url}?fileType=${fileType}`;
   }
