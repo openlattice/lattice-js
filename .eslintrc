@@ -62,7 +62,15 @@
           "Immutable.Map",
           "Immutable.OrderedMap",
           "Immutable.Set",
-          "Immutable.OrderedSet"
+          "Immutable.OrderedSet",
+          "List",
+          "OrderedList",
+          "Map",
+          "OrderedMap",
+          "Set",
+          "OrderedSet",
+          "SortableContainer",
+          "SortableElement"
         ]
       }
     ],
