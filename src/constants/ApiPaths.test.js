@@ -8,6 +8,7 @@ const DATA_PATH = 'data';
 const DATA_SOURCES_PATH = 'datasource';
 const DATASTORE_PATH = 'datastore';
 const EDM_PATH = 'edm';
+const INTEGRATION_PATH = 'integration';
 const LINKING_PATH = 'linking';
 const ORGANIZATIONS_PATH = 'organizations';
 const PERMISSIONS_PATH = 'permissions';
@@ -109,6 +110,11 @@ describe('ApiPaths', () => {
     test(`should export "${EDM_PATH}"`, () => {
       expect(ApiPaths.EDM_PATH).toBeDefined();
       expect(ApiPaths.EDM_PATH).toEqual(EDM_PATH);
+    });
+
+    test(`should export "${INTEGRATION_PATH}"`, () => {
+      expect(ApiPaths.INTEGRATION_PATH).toBeDefined();
+      expect(ApiPaths.INTEGRATION_PATH).toEqual(INTEGRATION_PATH);
     });
 
     test(`should export "${LINKING_PATH}"`, () => {
