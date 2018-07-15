@@ -7,8 +7,8 @@ import { DATA_API } from '../constants/ApiNames';
 import {
   COUNT_PATH,
   ENTITY_DATA_PATH,
-  TICKET_PATH,
-  UPDATE_PATH
+  SET_PATH,
+  TICKET_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -376,7 +376,7 @@ function replaceEntityInEntitySet() {
 
     const validParams = [mockEntitySetId, mockEntityKeyId, mockEntity];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${mockEntitySetId}/${mockEntityKeyId}`, mockEntity];
+    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`, mockEntity];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
@@ -401,7 +401,7 @@ function replaceEntityInEntitySetUsingFqns() {
 
     const validParams = [mockEntitySetId, mockEntityKeyId, mockEntity];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${mockEntitySetId}/${mockEntityKeyId}`, mockEntity];
+    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`, mockEntity];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
