@@ -57,6 +57,16 @@ const SEARCH_FIELDS :string = 'searchFields';
 const SEARCH_TERM :string = 'searchTerm';
 const START :string = 'start';
 
+/* TODO update all frontend projects and remove this garbage */
+const addIDField = (searchResult) => {
+  if (searchResult && searchResult.hits) {
+    searchResult.hits.forEach((hit) => {
+      hit.id = hit['openlattice.@id']; // eslint-disable-line no-param-reassign
+    });
+  }
+  return searchResult;
+};
+
 /**
  * `GET /search/entity_sets/{start}/{maxHits}`
  *
@@ -312,7 +322,7 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${entitySetId}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then(axiosResponse => addIDField(axiosResponse.data))
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -391,7 +401,7 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${ADVANCED_PATH}/${entitySetId}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then(axiosResponse => addIDField(axiosResponse.data))
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

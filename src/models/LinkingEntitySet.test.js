@@ -1,4 +1,4 @@
-import LinkingEntitySet, { LinkingEntitySetBuilder, isValid } from './LinkingEntitySet';
+import LinkingEntitySet, { LinkingEntitySetBuilder, isValidLinkingEntitySet as isValid } from './LinkingEntitySet';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
 import { MOCK_LINKING_ENTITY_SET_DM } from '../utils/testing/MockDataModels';
 

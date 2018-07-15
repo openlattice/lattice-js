@@ -5,8 +5,8 @@ import has from 'lodash/has';
 import Logger from '../utils/Logger';
 
 import FullyQualifiedName from '../models/FullyQualifiedName';
-import { isValid as isValidApp } from '../models/App';
-import { isValid as isValidAppType } from '../models/AppType';
+import { isValidApp } from '../models/App';
+import { isValidAppType } from '../models/AppType';
 import { APP_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyObject } from '../utils/LangUtils';

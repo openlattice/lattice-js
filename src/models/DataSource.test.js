@@ -1,4 +1,4 @@
-import DataSource, { DataSourceBuilder, isValid } from './DataSource';
+import DataSource, { DataSourceBuilder, isValidDataSource as isValid } from './DataSource';
 import { MOCK_DATA_SOURCE_DM } from '../utils/testing/MockDataModels';
 
 import {

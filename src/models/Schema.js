@@ -4,12 +4,11 @@
 
 import Immutable from 'immutable';
 
-import EntityType from './EntityType';
+import EntityType, { isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
-import PropertyType from './PropertyType';
+import PropertyType, { isValidPropertyTypeArray } from './PropertyType';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidEntityTypeArray, isValidPropertyTypeArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Schema');
 
@@ -121,7 +120,7 @@ export class SchemaBuilder {
   }
 }
 
-export function isValid(schema :any) :boolean {
+export function isValidSchema(schema :any) :boolean {
 
   if (!isDefined(schema)) {
 

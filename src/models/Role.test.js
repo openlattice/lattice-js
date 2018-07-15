@@ -1,4 +1,4 @@
-import Role, { RoleBuilder, isValid } from './Role';
+import Role, { RoleBuilder, isValidRole as isValid } from './Role';
 import { MOCK_ROLE_DM } from '../utils/testing/MockDataModels';
 
 import {

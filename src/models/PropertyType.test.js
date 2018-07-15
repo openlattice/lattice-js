@@ -1,4 +1,4 @@
-import PropertyType, { PropertyTypeBuilder, isValid } from './PropertyType';
+import PropertyType, { PropertyTypeBuilder, isValidPropertyType as isValid } from './PropertyType';
 import { MOCK_PROPERTY_TYPE_DM } from '../utils/testing/MockDataModels';
 
 import {

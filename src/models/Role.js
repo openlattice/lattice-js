@@ -5,7 +5,7 @@
 import has from 'lodash/has';
 
 import Logger from '../utils/Logger';
-import Principal, { isValid as isValidPrincipal } from './Principal';
+import Principal, { isValidPrincipal } from './Principal';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidUuid } from '../utils/ValidationUtils';
 
@@ -141,7 +141,7 @@ export class RoleBuilder {
   }
 }
 
-export function isValid(role :any) :boolean {
+export function isValidRole(role :any) :boolean {
 
   if (!isDefined(role)) {
 

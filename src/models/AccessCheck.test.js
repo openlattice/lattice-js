@@ -1,4 +1,4 @@
-import AccessCheck, { AccessCheckBuilder, isValid } from './AccessCheck';
+import AccessCheck, { AccessCheckBuilder, isValidAccessCheck as isValid } from './AccessCheck';
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED } from '../utils/testing/Invalid';
 import { MOCK_ACCESS_CHECK_DM } from '../utils/testing/MockDataModels';

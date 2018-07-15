@@ -1,4 +1,4 @@
-import Organization, { OrganizationBuilder, isValid } from './Organization';
+import Organization, { OrganizationBuilder, isValidOrganization as isValid } from './Organization';
 import { MOCK_ORGANIZATION_DM } from '../utils/testing/MockDataModels';
 
 import {

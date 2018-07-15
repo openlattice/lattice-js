@@ -1,4 +1,4 @@
-import Ace, { AceBuilder, isValid } from './Ace';
+import Ace, { AceBuilder, isValidAce as isValid } from './Ace';
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED } from '../utils/testing/Invalid';
 import { MOCK_ACE_DM } from '../utils/testing/MockDataModels';

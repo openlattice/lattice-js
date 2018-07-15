@@ -144,7 +144,7 @@ export class AppTypeBuilder {
   }
 }
 
-export function isValid(appType :any) :boolean {
+export function isValidAppType(appType :any) :boolean {
 
   if (!isDefined(appType)) {
 

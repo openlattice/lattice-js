@@ -6,7 +6,7 @@ import Immutable from 'immutable';
 import has from 'lodash/has';
 
 import Logger from '../utils/Logger';
-import Principal, { isValid as isValidPrincipal } from './Principal';
+import Principal, { isValidPrincipal, isValidPrincipalArray } from './Principal';
 
 import {
   isDefined,
@@ -18,8 +18,7 @@ import {
 
 import {
   isValidUuid,
-  isValidUuidArray,
-  isValidPrincipalArray
+  isValidUuidArray
 } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Organization');
@@ -247,7 +246,7 @@ export class OrganizationBuilder {
   }
 }
 
-export function isValid(organization :any) :boolean {
+export function isValidOrganization(organization :any) :boolean {
 
   if (!isDefined(organization)) {
 

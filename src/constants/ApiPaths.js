@@ -10,6 +10,7 @@ export const DATA_PATH :string = 'data';
 export const DATA_SOURCES_PATH :string = 'datasource';
 export const DATASTORE_PATH :string = 'datastore';
 export const EDM_PATH :string = 'edm';
+export const INTEGRATION_PATH :string = 'integration';
 export const LINKING_PATH :string = 'linking';
 export const ORGANIZATIONS_PATH :string = 'organizations';
 export const PERMISSIONS_PATH :string = 'permissions';

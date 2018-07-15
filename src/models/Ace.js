@@ -5,9 +5,9 @@
 import Immutable from 'immutable';
 
 import Logger from '../utils/Logger';
-import Principal, { isValid as isValidPrincipal } from './Principal';
+import Principal, { isValidPrincipal } from './Principal';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidPermissionArray } from '../utils/ValidationUtils';
+import { isValidPermissionArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { Permission } from '../constants/types/PermissionTypes';
 
@@ -81,7 +81,7 @@ export class AceBuilder {
   }
 }
 
-export function isValid(ace :any) :boolean {
+export function isValidAce(ace :any) :boolean {
 
   if (!isDefined(ace)) {
 
@@ -103,4 +103,9 @@ export function isValid(ace :any) :boolean {
     LOG.error(e, ace);
     return false;
   }
+}
+
+export function isValidAceArray(aces :Ace[]) :boolean {
+
+  return validateNonEmptyArray(aces, (ace :Ace) => isValidAce(ace));
 }

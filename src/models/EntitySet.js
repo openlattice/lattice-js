@@ -6,7 +6,7 @@ import Immutable from 'immutable';
 import has from 'lodash/has';
 
 import Logger from '../utils/Logger';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUuid, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import {
   isDefined,
@@ -178,7 +178,7 @@ export class EntitySetBuilder {
   }
 }
 
-export function isValid(entitySet :any) :boolean {
+export function isValidEntitySet(entitySet :any) :boolean {
 
   if (!isDefined(entitySet)) {
 
@@ -215,4 +215,9 @@ export function isValid(entitySet :any) :boolean {
     LOG.error(e, entitySet);
     return false;
   }
+}
+
+export function isValidEntitySetArray(entitySets :EntitySet[]) :boolean {
+
+  return validateNonEmptyArray(entitySets, (entitySet :EntitySet) => isValidEntitySet(entitySet));
 }

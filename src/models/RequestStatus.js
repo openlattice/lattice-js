@@ -4,9 +4,10 @@
 
 import Logger from '../utils/Logger';
 import RequestStateTypes from '../constants/types/RequestStateTypes';
-import Principal, { isValid as isValidPrincipal } from './Principal';
-import Request, { isValid as isValidRequest } from './Request';
+import Principal, { isValidPrincipal } from './Principal';
+import Request, { isValidRequest } from './Request';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
+import { validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { RequestState } from '../constants/types/RequestStateTypes';
 
@@ -80,7 +81,7 @@ export class RequestStatusBuilder {
   }
 }
 
-export function isValid(requestStatus :any) :boolean {
+export function isValidRequestStatus(requestStatus :any) :boolean {
 
   if (!isDefined(requestStatus)) {
 
@@ -103,4 +104,9 @@ export function isValid(requestStatus :any) :boolean {
     LOG.error(e, requestStatus);
     return false;
   }
+}
+
+export function isValidRequestStatusArray(statuses :RequestStatus[]) :boolean {
+
+  return validateNonEmptyArray(statuses, (requestStatus :RequestStatus) => isValidRequestStatus(requestStatus));
 }

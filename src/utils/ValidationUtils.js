@@ -4,14 +4,6 @@
 
 import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
-import AccessCheck, { isValid as isValidAccessCheck } from '../models/AccessCheck';
-import Ace, { isValid as isValidAce } from '../models/Ace';
-import EntitySet, { isValid as isValidEntitySet } from '../models/EntitySet';
-import EntityType, { isValid as isValidEntityType } from '../models/EntityType';
-import Principal, { isValid as isValidPrincipal } from '../models/Principal';
-import PropertyType, { isValid as isValidPropertyType } from '../models/PropertyType';
-import Request, { isValid as isValidRequest } from '../models/Request';
-import RequestStatus, { isValid as isValidRequestStatus } from '../models/RequestStatus';
 import { isNonEmptyArray, isNonEmptyString } from './LangUtils';
 
 import type { Permission } from '../constants/types/PermissionTypes';
@@ -56,49 +48,9 @@ export function isValidFqnArray(fqns :FullyQualifiedName[]) :boolean {
   return validateNonEmptyArray(fqns, (fqn :FullyQualifiedName) => FullyQualifiedName.isValid(fqn));
 }
 
-export function isValidEntitySetArray(entitySets :EntitySet[]) :boolean {
-
-  return validateNonEmptyArray(entitySets, (entitySet :EntitySet) => isValidEntitySet(entitySet));
-}
-
-export function isValidEntityTypeArray(entityTypes :EntityType[]) :boolean {
-
-  return validateNonEmptyArray(entityTypes, (entityType :EntityType) => isValidEntityType(entityType));
-}
-
-export function isValidPropertyTypeArray(propertyTypes :PropertyType[]) :boolean {
-
-  return validateNonEmptyArray(propertyTypes, (propertyType :PropertyType) => isValidPropertyType(propertyType));
-}
-
-export function isValidAceArray(aces :Ace[]) :boolean {
-
-  return validateNonEmptyArray(aces, (ace :Ace) => isValidAce(ace));
-}
-
 export function isValidPermissionArray(permissions :Permission[]) :boolean {
 
   return validateNonEmptyArray(permissions, (permission :Permission) => (
     isNonEmptyString(permission) && PermissionTypes[permission]
   ));
-}
-
-export function isValidPrincipalArray(principals :Principal[]) :boolean {
-
-  return validateNonEmptyArray(principals, (principal :Principal) => isValidPrincipal(principal));
-}
-
-export function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
-
-  return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => isValidAccessCheck(accessCheck));
-}
-
-export function isValidRequestArray(requests :Request[]) :boolean {
-
-  return validateNonEmptyArray(requests, (request :Request) => isValidRequest(request));
-}
-
-export function isValidRequestStatusArray(statuses :RequestStatus[]) :boolean {
-
-  return validateNonEmptyArray(statuses, (requestStatus :RequestStatus) => isValidRequestStatus(requestStatus));
 }
