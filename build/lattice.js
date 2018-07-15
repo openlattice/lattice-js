@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.35.0
+ * lattice - v0.35.1
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -34841,7 +34841,7 @@ function replaceEntityInEntitySet(entitySetId, entityKeyId, entity) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.UPDATE_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.SET_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -34895,7 +34895,7 @@ function replaceEntityInEntitySetUsingFqns(entitySetId, entityKeyId, entity) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.UPDATE_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.SET_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -40241,7 +40241,7 @@ var _Configuration = __webpack_require__(23);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // injected by Webpack.DefinePlugin
-var version = "v0.35.0";
+var version = "v0.35.1";
 
 /**
  * The `lattice.js` library is a layer on top of OpenLattice's REST APIs to simplify the process of reading data from
