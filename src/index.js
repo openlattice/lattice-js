@@ -14,6 +14,7 @@ import * as AnalysisApi from './api/AnalysisApi';
 import * as AppApi from './api/AppApi';
 import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
+import * as DataIntegrationApi from './api/DataIntegrationApi';
 import * as DataSourcesApi from './api/DataSourcesApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as LinkingApi from './api/LinkingApi';
@@ -37,6 +38,7 @@ export {
   AppApi,
   AuthorizationApi,
   DataApi,
+  DataIntegrationApi,
   DataSourcesApi,
   EntityDataModelApi,
   LinkingApi,
@@ -58,6 +60,7 @@ export default {
   AppApi,
   AuthorizationApi,
   DataApi,
+  DataIntegrationApi,
   DataSourcesApi,
   EntityDataModelApi,
   LinkingApi,

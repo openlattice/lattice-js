@@ -72,7 +72,6 @@ describe('DataApi', () => {
   getEntitySetData();
   getEntitySetDataFileUrl();
   createEntityData();
-  // createEntityAndAssociationData();
   storeEntityData();
   acquireSyncTicket();
   releaseSyncTicket();
@@ -274,9 +273,6 @@ function createEntityData() {
 
   });
 }
-
-// TODO: write unit tests for createEntityAndAssociationData()
-// function createEntityAndAssociationData() {}
 
 function storeEntityData() {
 

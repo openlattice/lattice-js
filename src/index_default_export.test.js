@@ -25,7 +25,12 @@ describe('lattice-js default export', () => {
 
   test('should export DataApi', () => {
     expect(Object.prototype.toString.call(Lattice.DataApi)).toEqual(OBJECT_TAG);
-    expect(Object.keys(Lattice.DataApi)).toHaveLength(12);
+    expect(Object.keys(Lattice.DataApi)).toHaveLength(11);
+  });
+
+  test('should export DataIntegrationApi', () => {
+    expect(Object.prototype.toString.call(Lattice.DataIntegrationApi)).toEqual(OBJECT_TAG);
+    expect(Object.keys(Lattice.DataIntegrationApi)).toHaveLength(1);
   });
 
   test('should export DataSourcesApi', () => {
