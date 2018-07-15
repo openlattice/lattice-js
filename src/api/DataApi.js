@@ -29,8 +29,7 @@ import {
   COUNT_PATH,
   ENTITY_DATA_PATH,
   SET_PATH,
-  TICKET_PATH,
-  UPDATE_PATH
+  TICKET_PATH
 } from '../constants/ApiPaths';
 
 import {
