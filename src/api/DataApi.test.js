@@ -7,8 +7,8 @@ import { DATA_API } from '../constants/ApiNames';
 import {
   COUNT_PATH,
   ENTITY_DATA_PATH,
-  TICKET_PATH,
-  SET_PATH
+  SET_PATH,
+  TICKET_PATH
 } from '../constants/ApiPaths';
 
 import {
