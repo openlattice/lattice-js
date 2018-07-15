@@ -28,6 +28,7 @@ import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 import {
   COUNT_PATH,
   ENTITY_DATA_PATH,
+  SET_PATH,
   TICKET_PATH,
   UPDATE_PATH
 } from '../constants/ApiPaths';
@@ -422,7 +423,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
   }
 
   return getApiAxiosInstance(DATA_API)
-    .put(`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${entitySetId}/${entityKeyId}`, entity)
+    .put(`/${SET_PATH}/${entitySetId}/${entityKeyId}`, entity)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -477,7 +478,7 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
   }
 
   return getApiAxiosInstance(DATA_API)
-    .post(`/${ENTITY_DATA_PATH}/${UPDATE_PATH}/${entitySetId}/${entityKeyId}`, entity)
+    .post(`/${SET_PATH}/${entitySetId}/${entityKeyId}`, entity)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
