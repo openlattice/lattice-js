@@ -60,7 +60,7 @@ const START :string = 'start';
 /* TODO update all frontend projects and remove this garbage */
 const addIDField = (searchResult) => {
   searchResult.hits.forEach((hit) => {
-    hit.id = hit['openlattice.@id'];
+    hit.id = hit['openlattice.@id']; // eslint-disable-line no-param-reassign
   });
   return searchResult;
 };

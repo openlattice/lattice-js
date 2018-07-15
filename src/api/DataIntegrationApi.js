@@ -18,27 +18,12 @@
  * // DataIntegrationApi.get...
  */
 
-import Immutable from 'immutable';
 import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
-import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
-
-import {
-  COUNT_PATH,
-  ENTITY_DATA_PATH,
-  TICKET_PATH,
-  UPDATE_PATH
-} from '../constants/ApiPaths';
-
-import {
-  isEmptyArray,
-  isEmptyString,
-  isNonEmptyObject,
-  isNonEmptyString
-} from '../utils/LangUtils';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isNonEmptyObject } from '../utils/LangUtils';
 
 const LOG = new Logger('DataIntegrationApi');
 
