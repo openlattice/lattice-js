@@ -27,9 +27,7 @@ import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   COUNT_PATH,
-  ENTITY_DATA_PATH,
-  SET_PATH,
-  TICKET_PATH
+  SET_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -49,18 +47,18 @@ const LOG = new Logger('DataApi');
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
- * @param {UUID} syncId
  * @param {UUID[]} propertyTypeIds
+ * @param {UUID[]} entityKeyIds
  * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
  *
  * @example
- * DataApi.getSelectedEntitySetData(
+ * DataApi.getEntitySetData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
+ *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"],
+ *   ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"]
  * );
  */
-export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeIds :UUID[]) :Promise<*> {
+export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], entityKeyIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -70,19 +68,10 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
     return Promise.reject(errorMsg);
   }
 
-  const data = {};
-
-  if (isValidUuid(syncId)) {
-    data.syncId = syncId;
-  }
-  else if (!isUndefined(syncId) && !isEmptyString(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
+  const entitySetSelection = {};
 
   if (isValidUuidArray(propertyTypeIds)) {
-    data.properties = Immutable.Set().withMutations((set :Set<UUID>) => {
+    entitySetSelection.properties = Immutable.Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
       });
@@ -94,8 +83,21 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
     return Promise.reject(errorMsg);
   }
 
+  if (isValidUuidArray(entityKeyIds)) {
+    entitySetSelection.ids = Immutable.Set().withMutations((set :Set<UUID>) => {
+      entityKeyIds.forEach((entityKeyId :UUID) => {
+        set.add(entityKeyId);
+      });
+    }).toJS();
+  }
+  else if (!isUndefined(entityKeyIds) && !isEmptyArray(entityKeyIds)) {
+    errorMsg = 'invalid parameter: entityKeyIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entityKeyIds);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(DATA_API)
-    .post(`/${ENTITY_DATA_PATH}/${entitySetId}`, data)
+    .post(`/${SET_PATH}/${entitySetId}`, entitySetSelection)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -113,7 +115,7 @@ export function getEntitySetData(entitySetId :UUID, syncId :UUID, propertyTypeId
  * @returns {string} - the direct file download URL
  *
  * @example
- * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
+ * DataApi.getEntitySetDataFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
  */
 export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?string {
 
@@ -133,8 +135,7 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     return null;
   }
 
-  // eslint-disable-next-line
-  return `${getApiBaseUrl(DATA_API)}/${ENTITY_DATA_PATH}/${entitySetId}?fileType=${fileType.toLowerCase()}`;
+  return `${getApiBaseUrl(DATA_API)}/${SET_PATH}/${entitySetId}?fileType=${fileType.toLowerCase()}`;
 }
 
 /**

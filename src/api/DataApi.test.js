@@ -6,9 +6,7 @@ import { DATA_API } from '../constants/ApiNames';
 
 import {
   COUNT_PATH,
-  ENTITY_DATA_PATH,
   SET_PATH,
-  TICKET_PATH
 } from '../constants/ApiPaths';
 
 import {
@@ -41,10 +39,9 @@ import {
 
 const MOCK_BASE_URL = genMockBaseUrl();
 const MOCK_FILE_TYPE = 'json';
+const MOCK_ENTITY_KEY_UUID = genRandomUUID();
 const MOCK_ENTITY_SET_UUID = genRandomUUID();
 const MOCK_PROPERTY_TYPE_UUID = genRandomUUID();
-const MOCK_SYNC_UUID = genRandomUUID();
-const MOCK_TICKET_UUID = genRandomUUID();
 
 const MOCK_ENTITIES = {
   entityId_1: [
@@ -87,30 +84,30 @@ function getEntitySetData() {
 
     const validParams = [
       MOCK_ENTITY_SET_UUID,
-      MOCK_SYNC_UUID,
-      [MOCK_PROPERTY_TYPE_UUID]
+      [MOCK_PROPERTY_TYPE_UUID],
+      [MOCK_ENTITY_KEY_UUID]
     ];
 
     const invalidParams = [
       INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED,
+      INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
       INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
     ];
 
     describe('should send a POST request with the correct params', () => {
 
-      test('+syncId, +propertyTypeIds', () => {
+      test('+propertyTypeIds, +entityKeyIds', () => {
 
         const apiInvocationParams = [
           MOCK_ENTITY_SET_UUID,
-          MOCK_SYNC_UUID,
-          [MOCK_PROPERTY_TYPE_UUID]
+          [MOCK_PROPERTY_TYPE_UUID],
+          [MOCK_ENTITY_KEY_UUID]
         ];
 
         const expectedAxiosParams = [
-          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
           {
-            syncId: MOCK_SYNC_UUID,
+            ids: [MOCK_ENTITY_KEY_UUID],
             properties: [MOCK_PROPERTY_TYPE_UUID]
           }
         ];
@@ -118,46 +115,46 @@ function getEntitySetData() {
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
       });
 
-      test('+syncId, -propertyTypeIds', () => {
+      test('-propertyTypeIds, +entityKeyIds', () => {
 
         const apiInvocationParams = [
           MOCK_ENTITY_SET_UUID,
-          MOCK_SYNC_UUID,
-          undefined
+          undefined,
+          [MOCK_ENTITY_KEY_UUID]
         ];
 
         const expectedAxiosParams = [
-          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
-          { syncId: MOCK_SYNC_UUID }
+          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          { ids: [MOCK_ENTITY_KEY_UUID] }
         ];
 
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
       });
 
-      test('-syncId, +propertyTypeIds', () => {
+      test('+propertyTypeIds, -entityKeyIds', () => {
 
         const apiInvocationParams = [
           MOCK_ENTITY_SET_UUID,
-          undefined,
-          [MOCK_PROPERTY_TYPE_UUID]
+          [MOCK_PROPERTY_TYPE_UUID],
+          undefined
         ];
 
         const expectedAxiosParams = [
-          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
           { properties: [MOCK_PROPERTY_TYPE_UUID] }
         ];
 
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
       });
 
-      test('-syncId, -propertyTypeIds', () => {
+      test('-propertyTypeIds, -entityKeyIds', () => {
 
         const apiInvocationParams = [
           MOCK_ENTITY_SET_UUID
         ];
 
         const expectedAxiosParams = [
-          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
           {}
         ];
 
@@ -192,14 +189,14 @@ function getEntitySetDataFileUrl() {
     test('should return the correct URL', () => {
 
       expect(DataApi.getEntitySetDataFileUrl(MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE)).toEqual(
-        `${MOCK_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
+        `${MOCK_BASE_URL}/${SET_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
       );
     });
 
     test('should correctly set the fileType query param as lowercase', () => {
 
       expect(DataApi.getEntitySetDataFileUrl(MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE.toUpperCase())).toEqual(
-        `${MOCK_BASE_URL}/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
+        `${MOCK_BASE_URL}/${SET_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
       );
     });
 
