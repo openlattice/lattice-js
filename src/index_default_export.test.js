@@ -73,11 +73,6 @@ describe('lattice-js default export', () => {
     expect(Object.keys(Lattice.SearchApi)).toHaveLength(12);
   });
 
-  test('should export SyncApi', () => {
-    expect(Object.prototype.toString.call(Lattice.SyncApi)).toEqual(OBJECT_TAG);
-    expect(Object.keys(Lattice.SyncApi)).toHaveLength(1);
-  });
-
   test('should export Models', () => {
     expect(Object.prototype.toString.call(Lattice.Models)).toEqual(OBJECT_TAG);
     expect(Object.keys(Lattice.Models)).toHaveLength(41);

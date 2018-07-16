@@ -23,7 +23,6 @@ import * as PermissionsApi from './api/PermissionsApi';
 import * as PrincipalsApi from './api/PrincipalsApi';
 import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
-import * as SyncApi from './api/SyncApi';
 
 import * as Types from './constants/types';
 import * as Models from './models';
@@ -47,7 +46,6 @@ export {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
-  SyncApi,
 
   Models,
   Types,
@@ -69,7 +67,6 @@ export default {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
-  SyncApi,
 
   Models,
   Types,
