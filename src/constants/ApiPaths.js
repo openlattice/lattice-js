@@ -41,8 +41,6 @@ export const INSTALL_PATH :string = 'install';
 
 // DataApi specific paths
 export const COUNT_PATH :string = 'count';
-export const ENTITY_DATA_PATH :string = 'entitydata';
-export const TICKET_PATH :string = 'ticket';
 
 // EntityDataModelApi specific paths
 export const ASSOCIATION_TYPE_PATH :string = 'association/type';

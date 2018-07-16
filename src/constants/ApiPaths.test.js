@@ -39,8 +39,6 @@ const LOOKUP_PATH = 'lookup';
 
 // DataApi specific paths
 const COUNT_PATH = 'count';
-const ENTITY_DATA_PATH = 'entitydata';
-const TICKET_PATH = 'ticket';
 
 // EntityDataModelApi specific paths
 const ASSOCIATION_TYPE_PATH = 'association/type';
@@ -241,16 +239,6 @@ describe('ApiPaths', () => {
     test(`should export "${COUNT_PATH}"`, () => {
       expect(ApiPaths.COUNT_PATH).toBeDefined();
       expect(ApiPaths.COUNT_PATH).toEqual(COUNT_PATH);
-    });
-
-    test(`should export "${ENTITY_DATA_PATH}"`, () => {
-      expect(ApiPaths.ENTITY_DATA_PATH).toBeDefined();
-      expect(ApiPaths.ENTITY_DATA_PATH).toEqual(ENTITY_DATA_PATH);
-    });
-
-    test(`should export "${TICKET_PATH}"`, () => {
-      expect(ApiPaths.TICKET_PATH).toBeDefined();
-      expect(ApiPaths.TICKET_PATH).toEqual(TICKET_PATH);
     });
 
   });
