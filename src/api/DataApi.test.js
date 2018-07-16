@@ -43,14 +43,12 @@ const MOCK_ENTITY_KEY_UUID = genRandomUUID();
 const MOCK_ENTITY_SET_UUID = genRandomUUID();
 const MOCK_PROPERTY_TYPE_UUID = genRandomUUID();
 
-const MOCK_ENTITIES = {
-  entityId_1: [
-    {
-      [`${genRandomUUID()}`]: ['value_1', 'value_2'],
-      [`${genRandomUUID()}`]: ['value_3', 'value_4']
-    }
-  ]
-};
+const MOCK_ENTITIES = [
+  {
+    [`${genRandomUUID()}`]: ['value_1', 'value_2'],
+    [`${genRandomUUID()}`]: ['value_3', 'value_4']
+  }
+];
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiBaseUrl.mockImplementation(() => MOCK_BASE_URL);
@@ -68,7 +66,7 @@ describe('DataApi', () => {
 
   getEntitySetData();
   getEntitySetDataFileUrl();
-  createEntityData();
+  createOrMergeEntityData();
   deleteEntityFromEntitySet();
   replaceEntityInEntitySet();
   replaceEntityInEntitySetUsingFqns();
@@ -206,59 +204,21 @@ function getEntitySetDataFileUrl() {
   });
 }
 
-function createEntityData() {
+function createOrMergeEntityData() {
 
-  describe('createEntityData()', () => {
+  describe('createOrMergeEntityData()', () => {
 
-    const apiToTest = DataApi.createEntityData;
+    const apiToTest = DataApi.createOrMergeEntityData;
 
     const validParams = [
       MOCK_ENTITY_SET_UUID,
-      MOCK_SYNC_UUID,
       MOCK_ENTITIES
     ];
 
     const invalidParams = [
       INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED,
       INVALID_PARAMS
     ];
-
-    describe('should send a PUT request with the correct URL path and data when syncId is given', () => {
-
-      test('+syncId', () => {
-
-        const apiInvocationParams = [
-          MOCK_ENTITY_SET_UUID,
-          MOCK_SYNC_UUID,
-          MOCK_ENTITIES
-        ];
-
-        const expectedAxiosParams = [
-          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`,
-          MOCK_ENTITIES
-        ];
-
-        return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
-      });
-
-      test('-syncId', () => {
-
-        const apiInvocationParams = [
-          MOCK_ENTITY_SET_UUID,
-          undefined,
-          MOCK_ENTITIES
-        ];
-
-        const expectedAxiosParams = [
-          `/${ENTITY_DATA_PATH}/${MOCK_ENTITY_SET_UUID}`,
-          MOCK_ENTITIES
-        ];
-
-        return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
-      });
-
-    });
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);

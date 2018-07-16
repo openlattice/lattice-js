@@ -22,20 +22,11 @@ import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
+import { COUNT_PATH, SET_PATH } from '../constants/ApiPaths';
+import { FILE_TYPE, SET_ID } from '../constants/UrlConstants';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
-
-import {
-  COUNT_PATH,
-  SET_PATH
-} from '../constants/ApiPaths';
-
-import {
-  isEmptyArray,
-  isEmptyString,
-  isNonEmptyObject,
-  isNonEmptyString
-} from '../utils/LangUtils';
+import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
+import { isValidMultimapArray, isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataApi');
 
@@ -135,36 +126,31 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     return null;
   }
 
-  return `${getApiBaseUrl(DATA_API)}/${SET_PATH}/${entitySetId}?fileType=${fileType.toLowerCase()}`;
+  return `${getApiBaseUrl(DATA_API)}/${SET_PATH}/${entitySetId}?${FILE_TYPE}=${fileType.toLowerCase()}`;
 }
 
 /**
- * `PUT /data/entitydata/{entitySetId}/{syncId}`
+ * `POST /data/set?setId={entitySetId}`
  *
- * Creates an entry for the given entity data.
+ * Creates or updates entities for the given entity data, and returns the corresponding entity UUIDs.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
- * @param {UUID} syncId
  * @param {Object} entities
- * @return {Promise} - a Promise that resolves without a value
+ * @return {Promise<UUID[]>} - a Promise that resolves with a list of UUIDs
  *
  * @example
- * DataApi.createEntityData(
+ * DataApi.createOrMergeEntityData(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   {
- *     "id_1": [
- *       {
- *         "uuid_1": ["value_1", "value_2"],
- *         "uuid_2": ["value_3", "value_4"]
- *       }
- *     ]
- *   }
+ *   [{
+ *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": ["value_1", "value_2"],
+ *     "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
+ *   }]
  * );
  */
-export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Object) :Promise<*> {
+
+export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -174,27 +160,14 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
     return Promise.reject(errorMsg);
   }
 
-  let url :string = `/${ENTITY_DATA_PATH}/${entitySetId}`;
-
-  if (isValidUuid(syncId)) {
-    url = `${url}/${syncId}`;
-  }
-  else if (!isUndefined(syncId) && !isEmptyString(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
-
-  if (!isNonEmptyObject(entities)) {
-    errorMsg = 'invalid parameter: entities must be a non-empty object';
+  if (!isValidMultimapArray(entities)) {
+    errorMsg = 'invalid parameter: entities must be a non-empty multimap array';
     LOG.error(errorMsg, entities);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(DATA_API)
-    .put(url, entities)
+    .post(`/${SET_PATH}?${SET_ID}=${entitySetId}`, entities)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
