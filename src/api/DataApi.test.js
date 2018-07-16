@@ -73,8 +73,6 @@ describe('DataApi', () => {
   getEntitySetDataFileUrl();
   createEntityData();
   storeEntityData();
-  acquireSyncTicket();
-  releaseSyncTicket();
   deleteEntityFromEntitySet();
   replaceEntityInEntitySet();
   replaceEntityInEntitySetUsingFqns();
@@ -302,42 +300,6 @@ function storeEntityData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'patch');
-  });
-}
-
-function acquireSyncTicket() {
-
-  describe('acquireSyncTicket()', () => {
-
-    const apiToTest = DataApi.acquireSyncTicket;
-
-    const validParams = [MOCK_ENTITY_SET_UUID, MOCK_SYNC_UUID];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${TICKET_PATH}/${MOCK_ENTITY_SET_UUID}/${MOCK_SYNC_UUID}`];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
-  });
-}
-
-function releaseSyncTicket() {
-
-  describe('releaseSyncTicket()', () => {
-
-    const apiToTest = DataApi.releaseSyncTicket;
-
-    const validParams = [MOCK_TICKET_UUID];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${TICKET_PATH}/${MOCK_TICKET_UUID}`];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
   });
 }
 
