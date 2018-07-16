@@ -202,63 +202,6 @@ export function createEntityData(entitySetId :UUID, syncId :UUID, entities :Obje
 }
 
 /**
- * `PATCH /data/entitydata/{ticketId}/{syncId}`
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} ticketId
- * @param {UUID} syncId
- * @param {Object} entities
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.storeEntityData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   {
- *     "id_1": [
- *       {
- *         "uuid_1": ["value_1", "value_2"],
- *         "uuid_2": ["value_3", "value_4"]
- *       }
- *     ]
- *   }
- * );
- */
-export function storeEntityData(ticketId :UUID, syncId :UUID, entities :Object) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(ticketId)) {
-    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
-    LOG.error(errorMsg, ticketId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
-
-  if (!isNonEmptyObject(entities)) {
-    errorMsg = 'invalid parameter: entities must be a non-empty object';
-    LOG.error(errorMsg, entities);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .patch(`/${ENTITY_DATA_PATH}/${TICKET_PATH}/${ticketId}/${syncId}`, entities)
-    .then(axiosResponse => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
  *
  * Deletes the entity with the specified id from the entity set with the specified id.

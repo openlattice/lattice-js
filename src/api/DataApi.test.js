@@ -72,7 +72,6 @@ describe('DataApi', () => {
   getEntitySetData();
   getEntitySetDataFileUrl();
   createEntityData();
-  storeEntityData();
   deleteEntityFromEntitySet();
   replaceEntityInEntitySet();
   replaceEntityInEntitySetUsingFqns();
@@ -269,37 +268,6 @@ function createEntityData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
 
-  });
-}
-
-function storeEntityData() {
-
-  describe('storeEntityData()', () => {
-
-    const apiToTest = DataApi.storeEntityData;
-
-    const validParams = [
-      MOCK_TICKET_UUID,
-      MOCK_SYNC_UUID,
-      MOCK_ENTITIES
-    ];
-
-    const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS
-    ];
-
-    const axiosParams = [
-      `/${ENTITY_DATA_PATH}/${TICKET_PATH}/${MOCK_TICKET_UUID}/${MOCK_SYNC_UUID}`,
-      MOCK_ENTITIES
-    ];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'patch');
   });
 }
 
