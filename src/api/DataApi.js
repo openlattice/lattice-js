@@ -20,13 +20,20 @@
 import Immutable from 'immutable';
 import isUndefined from 'lodash/isUndefined';
 
+import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
 import { COUNT_PATH, SET_PATH } from '../constants/ApiPaths';
 import { FILE_TYPE, SET_ID } from '../constants/UrlConstants';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
-import { isValidMultimapArray, isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isEmptyArray, isNonEmptyString } from '../utils/LangUtils';
+
+import {
+  isValidMultimap,
+  isValidMultimapArray,
+  isValidUuid,
+  isValidUuidArray
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataApi');
 
@@ -160,7 +167,7 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidMultimapArray(entities)) {
+  if (!isValidMultimapArray(entities, isValidUuid)) {
     errorMsg = 'invalid parameter: entities must be a non-empty multimap array';
     LOG.error(errorMsg, entities);
     return Promise.reject(errorMsg);
@@ -250,9 +257,9 @@ export function clearEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :
 }
 
 /**
- * `PUT /data/entitydata/{entitySetId}/{entityKeyId}`
+ * `PUT /data/set/{entitySetId}/{entityKeyId}`
  *
- * Replaces the entity values for the specified entityKeyId.
+ * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
@@ -266,8 +273,8 @@ export function clearEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
- *     "uuid_1a": ["value_1a", "value_1b"],
- *     "uuid_1b": ["value_1c", "value_1d"]
+ *     "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
+ *     "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
  *   }
  * );
  */
@@ -287,10 +294,8 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
     return Promise.reject(errorMsg);
   }
 
-  // TODO: validate "entity" structure
-
-  if (!isNonEmptyObject(entity)) {
-    errorMsg = 'invalid parameter: entity must be a non-empty object';
+  if (!isValidMultimap(entity, isValidUuid)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty multimap';
     LOG.error(errorMsg, entity);
     return Promise.reject(errorMsg);
   }
@@ -305,9 +310,9 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
 }
 
 /**
- * `POST /data/entitydata/update/{entitySetId}/{entityKeyId}`
+ * `POST /data/set/update/{entitySetId}/{entityKeyId}`
  *
- * Replaces the entity values for the specified entityKeyId.
+ * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
@@ -321,8 +326,8 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
- *     "namespace1.name1": ["value_1a", "value_1b"],
- *     "namespace2.name2": ["value_1c", "value_1d"]
+ *     "namespace1.name1": ["value_1", "value_2"],
+ *     "namespace2.name2": ["value_3", "value_4"]
  *   }
  * );
  */
@@ -342,9 +347,7 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
     return Promise.reject(errorMsg);
   }
 
-  // TODO: validate "entity" structure
-
-  if (!isNonEmptyObject(entity)) {
+  if (!isValidMultimap(entity, FullyQualifiedName.isValid)) {
     errorMsg = 'invalid parameter: entity must be a non-empty object';
     LOG.error(errorMsg, entity);
     return Promise.reject(errorMsg);

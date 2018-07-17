@@ -8,6 +8,8 @@ import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import { isNonEmptyArray, isNonEmptyObject, isNonEmptyString } from './LangUtils';
 
+type ValidatorFn = (value :any) => boolean;
+
 /*
  * https://github.com/mixer/uuid-validate
  * https://github.com/chriso/validator.js
@@ -18,7 +20,7 @@ import { isNonEmptyArray, isNonEmptyObject, isNonEmptyString } from './LangUtils
  */
 const BASE_UUID_PATTERN :RegExp = /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
 
-export function validateNonEmptyArray(value :any[], validatorFn :Function) :boolean {
+export function validateNonEmptyArray(value :any[], validatorFn :ValidatorFn) :boolean {
 
   if (!isNonEmptyArray(value)) {
     return false;
@@ -55,7 +57,7 @@ export function isValidPermissionArray(permissions :any[]) :boolean {
   ));
 }
 
-export function isValidMultimap(value :any) :boolean {
+export function isValidMultimap(value :any, validatorFn :ValidatorFn) :boolean {
 
   if (!isNonEmptyObject(value)) {
     return false;
@@ -65,7 +67,7 @@ export function isValidMultimap(value :any) :boolean {
 
   // validate all keys are UUIDs
   for (let index1 = 0; index1 < ids.length; index1 += 1) {
-    if (!isValidUuid(ids[index1])) {
+    if (!validatorFn(ids[index1])) {
       return false;
     }
   }
@@ -80,7 +82,7 @@ export function isValidMultimap(value :any) :boolean {
   return true;
 }
 
-export function isValidMultimapArray(values :any[]) :boolean {
+export function isValidMultimapArray(values :any[], validatorFn :ValidatorFn) :boolean {
 
-  return validateNonEmptyArray(values, (value :any) => isValidMultimap(value));
+  return validateNonEmptyArray(values, (value :any) => isValidMultimap(value, validatorFn));
 }
