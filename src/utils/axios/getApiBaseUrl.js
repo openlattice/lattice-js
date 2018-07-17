@@ -24,7 +24,6 @@ const API_TO_PATH_MAP :Map<string, string> = Immutable.OrderedMap({
   [ApiNames.PRINCIPALS_API]       : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.PRINCIPALS_PATH}`,
   [ApiNames.REQUESTS_API]         : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.REQUESTS_PATH}`,
   [ApiNames.SEARCH_API]           : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.SEARCH_PATH}`,
-  [ApiNames.SYNC_API]             : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.SYNC_PATH}`
 });
 /* eslint-enable */
 

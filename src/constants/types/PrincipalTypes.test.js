@@ -1,30 +1,17 @@
-import PrincipalTypes from './PrincipalTypes';
+import { Map } from 'immutable';
 
-const ORGANIZATION = 'ORGANIZATION';
-const ROLE = 'ROLE';
-const USER = 'USER';
-const APP = 'APP';
+import PrincipalTypes from './PrincipalTypes';
+import { testEnumIntegrity } from '../../utils/testing/TestUtils';
+
+const EXPECTED_ENUM = Map({
+  APP: 'APP',
+  ORGANIZATION: 'ORGANIZATION',
+  ROLE: 'ROLE',
+  USER: 'USER',
+}).sort();
 
 describe('PrincipalTypes', () => {
 
-  test(`should export "${ORGANIZATION}"`, () => {
-    expect(PrincipalTypes.ORGANIZATION).toBeDefined();
-    expect(PrincipalTypes.ORGANIZATION).toEqual(ORGANIZATION);
-  });
-
-  test(`should export "${ROLE}"`, () => {
-    expect(PrincipalTypes.ROLE).toBeDefined();
-    expect(PrincipalTypes.ROLE).toEqual(ROLE);
-  });
-
-  test(`should export "${USER}"`, () => {
-    expect(PrincipalTypes.USER).toBeDefined();
-    expect(PrincipalTypes.USER).toEqual(USER);
-  });
-
-  test(`should export "${APP}"`, () => {
-    expect(PrincipalTypes.APP).toBeDefined();
-    expect(PrincipalTypes.APP).toEqual(APP);
-  });
+  testEnumIntegrity(PrincipalTypes, EXPECTED_ENUM);
 
 });

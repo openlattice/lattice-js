@@ -2,16 +2,11 @@
  * @flow
  */
 
-const METAPHONE :'METAPHONE' = 'METAPHONE';
-const STANDARD :'STANDARD' = 'STANDARD';
-
 const AnalyzerTypes = {
-  METAPHONE,
-  STANDARD
+  METAPHONE: 'METAPHONE',
+  STANDARD: 'STANDARD',
 };
 
-export type Analyzer =
-  | typeof METAPHONE
-  | typeof STANDARD;
+export type Analyzer = $Keys<typeof AnalyzerTypes>;
 
 export { AnalyzerTypes as default };

@@ -1,24 +1,16 @@
-import RequestStateTypes from './RequestStateTypes';
+import { Map } from 'immutable';
 
-const APPROVED = 'APPROVED';
-const DECLINED = 'DECLINED';
-const SUBMITTED = 'SUBMITTED';
+import RequestStateTypes from './RequestStateTypes';
+import { testEnumIntegrity } from '../../utils/testing/TestUtils';
+
+const EXPECTED_ENUM = Map({
+  APPROVED: 'APPROVED',
+  DECLINED: 'DECLINED',
+  SUBMITTED: 'SUBMITTED',
+}).sort();
 
 describe('RequestStateTypes', () => {
 
-  test(`should export "${APPROVED}"`, () => {
-    expect(RequestStateTypes.APPROVED).toBeDefined();
-    expect(RequestStateTypes.APPROVED).toEqual(APPROVED);
-  });
-
-  test(`should export "${DECLINED}"`, () => {
-    expect(RequestStateTypes.DECLINED).toBeDefined();
-    expect(RequestStateTypes.DECLINED).toEqual(DECLINED);
-  });
-
-  test(`should export "${SUBMITTED}"`, () => {
-    expect(RequestStateTypes.SUBMITTED).toBeDefined();
-    expect(RequestStateTypes.SUBMITTED).toEqual(SUBMITTED);
-  });
+  testEnumIntegrity(RequestStateTypes, EXPECTED_ENUM);
 
 });

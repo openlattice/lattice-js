@@ -15,4 +15,3 @@ export const PERMISSIONS_API :string = 'PermissionsApi';
 export const PRINCIPALS_API :string = 'PrincipalsApi';
 export const REQUESTS_API :string = 'RequestsApi';
 export const SEARCH_API :string = 'SearchApi';
-export const SYNC_API :string = 'SyncApi';

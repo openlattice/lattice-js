@@ -15,7 +15,6 @@ const PERMISSIONS_PATH = 'permissions';
 const PRINCIPALS_PATH = 'principals';
 const REQUESTS_PATH = 'requests';
 const SEARCH_PATH = 'search';
-const SYNC_PATH = 'sync';
 
 // shared paths
 const BULK_PATH = 'bulk';
@@ -143,11 +142,6 @@ describe('ApiPaths', () => {
     test(`should export "${SEARCH_PATH}"`, () => {
       expect(ApiPaths.SEARCH_PATH).toBeDefined();
       expect(ApiPaths.SEARCH_PATH).toEqual(SEARCH_PATH);
-    });
-
-    test(`should export "${SYNC_PATH}"`, () => {
-      expect(ApiPaths.SYNC_PATH).toBeDefined();
-      expect(ApiPaths.SYNC_PATH).toEqual(SYNC_PATH);
     });
 
   });

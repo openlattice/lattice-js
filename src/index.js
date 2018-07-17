@@ -24,6 +24,7 @@ import * as PrincipalsApi from './api/PrincipalsApi';
 import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
 
+import * as Constants from './constants/GlobalConstants';
 import * as Types from './constants/types';
 import * as Models from './models';
 import { configure } from './config/Configuration';
@@ -47,6 +48,7 @@ export {
   RequestsApi,
   SearchApi,
 
+  Constants,
   Models,
   Types,
   configure,
@@ -68,6 +70,7 @@ export default {
   RequestsApi,
   SearchApi,
 
+  Constants,
   Models,
   Types,
   configure,

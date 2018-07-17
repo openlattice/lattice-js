@@ -17,7 +17,6 @@ export const PERMISSIONS_PATH :string = 'permissions';
 export const PRINCIPALS_PATH :string = 'principals';
 export const REQUESTS_PATH :string = 'requests';
 export const SEARCH_PATH :string = 'search';
-export const SYNC_PATH :string = 'sync';
 
 // shared paths
 export const BULK_PATH :string = 'bulk';

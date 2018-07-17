@@ -6,8 +6,8 @@
 const ActionTypes = {
   ADD: 'ADD',
   REMOVE: 'REMOVE',
+  REQUEST: 'REQUEST',
   SET: 'SET',
-  REQUEST: 'REQUEST'
 };
 
 export type Action = $Keys<typeof ActionTypes>;
