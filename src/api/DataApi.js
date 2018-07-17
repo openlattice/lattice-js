@@ -17,8 +17,8 @@
  * // DataApi.get...
  */
 
-import Immutable from 'immutable';
 import isUndefined from 'lodash/isUndefined';
+import { Set } from 'immutable';
 
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
@@ -229,7 +229,7 @@ export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], ent
   const entitySetSelection = {};
 
   if (isValidUuidArray(propertyTypeIds)) {
-    entitySetSelection.properties = Immutable.Set().withMutations((set :Set<UUID>) => {
+    entitySetSelection.properties = Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
       });
@@ -242,7 +242,7 @@ export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], ent
   }
 
   if (isValidUuidArray(entityKeyIds)) {
-    entitySetSelection.ids = Immutable.Set().withMutations((set :Set<UUID>) => {
+    entitySetSelection.ids = Set().withMutations((set :Set<UUID>) => {
       entityKeyIds.forEach((entityKeyId :UUID) => {
         set.add(entityKeyId);
       });

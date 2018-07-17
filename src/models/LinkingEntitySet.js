@@ -2,7 +2,7 @@
  * @flow
  */
 
-import Immutable from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import EntitySet, { isValidEntitySet } from './EntitySet';
@@ -46,8 +46,8 @@ export class LinkingEntitySetBuilder {
 
     let errorMsg :string = '';
 
-    const linkingPropertiesSet :Set<Map<UUID, UUID>> = Immutable.Set().withMutations((set :Set<Map<UUID, UUID>>) => {
-      Immutable.fromJS(linkingProperties).forEach((property :Map<UUID, UUID>) => {
+    const linkingPropertiesSet :Set<Map<UUID, UUID>> = Set().withMutations((set :Set<Map<UUID, UUID>>) => {
+      fromJS(linkingProperties).forEach((property :Map<UUID, UUID>) => {
 
         if (property.entrySeq().isEmpty()) {
           errorMsg = 'invalid parameter: linkingProperties must be a array of non-empty Map<UUID, UUID> objects';

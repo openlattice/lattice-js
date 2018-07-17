@@ -17,7 +17,7 @@
  * // OrganizationsApi.get...
  */
 
-import Immutable from 'immutable';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import Organization, { isValidOrganization } from '../models/Organization';
@@ -374,7 +374,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
     return Promise.reject(errorMsg);
   }
 
-  const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
+  const emailDomainSet = Set().withMutations((set :Set<string>) => {
     emailDomains.forEach((emailDomain :string) => {
       set.add(emailDomain);
     });
@@ -424,7 +424,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
     return Promise.reject(errorMsg);
   }
 
-  const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
+  const emailDomainSet = Set().withMutations((set :Set<string>) => {
     emailDomains.forEach((emailDomain :string) => {
       set.add(emailDomain);
     });
@@ -516,7 +516,7 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
     return Promise.reject(errorMsg);
   }
 
-  const emailDomainSet = Immutable.Set().withMutations((set :Set<string>) => {
+  const emailDomainSet = Set().withMutations((set :Set<string>) => {
     emailDomains.forEach((emailDomain :string) => {
       set.add(emailDomain);
     });

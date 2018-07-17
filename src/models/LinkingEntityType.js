@@ -2,9 +2,9 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
 import isBoolean from 'lodash/isBoolean';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import EntityType, { isValidEntityType } from './EntityType';
@@ -57,7 +57,7 @@ export class LinkingEntityTypeBuilder {
       throw new Error('invalid parameter: entityTypeIds must be an array of valid UUIDs');
     }
 
-    this.entityTypeIds = Immutable.Set().withMutations((set :Set<UUID>) => {
+    this.entityTypeIds = Set().withMutations((set :Set<UUID>) => {
       entityTypeIds.forEach((entityTypeId :UUID) => {
         set.add(entityTypeId);
       });

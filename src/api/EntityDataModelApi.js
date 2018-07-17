@@ -17,9 +17,9 @@
  * // EntityDataModelApi.get...
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
+import { Set } from 'immutable';
 
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
@@ -397,7 +397,7 @@ export function updateSchema(
     return Promise.reject(errorMsg);
   }
   else {
-    entityTypeIdsSet = Immutable.Set().withMutations((set :Set<UUID>) => {
+    entityTypeIdsSet = Set().withMutations((set :Set<UUID>) => {
       entityTypeIds.forEach((entityTypeId :UUID) => {
         set.add(entityTypeId);
       });
@@ -414,7 +414,7 @@ export function updateSchema(
     return Promise.reject(errorMsg);
   }
   else {
-    propertyTypeIdsSet = Immutable.Set().withMutations((set :Set<UUID>) => {
+    propertyTypeIdsSet = Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
       });

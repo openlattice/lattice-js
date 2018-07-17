@@ -2,9 +2,8 @@
  * @flow
  */
 
-import Immutable from 'immutable';
-
 import has from 'lodash/has';
+import { Set, fromJS } from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
@@ -105,7 +104,7 @@ export default class PropertyType {
       propertyTypeObj.analyzer = this.analyzer;
     }
 
-    return Immutable.fromJS(propertyTypeObj);
+    return fromJS(propertyTypeObj);
   }
 }
 
@@ -192,7 +191,7 @@ export class PropertyTypeBuilder {
       throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 
-    this.schemas = Immutable.Set().withMutations((set :Set<FullyQualifiedName>) => {
+    this.schemas = Set().withMutations((set :Set<FullyQualifiedName>) => {
       schemas.forEach((schemaFqn :FullyQualifiedName) => {
         set.add(schemaFqn);
       });

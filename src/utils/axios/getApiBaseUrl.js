@@ -2,7 +2,7 @@
  * @flow
  */
 
-import Immutable from 'immutable';
+import { Map, OrderedMap } from 'immutable';
 
 import * as ApiNames from '../../constants/ApiNames';
 import * as ApiPaths from '../../constants/ApiPaths';
@@ -10,7 +10,7 @@ import { getConfig } from '../../config/Configuration';
 import { isNonEmptyString } from '../LangUtils';
 
 /* eslint-disable key-spacing */
-const API_TO_PATH_MAP :Map<string, string> = Immutable.OrderedMap({
+const API_TO_PATH_MAP :Map<string, string> = OrderedMap({
   [ApiNames.ANALYSIS_API]         : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.ANALYSIS_PATH}`,
   [ApiNames.APP_API]              : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.APP_PATH}`,
   [ApiNames.AUTHORIZATION_API]    : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.AUTHORIZATIONS_PATH}`,

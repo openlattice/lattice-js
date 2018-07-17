@@ -2,7 +2,7 @@
  * @flow
  */
 
-import Immutable from 'immutable';
+import { fromJS } from 'immutable';
 
 import EntityType, { isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
@@ -42,7 +42,7 @@ export default class Schema {
     plainObj.entityTypes = this.entityTypes.map((entityType :EntityType) => entityType.asImmutable());
     plainObj.propertyTypes = this.propertyTypes.map((propertyType :PropertyType) => propertyType.asImmutable());
 
-    return Immutable.fromJS(plainObj);
+    return fromJS(plainObj);
   }
 }
 

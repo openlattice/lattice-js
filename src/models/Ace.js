@@ -2,7 +2,7 @@
  * @flow
  */
 
-import Immutable from 'immutable';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import Principal, { isValidPrincipal } from './Principal';
@@ -58,7 +58,7 @@ export class AceBuilder {
       throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
     }
 
-    this.permissions = Immutable.Set().withMutations((set :Set<Permission>) => {
+    this.permissions = Set().withMutations((set :Set<Permission>) => {
       permissions.forEach((permission :Permission) => {
         set.add(permission);
       });

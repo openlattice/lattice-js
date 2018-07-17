@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 import getApiBaseUrl from './getApiBaseUrl';
 import * as ApiNames from '../../constants/ApiNames';
@@ -12,7 +12,7 @@ import { genRandomString } from '../testing/MockUtils';
  */
 
 /* eslint-disable key-spacing */
-const API_TO_PATH_MAP = Immutable.OrderedMap({
+const API_TO_PATH_MAP = Map({
   [ApiNames.ANALYSIS_API]         : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.ANALYSIS_PATH}`,
   [ApiNames.APP_API]              : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.APP_PATH}`,
   [ApiNames.AUTHORIZATION_API]    : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.AUTHORIZATIONS_PATH}`,
@@ -26,7 +26,7 @@ const API_TO_PATH_MAP = Immutable.OrderedMap({
   [ApiNames.PRINCIPALS_API]       : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.PRINCIPALS_PATH}`,
   [ApiNames.REQUESTS_API]         : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.REQUESTS_PATH}`,
   [ApiNames.SEARCH_API]           : `${ApiPaths.DATASTORE_PATH}/${ApiPaths.SEARCH_PATH}`,
-});
+}).sort();
 /* eslint-enable */
 
 const MOCK_BASE_URL = `https://${genRandomString()}.openlattice.com`;
@@ -36,7 +36,7 @@ const MOCK_BASE_URL = `https://${genRandomString()}.openlattice.com`;
  */
 
 jest.mock('../../config/Configuration');
-Config.getConfig.mockImplementation(() => Immutable.fromJS({
+Config.getConfig.mockImplementation(() => fromJS({
   baseUrl: MOCK_BASE_URL
 }));
 

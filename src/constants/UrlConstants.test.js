@@ -1,9 +1,9 @@
-import Immutable from 'immutable';
+import { Map, OrderedMap } from 'immutable';
 
 import * as UrlConstants from './UrlConstants';
 
 /* eslint-disable key-spacing */
-const EXPECTED = Immutable.OrderedMap({
+const EXPECTED = Map({
   FILE_TYPE : 'fileType',
   PARTIAL   : 'partial',
   SET_ID    : 'setId',
@@ -13,7 +13,7 @@ const EXPECTED = Immutable.OrderedMap({
 describe('UrlConstants', () => {
 
   test('should only export expected constants', () => {
-    expect(Immutable.OrderedMap(UrlConstants)).toEqual(EXPECTED);
+    expect(OrderedMap(UrlConstants)).toEqual(EXPECTED);
   });
 
   EXPECTED.forEach((value, key) => {

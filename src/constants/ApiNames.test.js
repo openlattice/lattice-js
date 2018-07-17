@@ -1,9 +1,9 @@
-import Immutable from 'immutable';
+import { Map, OrderedMap } from 'immutable';
 
 import * as ApiNames from './ApiNames';
 
 /* eslint-disable key-spacing */
-const EXPECTED_APIS = Immutable.OrderedMap({
+const EXPECTED_APIS = Map({
   ANALYSIS_API         : 'AnalysisApi',
   APP_API              : 'AppApi',
   AUTHORIZATION_API    : 'AuthorizationApi',
@@ -23,7 +23,7 @@ const EXPECTED_APIS = Immutable.OrderedMap({
 describe('ApiNames', () => {
 
   test('should only export expected APIs', () => {
-    expect(Immutable.OrderedMap(ApiNames)).toEqual(EXPECTED_APIS);
+    expect(OrderedMap(ApiNames)).toEqual(EXPECTED_APIS);
   });
 
   EXPECTED_APIS.forEach((value, key) => {

@@ -2,14 +2,14 @@
  * @flow
  */
 
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 
 import getApiBaseUrl from './getApiBaseUrl';
 import newAxiosInstance from './newAxiosInstance';
 import { getConfig } from '../../config/Configuration';
 import { isNonEmptyString } from '../LangUtils';
 
-let baseUrlToAxiosInstanceMap :Map<string, Axios> = Immutable.Map();
+let baseUrlToAxiosInstanceMap :Map<string, Axios> = Map();
 
 export default function getApiAxiosInstance(api :string) :Axios {
 

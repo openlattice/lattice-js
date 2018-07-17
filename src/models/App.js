@@ -2,8 +2,8 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 
@@ -79,7 +79,7 @@ export class AppBuilder {
       throw new Error('invalid parameter: appTypeIds must be a valid UUID array');
     }
 
-    this.appTypeIds = Immutable.Set().withMutations((set :Set<UUID>) => {
+    this.appTypeIds = Set().withMutations((set :Set<UUID>) => {
       appTypeIds.forEach((appTypeId :UUID) => {
         set.add(appTypeId);
       });

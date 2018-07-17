@@ -2,8 +2,8 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
@@ -91,7 +91,7 @@ export class DataSourceBuilder {
       throw new Error('invalid parameter: entitySetIds must be an array of valid UUIDs');
     }
 
-    this.entitySetIds = Immutable.Set().withMutations((set :Set<UUID>) => {
+    this.entitySetIds = Set().withMutations((set :Set<UUID>) => {
       entitySetIds.forEach((entitySetId :UUID) => {
         set.add(entitySetId);
       });

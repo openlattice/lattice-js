@@ -2,9 +2,9 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
 import isString from 'lodash/isString';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray, isEmptyString } from '../utils/LangUtils';
@@ -54,7 +54,7 @@ export class RequestBuilder {
       throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
     }
 
-    this.permissions = Immutable.Set().withMutations((set :Set<Permission>) => {
+    this.permissions = Set().withMutations((set :Set<Permission>) => {
       permissions.forEach((permission :Permission) => {
         set.add(permission);
       });

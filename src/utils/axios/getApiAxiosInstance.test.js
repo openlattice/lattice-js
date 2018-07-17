@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import Immutable from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 import getApiAxiosInstance from './getApiAxiosInstance';
 import getApiBaseUrl from './getApiBaseUrl';
@@ -38,7 +38,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockAuthToken = genMockAuthToken();
 
     getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
-    Config.getConfig.mockImplementation(() => Immutable.fromJS({
+    Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken
     }));
 
@@ -62,7 +62,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockAuthToken = genMockAuthToken();
 
     getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
-    Config.getConfig.mockImplementation(() => Immutable.fromJS({
+    Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken
     }));
 
@@ -92,7 +92,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockAuthToken2 = genMockAuthToken();
 
     getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
-    Config.getConfig.mockImplementation(() => Immutable.fromJS({
+    Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken1
     }));
 
@@ -102,7 +102,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     expect(axiosInstance1.defaults.headers.common.Authorization).toEqual(`Bearer ${mockAuthToken1}`);
 
     axiosCreateSpy.mockClear();
-    Config.getConfig.mockImplementation(() => Immutable.fromJS({
+    Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken2
     }));
 
@@ -122,7 +122,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockApiBaseUrl = `${mockBaseUrl}/${mockApi}`;
 
     getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
-    Config.getConfig.mockImplementation(() => Immutable.Map());
+    Config.getConfig.mockImplementation(() => Map());
 
     const axiosInstance = getApiAxiosInstance(mockApi);
     expect(axiosCreateSpy).toHaveBeenCalledTimes(1);
@@ -138,7 +138,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockAuthToken = genMockAuthToken();
 
     getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
-    Config.getConfig.mockImplementation(() => Immutable.fromJS({
+    Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken
     }));
 
@@ -148,7 +148,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     expect(axiosInstance1.defaults.headers.common.Authorization).toEqual(`Bearer ${mockAuthToken}`);
 
     axiosCreateSpy.mockClear();
-    Config.getConfig.mockImplementation(() => Immutable.Map());
+    Config.getConfig.mockImplementation(() => Map());
 
     const axiosInstance2 = getApiAxiosInstance(mockApi);
     expect(axiosCreateSpy).toHaveBeenCalledTimes(1);
@@ -167,7 +167,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockAuthToken = genMockAuthToken();
 
     getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
-    Config.getConfig.mockImplementation(() => Immutable.Map());
+    Config.getConfig.mockImplementation(() => Map());
 
     const axiosInstance1 = getApiAxiosInstance(mockApi);
     expect(axiosCreateSpy).toHaveBeenCalledTimes(1);
@@ -175,7 +175,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     expect(axiosInstance1.defaults.headers.common.Authorization).toBeUndefined();
 
     axiosCreateSpy.mockClear();
-    Config.getConfig.mockImplementation(() => Immutable.fromJS({
+    Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken
     }));
 
