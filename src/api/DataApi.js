@@ -397,17 +397,17 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
 /**
  * `GET /data/{entitySetId}/{entityKeyId}`
  *
- * Returns a single entity, specified by its entitySetId and entityKeyId.
+ * Returns the entity data with the given entityKeyId in the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {UUID} entityKeyId
- * @return {Promise} - a Promise that resolves with the requested entity
+ * @return {Promise} - a Promise that resolves with the requested entity data
  *
  * @example
- *  * DataApi.getEntity("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
-  */
+ * DataApi.getEntity("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
+ */
 export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
 
   let errorMsg = '';
@@ -432,7 +432,3 @@ export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
       return Promise.reject(error);
     });
 }
-
-
-// TODO: createAssociationData()
-// TODO: storeAssociationData()
