@@ -5,6 +5,7 @@ import * as UrlConstants from './UrlConstants';
 /* eslint-disable key-spacing */
 const EXPECTED = Immutable.OrderedMap({
   FILE_TYPE : 'fileType',
+  PARTIAL   : 'partial',
   SET_ID    : 'setId',
 }).sort();
 /* eslint-enable */

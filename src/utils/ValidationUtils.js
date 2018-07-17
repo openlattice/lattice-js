@@ -63,18 +63,18 @@ export function isValidMultimap(value :any, validatorFn :ValidatorFn) :boolean {
     return false;
   }
 
-  const ids :any[] = Object.keys(value);
+  const keys :any[] = Object.keys(value);
 
   // validate all keys are UUIDs
-  for (let index1 = 0; index1 < ids.length; index1 += 1) {
-    if (!validatorFn(ids[index1])) {
+  for (let index1 = 0; index1 < keys.length; index1 += 1) {
+    if (!validatorFn(keys[index1])) {
       return false;
     }
   }
 
   // validate all values are arrays
-  for (let index2 = 0; index2 < ids.length; index2 += 1) {
-    if (!isArray(value[ids[index2]])) {
+  for (let index2 = 0; index2 < keys.length; index2 += 1) {
+    if (!isArray(value[keys[index2]])) {
       return false;
     }
   }

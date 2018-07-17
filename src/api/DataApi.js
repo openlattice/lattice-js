@@ -24,9 +24,9 @@ import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
 import { COUNT_PATH, SET_PATH } from '../constants/ApiPaths';
-import { FILE_TYPE, SET_ID } from '../constants/UrlConstants';
+import { FILE_TYPE, PARTIAL, SET_ID } from '../constants/UrlConstants';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isEmptyArray, isNonEmptyString } from '../utils/LangUtils';
+import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 
 import {
   isValidMultimap,
@@ -142,6 +142,7 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
     return Promise.reject(errorMsg);
   }
 
+  // TODO: validate SetMultimap
   if (!isValidMultimapArray(entities, isValidUuid)) {
     errorMsg = 'invalid parameter: entities must be a non-empty multimap array';
     LOG.error(errorMsg, entities);
@@ -328,6 +329,80 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
 }
 
 /**
+ * `PUT /data/set/{entitySetId}`
+ *
+ * // TODO: description
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {Object} entities
+ * @param {Boolean} partial
+ * @return {Promise} - a Promise that resolves with the count of entities that were updated
+ *
+ * @example
+ * DataApi.replaceEntityData(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "ec6865e6-e60e-424b-a071-6a9c1603d735": {
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
+ *     }
+ *   },
+ *   false
+ * );
+ */
+export function replaceEntityData(entitySetId :UUID, entities :Object, partial :boolean = false) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(entities)) {
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  const ids :any[] = Object.keys(entities);
+
+  // validate all keys are UUIDs
+  for (let index1 = 0; index1 < ids.length; index1 += 1) {
+    const id :any = ids[index1];
+    if (!isValidUuid(id)) {
+      errorMsg = 'invalid parameter: entities must be a non-empty object where all keys are UUIDs';
+      LOG.error(errorMsg, id);
+      return Promise.reject(errorMsg);
+    }
+  }
+
+  // validate all values are multimaps
+  // TODO: validate SetMultimap
+  for (let index2 = 0; index2 < ids.length; index2 += 1) {
+    const value :any = entities[ids[index2]];
+    if (!isValidMultimap(value, isValidUuid)) {
+      errorMsg = 'invalid parameter: entities must be a non-empty object where all values are multimaps';
+      LOG.error(errorMsg, value);
+      return Promise.reject(errorMsg);
+    }
+  }
+
+  const partialReplace :string = (partial === true) ? 'true' : 'false';
+
+  return getApiAxiosInstance(DATA_API)
+    .put(`/${SET_PATH}/${entitySetId}?${PARTIAL}=${partialReplace}`, entities)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PUT /data/set/{entitySetId}/{entityKeyId}`
  *
  * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
@@ -365,6 +440,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
     return Promise.reject(errorMsg);
   }
 
+  // TODO: validate SetMultimap
   if (!isValidMultimap(entity, isValidUuid)) {
     errorMsg = 'invalid parameter: entity must be a non-empty multimap';
     LOG.error(errorMsg, entity);
@@ -418,6 +494,7 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
     return Promise.reject(errorMsg);
   }
 
+  // TODO: validate SetMultimap
   if (!isValidMultimap(entity, FullyQualifiedName.isValid)) {
     errorMsg = 'invalid parameter: entity must be a non-empty object';
     LOG.error(errorMsg, entity);

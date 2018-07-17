@@ -3,17 +3,14 @@
 import * as AxiosUtils from '../utils/axios';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
-
-import {
-  COUNT_PATH,
-  SET_PATH,
-} from '../constants/ApiPaths';
+import { COUNT_PATH, SET_PATH } from '../constants/ApiPaths';
+import { PARTIAL } from '../constants/UrlConstants';
 
 import {
   INVALID_PARAMS,
+  INVALID_PARAMS_BOOLEANS_ALLOWED,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED
+  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
 } from '../utils/testing/Invalid';
 
 import {
@@ -39,16 +36,6 @@ import {
 
 const MOCK_BASE_URL = genMockBaseUrl();
 const MOCK_FILE_TYPE = 'json';
-const MOCK_ENTITY_KEY_UUID = genRandomUUID();
-const MOCK_ENTITY_SET_UUID = genRandomUUID();
-const MOCK_PROPERTY_TYPE_UUID = genRandomUUID();
-
-const MOCK_ENTITIES = [
-  {
-    [`${genRandomUUID()}`]: ['value_1', 'value_2'],
-    [`${genRandomUUID()}`]: ['value_3', 'value_4']
-  }
-];
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiBaseUrl.mockImplementation(() => MOCK_BASE_URL);
@@ -71,6 +58,7 @@ describe('DataApi', () => {
   getEntitySetData();
   getEntitySetDataFileUrl();
   getEntitySetSize();
+  replaceEntityData();
   replaceEntityInEntitySet();
   replaceEntityInEntitySetUsingFqns();
 });
@@ -119,16 +107,14 @@ function createOrMergeEntityData() {
   describe('createOrMergeEntityData()', () => {
 
     const apiToTest = DataApi.createOrMergeEntityData;
+    const mockEntitySetId = genRandomUUID();
+    const mockEntityData = [{
+      [`${genRandomUUID()}`]: ['value_1', 'value_2'],
+      [`${genRandomUUID()}`]: ['value_3', 'value_4']
+    }];
 
-    const validParams = [
-      MOCK_ENTITY_SET_UUID,
-      MOCK_ENTITIES
-    ];
-
-    const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS
-    ];
+    const validParams = [mockEntitySetId, mockEntityData];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
@@ -163,11 +149,14 @@ function getEntitySetData() {
   describe('getEntitySetData()', () => {
 
     const apiToTest = DataApi.getEntitySetData;
+    const mockEntityKeyId = genRandomUUID();
+    const mockEntitySetId = genRandomUUID();
+    const mockPropertyTypeId = genRandomUUID();
 
     const validParams = [
-      MOCK_ENTITY_SET_UUID,
-      [MOCK_PROPERTY_TYPE_UUID],
-      [MOCK_ENTITY_KEY_UUID]
+      mockEntitySetId,
+      [mockPropertyTypeId],
+      [mockEntityKeyId]
     ];
 
     const invalidParams = [
@@ -181,16 +170,16 @@ function getEntitySetData() {
       test('+propertyTypeIds, +entityKeyIds', () => {
 
         const apiInvocationParams = [
-          MOCK_ENTITY_SET_UUID,
-          [MOCK_PROPERTY_TYPE_UUID],
-          [MOCK_ENTITY_KEY_UUID]
+          mockEntitySetId,
+          [mockPropertyTypeId],
+          [mockEntityKeyId]
         ];
 
         const expectedAxiosParams = [
-          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          `/${SET_PATH}/${mockEntitySetId}`,
           {
-            ids: [MOCK_ENTITY_KEY_UUID],
-            properties: [MOCK_PROPERTY_TYPE_UUID]
+            ids: [mockEntityKeyId],
+            properties: [mockPropertyTypeId]
           }
         ];
 
@@ -200,14 +189,14 @@ function getEntitySetData() {
       test('-propertyTypeIds, +entityKeyIds', () => {
 
         const apiInvocationParams = [
-          MOCK_ENTITY_SET_UUID,
+          mockEntitySetId,
           undefined,
-          [MOCK_ENTITY_KEY_UUID]
+          [mockEntityKeyId]
         ];
 
         const expectedAxiosParams = [
-          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
-          { ids: [MOCK_ENTITY_KEY_UUID] }
+          `/${SET_PATH}/${mockEntitySetId}`,
+          { ids: [mockEntityKeyId] }
         ];
 
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
@@ -216,14 +205,14 @@ function getEntitySetData() {
       test('+propertyTypeIds, -entityKeyIds', () => {
 
         const apiInvocationParams = [
-          MOCK_ENTITY_SET_UUID,
-          [MOCK_PROPERTY_TYPE_UUID],
+          mockEntitySetId,
+          [mockPropertyTypeId],
           undefined
         ];
 
         const expectedAxiosParams = [
-          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
-          { properties: [MOCK_PROPERTY_TYPE_UUID] }
+          `/${SET_PATH}/${mockEntitySetId}`,
+          { properties: [mockPropertyTypeId] }
         ];
 
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
@@ -232,11 +221,11 @@ function getEntitySetData() {
       test('-propertyTypeIds, -entityKeyIds', () => {
 
         const apiInvocationParams = [
-          MOCK_ENTITY_SET_UUID
+          mockEntitySetId
         ];
 
         const expectedAxiosParams = [
-          `/${SET_PATH}/${MOCK_ENTITY_SET_UUID}`,
+          `/${SET_PATH}/${mockEntitySetId}`,
           {}
         ];
 
@@ -257,9 +246,10 @@ function getEntitySetDataFileUrl() {
   describe('getEntitySetDataFileUrl()', () => {
 
     const apiToTest = DataApi.getEntitySetDataFileUrl;
+    const mockEntitySetId = genRandomUUID();
 
     const validParams = [
-      MOCK_ENTITY_SET_UUID,
+      mockEntitySetId,
       MOCK_FILE_TYPE
     ];
 
@@ -270,15 +260,15 @@ function getEntitySetDataFileUrl() {
 
     test('should return the correct URL', () => {
 
-      expect(DataApi.getEntitySetDataFileUrl(MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE)).toEqual(
-        `${MOCK_BASE_URL}/${SET_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
+      expect(DataApi.getEntitySetDataFileUrl(mockEntitySetId, MOCK_FILE_TYPE)).toEqual(
+        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}?fileType=${MOCK_FILE_TYPE}`
       );
     });
 
-    test('should correctly set the fileType query param as lowercase', () => {
+    test('should correctly set the "fileType" query param as lowercase', () => {
 
-      expect(DataApi.getEntitySetDataFileUrl(MOCK_ENTITY_SET_UUID, MOCK_FILE_TYPE.toUpperCase())).toEqual(
-        `${MOCK_BASE_URL}/${SET_PATH}/${MOCK_ENTITY_SET_UUID}?fileType=${MOCK_FILE_TYPE}`
+      expect(DataApi.getEntitySetDataFileUrl(mockEntitySetId, MOCK_FILE_TYPE.toUpperCase())).toEqual(
+        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}?fileType=${MOCK_FILE_TYPE}`
       );
     });
 
@@ -304,6 +294,47 @@ function getEntitySetSize() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+  });
+}
+
+function replaceEntityData() {
+
+  describe('replaceEntityData()', () => {
+
+    const apiToTest = DataApi.replaceEntityData;
+    const mockEntitySetId = genRandomUUID();
+    const mockEntityData = {
+      [`${genRandomUUID()}`]: {
+        [`${genRandomUUID()}`]: ['value_1', 'value_2'],
+        [`${genRandomUUID()}`]: ['value_3', 'value_4']
+      }
+    };
+
+    // TODO: generate invalid params for the "entities" param
+
+    const validParams = [mockEntitySetId, mockEntityData, false];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS, []];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+
+    // TODO: add tests to validate "partial" query param is being set correctly for invalid values
+    describe('should send a PUT request with the correct params', () => {
+
+      test('partial=true', () => {
+        const apiInvocationParams = [mockEntitySetId, mockEntityData, true];
+        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${PARTIAL}=true`, mockEntityData];
+        return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
+      });
+
+      test('partial=false', () => {
+        const apiInvocationParams = [mockEntitySetId, mockEntityData, false];
+        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${PARTIAL}=false`, mockEntityData];
+        return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
+      });
+    });
   });
 }
 
