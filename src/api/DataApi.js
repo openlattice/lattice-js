@@ -176,9 +176,9 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 }
 
 /**
- * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
+ * `DELETE /data/set/{entitySetId}/{entityKeyId}`
  *
- * Deletes the entity with the specified id from the entity set with the specified id.
+ * Clears the entity with the specified entityKeyId from the EntitySet with the specified entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
@@ -187,13 +187,12 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
  * @return {Promise} - a Promise that resolves without a value
  *
  * @example
- * DataApi.deleteEntityFromEntitySet(
+ * DataApi.clearEntityFromEntitySet(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
- * )
-});
+ * );
  */
-export function deleteEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+export function clearEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -210,7 +209,7 @@ export function deleteEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) 
   }
 
   return getApiAxiosInstance(DATA_API)
-    .delete(`/${ENTITY_DATA_PATH}/${entitySetId}/${entityKeyId}`)
+    .delete(`/${SET_PATH}/${entitySetId}/${entityKeyId}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

@@ -67,7 +67,7 @@ describe('DataApi', () => {
   getEntitySetData();
   getEntitySetDataFileUrl();
   createOrMergeEntityData();
-  deleteEntityFromEntitySet();
+  clearEntityFromEntitySet();
   replaceEntityInEntitySet();
   replaceEntityInEntitySetUsingFqns();
   getEntitySetSize();
@@ -228,17 +228,17 @@ function createOrMergeEntityData() {
   });
 }
 
-function deleteEntityFromEntitySet() {
+function clearEntityFromEntitySet() {
 
-  describe('deleteEntityFromEntitySet()', () => {
+  describe('clearEntityFromEntitySet()', () => {
 
-    const apiToTest = DataApi.deleteEntityFromEntitySet;
+    const apiToTest = DataApi.clearEntityFromEntitySet;
     const mockEntitySetId = genRandomUUID();
     const mockEntityKeyId = genRandomUUID();
 
     const validParams = [mockEntitySetId, mockEntityKeyId];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${ENTITY_DATA_PATH}/${mockEntitySetId}/${mockEntityKeyId}`];
+    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
