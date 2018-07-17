@@ -64,16 +64,99 @@ describe('DataApi', () => {
     jest.clearAllMocks();
   });
 
+  clearEntitySet();
+  clearEntityFromEntitySet();
+  createOrMergeEntityData();
+  getEntity();
   getEntitySetData();
   getEntitySetDataFileUrl();
-  clearEntitySet();
-  createOrMergeEntityData();
-  clearEntityFromEntitySet();
+  getEntitySetSize();
   replaceEntityInEntitySet();
   replaceEntityInEntitySetUsingFqns();
-  getEntitySetSize();
-  getEntity();
 });
+
+function clearEntityFromEntitySet() {
+
+  describe('clearEntityFromEntitySet()', () => {
+
+    const apiToTest = DataApi.clearEntityFromEntitySet;
+    const mockEntitySetId = genRandomUUID();
+    const mockEntityKeyId = genRandomUUID();
+
+    const validParams = [mockEntitySetId, mockEntityKeyId];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
+  });
+}
+
+function clearEntitySet() {
+
+  describe('clearEntitySet()', () => {
+
+    const apiToTest = DataApi.clearEntitySet;
+    const mockEntitySetId = genRandomUUID();
+
+    const validParams = [mockEntitySetId];
+    const invalidParams = [INVALID_PARAMS_SS];
+    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}`];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
+  });
+}
+
+function createOrMergeEntityData() {
+
+  describe('createOrMergeEntityData()', () => {
+
+    const apiToTest = DataApi.createOrMergeEntityData;
+
+    const validParams = [
+      MOCK_ENTITY_SET_UUID,
+      MOCK_ENTITIES
+    ];
+
+    const invalidParams = [
+      INVALID_PARAMS_SS,
+      INVALID_PARAMS
+    ];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+
+  });
+}
+
+function getEntity() {
+
+  describe('getEntity()', () => {
+
+    const apiToTest = DataApi.getEntity;
+    const mockEntitySetId = genRandomUUID();
+    const mockEntityKeyId = genRandomUUID();
+
+    const validParams = [mockEntitySetId, mockEntityKeyId];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const axiosParams = [`/${mockEntitySetId}/${mockEntityKeyId}`];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+  });
+}
 
 function getEntitySetData() {
 
@@ -205,66 +288,22 @@ function getEntitySetDataFileUrl() {
   });
 }
 
-function createOrMergeEntityData() {
+function getEntitySetSize() {
 
-  describe('createOrMergeEntityData()', () => {
+  describe('getEntitySetSize()', () => {
 
-    const apiToTest = DataApi.createOrMergeEntityData;
-
-    const validParams = [
-      MOCK_ENTITY_SET_UUID,
-      MOCK_ENTITIES
-    ];
-
-    const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS
-    ];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-
-  });
-}
-
-function clearEntitySet() {
-
-  describe('clearEntitySet()', () => {
-
-    const apiToTest = DataApi.clearEntitySet;
+    const apiToTest = DataApi.getEntitySetSize;
     const mockEntitySetId = genRandomUUID();
 
     const validParams = [mockEntitySetId];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}`];
+    const axiosParams = [`/${mockEntitySetId}/${COUNT_PATH}`];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
-  });
-}
-
-function clearEntityFromEntitySet() {
-
-  describe('clearEntityFromEntitySet()', () => {
-
-    const apiToTest = DataApi.clearEntityFromEntitySet;
-    const mockEntitySetId = genRandomUUID();
-    const mockEntityKeyId = genRandomUUID();
-
-    const validParams = [mockEntitySetId, mockEntityKeyId];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
   });
 }
 
@@ -315,44 +354,5 @@ function replaceEntityInEntitySetUsingFqns() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
-  });
-}
-
-function getEntitySetSize() {
-
-  describe('getEntitySetSize()', () => {
-
-    const apiToTest = DataApi.getEntitySetSize;
-    const mockEntitySetId = genRandomUUID();
-
-    const validParams = [mockEntitySetId];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${mockEntitySetId}/${COUNT_PATH}`];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
-  });
-}
-
-function getEntity() {
-
-  describe('getEntity()', () => {
-
-    const apiToTest = DataApi.getEntity;
-    const mockEntitySetId = genRandomUUID();
-    const mockEntityKeyId = genRandomUUID();
-
-    const validParams = [mockEntitySetId, mockEntityKeyId];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${mockEntitySetId}/${mockEntityKeyId}`];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
   });
 }
