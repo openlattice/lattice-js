@@ -66,6 +66,7 @@ describe('DataApi', () => {
 
   getEntitySetData();
   getEntitySetDataFileUrl();
+  clearEntitySet();
   createOrMergeEntityData();
   clearEntityFromEntitySet();
   replaceEntityInEntitySet();
@@ -225,6 +226,25 @@ function createOrMergeEntityData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
 
+  });
+}
+
+function clearEntitySet() {
+
+  describe('clearEntitySet()', () => {
+
+    const apiToTest = DataApi.clearEntitySet;
+    const mockEntitySetId = genRandomUUID();
+
+    const validParams = [mockEntitySetId];
+    const invalidParams = [INVALID_PARAMS_SS];
+    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}`];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
   });
 }
 

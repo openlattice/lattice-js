@@ -176,9 +176,41 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 }
 
 /**
+ * `DELETE /data/set/{entitySetId}`
+ *
+ * Clears all entity data from the EntitySet with the given entitySetId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.clearEntitySet("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ */
+export function clearEntitySet(entitySetId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${SET_PATH}/${entitySetId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `DELETE /data/set/{entitySetId}/{entityKeyId}`
  *
- * Clears the entity with the specified entityKeyId from the EntitySet with the specified entitySetId.
+ * Clears the entity data with the given entityKeyId from the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
