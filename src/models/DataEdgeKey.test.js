@@ -250,6 +250,7 @@ describe('DataEdgeKey', () => {
         mutableSet.add(new DataEdgeKey(mockSource, mockDestination, mockEdge));
       });
       expect(testSet.size).toEqual(2);
+      expect(testSet.count()).toEqual(2);
       expect(testSet.first().dst).toEqual(mockDestination);
       expect(testSet.first().edge).toEqual(mockEdge);
       expect(testSet.first().src).toEqual(mockSource);
@@ -274,6 +275,7 @@ describe('DataEdgeKey', () => {
         mutableMap.set(dataEdgeKey2, 'test_value_3');
       });
       expect(testMap.size).toEqual(2);
+      expect(testMap.count()).toEqual(2);
       expect(testMap.get(dataEdgeKey0)).toEqual('test_value_3');
       expect(testMap.get(dataEdgeKey1)).toEqual('test_value_2');
       expect(testMap.get(dataEdgeKey2)).toEqual('test_value_3');

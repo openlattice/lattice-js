@@ -191,6 +191,7 @@ describe('EntityDataKey', () => {
         mutableSet.add(new EntityDataKey(mockEntitySetId, mockEntityKeyId));
       });
       expect(testSet.size).toEqual(2);
+      expect(testSet.count()).toEqual(2);
       expect(testSet.first().entityKeyId).toEqual(mockEntityKeyId);
       expect(testSet.first().entitySetId).toEqual(mockEntitySetId);
       expect(testSet.last().entityKeyId).toEqual(randomEntityKeyId);
@@ -211,6 +212,7 @@ describe('EntityDataKey', () => {
         mutableMap.set(entityDataKey2, 'test_value_3');
       });
       expect(testMap.size).toEqual(2);
+      expect(testMap.count()).toEqual(2);
       expect(testMap.get(entityDataKey0)).toEqual('test_value_3');
       expect(testMap.get(entityDataKey1)).toEqual('test_value_2');
       expect(testMap.get(entityDataKey2)).toEqual('test_value_3');

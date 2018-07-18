@@ -130,6 +130,7 @@ describe('Model', () => {
         mutableSet.add(new Model(MOCK_DM.id));
       });
       expect(testSet.size).toEqual(2);
+      expect(testSet.count()).toEqual(2);
       expect(testSet.first().id).toEqual(MOCK_DM.id);
       expect(testSet.last().id).toEqual(randomId);
     });
@@ -145,6 +146,7 @@ describe('Model', () => {
         mutableMap.set(model2, 'test_value_3');
       });
       expect(testMap.size).toEqual(2);
+      expect(testMap.count()).toEqual(2);
       expect(testMap.get(model0)).toEqual('test_value_3');
       expect(testMap.get(model1)).toEqual('test_value_2');
       expect(testMap.get(model2)).toEqual('test_value_3');

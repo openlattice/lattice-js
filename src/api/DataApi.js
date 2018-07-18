@@ -115,12 +115,12 @@ export function clearEntitySet(entitySetId :UUID) :Promise<*> {
 /**
  * `PUT /data/association`
  *
- * // TODO: description
+ * Creates associations (edges) from the given DataEdgeKeys.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {DataEdgeKey[]} associations
- * @return {Promise} - a Promise that resolves without a value
+ * @return {Promise} - a Promise that resolves with the count of associations (edges) that were created
  *
  * @example
  * DataApi.createAssociations([
