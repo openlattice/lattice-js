@@ -18,6 +18,8 @@ const EXPECTED_MODELS = Set([
   'AppTypeBuilder',
   'AssociationType',
   'AssociationTypeBuilder',
+  'DataEdgeKey',
+  'DataEdgeKeyBuilder',
   'DataSource',
   'DataSourceBuilder',
   'EntityDataKey',

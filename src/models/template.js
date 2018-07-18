@@ -16,6 +16,12 @@ export default class Model {
 
     this.id = id;
   }
+
+  valueOf() {
+    return JSON.stringify({
+      id: this.id
+    });
+  }
 }
 
 export class ModelBuilder {

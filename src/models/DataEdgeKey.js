@@ -7,6 +7,7 @@ import { Map, fromJS } from 'immutable';
 import EntityDataKey, { isValidEntityDataKey } from './EntityDataKey';
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
+import { validateNonEmptyArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('DataEdgeKey');
 
@@ -122,4 +123,9 @@ export function isValidDataEdgeKey(dataEdgeKey :any) :boolean {
     LOG.error(e, dataEdgeKey);
     return false;
   }
+}
+
+export function isValidDataEdgeKeyArray(dataEdgeKeys :any[]) :boolean {
+
+  return validateNonEmptyArray(dataEdgeKeys, (dataEdgeKey :any) => isValidDataEdgeKey(dataEdgeKey));
 }

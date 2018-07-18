@@ -20,10 +20,11 @@
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
+import DataEdgeKey, { isValidDataEdgeKeyArray } from '../models/DataEdgeKey';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
-import { COUNT_PATH, SET_PATH } from '../constants/ApiPaths';
+import { ASSOCIATION_PATH, COUNT_PATH, SET_PATH } from '../constants/ApiPaths';
 import { FILE_TYPE, PARTIAL, SET_ID } from '../constants/UrlConstants';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
@@ -104,6 +105,53 @@ export function clearEntitySet(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .delete(`/${SET_PATH}/${entitySetId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /data/association`
+ *
+ * // TODO: description
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {DataEdgeKey[]} associations
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.createAssociations([
+ *   {
+ *     "dst": {
+ *       "entitySetId": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *       "entityKeyId": "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     },
+ *     "edge": {
+ *       "entitySetId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "entityKeyId": "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
+ *     },
+ *     "src": {
+ *       "entitySetId": "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "entityKeyId": "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     },
+ *   }
+ * ]);
+ */
+export function createAssociations(associations :DataEdgeKey[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidDataEdgeKeyArray(associations)) {
+    errorMsg = 'invalid parameter: associations must be a non-empty array of valid DataEdgeKeys';
+    LOG.error(errorMsg, associations);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .put(`/${ASSOCIATION_PATH}`, associations)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

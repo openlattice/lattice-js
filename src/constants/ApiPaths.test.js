@@ -38,6 +38,7 @@ const LOOKUP_PATH = 'lookup';
 
 // DataApi specific paths
 const COUNT_PATH = 'count';
+const ASSOCIATION_PATH = 'association';
 
 // EntityDataModelApi specific paths
 const ASSOCIATION_TYPE_PATH = 'association/type';
@@ -233,6 +234,11 @@ describe('ApiPaths', () => {
     test(`should export "${COUNT_PATH}"`, () => {
       expect(ApiPaths.COUNT_PATH).toBeDefined();
       expect(ApiPaths.COUNT_PATH).toEqual(COUNT_PATH);
+    });
+
+    test(`should export "${ASSOCIATION_PATH}"`, () => {
+      expect(ApiPaths.ASSOCIATION_PATH).toBeDefined();
+      expect(ApiPaths.ASSOCIATION_PATH).toEqual(ASSOCIATION_PATH);
     });
 
   });
