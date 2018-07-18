@@ -12,6 +12,7 @@ import App, { AppBuilder } from './App';
 import AppType, { AppTypeBuilder } from './AppType';
 import AssociationType, { AssociationTypeBuilder } from './AssociationType';
 import DataSource, { DataSourceBuilder } from './DataSource';
+import EntityDataKey, { EntityDataKeyBuilder } from './EntityDataKey';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
 import LinkingEntitySet, { LinkingEntitySetBuilder } from './LinkingEntitySet';
@@ -42,6 +43,8 @@ export {
   AssociationTypeBuilder,
   DataSource,
   DataSourceBuilder,
+  EntityDataKey,
+  EntityDataKeyBuilder,
   EntitySet,
   EntitySetBuilder,
   EntityType,
