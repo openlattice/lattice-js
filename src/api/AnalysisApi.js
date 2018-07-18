@@ -22,7 +22,7 @@
 import Logger from '../utils/Logger';
 
 import { ANALYSIS_API } from '../constants/ApiNames';
-import { TYPES_PATH } from '../constants/ApiPaths';
+import { TYPES_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString } from '../utils/LangUtils';
 import { isValidUuid } from '../utils/ValidationUtils';

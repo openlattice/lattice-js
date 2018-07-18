@@ -7,7 +7,7 @@ const EXPECTED_ENUM = Map({
   APPROVED: 'APPROVED',
   DECLINED: 'DECLINED',
   SUBMITTED: 'SUBMITTED',
-}).sort();
+}).sortBy((value, key) => key);
 
 describe('RequestStateTypes', () => {
 

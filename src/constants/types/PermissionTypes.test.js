@@ -9,7 +9,7 @@ const EXPECTED_ENUM = Map({
   OWNER: 'OWNER',
   READ: 'READ',
   WRITE: 'WRITE',
-}).sort();
+}).sortBy((value, key) => key);
 
 describe('PermissionTypes', () => {
 

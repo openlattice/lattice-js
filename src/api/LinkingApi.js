@@ -21,7 +21,7 @@ import Logger from '../utils/Logger';
 import LinkingRequest, { isValidLinkingRequest } from '../models/LinkingRequest';
 import LinkingEntityType, { isValidLinkingEntityType } from '../models/LinkingEntityType';
 import { LINKING_API } from '../constants/ApiNames';
-import { TYPE_PATH } from '../constants/ApiPaths';
+import { TYPE_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('LinkingApi');

@@ -48,7 +48,7 @@ import {
   PROPERTY_TYPE_PATH,
   SCHEMA_PATH,
   SRC_PATH
-} from '../constants/ApiPaths';
+} from '../constants/UrlConstants';
 
 import {
   isEmptyArray,

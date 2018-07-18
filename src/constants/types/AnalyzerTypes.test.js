@@ -6,7 +6,7 @@ import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 const EXPECTED_ENUM = Map({
   METAPHONE: 'METAPHONE',
   STANDARD: 'STANDARD',
-}).sort();
+}).sortBy((value, key) => key);
 
 describe('AnalyzerTypes', () => {
 

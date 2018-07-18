@@ -21,7 +21,7 @@ import {
   LOOKUP_PATH,
   TYPE_PATH,
   UPDATE_PATH
-} from '../constants/ApiPaths';
+} from '../constants/UrlConstants';
 
 import {
   testApiShouldNotThrowOnInvalidParameters,

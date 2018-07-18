@@ -14,7 +14,7 @@ const EXPECTED_ENUM = Map({
   Organization            : 'Organization',
   OrganizationRole        : 'OrganizationRole',
   PropertyTypeInEntitySet : 'PropertyTypeInEntitySet',
-}).sort();
+}).sortBy((value, key) => key);
 /* eslint-enable */
 
 describe('SecurableTypes', () => {

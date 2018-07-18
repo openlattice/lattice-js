@@ -3,7 +3,7 @@
 import * as AxiosUtils from '../utils/axios';
 import * as LinkingApi from './LinkingApi';
 import { LINKING_API } from '../constants/ApiNames';
-import { TYPE_PATH } from '../constants/ApiPaths';
+import { TYPE_PATH } from '../constants/UrlConstants';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
 import { MOCK_LINKING_ENTITY_TYPE_DM, MOCK_LINKING_REQUEST_DM } from '../utils/testing/MockDataModels';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';

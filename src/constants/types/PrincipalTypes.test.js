@@ -8,7 +8,7 @@ const EXPECTED_ENUM = Map({
   ORGANIZATION: 'ORGANIZATION',
   ROLE: 'ROLE',
   USER: 'USER',
-}).sort();
+}).sortBy((value, key) => key);
 
 describe('PrincipalTypes', () => {
 

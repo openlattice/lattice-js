@@ -3,7 +3,7 @@
 import * as AxiosUtils from '../utils/axios';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
-import { COUNT_PATH, SET_PATH } from '../constants/ApiPaths';
+import { COUNT_PATH, SET_PATH } from '../constants/UrlConstants';
 import { PARTIAL } from '../constants/UrlConstants';
 
 import {

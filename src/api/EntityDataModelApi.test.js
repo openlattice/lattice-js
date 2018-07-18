@@ -12,7 +12,7 @@ import {
   ENTITY_TYPE_PATH,
   PROPERTY_TYPE_PATH,
   SCHEMA_PATH
-} from '../constants/ApiPaths';
+} from '../constants/UrlConstants';
 
 import {
   INVALID_PARAMS,

@@ -4,7 +4,7 @@ import * as GlobalConstants from './GlobalConstants';
 
 const EXPECTED = Map({
   OPENLATTICE_ID_FQN: 'openlattice.@id'
-}).sort();
+}).sortBy((value, key) => key);
 
 describe('GlobalConstants', () => {
 

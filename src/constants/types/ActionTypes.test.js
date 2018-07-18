@@ -9,7 +9,7 @@ const EXPECTED_ENUM = Map({
   REMOVE  : 'REMOVE',
   REQUEST : 'REQUEST',
   SET     : 'SET',
-}).sort();
+}).sortBy((value, key) => key);
 /* eslint-enable */
 
 describe('ActionTypes', () => {
