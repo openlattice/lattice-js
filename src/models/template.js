@@ -42,7 +42,7 @@ export class ModelBuilder {
   }
 }
 
-export function isValid(model :any) :boolean {
+export function isValidModel(model :any) :boolean {
 
   if (!isDefined(model)) {
 

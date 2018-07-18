@@ -171,7 +171,15 @@ describe('EntityDataKey', () => {
 
   });
 
-  describe('valueOf', () => {
+  describe('equality', () => {
+
+    test('valueOf()', () => {
+      const entityDataKey = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
+      expect(entityDataKey.valueOf()).toEqual(JSON.stringify({
+        entityKeyId: mockEntityKeyId,
+        entitySetId: mockEntitySetId,
+      }));
+    });
 
     test('Immutable.Set', () => {
 
@@ -193,18 +201,19 @@ describe('EntityDataKey', () => {
 
       const randomEntityKeyId = genRandomUUID();
       const randomEntitySetId = genRandomUUID();
-      const edk0 = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
-      const edk1 = new EntityDataKey(randomEntitySetId, randomEntityKeyId);
-      const edk2 = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
+      const entityDataKey0 = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
+      const entityDataKey1 = new EntityDataKey(randomEntitySetId, randomEntityKeyId);
+      const entityDataKey2 = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
 
       const testMap = Map().withMutations((mutableMap) => {
-        mutableMap.set(edk0, 'test_value_1');
-        mutableMap.set(edk1, 'test_value_2');
-        mutableMap.set(edk2, 'test_value_3');
+        mutableMap.set(entityDataKey0, 'test_value_1');
+        mutableMap.set(entityDataKey1, 'test_value_2');
+        mutableMap.set(entityDataKey2, 'test_value_3');
       });
       expect(testMap.size).toEqual(2);
-      expect(testMap.get(edk0)).toEqual('test_value_3');
-      expect(testMap.get(edk1)).toEqual('test_value_2');
+      expect(testMap.get(entityDataKey0)).toEqual('test_value_3');
+      expect(testMap.get(entityDataKey1)).toEqual('test_value_2');
+      expect(testMap.get(entityDataKey2)).toEqual('test_value_3');
     });
 
   });
