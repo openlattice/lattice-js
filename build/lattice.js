@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.35.1
+ * lattice - v0.36.0
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -4634,11 +4634,11 @@ exports.isNonEmptyObject = isNonEmptyObject;
 exports.isNonEmptyString = isNonEmptyString;
 exports.isNonEmptyStringArray = isNonEmptyStringArray;
 
-var _isArray = __webpack_require__(14);
+var _isArray = __webpack_require__(13);
 
 var _isArray2 = _interopRequireDefault(_isArray);
 
-var _isEmpty = __webpack_require__(73);
+var _isEmpty = __webpack_require__(74);
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
@@ -4646,7 +4646,7 @@ var _isNull = __webpack_require__(281);
 
 var _isNull2 = _interopRequireDefault(_isNull);
 
-var _isPlainObject = __webpack_require__(65);
+var _isPlainObject = __webpack_require__(66);
 
 var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
@@ -4735,7 +4735,7 @@ var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _isEmpty = __webpack_require__(73);
+var _isEmpty = __webpack_require__(74);
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
@@ -4877,12 +4877,18 @@ exports.isValidUuid = isValidUuid;
 exports.isValidUuidArray = isValidUuidArray;
 exports.isValidFqnArray = isValidFqnArray;
 exports.isValidPermissionArray = isValidPermissionArray;
+exports.isValidMultimap = isValidMultimap;
+exports.isValidMultimapArray = isValidMultimapArray;
+
+var _isArray = __webpack_require__(13);
+
+var _isArray2 = _interopRequireDefault(_isArray);
 
 var _PermissionTypes = __webpack_require__(29);
 
 var _PermissionTypes2 = _interopRequireDefault(_PermissionTypes);
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -4938,6 +4944,38 @@ function isValidPermissionArray(permissions) {
 
   return validateNonEmptyArray(permissions, function (permission) {
     return (0, _LangUtils.isNonEmptyString)(permission) && _PermissionTypes2.default[permission];
+  });
+}
+
+function isValidMultimap(value, validatorFn) {
+
+  if (!(0, _LangUtils.isNonEmptyObject)(value)) {
+    return false;
+  }
+
+  var keys = Object.keys(value);
+
+  // validate all keys are UUIDs
+  for (var index1 = 0; index1 < keys.length; index1 += 1) {
+    if (!validatorFn(keys[index1])) {
+      return false;
+    }
+  }
+
+  // validate all values are arrays
+  for (var index2 = 0; index2 < keys.length; index2 += 1) {
+    if (!(0, _isArray2.default)(value[keys[index2]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isValidMultimapArray(values, validatorFn) {
+
+  return validateNonEmptyArray(values, function (value) {
+    return isValidMultimap(value, validatorFn);
   });
 }
 
@@ -10796,7 +10834,6 @@ var APP_API = exports.APP_API = 'AppApi';
 var AUTHORIZATION_API = exports.AUTHORIZATION_API = 'AuthorizationApi';
 var DATA_API = exports.DATA_API = 'DataApi';
 var DATA_INTEGRATION_API = exports.DATA_INTEGRATION_API = 'DataIntegrationApi';
-var DATA_SOURCES_API = exports.DATA_SOURCES_API = 'DataSourcesApi';
 var EDM_API = exports.EDM_API = 'EntityDataModelApi';
 var LINKING_API = exports.LINKING_API = 'LinkingApi';
 var ORGANIZATIONS_API = exports.ORGANIZATIONS_API = 'OrganizationsApi';
@@ -10804,7 +10841,6 @@ var PERMISSIONS_API = exports.PERMISSIONS_API = 'PermissionsApi';
 var PRINCIPALS_API = exports.PRINCIPALS_API = 'PrincipalsApi';
 var REQUESTS_API = exports.REQUESTS_API = 'RequestsApi';
 var SEARCH_API = exports.SEARCH_API = 'SearchApi';
-var SYNC_API = exports.SYNC_API = 'SyncApi';
 
 /***/ }),
 /* 7 */
@@ -10813,32 +10849,7 @@ var SYNC_API = exports.SYNC_API = 'SyncApi';
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getApiAxiosInstance = exports.getApiBaseUrl = undefined;
-
-var _getApiBaseUrl = __webpack_require__(64);
-
-var _getApiBaseUrl2 = _interopRequireDefault(_getApiBaseUrl);
-
-var _getApiAxiosInstance = __webpack_require__(267);
-
-var _getApiAxiosInstance2 = _interopRequireDefault(_getApiAxiosInstance);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.getApiBaseUrl = _getApiBaseUrl2.default;
-exports.getApiAxiosInstance = _getApiAxiosInstance2.default;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var bind = __webpack_require__(60);
+var bind = __webpack_require__(61);
 var isBuffer = __webpack_require__(263);
 
 /*global toString:true*/
@@ -11142,7 +11153,7 @@ module.exports = {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11151,131 +11162,23 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var ANALYSIS_PATH = exports.ANALYSIS_PATH = 'analysis';
-var APP_PATH = exports.APP_PATH = 'app';
-var AUTHORIZATIONS_PATH = exports.AUTHORIZATIONS_PATH = 'authorizations';
-var DATA_PATH = exports.DATA_PATH = 'data';
-var DATA_SOURCES_PATH = exports.DATA_SOURCES_PATH = 'datasource';
-var DATASTORE_PATH = exports.DATASTORE_PATH = 'datastore';
-var EDM_PATH = exports.EDM_PATH = 'edm';
-var INTEGRATION_PATH = exports.INTEGRATION_PATH = 'integration';
-var LINKING_PATH = exports.LINKING_PATH = 'linking';
-var ORGANIZATIONS_PATH = exports.ORGANIZATIONS_PATH = 'organizations';
-var PERMISSIONS_PATH = exports.PERMISSIONS_PATH = 'permissions';
-var PRINCIPALS_PATH = exports.PRINCIPALS_PATH = 'principals';
-var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
-var SEARCH_PATH = exports.SEARCH_PATH = 'search';
-var SYNC_PATH = exports.SYNC_PATH = 'sync';
+exports.getApiAxiosInstance = exports.getApiBaseUrl = undefined;
 
-// shared paths
-var BULK_PATH = exports.BULK_PATH = 'bulk';
-var ENTITY_SET_PATH = exports.ENTITY_SET_PATH = 'entity/set';
-var ENTITY_TYPE_PATH = exports.ENTITY_TYPE_PATH = 'entity/type';
-var IDS_PATH = exports.IDS_PATH = 'ids';
-var NAMESPACE_PATH = exports.NAMESPACE_PATH = 'namespace';
-var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
-var ROLES_PATH = exports.ROLES_PATH = 'roles';
-var SET_PATH = exports.SET_PATH = 'set';
-var TYPE_PATH = exports.TYPE_PATH = 'type';
-var UPDATE_PATH = exports.UPDATE_PATH = 'update';
+var _getApiBaseUrl = __webpack_require__(65);
 
-// AnalysisApi specific paths
-var TYPES_PATH = exports.TYPES_PATH = 'types';
+var _getApiBaseUrl2 = _interopRequireDefault(_getApiBaseUrl);
 
-// AppApi specific paths
-var CONFIG_PATH = exports.CONFIG_PATH = 'config';
-var LOOKUP_PATH = exports.LOOKUP_PATH = 'lookup';
-var INSTALL_PATH = exports.INSTALL_PATH = 'install';
+var _getApiAxiosInstance = __webpack_require__(267);
 
-// DataApi specific paths
-var COUNT_PATH = exports.COUNT_PATH = 'count';
-var ENTITY_DATA_PATH = exports.ENTITY_DATA_PATH = 'entitydata';
-var TICKET_PATH = exports.TICKET_PATH = 'ticket';
+var _getApiAxiosInstance2 = _interopRequireDefault(_getApiAxiosInstance);
 
-// EntityDataModelApi specific paths
-var ASSOCIATION_TYPE_PATH = exports.ASSOCIATION_TYPE_PATH = 'association/type';
-var COMPLEX_TYPE_PATH = exports.COMPLEX_TYPE_PATH = 'complex/type';
-var DETAILED_PATH = exports.DETAILED_PATH = 'detailed';
-var ENUM_TYPE_PATH = exports.ENUM_TYPE_PATH = 'enum/type';
-var FORCE_PATH = exports.FORCE_PATH = 'force';
-var HIERARCHY_PATH = exports.HIERARCHY_PATH = 'hierarchy';
-var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
-var SRC_PATH = exports.SRC_PATH = 'src';
-var DST_PATH = exports.DST_PATH = 'dst';
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// OrganizationsApi specific paths
-var DESCRIPTION_PATH = exports.DESCRIPTION_PATH = 'description';
-var EMAIL_DOMAINS_PATH = exports.EMAIL_DOMAINS_PATH = 'email-domains';
-var MEMBERS_PATH = exports.MEMBERS_PATH = 'members';
-var TITLE_PATH = exports.TITLE_PATH = 'title';
-
-// PrincipalsApi specific paths
-var EMAIL_PATH = exports.EMAIL_PATH = 'email';
-var USERS_PATH = exports.USERS_PATH = 'users';
-
-// SearchApi specific paths
-var ADVANCED_PATH = exports.ADVANCED_PATH = 'advanced';
-var FQN_PATH = exports.FQN_PATH = 'fqn';
-var NEIGHBORS_PATH = exports.NEIGHBORS_PATH = 'neighbors';
-var SEARCH_ENTITY_SETS_PATH = exports.SEARCH_ENTITY_SETS_PATH = 'entity_sets';
-var SEARCH_ENTITY_TYPES_PATH = exports.SEARCH_ENTITY_TYPES_PATH = 'entity_types';
-var SEARCH_ASSOCIATION_TYPES_PATH = exports.SEARCH_ASSOCIATION_TYPES_PATH = 'association_types';
-var SEARCH_PROPERTY_TYPES_PATH = exports.SEARCH_PROPERTY_TYPES_PATH = 'property_types';
-
-// SyncApi specific paths
-var CURRENT_PATH = exports.CURRENT_PATH = 'current';
+exports.getApiBaseUrl = _getApiBaseUrl2.default;
+exports.getApiAxiosInstance = _getApiAxiosInstance2.default;
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var freeGlobal = __webpack_require__(69);
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = freeGlobal || freeSelf || Function('return this')();
-
-module.exports = root;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Symbol = __webpack_require__(35),
-    getRawTag = __webpack_require__(299),
-    objectToString = __webpack_require__(298);
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
-
-module.exports = baseGetTag;
-
-
-/***/ }),
-/* 12 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11547,7 +11450,155 @@ FullyQualifiedName.toString = function () {
 exports.default = FullyQualifiedName;
 
 /***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ADVANCED_PATH = exports.ADVANCED_PATH = 'advanced';
+var ANALYSIS_PATH = exports.ANALYSIS_PATH = 'analysis';
+var APP_PATH = exports.APP_PATH = 'app';
+var ASSOCIATION_PATH = exports.ASSOCIATION_PATH = 'association';
+var ASSOCIATION_TYPE_PATH = exports.ASSOCIATION_TYPE_PATH = 'association/type';
+var AUTHORIZATIONS_PATH = exports.AUTHORIZATIONS_PATH = 'authorizations';
+var BULK_PATH = exports.BULK_PATH = 'bulk';
+var COMPLEX_TYPE_PATH = exports.COMPLEX_TYPE_PATH = 'complex/type';
+var CONFIG_PATH = exports.CONFIG_PATH = 'config';
+var COUNT_PATH = exports.COUNT_PATH = 'count';
+var CURRENT_PATH = exports.CURRENT_PATH = 'current';
+var DATASTORE_PATH = exports.DATASTORE_PATH = 'datastore';
+var DATA_PATH = exports.DATA_PATH = 'data';
+var DATA_SOURCES_PATH = exports.DATA_SOURCES_PATH = 'datasource';
+var DESCRIPTION_PATH = exports.DESCRIPTION_PATH = 'description';
+var DETAILED_PATH = exports.DETAILED_PATH = 'detailed';
+var DST_PATH = exports.DST_PATH = 'dst';
+var EDM_PATH = exports.EDM_PATH = 'edm';
+var EMAIL_DOMAINS_PATH = exports.EMAIL_DOMAINS_PATH = 'email-domains';
+var EMAIL_PATH = exports.EMAIL_PATH = 'email';
+var ENTITY_SET_PATH = exports.ENTITY_SET_PATH = 'entity/set';
+var ENTITY_TYPE_PATH = exports.ENTITY_TYPE_PATH = 'entity/type';
+var ENUM_TYPE_PATH = exports.ENUM_TYPE_PATH = 'enum/type';
+var FILE_TYPE = exports.FILE_TYPE = 'fileType';
+var FORCE_PATH = exports.FORCE_PATH = 'force';
+var FQN_PATH = exports.FQN_PATH = 'fqn';
+var HIERARCHY_PATH = exports.HIERARCHY_PATH = 'hierarchy';
+var IDS_PATH = exports.IDS_PATH = 'ids';
+var INSTALL_PATH = exports.INSTALL_PATH = 'install';
+var INTEGRATION_PATH = exports.INTEGRATION_PATH = 'integration';
+var LINKING_PATH = exports.LINKING_PATH = 'linking';
+var LOOKUP_PATH = exports.LOOKUP_PATH = 'lookup';
+var MEMBERS_PATH = exports.MEMBERS_PATH = 'members';
+var NAMESPACE_PATH = exports.NAMESPACE_PATH = 'namespace';
+var NEIGHBORS_PATH = exports.NEIGHBORS_PATH = 'neighbors';
+var ORGANIZATIONS_PATH = exports.ORGANIZATIONS_PATH = 'organizations';
+var PARTIAL = exports.PARTIAL = 'partial';
+var PERMISSIONS_PATH = exports.PERMISSIONS_PATH = 'permissions';
+var PRINCIPALS_PATH = exports.PRINCIPALS_PATH = 'principals';
+var PROPERTY_TYPE_PATH = exports.PROPERTY_TYPE_PATH = 'property/type';
+var REQUESTS_PATH = exports.REQUESTS_PATH = 'requests';
+var ROLES_PATH = exports.ROLES_PATH = 'roles';
+var SCHEMA_PATH = exports.SCHEMA_PATH = 'schema';
+var SEARCH_ASSOCIATION_TYPES_PATH = exports.SEARCH_ASSOCIATION_TYPES_PATH = 'association_types';
+var SEARCH_ENTITY_SETS_PATH = exports.SEARCH_ENTITY_SETS_PATH = 'entity_sets';
+var SEARCH_ENTITY_TYPES_PATH = exports.SEARCH_ENTITY_TYPES_PATH = 'entity_types';
+var SEARCH_PATH = exports.SEARCH_PATH = 'search';
+var SEARCH_PROPERTY_TYPES_PATH = exports.SEARCH_PROPERTY_TYPES_PATH = 'property_types';
+var SET_ID = exports.SET_ID = 'setId';
+var SET_PATH = exports.SET_PATH = 'set';
+var SRC_PATH = exports.SRC_PATH = 'src';
+var TITLE_PATH = exports.TITLE_PATH = 'title';
+var TYPES_PATH = exports.TYPES_PATH = 'types';
+var TYPE_PATH = exports.TYPE_PATH = 'type';
+var UPDATE_PATH = exports.UPDATE_PATH = 'update';
+var USERS_PATH = exports.USERS_PATH = 'users';
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var freeGlobal = __webpack_require__(70);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(35),
+    getRawTag = __webpack_require__(299),
+    objectToString = __webpack_require__(298);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
 /* 13 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+module.exports = isArray;
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -11579,38 +11630,6 @@ function isObjectLike(value) {
 }
 
 module.exports = isObjectLike;
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-module.exports = isArray;
 
 
 /***/ }),
@@ -11800,15 +11819,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 exports.isValidEntityType = isValidEntityType;
 exports.isValidEntityTypeArray = isValidEntityTypeArray;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _immutable = __webpack_require__(4);
+
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -11894,7 +11911,7 @@ var EntityType = function () {
         entityTypeObj.category = this.category;
       }
 
-      return _immutable2.default.fromJS(entityTypeObj);
+      return (0, _immutable.fromJS)(entityTypeObj);
     }
   }]);
 
@@ -11978,7 +11995,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
         throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
       }
 
-      this.schemas = _immutable2.default.Set().withMutations(function (set) {
+      this.schemas = (0, _immutable.Set)().withMutations(function (set) {
         schemas.forEach(function (schemaFqn) {
           set.add(schemaFqn);
         });
@@ -11998,7 +12015,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
         throw new Error('invalid parameter: key must be a non-empty array of valid UUIDs');
       }
 
-      this.key = _immutable2.default.Set().withMutations(function (set) {
+      this.key = (0, _immutable.Set)().withMutations(function (set) {
         key.forEach(function (keyId) {
           set.add(keyId);
         });
@@ -12018,7 +12035,7 @@ var EntityTypeBuilder = exports.EntityTypeBuilder = function () {
         throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
       }
 
-      this.properties = _immutable2.default.Set().withMutations(function (set) {
+      this.properties = (0, _immutable.Set)().withMutations(function (set) {
         propertyTypes.forEach(function (propertyTypeId) {
           set.add(propertyTypeId);
         });
@@ -12175,9 +12192,9 @@ module.exports = isUndefined;
 /* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
-    isArray = __webpack_require__(14),
-    isObjectLike = __webpack_require__(13);
+var baseGetTag = __webpack_require__(12),
+    isArray = __webpack_require__(13),
+    isObjectLike = __webpack_require__(14);
 
 /** `Object#toString` result references. */
 var stringTag = '[object String]';
@@ -12284,8 +12301,6 @@ exports.getConfig = exports.configure = undefined;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
@@ -12302,13 +12317,13 @@ var LOG = new _Logger2.default('Configuration');
  * @memberof lattice
  */
 
-var ENV_URLS = _immutable2.default.fromJS({
+var ENV_URLS = (0, _immutable.fromJS)({
   LOCAL: 'http://localhost:8080',
   STAGING: 'https://api.staging.openlattice.com',
   PRODUCTION: 'https://api.openlattice.com'
 });
 
-var configuration = _immutable2.default.fromJS({
+var configuration = (0, _immutable.fromJS)({
   authToken: '',
   baseUrl: ENV_URLS.get('LOCAL')
 });
@@ -12397,10 +12412,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 exports.isValidRequest = isValidRequest;
 exports.isValidRequestArray = isValidRequestArray;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
@@ -12408,6 +12419,8 @@ var _has2 = _interopRequireDefault(_has);
 var _isString = __webpack_require__(19);
 
 var _isString2 = _interopRequireDefault(_isString);
+
+var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(2);
 
@@ -12461,7 +12474,7 @@ var RequestBuilder = exports.RequestBuilder = function () {
         throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
       }
 
-      this.permissions = _immutable2.default.Set().withMutations(function (set) {
+      this.permissions = (0, _immutable.Set)().withMutations(function (set) {
         permissions.forEach(function (permission) {
           set.add(permission);
         });
@@ -12578,15 +12591,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 exports.isValidPropertyType = isValidPropertyType;
 exports.isValidPropertyTypeArray = isValidPropertyTypeArray;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _immutable = __webpack_require__(4);
+
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -12670,7 +12681,7 @@ var PropertyType = function () {
         propertyTypeObj.analyzer = this.analyzer;
       }
 
-      return _immutable2.default.fromJS(propertyTypeObj);
+      return (0, _immutable.fromJS)(propertyTypeObj);
     }
   }]);
 
@@ -12765,7 +12776,7 @@ var PropertyTypeBuilder = exports.PropertyTypeBuilder = function () {
         throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
       }
 
-      this.schemas = _immutable2.default.Set().withMutations(function (set) {
+      this.schemas = (0, _immutable.Set)().withMutations(function (set) {
         schemas.forEach(function (schemaFqn) {
           set.add(schemaFqn);
         });
@@ -12903,13 +12914,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 exports.isValidEntitySet = isValidEntitySet;
 exports.isValidEntitySetArray = isValidEntitySetArray;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
+
+var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(2);
 
@@ -13039,7 +13048,7 @@ var EntitySetBuilder = exports.EntitySetBuilder = function () {
         throw new Error('invalid parameter: contacts must be a non-empty array of strings');
       }
 
-      this.contacts = _immutable2.default.Set().withMutations(function (set) {
+      this.contacts = (0, _immutable.Set)().withMutations(function (set) {
         contacts.forEach(function (contact) {
           set.add(contact);
         });
@@ -13134,11 +13143,10 @@ var SecurableTypes = {
   EdgeType: 'EdgeType',
   EntitySet: 'EntitySet',
   EntityType: 'EntityType',
-  DataSource: 'Datasource',
   LinkingEntityType: 'LinkingEntityType',
-  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
   Organization: 'Organization',
-  OrganizationRole: 'OrganizationRole'
+  OrganizationRole: 'OrganizationRole',
+  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet'
 };
 
 exports.default = SecurableTypes;
@@ -13193,7 +13201,7 @@ module.exports = exports['default'];
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 var normalizeHeaderName = __webpack_require__(260);
 
 var DEFAULT_CONTENT_TYPE = {
@@ -13210,10 +13218,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(59);
+    adapter = __webpack_require__(60);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(59);
+    adapter = __webpack_require__(60);
   }
   return adapter;
 }
@@ -13294,8 +13302,8 @@ module.exports = defaults;
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
-    isObjectLike = __webpack_require__(13);
+var baseGetTag = __webpack_require__(12),
+    isObjectLike = __webpack_require__(14);
 
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
@@ -13407,7 +13415,7 @@ module.exports = isObject;
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(11);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -13603,8 +13611,6 @@ exports.isValidAceArray = isValidAceArray;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
@@ -13671,7 +13677,7 @@ var AceBuilder = exports.AceBuilder = function () {
         throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
       }
 
-      this.permissions = _immutable2.default.Set().withMutations(function (set) {
+      this.permissions = (0, _immutable.Set)().withMutations(function (set) {
         permissions.forEach(function (permission) {
           set.add(permission);
         });
@@ -13879,8 +13885,8 @@ Object.defineProperty(exports, "__esModule", {
 var ActionTypes = {
   ADD: 'ADD',
   REMOVE: 'REMOVE',
-  SET: 'SET',
-  REQUEST: 'REQUEST'
+  REQUEST: 'REQUEST',
+  SET: 'SET'
 };
 
 exports.default = ActionTypes;
@@ -14239,13 +14245,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValidOrganization = isValidOrganization;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
+
+var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(2);
 
@@ -14368,7 +14372,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
         throw new Error('invalid parameter: members must be a non-empty array of valid Principals');
       }
 
-      this.members = _immutable2.default.Set().withMutations(function (set) {
+      this.members = (0, _immutable.Set)().withMutations(function (set) {
         members.forEach(function (member) {
           set.add(member);
         });
@@ -14388,7 +14392,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
         throw new Error('invalid parameter: roles must be a non-empty array of valid Principals');
       }
 
-      this.roles = _immutable2.default.Set().withMutations(function (set) {
+      this.roles = (0, _immutable.Set)().withMutations(function (set) {
         roles.forEach(function (role) {
           set.add(role);
         });
@@ -14408,7 +14412,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
         throw new Error('invalid parameter: emails must be a non-empty array of strings');
       }
 
-      this.emails = _immutable2.default.Set().withMutations(function (set) {
+      this.emails = (0, _immutable.Set)().withMutations(function (set) {
         emails.forEach(function (email) {
           set.add(email);
         });
@@ -14427,7 +14431,7 @@ var OrganizationBuilder = exports.OrganizationBuilder = function () {
         throw new Error('invalid parameter: apps must be a valid UUID array');
       }
 
-      this.apps = _immutable2.default.Set().withMutations(function (set) {
+      this.apps = (0, _immutable.Set)().withMutations(function (set) {
         apps.forEach(function (app) {
           set.add(app);
         });
@@ -14508,8 +14512,8 @@ function isValidOrganization(organization) {
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
-    isObjectLike = __webpack_require__(13);
+var baseGetTag = __webpack_require__(12),
+    isObjectLike = __webpack_require__(14);
 
 /** `Object#toString` result references. */
 var boolTag = '[object Boolean]';
@@ -14555,10 +14559,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValidLinkingEntityType = isValidLinkingEntityType;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
@@ -14566,6 +14566,8 @@ var _has2 = _interopRequireDefault(_has);
 var _isBoolean = __webpack_require__(45);
 
 var _isBoolean2 = _interopRequireDefault(_isBoolean);
+
+var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(2);
 
@@ -14630,7 +14632,7 @@ var LinkingEntityTypeBuilder = exports.LinkingEntityTypeBuilder = function () {
         throw new Error('invalid parameter: entityTypeIds must be an array of valid UUIDs');
       }
 
-      this.entityTypeIds = _immutable2.default.Set().withMutations(function (set) {
+      this.entityTypeIds = (0, _immutable.Set)().withMutations(function (set) {
         entityTypeIds.forEach(function (entityTypeId) {
           set.add(entityTypeId);
         });
@@ -14716,8 +14718,6 @@ exports.isValidLinkingEntitySet = isValidLinkingEntitySet;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
@@ -14771,8 +14771,8 @@ var LinkingEntitySetBuilder = exports.LinkingEntitySetBuilder = function () {
 
       var errorMsg = '';
 
-      var linkingPropertiesSet = _immutable2.default.Set().withMutations(function (set) {
-        _immutable2.default.fromJS(linkingProperties).forEach(function (property) {
+      var linkingPropertiesSet = (0, _immutable.Set)().withMutations(function (set) {
+        (0, _immutable.fromJS)(linkingProperties).forEach(function (property) {
 
           if (property.entrySeq().isEmpty()) {
             errorMsg = 'invalid parameter: linkingProperties must be a array of non-empty Map<UUID, UUID> objects';
@@ -14972,13 +14972,11 @@ exports.isValidSchema = isValidSchema;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _EntityType = __webpack_require__(17);
 
 var _EntityType2 = _interopRequireDefault(_EntityType);
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -15027,7 +15025,7 @@ var Schema = function () {
         return propertyType.asImmutable();
       });
 
-      return _immutable2.default.fromJS(plainObj);
+      return (0, _immutable.fromJS)(plainObj);
     }
   }]);
 
@@ -15145,12 +15143,9 @@ function isValidSchema(schema) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var METAPHONE = 'METAPHONE';
-var STANDARD = 'STANDARD';
-
 var AnalyzerTypes = {
-  METAPHONE: METAPHONE,
-  STANDARD: STANDARD
+  METAPHONE: 'METAPHONE',
+  STANDARD: 'STANDARD'
 };
 
 exports.default = AnalyzerTypes;
@@ -15165,19 +15160,176 @@ exports.default = AnalyzerTypes;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DataSourceBuilder = undefined;
+exports.EntityDataKeyBuilder = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-exports.isValidDataSource = isValidDataSource;
+exports.isValidEntityDataKey = isValidEntityDataKey;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
+var _Logger = __webpack_require__(2);
 
-var _has = __webpack_require__(5);
+var _Logger2 = _interopRequireDefault(_Logger);
 
-var _has2 = _interopRequireDefault(_has);
+var _ValidationUtils = __webpack_require__(3);
+
+var _LangUtils = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LOG = new _Logger2.default('EntityDataKey');
+
+/**
+ * @class EntityDataKey
+ * @memberof lattice
+ */
+
+var EntityDataKey = function () {
+  function EntityDataKey(entitySetId, entityKeyId) {
+    _classCallCheck(this, EntityDataKey);
+
+    this.entityKeyId = entityKeyId;
+    this.entitySetId = entitySetId;
+  }
+
+  _createClass(EntityDataKey, [{
+    key: 'asImmutable',
+    value: function asImmutable() {
+
+      var plainObj = {};
+
+      // required properties
+      plainObj.entityKeyId = this.entityKeyId;
+      plainObj.entitySetId = this.entitySetId;
+
+      return (0, _immutable.fromJS)(plainObj);
+    }
+
+    // equals(value :any) :boolean {
+    //
+    //   return value
+    //     && value.entityKeyId === this.entityKeyId
+    //     && value.entitySetId === this.entitySetId;
+    // }
+    //
+    // hashCode() :number {
+    //
+    //   return this.asImmutable().hashCode();
+    // }
+
+  }, {
+    key: 'valueOf',
+    value: function valueOf() {
+
+      return JSON.stringify({
+        entityKeyId: this.entityKeyId,
+        entitySetId: this.entitySetId
+      });
+    }
+  }]);
+
+  return EntityDataKey;
+}();
+
+/**
+ * @class EntityDataKeyBuilder
+ * @memberof lattice
+ */
+
+
+exports.default = EntityDataKey;
+
+var EntityDataKeyBuilder = exports.EntityDataKeyBuilder = function () {
+  function EntityDataKeyBuilder() {
+    _classCallCheck(this, EntityDataKeyBuilder);
+  }
+
+  _createClass(EntityDataKeyBuilder, [{
+    key: 'setEntityKeyId',
+    value: function setEntityKeyId(entityKeyId) {
+
+      if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+        throw new Error('invalid parameter: entityKeyId must be a valid UUID');
+      }
+
+      this.entityKeyId = entityKeyId;
+      return this;
+    }
+  }, {
+    key: 'setEntitySetId',
+    value: function setEntitySetId(entitySetId) {
+
+      if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+        throw new Error('invalid parameter: entitySetId must be a valid UUID');
+      }
+
+      this.entitySetId = entitySetId;
+      return this;
+    }
+  }, {
+    key: 'build',
+    value: function build() {
+
+      if (!this.entityKeyId) {
+        throw new Error('missing property: entityKeyId is a required property');
+      }
+
+      if (!this.entitySetId) {
+        throw new Error('missing property: entitySetId is a required property');
+      }
+
+      return new EntityDataKey(this.entitySetId, this.entityKeyId);
+    }
+  }]);
+
+  return EntityDataKeyBuilder;
+}();
+
+function isValidEntityDataKey(entityDataKey) {
+
+  if (!(0, _LangUtils.isDefined)(entityDataKey)) {
+
+    LOG.error('invalid parameter: entityDataKey must be defined', entityDataKey);
+    return false;
+  }
+
+  try {
+
+    new EntityDataKeyBuilder().setEntityKeyId(entityDataKey.entityKeyId).setEntitySetId(entityDataKey.entitySetId).build();
+
+    return true;
+  } catch (e) {
+
+    LOG.error(e, entityDataKey);
+    return false;
+  }
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DataEdgeKeyBuilder = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.isValidDataEdgeKey = isValidDataEdgeKey;
+exports.isValidDataEdgeKeyArray = isValidDataEdgeKeyArray;
+
+var _immutable = __webpack_require__(4);
+
+var _EntityDataKey = __webpack_require__(51);
+
+var _EntityDataKey2 = _interopRequireDefault(_EntityDataKey);
 
 var _Logger = __webpack_require__(2);
 
@@ -15191,148 +15343,137 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LOG = new _Logger2.default('DataSource');
+var LOG = new _Logger2.default('DataEdgeKey');
 
-var DataSource = function DataSource(id, title, description, entitySetIds) {
-  _classCallCheck(this, DataSource);
+var DataEdgeKey = function () {
+  function DataEdgeKey(src, dst, edge) {
+    _classCallCheck(this, DataEdgeKey);
 
-  // required properties
-  this.title = title;
-  this.entitySetIds = entitySetIds;
-
-  // optional properties
-  if ((0, _LangUtils.isDefined)(id)) {
-    this.id = id;
+    this.dst = dst;
+    this.edge = edge;
+    this.src = src;
   }
 
-  if ((0, _LangUtils.isDefined)(description)) {
-    this.description = description;
+  _createClass(DataEdgeKey, [{
+    key: 'asImmutable',
+    value: function asImmutable() {
+
+      var plainObj = {};
+
+      // required properties
+      plainObj.dst = this.dst;
+      plainObj.edge = this.edge;
+      plainObj.src = this.src;
+
+      return (0, _immutable.fromJS)(plainObj);
+    }
+  }, {
+    key: 'valueOf',
+    value: function valueOf() {
+
+      return JSON.stringify({
+        dst: this.dst,
+        edge: this.edge,
+        src: this.src
+      });
+    }
+  }]);
+
+  return DataEdgeKey;
+}();
+
+exports.default = DataEdgeKey;
+
+var DataEdgeKeyBuilder = exports.DataEdgeKeyBuilder = function () {
+  function DataEdgeKeyBuilder() {
+    _classCallCheck(this, DataEdgeKeyBuilder);
   }
-};
 
-exports.default = DataSource;
+  _createClass(DataEdgeKeyBuilder, [{
+    key: 'setDestination',
+    value: function setDestination(destination) {
 
-var DataSourceBuilder = exports.DataSourceBuilder = function () {
-  function DataSourceBuilder() {
-    _classCallCheck(this, DataSourceBuilder);
-  }
-
-  _createClass(DataSourceBuilder, [{
-    key: 'setId',
-    value: function setId(id) {
-
-      if (!(0, _LangUtils.isDefined)(id) || (0, _LangUtils.isEmptyString)(id)) {
-        return this;
+      if (!(0, _EntityDataKey.isValidEntityDataKey)(destination)) {
+        throw new Error('invalid parameter: destination must be a valid EntityDataKey');
       }
 
-      if (!(0, _ValidationUtils.isValidUuid)(id)) {
-        throw new Error('invalid parameter: id must be a valid UUID');
-      }
-
-      this.id = id;
+      this.dst = destination;
       return this;
     }
   }, {
-    key: 'setTitle',
-    value: function setTitle(title) {
+    key: 'setEdge',
+    value: function setEdge(edge) {
 
-      if (!(0, _LangUtils.isNonEmptyString)(title)) {
-        throw new Error('invalid parameter: title must be a non-empty string');
+      if (!(0, _EntityDataKey.isValidEntityDataKey)(edge)) {
+        throw new Error('invalid parameter: edge must be a valid EntityDataKey');
       }
 
-      this.title = title;
+      this.edge = edge;
       return this;
     }
   }, {
-    key: 'setDescription',
-    value: function setDescription(description) {
+    key: 'setSource',
+    value: function setSource(source) {
 
-      if (!(0, _LangUtils.isDefined)(description) || (0, _LangUtils.isEmptyString)(description)) {
-        return this;
+      if (!(0, _EntityDataKey.isValidEntityDataKey)(source)) {
+        throw new Error('invalid parameter: source must be a valid EntityDataKey');
       }
 
-      if (!(0, _LangUtils.isNonEmptyString)(description)) {
-        throw new Error('invalid parameter: description must be a non-empty string');
-      }
-
-      this.description = description;
-      return this;
-    }
-  }, {
-    key: 'setEntitySetIds',
-    value: function setEntitySetIds(entitySetIds) {
-
-      if (!(0, _ValidationUtils.isValidUuidArray)(entitySetIds)) {
-        throw new Error('invalid parameter: entitySetIds must be an array of valid UUIDs');
-      }
-
-      this.entitySetIds = _immutable2.default.Set().withMutations(function (set) {
-        entitySetIds.forEach(function (entitySetId) {
-          set.add(entitySetId);
-        });
-      }).toJS();
-
+      this.src = source;
       return this;
     }
   }, {
     key: 'build',
     value: function build() {
 
-      if (!this.id) {
-        throw new Error('missing property: id is a required property');
+      if (!this.dst) {
+        throw new Error('missing property: destination is a required property');
       }
 
-      if (!this.title) {
-        throw new Error('missing property: title is a required property');
+      if (!this.edge) {
+        throw new Error('missing property: edge is a required property');
       }
 
-      if (!this.entitySetIds) {
-        throw new Error('missing property: entitySetIds is a required property');
+      if (!this.src) {
+        throw new Error('missing property: source is a required property');
       }
 
-      return new DataSource(this.id, this.title, this.description, this.entitySetIds);
+      return new DataEdgeKey(this.src, this.dst, this.edge);
     }
   }]);
 
-  return DataSourceBuilder;
+  return DataEdgeKeyBuilder;
 }();
 
-function isValidDataSource(dataSource) {
+function isValidDataEdgeKey(dataEdgeKey) {
 
-  if (!(0, _LangUtils.isDefined)(dataSource)) {
+  if (!(0, _LangUtils.isDefined)(dataEdgeKey)) {
 
-    LOG.error('invalid parameter: dataSource must be defined', dataSource);
+    LOG.error('invalid parameter: dataEdgeKey must be defined', dataEdgeKey);
     return false;
   }
 
   try {
 
-    var dataSourceBuilder = new DataSourceBuilder();
-
-    // required properties
-    dataSourceBuilder.setTitle(dataSource.title).setEntitySetIds(dataSource.entitySetIds);
-
-    // optional properties
-    if ((0, _has2.default)(dataSource, 'id')) {
-      dataSourceBuilder.setId(dataSource.id);
-    }
-
-    if ((0, _has2.default)(dataSource, 'description')) {
-      dataSourceBuilder.setDescription(dataSource.description);
-    }
-
-    dataSourceBuilder.build();
+    new DataEdgeKeyBuilder().setDestination(dataEdgeKey.dst).setEdge(dataEdgeKey.edge).setSource(dataEdgeKey.src).build();
 
     return true;
   } catch (e) {
 
-    LOG.error(e, dataSource);
+    LOG.error(e, dataEdgeKey);
     return false;
   }
 }
 
+function isValidDataEdgeKeyArray(dataEdgeKeys) {
+
+  return (0, _ValidationUtils.validateNonEmptyArray)(dataEdgeKeys, function (dataEdgeKey) {
+    return isValidDataEdgeKey(dataEdgeKey);
+  });
+}
+
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15348,13 +15489,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 exports.isValidAccessCheck = isValidAccessCheck;
 exports.isValidAccessCheckArray = isValidAccessCheckArray;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
+
+var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(2);
 
@@ -15422,7 +15561,7 @@ var AccessCheckBuilder = exports.AccessCheckBuilder = function () {
         throw new Error('invalid parameter: permissions must be an array of valid Permissions');
       }
 
-      this.permissions = _immutable2.default.Set().withMutations(function (set) {
+      this.permissions = (0, _immutable.Set)().withMutations(function (set) {
         permissions.forEach(function (permission) {
           set.add(permission);
         });
@@ -15483,7 +15622,7 @@ function isValidAccessCheckArray(accessChecks) {
 }
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15510,7 +15649,7 @@ var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -15675,7 +15814,7 @@ function isValidAppType(appType) {
 }
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15690,13 +15829,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValidApp = isValidApp;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
+
+var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(2);
 
@@ -15756,7 +15893,7 @@ var AppBuilder = exports.AppBuilder = function () {
         throw new Error('invalid parameter: appTypeIds must be a valid UUID array');
       }
 
-      this.appTypeIds = _immutable2.default.Set().withMutations(function (set) {
+      this.appTypeIds = (0, _immutable.Set)().withMutations(function (set) {
         appTypeIds.forEach(function (appTypeId) {
           set.add(appTypeId);
         });
@@ -15886,7 +16023,7 @@ function isValidApp(app) {
 }
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15910,7 +16047,7 @@ function merge() {
 module.exports = exports['default'];
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15936,7 +16073,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15948,7 +16085,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15973,18 +16110,18 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 var settle = __webpack_require__(259);
 var buildURL = __webpack_require__(257);
 var parseHeaders = __webpack_require__(256);
 var isURLSameOrigin = __webpack_require__(255);
-var createError = __webpack_require__(58);
+var createError = __webpack_require__(59);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(254);
 
 module.exports = function xhrAdapter(config) {
@@ -16160,7 +16297,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16178,10 +16315,10 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseToString = __webpack_require__(63);
+var baseToString = __webpack_require__(64);
 
 /**
  * Converts `value` to a string. An empty string is returned for `null`
@@ -16212,7 +16349,7 @@ module.exports = toString;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseFindIndex = __webpack_require__(275),
@@ -16238,12 +16375,12 @@ module.exports = baseIndexOf;
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(35),
     arrayMap = __webpack_require__(279),
-    isArray = __webpack_require__(14),
+    isArray = __webpack_require__(13),
     isSymbol = __webpack_require__(32);
 
 /** Used as references for various `Number` constants. */
@@ -16281,7 +16418,7 @@ module.exports = baseToString;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16291,21 +16428,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Immutable$OrderedMap;
+var _OrderedMap;
 
 exports.default = getApiBaseUrl;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _ApiNames = __webpack_require__(6);
 
 var ApiNames = _interopRequireWildcard(_ApiNames);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
-var ApiPaths = _interopRequireWildcard(_ApiPaths);
+var UrlConstants = _interopRequireWildcard(_UrlConstants);
 
 var _Configuration = __webpack_require__(23);
 
@@ -16313,12 +16448,10 @@ var _LangUtils = __webpack_require__(1);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /* eslint-disable key-spacing */
-var API_TO_PATH_MAP = _immutable2.default.OrderedMap((_Immutable$OrderedMap = {}, _defineProperty(_Immutable$OrderedMap, ApiNames.ANALYSIS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.ANALYSIS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.APP_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.APP_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.AUTHORIZATION_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.AUTHORIZATIONS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.DATA_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.DATA_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.DATA_INTEGRATION_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.INTEGRATION_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.DATA_SOURCES_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.DATA_SOURCES_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.EDM_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.EDM_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.LINKING_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.LINKING_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.ORGANIZATIONS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.ORGANIZATIONS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.PERMISSIONS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.PERMISSIONS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.PRINCIPALS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.PRINCIPALS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.REQUESTS_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.REQUESTS_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.SEARCH_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.SEARCH_PATH), _defineProperty(_Immutable$OrderedMap, ApiNames.SYNC_API, ApiPaths.DATASTORE_PATH + '/' + ApiPaths.SYNC_PATH), _Immutable$OrderedMap));
+var API_TO_PATH_MAP = (0, _immutable.OrderedMap)((_OrderedMap = {}, _defineProperty(_OrderedMap, ApiNames.ANALYSIS_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.ANALYSIS_PATH), _defineProperty(_OrderedMap, ApiNames.APP_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.APP_PATH), _defineProperty(_OrderedMap, ApiNames.AUTHORIZATION_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.AUTHORIZATIONS_PATH), _defineProperty(_OrderedMap, ApiNames.DATA_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.DATA_PATH), _defineProperty(_OrderedMap, ApiNames.DATA_INTEGRATION_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.INTEGRATION_PATH), _defineProperty(_OrderedMap, ApiNames.EDM_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.EDM_PATH), _defineProperty(_OrderedMap, ApiNames.LINKING_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.LINKING_PATH), _defineProperty(_OrderedMap, ApiNames.ORGANIZATIONS_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.ORGANIZATIONS_PATH), _defineProperty(_OrderedMap, ApiNames.PERMISSIONS_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.PERMISSIONS_PATH), _defineProperty(_OrderedMap, ApiNames.PRINCIPALS_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.PRINCIPALS_PATH), _defineProperty(_OrderedMap, ApiNames.REQUESTS_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.REQUESTS_PATH), _defineProperty(_OrderedMap, ApiNames.SEARCH_API, UrlConstants.DATASTORE_PATH + '/' + UrlConstants.SEARCH_PATH), _OrderedMap));
 /* eslint-enable */
 
 function getApiBaseUrl(api) {
@@ -16335,12 +16468,12 @@ function getApiBaseUrl(api) {
 }
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(12),
     getPrototype = __webpack_require__(282),
-    isObjectLike = __webpack_require__(13);
+    isObjectLike = __webpack_require__(14);
 
 /** `Object#toString` result references. */
 var objectTag = '[object Object]';
@@ -16403,11 +16536,11 @@ module.exports = isPlainObject;
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsArguments = __webpack_require__(291),
-    isObjectLike = __webpack_require__(13);
+    isObjectLike = __webpack_require__(14);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -16445,11 +16578,11 @@ module.exports = isArguments;
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -16458,7 +16591,7 @@ module.exports = Map;
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -16490,7 +16623,7 @@ module.exports = toSource;
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -16501,10 +16634,10 @@ module.exports = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(300)))
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(12),
     isObject = __webpack_require__(34);
 
 /** `Object#toString` result references. */
@@ -16544,7 +16677,7 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports) {
 
 /**
@@ -16565,7 +16698,7 @@ module.exports = overArg;
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -16589,16 +16722,16 @@ module.exports = isPrototype;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseKeys = __webpack_require__(305),
     getTag = __webpack_require__(303),
-    isArguments = __webpack_require__(66),
-    isArray = __webpack_require__(14),
+    isArguments = __webpack_require__(67),
+    isArray = __webpack_require__(13),
     isArrayLike = __webpack_require__(290),
     isBuffer = __webpack_require__(289),
-    isPrototype = __webpack_require__(72),
+    isPrototype = __webpack_require__(73),
     isTypedArray = __webpack_require__(287);
 
 /** `Object#toString` result references. */
@@ -16672,7 +16805,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16778,7 +16911,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16884,7 +17017,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -16997,7 +17130,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17060,7 +17193,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17131,7 +17264,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17213,7 +17346,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17274,7 +17407,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17335,7 +17468,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17436,7 +17569,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17590,7 +17723,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js language configuration
@@ -17712,7 +17845,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17773,7 +17906,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17834,7 +17967,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17928,7 +18061,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -18025,7 +18158,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18150,7 +18283,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18215,7 +18348,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18285,7 +18418,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18404,7 +18537,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18474,7 +18607,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18566,7 +18699,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18698,7 +18831,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18760,7 +18893,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18832,7 +18965,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18923,7 +19056,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19037,7 +19170,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19151,7 +19284,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19222,7 +19355,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19398,7 +19531,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19557,7 +19690,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19631,7 +19764,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19694,7 +19827,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19795,7 +19928,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19980,7 +20113,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20058,7 +20191,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20122,7 +20255,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20190,7 +20323,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20319,7 +20452,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20446,7 +20579,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20509,7 +20642,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20599,7 +20732,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20689,7 +20822,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20815,7 +20948,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20880,7 +21013,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20976,7 +21109,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21039,7 +21172,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21124,7 +21257,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21209,7 +21342,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21372,7 +21505,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21479,7 +21612,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21563,7 +21696,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21656,7 +21789,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21723,7 +21856,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21838,7 +21971,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21938,7 +22071,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22059,7 +22192,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22132,7 +22265,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22271,7 +22404,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22361,7 +22494,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22445,7 +22578,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22574,7 +22707,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22687,7 +22820,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22777,7 +22910,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22869,7 +23002,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22954,7 +23087,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23049,7 +23182,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23121,7 +23254,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23256,7 +23389,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23341,7 +23474,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23439,7 +23572,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23552,7 +23685,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23709,7 +23842,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23836,7 +23969,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23936,7 +24069,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24063,7 +24196,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24189,7 +24322,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24269,7 +24402,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24348,7 +24481,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24426,7 +24559,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24507,7 +24640,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24584,7 +24717,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24670,7 +24803,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24733,7 +24866,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24845,7 +24978,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24954,7 +25087,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25023,7 +25156,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25106,7 +25239,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25192,7 +25325,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25287,7 +25420,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25382,7 +25515,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25456,7 +25589,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25526,7 +25659,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25591,7 +25724,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25661,7 +25794,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25731,7 +25864,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25797,7 +25930,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25867,7 +26000,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25970,7 +26103,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26072,7 +26205,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26151,7 +26284,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26230,7 +26363,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26309,7 +26442,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26372,7 +26505,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26455,7 +26588,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26521,7 +26654,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26703,7 +26836,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26794,7 +26927,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26948,7 +27081,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 182 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27059,7 +27192,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27181,7 +27314,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 184 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27303,7 +27436,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 185 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27364,7 +27497,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 186 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27457,7 +27590,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 187 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27592,7 +27725,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 188 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27700,7 +27833,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 189 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27762,7 +27895,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 190 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27869,7 +28002,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27931,7 +28064,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28056,7 +28189,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28118,7 +28251,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28180,7 +28313,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28318,7 +28451,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28394,7 +28527,7 @@ module.exports = isEmpty;
 
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28409,13 +28542,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.isValidAssociationType = isValidAssociationType;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _isBoolean = __webpack_require__(45);
 
 var _isBoolean2 = _interopRequireDefault(_isBoolean);
+
+var _immutable = __webpack_require__(4);
 
 var _Logger = __webpack_require__(2);
 
@@ -28463,7 +28594,7 @@ var AssociationType = function () {
       associationTypeObj.dst = this.dst;
       associationTypeObj.bidirectional = this.bidirectional;
 
-      return _immutable2.default.fromJS(associationTypeObj);
+      return (0, _immutable.fromJS)(associationTypeObj);
     }
   }]);
 
@@ -28506,7 +28637,7 @@ var AssociationTypeBuilder = exports.AssociationTypeBuilder = function () {
         throw new Error('invalid parameter: sourceEntityTypeIds must be an array of valid UUIDs');
       }
 
-      this.sourceEntityTypeIds = _immutable2.default.Set().withMutations(function (set) {
+      this.sourceEntityTypeIds = (0, _immutable.Set)().withMutations(function (set) {
         sourceEntityTypeIds.forEach(function (entityTypeId) {
           set.add(entityTypeId);
         });
@@ -28526,7 +28657,7 @@ var AssociationTypeBuilder = exports.AssociationTypeBuilder = function () {
         throw new Error('invalid parameter: destinationEntityTypeIds must be an array of valid UUIDs');
       }
 
-      this.destinationEntityTypeIds = _immutable2.default.Set().withMutations(function (set) {
+      this.destinationEntityTypeIds = (0, _immutable.Set)().withMutations(function (set) {
         destinationEntityTypeIds.forEach(function (entityTypeId) {
           set.add(entityTypeId);
         });
@@ -28605,7 +28736,7 @@ function isValidAssociationType(associationType) {
 }
 
 /***/ }),
-/* 198 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28614,13 +28745,13 @@ function isValidAssociationType(associationType) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SchemaBuilder = exports.Schema = exports.RoleBuilder = exports.Role = exports.RequestStatusBuilder = exports.RequestStatus = exports.RequestBuilder = exports.Request = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.LinkingRequestBuilder = exports.LinkingRequest = exports.LinkingEntityTypeBuilder = exports.LinkingEntityType = exports.LinkingEntitySetBuilder = exports.LinkingEntitySet = exports.FullyQualifiedName = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.DataSourceBuilder = exports.DataSource = exports.AssociationTypeBuilder = exports.AssociationType = exports.AppTypeBuilder = exports.AppType = exports.AppBuilder = exports.App = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.AccessCheckBuilder = exports.AccessCheck = undefined;
+exports.SchemaBuilder = exports.Schema = exports.RoleBuilder = exports.Role = exports.RequestStatusBuilder = exports.RequestStatus = exports.RequestBuilder = exports.Request = exports.PropertyTypeBuilder = exports.PropertyType = exports.PrincipalBuilder = exports.Principal = exports.OrganizationBuilder = exports.Organization = exports.LinkingRequestBuilder = exports.LinkingRequest = exports.LinkingEntityTypeBuilder = exports.LinkingEntityType = exports.LinkingEntitySetBuilder = exports.LinkingEntitySet = exports.FullyQualifiedName = exports.EntityTypeBuilder = exports.EntityType = exports.EntitySetBuilder = exports.EntitySet = exports.EntityDataKeyBuilder = exports.EntityDataKey = exports.DataEdgeKeyBuilder = exports.DataEdgeKey = exports.AssociationTypeBuilder = exports.AssociationType = exports.AppTypeBuilder = exports.AppType = exports.AppBuilder = exports.App = exports.AclDataBuilder = exports.AclData = exports.AclBuilder = exports.Acl = exports.AceBuilder = exports.Ace = exports.AccessCheckBuilder = exports.AccessCheck = undefined;
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _AccessCheck = __webpack_require__(52);
+var _AccessCheck = __webpack_require__(53);
 
 var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
 
@@ -28636,21 +28767,25 @@ var _AclData = __webpack_require__(41);
 
 var _AclData2 = _interopRequireDefault(_AclData);
 
-var _App = __webpack_require__(54);
+var _App = __webpack_require__(55);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _AppType = __webpack_require__(53);
+var _AppType = __webpack_require__(54);
 
 var _AppType2 = _interopRequireDefault(_AppType);
 
-var _AssociationType = __webpack_require__(197);
+var _AssociationType = __webpack_require__(198);
 
 var _AssociationType2 = _interopRequireDefault(_AssociationType);
 
-var _DataSource = __webpack_require__(51);
+var _DataEdgeKey = __webpack_require__(52);
 
-var _DataSource2 = _interopRequireDefault(_DataSource);
+var _DataEdgeKey2 = _interopRequireDefault(_DataEdgeKey);
+
+var _EntityDataKey = __webpack_require__(51);
+
+var _EntityDataKey2 = _interopRequireDefault(_EntityDataKey);
 
 var _EntitySet = __webpack_require__(27);
 
@@ -28716,8 +28851,10 @@ exports.AppType = _AppType2.default;
 exports.AppTypeBuilder = _AppType.AppTypeBuilder;
 exports.AssociationType = _AssociationType2.default;
 exports.AssociationTypeBuilder = _AssociationType.AssociationTypeBuilder;
-exports.DataSource = _DataSource2.default;
-exports.DataSourceBuilder = _DataSource.DataSourceBuilder;
+exports.DataEdgeKey = _DataEdgeKey2.default;
+exports.DataEdgeKeyBuilder = _DataEdgeKey.DataEdgeKeyBuilder;
+exports.EntityDataKey = _EntityDataKey2.default;
+exports.EntityDataKeyBuilder = _EntityDataKey.EntityDataKeyBuilder;
 exports.EntitySet = _EntitySet2.default;
 exports.EntitySetBuilder = _EntitySet.EntitySetBuilder;
 exports.EntityType = _EntityType2.default;
@@ -28745,7 +28882,7 @@ exports.Schema = _Schema2.default;
 exports.SchemaBuilder = _Schema.SchemaBuilder;
 
 /***/ }),
-/* 199 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28790,7 +28927,7 @@ exports.RequestStateTypes = _RequestStateTypes2.default;
 exports.SecurableTypes = _SecurableTypes2.default;
 
 /***/ }),
-/* 200 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28799,69 +28936,21 @@ exports.SecurableTypes = _SecurableTypes2.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getCurrentSyncId = getCurrentSyncId;
+exports.OPENLATTICE_ID_FQN = undefined;
 
-var _Logger = __webpack_require__(2);
+var _FullyQualifiedName = __webpack_require__(9);
 
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _ApiNames = __webpack_require__(6);
-
-var _ApiPaths = __webpack_require__(9);
-
-var _axios = __webpack_require__(7);
+var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint-disable import/prefer-default-export */
-
-/**
- * SyncApi ...
- *
- * @module SyncApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.SyncApi.getCurrentSync...
- *
- * @example
- * import { SyncApi } from 'lattice';
- * // SyncApi.getCurrentSync...
- */
-
-var LOG = new _Logger2.default('SyncApi');
-
-/**
- * `GET /sync/{entitySetId}/current`
- *
- * Returns the current sync id for a given entity set
- *
- * @static
- * @memberof lattice.
- * @param {UUID} entitySetId
- * @returns {Promise<UUID>} - a Promise that resolves with the UUID of the current sync id for the entity set
- *
- * @example
- * LinkingApi.getCurrentSyncId("e39dfdfa-a3e6-4f1f-b54b-646a723c3085");
- */
-function getCurrentSyncId(entitySetId) {
-
-  // TODO: everything
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SYNC_API).get('/' + entitySetId + '/' + _ApiPaths.CURRENT_PATH).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
+var OPENLATTICE_ID_FQN = exports.OPENLATTICE_ID_FQN = _FullyQualifiedName2.default.toString('openlattice', '@id');
 
 /***/ }),
-/* 201 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(11);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeIsFinite = root.isFinite;
@@ -28900,7 +28989,7 @@ module.exports = isFinite;
 
 
 /***/ }),
-/* 202 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28922,11 +29011,7 @@ exports.searchPropertyTypesByFQN = searchPropertyTypesByFQN;
 exports.searchEntityNeighbors = searchEntityNeighbors;
 exports.searchEntityNeighborsBulk = searchEntityNeighborsBulk;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _isFinite = __webpack_require__(201);
+var _isFinite = __webpack_require__(202);
 
 var _isFinite2 = _interopRequireDefault(_isFinite);
 
@@ -28934,17 +29019,19 @@ var _isString = __webpack_require__(19);
 
 var _isString2 = _interopRequireDefault(_isString);
 
+var _immutable = __webpack_require__(4);
+
 var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _ValidationUtils = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -29030,7 +29117,7 @@ function getEntitySets(searchOptions) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _ApiPaths.SEARCH_ENTITY_SETS_PATH + '/' + start + '/' + maxHits).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).get('/' + _UrlConstants.SEARCH_ENTITY_SETS_PATH + '/' + start + '/' + maxHits).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29154,7 +29241,7 @@ function searchEntitySetMetaData(searchOptions) {
       LOG.error(errorMsg, propertyTypeIds);
       return Promise.reject(errorMsg);
     }
-    data[PROPERTY_TYPE_IDS] = _immutable2.default.Set().withMutations(function (set) {
+    data[PROPERTY_TYPE_IDS] = (0, _immutable.Set)().withMutations(function (set) {
       propertyTypeIds.forEach(function (id) {
         set.add(id);
       });
@@ -29311,7 +29398,7 @@ function advancedSearchEntitySetData(entitySetId, searchOptions) {
   data[MAX_HITS] = maxHits;
   data[SEARCH_FIELDS] = searchFields;
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ADVANCED_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _UrlConstants.ADVANCED_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
     return addIDField(axiosResponse.data);
   }).catch(function (error) {
     LOG.error(error);
@@ -29376,7 +29463,7 @@ function searchOrganizations(searchOptions) {
   data[MAX_HITS] = maxHits;
   data[SEARCH_TERM] = searchTerm;
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.ORGANIZATIONS_PATH, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _UrlConstants.ORGANIZATIONS_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29441,7 +29528,7 @@ function searchEntityTypes(searchOptions) {
   data[MAX_HITS] = maxHits;
   data[SEARCH_TERM] = searchTerm;
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ENTITY_TYPES_PATH, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _UrlConstants.SEARCH_ENTITY_TYPES_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29505,7 +29592,7 @@ function searchAssociationTypes(searchOptions) {
   data[MAX_HITS] = maxHits;
   data[SEARCH_TERM] = searchTerm;
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ASSOCIATION_TYPES_PATH, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _UrlConstants.SEARCH_ASSOCIATION_TYPES_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29579,7 +29666,7 @@ function searchEntityTypesByFQN(searchOptions) {
   data[NAMESPACE] = namespace;
   data[NAME] = name;
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_ENTITY_TYPES_PATH + '/' + _ApiPaths.FQN_PATH, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _UrlConstants.SEARCH_ENTITY_TYPES_PATH + '/' + _UrlConstants.FQN_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29644,7 +29731,7 @@ function searchPropertyTypes(searchOptions) {
   data[MAX_HITS] = maxHits;
   data[SEARCH_TERM] = searchTerm;
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_PROPERTY_TYPES_PATH, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _UrlConstants.SEARCH_PROPERTY_TYPES_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29718,7 +29805,7 @@ function searchPropertyTypesByFQN(searchOptions) {
   data[NAMESPACE] = namespace;
   data[NAME] = name;
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _ApiPaths.SEARCH_PROPERTY_TYPES_PATH + '/' + _ApiPaths.FQN_PATH, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + _UrlConstants.SEARCH_PROPERTY_TYPES_PATH + '/' + _UrlConstants.FQN_PATH, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29785,7 +29872,7 @@ function searchEntityNeighborsBulk(entitySetId, entityIds) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId + '/' + _ApiPaths.NEIGHBORS_PATH, entityIds).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.SEARCH_API).post('/' + entitySetId + '/' + _UrlConstants.NEIGHBORS_PATH, entityIds).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -29794,7 +29881,7 @@ function searchEntityNeighborsBulk(entitySetId, entityIds) {
 }
 
 /***/ }),
-/* 203 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29807,13 +29894,11 @@ exports.getAllRequestStatuses = getAllRequestStatuses;
 exports.submitRequests = submitRequests;
 exports.updateRequestStatuses = updateRequestStatuses;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
+
+var _immutable = __webpack_require__(4);
 
 var _RequestStateTypes = __webpack_require__(25);
 
@@ -29833,7 +29918,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _ValidationUtils = __webpack_require__(3);
 
@@ -29938,7 +30023,7 @@ function getAllRequestStatuses(options) {
       return Promise.reject(errorMsg);
     }
 
-    var aclKeysSet = _immutable2.default.Set().withMutations(function (set) {
+    var aclKeysSet = (0, _immutable.Set)().withMutations(function (set) {
       for (var index = 0; index < options.aclKeys.length; index += 1) {
         var aclKey = options.aclKeys[index];
         if (!(0, _ValidationUtils.isValidUuidArray)(aclKey)) {
@@ -29946,7 +30031,7 @@ function getAllRequestStatuses(options) {
           LOG.error(errorMsg, aclKey);
           break;
         }
-        set.add(_immutable2.default.List(aclKey));
+        set.add((0, _immutable.List)(aclKey));
       }
     });
 
@@ -30056,7 +30141,7 @@ function updateRequestStatuses(statuses) {
 }
 
 /***/ }),
-/* 204 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30079,11 +30164,11 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30124,7 +30209,7 @@ function getUser(userId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + userId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _UrlConstants.USERS_PATH + '/' + userId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30141,7 +30226,7 @@ function getUser(userId) {
  */
 function getAllRoles() {
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _UrlConstants.ROLES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30158,7 +30243,7 @@ function getAllRoles() {
  */
 function getAllUsers() {
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _UrlConstants.USERS_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30186,7 +30271,7 @@ function searchAllUsersByEmail(emailSearchQuery) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.SEARCH_PATH + '/' + _ApiPaths.EMAIL_PATH + '/' + emailSearchQuery).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _UrlConstants.USERS_PATH + '/' + _UrlConstants.SEARCH_PATH + '/' + _UrlConstants.EMAIL_PATH + '/' + emailSearchQuery).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30214,7 +30299,7 @@ function searchAllUsers(searchQuery) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _ApiPaths.USERS_PATH + '/' + _ApiPaths.SEARCH_PATH + '/' + searchQuery).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).get('/' + _UrlConstants.USERS_PATH + '/' + _UrlConstants.SEARCH_PATH + '/' + searchQuery).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30244,7 +30329,7 @@ function addRoleToUser(userId, role) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).put('/' + _UrlConstants.USERS_PATH + '/' + userId + '/' + _UrlConstants.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30268,7 +30353,7 @@ function removeRoleFromUser(userId, role) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).delete('/' + _ApiPaths.USERS_PATH + '/' + userId + '/' + _ApiPaths.ROLES_PATH + '/' + role).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.PRINCIPALS_API).delete('/' + _UrlConstants.USERS_PATH + '/' + userId + '/' + _UrlConstants.ROLES_PATH + '/' + role).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30277,7 +30362,7 @@ function removeRoleFromUser(userId, role) {
 }
 
 /***/ }),
-/* 205 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30299,7 +30384,7 @@ var _AclData2 = _interopRequireDefault(_AclData);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _ValidationUtils = __webpack_require__(3);
 
@@ -30407,7 +30492,7 @@ function updateAcl(aclData) {
 }
 
 /***/ }),
-/* 206 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30442,8 +30527,6 @@ exports.removeMemberFromOrganization = removeMemberFromOrganization;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
@@ -30458,13 +30541,13 @@ var _Role2 = _interopRequireDefault(_Role);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30653,7 +30736,7 @@ function updateTitle(organizationId, title) {
     }
   };
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30700,7 +30783,7 @@ function updateDescription(organizationId, description) {
     }
   };
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30731,7 +30814,7 @@ function getAutoApprovedEmailDomains(organizationId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _UrlConstants.EMAIL_DOMAINS_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30772,7 +30855,7 @@ function addAutoApprovedEmailDomain(organizationId, emailDomain) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30815,13 +30898,13 @@ function addAutoApprovedEmailDomains(organizationId, emailDomains) {
     return Promise.reject(errorMsg);
   }
 
-  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
+  var emailDomainSet = (0, _immutable.Set)().withMutations(function (set) {
     emailDomains.forEach(function (emailDomain) {
       set.add(emailDomain);
     });
   }).toJS();
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + organizationId + '/' + _UrlConstants.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30864,13 +30947,13 @@ function setAutoApprovedEmailDomains(organizationId, emailDomains) {
     return Promise.reject(errorMsg);
   }
 
-  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
+  var emailDomainSet = (0, _immutable.Set)().withMutations(function (set) {
     emailDomains.forEach(function (emailDomain) {
       set.add(emailDomain);
     });
   }).toJS();
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.EMAIL_DOMAINS_PATH, emailDomainSet).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30911,7 +30994,7 @@ function removeAutoApprovedEmailDomain(organizationId, emailDomain) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _UrlConstants.EMAIL_DOMAINS_PATH + '/' + emailDomain).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -30954,14 +31037,14 @@ function removeAutoApprovedEmailDomains(organizationId, emailDomains) {
     return Promise.reject(errorMsg);
   }
 
-  var emailDomainSet = _immutable2.default.Set().withMutations(function (set) {
+  var emailDomainSet = (0, _immutable.Set)().withMutations(function (set) {
     emailDomains.forEach(function (emailDomain) {
       set.add(emailDomain);
     });
   }).toJS();
 
   return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).request({
-    url: '/' + organizationId + '/' + _ApiPaths.EMAIL_DOMAINS_PATH,
+    url: '/' + organizationId + '/' + _UrlConstants.EMAIL_DOMAINS_PATH,
     method: 'delete',
     data: emailDomainSet
   }).then(function (axiosResponse) {
@@ -31002,7 +31085,7 @@ function getRole(organizationId, roleId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31033,7 +31116,7 @@ function getAllRoles(organizationId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.ROLES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31073,7 +31156,7 @@ function createRole(role) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + _ApiPaths.ROLES_PATH, role).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).post('/' + _UrlConstants.ROLES_PATH, role).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31111,7 +31194,7 @@ function deleteRole(organizationId, roleId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.ROLES_PATH + '/' + roleId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31166,7 +31249,7 @@ function updateRoleTitle(organizationId, roleId, title) {
     }
   };
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.ROLES_PATH + '/' + roleId + '/' + _UrlConstants.TITLE_PATH, title, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31221,7 +31304,7 @@ function updateRoleDescription(organizationId, roleId, description) {
     }
   };
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.ROLES_PATH + '/' + roleId + '/' + _UrlConstants.DESCRIPTION_PATH, description, axiosConfig).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31271,7 +31354,7 @@ function addRoleToMember(organizationId, roleId, memberId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.ROLES_PATH + '/' + roleId + '/' + _UrlConstants.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31321,7 +31404,7 @@ function removeRoleFromMember(organizationId, roleId, memberId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.ROLES_PATH + '/' + roleId + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.ROLES_PATH + '/' + roleId + '/' + _UrlConstants.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31352,7 +31435,7 @@ function getAllMembers(organizationId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).get('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.MEMBERS_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31393,7 +31476,7 @@ function addMemberToOrganization(organizationId, memberId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).put('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31434,7 +31517,7 @@ function removeMemberFromOrganization(organizationId, memberId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _ApiPaths.PRINCIPALS_PATH + '/' + _ApiPaths.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ORGANIZATIONS_API).delete('/' + organizationId + '/' + _UrlConstants.PRINCIPALS_PATH + '/' + _UrlConstants.MEMBERS_PATH + '/' + memberId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31443,7 +31526,7 @@ function removeMemberFromOrganization(organizationId, memberId) {
 }
 
 /***/ }),
-/* 207 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31469,9 +31552,9 @@ var _LinkingEntityType2 = _interopRequireDefault(_LinkingEntityType);
 
 var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31528,7 +31611,7 @@ function createLinkingEntityType(linkingEntityType) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _ApiPaths.TYPE_PATH, linkingEntityType).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.LINKING_API).post('/' + _UrlConstants.TYPE_PATH, linkingEntityType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31670,7 +31753,7 @@ function linkEntitySets(linkingRequest) {
 // }
 
 /***/ }),
-/* 208 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31737,10 +31820,6 @@ exports.getAllEntitySetPropertyMetadata = getAllEntitySetPropertyMetadata;
 exports.getEntitySetPropertyMetadata = getEntitySetPropertyMetadata;
 exports.updateEntitySetPropertyMetadata = updateEntitySetPropertyMetadata;
 
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
-
 var _has = __webpack_require__(5);
 
 var _has2 = _interopRequireDefault(_has);
@@ -31749,7 +31828,9 @@ var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _immutable = __webpack_require__(4);
+
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
@@ -31775,11 +31856,11 @@ var _Schema2 = _interopRequireDefault(_Schema);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _ValidationUtils = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -31910,7 +31991,7 @@ function getSchema(schemaFqn) {
       name = schemaFqn.name;
 
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31932,7 +32013,7 @@ function getSchema(schemaFqn) {
  */
 function getAllSchemas() {
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.SCHEMA_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -31964,7 +32045,7 @@ function getAllSchemasInNamespace(namespace) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.SCHEMA_PATH + '/' + namespace).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32006,7 +32087,7 @@ function getSchemaFileUrl(schemaFqn, fileType) {
   var namespace = schemaFqn.namespace,
       name = schemaFqn.name;
 
-  return (0, _axios.getApiBaseUrl)(_ApiNames.EDM_API) + '/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType.toLowerCase();
+  return (0, _axios.getApiBaseUrl)(_ApiNames.EDM_API) + '/' + _UrlConstants.SCHEMA_PATH + '/' + namespace + '/' + name + '?fileType=' + fileType.toLowerCase();
 }
 
 /**
@@ -32038,7 +32119,7 @@ function createSchema(schema) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.SCHEMA_PATH, schema).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.SCHEMA_PATH, schema).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32075,7 +32156,7 @@ function createEmptySchema(schemaFqn) {
       name = schemaFqn.name;
 
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _UrlConstants.SCHEMA_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32132,7 +32213,7 @@ function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
     LOG.error(errorMsg, entityTypeIds);
     return Promise.reject(errorMsg);
   } else {
-    entityTypeIdsSet = _immutable2.default.Set().withMutations(function (set) {
+    entityTypeIdsSet = (0, _immutable.Set)().withMutations(function (set) {
       entityTypeIds.forEach(function (entityTypeId) {
         set.add(entityTypeId);
       });
@@ -32147,7 +32228,7 @@ function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
   } else {
-    propertyTypeIdsSet = _immutable2.default.Set().withMutations(function (set) {
+    propertyTypeIdsSet = (0, _immutable.Set)().withMutations(function (set) {
       propertyTypeIds.forEach(function (propertyTypeId) {
         set.add(propertyTypeId);
       });
@@ -32164,7 +32245,7 @@ function updateSchema(schemaFqn, action, entityTypeIds, propertyTypeIds) {
     propertyTypes: propertyTypeIdsSet
   };
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.SCHEMA_PATH + '/' + namespace + '/' + name, data).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _UrlConstants.SCHEMA_PATH + '/' + namespace + '/' + name, data).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32201,7 +32282,7 @@ function getEntitySet(entitySetId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32232,7 +32313,7 @@ function getEntitySetId(entitySetName) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetName).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.IDS_PATH + '/' + _UrlConstants.ENTITY_SET_PATH + '/' + entitySetName).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32254,7 +32335,7 @@ function getEntitySetId(entitySetName) {
  */
 function getAllEntitySets() {
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENTITY_SET_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32298,7 +32379,7 @@ function createEntitySets(entitySets) {
 
   // TODO: Immutable.Set() - entitySets needs to be Set<EntitySet>
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.ENTITY_SET_PATH, entitySets).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32329,7 +32410,7 @@ function deleteEntitySet(entitySetId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ENTITY_SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32408,7 +32489,7 @@ function updateEntitySetMetaData(entitySetId, metadata) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId, metadata).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _UrlConstants.ENTITY_SET_PATH + '/' + entitySetId, metadata).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32445,7 +32526,7 @@ function getEntityType(entityTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32482,7 +32563,7 @@ function getEntityTypeId(entityTypeFqn) {
       name = entityTypeFqn.name;
 
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.IDS_PATH + '/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32505,7 +32586,7 @@ function getEntityTypeId(entityTypeFqn) {
  */
 function getAllEntityTypes() {
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENTITY_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32530,7 +32611,7 @@ function getAllAssociationEntityTypes() {
 
   // TODO: everything
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32582,7 +32663,7 @@ function createEntityType(entityType) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.ENTITY_TYPE_PATH, entityType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32613,7 +32694,7 @@ function deleteEntityType(entityTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32654,7 +32735,7 @@ function addPropertyTypeToEntityType(entityTypeId, propertyTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32695,7 +32776,7 @@ function removePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32737,7 +32818,7 @@ function forceRemovePropertyTypeFromEntityType(entityTypeId, propertyTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + propertyTypeId + '/' + _UrlConstants.FORCE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32779,7 +32860,7 @@ function reorderPropertyTypesInEntityType(entityTypeId, propertyTypeIds) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyTypeIds).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _UrlConstants.PROPERTY_TYPE_PATH, propertyTypeIds).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32858,7 +32939,7 @@ function updateEntityTypeMetaData(entityTypeId, metadata) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId, metadata).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId, metadata).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32892,7 +32973,7 @@ function getEntityTypeHierarchy(entityTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENTITY_TYPE_PATH + '/' + entityTypeId + '/' + _UrlConstants.HIERARCHY_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32930,7 +33011,7 @@ function getPropertyType(propertyTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32967,7 +33048,7 @@ function getPropertyTypeId(propertyTypeFqn) {
       name = propertyTypeFqn.name;
 
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.IDS_PATH + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.IDS_PATH + '/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -32990,7 +33071,7 @@ function getPropertyTypeId(propertyTypeFqn) {
  */
 function getAllPropertyTypes() {
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33022,7 +33103,7 @@ function getAllPropertyTypesInNamespace(namespace) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + _ApiPaths.NAMESPACE_PATH + '/' + namespace).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + _UrlConstants.NAMESPACE_PATH + '/' + namespace).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33066,7 +33147,7 @@ function createPropertyType(propertyType) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.PROPERTY_TYPE_PATH, propertyType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33097,7 +33178,7 @@ function deletePropertyType(propertyTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33129,7 +33210,7 @@ function forceDeletePropertyType(propertyTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId + '/' + _ApiPaths.FORCE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + propertyTypeId + '/' + _UrlConstants.FORCE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33208,7 +33289,7 @@ function updatePropertyTypeMetaData(propertyTypeId, metadata) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).patch('/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33248,7 +33329,7 @@ function getAssociationType(associationTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33273,7 +33354,7 @@ function getAllAssociationTypes() {
 
   // TODO: everything
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ASSOCIATION_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33307,7 +33388,7 @@ function getAssociationTypeDetails(associationTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DETAILED_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _UrlConstants.DETAILED_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33339,7 +33420,7 @@ function getAllAvailableAssociationTypes(entityTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + entityTypeId + '/available').then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + entityTypeId + '/available').then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33379,7 +33460,7 @@ function createAssociationType(associationType) {
   //   return Promise.reject(errorMsg);
   // }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ASSOCIATION_TYPE_PATH, associationType).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.ASSOCIATION_TYPE_PATH, associationType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33412,7 +33493,7 @@ function deleteAssociationType(associationTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + associationTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33451,7 +33532,7 @@ function getComplexType(complexTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33476,7 +33557,7 @@ function getAllComplexTypes() {
 
   // TODO: everything
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.COMPLEX_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33510,7 +33591,7 @@ function getComplexTypeHierarchy(complexTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId + '/' + _ApiPaths.HIERARCHY_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.COMPLEX_TYPE_PATH + '/' + complexTypeId + '/' + _UrlConstants.HIERARCHY_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33560,7 +33641,7 @@ function createComplexType(complexType) {
   //   return Promise.reject(errorMsg);
   // }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.COMPLEX_TYPE_PATH, complexType).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.COMPLEX_TYPE_PATH, complexType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33593,7 +33674,7 @@ function deleteComplexType(complexTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.COMPLEX_TYPE_PATH + '/' + complexTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33632,7 +33713,7 @@ function getEnumType(enumTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33657,7 +33738,7 @@ function getAllEnumTypes() {
 
   // TODO: everything
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENUM_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENUM_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33707,7 +33788,7 @@ function createEnumType(enumType) {
   //   return Promise.reject(errorMsg);
   // }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENUM_TYPE_PATH, enumType).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.ENUM_TYPE_PATH, enumType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33740,7 +33821,7 @@ function deleteEnumType(enumTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ENUM_TYPE_PATH + '/' + enumTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33781,7 +33862,7 @@ function addSrcEntityTypeToAssociationType(associationTypeId, entityTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _UrlConstants.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33822,7 +33903,7 @@ function addDstEntityTypeToAssociationType(associationTypeId, entityTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).put('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _UrlConstants.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33864,7 +33945,7 @@ function removeSrcEntityTypeFromAssociationType(associationTypeId, entityTypeId)
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _UrlConstants.SRC_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33906,7 +33987,7 @@ function removeDstEntityTypeFromAssociationType(associationTypeId, entityTypeId)
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _ApiPaths.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _ApiPaths.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).delete('/' + _UrlConstants.ASSOCIATION_TYPE_PATH + '/' + associationTypeId + '/' + _UrlConstants.DST_PATH + '/' + entityTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33937,7 +34018,7 @@ function getAllEntitySetPropertyMetadata(entitySetId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENTITY_SET_PATH + '/' + entitySetId + '/' + _UrlConstants.PROPERTY_TYPE_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -33978,7 +34059,7 @@ function getEntitySetPropertyMetadata(entitySetId, propertyTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).get('/' + _UrlConstants.ENTITY_SET_PATH + '/' + entitySetId + '/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + propertyTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -34043,235 +34124,7 @@ function updateEntitySetPropertyMetadata(entitySetId, propertyTypeId, metadata) 
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _ApiPaths.ENTITY_SET_PATH + '/' + entitySetId + '/' + _ApiPaths.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/***/ }),
-/* 209 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getDataSource = getDataSource;
-exports.createOrUpdateDataSource = createOrUpdateDataSource;
-exports.deleteDataSource = deleteDataSource;
-exports.startSync = startSync;
-exports.signalSyncCompleted = signalSyncCompleted;
-
-var _Logger = __webpack_require__(2);
-
-var _Logger2 = _interopRequireDefault(_Logger);
-
-var _DataSource = __webpack_require__(51);
-
-var _DataSource2 = _interopRequireDefault(_DataSource);
-
-var _ApiNames = __webpack_require__(6);
-
-var _axios = __webpack_require__(7);
-
-var _ValidationUtils = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var LOG = new _Logger2.default('DataSourcesApi');
-
-/**
- * `GET /datasource/{uuid}`
- *
- * Gets the DataSource definition for the given DataSource UUID.
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @returns {Promise<DataSource>} - a Promise that will resolve with the DataSource definition as its fulfillment value
- *
- * @example
- * DataSourcesApi.getDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-
-
-/**
- * DataSourcesApi ...
- *
- * TODO: add description
- *
- * @module DataSourcesApi
- * @memberof lattice
- *
- * @example
- * import Lattice from 'lattice';
- * // Lattice.DataSourcesApi.get...
- *
- * @example
- * import { DataSourcesApi } from 'lattice';
- * // DataSourcesApi.get...
- */
-
-function getDataSource(dataSourceId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).get('/' + dataSourceId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /datasource`
- *
- * Creates a new DataSource definition if it doesn't exist, or updates the existing DataSource definition.
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {DataSource} dataSource
- * @returns {Promise<UUID>} - a Promise that will resolve with the newly-created DataSource UUID
- *
- * @example
- * DataSourcesApi.createOrUpdateDataSource(
- *   {
- *     "id": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *     "title": "My DataSource",
- *     "description": "a DataSource to be integrated",
- *     "entitySetIds": [
- *       "e39dfdfa-a3e6-4f1f-b54b-646a723c3085",
- *       "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     ]
- *   }
- * );
- */
-function createOrUpdateDataSource(dataSource) {
-
-  var errorMsg = '';
-
-  if (!(0, _DataSource.isValidDataSource)(dataSource)) {
-    errorMsg = 'invalid parameter: dataSource must be a valid DataSource';
-    LOG.error(errorMsg, dataSource);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).post('/', dataSource).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /datasource/{uuid}`
- *
- * Deletes the DataSource definition for the given DataSource UUID.
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataSourcesApi.deleteDataSource("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-function deleteDataSource(dataSourceId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).delete('/' + dataSourceId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /datasource/{uuid}`
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @returns {Promise<UUID>} - a Promise that will resolve with the sync UUID as its fulfillment value
- *
- * @example
- * DataSourcesApi.startSync("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-function startSync(dataSourceId) {
-
-  // TODO: add description
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).post('/' + dataSourceId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /datasource/{uuid}/{uuid}`
- *
- * @static
- * @memberof lattice.DataSourcesApi
- * @param {UUID} dataSourceId
- * @param {UUID} syncId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataSourcesApi.signalSyncCompleted(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "8f79e123-3411-4099-a41f-88e5d22d0e8d"
- * );
- */
-function signalSyncCompleted(dataSourceId, syncId) {
-
-  // TODO: add description
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(dataSourceId)) {
-    errorMsg = 'invalid parameter: dataSourceId must be a valid UUID';
-    LOG.error(errorMsg, dataSourceId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_SOURCES_API).delete('/' + dataSourceId + '/' + syncId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.EDM_API).post('/' + _UrlConstants.ENTITY_SET_PATH + '/' + entitySetId + '/' + _UrlConstants.PROPERTY_TYPE_PATH + '/' + propertyTypeId, metadata).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -34301,7 +34154,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -34417,25 +34270,31 @@ function createEntityAndAssociationData(bulkDataCreation) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.clearEntityFromEntitySet = clearEntityFromEntitySet;
+exports.clearEntitySet = clearEntitySet;
+exports.createAssociations = createAssociations;
+exports.createOrMergeEntityData = createOrMergeEntityData;
+exports.getEntity = getEntity;
 exports.getEntitySetData = getEntitySetData;
 exports.getEntitySetDataFileUrl = getEntitySetDataFileUrl;
-exports.createEntityData = createEntityData;
-exports.storeEntityData = storeEntityData;
-exports.acquireSyncTicket = acquireSyncTicket;
-exports.releaseSyncTicket = releaseSyncTicket;
-exports.deleteEntityFromEntitySet = deleteEntityFromEntitySet;
+exports.getEntitySetSize = getEntitySetSize;
+exports.replaceEntityData = replaceEntityData;
 exports.replaceEntityInEntitySet = replaceEntityInEntitySet;
 exports.replaceEntityInEntitySetUsingFqns = replaceEntityInEntitySetUsingFqns;
-exports.getEntitySetSize = getEntitySetSize;
-exports.getEntity = getEntity;
-
-var _immutable = __webpack_require__(4);
-
-var _immutable2 = _interopRequireDefault(_immutable);
 
 var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+var _immutable = __webpack_require__(4);
+
+var _DataEdgeKey = __webpack_require__(52);
+
+var _DataEdgeKey2 = _interopRequireDefault(_DataEdgeKey);
+
+var _FullyQualifiedName = __webpack_require__(9);
+
+var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
 var _Logger = __webpack_require__(2);
 
@@ -34443,13 +34302,13 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
-
-var _ValidationUtils = __webpack_require__(3);
-
-var _ApiPaths = __webpack_require__(9);
+var _axios = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
+
+var _UrlConstants = __webpack_require__(10);
+
+var _ValidationUtils = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34471,25 +34330,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var LOG = new _Logger2.default('DataApi');
 
 /**
- * `POST /data/entitydata/{entitySetId}`
+ * `DELETE /data/set/{entitySetId}/{entityKeyId}`
  *
- * Gets all data for the given EntitySet UUID with respect to the given filters.
+ * Clears the entity data with the given entityKeyId from the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
- * @param {UUID} syncId
- * @param {UUID[]} propertyTypeIds
- * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
- * DataApi.getSelectedEntitySetData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ * DataApi.clearEntityFromEntitySet(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"]
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
  * );
  */
-function getEntitySetData(entitySetId, syncId, propertyTypeIds) {
+function clearEntityFromEntitySet(entitySetId, entityKeyId) {
 
   var errorMsg = '';
 
@@ -34499,18 +34356,214 @@ function getEntitySetData(entitySetId, syncId, propertyTypeIds) {
     return Promise.reject(errorMsg);
   }
 
-  var data = {};
-
-  if ((0, _ValidationUtils.isValidUuid)(syncId)) {
-    data.syncId = syncId;
-  } else if (!(0, _isUndefined2.default)(syncId) && !(0, _LangUtils.isEmptyString)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);
   }
 
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _UrlConstants.SET_PATH + '/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `DELETE /data/set/{entitySetId}`
+ *
+ * Clears all entity data from the EntitySet with the given entitySetId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.clearEntitySet("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ */
+function clearEntitySet(entitySetId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _UrlConstants.SET_PATH + '/' + entitySetId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /data/association`
+ *
+ * Creates associations (edges) from the given DataEdgeKeys.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {DataEdgeKey[]} associations
+ * @return {Promise} - a Promise that resolves with the count of associations (edges) that were created
+ *
+ * @example
+ * DataApi.createAssociations([
+ *   {
+ *     "dst": {
+ *       "entitySetId": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *       "entityKeyId": "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ *     },
+ *     "edge": {
+ *       "entitySetId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *       "entityKeyId": "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
+ *     },
+ *     "src": {
+ *       "entitySetId": "8f79e123-3411-4099-a41f-88e5d22d0e8d",
+ *       "entityKeyId": "4b08e1f9-4a00-4169-92ea-10e377070220"
+ *     },
+ *   }
+ * ]);
+ */
+function createAssociations(associations) {
+
+  var errorMsg = '';
+
+  if (!(0, _DataEdgeKey.isValidDataEdgeKeyArray)(associations)) {
+    errorMsg = 'invalid parameter: associations must be a non-empty array of valid DataEdgeKeys';
+    LOG.error(errorMsg, associations);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _UrlConstants.ASSOCIATION_PATH, associations).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /data/set?setId={entitySetId}`
+ *
+ * Creates or updates entities for the given entity data, and returns the corresponding entity UUIDs.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {Object} entities
+ * @return {Promise<UUID[]>} - a Promise that resolves with a list of UUIDs
+ *
+ * @example
+ * DataApi.createOrMergeEntityData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   [{
+ *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": ["value_1", "value_2"],
+ *     "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
+ *   }]
+ * );
+ */
+
+function createOrMergeEntityData(entitySetId, entities) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate SetMultimap
+  if (!(0, _ValidationUtils.isValidMultimapArray)(entities, _ValidationUtils.isValidUuid)) {
+    errorMsg = 'invalid parameter: entities must be a non-empty multimap array';
+    LOG.error(errorMsg, entities);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _UrlConstants.SET_PATH + '?' + _UrlConstants.SET_ID + '=' + entitySetId, entities).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `GET /data/{entitySetId}/{entityKeyId}`
+ *
+ * Returns the entity data with the given entityKeyId in the EntitySet with the given entitySetId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @return {Promise} - a Promise that resolves with the requested entity data
+ *
+ * @example
+ * DataApi.getEntity("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
+ */
+function getEntity(entitySetId, entityKeyId) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `POST /data/entitydata/{entitySetId}`
+ *
+ * Gets all data for the given EntitySet UUID with respect to the given filters.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID[]} propertyTypeIds
+ * @param {UUID[]} entityKeyIds
+ * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
+ *
+ * @example
+ * DataApi.getEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"],
+ *   ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"]
+ * );
+ */
+function getEntitySetData(entitySetId, propertyTypeIds, entityKeyIds) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  var entitySetSelection = {};
+
   if ((0, _ValidationUtils.isValidUuidArray)(propertyTypeIds)) {
-    data.properties = _immutable2.default.Set().withMutations(function (set) {
+    entitySetSelection.properties = (0, _immutable.Set)().withMutations(function (set) {
       propertyTypeIds.forEach(function (propertyTypeId) {
         set.add(propertyTypeId);
       });
@@ -34521,7 +34574,19 @@ function getEntitySetData(entitySetId, syncId, propertyTypeIds) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId, data).then(function (axiosResponse) {
+  if ((0, _ValidationUtils.isValidUuidArray)(entityKeyIds)) {
+    entitySetSelection.ids = (0, _immutable.Set)().withMutations(function (set) {
+      entityKeyIds.forEach(function (entityKeyId) {
+        set.add(entityKeyId);
+      });
+    }).toJS();
+  } else if (!(0, _isUndefined2.default)(entityKeyIds) && !(0, _LangUtils.isEmptyArray)(entityKeyIds)) {
+    errorMsg = 'invalid parameter: entityKeyIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entityKeyIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _UrlConstants.SET_PATH + '/' + entitySetId, entitySetSelection).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -34539,7 +34604,7 @@ function getEntitySetData(entitySetId, syncId, propertyTypeIds) {
  * @returns {string} - the direct file download URL
  *
  * @example
- * DataApi.getAllEntitiesOfTypeFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
+ * DataApi.getEntitySetDataFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
  */
 function getEntitySetDataFileUrl(entitySetId, fileType) {
 
@@ -34559,348 +34624,7 @@ function getEntitySetDataFileUrl(entitySetId, fileType) {
     return null;
   }
 
-  // eslint-disable-next-line
-  return (0, _axios.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '?fileType=' + fileType.toLowerCase();
-}
-
-/**
- * `PUT /data/entitydata/{entitySetId}/{syncId}`
- *
- * Creates an entry for the given entity data.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} syncId
- * @param {Object} entities
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.createEntityData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   {
- *     "id_1": [
- *       {
- *         "uuid_1": ["value_1", "value_2"],
- *         "uuid_2": ["value_3", "value_4"]
- *       }
- *     ]
- *   }
- * );
- */
-function createEntityData(entitySetId, syncId, entities) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  var url = '/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId;
-
-  if ((0, _ValidationUtils.isValidUuid)(syncId)) {
-    url = url + '/' + syncId;
-  } else if (!(0, _isUndefined2.default)(syncId) && !(0, _LangUtils.isEmptyString)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
-
-  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
-    errorMsg = 'invalid parameter: entities must be a non-empty object';
-    LOG.error(errorMsg, entities);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put(url, entities).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PATCH /data/entitydata/{ticketId}/{syncId}`
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} ticketId
- * @param {UUID} syncId
- * @param {Object} entities
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.storeEntityData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   {
- *     "id_1": [
- *       {
- *         "uuid_1": ["value_1", "value_2"],
- *         "uuid_2": ["value_3", "value_4"]
- *       }
- *     ]
- *   }
- * );
- */
-function storeEntityData(ticketId, syncId, entities) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
-    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
-    LOG.error(errorMsg, ticketId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate entities as Map<String, SetMultimap<UUID, Object>>
-
-  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
-    errorMsg = 'invalid parameter: entities must be a non-empty object';
-    LOG.error(errorMsg, entities);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).patch('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + _ApiPaths.TICKET_PATH + '/' + ticketId + '/' + syncId, entities).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /data/ticket/{entitySetId}/{syncId}`
- *
- * Acquires a sync ticket UUID for the given EntitySet UUID.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} syncId
- * @return {Promise<UUID>} - a Promise that will resolve with the acquired sync ticket UUID as its fulfillment value
- *
- * @example
- * DataApi.acquireSyncTicket(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
- * );
- */
-function acquireSyncTicket(entitySetId, syncId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(syncId)) {
-    errorMsg = 'invalid parameter: syncId must be a valid UUID';
-    LOG.error(errorMsg, syncId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.TICKET_PATH + '/' + entitySetId + '/' + syncId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /data/ticket/{ticketId}`
- *
- * Releases the given sync ticket UUID.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} syncId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.acquireSyncTicket("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-function releaseSyncTicket(ticketId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(ticketId)) {
-    errorMsg = 'invalid parameter: ticketId must be a valid UUID';
-    LOG.error(errorMsg, ticketId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.TICKET_PATH + '/' + ticketId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `DELETE /data/entitydata/{entitySetId}/{entityKeyId}`
- *
- * Deletes the entity with the specified id from the entity set with the specified id.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.deleteEntityFromEntitySet(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
- * )
-});
- */
-function deleteEntityFromEntitySet(entitySetId, entityKeyId) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).delete('/' + _ApiPaths.ENTITY_DATA_PATH + '/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `PUT /data/entitydata/{entitySetId}/{entityKeyId}`
- *
- * Replaces the entity values for the specified entityKeyId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @param {Object} entity
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.replaceEntityInEntitySet(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "uuid_1a": ["value_1a", "value_1b"],
- *     "uuid_1b": ["value_1c", "value_1d"]
- *   }
- * );
- */
-function replaceEntityInEntitySet(entitySetId, entityKeyId, entity) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate "entity" structure
-
-  if (!(0, _LangUtils.isNonEmptyObject)(entity)) {
-    errorMsg = 'invalid parameter: entity must be a non-empty object';
-    LOG.error(errorMsg, entity);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _ApiPaths.SET_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
-}
-
-/**
- * `POST /data/entitydata/update/{entitySetId}/{entityKeyId}`
- *
- * Replaces the entity values for the specified entityKeyId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @param {Object} entity
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.replaceEntityInEntitySetUsingFqns(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "namespace1.name1": ["value_1a", "value_1b"],
- *     "namespace2.name2": ["value_1c", "value_1d"]
- *   }
- * );
- */
-function replaceEntityInEntitySetUsingFqns(entitySetId, entityKeyId, entity) {
-
-  var errorMsg = '';
-
-  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate "entity" structure
-
-  if (!(0, _LangUtils.isNonEmptyObject)(entity)) {
-    errorMsg = 'invalid parameter: entity must be a non-empty object';
-    LOG.error(errorMsg, entity);
-    return Promise.reject(errorMsg);
-  }
-
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _ApiPaths.SET_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
-    return axiosResponse.data;
-  }).catch(function (error) {
-    LOG.error(error);
-    return Promise.reject(error);
-  });
+  return (0, _axios.getApiBaseUrl)(_ApiNames.DATA_API) + '/' + _UrlConstants.SET_PATH + '/' + entitySetId + '?' + _UrlConstants.FILE_TYPE + '=' + fileType.toLowerCase();
 }
 
 /**
@@ -34926,7 +34650,7 @@ function getEntitySetSize(entitySetId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + _ApiPaths.COUNT_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + _UrlConstants.COUNT_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -34935,20 +34659,103 @@ function getEntitySetSize(entitySetId) {
 }
 
 /**
- * `GET /data/{entitySetId}/{entityKeyId}`
+ * `PUT /data/set/{entitySetId}`
  *
- * Returns a single entity, specified by its entitySetId and entityKeyId.
+ * // TODO: description
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {Object} entities
+ * @param {Boolean} partial
+ * @return {Promise} - a Promise that resolves with the count of entities that were updated
+ *
+ * @example
+ * DataApi.replaceEntityData(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "ec6865e6-e60e-424b-a071-6a9c1603d735": {
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
+ *     }
+ *   },
+ *   false
+ * );
+ */
+function replaceEntityData(entitySetId, entities) {
+  var partial = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _LangUtils.isNonEmptyObject)(entities)) {
+    errorMsg = 'invalid parameter: entities must be a non-empty object';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  var ids = Object.keys(entities);
+
+  // validate all keys are UUIDs
+  for (var index1 = 0; index1 < ids.length; index1 += 1) {
+    var id = ids[index1];
+    if (!(0, _ValidationUtils.isValidUuid)(id)) {
+      errorMsg = 'invalid parameter: entities must be a non-empty object where all keys are UUIDs';
+      LOG.error(errorMsg, id);
+      return Promise.reject(errorMsg);
+    }
+  }
+
+  // validate all values are multimaps
+  // TODO: validate SetMultimap
+  for (var index2 = 0; index2 < ids.length; index2 += 1) {
+    var value = entities[ids[index2]];
+    if (!(0, _ValidationUtils.isValidMultimap)(value, _ValidationUtils.isValidUuid)) {
+      errorMsg = 'invalid parameter: entities must be a non-empty object where all values are multimaps';
+      LOG.error(errorMsg, value);
+      return Promise.reject(errorMsg);
+    }
+  }
+
+  var partialReplace = partial === true ? 'true' : 'false';
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _UrlConstants.SET_PATH + '/' + entitySetId + '?' + _UrlConstants.PARTIAL + '=' + partialReplace, entities).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
+
+/**
+ * `PUT /data/set/{entitySetId}/{entityKeyId}`
+ *
+ * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {UUID} entityKeyId
- * @return {Promise} - a Promise that resolves with the requested entity
+ * @param {Object} entity
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
- *  * DataApi.getEntity("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
-  */
-function getEntity(entitySetId, entityKeyId) {
+ * DataApi.replaceEntityInEntitySet(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
+ *     "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
+ *   }
+ * );
+ */
+function replaceEntityInEntitySet(entitySetId, entityKeyId, entity) {
 
   var errorMsg = '';
 
@@ -34964,7 +34771,14 @@ function getEntity(entitySetId, entityKeyId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).get('/' + entitySetId + '/' + entityKeyId).then(function (axiosResponse) {
+  // TODO: validate SetMultimap
+  if (!(0, _ValidationUtils.isValidMultimap)(entity, _ValidationUtils.isValidUuid)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty multimap';
+    LOG.error(errorMsg, entity);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).put('/' + _UrlConstants.SET_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -34972,8 +34786,58 @@ function getEntity(entitySetId, entityKeyId) {
   });
 }
 
-// TODO: createAssociationData()
-// TODO: storeAssociationData()
+/**
+ * `POST /data/set/update/{entitySetId}/{entityKeyId}`
+ *
+ * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @param {Object} entity
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * DataApi.replaceEntityInEntitySetUsingFqns(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "namespace1.name1": ["value_1", "value_2"],
+ *     "namespace2.name2": ["value_3", "value_4"]
+ *   }
+ * );
+ */
+function replaceEntityInEntitySetUsingFqns(entitySetId, entityKeyId, entity) {
+
+  var errorMsg = '';
+
+  if (!(0, _ValidationUtils.isValidUuid)(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!(0, _ValidationUtils.isValidUuid)(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  // TODO: validate SetMultimap
+  if (!(0, _ValidationUtils.isValidMultimap)(entity, _FullyQualifiedName2.default.isValid)) {
+    errorMsg = 'invalid parameter: entity must be a non-empty object';
+    LOG.error(errorMsg, entity);
+    return Promise.reject(errorMsg);
+  }
+
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _UrlConstants.SET_PATH + '/' + entitySetId + '/' + entityKeyId, entity).then(function (axiosResponse) {
+    return axiosResponse.data;
+  }).catch(function (error) {
+    LOG.error(error);
+    return Promise.reject(error);
+  });
+}
 
 /***/ }),
 /* 212 */
@@ -34992,7 +34856,7 @@ var _isUndefined = __webpack_require__(18);
 
 var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-var _AccessCheck = __webpack_require__(52);
+var _AccessCheck = __webpack_require__(53);
 
 var _AccessCheck2 = _interopRequireDefault(_AccessCheck);
 
@@ -35010,7 +34874,7 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -35708,7 +35572,7 @@ module.exports = Hash;
 
 var Hash = __webpack_require__(232),
     ListCache = __webpack_require__(226),
-    Map = __webpack_require__(67);
+    Map = __webpack_require__(68);
 
 /**
  * Removes all key-value entries from the map.
@@ -35915,7 +35779,7 @@ module.exports = stringToPath;
 /* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(14),
+var isArray = __webpack_require__(13),
     isSymbol = __webpack_require__(32);
 
 /** Used to match property names within property paths. */
@@ -35950,10 +35814,10 @@ module.exports = isKey;
 /* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isArray = __webpack_require__(14),
+var isArray = __webpack_require__(13),
     isKey = __webpack_require__(238),
     stringToPath = __webpack_require__(237),
-    toString = __webpack_require__(61);
+    toString = __webpack_require__(62);
 
 /**
  * Casts `value` to a path array if it's not one.
@@ -35978,8 +35842,8 @@ module.exports = castPath;
 /***/ (function(module, exports, __webpack_require__) {
 
 var castPath = __webpack_require__(239),
-    isArguments = __webpack_require__(66),
-    isArray = __webpack_require__(14),
+    isArguments = __webpack_require__(67),
+    isArray = __webpack_require__(13),
     isIndex = __webpack_require__(214),
     isLength = __webpack_require__(33),
     toKey = __webpack_require__(213);
@@ -36080,23 +35944,23 @@ var _Logger = __webpack_require__(2);
 
 var _Logger2 = _interopRequireDefault(_Logger);
 
-var _FullyQualifiedName = __webpack_require__(12);
+var _FullyQualifiedName = __webpack_require__(9);
 
 var _FullyQualifiedName2 = _interopRequireDefault(_FullyQualifiedName);
 
-var _App = __webpack_require__(54);
+var _App = __webpack_require__(55);
 
-var _AppType = __webpack_require__(53);
+var _AppType = __webpack_require__(54);
 
 var _ApiNames = __webpack_require__(6);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
 var _ValidationUtils = __webpack_require__(3);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36180,7 +36044,7 @@ function getAppByName(appName) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.LOOKUP_PATH + '/' + appName).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _UrlConstants.LOOKUP_PATH + '/' + appName).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36215,7 +36079,7 @@ function getAppTypesForAppTypeIds(appTypeIds) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _ApiPaths.TYPE_PATH + '/' + _ApiPaths.BULK_PATH, appTypeIds).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _UrlConstants.TYPE_PATH + '/' + _UrlConstants.BULK_PATH, appTypeIds).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36246,7 +36110,7 @@ function getConfigurations(appId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.CONFIG_PATH + '/' + appId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _UrlConstants.CONFIG_PATH + '/' + appId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36295,7 +36159,7 @@ function installApp(appId, organizationId, prefix) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.INSTALL_PATH + '/' + appId + '/' + organizationId + '/' + prefix).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _UrlConstants.INSTALL_PATH + '/' + appId + '/' + organizationId + '/' + prefix).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36371,7 +36235,7 @@ function createAppType(appType) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _ApiPaths.TYPE_PATH, appType).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _UrlConstants.TYPE_PATH, appType).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36403,7 +36267,7 @@ function getAppType(appTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.TYPE_PATH + '/' + appTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _UrlConstants.TYPE_PATH + '/' + appTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36441,7 +36305,7 @@ function getAppTypeByFqn(appTypeFqn) {
       name = appTypeFqn.name;
 
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.TYPE_PATH + '/' + _ApiPaths.LOOKUP_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _UrlConstants.TYPE_PATH + '/' + _UrlConstants.LOOKUP_PATH + '/' + namespace + '/' + name).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36505,7 +36369,7 @@ function deleteAppType(appTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).delete('/' + _ApiPaths.TYPE_PATH + '/' + appTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).delete('/' + _UrlConstants.TYPE_PATH + '/' + appTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36547,7 +36411,7 @@ function addAppTypeToApp(appId, appTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.UPDATE_PATH + '/' + appId + '/' + appTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _UrlConstants.UPDATE_PATH + '/' + appId + '/' + appTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36589,7 +36453,7 @@ function removeAppTypeFromApp(appId, appTypeId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).delete('/' + _ApiPaths.UPDATE_PATH + '/' + appId + '/' + appTypeId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).delete('/' + _UrlConstants.UPDATE_PATH + '/' + appId + '/' + appTypeId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36648,7 +36512,7 @@ function updateAppEntitySetConfig(organizationId, appId, appTypeId, entitySetId)
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _ApiPaths.UPDATE_PATH + '/' + organizationId + '/' + appId + '/' + appTypeId + '/' + entitySetId).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).get('/' + _UrlConstants.UPDATE_PATH + '/' + organizationId + '/' + appId + '/' + appTypeId + '/' + entitySetId).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36706,7 +36570,7 @@ function updateAppConfigPermissions(organizationId, appId, appTypeId, permission
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _ApiPaths.UPDATE_PATH + '/' + organizationId + '/' + appId + '/' + appTypeId, permissions).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _UrlConstants.UPDATE_PATH + '/' + organizationId + '/' + appId + '/' + appTypeId, permissions).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36787,7 +36651,7 @@ function updateAppMetadata(appId, metadataUpdate) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _ApiPaths.UPDATE_PATH + '/' + appId, metadataUpdate).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _UrlConstants.UPDATE_PATH + '/' + appId, metadataUpdate).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36861,7 +36725,7 @@ function updateAppTypeMetadata(appTypeId, metadataUpdate) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _ApiPaths.TYPE_PATH + '/' + _ApiPaths.UPDATE_PATH + '/' + appTypeId, metadataUpdate).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.APP_API).post('/' + _UrlConstants.TYPE_PATH + '/' + _UrlConstants.UPDATE_PATH + '/' + appTypeId, metadataUpdate).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -36972,7 +36836,7 @@ var _assertString = __webpack_require__(30);
 
 var _assertString2 = _interopRequireDefault(_assertString);
 
-var _merge = __webpack_require__(55);
+var _merge = __webpack_require__(56);
 
 var _merge2 = _interopRequireDefault(_merge);
 
@@ -37052,7 +36916,7 @@ var _isIP = __webpack_require__(243);
 
 var _isIP2 = _interopRequireDefault(_isIP);
 
-var _merge = __webpack_require__(55);
+var _merge = __webpack_require__(56);
 
 var _merge2 = _interopRequireDefault(_merge);
 
@@ -37222,7 +37086,7 @@ module.exports = function spread(callback) {
 "use strict";
 
 
-var Cancel = __webpack_require__(56);
+var Cancel = __webpack_require__(57);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -37328,7 +37192,7 @@ module.exports = function isAbsoluteURL(url) {
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 
 /**
  * Transform the data for a request or a response
@@ -37355,9 +37219,9 @@ module.exports = function transformData(data, headers, fns) {
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 var transformData = __webpack_require__(250);
-var isCancel = __webpack_require__(57);
+var isCancel = __webpack_require__(58);
 var defaults = __webpack_require__(31);
 var isAbsoluteURL = __webpack_require__(249);
 var combineURLs = __webpack_require__(248);
@@ -37448,7 +37312,7 @@ module.exports = function dispatchRequest(config) {
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 
 function InterceptorManager() {
   this.handlers = [];
@@ -37507,7 +37371,7 @@ module.exports = InterceptorManager;
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -37610,7 +37474,7 @@ module.exports = btoa;
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -37685,7 +37549,7 @@ module.exports = (
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
@@ -37745,7 +37609,7 @@ module.exports = function parseHeaders(headers) {
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -37846,7 +37710,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 "use strict";
 
 
-var createError = __webpack_require__(58);
+var createError = __webpack_require__(59);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -37879,7 +37743,7 @@ module.exports = function settle(resolve, reject, response) {
 "use strict";
 
 
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -38089,7 +37953,7 @@ process.umask = function() { return 0; };
 
 
 var defaults = __webpack_require__(31);
-var utils = __webpack_require__(8);
+var utils = __webpack_require__(7);
 var InterceptorManager = __webpack_require__(252);
 var dispatchRequest = __webpack_require__(251);
 
@@ -38201,8 +38065,8 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var utils = __webpack_require__(8);
-var bind = __webpack_require__(60);
+var utils = __webpack_require__(7);
+var bind = __webpack_require__(61);
 var Axios = __webpack_require__(262);
 var defaults = __webpack_require__(31);
 
@@ -38237,9 +38101,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(56);
+axios.Cancel = __webpack_require__(57);
 axios.CancelToken = __webpack_require__(247);
-axios.isCancel = __webpack_require__(57);
+axios.isCancel = __webpack_require__(58);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -38322,9 +38186,7 @@ exports.default = getApiAxiosInstance;
 
 var _immutable = __webpack_require__(4);
 
-var _immutable2 = _interopRequireDefault(_immutable);
-
-var _getApiBaseUrl = __webpack_require__(64);
+var _getApiBaseUrl = __webpack_require__(65);
 
 var _getApiBaseUrl2 = _interopRequireDefault(_getApiBaseUrl);
 
@@ -38338,7 +38200,7 @@ var _LangUtils = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var baseUrlToAxiosInstanceMap = _immutable2.default.Map();
+var baseUrlToAxiosInstanceMap = (0, _immutable.Map)();
 
 function getApiAxiosInstance(api) {
 
@@ -38489,7 +38351,7 @@ module.exports = stringToArray;
 /* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIndexOf = __webpack_require__(62);
+var baseIndexOf = __webpack_require__(63);
 
 /**
  * Used by `_.trim` and `_.trimStart` to get the index of the first string symbol
@@ -38592,7 +38454,7 @@ module.exports = baseFindIndex;
 /* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIndexOf = __webpack_require__(62);
+var baseIndexOf = __webpack_require__(63);
 
 /**
  * Used by `_.trim` and `_.trimEnd` to get the index of the last string symbol
@@ -38705,12 +38567,12 @@ module.exports = arrayMap;
 /* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseToString = __webpack_require__(63),
+var baseToString = __webpack_require__(64),
     castSlice = __webpack_require__(278),
     charsEndIndex = __webpack_require__(276),
     charsStartIndex = __webpack_require__(272),
     stringToArray = __webpack_require__(271),
-    toString = __webpack_require__(61);
+    toString = __webpack_require__(62);
 
 /** Used to match leading and trailing whitespace. */
 var reTrim = /^\s+|\s+$/g;
@@ -38788,7 +38650,7 @@ module.exports = isNull;
 /* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(71);
+var overArg = __webpack_require__(72);
 
 /** Built-in value references. */
 var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -38800,9 +38662,9 @@ module.exports = getPrototype;
 /* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
-    isObjectLike = __webpack_require__(13),
-    isPlainObject = __webpack_require__(65);
+var baseGetTag = __webpack_require__(12),
+    isObjectLike = __webpack_require__(14),
+    isPlainObject = __webpack_require__(66);
 
 /** `Object#toString` result references. */
 var domExcTag = '[object DOMException]',
@@ -38842,7 +38704,7 @@ module.exports = isError;
 /* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(69);
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(70);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -38899,9 +38761,9 @@ module.exports = baseUnary;
 /* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
+var baseGetTag = __webpack_require__(12),
     isLength = __webpack_require__(33),
-    isObjectLike = __webpack_require__(13);
+    isObjectLike = __webpack_require__(14);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -39022,7 +38884,7 @@ module.exports = stubFalse;
 /* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(10),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(11),
     stubFalse = __webpack_require__(288);
 
 /** Detect free variable `exports`. */
@@ -39067,7 +38929,7 @@ module.exports = isBuffer;
 /* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(70),
+var isFunction = __webpack_require__(71),
     isLength = __webpack_require__(33);
 
 /**
@@ -39106,8 +38968,8 @@ module.exports = isArrayLike;
 /* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(11),
-    isObjectLike = __webpack_require__(13);
+var baseGetTag = __webpack_require__(12),
+    isObjectLike = __webpack_require__(14);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
@@ -39131,7 +38993,7 @@ module.exports = baseIsArguments;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -39144,7 +39006,7 @@ module.exports = WeakMap;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -39157,7 +39019,7 @@ module.exports = Set;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -39188,7 +39050,7 @@ module.exports = getValue;
 /* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(10);
+var root = __webpack_require__(11);
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -39332,10 +39194,10 @@ module.exports = g;
 /* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(70),
+var isFunction = __webpack_require__(71),
     isMasked = __webpack_require__(297),
     isObject = __webpack_require__(34),
-    toSource = __webpack_require__(68);
+    toSource = __webpack_require__(69);
 
 /**
  * Used to match `RegExp`
@@ -39386,7 +39248,7 @@ module.exports = baseIsNative;
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(15),
-    root = __webpack_require__(10);
+    root = __webpack_require__(11);
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -39399,12 +39261,12 @@ module.exports = DataView;
 /***/ (function(module, exports, __webpack_require__) {
 
 var DataView = __webpack_require__(302),
-    Map = __webpack_require__(67),
+    Map = __webpack_require__(68),
     Promise = __webpack_require__(294),
     Set = __webpack_require__(293),
     WeakMap = __webpack_require__(292),
-    baseGetTag = __webpack_require__(11),
-    toSource = __webpack_require__(68);
+    baseGetTag = __webpack_require__(12),
+    toSource = __webpack_require__(69);
 
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
@@ -39462,7 +39324,7 @@ module.exports = getTag;
 /* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(71);
+var overArg = __webpack_require__(72);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeKeys = overArg(Object.keys, Object);
@@ -39474,7 +39336,7 @@ module.exports = nativeKeys;
 /* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isPrototype = __webpack_require__(72),
+var isPrototype = __webpack_require__(73),
     nativeKeys = __webpack_require__(304);
 
 /** Used for built-in method references. */
@@ -39511,252 +39373,252 @@ module.exports = baseKeys;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 196,
-	"./af.js": 196,
-	"./ar": 195,
-	"./ar-dz": 194,
-	"./ar-dz.js": 194,
-	"./ar-kw": 193,
-	"./ar-kw.js": 193,
-	"./ar-ly": 192,
-	"./ar-ly.js": 192,
-	"./ar-ma": 191,
-	"./ar-ma.js": 191,
-	"./ar-sa": 190,
-	"./ar-sa.js": 190,
-	"./ar-tn": 189,
-	"./ar-tn.js": 189,
-	"./ar.js": 195,
-	"./az": 188,
-	"./az.js": 188,
-	"./be": 187,
-	"./be.js": 187,
-	"./bg": 186,
-	"./bg.js": 186,
-	"./bm": 185,
-	"./bm.js": 185,
-	"./bn": 184,
-	"./bn.js": 184,
-	"./bo": 183,
-	"./bo.js": 183,
-	"./br": 182,
-	"./br.js": 182,
-	"./bs": 181,
-	"./bs.js": 181,
-	"./ca": 180,
-	"./ca.js": 180,
-	"./cs": 179,
-	"./cs.js": 179,
-	"./cv": 178,
-	"./cv.js": 178,
-	"./cy": 177,
-	"./cy.js": 177,
-	"./da": 176,
-	"./da.js": 176,
-	"./de": 175,
-	"./de-at": 174,
-	"./de-at.js": 174,
-	"./de-ch": 173,
-	"./de-ch.js": 173,
-	"./de.js": 175,
-	"./dv": 172,
-	"./dv.js": 172,
-	"./el": 171,
-	"./el.js": 171,
-	"./en-au": 170,
-	"./en-au.js": 170,
-	"./en-ca": 169,
-	"./en-ca.js": 169,
-	"./en-gb": 168,
-	"./en-gb.js": 168,
-	"./en-ie": 167,
-	"./en-ie.js": 167,
-	"./en-il": 166,
-	"./en-il.js": 166,
-	"./en-nz": 165,
-	"./en-nz.js": 165,
-	"./eo": 164,
-	"./eo.js": 164,
-	"./es": 163,
-	"./es-do": 162,
-	"./es-do.js": 162,
-	"./es-us": 161,
-	"./es-us.js": 161,
-	"./es.js": 163,
-	"./et": 160,
-	"./et.js": 160,
-	"./eu": 159,
-	"./eu.js": 159,
-	"./fa": 158,
-	"./fa.js": 158,
-	"./fi": 157,
-	"./fi.js": 157,
-	"./fo": 156,
-	"./fo.js": 156,
-	"./fr": 155,
-	"./fr-ca": 154,
-	"./fr-ca.js": 154,
-	"./fr-ch": 153,
-	"./fr-ch.js": 153,
-	"./fr.js": 155,
-	"./fy": 152,
-	"./fy.js": 152,
-	"./gd": 151,
-	"./gd.js": 151,
-	"./gl": 150,
-	"./gl.js": 150,
-	"./gom-latn": 149,
-	"./gom-latn.js": 149,
-	"./gu": 148,
-	"./gu.js": 148,
-	"./he": 147,
-	"./he.js": 147,
-	"./hi": 146,
-	"./hi.js": 146,
-	"./hr": 145,
-	"./hr.js": 145,
-	"./hu": 144,
-	"./hu.js": 144,
-	"./hy-am": 143,
-	"./hy-am.js": 143,
-	"./id": 142,
-	"./id.js": 142,
-	"./is": 141,
-	"./is.js": 141,
-	"./it": 140,
-	"./it.js": 140,
-	"./ja": 139,
-	"./ja.js": 139,
-	"./jv": 138,
-	"./jv.js": 138,
-	"./ka": 137,
-	"./ka.js": 137,
-	"./kk": 136,
-	"./kk.js": 136,
-	"./km": 135,
-	"./km.js": 135,
-	"./kn": 134,
-	"./kn.js": 134,
-	"./ko": 133,
-	"./ko.js": 133,
-	"./ky": 132,
-	"./ky.js": 132,
-	"./lb": 131,
-	"./lb.js": 131,
-	"./lo": 130,
-	"./lo.js": 130,
-	"./lt": 129,
-	"./lt.js": 129,
-	"./lv": 128,
-	"./lv.js": 128,
-	"./me": 127,
-	"./me.js": 127,
-	"./mi": 126,
-	"./mi.js": 126,
-	"./mk": 125,
-	"./mk.js": 125,
-	"./ml": 124,
-	"./ml.js": 124,
-	"./mn": 123,
-	"./mn.js": 123,
-	"./mr": 122,
-	"./mr.js": 122,
-	"./ms": 121,
-	"./ms-my": 120,
-	"./ms-my.js": 120,
-	"./ms.js": 121,
-	"./mt": 119,
-	"./mt.js": 119,
-	"./my": 118,
-	"./my.js": 118,
-	"./nb": 117,
-	"./nb.js": 117,
-	"./ne": 116,
-	"./ne.js": 116,
-	"./nl": 115,
-	"./nl-be": 114,
-	"./nl-be.js": 114,
-	"./nl.js": 115,
-	"./nn": 113,
-	"./nn.js": 113,
-	"./pa-in": 112,
-	"./pa-in.js": 112,
-	"./pl": 111,
-	"./pl.js": 111,
-	"./pt": 110,
-	"./pt-br": 109,
-	"./pt-br.js": 109,
-	"./pt.js": 110,
-	"./ro": 108,
-	"./ro.js": 108,
-	"./ru": 107,
-	"./ru.js": 107,
-	"./sd": 106,
-	"./sd.js": 106,
-	"./se": 105,
-	"./se.js": 105,
-	"./si": 104,
-	"./si.js": 104,
-	"./sk": 103,
-	"./sk.js": 103,
-	"./sl": 102,
-	"./sl.js": 102,
-	"./sq": 101,
-	"./sq.js": 101,
-	"./sr": 100,
-	"./sr-cyrl": 99,
-	"./sr-cyrl.js": 99,
-	"./sr.js": 100,
-	"./ss": 98,
-	"./ss.js": 98,
-	"./sv": 97,
-	"./sv.js": 97,
-	"./sw": 96,
-	"./sw.js": 96,
-	"./ta": 95,
-	"./ta.js": 95,
-	"./te": 94,
-	"./te.js": 94,
-	"./tet": 93,
-	"./tet.js": 93,
-	"./tg": 92,
-	"./tg.js": 92,
-	"./th": 91,
-	"./th.js": 91,
-	"./tl-ph": 90,
-	"./tl-ph.js": 90,
-	"./tlh": 89,
-	"./tlh.js": 89,
-	"./tr": 88,
-	"./tr.js": 88,
-	"./tzl": 87,
-	"./tzl.js": 87,
-	"./tzm": 86,
-	"./tzm-latn": 85,
-	"./tzm-latn.js": 85,
-	"./tzm.js": 86,
-	"./ug-cn": 84,
-	"./ug-cn.js": 84,
-	"./uk": 83,
-	"./uk.js": 83,
-	"./ur": 82,
-	"./ur.js": 82,
-	"./uz": 81,
-	"./uz-latn": 80,
-	"./uz-latn.js": 80,
-	"./uz.js": 81,
-	"./vi": 79,
-	"./vi.js": 79,
-	"./x-pseudo": 78,
-	"./x-pseudo.js": 78,
-	"./yo": 77,
-	"./yo.js": 77,
-	"./zh-cn": 76,
-	"./zh-cn.js": 76,
-	"./zh-hk": 75,
-	"./zh-hk.js": 75,
-	"./zh-tw": 74,
-	"./zh-tw.js": 74
+	"./af": 197,
+	"./af.js": 197,
+	"./ar": 196,
+	"./ar-dz": 195,
+	"./ar-dz.js": 195,
+	"./ar-kw": 194,
+	"./ar-kw.js": 194,
+	"./ar-ly": 193,
+	"./ar-ly.js": 193,
+	"./ar-ma": 192,
+	"./ar-ma.js": 192,
+	"./ar-sa": 191,
+	"./ar-sa.js": 191,
+	"./ar-tn": 190,
+	"./ar-tn.js": 190,
+	"./ar.js": 196,
+	"./az": 189,
+	"./az.js": 189,
+	"./be": 188,
+	"./be.js": 188,
+	"./bg": 187,
+	"./bg.js": 187,
+	"./bm": 186,
+	"./bm.js": 186,
+	"./bn": 185,
+	"./bn.js": 185,
+	"./bo": 184,
+	"./bo.js": 184,
+	"./br": 183,
+	"./br.js": 183,
+	"./bs": 182,
+	"./bs.js": 182,
+	"./ca": 181,
+	"./ca.js": 181,
+	"./cs": 180,
+	"./cs.js": 180,
+	"./cv": 179,
+	"./cv.js": 179,
+	"./cy": 178,
+	"./cy.js": 178,
+	"./da": 177,
+	"./da.js": 177,
+	"./de": 176,
+	"./de-at": 175,
+	"./de-at.js": 175,
+	"./de-ch": 174,
+	"./de-ch.js": 174,
+	"./de.js": 176,
+	"./dv": 173,
+	"./dv.js": 173,
+	"./el": 172,
+	"./el.js": 172,
+	"./en-au": 171,
+	"./en-au.js": 171,
+	"./en-ca": 170,
+	"./en-ca.js": 170,
+	"./en-gb": 169,
+	"./en-gb.js": 169,
+	"./en-ie": 168,
+	"./en-ie.js": 168,
+	"./en-il": 167,
+	"./en-il.js": 167,
+	"./en-nz": 166,
+	"./en-nz.js": 166,
+	"./eo": 165,
+	"./eo.js": 165,
+	"./es": 164,
+	"./es-do": 163,
+	"./es-do.js": 163,
+	"./es-us": 162,
+	"./es-us.js": 162,
+	"./es.js": 164,
+	"./et": 161,
+	"./et.js": 161,
+	"./eu": 160,
+	"./eu.js": 160,
+	"./fa": 159,
+	"./fa.js": 159,
+	"./fi": 158,
+	"./fi.js": 158,
+	"./fo": 157,
+	"./fo.js": 157,
+	"./fr": 156,
+	"./fr-ca": 155,
+	"./fr-ca.js": 155,
+	"./fr-ch": 154,
+	"./fr-ch.js": 154,
+	"./fr.js": 156,
+	"./fy": 153,
+	"./fy.js": 153,
+	"./gd": 152,
+	"./gd.js": 152,
+	"./gl": 151,
+	"./gl.js": 151,
+	"./gom-latn": 150,
+	"./gom-latn.js": 150,
+	"./gu": 149,
+	"./gu.js": 149,
+	"./he": 148,
+	"./he.js": 148,
+	"./hi": 147,
+	"./hi.js": 147,
+	"./hr": 146,
+	"./hr.js": 146,
+	"./hu": 145,
+	"./hu.js": 145,
+	"./hy-am": 144,
+	"./hy-am.js": 144,
+	"./id": 143,
+	"./id.js": 143,
+	"./is": 142,
+	"./is.js": 142,
+	"./it": 141,
+	"./it.js": 141,
+	"./ja": 140,
+	"./ja.js": 140,
+	"./jv": 139,
+	"./jv.js": 139,
+	"./ka": 138,
+	"./ka.js": 138,
+	"./kk": 137,
+	"./kk.js": 137,
+	"./km": 136,
+	"./km.js": 136,
+	"./kn": 135,
+	"./kn.js": 135,
+	"./ko": 134,
+	"./ko.js": 134,
+	"./ky": 133,
+	"./ky.js": 133,
+	"./lb": 132,
+	"./lb.js": 132,
+	"./lo": 131,
+	"./lo.js": 131,
+	"./lt": 130,
+	"./lt.js": 130,
+	"./lv": 129,
+	"./lv.js": 129,
+	"./me": 128,
+	"./me.js": 128,
+	"./mi": 127,
+	"./mi.js": 127,
+	"./mk": 126,
+	"./mk.js": 126,
+	"./ml": 125,
+	"./ml.js": 125,
+	"./mn": 124,
+	"./mn.js": 124,
+	"./mr": 123,
+	"./mr.js": 123,
+	"./ms": 122,
+	"./ms-my": 121,
+	"./ms-my.js": 121,
+	"./ms.js": 122,
+	"./mt": 120,
+	"./mt.js": 120,
+	"./my": 119,
+	"./my.js": 119,
+	"./nb": 118,
+	"./nb.js": 118,
+	"./ne": 117,
+	"./ne.js": 117,
+	"./nl": 116,
+	"./nl-be": 115,
+	"./nl-be.js": 115,
+	"./nl.js": 116,
+	"./nn": 114,
+	"./nn.js": 114,
+	"./pa-in": 113,
+	"./pa-in.js": 113,
+	"./pl": 112,
+	"./pl.js": 112,
+	"./pt": 111,
+	"./pt-br": 110,
+	"./pt-br.js": 110,
+	"./pt.js": 111,
+	"./ro": 109,
+	"./ro.js": 109,
+	"./ru": 108,
+	"./ru.js": 108,
+	"./sd": 107,
+	"./sd.js": 107,
+	"./se": 106,
+	"./se.js": 106,
+	"./si": 105,
+	"./si.js": 105,
+	"./sk": 104,
+	"./sk.js": 104,
+	"./sl": 103,
+	"./sl.js": 103,
+	"./sq": 102,
+	"./sq.js": 102,
+	"./sr": 101,
+	"./sr-cyrl": 100,
+	"./sr-cyrl.js": 100,
+	"./sr.js": 101,
+	"./ss": 99,
+	"./ss.js": 99,
+	"./sv": 98,
+	"./sv.js": 98,
+	"./sw": 97,
+	"./sw.js": 97,
+	"./ta": 96,
+	"./ta.js": 96,
+	"./te": 95,
+	"./te.js": 95,
+	"./tet": 94,
+	"./tet.js": 94,
+	"./tg": 93,
+	"./tg.js": 93,
+	"./th": 92,
+	"./th.js": 92,
+	"./tl-ph": 91,
+	"./tl-ph.js": 91,
+	"./tlh": 90,
+	"./tlh.js": 90,
+	"./tr": 89,
+	"./tr.js": 89,
+	"./tzl": 88,
+	"./tzl.js": 88,
+	"./tzm": 87,
+	"./tzm-latn": 86,
+	"./tzm-latn.js": 86,
+	"./tzm.js": 87,
+	"./ug-cn": 85,
+	"./ug-cn.js": 85,
+	"./uk": 84,
+	"./uk.js": 84,
+	"./ur": 83,
+	"./ur.js": 83,
+	"./uz": 82,
+	"./uz-latn": 81,
+	"./uz-latn.js": 81,
+	"./uz.js": 82,
+	"./vi": 80,
+	"./vi.js": 80,
+	"./x-pseudo": 79,
+	"./x-pseudo.js": 79,
+	"./yo": 78,
+	"./yo.js": 78,
+	"./zh-cn": 77,
+	"./zh-cn.js": 77,
+	"./zh-hk": 76,
+	"./zh-hk.js": 76,
+	"./zh-tw": 75,
+	"./zh-tw.js": 75
 };
 
 
@@ -40055,9 +39917,9 @@ var _Logger2 = _interopRequireDefault(_Logger);
 
 var _ApiNames = __webpack_require__(6);
 
-var _ApiPaths = __webpack_require__(9);
+var _UrlConstants = __webpack_require__(10);
 
-var _axios = __webpack_require__(7);
+var _axios = __webpack_require__(8);
 
 var _LangUtils = __webpack_require__(1);
 
@@ -40152,7 +40014,7 @@ function getNeighborTypes(entitySetId) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).get('/' + entitySetId + '/' + _ApiPaths.TYPES_PATH).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.ANALYSIS_API).get('/' + entitySetId + '/' + _UrlConstants.TYPES_PATH).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
@@ -40170,7 +40032,7 @@ function getNeighborTypes(entitySetId) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.version = exports.configure = exports.Types = exports.Models = exports.SyncApi = exports.SearchApi = exports.RequestsApi = exports.PrincipalsApi = exports.PermissionsApi = exports.OrganizationsApi = exports.LinkingApi = exports.EntityDataModelApi = exports.DataSourcesApi = exports.DataIntegrationApi = exports.DataApi = exports.AuthorizationApi = exports.AppApi = exports.AnalysisApi = undefined;
+exports.version = exports.configure = exports.Types = exports.Models = exports.Constants = exports.SearchApi = exports.RequestsApi = exports.PrincipalsApi = exports.PermissionsApi = exports.OrganizationsApi = exports.LinkingApi = exports.EntityDataModelApi = exports.DataIntegrationApi = exports.DataApi = exports.AuthorizationApi = exports.AppApi = exports.AnalysisApi = undefined;
 
 var _AnalysisApi = __webpack_require__(308);
 
@@ -40192,47 +40054,43 @@ var _DataIntegrationApi = __webpack_require__(210);
 
 var DataIntegrationApi = _interopRequireWildcard(_DataIntegrationApi);
 
-var _DataSourcesApi = __webpack_require__(209);
-
-var DataSourcesApi = _interopRequireWildcard(_DataSourcesApi);
-
-var _EntityDataModelApi = __webpack_require__(208);
+var _EntityDataModelApi = __webpack_require__(209);
 
 var EntityDataModelApi = _interopRequireWildcard(_EntityDataModelApi);
 
-var _LinkingApi = __webpack_require__(207);
+var _LinkingApi = __webpack_require__(208);
 
 var LinkingApi = _interopRequireWildcard(_LinkingApi);
 
-var _OrganizationsApi = __webpack_require__(206);
+var _OrganizationsApi = __webpack_require__(207);
 
 var OrganizationsApi = _interopRequireWildcard(_OrganizationsApi);
 
-var _PermissionsApi = __webpack_require__(205);
+var _PermissionsApi = __webpack_require__(206);
 
 var PermissionsApi = _interopRequireWildcard(_PermissionsApi);
 
-var _PrincipalsApi = __webpack_require__(204);
+var _PrincipalsApi = __webpack_require__(205);
 
 var PrincipalsApi = _interopRequireWildcard(_PrincipalsApi);
 
-var _RequestsApi = __webpack_require__(203);
+var _RequestsApi = __webpack_require__(204);
 
 var RequestsApi = _interopRequireWildcard(_RequestsApi);
 
-var _SearchApi = __webpack_require__(202);
+var _SearchApi = __webpack_require__(203);
 
 var SearchApi = _interopRequireWildcard(_SearchApi);
 
-var _SyncApi = __webpack_require__(200);
+var _GlobalConstants = __webpack_require__(201);
 
-var SyncApi = _interopRequireWildcard(_SyncApi);
+var Constants = _interopRequireWildcard(_GlobalConstants);
 
-var _types = __webpack_require__(199);
+var _types = __webpack_require__(200);
 
 var Types = _interopRequireWildcard(_types);
 
-var _models = __webpack_require__(198);
+var _models = __webpack_require__(199);
 
 var Models = _interopRequireWildcard(_models);
 
@@ -40241,7 +40099,7 @@ var _Configuration = __webpack_require__(23);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // injected by Webpack.DefinePlugin
-var version = "v0.35.1";
+
 
 /**
  * The `lattice.js` library is a layer on top of OpenLattice's REST APIs to simplify the process of reading data from
@@ -40251,12 +40109,13 @@ var version = "v0.35.1";
  * @module lattice
  */
 
+var version = "v0.36.0";
+
 exports.AnalysisApi = AnalysisApi;
 exports.AppApi = AppApi;
 exports.AuthorizationApi = AuthorizationApi;
 exports.DataApi = DataApi;
 exports.DataIntegrationApi = DataIntegrationApi;
-exports.DataSourcesApi = DataSourcesApi;
 exports.EntityDataModelApi = EntityDataModelApi;
 exports.LinkingApi = LinkingApi;
 exports.OrganizationsApi = OrganizationsApi;
@@ -40264,7 +40123,7 @@ exports.PermissionsApi = PermissionsApi;
 exports.PrincipalsApi = PrincipalsApi;
 exports.RequestsApi = RequestsApi;
 exports.SearchApi = SearchApi;
-exports.SyncApi = SyncApi;
+exports.Constants = Constants;
 exports.Models = Models;
 exports.Types = Types;
 exports.configure = _Configuration.configure;
@@ -40275,7 +40134,6 @@ exports.default = {
   AuthorizationApi: AuthorizationApi,
   DataApi: DataApi,
   DataIntegrationApi: DataIntegrationApi,
-  DataSourcesApi: DataSourcesApi,
   EntityDataModelApi: EntityDataModelApi,
   LinkingApi: LinkingApi,
   OrganizationsApi: OrganizationsApi,
@@ -40283,8 +40141,8 @@ exports.default = {
   PrincipalsApi: PrincipalsApi,
   RequestsApi: RequestsApi,
   SearchApi: SearchApi,
-  SyncApi: SyncApi,
 
+  Constants: Constants,
   Models: Models,
   Types: Types,
   configure: _Configuration.configure,
