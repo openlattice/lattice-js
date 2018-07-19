@@ -3,7 +3,7 @@
 import * as AxiosUtils from '../utils/axios';
 import * as PrincipalsApi from './PrincipalsApi';
 import { PRINCIPALS_API } from '../constants/ApiNames';
-import { EMAIL_PATH, SEARCH_PATH, USERS_PATH } from '../constants/ApiPaths';
+import { EMAIL_PATH, SEARCH_PATH, USERS_PATH } from '../constants/UrlConstants';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 

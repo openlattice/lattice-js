@@ -16,6 +16,12 @@ export default class Model {
 
     this.id = id;
   }
+
+  valueOf() {
+    return JSON.stringify({
+      id: this.id
+    });
+  }
 }
 
 export class ModelBuilder {
@@ -42,7 +48,7 @@ export class ModelBuilder {
   }
 }
 
-export function isValid(model :any) :boolean {
+export function isValidModel(model :any) :boolean {
 
   if (!isDefined(model)) {
 

@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import Immutable from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 import newAxiosInstance from './newAxiosInstance';
 import * as Config from '../../config/Configuration';
@@ -13,7 +13,7 @@ const axiosCreateSpy = jest.spyOn(Axios, 'create');
  */
 
 jest.mock('../../config/Configuration');
-Config.getConfig.mockImplementation(() => Immutable.Map());
+Config.getConfig.mockImplementation(() => Map());
 
 /*
  * tests
@@ -52,7 +52,7 @@ describe('AxiosUtils : newAxiosInstance()', () => {
     const mockBaseUrl = genMockBaseUrl();
     const mockAuthToken = genMockAuthToken();
 
-    Config.getConfig.mockImplementationOnce(() => Immutable.fromJS({
+    Config.getConfig.mockImplementationOnce(() => fromJS({
       authToken: mockAuthToken
     }));
 

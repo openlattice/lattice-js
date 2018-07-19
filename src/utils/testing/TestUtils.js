@@ -204,6 +204,22 @@ function testApiShouldRejectOnInvalidParameters(functionToTest, validParams, inv
   });
 }
 
+function testEnumIntegrity(enumToTest, expectedEnum) {
+
+  test('should contain only expected enum values', () => {
+    expect(Object.keys(enumToTest)).toEqual(Object.values(enumToTest));
+    expect(Object.keys(enumToTest)).toEqual(expectedEnum.keySeq().toJS());
+    expect(Object.values(enumToTest)).toEqual(expectedEnum.valueSeq().toJS());
+  });
+
+  expectedEnum.forEach((value) => {
+    test(`should contain "${value}"`, () => {
+      expect(enumToTest).toHaveProperty(value);
+      expect(enumToTest[value]).toEqual(value);
+    });
+  });
+}
+
 export {
   assertApiShouldSendCorrectHttpRequest,
   testApiShouldNotThrowOnInvalidParameters,
@@ -216,5 +232,6 @@ export {
   testApiShouldSendCorrectPatchRequest,
   testApiShouldSendCorrectPostRequest,
   testApiShouldSendCorrectPutRequest,
-  testApiShouldUseCorrectAxiosInstance
+  testApiShouldUseCorrectAxiosInstance,
+  testEnumIntegrity,
 };

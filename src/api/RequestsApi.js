@@ -19,8 +19,8 @@
  * // RequestsApi.get...
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
+import { List, Set } from 'immutable';
 
 import RequestStateTypes from '../constants/types/RequestStateTypes';
 import Request, { isValidRequestArray } from '../models/Request';
@@ -123,7 +123,7 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<*> {
       return Promise.reject(errorMsg);
     }
 
-    const aclKeysSet :Set<List<UUID>> = Immutable.Set().withMutations((set :Set<List<UUID>>) => {
+    const aclKeysSet :Set<List<UUID>> = Set().withMutations((set :Set<List<UUID>>) => {
       for (let index = 0; index < options.aclKeys.length; index += 1) {
         const aclKey = options.aclKeys[index];
         if (!isValidUuidArray(aclKey)) {
@@ -131,7 +131,7 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<*> {
           LOG.error(errorMsg, aclKey);
           break;
         }
-        set.add(Immutable.List(aclKey));
+        set.add(List(aclKey));
       }
     });
 

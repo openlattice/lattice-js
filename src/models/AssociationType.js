@@ -2,8 +2,8 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import isBoolean from 'lodash/isBoolean';
+import { Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import EntityType, { isValidEntityType } from './EntityType';
@@ -47,7 +47,7 @@ export default class AssociationType {
     associationTypeObj.dst = this.dst;
     associationTypeObj.bidirectional = this.bidirectional;
 
-    return Immutable.fromJS(associationTypeObj);
+    return fromJS(associationTypeObj);
   }
 }
 
@@ -82,7 +82,7 @@ export class AssociationTypeBuilder {
       throw new Error('invalid parameter: sourceEntityTypeIds must be an array of valid UUIDs');
     }
 
-    this.sourceEntityTypeIds = Immutable.Set().withMutations((set :Set<UUID>) => {
+    this.sourceEntityTypeIds = Set().withMutations((set :Set<UUID>) => {
       sourceEntityTypeIds.forEach((entityTypeId :UUID) => {
         set.add(entityTypeId);
       });
@@ -101,7 +101,7 @@ export class AssociationTypeBuilder {
       throw new Error('invalid parameter: destinationEntityTypeIds must be an array of valid UUIDs');
     }
 
-    this.destinationEntityTypeIds = Immutable.Set().withMutations((set :Set<UUID>) => {
+    this.destinationEntityTypeIds = Set().withMutations((set :Set<UUID>) => {
       destinationEntityTypeIds.forEach((entityTypeId :UUID) => {
         set.add(entityTypeId);
       });

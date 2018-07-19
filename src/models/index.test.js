@@ -1,9 +1,9 @@
-import Immutable from 'immutable';
+import { OrderedSet, Set } from 'immutable';
 
 import * as Models from './index';
 
 /* eslint-disable key-spacing */
-const EXPECTED_MODELS = Immutable.OrderedSet([
+const EXPECTED_MODELS = Set([
   'AccessCheck',
   'AccessCheckBuilder',
   'Ace',
@@ -18,8 +18,10 @@ const EXPECTED_MODELS = Immutable.OrderedSet([
   'AppTypeBuilder',
   'AssociationType',
   'AssociationTypeBuilder',
-  'DataSource',
-  'DataSourceBuilder',
+  'DataEdgeKey',
+  'DataEdgeKeyBuilder',
+  'EntityDataKey',
+  'EntityDataKeyBuilder',
   'EntitySet',
   'EntitySetBuilder',
   'EntityType',
@@ -51,7 +53,7 @@ const EXPECTED_MODELS = Immutable.OrderedSet([
 describe('Lattice.Models', () => {
 
   test('should only export expected models', () => {
-    expect(Immutable.OrderedSet(Object.keys(Models))).toEqual(EXPECTED_MODELS);
+    expect(OrderedSet(Object.keys(Models))).toEqual(EXPECTED_MODELS);
   });
 
   EXPECTED_MODELS.forEach((model) => {

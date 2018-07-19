@@ -11,7 +11,8 @@ import AclData, { AclDataBuilder } from './AclData';
 import App, { AppBuilder } from './App';
 import AppType, { AppTypeBuilder } from './AppType';
 import AssociationType, { AssociationTypeBuilder } from './AssociationType';
-import DataSource, { DataSourceBuilder } from './DataSource';
+import DataEdgeKey, { DataEdgeKeyBuilder } from './DataEdgeKey';
+import EntityDataKey, { EntityDataKeyBuilder } from './EntityDataKey';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
 import LinkingEntitySet, { LinkingEntitySetBuilder } from './LinkingEntitySet';
@@ -40,8 +41,10 @@ export {
   AppTypeBuilder,
   AssociationType,
   AssociationTypeBuilder,
-  DataSource,
-  DataSourceBuilder,
+  DataEdgeKey,
+  DataEdgeKeyBuilder,
+  EntityDataKey,
+  EntityDataKeyBuilder,
   EntitySet,
   EntitySetBuilder,
   EntityType,

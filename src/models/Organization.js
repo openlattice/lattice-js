@@ -2,8 +2,8 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import Principal, { isValidPrincipal, isValidPrincipalArray } from './Principal';
@@ -142,7 +142,7 @@ export class OrganizationBuilder {
       throw new Error('invalid parameter: members must be a non-empty array of valid Principals');
     }
 
-    this.members = Immutable.Set().withMutations((set :Set<Principal>) => {
+    this.members = Set().withMutations((set :Set<Principal>) => {
       members.forEach((member :Principal) => {
         set.add(member);
       });
@@ -161,7 +161,7 @@ export class OrganizationBuilder {
       throw new Error('invalid parameter: roles must be a non-empty array of valid Principals');
     }
 
-    this.roles = Immutable.Set().withMutations((set :Set<Principal>) => {
+    this.roles = Set().withMutations((set :Set<Principal>) => {
       roles.forEach((role :Principal) => {
         set.add(role);
       });
@@ -180,7 +180,7 @@ export class OrganizationBuilder {
       throw new Error('invalid parameter: emails must be a non-empty array of strings');
     }
 
-    this.emails = Immutable.Set().withMutations((set :Set<Principal>) => {
+    this.emails = Set().withMutations((set :Set<Principal>) => {
       emails.forEach((email :string) => {
         set.add(email);
       });
@@ -198,7 +198,7 @@ export class OrganizationBuilder {
       throw new Error('invalid parameter: apps must be a valid UUID array');
     }
 
-    this.apps = Immutable.Set().withMutations((set :Set<Principal>) => {
+    this.apps = Set().withMutations((set :Set<Principal>) => {
       apps.forEach((app :UUID) => {
         set.add(app);
       });

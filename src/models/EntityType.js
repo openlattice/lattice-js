@@ -2,8 +2,8 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
+import { Set, fromJS } from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
 import SecurableTypes from '../constants/types/SecurableTypes';
@@ -108,7 +108,7 @@ export default class EntityType {
       entityTypeObj.category = this.category;
     }
 
-    return Immutable.fromJS(entityTypeObj);
+    return fromJS(entityTypeObj);
   }
 }
 
@@ -186,7 +186,7 @@ export class EntityTypeBuilder {
       throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 
-    this.schemas = Immutable.Set().withMutations((set :Set<FullyQualifiedName>) => {
+    this.schemas = Set().withMutations((set :Set<FullyQualifiedName>) => {
       schemas.forEach((schemaFqn :FullyQualifiedName) => {
         set.add(schemaFqn);
       });
@@ -205,7 +205,7 @@ export class EntityTypeBuilder {
       throw new Error('invalid parameter: key must be a non-empty array of valid UUIDs');
     }
 
-    this.key = Immutable.Set().withMutations((set :Set<UUID>) => {
+    this.key = Set().withMutations((set :Set<UUID>) => {
       key.forEach((keyId :UUID) => {
         set.add(keyId);
       });
@@ -224,7 +224,7 @@ export class EntityTypeBuilder {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
     }
 
-    this.properties = Immutable.Set().withMutations((set :Set<UUID>) => {
+    this.properties = Set().withMutations((set :Set<UUID>) => {
       propertyTypes.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
       });

@@ -2,11 +2,13 @@
  * @flow
  */
 
+import isArray from 'lodash/isArray';
+
 import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
-import { isNonEmptyArray, isNonEmptyString } from './LangUtils';
+import { isNonEmptyArray, isNonEmptyObject, isNonEmptyString } from './LangUtils';
 
-import type { Permission } from '../constants/types/PermissionTypes';
+type ValidatorFn = (value :any) => boolean;
 
 /*
  * https://github.com/mixer/uuid-validate
@@ -18,7 +20,7 @@ import type { Permission } from '../constants/types/PermissionTypes';
  */
 const BASE_UUID_PATTERN :RegExp = /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
 
-export function validateNonEmptyArray(value :any[], validatorFn :Function) :boolean {
+export function validateNonEmptyArray(value :any[], validatorFn :ValidatorFn) :boolean {
 
   if (!isNonEmptyArray(value)) {
     return false;
@@ -38,19 +40,49 @@ export function isValidUuid(value :any) :boolean {
   return BASE_UUID_PATTERN.test(value);
 }
 
-export function isValidUuidArray(uuids :UUID[]) :boolean {
+export function isValidUuidArray(uuids :any[]) :boolean {
 
-  return validateNonEmptyArray(uuids, (id :UUID) => isValidUuid(id));
+  return validateNonEmptyArray(uuids, (id :any) => isValidUuid(id));
 }
 
-export function isValidFqnArray(fqns :FullyQualifiedName[]) :boolean {
+export function isValidFqnArray(fqns :any[]) :boolean {
 
-  return validateNonEmptyArray(fqns, (fqn :FullyQualifiedName) => FullyQualifiedName.isValid(fqn));
+  return validateNonEmptyArray(fqns, (fqn :any) => FullyQualifiedName.isValid(fqn));
 }
 
-export function isValidPermissionArray(permissions :Permission[]) :boolean {
+export function isValidPermissionArray(permissions :any[]) :boolean {
 
-  return validateNonEmptyArray(permissions, (permission :Permission) => (
+  return validateNonEmptyArray(permissions, (permission :any) => (
     isNonEmptyString(permission) && PermissionTypes[permission]
   ));
+}
+
+export function isValidMultimap(value :any, validatorFn :ValidatorFn) :boolean {
+
+  if (!isNonEmptyObject(value)) {
+    return false;
+  }
+
+  const keys :any[] = Object.keys(value);
+
+  // validate all keys are UUIDs
+  for (let index1 = 0; index1 < keys.length; index1 += 1) {
+    if (!validatorFn(keys[index1])) {
+      return false;
+    }
+  }
+
+  // validate all values are arrays
+  for (let index2 = 0; index2 < keys.length; index2 += 1) {
+    if (!isArray(value[keys[index2]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function isValidMultimapArray(values :any[], validatorFn :ValidatorFn) :boolean {
+
+  return validateNonEmptyArray(values, (value :any) => isValidMultimap(value, validatorFn));
 }

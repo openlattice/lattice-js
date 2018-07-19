@@ -17,10 +17,9 @@
  * // SearchApi.search...
  */
 
-import Immutable from 'immutable';
-
 import isFinite from 'lodash/isFinite';
 import isString from 'lodash/isString';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { SEARCH_API } from '../constants/ApiNames';
@@ -36,7 +35,7 @@ import {
   SEARCH_ENTITY_TYPES_PATH,
   SEARCH_ASSOCIATION_TYPES_PATH,
   SEARCH_PROPERTY_TYPES_PATH
-} from '../constants/ApiPaths';
+} from '../constants/UrlConstants';
 
 import {
   isDefined,
@@ -238,7 +237,7 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<*> {
       LOG.error(errorMsg, propertyTypeIds);
       return Promise.reject(errorMsg);
     }
-    data[PROPERTY_TYPE_IDS] = Immutable.Set().withMutations((set :Set<UUID>) => {
+    data[PROPERTY_TYPE_IDS] = Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((id :UUID) => {
         set.add(id);
       });

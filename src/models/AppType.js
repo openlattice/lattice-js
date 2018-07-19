@@ -58,7 +58,7 @@ export default class AppType {
  */
 export class AppTypeBuilder {
 
-  description :string;
+  description :?string;
   entityTypeId :UUID;
   id :?UUID;
   title :string;

@@ -14,7 +14,7 @@ import {
   PRINCIPALS_PATH,
   ROLES_PATH,
   TITLE_PATH
-} from '../constants/ApiPaths';
+} from '../constants/UrlConstants';
 
 import {
   testApiShouldNotThrowOnInvalidParameters,

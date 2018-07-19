@@ -9,11 +9,10 @@ const SecurableTypes = {
   EdgeType: 'EdgeType',
   EntitySet: 'EntitySet',
   EntityType: 'EntityType',
-  DataSource: 'Datasource',
   LinkingEntityType: 'LinkingEntityType',
-  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
   Organization: 'Organization',
-  OrganizationRole: 'OrganizationRole'
+  OrganizationRole: 'OrganizationRole',
+  PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
 };
 
 export type SecurableType = $Keys<typeof SecurableTypes>;
