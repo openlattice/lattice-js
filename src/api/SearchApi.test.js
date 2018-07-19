@@ -111,7 +111,7 @@ function testSearchEntitySetMetaData() {
         '/',
         {
           kw: MOCK_SEARCH_TERM,
-          eid: MOCK_ENTITY_TYPE_UUID,
+          entityTypeId: MOCK_ENTITY_TYPE_UUID,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -153,7 +153,7 @@ function testSearchEntitySetMetaData() {
       const expectedParameters = [
         '/',
         {
-          eid: MOCK_ENTITY_TYPE_UUID,
+          entityTypeId: MOCK_ENTITY_TYPE_UUID,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
