@@ -3,8 +3,16 @@
 import * as AxiosUtils from '../utils/axios';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
-import { COUNT_PATH, SET_PATH } from '../constants/UrlConstants';
-import { PARTIAL } from '../constants/UrlConstants';
+import { MOCK_DATA_EDGE_KEY_DM } from '../utils/testing/MockDataModels';
+
+import {
+  ASSOCIATION_PATH,
+  COUNT_PATH,
+  FILE_TYPE,
+  PARTIAL,
+  SET_ID,
+  SET_PATH,
+} from '../constants/UrlConstants';
 
 import {
   INVALID_PARAMS,
@@ -52,6 +60,7 @@ describe('DataApi', () => {
 
   clearEntitySet();
   clearEntityFromEntitySet();
+  createAssociations();
   createOrMergeEntityData();
   getEntity();
   getEntitySetData();
@@ -101,6 +110,23 @@ function clearEntitySet() {
   });
 }
 
+function createAssociations() {
+
+  describe('createAssociations()', () => {
+
+    const apiToTest = DataApi.createAssociations;
+    const validParams = [[MOCK_DATA_EDGE_KEY_DM]];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = [`/${ASSOCIATION_PATH}`, [MOCK_DATA_EDGE_KEY_DM]];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
+  });
+}
+
 function createOrMergeEntityData() {
 
   describe('createOrMergeEntityData()', () => {
@@ -114,12 +140,13 @@ function createOrMergeEntityData() {
 
     const validParams = [mockEntitySetId, mockEntityData];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [`/${SET_PATH}?${SET_ID}=${mockEntitySetId}`, mockEntityData];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
   });
 }
 

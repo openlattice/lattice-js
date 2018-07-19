@@ -24,10 +24,17 @@ import DataEdgeKey, { isValidDataEdgeKeyArray } from '../models/DataEdgeKey';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
-import { ASSOCIATION_PATH, COUNT_PATH, SET_PATH } from '../constants/UrlConstants';
-import { FILE_TYPE, PARTIAL, SET_ID } from '../constants/UrlConstants';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
+
+import {
+  ASSOCIATION_PATH,
+  COUNT_PATH,
+  FILE_TYPE,
+  PARTIAL,
+  SET_ID,
+  SET_PATH,
+} from '../constants/UrlConstants';
 
 import {
   isValidMultimap,
