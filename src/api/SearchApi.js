@@ -23,6 +23,7 @@ import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { SEARCH_API } from '../constants/ApiNames';
+import { OPENLATTICE_ID_FQN } from '../constants/GlobalConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
@@ -46,7 +47,7 @@ import {
 
 const LOG = new Logger('SearchApi');
 
-const ENTITY_TYPE_ID :string = 'eid';
+const ENTITY_TYPE_ID :string = 'entityTypeId';
 const KEYWORD :string = 'kw';
 const MAX_HITS :string = 'maxHits';
 const NAME :string = 'name';
@@ -60,7 +61,7 @@ const START :string = 'start';
 const addIDField = (searchResult) => {
   if (searchResult && searchResult.hits) {
     searchResult.hits.forEach((hit) => {
-      hit.id = hit['openlattice.@id']; // eslint-disable-line no-param-reassign
+      hit.id = hit[OPENLATTICE_ID_FQN]; // eslint-disable-line no-param-reassign
     });
   }
   return searchResult;
