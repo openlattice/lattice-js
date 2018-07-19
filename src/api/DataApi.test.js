@@ -8,7 +8,6 @@ import { MOCK_DATA_EDGE_KEY_DM } from '../utils/testing/MockDataModels';
 import {
   ASSOCIATION_PATH,
   COUNT_PATH,
-  FILE_TYPE,
   PARTIAL,
   SET_ID,
   SET_PATH,
