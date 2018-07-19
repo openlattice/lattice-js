@@ -2,8 +2,8 @@
  * @flow
  */
 
-import Immutable from 'immutable';
 import has from 'lodash/has';
+import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isValidUuid, validateNonEmptyArray } from '../utils/ValidationUtils';
@@ -140,7 +140,7 @@ export class EntitySetBuilder {
       throw new Error('invalid parameter: contacts must be a non-empty array of strings');
     }
 
-    this.contacts = Immutable.Set().withMutations((set :Set<string>) => {
+    this.contacts = Set().withMutations((set :Set<string>) => {
       contacts.forEach((contact :string) => {
         set.add(contact);
       });

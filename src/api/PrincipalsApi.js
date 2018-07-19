@@ -27,7 +27,7 @@ import {
   ROLES_PATH,
   SEARCH_PATH,
   USERS_PATH
-} from '../constants/ApiPaths';
+} from '../constants/UrlConstants';
 
 const LOG = new Logger('PrincipalsApi');
 

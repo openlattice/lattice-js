@@ -7,7 +7,7 @@
  * @memberof lattice
  */
 
-import Immutable from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
@@ -17,13 +17,13 @@ declare var __ENV_PROD__ :boolean;
 
 const LOG = new Logger('Configuration');
 
-const ENV_URLS :Map<string, string> = Immutable.fromJS({
+const ENV_URLS :Map<string, string> = fromJS({
   LOCAL: 'http://localhost:8080',
   STAGING: 'https://api.staging.openlattice.com',
   PRODUCTION: 'https://api.openlattice.com'
 });
 
-let configuration :Map<string, string> = Immutable.fromJS({
+let configuration :Map<string, string> = fromJS({
   authToken: '',
   baseUrl: ENV_URLS.get('LOCAL')
 });

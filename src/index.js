@@ -15,7 +15,6 @@ import * as AppApi from './api/AppApi';
 import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
-import * as DataSourcesApi from './api/DataSourcesApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as LinkingApi from './api/LinkingApi';
 import * as OrganizationsApi from './api/OrganizationsApi';
@@ -23,8 +22,8 @@ import * as PermissionsApi from './api/PermissionsApi';
 import * as PrincipalsApi from './api/PrincipalsApi';
 import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
-import * as SyncApi from './api/SyncApi';
 
+import * as Constants from './constants/GlobalConstants';
 import * as Types from './constants/types';
 import * as Models from './models';
 import { configure } from './config/Configuration';
@@ -39,7 +38,6 @@ export {
   AuthorizationApi,
   DataApi,
   DataIntegrationApi,
-  DataSourcesApi,
   EntityDataModelApi,
   LinkingApi,
   OrganizationsApi,
@@ -47,8 +45,8 @@ export {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
-  SyncApi,
 
+  Constants,
   Models,
   Types,
   configure,
@@ -61,7 +59,6 @@ export default {
   AuthorizationApi,
   DataApi,
   DataIntegrationApi,
-  DataSourcesApi,
   EntityDataModelApi,
   LinkingApi,
   OrganizationsApi,
@@ -69,8 +66,8 @@ export default {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
-  SyncApi,
 
+  Constants,
   Models,
   Types,
   configure,

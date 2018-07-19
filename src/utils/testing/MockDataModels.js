@@ -8,8 +8,11 @@ import {
   SecurableTypes
 } from '../../constants/types';
 
+import { genRandomUUID } from './MockUtils';
+
 export const MOCK_ACL_KEY :string[] = [
-  'ec6865e6-e60e-424b-a071-6a9c1603d735'
+  genRandomUUID(),
+  genRandomUUID(),
 ];
 
 export const MOCK_FQN :Object = {
@@ -54,6 +57,21 @@ export const MOCK_APP_TYPE_DM :Object = {
   entityTypeId: 'ec6865e6-e60e-424b-a071-6a9c1603d735'
 };
 
+export const MOCK_DATA_EDGE_KEY_DM :Object = {
+  dst: {
+    entityKeyId: genRandomUUID(),
+    entitySetId: genRandomUUID(),
+  },
+  edge: {
+    entityKeyId: genRandomUUID(),
+    entitySetId: genRandomUUID(),
+  },
+  src: {
+    entityKeyId: genRandomUUID(),
+    entitySetId: genRandomUUID(),
+  },
+};
+
 export const MOCK_DATA_SOURCE_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
   title: 'title',
@@ -62,6 +80,11 @@ export const MOCK_DATA_SOURCE_DM :Object = {
     'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
     'fae6af98-2675-45bd-9a5b-1619a87235a8'
   ]
+};
+
+export const MOCK_ENTITY_DATA_KEY_DM :Object = {
+  entityKeyId: genRandomUUID(),
+  entitySetId: genRandomUUID(),
 };
 
 export const MOCK_ENTITY_SET_DM :Object = {

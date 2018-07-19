@@ -12,7 +12,7 @@ import {
   ORGANIZATIONS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
   SEARCH_PROPERTY_TYPES_PATH
-} from '../constants/ApiPaths';
+} from '../constants/UrlConstants';
 
 import {
   testApiShouldNotThrowOnInvalidParameters,
