@@ -14,7 +14,6 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   AuthorizationApi   : { size: 2 },
   DataApi            : { size: 11 },
   DataIntegrationApi : { size: 1 },
-  DataSourcesApi     : { size: 5 },
   EntityDataModelApi : { size: 57 },
   LinkingApi         : { size: 2 },
   OrganizationsApi   : { size: 23 },
@@ -23,7 +22,7 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   RequestsApi        : { size: 3 },
   SearchApi          : { size: 12 },
   Constants          : { size: 1 },
-  Models             : { size: 45 },
+  Models             : { size: 43 },
   Types              : { size: 6 },
 });
 /* eslint-enable key-spacing */
