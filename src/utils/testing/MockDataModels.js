@@ -10,6 +10,8 @@ import {
 
 import { genRandomUUID } from './MockUtils';
 
+const MOCK_NAMESPACE = 'OPENLATTICE';
+
 export const MOCK_ACL_KEY :string[] = [
   genRandomUUID(),
   genRandomUUID(),
@@ -115,6 +117,13 @@ export const MOCK_ENTITY_TYPE_DM :Object = {
   category: SecurableTypes.EntityType
 };
 
+export const MOCK_ASSOCIATION_TYPE_DM :Object = {
+  bidirectional: false,
+  dst: [genRandomUUID()],
+  entityType: MOCK_ENTITY_TYPE_DM,
+  src: [genRandomUUID()],
+};
+
 export const MOCK_LINKING_ENTITY_SET_DM :Object = {
   entitySet: MOCK_ENTITY_SET_DM,
   linkingProperties: [
@@ -197,4 +206,13 @@ export const MOCK_SCHEMA_DM :Object = {
   fqn: MOCK_FQN,
   entityTypes: [MOCK_ENTITY_TYPE_DM],
   propertyTypes: [MOCK_PROPERTY_TYPE_DM]
+};
+
+export const MOCK_EDM_DM :Object = {
+  associationTypes: [MOCK_ASSOCIATION_TYPE_DM],
+  entityTypes: [MOCK_ENTITY_TYPE_DM],
+  namespaces: [MOCK_NAMESPACE],
+  propertyTypes: [MOCK_PROPERTY_TYPE_DM],
+  schemas: [MOCK_SCHEMA_DM],
+  version: genRandomUUID(),
 };

@@ -6,12 +6,14 @@ import { EDM_API } from '../constants/ApiNames';
 import { genMockBaseUrl, genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
+  DIFF_PATH,
   IDS_PATH,
   NAMESPACE_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
   PROPERTY_TYPE_PATH,
-  SCHEMA_PATH
+  SCHEMA_PATH,
+  VERSION_PATH,
 } from '../constants/UrlConstants';
 
 import {
@@ -22,6 +24,7 @@ import {
 
 
 import {
+  MOCK_EDM_DM,
   MOCK_FQN,
   MOCK_ENTITY_SET_DM,
   MOCK_ENTITY_TYPE_DM,
@@ -66,6 +69,10 @@ describe('EntityDataModelApi', () => {
   });
 
   testGetEntityDataModel();
+  testGetEntityDataModelDiff();
+  testGetEntityDataModelProjection();
+  testGetEntityDataModelVersion();
+  testUpdateEntityDataModel();
   testGetSchema();
   testGetAllSchemas();
   testGetAllSchemasInNamespace();
@@ -109,6 +116,79 @@ function testGetEntityDataModel() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+  });
+}
+
+function testGetEntityDataModelDiff() {
+
+  describe('getEntityDataModelDiff()', () => {
+
+    const fnToTest = EntityDataModelApi.getEntityDataModelDiff;
+
+    const validParams = [MOCK_EDM_DM];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = [`/${DIFF_PATH}`, MOCK_EDM_DM];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+  });
+}
+
+function testGetEntityDataModelProjection() {
+
+  describe('getEntityDataModelProjection()', () => {
+
+    const fnToTest = EntityDataModelApi.getEntityDataModelProjection;
+
+    // TODO: create mock projection object
+    const mockProjection = [{}];
+    const validParams = [mockProjection];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = ['/', mockProjection];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    // TODO: add invalid parameters tests
+    // testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+  });
+}
+
+function testGetEntityDataModelVersion() {
+
+  describe('getEntityDataModelVersion()', () => {
+
+    const fnToTest = EntityDataModelApi.getEntityDataModelVersion;
+
+    const validParams = [];
+    const axiosParams = [`/${VERSION_PATH}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+  });
+}
+
+function testUpdateEntityDataModel() {
+
+  describe('updateEntityDataModel()', () => {
+
+    const fnToTest = EntityDataModelApi.updateEntityDataModel;
+
+    const validParams = [MOCK_EDM_DM];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = ['/', MOCK_EDM_DM];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
   });
 }
 

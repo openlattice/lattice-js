@@ -20,6 +20,7 @@ const EXPECTED = Map({
   DATA_SOURCES_PATH             : 'datasource',
   DESCRIPTION_PATH              : 'description',
   DETAILED_PATH                 : 'detailed',
+  DIFF_PATH                     : 'diff',
   DST_PATH                      : 'dst',
   EDM_PATH                      : 'edm',
   EMAIL_DOMAINS_PATH            : 'email-domains',
@@ -60,6 +61,7 @@ const EXPECTED = Map({
   TYPE_PATH                     : 'type',
   UPDATE_PATH                   : 'update',
   USERS_PATH                    : 'users',
+  VERSION_PATH                  : 'version',
 }).sortBy((value, key) => key);
 /* eslint-enable */
 
