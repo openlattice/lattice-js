@@ -512,7 +512,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
 }
 
 /**
- * `POST /data/set/update/{entitySetId}/{entityKeyId}`
+ * `POST /data/set/{entitySetId}/{entityKeyId}`
  *
  * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
  *
