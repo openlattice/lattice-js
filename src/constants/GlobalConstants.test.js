@@ -2,9 +2,14 @@ import { Map, OrderedMap } from 'immutable';
 
 import * as GlobalConstants from './GlobalConstants';
 
+/* eslint-disable key-spacing */
 const EXPECTED = Map({
-  OPENLATTICE_ID_FQN: 'openlattice.@id'
+  AT_CLASS           : '@class',
+  AT_ID              : '@id',
+  OPENLATTICE_ID_FQN : 'openlattice.@id',
+  ROLE_PKG           : 'com.openlattice.organization.roles.Role',
 }).sortBy((value, key) => key);
+/* eslint-enable */
 
 describe('GlobalConstants', () => {
 

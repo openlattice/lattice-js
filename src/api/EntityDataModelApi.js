@@ -37,6 +37,7 @@ import {
   ASSOCIATION_TYPE_PATH,
   COMPLEX_TYPE_PATH,
   DETAILED_PATH,
+  DIFF_PATH,
   DST_PATH,
   ENTITY_SET_PATH,
   ENTITY_TYPE_PATH,
@@ -47,11 +48,13 @@ import {
   NAMESPACE_PATH,
   PROPERTY_TYPE_PATH,
   SCHEMA_PATH,
-  SRC_PATH
+  SRC_PATH,
+  VERSION_PATH,
 } from '../constants/UrlConstants';
 
 import {
   isEmptyArray,
+  isNonEmptyArray,
   isNonEmptyObject,
   isNonEmptyString,
   isNonEmptyStringArray
@@ -95,6 +98,48 @@ export function getEntityDataModel() :Promise<*> {
 }
 
 /**
+ * `POST /edm/diff`
+ *
+ * Compares the given Entity Data Model against the existing Entity Data Model, and gets the difference between them
+ * in terms of PropertyTypes, EntityTypes, AssociationTypes, and Schemas.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<Object>} - a Promise that will resolve with the Entity Data Model diff as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityDataModelDiff({
+ *   "associationTypes": [],
+ *   "entityTypes": [],
+ *   "namespaces": [],
+ *   "propertyTypes": [],
+ *   "schemas": [],
+ *   "version": "",
+ * });
+ */
+export function getEntityDataModelDiff(edm :Object) :Promise<*> {
+
+  // TODO: add better validation
+  // TODO: create EntityDataModel model
+
+  let errorMsg = '';
+
+  if (!isNonEmptyObject(edm)) {
+    errorMsg = 'invalid parameter: edm must be a non-empty object';
+    LOG.error(errorMsg, edm);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .post(`/${DIFF_PATH}`, edm)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `POST /edm`
  *
  * Gets the Entity Data Model, filtered by the given projection.
@@ -121,12 +166,83 @@ export function getEntityDataModel() :Promise<*> {
  */
 export function getEntityDataModelProjection(projection :Object[]) :Promise<*> {
 
-  // TODO: add validation
-  // TODO: add unit tests
+  // TODO: add better validation
   // TODO: create data models
+
+  let errorMsg = '';
+
+  if (!isNonEmptyArray(projection)) {
+    errorMsg = 'invalid parameter: projection must be a non-empty object array';
+    LOG.error(errorMsg, projection);
+    return Promise.reject(errorMsg);
+  }
 
   return getApiAxiosInstance(EDM_API)
     .post('/', projection)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /edm/version`
+ *
+ * Gets the current version of the Entity Data Model.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise<UUID>} - a Promise that will resolve with the Entity Data Model version as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntityDataModelVersion();
+ */
+export function getEntityDataModelVersion() :Promise<*> {
+
+  return getApiAxiosInstance(EDM_API)
+    .get(`/${VERSION_PATH}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PATCH /edm`
+ *
+ * Updates the existing Entity Data Model with the relevant elements from the given Entity Data Model
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateEntityDataModel({
+ *   "associationTypes": [],
+ *   "entityTypes": [],
+ *   "namespaces": [],
+ *   "propertyTypes": [],
+ *   "schemas": [],
+ *   "version": "",
+ * });
+ */
+export function updateEntityDataModel(edm :Object) :Promise<*> {
+
+  // TODO: add better validation
+  // TODO: create EntityDataModel model
+
+  let errorMsg = '';
+
+  if (!isNonEmptyObject(edm)) {
+    errorMsg = 'invalid parameter: edm must be a non-empty object';
+    LOG.error(errorMsg, edm);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .patch('/', edm)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

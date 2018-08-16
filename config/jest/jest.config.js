@@ -27,5 +27,6 @@ module.exports = {
     '<rootDir>/build/',
     '<rootDir>/flow-typed/'
   ],
-  rootDir: '../..'
+  rootDir: '../..',
+  testURL: 'http://localhost',
 };
