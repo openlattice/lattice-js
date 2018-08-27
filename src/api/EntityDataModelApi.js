@@ -1726,7 +1726,7 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<*> {
 /**
  * `GET /edm/association/type/{uuid}/available`
  *
- * Gets all available assocations for the given EntityType UUID.
+ * Gets all available associationTypes for the given EntityType UUID.
  *
  * @static
  * @memberof lattice.EntityDataModelApi

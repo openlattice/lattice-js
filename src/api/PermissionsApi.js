@@ -60,7 +60,7 @@ export function getAcl(aclKey :UUID[]) :Promise<*> {
 /**
  * `PATCH /permissions`
  *
- * Updates the ACL for a particular ACL Key, only if the user is the owner of the ACL Key.
+ * Updates the Ace for a particular ACL Key, only if the user is the owner of the ACL Key.
  *
  * @static
  * @memberof lattice.PermissionsApi
