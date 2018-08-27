@@ -727,11 +727,11 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<*> {
 /**
  * `PATCH /edm/entity/set/{uuid}`
  *
- * Updates the EntityType definition for the given EntityType UUID with the given metadata.
+ * Updates the EntityType definition for the given EntitySet UUID with the given metadata.
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
+ * @param {UUID} entitySetId
  * @param {Object} metadata
  * @return {Promise} - a Promise that resolves without a value
  *
@@ -1726,6 +1726,8 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<*> {
 /**
  * `GET /edm/association/type/{uuid}/available`
  *
+ * Gets all available associationTypes for the given EntityType UUID.
+ *
  * @static
  * @memberof lattice.EntityDataModelApi
  * @param {UUID} entityTypeId
@@ -2419,7 +2421,7 @@ export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {UUID} entityTypeId
+ * @param {UUID} entitySetId
  * @param {UUID} propertyTypeId
  * @param {Object} metadata
  * @return {Promise} - a Promise that resolves without a value
