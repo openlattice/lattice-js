@@ -3,7 +3,7 @@
 import * as AxiosUtils from '../utils/axios';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
-import { MOCK_DATA_EDGE_KEY_DM } from '../utils/testing/MockDataModels';
+import { MOCK_DATA_EDGE_KEY_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
 
 import {
   ASSOCIATION_PATH,
@@ -60,6 +60,7 @@ describe('DataApi', () => {
   clearEntitySet();
   clearEntityFromEntitySet();
   createAssociations();
+  createEntityAndAssociationData();
   createOrMergeEntityData();
   getEntity();
   getEntitySetData();
@@ -123,6 +124,23 @@ function createAssociations() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
+  });
+}
+
+function createEntityAndAssociationData() {
+
+  describe('createEntityAndAssociationData()', () => {
+
+    const apiToTest = DataApi.createEntityAndAssociationData;
+    const validParams = [MOCK_DATA_GRAPH_DM];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = ['/', MOCK_DATA_GRAPH_DM];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
   });
 }
 

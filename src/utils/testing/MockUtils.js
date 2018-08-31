@@ -4,6 +4,11 @@
 
 import randomUUID from 'uuid/v4';
 
+function genRandomBoolean() :boolean {
+
+  return Math.random() >= 0.5;
+}
+
 function genRandomString() :string {
 
   // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
@@ -49,8 +54,9 @@ function getMockAxiosInstance() :Object {
 export {
   genMockAuthToken,
   genMockBaseUrl,
+  genRandomBoolean,
   genRandomString,
   genRandomUUID,
   getMockPromise,
-  getMockAxiosInstance
+  getMockAxiosInstance,
 };

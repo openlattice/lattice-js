@@ -2,6 +2,7 @@
  * @flow
  */
 
+import has from 'lodash/has';
 import isBoolean from 'lodash/isBoolean';
 import { Set, fromJS } from 'immutable';
 
@@ -37,7 +38,7 @@ export default class AssociationType {
     this.bidirectional = bidirectional;
   }
 
-  asImmutable() {
+  asImmutable() :Map<string, Object> {
 
     const associationTypeObj = {};
 
@@ -48,6 +49,16 @@ export default class AssociationType {
     associationTypeObj.bidirectional = this.bidirectional;
 
     return fromJS(associationTypeObj);
+  }
+
+  valueOf() :string {
+
+    return JSON.stringify({
+      bidirectional: this.bidirectional,
+      dst: this.dst,
+      entityType: this.entityType,
+      src: this.src,
+    });
   }
 }
 
@@ -164,16 +175,27 @@ export function isValidAssociationType(associationType :any) :boolean {
 
   try {
 
-    const associationTypeBuilder = new AssociationTypeBuilder();
-
     // required properties
-    associationTypeBuilder
-      .setEntityType(associationType.entityType)
-      .setSourceEntityTypeIds(associationType.sourceEntityTypeIds)
-      .setDestinationEntityTypeIds(associationType.destinationEntityTypeIds)
-      .setBidirectional(associationType.bidirectional);
+    let builder = (new AssociationTypeBuilder())
+      .setBidirectional(associationType.bidirectional)
+      .setEntityType(associationType.entityType);
 
-    associationTypeBuilder.build();
+    // optional properties
+    if (has(associationType, 'destinationEntityTypeIds')) {
+      builder = builder.setDestinationEntityTypeIds(associationType.destinationEntityTypeIds);
+    }
+    else if (has(associationType, 'dst')) {
+      builder = builder.setDestinationEntityTypeIds(associationType.dst);
+    }
+
+    if (has(associationType, 'sourceEntityTypeIds')) {
+      builder = builder.setSourceEntityTypeIds(associationType.sourceEntityTypeIds);
+    }
+    else if (has(associationType, 'src')) {
+      builder = builder.setSourceEntityTypeIds(associationType.src);
+    }
+
+    builder.build();
 
     return true;
   }

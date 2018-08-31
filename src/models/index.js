@@ -12,6 +12,7 @@ import App, { AppBuilder } from './App';
 import AppType, { AppTypeBuilder } from './AppType';
 import AssociationType, { AssociationTypeBuilder } from './AssociationType';
 import DataEdgeKey, { DataEdgeKeyBuilder } from './DataEdgeKey';
+import DataGraph, { DataGraphBuilder } from './DataGraph';
 import EntityDataKey, { EntityDataKeyBuilder } from './EntityDataKey';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
@@ -43,6 +44,8 @@ export {
   AssociationTypeBuilder,
   DataEdgeKey,
   DataEdgeKeyBuilder,
+  DataGraph,
+  DataGraphBuilder,
   EntityDataKey,
   EntityDataKeyBuilder,
   EntitySet,

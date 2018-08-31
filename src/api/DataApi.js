@@ -21,6 +21,7 @@ import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
 import DataEdgeKey, { isValidDataEdgeKeyArray } from '../models/DataEdgeKey';
+import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
@@ -159,6 +160,54 @@ export function createAssociations(associations :DataEdgeKey[]) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .put(`/${ASSOCIATION_PATH}`, associations)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /data`
+ *
+ * Creates entities for the given entity and association data, and returns the corresponding entity UUIDs.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {DataGraph} data
+ * @return {Promise} - a Promise that resolves with the ids of the entities and associations that were created
+ *
+ * @example
+ * DataApi.createEntityAndAssociationData({
+ *   associations: {
+ *     'a680a1d8-73fb-423c-abd2-fd71965693d2': [{
+ *       dstEntityIndex: 2,
+ *       dstEntityKeyId: 'cf72e97f-109c-46a1-bb89-93a8753fd7ac',
+ *       dstEntitySetId: '69682f1e-6039-44da-8342-522395b43738',
+ *       srcEntityIndex: 4,
+ *       srcEntityKeyId: '5e4a579a-ad72-4902-991c-027d80dcd590',
+ *       srcEntitySetId: 'd66c4c7d-0aa9-43f3-bb80-9ebcbd5e21ea',
+ *     }]
+ *   },
+ *   entities: {
+ *     'c92f4318-9f93-4f88-94c1-0ca5b3b278ab': [{
+ *       '6a74d45c-9451-4f88-b8c8-a0e27c08b2a2': ['value_1', 'value_2'],
+ *     }]
+ *   },
+ * });
+ */
+export function createEntityAndAssociationData(data :DataGraph) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidDataGraph(data)) {
+    errorMsg = 'invalid parameter: data must be a valid DataGraph';
+    LOG.error(errorMsg, data);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post('/', data)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

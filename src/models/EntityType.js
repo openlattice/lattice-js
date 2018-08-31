@@ -23,6 +23,7 @@ import {
   validateNonEmptyArray
 } from '../utils/ValidationUtils';
 
+import type { FQN } from './FullyQualifiedName';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('EntityType');
@@ -34,10 +35,10 @@ const LOG = new Logger('EntityType');
 export default class EntityType {
 
   id :?UUID;
-  type :FullyQualifiedName;
+  type :FQN;
   title :string;
   description :?string;
-  schemas :FullyQualifiedName[];
+  schemas :FQN[];
   key :UUID[];
   properties :UUID[];
   baseType :?UUID;
@@ -45,10 +46,10 @@ export default class EntityType {
 
   constructor(
     id :?UUID,
-    type :FullyQualifiedName,
+    type :FQN,
     title :string,
     description :?string,
-    schemas :FullyQualifiedName[],
+    schemas :FQN[],
     key :UUID[],
     properties :UUID[],
     baseType :?UUID,
@@ -119,10 +120,10 @@ export default class EntityType {
 export class EntityTypeBuilder {
 
   id :?UUID;
-  type :FullyQualifiedName;
+  type :FQN;
   title :string;
   description :?string;
-  schemas :FullyQualifiedName[];
+  schemas :FQN[];
   key :UUID[];
   properties :UUID[];
   baseType :?UUID;
@@ -142,7 +143,7 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setType(entityTypeFqn :FullyQualifiedName) :EntityTypeBuilder {
+  setType(entityTypeFqn :FQN) :EntityTypeBuilder {
 
     if (!FullyQualifiedName.isValid(entityTypeFqn)) {
       throw new Error('invalid parameter: entityTypeFqn must be a valid FQN');
@@ -176,7 +177,7 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :FullyQualifiedName[]) :EntityTypeBuilder {
+  setSchemas(schemas :FQN[]) :EntityTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -186,8 +187,8 @@ export class EntityTypeBuilder {
       throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 
-    this.schemas = Set().withMutations((set :Set<FullyQualifiedName>) => {
-      schemas.forEach((schemaFqn :FullyQualifiedName) => {
+    this.schemas = Set().withMutations((set :Set<FQN>) => {
+      schemas.forEach((schemaFqn :FQN) => {
         set.add(schemaFqn);
       });
     }).toJS();
