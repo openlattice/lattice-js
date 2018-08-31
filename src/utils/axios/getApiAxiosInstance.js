@@ -3,6 +3,7 @@
  */
 
 import { Map } from 'immutable';
+import type { Axios } from 'axios';
 
 import getApiBaseUrl from './getApiBaseUrl';
 import newAxiosInstance from './newAxiosInstance';
@@ -13,7 +14,7 @@ let baseUrlToAxiosInstanceMap :Map<string, Axios> = Map();
 
 export default function getApiAxiosInstance(api :string) :Axios {
 
-  let axiosInstance;
+  let axiosInstance :Axios;
   const baseUrl = getApiBaseUrl(api);
   if (!baseUrlToAxiosInstanceMap.has(baseUrl)) {
     axiosInstance = newAxiosInstance(baseUrl);
@@ -35,6 +36,5 @@ export default function getApiAxiosInstance(api :string) :Axios {
     baseUrlToAxiosInstanceMap = baseUrlToAxiosInstanceMap.set(baseUrl, axiosInstance);
   }
 
-  // type casting to "any" to avoid Flow errors for now
-  return (baseUrlToAxiosInstanceMap.get(baseUrl) :any);
+  return baseUrlToAxiosInstanceMap.get(baseUrl);
 }

@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import { Map, fromJS } from 'immutable';
 
 import getApiAxiosInstance from './getApiAxiosInstance';
@@ -6,7 +6,7 @@ import getApiBaseUrl from './getApiBaseUrl';
 import * as Config from '../../config/Configuration';
 import { genMockAuthToken, genMockBaseUrl, genRandomString } from '../testing/MockUtils';
 
-const axiosCreateSpy = jest.spyOn(Axios, 'create');
+const axiosCreateSpy = jest.spyOn(axios, 'create');
 
 /*
  * mocks
