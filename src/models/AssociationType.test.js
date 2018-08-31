@@ -1,7 +1,6 @@
 import { Map, Set } from 'immutable';
 
 import AssociationType, { AssociationTypeBuilder, isValidAssociationType as isValid } from './AssociationType';
-import { genRandomUUID } from '../utils/testing/MockUtils';
 
 import {
   INVALID_PARAMS,
