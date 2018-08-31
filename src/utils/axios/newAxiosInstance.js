@@ -2,8 +2,10 @@
  * @flow
  */
 
-import Axios from 'axios';
+import axios from 'axios';
 import isURL from 'validator/lib/isURL';
+
+import type { Axios } from 'axios';
 
 import { getConfig } from '../../config/Configuration';
 import { isNonEmptyString } from '../LangUtils';
@@ -28,5 +30,5 @@ export default function newAxiosInstance(baseUrl :string) :Axios {
     axiosConfigObj.headers.common.Authorization = `Bearer ${authToken}`;
   }
 
-  return Axios.create(axiosConfigObj);
+  return axios.create(axiosConfigObj);
 }
