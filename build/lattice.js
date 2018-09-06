@@ -1,6 +1,6 @@
 /*!
  * 
- * lattice - v0.38.0
+ * lattice - v0.38.1
  * JavaScript SDK for all OpenLattice REST APIs
  * https://github.com/openlattice/lattice-js
  * 
@@ -28792,7 +28792,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * @module lattice
  */
 
-var version = "v0.38.0";
+var version = "v0.38.1";
 
 exports.AnalysisApi = AnalysisApi;
 exports.AppApi = AppApi;
@@ -34259,7 +34259,7 @@ function createEntityAndAssociationData(data) {
 }
 
 /**
- * `POST /data/set?setId={entitySetId}`
+ * `POST /data/set/?setId={entitySetId}`
  *
  * Creates or updates entities for the given entity data, and returns the corresponding entity UUIDs.
  *
@@ -34296,7 +34296,7 @@ function createOrMergeEntityData(entitySetId, entities) {
     return Promise.reject(errorMsg);
   }
 
-  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _UrlConstants.SET_PATH + '?' + _UrlConstants.SET_ID + '=' + entitySetId, entities).then(function (axiosResponse) {
+  return (0, _axios.getApiAxiosInstance)(_ApiNames.DATA_API).post('/' + _UrlConstants.SET_PATH + '/?' + _UrlConstants.SET_ID + '=' + entitySetId, entities).then(function (axiosResponse) {
     return axiosResponse.data;
   }).catch(function (error) {
     LOG.error(error);
