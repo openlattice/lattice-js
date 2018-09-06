@@ -11,7 +11,7 @@ import isString from 'lodash/isString';
 
 // injected by Webpack.DefinePlugin
 declare var __ENV_DEV__ :boolean;
-declare var __ENV_TEST__ :boolean;
+declare var __ENV_PROD__ :boolean;
 declare var __PACKAGE__ :string;
 
 const LOG_LEVELS = {
@@ -27,7 +27,7 @@ const TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 if (__ENV_DEV__) {
   log.setLevel(log.levels.TRACE);
 }
-else if (__ENV_TEST__) {
+else if (!__ENV_DEV__ && !__ENV_PROD__) {
   log.setLevel(log.levels.SILENT);
 }
 else {
