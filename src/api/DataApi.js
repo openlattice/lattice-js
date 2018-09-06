@@ -216,7 +216,7 @@ export function createEntityAndAssociationData(data :DataGraph) :Promise<*> {
 }
 
 /**
- * `POST /data/set?setId={entitySetId}`
+ * `POST /data/set/?setId={entitySetId}`
  *
  * Creates or updates entities for the given entity data, and returns the corresponding entity UUIDs.
  *
@@ -254,7 +254,7 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
   }
 
   return getApiAxiosInstance(DATA_API)
-    .post(`/${SET_PATH}?${SET_ID}=${entitySetId}`, entities)
+    .post(`/${SET_PATH}/?${SET_ID}=${entitySetId}`, entities)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
