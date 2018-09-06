@@ -1,5 +1,5 @@
-import moment from 'moment';
-import PACKAGE from '../../package.json';
+const moment = require('moment');
+const PACKAGE = require('../../package.json');
 
 const BANNER = `
 ${PACKAGE.name} - v${PACKAGE.version}
@@ -9,13 +9,6 @@ ${PACKAGE.homepage}
 Copyright (c) 2017-${moment().year()}, OpenLattice, Inc. All rights reserved.
 `;
 
-const ENTRY_FILE_NAME = 'index.js';
-const LIB_FILE_NAME = 'lattice';
-const LIB_NAMESPACE = 'Lattice';
-
-export default {
+module.exports = {
   BANNER,
-  ENTRY_FILE_NAME,
-  LIB_FILE_NAME,
-  LIB_NAMESPACE
 };

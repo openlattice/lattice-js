@@ -9,13 +9,13 @@
 
 ### configure
 
-baseUrl can be a full URL, or a simple URL identifier (substring). for example, all of the following strings will
-result in the same base URL:
+baseUrl can be a full URL, or an environment identifier (substring). for example, all of the following strings are valid values for baseUrl:
 
--   "<https://api.openlattice.com>"
--   "api.openlattice.com"
--   "openlattice"
--   "api"
+-   "https://api.openlattice.com"
+-   "https://api.staging.openlattice.com"
+-   "localhost"
+-   "staging"
+-   "production"
 
 **Parameters**
 

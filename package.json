@@ -24,48 +24,52 @@
   "license": "Apache-2.0",
   "main": "build/lattice.js",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "@babel/runtime": "^7.0.0",
     "axios": "^0.18.0",
     "immutable": "4.0.0-rc.9",
     "lodash": "^4.17.10",
-    "loglevel": "^1.6.1",
+    "loglevel": "^1.6.0",
     "moment": "^2.22.0",
     "validator": "^10.7.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.1",
-    "babel-loader": "^7.1.0",
-    "babel-plugin-transform-class-properties": "^6.24.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-flow": "^6.23.0",
-    "better-npm-run": "0.1.1",
-    "bluebird": "^3.5.1",
-    "documentation": "^8.0.0",
-    "eslint": "^5.4.0",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^9.0.0",
+    "babel-jest": "^23.4.2",
+    "babel-loader": "^8.0.0",
+    "bluebird": "^3.5.2",
+    "documentation": "^8.1.0",
+    "eslint": "^5.5.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-import-resolver-webpack": "^0.10.0",
     "eslint-loader": "^2.1.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jest": "^21.22.0",
-    "flow-bin": "^0.79.0",
+    "flow-bin": "^0.80.0",
     "jest": "^23.5.0",
     "npm-run-all": "^4.1.0",
-    "request": "^2.88.0",
-    "rimraf": "2.6.2",
+    "rimraf": "2.6.0",
     "uuid": "^3.3.0",
     "webpack": "^4.17.0",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.0"
   },
   "scripts": {
-    "build": "better-npm-run build",
-    "build:min": "better-npm-run build:min",
+    "build": "webpack --config config/webpack/webpack.config.js --env.production",
     "clean": "rimraf build/*",
     "flow": "flow check",
-    "lib": "better-npm-run webpack-dev-server",
+    "lib": "webpack-dev-server --config config/webpack/webpack.config.js --env.development --port 9000 --content-base build/",
     "lint": "eslint --config .eslintrc src",
     "release:major": "npm version major -m \"releasing v%s\" && npm publish",
     "release:minor": "npm version minor -m \"releasing v%s\" && npm publish",
@@ -76,29 +80,5 @@
     "test": "jest --config config/jest/jest.config.js",
     "test:travis": "jest --maxWorkers=4 --config config/jest/jest.config.js",
     "test:watch": "jest --config config/jest/jest.config.js --watch --coverage=false"
-  },
-  "betterScripts": {
-    "build": {
-      "command": "webpack --config config/webpack/webpack.config.babel.js",
-      "env": {
-        "BUILD": "production",
-        "MINIMIZE": "false",
-        "TARGET_ENV": "web"
-      }
-    },
-    "build:min": {
-      "command": "webpack --config config/webpack/webpack.config.babel.js",
-      "env": {
-        "BUILD": "production",
-        "MINIMIZE": "true",
-        "TARGET_ENV": "web"
-      }
-    },
-    "webpack-dev-server": {
-      "command": "webpack-dev-server --config config/webpack/webpack.config.babel.js --port 9100 --content-base build/",
-      "env": {
-        "BUILD": "development"
-      }
-    }
   }
 }

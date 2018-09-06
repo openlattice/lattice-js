@@ -2,8 +2,6 @@
  * @flow
  */
 
-import FullyQualifiedName from './FullyQualifiedName';
-
 import AccessCheck, { AccessCheckBuilder } from './AccessCheck';
 import Ace, { AceBuilder } from './Ace';
 import Acl, { AclBuilder } from './Acl';
@@ -16,6 +14,7 @@ import DataGraph, { DataGraphBuilder } from './DataGraph';
 import EntityDataKey, { EntityDataKeyBuilder } from './EntityDataKey';
 import EntitySet, { EntitySetBuilder } from './EntitySet';
 import EntityType, { EntityTypeBuilder } from './EntityType';
+import FullyQualifiedName from './FullyQualifiedName';
 import LinkingEntitySet, { LinkingEntitySetBuilder } from './LinkingEntitySet';
 import LinkingEntityType, { LinkingEntityTypeBuilder } from './LinkingEntityType';
 import LinkingRequest, { LinkingRequestBuilder } from './LinkingRequest';
@@ -72,5 +71,5 @@ export {
   Role,
   RoleBuilder,
   Schema,
-  SchemaBuilder
+  SchemaBuilder,
 };
