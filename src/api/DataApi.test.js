@@ -157,7 +157,7 @@ function createOrMergeEntityData() {
 
     const validParams = [mockEntitySetId, mockEntityData];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${SET_PATH}?${SET_ID}=${mockEntitySetId}`, mockEntityData];
+    const axiosParams = [`/${SET_PATH}/?${SET_ID}=${mockEntitySetId}`, mockEntityData];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
