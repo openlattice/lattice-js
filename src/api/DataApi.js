@@ -274,9 +274,9 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
  * @return {Promise} - a Promise that resolves with the requested entity data
  *
  * @example
- * DataApi.getEntity("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
+ * DataApi.getEntityData("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
  */
-export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+export function getEntityData(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -302,7 +302,16 @@ export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
 }
 
 /**
- * `POST /data/entitydata/{entitySetId}`
+ * @deprecated
+ */
+export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+
+  LOG.error('DataApi.getEntity() is deprecated. Please use DataApi.getEntityData() instead.');
+  return getEntityData(entitySetId, entityKeyId);
+}
+
+/**
+ * `POST /data/set/{entitySetId}`
  *
  * Gets all data for the given EntitySet UUID with respect to the given filters.
  *

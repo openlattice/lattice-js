@@ -21,6 +21,8 @@ import {
   UPDATE_PATH
 } from '../constants/UrlConstants';
 
+import type { Permission } from '../constants/types/PermissionTypes';
+
 const LOG = new Logger('AppApi');
 
 /**
