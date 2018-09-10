@@ -62,7 +62,7 @@ describe('DataApi', () => {
   createAssociations();
   createEntityAndAssociationData();
   createOrMergeEntityData();
-  getEntity();
+  getEntityData();
   getEntitySetData();
   getEntitySetDataFileUrl();
   getEntitySetSize();
@@ -167,11 +167,11 @@ function createOrMergeEntityData() {
   });
 }
 
-function getEntity() {
+function getEntityData() {
 
-  describe('getEntity()', () => {
+  describe('getEntityData()', () => {
 
-    const apiToTest = DataApi.getEntity;
+    const apiToTest = DataApi.getEntityData;
     const mockEntitySetId = genRandomUUID();
     const mockEntityKeyId = genRandomUUID();
 

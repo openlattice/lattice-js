@@ -1,9 +1,9 @@
 # Release Process :rocket:
 
 #### 1. Get everything onto `develop`
-All changes that need to go out in a release must be merged into the `develop` branch. 
+All changes that need to go out in a release must be merged into the `develop` branch.
 
-#### 2. Open a new Pull Request titled `changes for the next release`
+#### 2. Open a new Pull Request titled `changes for the next release` or `YYYY-MM-DD release`
 Once all necessary changes are on `develop`, it's time to open a new Pull Request to merge `develop` into `master`. Set the `base` branch as `master`, set the `compare` branch as `develop`, and please title this Pull Request:
 
     changes for the next release
@@ -13,7 +13,7 @@ Once all necessary changes are on `develop`, it's time to open a new Pull Reques
 #### 3. Run the release script
 The release script **should only be run from the master branch**. Checkout the master branch locally, `pull` in all latest changes, and confirm that the changes from the previous Pull Request made it into your local `master` branch.
 
-Before we run the release script, we need to decide whether this is a `major`, `minor`, or `patch` release. 
+Before we run the release script, we need to decide whether this is a `major`, `minor`, or `patch` release.
 
 We're trying to follow `SemVer`, so please make sure you're familiar with the philosophy. Here's a few good resource:
 
@@ -29,7 +29,7 @@ Please take note of the release version; you'll see things like `releasing v0.1.
 
 **IMPORTANT:** We're not done yet!
 
-#### 4. Open a new Pull Request titled `changes from release v0.1.2`
+#### 4. Open a new Pull Request titled `changes from release v0.1.2` or `v0.1.2 release`
 Once the release script finishes, it's time to open a new Pull Request to merge `master` into `develop`. Set the `base` branch as `develop`, set the `compare` branch as `master`, and please title this Pull Request:
 
     changes from release {version}
