@@ -53,6 +53,11 @@ module.exports = (env) => {
     __VERSION__: JSON.stringify(`v${PACKAGE.version}`),
   });
 
+  // https://github.com/moment/moment/issues/2373
+  // https://stackoverflow.com/a/25426019/196921
+  // https://github.com/facebookincubator/create-react-app/pull/2187
+  const IGNORE_MOMENT_LOCALES = new Webpack.IgnorePlugin(/^\.\/locale$/, /moment$/);
+
   /*
    * base webpack config
    */
@@ -85,6 +90,7 @@ module.exports = (env) => {
     plugins: [
       DEFINE_PLUGIN,
       BANNER_PLUGIN,
+      IGNORE_MOMENT_LOCALES,
     ],
     resolve: {
       extensions: ['.js'],
