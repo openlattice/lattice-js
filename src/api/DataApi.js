@@ -32,9 +32,9 @@ import {
   ASSOCIATION_PATH,
   COUNT_PATH,
   FILE_TYPE,
-  PARTIAL,
   SET_ID,
   SET_PATH,
+  TYPE_PATH
 } from '../constants/UrlConstants';
 
 import {
@@ -504,10 +504,10 @@ export function replaceEntityData(entitySetId :UUID, entities :Object, partial :
     }
   }
 
-  const partialReplace :string = (partial === true) ? 'true' : 'false';
+  const replaceType :string = (partial === true) ? 'PartialReplace' : 'Replace';
 
   return getApiAxiosInstance(DATA_API)
-    .put(`/${SET_PATH}/${entitySetId}?${PARTIAL}=${partialReplace}`, entities)
+    .put(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${replaceType}`, entities)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
