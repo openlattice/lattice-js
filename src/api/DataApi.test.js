@@ -8,9 +8,9 @@ import { MOCK_DATA_EDGE_KEY_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/Mock
 import {
   ASSOCIATION_PATH,
   COUNT_PATH,
-  PARTIAL,
   SET_ID,
   SET_PATH,
+  TYPE_PATH
 } from '../constants/UrlConstants';
 
 import {
@@ -368,13 +368,13 @@ function replaceEntityData() {
 
       test('partial=true', () => {
         const apiInvocationParams = [mockEntitySetId, mockEntityData, true];
-        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${PARTIAL}=true`, mockEntityData];
+        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=PartialReplace`, mockEntityData];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
       });
 
       test('partial=false', () => {
         const apiInvocationParams = [mockEntitySetId, mockEntityData, false];
-        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${PARTIAL}=false`, mockEntityData];
+        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=Replace`, mockEntityData];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
       });
     });
