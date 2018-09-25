@@ -28,6 +28,8 @@ import { DATA_API } from '../constants/ApiNames';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 
+import EntityUpdateTypes from '../constants/types/EntityUpdateTypes';
+
 import {
   ASSOCIATION_PATH,
   COUNT_PATH,
@@ -504,7 +506,7 @@ export function replaceEntityData(entitySetId :UUID, entities :Object, partial :
     }
   }
 
-  const replaceType :string = (partial === true) ? 'PartialReplace' : 'Replace';
+  const replaceType :string = (partial === true) ? EntityUpdateTypes.PartialReplace : EntityUpdateTypes.Replace;
 
   return getApiAxiosInstance(DATA_API)
     .put(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${replaceType}`, entities)
