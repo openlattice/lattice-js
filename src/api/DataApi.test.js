@@ -5,12 +5,14 @@ import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
 import { MOCK_DATA_EDGE_KEY_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
 
+import EntityUpdateTypes from '../constants/types/EntityUpdateTypes';
+
 import {
   ASSOCIATION_PATH,
   COUNT_PATH,
-  PARTIAL,
   SET_ID,
   SET_PATH,
+  TYPE_PATH
 } from '../constants/UrlConstants';
 
 import {
@@ -366,15 +368,21 @@ function replaceEntityData() {
     // TODO: add tests to validate "partial" query param is being set correctly for invalid values
     describe('should send a PUT request with the correct params', () => {
 
-      test('partial=true', () => {
+      test('type=PartialReplace', () => {
         const apiInvocationParams = [mockEntitySetId, mockEntityData, true];
-        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${PARTIAL}=true`, mockEntityData];
+        const expectedAxiosParams = [
+          `/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=${EntityUpdateTypes.PartialReplace}`,
+          mockEntityData
+        ];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
       });
 
-      test('partial=false', () => {
+      test('type=Replace', () => {
         const apiInvocationParams = [mockEntitySetId, mockEntityData, false];
-        const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}?${PARTIAL}=false`, mockEntityData];
+        const expectedAxiosParams = [
+          `/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=${EntityUpdateTypes.Replace}`,
+          mockEntityData
+        ];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
       });
     });
