@@ -2373,6 +2373,38 @@ export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<*> {
 }
 
 /**
+ * `GET /edm/entity/set/property/type`
+ *
+ * Returns all property type metadata for the requested entity sets
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {UUID[]} entitySetIds
+ * @return {Promise}
+ *
+ * @example
+ * EntityDataModelApi.getPropertyMetadataForEntitySets(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
+ */
+export function getPropertyMetadataForEntitySets(entitySetIds :UUID[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuidArray(entitySetIds)) {
+    errorMsg = 'invalid parameter: entitySetIds must be a valid UUID array';
+    LOG.error(errorMsg, entitySetIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .post(`/${ENTITY_SET_PATH}/${PROPERTY_TYPE_PATH}`, entitySetIds)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /edm/entity/set/{uuid}/property/type/{uuid}`
  *
  * Returns specified property type metadata for an entity set
