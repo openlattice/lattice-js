@@ -4,8 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
 import { MOCK_DATA_EDGE_KEY_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
-
-import EntityUpdateTypes from '../constants/types/EntityUpdateTypes';
+import { UpdateTypes } from '../constants/types';
 
 import {
   ASSOCIATION_PATH,
@@ -371,7 +370,7 @@ function replaceEntityData() {
       test('type=PartialReplace', () => {
         const apiInvocationParams = [mockEntitySetId, mockEntityData, true];
         const expectedAxiosParams = [
-          `/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=${EntityUpdateTypes.PartialReplace}`,
+          `/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=${UpdateTypes.PartialReplace}`,
           mockEntityData
         ];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');
@@ -380,7 +379,7 @@ function replaceEntityData() {
       test('type=Replace', () => {
         const apiInvocationParams = [mockEntitySetId, mockEntityData, false];
         const expectedAxiosParams = [
-          `/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=${EntityUpdateTypes.Replace}`,
+          `/${SET_PATH}/${mockEntitySetId}?${TYPE_PATH}=${UpdateTypes.Replace}`,
           mockEntityData
         ];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'put');

@@ -25,10 +25,9 @@ import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
+import { UpdateTypes } from '../constants/types';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
-
-import EntityUpdateTypes from '../constants/types/EntityUpdateTypes';
 
 import {
   ASSOCIATION_PATH,
@@ -45,6 +44,8 @@ import {
   isValidUuid,
   isValidUuidArray
 } from '../utils/ValidationUtils';
+
+import type { UpdateType } from '../constants/types';
 
 const LOG = new Logger('DataApi');
 
@@ -456,10 +457,10 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
  * @return {Promise} - a Promise that resolves with the count of entities that were updated
  *
  * @example
- * DataApi.replaceEntityData(
+ * DataApi.updateEntityData(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   {
- *     "ec6865e6-e60e-424b-a071-6a9c1603d735": {
+ *     "219f0000-0000-0000-8000-000000000000": {
  *       "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
  *     }
@@ -467,7 +468,7 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
  *   false
  * );
  */
-export function replaceEntityData(entitySetId :UUID, entities :Object, partial :boolean = false) :Promise<*> {
+export function updateEntityData(entitySetId :UUID, entities :Object, updateType :UpdateType) :Promise<*> {
 
   let errorMsg = '';
 
@@ -506,15 +507,30 @@ export function replaceEntityData(entitySetId :UUID, entities :Object, partial :
     }
   }
 
-  const replaceType :string = (partial === true) ? EntityUpdateTypes.PartialReplace : EntityUpdateTypes.Replace;
+  if (!isNonEmptyString(updateType) || !UpdateTypes[updateType]) {
+    errorMsg = 'invalid parameter: updateType must be a valid UpdateType';
+    LOG.error(errorMsg, updateType);
+    return Promise.reject(errorMsg);
+  }
 
   return getApiAxiosInstance(DATA_API)
-    .put(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${replaceType}`, entities)
+    .put(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${updateType}`, entities)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
     });
+}
+
+/**
+ * @deprecated
+ */
+export function replaceEntityData(entitySetId :UUID, entities :Object, partial :boolean = false) :Promise<*> {
+
+  LOG.error('DataApi.replaceEntityData() is deprecated. Please use DataApi.updateEntityData() instead.');
+
+  const updateType :UpdateType = (partial === true) ? UpdateTypes.PartialReplace : UpdateTypes.Replace;
+  return updateEntityData(entitySetId, entities, updateType);
 }
 
 /**
@@ -542,6 +558,7 @@ export function replaceEntityData(entitySetId :UUID, entities :Object, partial :
 export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
 
   let errorMsg = '';
+  LOG.warn('DataApi.replaceEntityInEntitySet() is deprecated. Please use DataApi.updateEntityData() instead.');
 
   if (!isValidUuid(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
@@ -596,6 +613,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
 export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
 
   let errorMsg = '';
+  LOG.warn('DataApi.replaceEntityInEntitySetUsingFqns() is deprecated. Please use DataApi.updateEntityData() instead.');
 
   if (!isValidUuid(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
