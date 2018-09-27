@@ -1,15 +1,16 @@
 import { Map } from 'immutable';
 
-import EntityUpdateTypes from './EntityUpdateTypes';
+import UpdateTypes from './UpdateTypes';
 import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 
 const EXPECTED_ENUM = Map({
+  Merge: 'Merge',
   PartialReplace: 'PartialReplace',
-  Replace: 'Replace'
+  Replace: 'Replace',
 }).sortBy((value, key) => key);
 
-describe('EntityUpdateTypes', () => {
+describe('UpdateTypes', () => {
 
-  testEnumIntegrity(EntityUpdateTypes, EXPECTED_ENUM);
+  testEnumIntegrity(UpdateTypes, EXPECTED_ENUM);
 
 });

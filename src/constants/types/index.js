@@ -8,6 +8,7 @@ import PermissionTypes from './PermissionTypes';
 import PrincipalTypes from './PrincipalTypes';
 import RequestStateTypes from './RequestStateTypes';
 import SecurableTypes from './SecurableTypes';
+import UpdateTypes from './UpdateTypes';
 
 import type { Action } from './ActionTypes';
 import type { Analyzer } from './AnalyzerTypes';
@@ -15,6 +16,7 @@ import type { Permission } from './PermissionTypes';
 import type { PrincipalType } from './PrincipalTypes';
 import type { RequestState } from './RequestStateTypes';
 import type { SecurableType } from './SecurableTypes';
+import type { UpdateType } from './UpdateTypes';
 
 export {
   ActionTypes,
@@ -22,7 +24,8 @@ export {
   PermissionTypes,
   PrincipalTypes,
   RequestStateTypes,
-  SecurableTypes
+  SecurableTypes,
+  UpdateTypes,
 };
 
 export type {
@@ -31,5 +34,6 @@ export type {
   Permission,
   PrincipalType,
   RequestState,
-  SecurableType
+  SecurableType,
+  UpdateType,
 };
