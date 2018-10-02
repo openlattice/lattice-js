@@ -447,7 +447,7 @@ export function deleteAppType(appTypeId :UUID) :Promise<*> {
 }
 
 /**
-  * `GET /app/update/{appId}/{appTypeId}`
+  * `POST /app/update/{appId}/{appTypeId}`
   *
   * Adds an app type to an app.
   *
@@ -481,7 +481,7 @@ export function addAppTypeToApp(appId :UUID, appTypeId :UUID) :Promise<*> {
   }
 
   return getApiAxiosInstance(APP_API)
-    .get(`/${UPDATE_PATH}/${appId}/${appTypeId}`)
+    .post(`/${UPDATE_PATH}/${appId}/${appTypeId}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

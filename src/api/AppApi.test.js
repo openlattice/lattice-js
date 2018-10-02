@@ -320,7 +320,7 @@ function testAddAppTypeToApp() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectPostRequest(fnToTest, validParams, axiosParams);
   });
 }
 
