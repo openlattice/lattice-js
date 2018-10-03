@@ -209,6 +209,7 @@ export default class FullyQualifiedName {
    */
   getFullyQualifiedName() :string {
 
+    LOG.warn('getFullyQualifiedName() is deprecated. Please use toString() instead.');
     return this.toString();
   }
 
