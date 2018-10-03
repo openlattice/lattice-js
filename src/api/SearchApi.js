@@ -48,6 +48,7 @@ import {
 const LOG = new Logger('SearchApi');
 
 const ENTITY_TYPE_ID :string = 'entityTypeId';
+const FUZZY :string = 'fuzzy';
 const KEYWORD :string = 'kw';
 const MAX_HITS :string = 'maxHits';
 const NAME :string = 'name';
@@ -295,7 +296,8 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
   const {
     start,
     maxHits,
-    searchTerm
+    searchTerm,
+    fuzzy
   } = searchOptions;
 
   if (!isFinite(start) || start < 0) {
@@ -319,6 +321,10 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
   data[START] = start;
   data[MAX_HITS] = maxHits;
   data[SEARCH_TERM] = searchTerm;
+
+  if (isDefined(fuzzy)) {
+    data[FUZZY] = fuzzy;
+  }
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${entitySetId}`, data)
