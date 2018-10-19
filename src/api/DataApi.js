@@ -20,7 +20,6 @@
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
-import DataEdgeKey, { isValidDataEdgeKeyArray } from '../models/DataEdgeKey';
 import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
