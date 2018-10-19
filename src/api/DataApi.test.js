@@ -124,7 +124,7 @@ function createAssociations() {
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
   });
 }
 
