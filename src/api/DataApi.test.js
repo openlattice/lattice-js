@@ -3,7 +3,7 @@
 import * as AxiosUtils from '../utils/axios';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
-import { MOCK_DATA_EDGE_KEY_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
+import { MOCK_DATA_EDGE_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
 import { UpdateTypes } from '../constants/types';
 
 import {
@@ -116,15 +116,15 @@ function createAssociations() {
   describe('createAssociations()', () => {
 
     const apiToTest = DataApi.createAssociations;
-    const validParams = [[MOCK_DATA_EDGE_KEY_DM]];
+    const validParams = [MOCK_DATA_EDGE_DM];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${ASSOCIATION_PATH}`, [MOCK_DATA_EDGE_KEY_DM]];
+    const axiosParams = [`/${ASSOCIATION_PATH}`, MOCK_DATA_EDGE_DM];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
   });
 }
 

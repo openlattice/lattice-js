@@ -74,6 +74,22 @@ const MOCK_DATA_EDGE_KEY_DM :Object = {
   },
 };
 
+const MOCK_DATA_EDGE_DM :Object = {
+  'a680a1d8-73fb-423c-abd2-fd71965693d2': [{
+    data: {
+      '6a74d45c-9451-4f88-b8c8-a0e27c08b2a2': ['value_1', 'value_2'],
+    },
+    dst: {
+      entitySetId: '69682f1e-6039-44da-8342-522395b43738',
+      entityKeyId: 'cf72e97f-109c-46a1-bb89-93a8753fd7ac'
+    },
+    src: {
+      entitySetId: '5e4a579a-ad72-4902-991c-027d80dcd590',
+      entityKeyId: '5e4a579a-ad72-4902-991c-027d80dcd590'
+    },
+  }]
+};
+
 const MOCK_DATA_SOURCE_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
   title: 'title',
@@ -289,6 +305,7 @@ export {
   MOCK_APP_TYPE_DM,
   MOCK_ASSOCIATION_TYPE_DM,
   MOCK_DATA_EDGE_KEY_DM,
+  MOCK_DATA_EDGE_DM,
   MOCK_DATA_GRAPH_DM,
   MOCK_DATA_SOURCE_DM,
   MOCK_EDM_DM,
