@@ -133,23 +133,21 @@ export function clearEntitySet(entitySetId :UUID) :Promise<*> {
  * @return {Promise} - a Promise that resolves with the count of associations (edges) that were created
  *
  * @example
- * DataApi.createAssociations(
- *  {
- *    a680a1d8-73fb-423c-abd2-fd71965693d2: [{
- *      data: {
- *        '6a74d45c-9451-4f88-b8c8-a0e27c08b2a2': ['value_1', 'value_2'],
- *      },
- *      dst: {
- *        entitySetId: '69682f1e-6039-44da-8342-522395b43738',
- *        entityKeyId: 'cf72e97f-109c-46a1-bb89-93a8753fd7ac'
- *      },
- *      src: {
- *        entitySetId: '5e4a579a-ad72-4902-991c-027d80dcd590',
- *        entityKeyId: '5e4a579a-ad72-4902-991c-027d80dcd590'
- *      },
- *    }]
- *  }
- *);
+ * DataApi.createAssociations({
+ *   "a680a1d8-73fb-423c-abd2-fd71965693d2": [{
+ *     "data": {
+ *       "6a74d45c-9451-4f88-b8c8-a0e27c08b2a2": ["value_1", "value_2"],
+ *     },
+ *     "dst": {
+ *       "entitySetId": "69682f1e-6039-44da-8342-522395b43738",
+ *       "entityKeyId": "cf72e97f-109c-46a1-bb89-93a8753fd7ac"
+ *     },
+ *     "src": {
+ *       "entitySetId": "5e4a579a-ad72-4902-991c-027d80dcd590",
+ *       "entityKeyId": "d66c4c7d-0aa9-43f3-bb80-9ebcbd5e21ea"
+ *     },
+ *   }]
+ * });
  */
 export function createAssociations(associations :Object) :Promise<*> {
 
