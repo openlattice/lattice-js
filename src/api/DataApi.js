@@ -20,7 +20,6 @@
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
-import DataEdgeKey, { isValidDataEdgeKeyArray } from '../models/DataEdgeKey';
 import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
@@ -130,33 +129,35 @@ export function clearEntitySet(entitySetId :UUID) :Promise<*> {
  *
  * @static
  * @memberof lattice.DataApi
- * @param {DataEdgeKey[]} associations
+ * @param {Object} associations
  * @return {Promise} - a Promise that resolves with the count of associations (edges) that were created
  *
  * @example
- * DataApi.createAssociations([
- *   {
- *     "dst": {
- *       "entitySetId": "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *       "entityKeyId": "fae6af98-2675-45bd-9a5b-1619a87235a8"
- *     },
- *     "edge": {
- *       "entitySetId": "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *       "entityKeyId": "e39dfdfa-a3e6-4f1f-b54b-646a723c3085"
- *     },
- *     "src": {
- *       "entitySetId": "8f79e123-3411-4099-a41f-88e5d22d0e8d",
- *       "entityKeyId": "4b08e1f9-4a00-4169-92ea-10e377070220"
- *     },
- *   }
- * ]);
+ * DataApi.createAssociations(
+ *  {
+ *    a680a1d8-73fb-423c-abd2-fd71965693d2: [{
+ *      data: {
+ *        '6a74d45c-9451-4f88-b8c8-a0e27c08b2a2': ['value_1', 'value_2'],
+ *      },
+ *      dst: {
+ *        entitySetId: '69682f1e-6039-44da-8342-522395b43738',
+ *        entityKeyId: 'cf72e97f-109c-46a1-bb89-93a8753fd7ac'
+ *      },
+ *      src: {
+ *        entitySetId: '5e4a579a-ad72-4902-991c-027d80dcd590',
+ *        entityKeyId: '5e4a579a-ad72-4902-991c-027d80dcd590'
+ *      },
+ *    }]
+ *  }
+ *);
  */
-export function createAssociations(associations :DataEdgeKey[]) :Promise<*> {
+export function createAssociations(associations :Object) :Promise<*> {
 
   let errorMsg = '';
+  // TODO: Create a DataEdge Model and DataEdge.test.js - Set validation by mapping UUID to set of DataEdges
 
-  if (!isValidDataEdgeKeyArray(associations)) {
-    errorMsg = 'invalid parameter: associations must be a non-empty array of valid DataEdgeKeys';
+  if (!isNonEmptyObject(associations)) {
+    errorMsg = 'invalid parameter: associations must be a non-empty Object of association EntitySetIds to DataEdges';
     LOG.error(errorMsg, associations);
     return Promise.reject(errorMsg);
   }
