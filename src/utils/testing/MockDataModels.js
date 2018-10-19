@@ -73,6 +73,7 @@ const MOCK_DATA_EDGE_KEY_DM :Object = {
     entitySetId: 'c3dbd929-91c9-4b48-9545-a634038f34ba',
   },
 };
+
 const MOCK_DATA_EDGE_DM :Object = {
   'a680a1d8-73fb-423c-abd2-fd71965693d2': [{
     data: {
@@ -87,7 +88,7 @@ const MOCK_DATA_EDGE_DM :Object = {
       entityKeyId: '5e4a579a-ad72-4902-991c-027d80dcd590'
     },
   }]
-}
+};
 
 const MOCK_DATA_SOURCE_DM :Object = {
   id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
