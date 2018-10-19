@@ -903,7 +903,7 @@ export function getAllEntityTypes() :Promise<*> {
 }
 
 /**
- * `GET /edm/association/type`
+ * `GET /edm/association/type/entity/type`
  *
  * Gets all association EntityType definitions.
  *
@@ -920,7 +920,7 @@ export function getAllAssociationEntityTypes() :Promise<*> {
   // TODO: everything
 
   return getApiAxiosInstance(EDM_API)
-    .get(`/${ASSOCIATION_TYPE_PATH}`)
+    .get(`/${ASSOCIATION_TYPE_PATH}/${ENTITY_TYPE_PATH}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
