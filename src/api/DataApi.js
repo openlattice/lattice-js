@@ -123,7 +123,7 @@ export function clearEntitySet(entitySetId :UUID) :Promise<*> {
 }
 
 /**
- * `PUT /data/association`
+ * `POST /data/association`
  *
  * Creates associations (edges) from the given DataEdgeKeys.
  *
@@ -163,7 +163,7 @@ export function createAssociations(associations :Object) :Promise<*> {
   }
 
   return getApiAxiosInstance(DATA_API)
-    .put(`/${ASSOCIATION_PATH}`, associations)
+    .post(`/${ASSOCIATION_PATH}`, associations)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
