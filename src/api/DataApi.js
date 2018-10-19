@@ -156,7 +156,7 @@ export function createAssociations(associations :Object) :Promise<*> {
   let errorMsg = '';
   // TODO: Create a DataEdge Model and DataEdge.test.js - Set validation by mapping UUID to set of DataEdges
 
-  if (typeof associations !== 'object') {
+  if (!isNonEmptyObject(associations)) {
     errorMsg = 'invalid parameter: associations must be a non-empty Object of association EntitySetIds to DataEdges';
     LOG.error(errorMsg, associations);
     return Promise.reject(errorMsg);
