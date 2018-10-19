@@ -89,7 +89,7 @@ const LOG = new Logger('DataIntegrationApi');
  *   ]
  * );
  */
-export default function createEntityAndAssociationData(bulkDataCreation :Object) :Promise<*> {
+export function createEntityAndAssociationData(bulkDataCreation :Object) :Promise<*> {
 
   let errorMsg = '';
 
