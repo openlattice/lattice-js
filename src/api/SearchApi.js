@@ -256,6 +256,70 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<*> {
 }
 
 /**
+ * `PATCH /search`
+ *
+ * Executes an entity set data search according to the specified constraints.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchConstraints
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.executeSearch(
+ *   {
+ *     "entitySetIds": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *     "searchTerm": "Lattice",
+ *     "start": 0,
+ *     "maxHits": 100,
+ *     "type": "simple"
+ *   }
+ * );
+ */
+export function executeSearch(searchConstraints :Object) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyObject(searchConstraints)) {
+    errorMsg = 'invalid parameter: searchConstraints must be a non-empty object';
+    LOG.error(errorMsg, searchConstraints);
+    return Promise.reject(errorMsg);
+  }
+
+  const {
+    entitySetIds,
+    start,
+    maxHits
+  } = searchConstraints;
+
+  if (!isValidUuidArray(entitySetIds)) {
+    errorMsg = 'invalid parameter: entitySetIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entitySetIds);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(start) || start < 0) {
+    errorMsg = 'invalid property: start must be a positive number';
+    LOG.error(errorMsg, start);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isFinite(maxHits) || maxHits < 0) {
+    errorMsg = 'invalid property: maxHits must be a positive number';
+    LOG.error(errorMsg, maxHits);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .patch('/', searchConstraints)
+    .then(axiosResponse => addIDField(axiosResponse.data))
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `POST /search/{entitySetId}`
  *
  * Executes a search over the data of the given EntitySet to find matches for the given search term.
