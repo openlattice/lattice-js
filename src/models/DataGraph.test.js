@@ -1,7 +1,7 @@
 import { Map, Set } from 'immutable';
 
 import DataGraph, { DataGraphBuilder, isValidDataGraph as isValid } from './DataGraph';
-import { INVALID_PARAMS } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_EMPTY_OBJECT_ALLOWED } from '../utils/testing/Invalid';
 
 import {
   MOCK_DATA_GRAPH_DM as MOCK_DM,
@@ -20,7 +20,7 @@ describe('DataGraph', () => {
     describe('setAssociations()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_OBJECT_ALLOWED.forEach((invalidInput) => {
           expect(() => {
             (new DataGraphBuilder()).setAssociations(invalidInput);
           }).toThrow();
@@ -139,7 +139,7 @@ describe('DataGraph', () => {
       });
 
       test('should return false when given an object literal with an invalid "associations" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_OBJECT_ALLOWED.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_DM, { associations: invalidInput }))).toEqual(false);
         });
       });
@@ -151,7 +151,7 @@ describe('DataGraph', () => {
       });
 
       test('should return false when given an instance with an invalid "associations" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_EMPTY_OBJECT_ALLOWED.forEach((invalidInput) => {
           expect(isValid(
             new DataGraph(
               invalidInput, mockEntities

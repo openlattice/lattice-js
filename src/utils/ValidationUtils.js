@@ -3,6 +3,7 @@
  */
 
 import isArray from 'lodash/isArray';
+import isPlainObject from 'lodash/isPlainObject';
 
 import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
@@ -60,6 +61,31 @@ export function isValidPermissionArray(permissions :any[]) :boolean {
 export function isValidMultimap(value :any, validatorFn :ValidatorFn) :boolean {
 
   if (!isNonEmptyObject(value)) {
+    return false;
+  }
+
+  const keys :any[] = Object.keys(value);
+
+  // validate all keys are valid according to the validator function
+  for (let index1 = 0; index1 < keys.length; index1 += 1) {
+    if (!validatorFn(keys[index1])) {
+      return false;
+    }
+  }
+
+  // validate all values are arrays
+  for (let index2 = 0; index2 < keys.length; index2 += 1) {
+    if (!isArray(value[keys[index2]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function isValidOrEmptyMultimap(value :any, validatorFn :ValidatorFn) :boolean {
+
+  if (!isPlainObject(value)) {
     return false;
   }
 
