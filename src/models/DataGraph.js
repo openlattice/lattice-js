@@ -5,7 +5,7 @@ import { Map, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidMultimap, isValidUuid } from '../utils/ValidationUtils';
+import { isValidMultimap, isValidOrEmptyMultimap, isValidUuid } from '../utils/ValidationUtils';
 
 
 const LOG = new Logger('DataGraph');
@@ -56,7 +56,7 @@ export class DataGraphBuilder {
 
   setAssociations(associations :Object) :DataGraphBuilder {
 
-    if (!isValidMultimap(associations, isValidUuid)) {
+    if (!isValidOrEmptyMultimap(associations, isValidUuid)) {
       throw new Error('invalid parameter: associations must be a non-empty object where all values are multimaps');
     }
 
