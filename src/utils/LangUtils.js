@@ -45,7 +45,7 @@ function isNonEmptyString(value :any) :boolean {
   return isString(value) && !isEmpty(trim(value));
 }
 
-function isNonEmptyStringArray(value :string[]) {
+function isNonEmptyStringArray(value :string[]) :boolean {
 
   if (!isNonEmptyArray(value)) {
     return false;
