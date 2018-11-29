@@ -34,7 +34,7 @@
  * // usage:
  * fqn.getNamespace(); // "LATTICE"
  * fqn.getName(); // "Data"
- * fqn.getFullyQualifiedName(); // "LATTICE.Data"
+ * fqn.toString(); // "LATTICE.Data"
  */
 
 import isObject from 'lodash/isObject';
@@ -46,12 +46,7 @@ import { isNonEmptyString } from '../utils/LangUtils';
 
 const LOG = new Logger('FullyQualifiedName');
 
-type FqnObjectLiteral = {
-  namespace :string;
-  name :string;
-};
-
-function parseFqnString(fullyQualifiedName :string) :FqnObjectLiteral {
+function parseFqnString(fullyQualifiedName :string) :FQNObject {
 
   if (!isNonEmptyString(fullyQualifiedName)) {
     return { namespace: '', name: '' };
@@ -72,7 +67,7 @@ function parseFqnString(fullyQualifiedName :string) :FqnObjectLiteral {
   };
 }
 
-function processArgs(...args :any[]) :FqnObjectLiteral {
+function processArgs(...args :any[]) :FQNObject {
 
   let namespace :string = '';
   let name :string = '';
@@ -213,7 +208,7 @@ export default class FullyQualifiedName {
     return this.toString();
   }
 
-  toObject() :FqnObjectLiteral {
+  toObject() :FQNObject {
 
     return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
       ? {
@@ -238,5 +233,3 @@ export default class FullyQualifiedName {
     return this.toString();
   }
 }
-
-export type FQN = FullyQualifiedName | FqnObjectLiteral;
