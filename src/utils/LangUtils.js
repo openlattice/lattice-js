@@ -10,42 +10,42 @@ import isString from 'lodash/isString';
 import isUndefined from 'lodash/isUndefined';
 import trim from 'lodash/trim';
 
-export function isDefined(value :any) :boolean {
+function isDefined(value :any) :boolean {
 
   return !isNull(value) && !isUndefined(value);
 }
 
-export function isEmptyArray(value :any) :boolean {
+function isEmptyArray(value :any) :boolean {
 
   return isArray(value) && isEmpty(value);
 }
 
-export function isEmptyObject(value :any) :boolean {
+function isEmptyObject(value :any) :boolean {
 
   return isPlainObject(value) && isEmpty(value);
 }
 
-export function isEmptyString(value :any) :boolean {
+function isEmptyString(value :any) :boolean {
 
   return isString(value) && isEmpty(value);
 }
 
-export function isNonEmptyArray(value :any) :boolean {
+function isNonEmptyArray(value :any) :boolean {
 
   return isArray(value) && !isEmpty(value);
 }
 
-export function isNonEmptyObject(value :any) :boolean {
+function isNonEmptyObject(value :any) :boolean {
 
   return isPlainObject(value) && !isEmpty(value);
 }
 
-export function isNonEmptyString(value :any) :boolean {
+function isNonEmptyString(value :any) :boolean {
 
   return isString(value) && !isEmpty(trim(value));
 }
 
-export function isNonEmptyStringArray(value :string[]) {
+function isNonEmptyStringArray(value :string[]) {
 
   if (!isNonEmptyArray(value)) {
     return false;
@@ -59,3 +59,14 @@ export function isNonEmptyStringArray(value :string[]) {
 
   return true;
 }
+
+export {
+  isDefined,
+  isEmptyArray,
+  isEmptyObject,
+  isEmptyString,
+  isNonEmptyArray,
+  isNonEmptyObject,
+  isNonEmptyString,
+  isNonEmptyStringArray,
+};
