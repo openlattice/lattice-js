@@ -2,6 +2,7 @@
 
 import BBPromise from 'bluebird';
 
+import isPlainObject from 'lodash/isPlainObject';
 import * as AxiosUtils from '../axios';
 import { INVALID_PARAMS } from './Invalid';
 import { getMockAxiosInstance } from './MockUtils';
@@ -106,9 +107,11 @@ function testApiShouldReturnNullOnInvalidParameters(functionToTest, validParams,
     }
 
     for (let i = 0; i < validParams.length; i += 1) {
-      const invocationParams1 = validParams.slice(0);
-      const invocationParams2 = validParams.slice(0);
       invalidParams[i].forEach((invalidInput) => {
+        // NOTE: JSON.parse(JSON.stringify()) might be too heavy
+        // NOTE: this might be problematic if params are functions / classes
+        const invocationParams1 = JSON.parse(JSON.stringify(validParams));
+        const invocationParams2 = JSON.parse(JSON.stringify(validParams));
         invocationParams1[i] = invalidInput;
         invocationParams2[i] = [invalidInput];
         expect(functionToTest(...invocationParams1)).toEqual(null);
@@ -128,31 +131,46 @@ function testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams = 
       throw new Error('validParams.length should equal invalidParams.length');
     }
 
-    const invocations = [];
+    const invocationParams = [];
 
     if (validParams.length === 0) {
       INVALID_PARAMS.forEach((invalidInput) => {
-        invocations.push([invalidInput]);
-        invocations.push([[invalidInput]]);
+        invocationParams.push([invalidInput]);
+        invocationParams.push([[invalidInput]]);
       });
     }
     else {
+      // NOTE: JSON.parse(JSON.stringify()) might be too heavy
+      // NOTE: this might be problematic if params are functions / classes
       for (let i = 0; i < validParams.length; i += 1) {
-        const invocationParams1 = validParams.slice(0);
-        const invocationParams2 = validParams.slice(0);
-        invalidParams[i].forEach((invalidInput) => {
-          invocationParams1[i] = invalidInput;
-          invocationParams2[i] = [invalidInput];
-          invocations.push(invocationParams1.slice(0));
-          invocations.push(invocationParams2.slice(0));
-        });
+        if (isPlainObject(invalidParams[i])) {
+          Object.keys(invalidParams[i]).forEach((key) => {
+            invalidParams[i][key].forEach((invalidValue) => {
+              const invocationParams1 = JSON.parse(JSON.stringify(validParams));
+              const invocationParams2 = JSON.parse(JSON.stringify(validParams));
+              invocationParams1[i][key] = invalidValue;
+              invocationParams2[i][key] = [invalidValue];
+              invocationParams.push(invocationParams1);
+              invocationParams.push(invocationParams2);
+            });
+          });
+        }
+        else {
+          invalidParams[i].forEach((invalidInput) => {
+            const invocationParams1 = JSON.parse(JSON.stringify(validParams));
+            const invocationParams2 = JSON.parse(JSON.stringify(validParams));
+            invocationParams1[i] = invalidInput;
+            invocationParams2[i] = [invalidInput];
+            invocationParams.push(invocationParams1);
+            invocationParams.push(invocationParams2);
+          });
+        }
       }
     }
 
-
-    invocations.forEach((invocationParams) => {
+    invocationParams.forEach((params) => {
       expect(() => {
-        const result = functionToTest(...invocationParams);
+        const result = functionToTest(...params);
         if (result instanceof Promise) {
           result.catch(() => {});
         }
@@ -171,31 +189,57 @@ function testApiShouldRejectOnInvalidParameters(functionToTest, validParams, inv
       throw new Error('validParams.length should equal invalidParams.length');
     }
 
-    const promises = [];
+    const invocationParams = [];
 
     if (validParams.length === 0) {
-      INVALID_PARAMS.forEach((invalidInput) => {
-        promises.push(functionToTest(invalidInput));
-        promises.push(functionToTest([invalidInput]));
+      INVALID_PARAMS.forEach((invalidValue) => {
+        invocationParams.push(invalidValue);
+        invocationParams.push([invalidValue]);
       });
     }
     else {
+      // NOTE: JSON.parse(JSON.stringify()) might be too heavy
+      // NOTE: this might be problematic if params are functions / classes
       for (let i = 0; i < validParams.length; i += 1) {
-        const invocationParams1 = validParams.slice(0);
-        const invocationParams2 = validParams.slice(0);
-        invalidParams[i].forEach((invalidInput) => {
-          invocationParams1[i] = invalidInput;
-          invocationParams2[i] = [invalidInput];
-          promises.push(functionToTest(...invocationParams1));
-          promises.push(functionToTest(...invocationParams2));
-        });
+        if (isPlainObject(invalidParams[i])) {
+          Object.keys(invalidParams[i]).forEach((key) => {
+            invalidParams[i][key].forEach((invalidValue) => {
+              const invocationParams1 = JSON.parse(JSON.stringify(validParams));
+              const invocationParams2 = JSON.parse(JSON.stringify(validParams));
+              invocationParams1[i][key] = invalidValue;
+              invocationParams2[i][key] = [invalidValue];
+              invocationParams.push(invocationParams1);
+              invocationParams.push(invocationParams2);
+            });
+          });
+        }
+        else {
+          invalidParams[i].forEach((invalidValue) => {
+            const invocationParams1 = JSON.parse(JSON.stringify(validParams));
+            const invocationParams2 = JSON.parse(JSON.stringify(validParams));
+            invocationParams1[i] = invalidValue;
+            invocationParams2[i] = [invalidValue];
+            invocationParams.push(invocationParams1);
+            invocationParams.push(invocationParams2);
+          });
+        }
       }
     }
+
+    let failedParams;
+    const promises = [];
+    invocationParams.forEach((params) => {
+      promises.push(
+        functionToTest(...params).then(() => {
+          failedParams = JSON.parse(JSON.stringify(params));
+        })
+      );
+    });
 
     // if any promises are fulfilled, fail
     BBPromise.any(promises)
       .then(() => {
-        done.fail();
+        done.fail(failedParams);
       })
       .catch(() => {
         done();

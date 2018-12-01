@@ -29,7 +29,7 @@
     "immutable": "4.0.0-rc.9",
     "lodash": "^4.17.10",
     "loglevel": "^1.6.0",
-    "validator": "^10.7.0"
+    "validator": "^10.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -56,7 +56,7 @@
     "eslint-plugin-flowtype": "^3.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jest": "^22.0.0",
-    "flow-bin": "^0.85.0",
+    "flow-bin": "^0.87.0",
     "jest": "^23.5.0",
     "npm-run-all": "^4.1.0",
     "rimraf": "2.6.0",
@@ -69,7 +69,8 @@
     "@babel/polyfill": "^7.0.0"
   },
   "scripts": {
-    "build": "webpack --config config/webpack/webpack.config.js --env.production",
+    "build:dev": "webpack --config config/webpack/webpack.config.js --env.development",
+    "build:prod": "webpack --config config/webpack/webpack.config.js --env.production",
     "clean": "rimraf build/*",
     "flow": "flow check",
     "lib": "webpack-dev-server --config config/webpack/webpack.config.js --env.development --port 9000 --content-base build/",
@@ -78,7 +79,7 @@
     "release:minor": "npm version minor -m \"releasing v%s\" && npm publish",
     "release:patch": "npm version patch -m \"releasing v%s\" && npm publish",
     "preversion": "npm-run-all lint test",
-    "version": "npm-run-all clean build && git add -A package.json build/",
+    "version": "npm-run-all clean build:prod && git add -A package.json build/",
     "postversion": "git push && git push --tags",
     "test": "jest --config config/jest/jest.config.js",
     "test:travis": "jest --maxWorkers=4 --config config/jest/jest.config.js",
