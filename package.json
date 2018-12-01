@@ -29,7 +29,7 @@
     "immutable": "4.0.0-rc.9",
     "lodash": "^4.17.10",
     "loglevel": "^1.6.0",
-    "validator": "^10.7.0"
+    "validator": "^10.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
