@@ -19,6 +19,7 @@
 
 import isFinite from 'lodash/isFinite';
 import isString from 'lodash/isString';
+import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
@@ -40,13 +41,19 @@ import {
 
 import {
   isDefined,
+  isEmptyArray,
   isNonEmptyArray,
   isNonEmptyObject,
-  isNonEmptyString
+  isNonEmptyString,
 } from '../utils/LangUtils';
 
 const LOG = new Logger('SearchApi');
 
+const DESTINATION :string = 'dst';
+const DESTINATION_ES_IDS = 'destinationEntitySetIds';
+const EDGE :string = 'edge';
+const EDGE_ES_IDS = 'edgeEntitySetIds';
+const ENTITY_KEY_IDS :string = 'entityKeyIds';
 const ENTITY_TYPE_ID :string = 'entityTypeId';
 const FUZZY :string = 'fuzzy';
 const KEYWORD :string = 'kw';
@@ -56,6 +63,8 @@ const NAMESPACE :string = 'namespace';
 const PROPERTY_TYPE_IDS :string = 'pid';
 const SEARCH_FIELDS :string = 'searchFields';
 const SEARCH_TERM :string = 'searchTerm';
+const SOURCE :string = 'src';
+const SOURCE_ES_IDS = 'sourceEntitySetIds';
 const START :string = 'start';
 
 /* TODO update all frontend projects and remove this garbage */
@@ -898,9 +907,23 @@ export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<*> {
 }
 
 /**
- * TODO: everything
+ * `GET /search/{entitySetId}/{entityKeyId}`
+ *
+ * Executes a search for all neighbors of an entity.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @returns {Promise}
+ *
+ * @example
+ * SearchApi.searchEntityNeighbors(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "11442cb3-99dc-4842-8736-6c76e6fcc7c4"
+ * );
  */
-export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promise<*> {
+export function searchEntityNeighbors(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -910,14 +933,14 @@ export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promis
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityId)) {
-    errorMsg = 'invalid parameter: entityId must be a valid UUID';
-    LOG.error(errorMsg, entityId);
+  if (!isValidUuid(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(SEARCH_API)
-    .get(`/${entitySetId}/${entityId}`)
+    .get(`/${entitySetId}/${entityKeyId}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -925,26 +948,33 @@ export function searchEntityNeighbors(entitySetId :UUID, entityId :UUID) :Promis
     });
 }
 
-
 /**
- * `POST /search/{entityTypeId}/neighbors`
+ * `POST /search/{entitySetId}/neighbors/advanced`
  *
- * Executes a search for all neighbors of all the entities specified, where all entities belong to the
- * same entity set.
+ * Executes a search for all neighbors of multiple entities of the same EntitySet that are connected by an association,
+ * optinally filtered by the given source/destination/edge EntitySet ids
  *
  * @static
  * @memberof lattice.SearchApi
  * @param {UUID} entitySetId
- * @param {UUID[]} entityIds
+ * @param {Object} filter
  * @returns {Promise}
  *
  * @example
- * SearchApi.searchEntityNeighborsBulk("ec6865e6-e60e-424b-a071-6a9c1603d735",
- * ["3bf2a30d-fda0-4389-a1e6-8546b230efad","a62a47fe-e6a7-4536-85f1-fe935902a536"]);
+ * SearchApi.searchEntityNeighborsFilter(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "entityKeyIds": ["3bf2a30d-fda0-4389-a1e6-8546b230efad"],
+ *     "destinationEntitySetIds": ["11442cb3-99dc-4842-8736-6c76e6fcc7c4"],
+ *     "edgeEntitySetIds": ["f8c6c56a-ad39-4587-b216-def81615d69c"],
+ *     "sourceEntitySetIds": ["6317fab5-905d-42f4-8d67-2b78b3c56c77"],
+ *   }
+ * );
  */
-export function searchEntityNeighborsBulk(entitySetId :UUID, entityIds :UUID[]) :Promise<*> {
+export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Object) :Promise<*> {
 
   let errorMsg = '';
+  const data :Object = {};
 
   if (!isValidUuid(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
@@ -952,17 +982,86 @@ export function searchEntityNeighborsBulk(entitySetId :UUID, entityIds :UUID[]) 
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuidArray(entityIds)) {
-    errorMsg = 'invalid parameter: entityIds must be a non-empty array of valid UUIDs';
-    LOG.error(errorMsg, entityIds);
+  if (!isNonEmptyObject(filter)) {
+    errorMsg = 'invalid parameter: filter must be a non-empty object';
+    LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
+  if (!isValidUuidArray(filter[ENTITY_KEY_IDS])) {
+    errorMsg = `invalid parameter: filter.${ENTITY_KEY_IDS} must be a non-empty set of valid UUIDs`;
+    LOG.error(errorMsg, filter[ENTITY_KEY_IDS]);
+    return Promise.reject(errorMsg);
+  }
+
+  const entityKeyIds :UUID[] = Set().withMutations((set :Set<UUID>) => (
+    filter[ENTITY_KEY_IDS].forEach((id :UUID) => set.add(id))
+  )).toJS();
+
+  let destinationEntitySetIds :UUID[];
+  if (isUndefined(filter[DESTINATION_ES_IDS]) || isEmptyArray(filter[DESTINATION_ES_IDS])) {
+    destinationEntitySetIds = [];
+  }
+  else if (!isValidUuidArray(filter[DESTINATION_ES_IDS])) {
+    errorMsg = `invalid parameter: filter.${DESTINATION_ES_IDS} must be a set of valid UUIDs`;
+    LOG.error(errorMsg, filter[DESTINATION_ES_IDS]);
+    return Promise.reject(errorMsg);
+  }
+  else {
+    destinationEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[DESTINATION_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+  }
+
+  let edgeEntitySetIds :UUID[];
+  if (isUndefined(filter[EDGE_ES_IDS]) || isEmptyArray(filter[EDGE_ES_IDS])) {
+    edgeEntitySetIds = [];
+  }
+  else if (!isValidUuidArray(filter[EDGE_ES_IDS])) {
+    errorMsg = `invalid parameter: filter.${EDGE_ES_IDS} must be a set of valid UUIDs`;
+    LOG.error(errorMsg, filter[EDGE_ES_IDS]);
+    return Promise.reject(errorMsg);
+  }
+  else {
+    edgeEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[EDGE_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+  }
+
+  let sourceEntitySetIds :UUID[];
+  if (isUndefined(filter[SOURCE_ES_IDS]) || isEmptyArray(filter[SOURCE_ES_IDS])) {
+    sourceEntitySetIds = [];
+  }
+  else if (!isValidUuidArray(filter[SOURCE_ES_IDS])) {
+    errorMsg = `invalid parameter: filter.${SOURCE_ES_IDS} must be a set of valid UUIDs`;
+    LOG.error(errorMsg, filter[SOURCE_ES_IDS]);
+    return Promise.reject(errorMsg);
+  }
+  else {
+    sourceEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[SOURCE_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+  }
+
+  data[DESTINATION] = destinationEntitySetIds;
+  data[EDGE] = edgeEntitySetIds;
+  data[ENTITY_KEY_IDS] = entityKeyIds;
+  data[SOURCE] = sourceEntitySetIds;
+
   return getApiAxiosInstance(SEARCH_API)
-    .post(`/${entitySetId}/${NEIGHBORS_PATH}`, entityIds)
+    .post(`/${entitySetId}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`, data)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
     });
+}
+
+/**
+ * @deprecated
+ */
+export function searchEntityNeighborsBulk(entitySetId :UUID, entityKeyIds :UUID[]) :Promise<*> {
+
+  LOG.warn('searchEntityNeighborsBulk() is deprecated. Please use searchEntityNeighborsWithFilter() instead.');
+  return searchEntityNeighborsWithFilter(entitySetId, { entityKeyIds });
 }

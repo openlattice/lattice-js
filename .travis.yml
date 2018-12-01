@@ -22,7 +22,7 @@ before_script:
   - npm run test:travis
 
 script:
-  - npm run build
+  - npm run build:prod
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

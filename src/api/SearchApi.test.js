@@ -3,23 +3,29 @@
 import * as AxiosUtils from '../utils/axios';
 import * as SearchApi from './SearchApi';
 import { SEARCH_API } from '../constants/ApiNames';
-import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
   ADVANCED_PATH,
   FQN_PATH,
+  NEIGHBORS_PATH,
   ORGANIZATIONS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
-  SEARCH_PROPERTY_TYPES_PATH
+  SEARCH_PROPERTY_TYPES_PATH,
 } from '../constants/UrlConstants';
+
+import {
+  INVALID_PARAMS,
+  INVALID_PARAMS_SS,
+  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
+} from '../utils/testing/Invalid';
 
 import {
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
   testApiShouldSendCorrectHttpRequest,
-  testApiShouldUseCorrectAxiosInstance
+  testApiShouldUseCorrectAxiosInstance,
 } from '../utils/testing/TestUtils';
 
 /*
@@ -31,9 +37,10 @@ const MOCK_MAX_HITS = 100;
 const MOCK_NAME = 'NAME';
 const MOCK_NAMESPACE = 'NAMESPACE';
 const MOCK_SEARCH_TERM = genRandomString();
-const MOCK_ENTITY_SET_UUID = genRandomUUID();
-const MOCK_ENTITY_TYPE_UUID = genRandomUUID();
-const MOCK_PROPERTY_TYPE_UUIDS = [genRandomUUID(), genRandomUUID()];
+const MOCK_ENTITY_KEY_ID = genRandomUUID();
+const MOCK_ENTITY_SET_ID = genRandomUUID();
+const MOCK_ENTITY_TYPE_ID = genRandomUUID();
+const MOCK_PROPERTY_TYPE_IDS = [genRandomUUID(), genRandomUUID()];
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
@@ -56,6 +63,9 @@ describe('SearchApi', () => {
   testSearchEntityTypesByFQN();
   testSearchPropertyTypes();
   testSearchPropertyTypesByFQN();
+
+  searchEntityNeighbors();
+  searchEntityNeighborsWithFilter();
 });
 
 function testSearchEntitySetMetaData() {
@@ -102,7 +112,7 @@ function testSearchEntitySetMetaData() {
 
       const searchOptions = {
         searchTerm: MOCK_SEARCH_TERM,
-        entityTypeId: MOCK_ENTITY_TYPE_UUID,
+        entityTypeId: MOCK_ENTITY_TYPE_ID,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -111,7 +121,7 @@ function testSearchEntitySetMetaData() {
         '/',
         {
           kw: MOCK_SEARCH_TERM,
-          entityTypeId: MOCK_ENTITY_TYPE_UUID,
+          entityTypeId: MOCK_ENTITY_TYPE_ID,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -124,7 +134,7 @@ function testSearchEntitySetMetaData() {
 
       const searchOptions = {
         searchTerm: MOCK_SEARCH_TERM,
-        propertyTypeIds: MOCK_PROPERTY_TYPE_UUIDS,
+        propertyTypeIds: MOCK_PROPERTY_TYPE_IDS,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -133,7 +143,7 @@ function testSearchEntitySetMetaData() {
         '/',
         {
           kw: MOCK_SEARCH_TERM,
-          pid: MOCK_PROPERTY_TYPE_UUIDS,
+          pid: MOCK_PROPERTY_TYPE_IDS,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -145,7 +155,7 @@ function testSearchEntitySetMetaData() {
     describe('search by EntityType UUID', () => {
 
       const searchOptions = {
-        entityTypeId: MOCK_ENTITY_TYPE_UUID,
+        entityTypeId: MOCK_ENTITY_TYPE_ID,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -153,7 +163,7 @@ function testSearchEntitySetMetaData() {
       const expectedParameters = [
         '/',
         {
-          entityTypeId: MOCK_ENTITY_TYPE_UUID,
+          entityTypeId: MOCK_ENTITY_TYPE_ID,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -165,7 +175,7 @@ function testSearchEntitySetMetaData() {
     describe('search by PropertyType UUIDs', () => {
 
       const searchOptions = {
-        propertyTypeIds: MOCK_PROPERTY_TYPE_UUIDS,
+        propertyTypeIds: MOCK_PROPERTY_TYPE_IDS,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -173,7 +183,7 @@ function testSearchEntitySetMetaData() {
       const expectedParameters = [
         '/',
         {
-          pid: MOCK_PROPERTY_TYPE_UUIDS,
+          pid: MOCK_PROPERTY_TYPE_IDS,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -192,7 +202,7 @@ function testSearchEntitySetData() {
     const fnToTest = SearchApi.searchEntitySetData;
 
     const validParams = [
-      MOCK_ENTITY_SET_UUID,
+      MOCK_ENTITY_SET_ID,
       {
         searchTerm: MOCK_SEARCH_TERM,
         start: MOCK_START,
@@ -206,7 +216,7 @@ function testSearchEntitySetData() {
     ];
 
     const axiosParams = [
-      `/${MOCK_ENTITY_SET_UUID}`,
+      `/${MOCK_ENTITY_SET_ID}`,
       {
         searchTerm: MOCK_SEARCH_TERM,
         start: MOCK_START,
@@ -232,11 +242,11 @@ function testAdvancedSearchEntitySetData() {
 
     // TODO: searchFields needs to be List<SearchDetails>
     const validParams = [
-      MOCK_ENTITY_SET_UUID,
+      MOCK_ENTITY_SET_ID,
       {
         searchFields: [
-          { [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM },
-          { [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM }
+          { [MOCK_PROPERTY_TYPE_IDS[0]]: MOCK_SEARCH_TERM },
+          { [MOCK_PROPERTY_TYPE_IDS[1]]: MOCK_SEARCH_TERM }
         ],
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
@@ -249,11 +259,11 @@ function testAdvancedSearchEntitySetData() {
     ];
 
     const axiosParams = [
-      `/${ADVANCED_PATH}/${MOCK_ENTITY_SET_UUID}`,
+      `/${ADVANCED_PATH}/${MOCK_ENTITY_SET_ID}`,
       {
         searchFields: [
-          { [MOCK_PROPERTY_TYPE_UUIDS[0]]: MOCK_SEARCH_TERM },
-          { [MOCK_PROPERTY_TYPE_UUIDS[1]]: MOCK_SEARCH_TERM }
+          { [MOCK_PROPERTY_TYPE_IDS[0]]: MOCK_SEARCH_TERM },
+          { [MOCK_PROPERTY_TYPE_IDS[1]]: MOCK_SEARCH_TERM }
         ],
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
@@ -437,6 +447,58 @@ function testSearchPropertyTypesByFQN() {
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       }
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, SEARCH_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+  });
+}
+
+function searchEntityNeighbors() {
+
+  describe('searchEntityNeighbors', () => {
+
+    const fnToTest = SearchApi.searchEntityNeighbors;
+    const validParams = [MOCK_ENTITY_SET_ID, MOCK_ENTITY_KEY_ID];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ENTITY_SET_ID}/${MOCK_ENTITY_KEY_ID}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, SEARCH_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+  });
+}
+
+function searchEntityNeighborsWithFilter() {
+
+  // TODO: test deduplicating arrays into sets
+
+  describe('searchEntityNeighborsWithFilter', () => {
+
+    const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
+    const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }];
+    const invalidParams = [
+      INVALID_PARAMS_SS,
+      {
+        destinationEntitySetIds: INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
+        edgeEntitySetIds: INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
+        entityKeyIds: INVALID_PARAMS_SS,
+        sourceEntitySetIds: INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
+      },
+    ];
+    const axiosParams = [
+      `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`,
+      {
+        dst: [],
+        edge: [],
+        entityKeyIds: [MOCK_ENTITY_KEY_ID],
+        src: [],
+      },
     ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
