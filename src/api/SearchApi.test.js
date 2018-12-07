@@ -493,12 +493,7 @@ function searchEntityNeighborsWithFilter() {
     ];
     const axiosParams = [
       `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`,
-      {
-        dst: [],
-        edge: [],
-        entityKeyIds: [MOCK_ENTITY_KEY_ID],
-        src: [],
-      },
+      { entityKeyIds: [MOCK_ENTITY_KEY_ID] },
     ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
