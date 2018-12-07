@@ -19,7 +19,6 @@
 
 import isFinite from 'lodash/isFinite';
 import isString from 'lodash/isString';
-import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
@@ -41,7 +40,6 @@ import {
 
 import {
   isDefined,
-  isEmptyArray,
   isNonEmptyArray,
   isNonEmptyObject,
   isNonEmptyString,
@@ -997,56 +995,46 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   const entityKeyIds :UUID[] = Set().withMutations((set :Set<UUID>) => (
     filter[ENTITY_KEY_IDS].forEach((id :UUID) => set.add(id))
   )).toJS();
+  data[ENTITY_KEY_IDS] = entityKeyIds;
 
-  let destinationEntitySetIds :UUID[];
-  if (isUndefined(filter[DESTINATION_ES_IDS]) || isEmptyArray(filter[DESTINATION_ES_IDS])) {
-    destinationEntitySetIds = [];
+  let destinationEntitySetIds :?UUID[];
+  if (isValidUuidArray(filter[DESTINATION_ES_IDS])) {
+    destinationEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[DESTINATION_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+    data[DESTINATION] = destinationEntitySetIds;
   }
-  else if (!isValidUuidArray(filter[DESTINATION_ES_IDS])) {
+  else if (isDefined(filter[DESTINATION_ES_IDS])) {
     errorMsg = `invalid parameter: filter.${DESTINATION_ES_IDS} must be a set of valid UUIDs`;
     LOG.error(errorMsg, filter[DESTINATION_ES_IDS]);
     return Promise.reject(errorMsg);
   }
-  else {
-    destinationEntitySetIds = Set().withMutations((set :Set<UUID>) => (
-      filter[DESTINATION_ES_IDS].forEach((id :UUID) => set.add(id))
-    )).toJS();
-  }
 
-  let edgeEntitySetIds :UUID[];
-  if (isUndefined(filter[EDGE_ES_IDS]) || isEmptyArray(filter[EDGE_ES_IDS])) {
-    edgeEntitySetIds = [];
+  let edgeEntitySetIds :?UUID[];
+  if (isValidUuidArray(filter[EDGE_ES_IDS])) {
+    edgeEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[EDGE_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+    data[EDGE] = edgeEntitySetIds;
   }
-  else if (!isValidUuidArray(filter[EDGE_ES_IDS])) {
+  else if (isDefined(filter[EDGE_ES_IDS])) {
     errorMsg = `invalid parameter: filter.${EDGE_ES_IDS} must be a set of valid UUIDs`;
     LOG.error(errorMsg, filter[EDGE_ES_IDS]);
     return Promise.reject(errorMsg);
   }
-  else {
-    edgeEntitySetIds = Set().withMutations((set :Set<UUID>) => (
-      filter[EDGE_ES_IDS].forEach((id :UUID) => set.add(id))
-    )).toJS();
-  }
 
-  let sourceEntitySetIds :UUID[];
-  if (isUndefined(filter[SOURCE_ES_IDS]) || isEmptyArray(filter[SOURCE_ES_IDS])) {
-    sourceEntitySetIds = [];
+  let sourceEntitySetIds :?UUID[];
+  if (isValidUuidArray(filter[SOURCE_ES_IDS])) {
+    sourceEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[SOURCE_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+    data[SOURCE] = sourceEntitySetIds;
   }
-  else if (!isValidUuidArray(filter[SOURCE_ES_IDS])) {
+  else if (isDefined(filter[SOURCE_ES_IDS])) {
     errorMsg = `invalid parameter: filter.${SOURCE_ES_IDS} must be a set of valid UUIDs`;
     LOG.error(errorMsg, filter[SOURCE_ES_IDS]);
     return Promise.reject(errorMsg);
   }
-  else {
-    sourceEntitySetIds = Set().withMutations((set :Set<UUID>) => (
-      filter[SOURCE_ES_IDS].forEach((id :UUID) => set.add(id))
-    )).toJS();
-  }
-
-  data[DESTINATION] = destinationEntitySetIds;
-  data[EDGE] = edgeEntitySetIds;
-  data[ENTITY_KEY_IDS] = entityKeyIds;
-  data[SOURCE] = sourceEntitySetIds;
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${entitySetId}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`, data)
