@@ -40,6 +40,7 @@ import {
 
 import {
   isDefined,
+  isEmptyArray,
   isNonEmptyArray,
   isNonEmptyObject,
   isNonEmptyString,
@@ -998,7 +999,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   data[ENTITY_KEY_IDS] = entityKeyIds;
 
   let destinationEntitySetIds :?UUID[];
-  if (isValidUuidArray(filter[DESTINATION_ES_IDS])) {
+  if (isEmptyArray(filter[DESTINATION_ES_IDS]) || isValidUuidArray(filter[DESTINATION_ES_IDS])) {
     destinationEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[DESTINATION_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();
@@ -1011,7 +1012,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   }
 
   let edgeEntitySetIds :?UUID[];
-  if (isValidUuidArray(filter[EDGE_ES_IDS])) {
+  if (isEmptyArray(filter[EDGE_ES_IDS]) || isValidUuidArray(filter[EDGE_ES_IDS])) {
     edgeEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[EDGE_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();
@@ -1024,7 +1025,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   }
 
   let sourceEntitySetIds :?UUID[];
-  if (isValidUuidArray(filter[SOURCE_ES_IDS])) {
+  if (isEmptyArray(filter[SOURCE_ES_IDS]) || isValidUuidArray(filter[SOURCE_ES_IDS])) {
     sourceEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[SOURCE_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();
