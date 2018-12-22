@@ -19,6 +19,7 @@ import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as LinkingApi from './api/LinkingApi';
 import * as OrganizationsApi from './api/OrganizationsApi';
 import * as PermissionsApi from './api/PermissionsApi';
+import * as PersistentSearchApi from './api/PersistentSearchApi';
 import * as PrincipalsApi from './api/PrincipalsApi';
 import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
@@ -42,6 +43,7 @@ export {
   LinkingApi,
   OrganizationsApi,
   PermissionsApi,
+  PersistentSearchApi,
   PrincipalsApi,
   RequestsApi,
   SearchApi,
@@ -63,6 +65,7 @@ export default {
   LinkingApi,
   OrganizationsApi,
   PermissionsApi,
+  PersistentSearchApi,
   PrincipalsApi,
   RequestsApi,
   SearchApi,

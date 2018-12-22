@@ -13,6 +13,7 @@ const EXPECTED_APIS = Map({
   LINKING_API          : 'LinkingApi',
   ORGANIZATIONS_API    : 'OrganizationsApi',
   PERMISSIONS_API      : 'PermissionsApi',
+  PERSISTENT_SEARCH_API: 'PersistentSearchApi',
   PRINCIPALS_API       : 'PrincipalsApi',
   REQUESTS_API         : 'RequestsApi',
   SEARCH_API           : 'SearchApi',
