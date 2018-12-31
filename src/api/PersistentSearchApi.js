@@ -88,7 +88,7 @@ export function createPersistentSearch(persistentSearch :Object) :Promise<*> {
 export function loadPersistentSearches(includeExpired :boolean) :Promise<*> {
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
-    .get(`?includeExpired=${includeExpired}`)
+    .get(`?includeExpired=${String(includeExpired)}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -108,9 +108,12 @@ export function loadPersistentSearches(includeExpired :boolean) :Promise<*> {
  * @returns {Promise} - a Promise that resolves once the expiration date has been updated
  *
  * @example
- * PersistentSearchApi.updatePersistentSearchExpiration("ec6865e6-e60e-424b-a071-6a9c1603d735", "2018-12-22T01:57:02.801Z");
+ * PersistentSearchApi.updatePersistentSearchExpiration(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "2018-12-22T01:57:02.801Z"
+ * );
  */
-export function updatePersistentSearchExpiration(persistentSearchId :boolean, expiration :string) :Promise<*> {
+export function updatePersistentSearchExpiration(persistentSearchId :UUID, expiration :string) :Promise<*> {
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
     .patch(`/${persistentSearchId}/${EXPIRATION_PATH}`, expiration, {
@@ -153,7 +156,7 @@ export function updatePersistentSearchExpiration(persistentSearchId :boolean, ex
  *   ]
  * );
  */
-export function updatePersistentSearchConstraints(persistentSearchId :boolean, searchConstraints :Object) :Promise<*> {
+export function updatePersistentSearchConstraints(persistentSearchId :UUID, searchConstraints :Object) :Promise<*> {
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
     .patch(`/${persistentSearchId}`, searchConstraints)
@@ -177,7 +180,7 @@ export function updatePersistentSearchConstraints(persistentSearchId :boolean, s
  * @example
  * PersistentSearchApi.expirePersistentSearch("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function expirePersistentSearch(persistentSearchId :boolean) :Promise<*> {
+export function expirePersistentSearch(persistentSearchId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
     .delete(`/${persistentSearchId}`)
