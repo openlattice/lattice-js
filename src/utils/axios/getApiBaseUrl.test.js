@@ -23,6 +23,7 @@ const API_TO_PATH_MAP = Map({
   [ApiNames.LINKING_API]          : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.LINKING_PATH}`,
   [ApiNames.ORGANIZATIONS_API]    : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ORGANIZATIONS_PATH}`,
   [ApiNames.PERMISSIONS_API]      : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.PERMISSIONS_PATH}`,
+  [ApiNames.PERSISTENT_SEARCH_API]: `${UrlConstants.DATASTORE_PATH}/${UrlConstants.PERSISTENT_SEARCH_PATH}`,
   [ApiNames.PRINCIPALS_API]       : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.PRINCIPALS_PATH}`,
   [ApiNames.REQUESTS_API]         : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.REQUESTS_PATH}`,
   [ApiNames.SEARCH_API]           : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.SEARCH_PATH}`,
