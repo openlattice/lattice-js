@@ -11,7 +11,6 @@ import SecurableTypes from './SecurableTypes';
 import UpdateTypes from './UpdateTypes';
 
 import type { Action } from './ActionTypes';
-import type { Analyzer } from './AnalyzerTypes';
 import type { Permission } from './PermissionTypes';
 import type { PrincipalType } from './PrincipalTypes';
 import type { RequestState } from './RequestStateTypes';
@@ -30,7 +29,6 @@ export {
 
 export type {
   Action,
-  Analyzer,
   Permission,
   PrincipalType,
   RequestState,
