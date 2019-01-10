@@ -2,11 +2,9 @@
  * @flow
  */
 
-const AnalyzerTypes = {
+const AnalyzerTypes :AnalyzerTypeEnum = Object.freeze({
   METAPHONE: 'METAPHONE',
   STANDARD: 'STANDARD',
-};
-
-export type Analyzer = $Keys<typeof AnalyzerTypes>;
+});
 
 export { AnalyzerTypes as default };

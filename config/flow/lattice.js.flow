@@ -1,0 +1,74 @@
+/*
+ * @flow
+ */
+
+/* eslint-disable no-use-before-define */
+
+type UUID = string;
+
+type FQN = FullyQualifiedName;
+type FQNObject = {|
+  namespace :string;
+  name :string;
+|};
+
+declare class FullyQualifiedName {
+  static isValid :(...args :any[]) => boolean;
+  static toString :(...args :any[]) => string;
+  namespace :string;
+  name :string;
+  getNamespace() :string;
+  getName() :string;
+  toObject() :FQNObject;
+  toString() :string;
+  valueOf() :string;
+}
+
+declare type PropertyTypeObject = {|
+  analyzer ?:AnalyzerType;
+  datatype :string;
+  description ?:string;
+  id ?:UUID;
+  piiField ?:boolean;
+  schemas :FQNObject[];
+  title :string;
+  type :FQNObject;
+|};
+
+declare class PropertyType {
+  analyzer :?AnalyzerType;
+  datatype :string;
+  description :?string;
+  id :?UUID;
+  piiField :?boolean;
+  schemas :FQN[];
+  title :string;
+  type :FQN;
+  asImmutable() :Map<*, *>;
+  toObject() :PropertyTypeObject;
+  valueOf() :string;
+}
+
+declare class PropertyTypeBuilder {
+  build() :PropertyType;
+  setAnalyzer() :PropertyTypeBuilder;
+  setDataType() :PropertyTypeBuilder;
+  setDescription() :PropertyTypeBuilder;
+  setId() :PropertyTypeBuilder;
+  setPii() :PropertyTypeBuilder;
+  setSchemas() :PropertyTypeBuilder;
+  setTitle() :PropertyTypeBuilder;
+  setType() :PropertyTypeBuilder;
+}
+
+/*
+ *
+ * Constants / Enums
+ *
+ */
+
+type AnalyzerTypeEnum = {|
+  METAPHONE :'METAPHONE';
+  STANDARD :'STANDARD';
+|};
+type AnalyzerType = $Values<AnalyzerTypeEnum>;
