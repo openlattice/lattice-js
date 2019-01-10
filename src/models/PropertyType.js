@@ -3,7 +3,7 @@
  */
 
 import has from 'lodash/has';
-import { Set, fromJS } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
 
@@ -23,8 +23,6 @@ import {
   validateNonEmptyArray
 } from '../utils/ValidationUtils';
 
-import type { Analyzer } from '../constants/types/AnalyzerTypes';
-
 const LOG = new Logger('PropertyType');
 
 /**
@@ -33,31 +31,31 @@ const LOG = new Logger('PropertyType');
  */
 export default class PropertyType {
 
-  id :?UUID;
-  type :FullyQualifiedName;
-  title :string;
-  description :?string;
+  analyzer :?AnalyzerType;
   datatype :string;
-  schemas :FullyQualifiedName[];
-  piiField :boolean;
-  analyzer :Analyzer;
+  description :?string;
+  id :?UUID;
+  piiField :?boolean;
+  schemas :FQN[];
+  title :string;
+  type :FQN;
 
   constructor(
     id :?UUID,
-    type :FullyQualifiedName,
+    type :FQN,
     title :string,
     description :?string,
     datatype :string,
-    schemas :FullyQualifiedName[],
-    piiField :boolean,
-    analyzer :Analyzer
+    schemas :FQN[],
+    piiField :?boolean,
+    analyzer :?AnalyzerType,
   ) {
 
     // required properties
-    this.type = type;
-    this.title = title;
     this.datatype = datatype;
     this.schemas = schemas;
+    this.title = title;
+    this.type = type;
 
     // optional properties
     if (isDefined(id)) {
@@ -77,15 +75,20 @@ export default class PropertyType {
     }
   }
 
-  asImmutable() {
+  toImmutable() :Map<*, *> {
 
-    const propertyTypeObj = {};
+    return fromJS(this.toObject());
+  }
+
+  toObject() :PropertyTypeObject {
 
     // required properties
-    propertyTypeObj.type = this.type;
-    propertyTypeObj.title = this.title;
-    propertyTypeObj.datatype = this.datatype;
-    propertyTypeObj.schemas = this.schemas;
+    const propertyTypeObj :PropertyTypeObject = {
+      datatype: this.datatype,
+      schemas: this.schemas.map((fqn :FQN) => fqn.toObject()),
+      title: this.title,
+      type: this.type.toObject(),
+    };
 
     // optional properties
     if (isDefined(this.id)) {
@@ -104,7 +107,17 @@ export default class PropertyType {
       propertyTypeObj.analyzer = this.analyzer;
     }
 
-    return fromJS(propertyTypeObj);
+    return propertyTypeObj;
+  }
+
+  toString() :string {
+
+    return JSON.stringify(this.toObject());
+  }
+
+  valueOf() :string {
+
+    return this.toString();
   }
 }
 
@@ -114,14 +127,14 @@ export default class PropertyType {
  */
 export class PropertyTypeBuilder {
 
-  id :?UUID;
-  type :FullyQualifiedName;
-  title :string;
-  description :?string;
+  analyzer :?AnalyzerType;
   datatype :string;
-  schemas :FullyQualifiedName[];
-  piiField :boolean;
-  analyzer :Analyzer;
+  description :?string;
+  id :?UUID;
+  piiField :?boolean;
+  schemas :FQN[];
+  title :string;
+  type :FQN;
 
   setId(propertyTypeId :?UUID) :PropertyTypeBuilder {
 
@@ -137,7 +150,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setType(propertyTypeFqn :FullyQualifiedName) :PropertyTypeBuilder {
+  setType(propertyTypeFqn :FQN) :PropertyTypeBuilder {
 
     if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
       throw new Error('invalid parameter: propertyTypeFqn must be a valid FQN');
@@ -181,7 +194,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :FullyQualifiedName[]) :PropertyTypeBuilder {
+  setSchemas(schemas :FQN[]) :PropertyTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -191,8 +204,8 @@ export class PropertyTypeBuilder {
       throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 
-    this.schemas = Set().withMutations((set :Set<FullyQualifiedName>) => {
-      schemas.forEach((schemaFqn :FullyQualifiedName) => {
+    this.schemas = Set().withMutations((set :Set<FQN>) => {
+      schemas.forEach((schemaFqn :FQN) => {
         set.add(schemaFqn);
       });
     }).toJS();
@@ -214,7 +227,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setAnalyzer(analyzer :Analyzer) :PropertyTypeBuilder {
+  setAnalyzer(analyzer :AnalyzerType) :PropertyTypeBuilder {
 
     if (!isDefined(analyzer) || isEmptyString(analyzer)) {
       return this;
@@ -232,15 +245,15 @@ export class PropertyTypeBuilder {
 
     let errorMsg :string = '';
 
-    if (!this.type) {
+    if (!isDefined(this.type)) {
       errorMsg = 'missing property: type is a required property';
     }
 
-    if (!this.title) {
+    if (!isDefined(this.title)) {
       errorMsg = 'missing property: title is a required property';
     }
 
-    if (!this.datatype) {
+    if (!isDefined(this.datatype)) {
       errorMsg = 'missing property: datatype is a required property';
     }
 
@@ -261,7 +274,7 @@ export class PropertyTypeBuilder {
       this.datatype,
       this.schemas,
       this.piiField,
-      this.analyzer
+      this.analyzer,
     );
   }
 }

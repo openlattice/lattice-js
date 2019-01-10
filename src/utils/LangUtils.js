@@ -10,7 +10,7 @@ import isString from 'lodash/isString';
 import isUndefined from 'lodash/isUndefined';
 import trim from 'lodash/trim';
 
-function isDefined(value :any) :boolean {
+function isDefined(value :any) :boolean %checks {
 
   return !isNull(value) && !isUndefined(value);
 }
