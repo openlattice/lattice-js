@@ -23,6 +23,7 @@ import {
   validateNonEmptyArray
 } from '../utils/ValidationUtils';
 
+import type { FQN } from './FullyQualifiedName';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('EntityType');

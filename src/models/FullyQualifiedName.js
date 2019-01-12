@@ -46,6 +46,11 @@ import { isNonEmptyString } from '../utils/LangUtils';
 
 const LOG = new Logger('FullyQualifiedName');
 
+type FQNObject = {|
+  namespace :string;
+  name :string;
+|};
+
 function parseFqnString(fullyQualifiedName :string) :FQNObject {
 
   if (!isNonEmptyString(fullyQualifiedName)) {
@@ -233,3 +238,10 @@ export default class FullyQualifiedName {
     return this.toString();
   }
 }
+
+type FQN = FullyQualifiedName;
+
+export type {
+  FQN,
+  FQNObject,
+};
