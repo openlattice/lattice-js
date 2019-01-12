@@ -14,16 +14,30 @@ import {
   isDefined,
   isEmptyArray,
   isEmptyString,
-  isNonEmptyString
+  isNonEmptyString,
 } from '../utils/LangUtils';
 
 import {
   isValidUuid,
   isValidFqnArray,
-  validateNonEmptyArray
+  validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
+import type { FQN, FQNObject } from './FullyQualifiedName';
+import type { AnalyzerType } from '../constants/types';
+
 const LOG = new Logger('PropertyType');
+
+type PropertyTypeObject = {|
+  analyzer ?:AnalyzerType;
+  datatype :string;
+  description ?:string;
+  id ?:UUID;
+  piiField ?:boolean;
+  schemas :FQNObject[];
+  title :string;
+  type :FQNObject;
+|};
 
 /**
  * @class PropertyType
@@ -150,13 +164,13 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setType(propertyTypeFqn :FQN) :PropertyTypeBuilder {
+  setType(propertyTypeFQN :FQN) :PropertyTypeBuilder {
 
-    if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
-      throw new Error('invalid parameter: propertyTypeFqn must be a valid FQN');
+    if (!FullyQualifiedName.isValid(propertyTypeFQN)) {
+      throw new Error('invalid parameter: propertyTypeFQN must be a valid FQN');
     }
 
-    this.type = propertyTypeFqn;
+    this.type = new FullyQualifiedName(propertyTypeFQN);
     return this;
   }
 
@@ -205,8 +219,8 @@ export class PropertyTypeBuilder {
     }
 
     this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFqn :FQN) => {
-        set.add(schemaFqn);
+      schemas.forEach((schemaFQN :FQN) => {
+        set.add(new FullyQualifiedName(schemaFQN));
       });
     }).toJS();
 
