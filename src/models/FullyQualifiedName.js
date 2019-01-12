@@ -243,4 +243,5 @@ type FQN = FullyQualifiedName;
 
 export type {
   FQN,
+  FQNObject,
 };

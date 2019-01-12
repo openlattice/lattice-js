@@ -23,9 +23,21 @@ import {
   validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
-import type { FQN } from './FullyQualifiedName';
+import type { FQN, FQNObject } from './FullyQualifiedName';
+import type { AnalyzerType } from '../constants/types';
 
 const LOG = new Logger('PropertyType');
+
+type PropertyTypeObject = {|
+  analyzer ?:AnalyzerType;
+  datatype :string;
+  description ?:string;
+  id ?:UUID;
+  piiField ?:boolean;
+  schemas :FQNObject[];
+  title :string;
+  type :FQNObject;
+|};
 
 /**
  * @class PropertyType
