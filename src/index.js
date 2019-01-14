@@ -52,7 +52,7 @@ export {
   Models,
   Types,
   configure,
-  version
+  version,
 };
 
 export default {
@@ -74,5 +74,5 @@ export default {
   Models,
   Types,
   configure,
-  version
+  version,
 };
