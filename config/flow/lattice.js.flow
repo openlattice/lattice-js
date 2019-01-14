@@ -68,18 +68,18 @@ type AnalyzerTypeEnum = {|
 type AnalyzerType = $Values<AnalyzerTypeEnum>;
 
 declare module "lattice" {
-  declare export default {
-    Models: {
-      FQN: FQN,
-      FQNObject: FQNObject,
-      FullyQualifiedName: FullyQualifiedName,
-      PropertyType: PropertyType,
-      PropertyTypeBuilder: PropertyTypeBuilder,
-      PropertyTypeObject: PropertyTypeObject,
-    },
-    Types: {
-      AnalyzerType: AnalyzerType,
-      AnalyzerTypeEnum: AnalyzerTypeEnum,
-    },
-  }
-}
+  declare module.exports :{
+    Models :{
+      FQN :FQN;
+      FQNObject :FQNObject;
+      FullyQualifiedName :FullyQualifiedName;
+      PropertyType :PropertyType;
+      PropertyTypeBuilder :PropertyTypeBuilder;
+      PropertyTypeObject :PropertyTypeObject;
+    };
+    Types :{
+      AnalyzerType :AnalyzerType;
+      AnalyzerTypeEnum :AnalyzerTypeEnum;
+    };
+  };
+};
