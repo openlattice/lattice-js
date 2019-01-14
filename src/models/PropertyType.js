@@ -241,7 +241,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setAnalyzer(analyzer :AnalyzerType) :PropertyTypeBuilder {
+  setAnalyzer(analyzer :?AnalyzerType) :PropertyTypeBuilder {
 
     if (!isDefined(analyzer) || isEmptyString(analyzer)) {
       return this;
