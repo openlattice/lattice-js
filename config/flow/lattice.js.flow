@@ -26,6 +26,7 @@ declare module "lattice" {
     namespace :string;
     name :string;
     constructor(namespace :string, name :string) :FullyQualifiedName;
+    constructor(fqn :FullyQualifiedName) :FullyQualifiedName;
     constructor(fqn :FQNObject) :FullyQualifiedName;
     constructor(fqn :string) :FullyQualifiedName;
     constructor(fqn :Map<string, string>) :FullyQualifiedName;
@@ -67,7 +68,7 @@ declare module "lattice" {
     setDataType(datatype :string) :PropertyTypeBuilder;
     setDescription(description :?string) :PropertyTypeBuilder;
     setId(propertyTypeId :?UUID) :PropertyTypeBuilder;
-    setPii(pii :boolean) :PropertyTypeBuilder;
+    setPii(pii :?boolean) :PropertyTypeBuilder;
     setSchemas(schemas :FQN[]) :PropertyTypeBuilder;
     setTitle(title :string) :PropertyTypeBuilder;
     setType(propertyTypeFQN :FQN) :PropertyTypeBuilder;

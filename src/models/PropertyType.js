@@ -227,7 +227,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setPii(pii :boolean) :PropertyTypeBuilder {
+  setPii(pii :?boolean) :PropertyTypeBuilder {
 
     if (!isDefined(pii)) {
       return this;
