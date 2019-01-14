@@ -56,7 +56,7 @@ declare module "lattice" {
     schemas :FQN[];
     title :string;
     type :FQN;
-    asImmutable() :Map<*, *>;
+    toImmutable() :Map<*, *>;
     toObject() :PropertyTypeObject;
     valueOf() :string;
   }
