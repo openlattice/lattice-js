@@ -2,84 +2,175 @@
  * @flow
  */
 
-type UUID = string;
-
-type FQN = FullyQualifiedName;
-
-type FQNObject = {|
-  namespace :string;
-  name :string;
-|};
-
-declare class FullyQualifiedName {
-  static isValid :(...args :any[]) => boolean;
-  static toString :(...args :any[]) => string;
-  namespace :string;
-  name :string;
-  getNamespace() :string;
-  getName() :string;
-  toObject() :FQNObject;
-  toString() :string;
-  valueOf() :string;
-}
-
-type PropertyTypeObject = {|
-  analyzer ?:AnalyzerType;
-  datatype :string;
-  description ?:string;
-  id ?:UUID;
-  piiField ?:boolean;
-  schemas :FQNObject[];
-  title :string;
-  type :FQNObject;
-|};
-
-declare class PropertyType {
-  analyzer :?AnalyzerType;
-  datatype :string;
-  description :?string;
-  id :?UUID;
-  piiField :?boolean;
-  schemas :FQN[];
-  title :string;
-  type :FQN;
-  asImmutable() :Map<*, *>;
-  toObject() :PropertyTypeObject;
-  valueOf() :string;
-}
-
-declare class PropertyTypeBuilder {
-  build() :PropertyType;
-  setAnalyzer() :PropertyTypeBuilder;
-  setDataType() :PropertyTypeBuilder;
-  setDescription() :PropertyTypeBuilder;
-  setId() :PropertyTypeBuilder;
-  setPii() :PropertyTypeBuilder;
-  setSchemas() :PropertyTypeBuilder;
-  setTitle() :PropertyTypeBuilder;
-  setType() :PropertyTypeBuilder;
-}
-
-type AnalyzerTypeEnum = {|
-  METAPHONE :'METAPHONE';
-  STANDARD :'STANDARD';
-|};
-
-type AnalyzerType = $Values<AnalyzerTypeEnum>;
-
 declare module "lattice" {
-  declare module.exports :{
-    Models :{
-      FQN :FQN;
-      FQNObject :FQNObject;
-      FullyQualifiedName :FullyQualifiedName;
-      PropertyType :PropertyType;
-      PropertyTypeBuilder :PropertyTypeBuilder;
-      PropertyTypeObject :PropertyTypeObject;
-    };
-    Types :{
-      AnalyzerType :AnalyzerType;
-      AnalyzerTypeEnum :AnalyzerTypeEnum;
-    };
+
+  declare export type LatticeConfig = {
+    authToken ? :string;
+    baseUrl :string;
+  };
+
+  declare function configure(config :LatticeConfig) :void;
+
+  declare export type UUID = string;
+
+  /*
+   *
+   * models
+   *
+   */
+
+  declare export type FQN = FullyQualifiedName;
+
+  declare export type FQNObject = {|
+    namespace :string;
+    name :string;
+  |};
+
+  declare export class FullyQualifiedName {
+    static isValid :(...args :any[]) => boolean;
+    static toString :(...args :any[]) => string;
+    namespace :string;
+    name :string;
+    constructor(namespace :string, name :string) :FullyQualifiedName;
+    constructor(fqn :FullyQualifiedName) :FullyQualifiedName;
+    constructor(fqn :FQNObject) :FullyQualifiedName;
+    constructor(fqn :string) :FullyQualifiedName;
+    constructor(fqn :Map<string, string>) :FullyQualifiedName;
+    getNamespace() :string;
+    getName() :string;
+    toObject() :FQNObject;
+    toString() :string;
+    valueOf() :string;
+  }
+
+  declare export type EntityTypeObject = {|
+    baseType ?:UUID;
+    category ?:SecurableType;
+    description ?:string;
+    id ?:UUID;
+    key :UUID[];
+    properties :UUID[];
+    schemas :FQNObject[];
+    title :string;
+    type :FQNObject;
+  |};
+
+  declare export class EntityType {
+    baseType :?UUID;
+    category :?SecurableType;
+    description :?string;
+    id :?UUID;
+    key :UUID[];
+    properties :UUID[];
+    schemas :FQN[];
+    title :string;
+    type :FQN;
+    toImmutable() :Map<*, *>;
+    toObject() :PropertyTypeObject;
+    valueOf() :string;
+  }
+
+  declare export class EntityTypeBuilder {
+    build() :EntityType;
+    setBaseType(baseType :?UUID) :EntityTypeBuilder;
+    setCategory(category :?SecurableType) :EntityTypeBuilder;
+    setDescription(description :?string) :EntityTypeBuilder;
+    setId(propertyTypeId :?UUID) :EntityTypeBuilder;
+    setKey(key :UUID[]) :EntityTypeBuilder;
+    setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder;
+    setSchemas(schemas :Array<FQN | FQNObject | string>) :EntityTypeBuilder;
+    setTitle(title :string) :EntityTypeBuilder;
+    setType(propertyTypeFQN :FQN | FQNObject | string) :EntityTypeBuilder;
+  }
+
+  declare export type PropertyTypeObject = {|
+    analyzer ?:AnalyzerType;
+    datatype :string;
+    description ?:string;
+    id ?:UUID;
+    piiField ?:boolean;
+    schemas :FQNObject[];
+    title :string;
+    type :FQNObject;
+  |};
+
+  declare export class PropertyType {
+    analyzer :?AnalyzerType;
+    datatype :string;
+    description :?string;
+    id :?UUID;
+    piiField :?boolean;
+    schemas :FQN[];
+    title :string;
+    type :FQN;
+    toImmutable() :Map<*, *>;
+    toObject() :PropertyTypeObject;
+    valueOf() :string;
+  }
+
+  declare export class PropertyTypeBuilder {
+    build() :PropertyType;
+    setAnalyzer(analyzer :?AnalyzerType) :PropertyTypeBuilder;
+    setDataType(datatype :string) :PropertyTypeBuilder;
+    setDescription(description :?string) :PropertyTypeBuilder;
+    setId(propertyTypeId :?UUID) :PropertyTypeBuilder;
+    setPii(pii :?boolean) :PropertyTypeBuilder;
+    setSchemas(schemas :Array<FQN | FQNObject | string>) :PropertyTypeBuilder;
+    setTitle(title :string) :PropertyTypeBuilder;
+    setType(propertyTypeFQN :FQN | FQNObject | string) :PropertyTypeBuilder;
+  }
+
+  /*
+   *
+   * constants & enums
+   *
+   */
+
+  declare export type AnalyzerTypes = {|
+    METAPHONE :'METAPHONE';
+    STANDARD :'STANDARD';
+  |};
+
+  declare export type AnalyzerType = $Values<AnalyzerTypes>;
+
+  declare export type SecurableTypes = {|
+    AssociationType :'AssociationType';
+    ComplexType :'ComplexType';
+    EdgeType :'EdgeType';
+    EntitySet :'EntitySet';
+    EntityType :'EntityType';
+    LinkingEntityType :'LinkingEntityType';
+    Organization :'Organization';
+    OrganizationRole :'OrganizationRole';
+    PropertyTypeInEntitySet :'PropertyTypeInEntitySet';
+  |};
+
+  declare export type SecurableType = $Values<SecurableTypes>;
+
+  /*
+   *
+   * module exports
+   *
+   */
+
+  declare export var Models :{
+    EntityType :typeof EntityType,
+    EntityTypeBuilder :typeof EntityTypeBuilder,
+    FullyQualifiedName :typeof FullyQualifiedName,
+    PropertyType :typeof PropertyType,
+    PropertyTypeBuilder :typeof PropertyTypeBuilder,
+  };
+
+  declare export var Types :{
+    AnalyzerType :AnalyzerType,
+    AnalyzerTypes :AnalyzerTypes,
+    SecurableType :SecurableType,
+    SecurableTypes :SecurableTypes,
+  };
+
+  declare export default {
+    Models: typeof Models,
+    Types: typeof Types,
+    configure: typeof configure,
   };
 };

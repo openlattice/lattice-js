@@ -25,7 +25,7 @@ function isEmptyObject(value :any) :boolean {
   return isPlainObject(value) && isEmpty(value);
 }
 
-function isEmptyString(value :any) :boolean {
+function isEmptyString(value :any) :boolean %checks {
 
   return isString(value) && isEmpty(value);
 }
@@ -40,7 +40,7 @@ function isNonEmptyObject(value :any) :boolean {
   return isPlainObject(value) && !isEmpty(value);
 }
 
-function isNonEmptyString(value :any) :boolean {
+function isNonEmptyString(value :any) :boolean %checks {
 
   return isString(value) && !isEmpty(trim(value));
 }
