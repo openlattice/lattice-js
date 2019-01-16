@@ -72,20 +72,20 @@ export default class PropertyType {
     this.type = type;
 
     // optional properties
-    if (isDefined(id)) {
-      this.id = id;
+    if (isDefined(analyzer)) {
+      this.analyzer = analyzer;
     }
 
     if (isDefined(description)) {
       this.description = description;
     }
 
-    if (isDefined(piiField)) {
-      this.piiField = piiField;
+    if (isDefined(id)) {
+      this.id = id;
     }
 
-    if (isDefined(analyzer)) {
-      this.analyzer = analyzer;
+    if (isDefined(piiField)) {
+      this.piiField = piiField;
     }
   }
 
@@ -164,7 +164,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setType(propertyTypeFQN :FQN) :PropertyTypeBuilder {
+  setType(propertyTypeFQN :FQN | FQNObject | string) :PropertyTypeBuilder {
 
     if (!FullyQualifiedName.isValid(propertyTypeFQN)) {
       throw new Error('invalid parameter: propertyTypeFQN must be a valid FQN');
@@ -208,7 +208,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :FQN[]) :PropertyTypeBuilder {
+  setSchemas(schemas :Array<FQN | FQNObject | string>) :PropertyTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -219,7 +219,7 @@ export class PropertyTypeBuilder {
     }
 
     this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFQN :FQN) => {
+      schemas.forEach((schemaFQN :FQN | FQNObject | string) => {
         set.add(new FullyQualifiedName(schemaFQN));
       });
     }).toJS();
@@ -307,30 +307,29 @@ export function isValidPropertyType(propertyType :any) :boolean {
 
     // required properties
     propertyTypeBuilder
-      .setType(propertyType.type)
-      .setTitle(propertyType.title)
       .setDataType(propertyType.datatype)
-      .setSchemas(propertyType.schemas);
+      .setSchemas(propertyType.schemas)
+      .setTitle(propertyType.title)
+      .setType(propertyType.type);
 
     // optional properties
-    if (has(propertyType, 'id')) {
-      propertyTypeBuilder.setId(propertyType.id);
+    if (has(propertyType, 'analyzer')) {
+      propertyTypeBuilder.setAnalyzer(propertyType.analyzer);
     }
 
     if (has(propertyType, 'description')) {
       propertyTypeBuilder.setDescription(propertyType.description);
     }
 
+    if (has(propertyType, 'id')) {
+      propertyTypeBuilder.setId(propertyType.id);
+    }
+
     if (has(propertyType, 'piiField')) {
       propertyTypeBuilder.setPii(propertyType.piiField);
     }
 
-    if (has(propertyType, 'analyzer')) {
-      propertyTypeBuilder.setAnalyzer(propertyType.analyzer);
-    }
-
     propertyTypeBuilder.build();
-
     return true;
   }
   catch (e) {

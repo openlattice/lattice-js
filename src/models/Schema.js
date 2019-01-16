@@ -39,7 +39,7 @@ export default class Schema {
 
     // required properties
     plainObj.fqn = this.fqn;
-    plainObj.entityTypes = this.entityTypes.map((entityType :EntityType) => entityType.asImmutable());
+    plainObj.entityTypes = this.entityTypes.map((entityType :EntityType) => entityType.toImmutable());
     plainObj.propertyTypes = this.propertyTypes.map((propertyType :PropertyType) => propertyType.toImmutable());
 
     return fromJS(plainObj);
