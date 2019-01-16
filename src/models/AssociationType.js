@@ -43,7 +43,7 @@ export default class AssociationType {
     const associationTypeObj = {};
 
     // required properties
-    associationTypeObj.entityType = this.entityType.asImmutable();
+    associationTypeObj.entityType = this.entityType.toImmutable();
     associationTypeObj.src = this.src;
     associationTypeObj.dst = this.dst;
     associationTypeObj.bidirectional = this.bidirectional;

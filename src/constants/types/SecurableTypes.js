@@ -2,8 +2,21 @@
  * @flow
  */
 
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-const SecurableTypes = {
+type SecurableTypeEnum = {|
+  AssociationType :'AssociationType';
+  ComplexType :'ComplexType';
+  EdgeType :'EdgeType';
+  EntitySet :'EntitySet';
+  EntityType :'EntityType';
+  LinkingEntityType :'LinkingEntityType';
+  Organization :'Organization';
+  OrganizationRole :'OrganizationRole';
+  PropertyTypeInEntitySet :'PropertyTypeInEntitySet';
+|};
+
+type SecurableType = $Values<SecurableTypeEnum>;
+
+const SecurableTypes :SecurableTypeEnum = Object.freeze({
   AssociationType: 'AssociationType',
   ComplexType: 'ComplexType',
   EdgeType: 'EdgeType',
@@ -13,8 +26,7 @@ const SecurableTypes = {
   Organization: 'Organization',
   OrganizationRole: 'OrganizationRole',
   PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
-};
-
-export type SecurableType = $Keys<typeof SecurableTypes>;
+});
 
 export { SecurableTypes as default };
+export type { SecurableType };

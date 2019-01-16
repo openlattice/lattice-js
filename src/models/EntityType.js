@@ -23,10 +23,22 @@ import {
   validateNonEmptyArray
 } from '../utils/ValidationUtils';
 
-import type { FQN } from './FullyQualifiedName';
+import type { FQN, FQNObject } from './FullyQualifiedName';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('EntityType');
+
+type EntityTypeObject = {|
+  baseType ?:UUID;
+  category ?:SecurableType;
+  description ?:string;
+  id ?:UUID;
+  key :UUID[];
+  properties :UUID[];
+  schemas :FQNObject[];
+  title :string;
+  type :FQNObject;
+|};
 
 /**
  * @class EntityType
@@ -34,15 +46,15 @@ const LOG = new Logger('EntityType');
  */
 export default class EntityType {
 
-  id :?UUID;
-  type :FQN;
-  title :string;
-  description :?string;
-  schemas :FQN[];
-  key :UUID[];
-  properties :UUID[];
   baseType :?UUID;
   category :?SecurableType;
+  description :?string;
+  id :?UUID;
+  key :UUID[];
+  properties :UUID[];
+  schemas :FQN[];
+  title :string;
+  type :FQN;
 
   constructor(
     id :?UUID,
@@ -57,21 +69,13 @@ export default class EntityType {
   ) {
 
     // required properties
-    this.type = type;
-    this.title = title;
-    this.schemas = schemas;
     this.key = key;
     this.properties = properties;
+    this.schemas = schemas;
+    this.title = title;
+    this.type = type;
 
     // optional properties
-    if (isDefined(id)) {
-      this.id = id;
-    }
-
-    if (isDefined(description)) {
-      this.description = description;
-    }
-
     if (isDefined(baseType)) {
       this.baseType = baseType;
     }
@@ -79,18 +83,31 @@ export default class EntityType {
     if (isDefined(category)) {
       this.category = category;
     }
+
+    if (isDefined(description)) {
+      this.description = description;
+    }
+
+    if (isDefined(id)) {
+      this.id = id;
+    }
   }
 
-  asImmutable() {
+  toImmutable() :Map<*, *> {
 
-    const entityTypeObj = {};
+    return fromJS(this.toObject());
+  }
+
+  toObject() :EntityTypeObject {
 
     // required properties
-    entityTypeObj.type = this.type;
-    entityTypeObj.title = this.title;
-    entityTypeObj.schemas = this.schemas;
-    entityTypeObj.key = this.key;
-    entityTypeObj.properties = this.properties;
+    const entityTypeObj :EntityTypeObject = {
+      key: this.key,
+      properties: this.properties,
+      schemas: this.schemas.map((fqn :FQN) => fqn.toObject()),
+      title: this.title,
+      type: this.type.toObject(),
+    };
 
     // optional properties
     if (isDefined(this.id)) {
@@ -109,7 +126,17 @@ export default class EntityType {
       entityTypeObj.category = this.category;
     }
 
-    return fromJS(entityTypeObj);
+    return entityTypeObj;
+  }
+
+  toString() :string {
+
+    return JSON.stringify(this.toObject());
+  }
+
+  valueOf() :string {
+
+    return this.toString();
   }
 }
 
@@ -119,15 +146,15 @@ export default class EntityType {
  */
 export class EntityTypeBuilder {
 
-  id :?UUID;
-  type :FQN;
-  title :string;
-  description :?string;
-  schemas :FQN[];
-  key :UUID[];
-  properties :UUID[];
   baseType :?UUID;
   category :?SecurableType;
+  description :?string;
+  id :?UUID;
+  key :UUID[];
+  properties :UUID[];
+  schemas :FQN[];
+  title :string;
+  type :FQN;
 
   setId(entityTypeId :?UUID) :EntityTypeBuilder {
 
@@ -143,13 +170,13 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setType(entityTypeFqn :FQN) :EntityTypeBuilder {
+  setType(entityTypeFqn :FQN | FQNObject | string) :EntityTypeBuilder {
 
     if (!FullyQualifiedName.isValid(entityTypeFqn)) {
       throw new Error('invalid parameter: entityTypeFqn must be a valid FQN');
     }
 
-    this.type = entityTypeFqn;
+    this.type = new FullyQualifiedName(entityTypeFqn);
     return this;
   }
 
@@ -177,7 +204,7 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :FQN[]) :EntityTypeBuilder {
+  setSchemas(schemas :Array<FQN | FQNObject | string>) :EntityTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -188,8 +215,8 @@ export class EntityTypeBuilder {
     }
 
     this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFqn :FQN) => {
-        set.add(schemaFqn);
+      schemas.forEach((schemaFQN :FQN | FQNObject | string) => {
+        set.add(new FullyQualifiedName(schemaFQN));
       });
     }).toJS();
 
@@ -234,7 +261,7 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setBaseType(baseType :UUID) :EntityTypeBuilder {
+  setBaseType(baseType :?UUID) :EntityTypeBuilder {
 
     if (!isDefined(baseType) || isEmptyString(baseType)) {
       return this;
@@ -248,7 +275,7 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setCategory(category :SecurableType) :EntityTypeBuilder {
+  setCategory(category :?SecurableType) :EntityTypeBuilder {
 
     if (!isDefined(category) || isEmptyString(category)) {
       return this;
@@ -266,11 +293,11 @@ export class EntityTypeBuilder {
 
     let errorMsg :string = '';
 
-    if (!this.type) {
+    if (!isDefined(this.type)) {
       errorMsg = 'missing property: type is a required property';
     }
 
-    if (!this.title) {
+    if (!isDefined(this.title)) {
       errorMsg = 'missing property: title is a required property';
     }
 
@@ -279,16 +306,16 @@ export class EntityTypeBuilder {
       throw new Error(errorMsg);
     }
 
-    if (!this.schemas) {
-      this.schemas = [];
-    }
-
     if (!this.key) {
       this.key = [];
     }
 
     if (!this.properties) {
       this.properties = [];
+    }
+
+    if (!this.schemas) {
+      this.schemas = [];
     }
 
     return new EntityType(
@@ -319,21 +346,13 @@ export function isValidEntityType(entityType :any) :boolean {
 
     // required properties
     entityTypeBuilder
-      .setType(entityType.type)
-      .setTitle(entityType.title)
-      .setSchemas(entityType.schemas)
       .setKey(entityType.key)
-      .setPropertyTypes(entityType.properties);
+      .setPropertyTypes(entityType.properties)
+      .setSchemas(entityType.schemas)
+      .setTitle(entityType.title)
+      .setType(entityType.type);
 
     // optional properties
-    if (has(entityType, 'id')) {
-      entityTypeBuilder.setId(entityType.id);
-    }
-
-    if (has(entityType, 'description')) {
-      entityTypeBuilder.setDescription(entityType.description);
-    }
-
     if (has(entityType, 'baseType')) {
       entityTypeBuilder.setBaseType(entityType.baseType);
     }
@@ -342,8 +361,15 @@ export function isValidEntityType(entityType :any) :boolean {
       entityTypeBuilder.setCategory(entityType.category);
     }
 
-    entityTypeBuilder.build();
+    if (has(entityType, 'description')) {
+      entityTypeBuilder.setDescription(entityType.description);
+    }
 
+    if (has(entityType, 'id')) {
+      entityTypeBuilder.setId(entityType.id);
+    }
+
+    entityTypeBuilder.build();
     return true;
   }
   catch (e) {
