@@ -24,11 +24,12 @@ import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
-import { UpdateTypes } from '../constants/types';
+import { UpdateTypes, DeleteTypes } from '../constants/types';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 
 import {
+  ALL,
   ASSOCIATION_PATH,
   COUNT_PATH,
   FILE_TYPE,
@@ -44,7 +45,7 @@ import {
   isValidUuidArray
 } from '../utils/ValidationUtils';
 
-import type { UpdateType } from '../constants/types';
+import type { UpdateType, DeleteType } from '../constants/types';
 
 const LOG = new Logger('DataApi');
 
@@ -265,6 +266,52 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 }
 
 /**
+ * `DELETE /data/set/{entitySetId}/all`
+ *
+ * Deletes all entities from an entity set.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {DeleteType} deleteType
+ * @return {Promise} - a Promise that resolves with the count of entities that were deleted
+ *
+ * @example
+ * DataApi.deleteAllEntitiesFromEntitySet(
+*   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+*   'Soft'
+* );
+*/
+
+export function deleteAllEntitiesFromEntitySet(
+  entitySetId :UUID,
+  deleteType :DeleteType
+) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(deleteType) || !DeleteTypes[deleteType]) {
+    errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
+    LOG.error(errorMsg, deleteType);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${SET_PATH}/${entitySetId}/${ALL}?${TYPE_PATH}=${deleteType}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /data/{entitySetId}/{entityKeyId}`
  *
  * Returns the entity data with the given entityKeyId in the EntitySet with the given entitySetId.
@@ -452,7 +499,7 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {Object} entities
- * @param {Boolean} partial
+ * @param {UpdateType} updateType
  * @return {Promise} - a Promise that resolves with the count of entities that were updated
  *
  * @example
@@ -464,7 +511,7 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
  *     }
  *   },
- *   false
+ *   'PartialReplace'
  * );
  */
 export function updateEntityData(entitySetId :UUID, entities :Object, updateType :UpdateType) :Promise<*> {
