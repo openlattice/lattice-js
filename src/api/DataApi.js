@@ -273,7 +273,7 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {DeleteType} deleteType
- * @return {Promise} - a Promise that resolves with the count of entities that were updated
+ * @return {Promise} - a Promise that resolves with the count of entities that were deleted
  *
  * @example
  * DataApi.deleteAllEntitiesFromEntitySet(
