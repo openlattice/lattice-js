@@ -29,6 +29,7 @@ import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 
 import {
+  ALL,
   ASSOCIATION_PATH,
   COUNT_PATH,
   FILE_TYPE,
@@ -302,7 +303,7 @@ export function deleteAllEntitiesFromEntitySet(
   }
 
   return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}/all?${TYPE_PATH}=${deleteType}`)
+    .delete(`/${SET_PATH}/${entitySetId}/${ALL}?${TYPE_PATH}=${deleteType}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
