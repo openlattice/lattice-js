@@ -284,7 +284,7 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 
 export function deleteAllEntitiesFromEntitySet(
   entitySetId :UUID,
-  deleteType :DeleteType = DeleteTypes.Soft
+  deleteType :DeleteType
 ) :Promise<*> {
 
   let errorMsg = '';
