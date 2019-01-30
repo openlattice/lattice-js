@@ -510,7 +510,7 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
  *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
  *     }
  *   },
- *   false
+ *   'PartialReplace'
  * );
  */
 export function updateEntityData(entitySetId :UUID, entities :Object, updateType :UpdateType) :Promise<*> {
