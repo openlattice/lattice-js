@@ -4,6 +4,7 @@
 
 import ActionTypes from './ActionTypes';
 import AnalyzerTypes from './AnalyzerTypes';
+import DeleteTypes from './DeleteTypes';
 import PermissionTypes from './PermissionTypes';
 import PrincipalTypes from './PrincipalTypes';
 import RequestStateTypes from './RequestStateTypes';
@@ -12,6 +13,7 @@ import UpdateTypes from './UpdateTypes';
 
 import type { Action } from './ActionTypes';
 import type { AnalyzerType } from './AnalyzerTypes';
+import type { DeleteType } from './DeleteTypes';
 import type { Permission } from './PermissionTypes';
 import type { PrincipalType } from './PrincipalTypes';
 import type { RequestState } from './RequestStateTypes';
@@ -21,6 +23,7 @@ import type { UpdateType } from './UpdateTypes';
 export {
   ActionTypes,
   AnalyzerTypes,
+  DeleteTypes,
   PermissionTypes,
   PrincipalTypes,
   RequestStateTypes,
@@ -31,6 +34,7 @@ export {
 export type {
   Action,
   AnalyzerType,
+  DeleteType,
   Permission,
   PrincipalType,
   RequestState,

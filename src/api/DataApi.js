@@ -24,7 +24,7 @@ import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
-import { UpdateTypes } from '../constants/types';
+import { UpdateTypes, DeleteTypes } from '../constants/types';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 
@@ -263,6 +263,31 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
       return Promise.reject(error);
     });
 }
+
+/**
+ * `DELETE /data/set/{entitySetId}/all`
+ *
+ * // TODO: description
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {Object} entities
+ * @param {Boolean} partial
+ * @return {Promise} - a Promise that resolves with the count of entities that were updated
+ *
+ * @example
+ * DataApi.updateEntityData(
+  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+  *   {
+  *     "219f0000-0000-0000-8000-000000000000": {
+  *       "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
+  *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
+  *     }
+  *   },
+  *   false
+  * );
+  */
 
 /**
  * `GET /data/{entitySetId}/{entityKeyId}`
