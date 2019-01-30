@@ -177,7 +177,7 @@ function deleteAllEntitiesFromEntitySet() {
     const mockEntitySetId = genRandomUUID();
 
     const validParams = [mockEntitySetId, 'Soft'];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
