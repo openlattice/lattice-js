@@ -4,7 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
 import { MOCK_DATA_EDGE_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
-import { UpdateTypes } from '../constants/types';
+import { UpdateTypes, DeleteTypes } from '../constants/types';
 
 import {
   ASSOCIATION_PATH,
@@ -63,6 +63,7 @@ describe('DataApi', () => {
   createAssociations();
   createEntityAndAssociationData();
   createOrMergeEntityData();
+  deleteAllEntitiesFromEntitySet();
   getEntityData();
   getEntitySetData();
   getEntitySetDataFileUrl();
@@ -165,6 +166,35 @@ function createOrMergeEntityData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+  });
+}
+
+function deleteAllEntitiesFromEntitySet() {
+
+  describe('deleteAllEntitiesFromEntitySet()', () => {
+
+    const apiToTest = DataApi.deleteAllEntitiesFromEntitySet;
+    const mockEntitySetId = genRandomUUID();
+
+    const validParams = [mockEntitySetId, 'Soft'];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+
+    test('type=Soft', () => {
+      const apiInvocationParams = [mockEntitySetId, 'Soft'];
+      const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}/all?${TYPE_PATH}=${DeleteTypes.Soft}`];
+      return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
+    });
+
+    test('type=Hard', () => {
+      const apiInvocationParams = [mockEntitySetId, 'Hard'];
+      const expectedAxiosParams = [`/${SET_PATH}/${mockEntitySetId}/all?${TYPE_PATH}=${DeleteTypes.Hard}`];
+      return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
+    });
   });
 }
 
