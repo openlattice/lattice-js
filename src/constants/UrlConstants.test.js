@@ -5,6 +5,7 @@ import * as UrlConstants from './UrlConstants';
 /* eslint-disable key-spacing */
 const EXPECTED = Map({
   ADVANCED_PATH                 : 'advanced',
+  ALL                           : 'all',
   ANALYSIS_PATH                 : 'analysis',
   APP_PATH                      : 'app',
   ASSOCIATION_PATH              : 'association',
