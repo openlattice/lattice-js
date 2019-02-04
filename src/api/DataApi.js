@@ -50,80 +50,6 @@ import type { UpdateType, DeleteType } from '../constants/types';
 const LOG = new Logger('DataApi');
 
 /**
- * `DELETE /data/set/{entitySetId}/{entityKeyId}`
- *
- * Clears the entity data with the given entityKeyId from the EntitySet with the given entitySetId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.clearEntityFromEntitySet(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
- * );
- */
-export function clearEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}/${entityKeyId}`)
-    .then(axiosResponse => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `DELETE /data/set/{entitySetId}`
- *
- * Clears all entity data from the EntitySet with the given entitySetId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.clearEntitySet("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
- */
-export function clearEntitySet(entitySetId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}`)
-    .then(axiosResponse => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `POST /data/association`
  *
  * Creates associations (edges) from the given DataEdgeKeys.
@@ -266,9 +192,68 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 }
 
 /**
- * `DELETE /data/set/{entitySetId}/all`
+ * `DELETE /data/set/{entitySetId}/{entityKeyId}?type=Soft`
  *
- * Deletes all entities from an entity set.
+ * Deletes the entity with the given entityKeyId from the EntitySet with the given entitySetId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID} entityKeyId
+ * @param {DeleteType} deleteType
+ * @return {Promise} - a Promise that resolves with the count of entities that were deleted (should be 1)
+ *
+ * @example
+ * DataApi.deleteEntity(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "Soft"
+ * );
+ */
+export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :DeleteType) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entityKeyId)) {
+    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    LOG.error(errorMsg, entityKeyId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(deleteType) || !DeleteTypes[deleteType]) {
+    errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
+    LOG.error(errorMsg, deleteType);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${SET_PATH}/${entitySetId}/${entityKeyId}?${TYPE_PATH}=${deleteType}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * @deprecated
+ */
+export function clearEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+
+  LOG.error('DataApi.clearEntityFromEntitySet() is deprecated. Please use DataApi.deleteEntity() instead.');
+  return deleteEntity(entitySetId, entityKeyId, DeleteTypes.Soft);
+}
+
+/**
+ * `DELETE /data/set/{entitySetId}/all?type=Soft`
+ *
+ * Deletes an EntitySet.
  *
  * @static
  * @memberof lattice.DataApi
@@ -277,16 +262,13 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
  * @return {Promise} - a Promise that resolves with the count of entities that were deleted
  *
  * @example
- * DataApi.deleteAllEntitiesFromEntitySet(
+ * DataApi.deleteEntitySet(
 *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
-*   'Soft'
+*   "Soft"
 * );
 */
 
-export function deleteAllEntitiesFromEntitySet(
-  entitySetId :UUID,
-  deleteType :DeleteType
-) :Promise<*> {
+export function deleteEntitySet(entitySetId :UUID, deleteType :DeleteType) :Promise<*> {
 
   let errorMsg = '';
 
@@ -309,6 +291,15 @@ export function deleteAllEntitiesFromEntitySet(
       LOG.error(error);
       return Promise.reject(error);
     });
+}
+
+/**
+ * @deprecated
+ */
+export function clearEntitySet(entitySetId :UUID) :Promise<*> {
+
+  LOG.error('DataApi.clearEntitySet() is deprecated. Please use DataApi.deleteEntitySet() instead.');
+  return deleteEntitySet(entitySetId, DeleteTypes.Soft);
 }
 
 /**

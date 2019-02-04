@@ -58,12 +58,11 @@ describe('DataApi', () => {
     jest.clearAllMocks();
   });
 
-  clearEntitySet();
-  clearEntityFromEntitySet();
   createAssociations();
   createEntityAndAssociationData();
   createOrMergeEntityData();
-  deleteAllEntitiesFromEntitySet();
+  deleteEntity();
+  deleteEntitySet();
   getEntityData();
   getEntitySetData();
   getEntitySetDataFileUrl();
@@ -72,45 +71,6 @@ describe('DataApi', () => {
   replaceEntityInEntitySet();
   replaceEntityInEntitySetUsingFqns();
 });
-
-function clearEntityFromEntitySet() {
-
-  describe('clearEntityFromEntitySet()', () => {
-
-    const apiToTest = DataApi.clearEntityFromEntitySet;
-    const mockEntitySetId = genRandomUUID();
-    const mockEntityKeyId = genRandomUUID();
-
-    const validParams = [mockEntitySetId, mockEntityKeyId];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
-  });
-}
-
-function clearEntitySet() {
-
-  describe('clearEntitySet()', () => {
-
-    const apiToTest = DataApi.clearEntitySet;
-    const mockEntitySetId = genRandomUUID();
-
-    const validParams = [mockEntitySetId];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${SET_PATH}/${mockEntitySetId}`];
-
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
-  });
-}
 
 function createAssociations() {
 
@@ -169,13 +129,41 @@ function createOrMergeEntityData() {
   });
 }
 
-function deleteAllEntitiesFromEntitySet() {
+function deleteEntity() {
 
-  describe('deleteAllEntitiesFromEntitySet()', () => {
+  describe('deleteEntity()', () => {
 
-    const apiToTest = DataApi.deleteAllEntitiesFromEntitySet;
+    const apiToTest = DataApi.deleteEntity;
+    const mockEKID = genRandomUUID();
+    const mockESID = genRandomUUID();
+    const validParams = [mockESID, mockEKID, DeleteTypes.Soft];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+
+    test('type=Soft', () => {
+      const apiInvocationParams = [mockESID, mockEKID, 'Soft'];
+      const expectedAxiosParams = [`/${SET_PATH}/${mockESID}/${mockEKID}?${TYPE_PATH}=${DeleteTypes.Soft}`];
+      return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
+    });
+
+    test('type=Hard', () => {
+      const apiInvocationParams = [mockESID, mockEKID, 'Hard'];
+      const expectedAxiosParams = [`/${SET_PATH}/${mockESID}/${mockEKID}?${TYPE_PATH}=${DeleteTypes.Hard}`];
+      return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
+    });
+  });
+}
+
+function deleteEntitySet() {
+
+  describe('deleteEntitySet()', () => {
+
+    const apiToTest = DataApi.deleteEntitySet;
     const mockEntitySetId = genRandomUUID();
-
     const validParams = [mockEntitySetId, 'Soft'];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
 
