@@ -4,7 +4,7 @@
 
 const DeleteTypes = {
   Hard: 'Hard',
-  Soft: 'Soft'
+  Soft: 'Soft',
 };
 
 export type DeleteType = $Keys<typeof DeleteTypes>;
