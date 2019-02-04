@@ -133,6 +133,13 @@ declare module "lattice" {
 
   declare export type AnalyzerType = $Values<AnalyzerTypes>;
 
+  declare export type DeleteTypes = {|
+    Hard :'Hard';
+    Soft :'Soft';
+  |};
+
+  declare export type DeleteType = $Values<DeleteTypes>;
+
   declare export type SecurableTypes = {|
     AssociationType :'AssociationType';
     ComplexType :'ComplexType';
@@ -147,11 +154,25 @@ declare module "lattice" {
 
   declare export type SecurableType = $Values<SecurableTypes>;
 
+  declare export type UpdateTypes = {|
+    Merge :'Merge',
+    PartialReplace :'PartialReplace',
+    Replace :'Replace',
+  |};
+
+  declare export type UpdateType = $Values<UpdateTypes>;
+
   /*
    *
    * module exports
    *
    */
+
+  declare export var Constants :{
+    AT_CLASS :'@class',
+    AT_ID :'@id',
+    OPENLATTICE_ID_FQN :'openlattice.@id',
+  };
 
   declare export var Models :{
     EntityType :typeof EntityType,
@@ -164,11 +185,16 @@ declare module "lattice" {
   declare export var Types :{
     AnalyzerType :AnalyzerType,
     AnalyzerTypes :AnalyzerTypes,
+    DeleteType :DeleteType,
+    DeleteTypes :DeleteTypes,
     SecurableType :SecurableType,
     SecurableTypes :SecurableTypes,
+    UpdateType :UpdateType,
+    UpdateTypes :UpdateTypes,
   };
 
   declare export default {
+    Constants: typeof Constants,
     Models: typeof Models,
     Types: typeof Types,
     configure: typeof configure,
