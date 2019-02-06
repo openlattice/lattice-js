@@ -25,6 +25,7 @@ import { isNonEmptyString } from '../utils/LangUtils';
 
 
 import {
+  DB_PATH,
   EMAIL_PATH,
   ROLES_PATH,
   SEARCH_PATH,
@@ -176,6 +177,34 @@ export function getSecurablePrincipal(principal :Principal) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .post('/', principal)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /principals/db`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise}
+ *
+ * TODO: add unit tests
+ */
+export function getDbAccessCredential() :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidPrincipal(principal)) {
+    errorMsg = 'invalid parameter: principal must be a valid Principal';
+    LOG.error(errorMsg, principal);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${DB_PATH}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
