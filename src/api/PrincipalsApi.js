@@ -195,14 +195,6 @@ export function getSecurablePrincipal(principal :Principal) :Promise<*> {
  */
 export function getDbAccessCredential() :Promise<*> {
 
-  let errorMsg = '';
-
-  if (!isValidPrincipal(principal)) {
-    errorMsg = 'invalid parameter: principal must be a valid Principal';
-    LOG.error(errorMsg, principal);
-    return Promise.reject(errorMsg);
-  }
-
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${DB_PATH}`)
     .then(axiosResponse => axiosResponse.data)
