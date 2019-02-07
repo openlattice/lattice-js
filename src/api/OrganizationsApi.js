@@ -1095,7 +1095,7 @@ export function getFilteredOrganizationEntitySets(organizationId :UUID, flags :s
 /**
  * `POST /organizations/{orgId}/entity-sets/assemble`
  *
- * Materializes enum sets into the organization database.
+ * Materializes entity sets into the organization database.
  *
  * @static
  * @memberof lattice.OrganizationsApi
