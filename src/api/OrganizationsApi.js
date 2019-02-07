@@ -1101,7 +1101,7 @@ export function getFilteredOrganizationEntitySets(organizationId :UUID, flags :s
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {UUID[]} entitySetIds
- * @return {Promise} - a Promise that resolves with a map from entity set ids to OrganizationEntitySetFlags
+ * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * OrganizationsApi.assembleEntitySets(
