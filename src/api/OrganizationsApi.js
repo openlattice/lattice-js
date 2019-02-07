@@ -25,7 +25,7 @@ import Role, { isValidRole } from '../models/Role';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   ASSEMBLE_PATH,
@@ -1119,9 +1119,9 @@ export function assembleEntitySets(organizationId :UUID, entitySetIds :UUID[]) :
     return Promise.reject(errorMsg);
   }
 
-  if (!isNone(flags)) {
-    errorMsg = 'invalid parameter: flags must be a non-empty string array';
-    LOG.error(errorMsg, flags);
+  if (!isValidUuidArray(entitySetIds)) {
+    errorMsg = 'invalid parameter: entitySetIds must be a valid UUID array';
+    LOG.error(errorMsg, entitySetIds);
     return Promise.reject(errorMsg);
   }
 
