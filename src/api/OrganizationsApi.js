@@ -25,11 +25,13 @@ import Role, { isValidRole } from '../models/Role';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
+  ASSEMBLE_PATH,
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
+  ENTITY_SETS_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
   ROLES_PATH,
@@ -1009,6 +1011,122 @@ export function removeMemberFromOrganization(organizationId :UUID, memberId :str
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${memberId}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /organizations/{orgId}/entity-sets`
+ *
+ * Retrieves all the organization entity sets without filtering.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @return {Promise} - a Promise that resolves with a map from entity set ids to OrganizationEntitySetFlags
+ *
+ * @example
+ * OrganizationsApi.getOrganizationEntitySets("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getOrganizationEntitySets(organizationId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${ENTITY_SETS_PATH}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /organizations/{orgId}/entity-sets`
+ *
+ * Retrieves all the organization entity sets filtered according to the flags provided.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} flags
+ * @return {Promise} - a Promise that resolves with a map from entity set ids to OrganizationEntitySetFlags
+ *
+ * @example
+ * OrganizationsApi.getFilteredOrganizationEntitySets(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["INTERNAL"]
+ * );
+ */
+export function getFilteredOrganizationEntitySets(organizationId :UUID, flags :string[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyStringArray(flags)) {
+    errorMsg = 'invalid parameter: flags must be a non-empty string array';
+    LOG.error(errorMsg, flags);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${ENTITY_SETS_PATH}`, flags)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /organizations/{orgId}/entity-sets/assemble`
+ *
+ * Materializes entity sets into the organization database.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID[]} entitySetIds
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.assembleEntitySets(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"]
+ * );
+ */
+export function assembleEntitySets(organizationId :UUID, entitySetIds :UUID[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuidArray(entitySetIds)) {
+    errorMsg = 'invalid parameter: entitySetIds must be a valid UUID array';
+    LOG.error(errorMsg, entitySetIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${ENTITY_SETS_PATH}/${ASSEMBLE_PATH}`, entitySetIds)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
