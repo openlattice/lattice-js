@@ -6,6 +6,7 @@
 const PermissionTypes = {
   DISCOVER: 'DISCOVER',
   LINK: 'LINK',
+  MATERIALIZE: 'MATERIALIZE',
   OWNER: 'OWNER',
   READ: 'READ',
   WRITE: 'WRITE'
