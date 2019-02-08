@@ -2,13 +2,22 @@
  * @flow
  */
 
+import { genRandomBoolean, genRandomString, genRandomUUID } from './MockUtils';
 import {
+  AnalyzerTypes,
   PrincipalTypes,
   RequestStateTypes,
-  SecurableTypes
+  SecurableTypes,
 } from '../../constants/types';
-
-import { genRandomBoolean, genRandomString, genRandomUUID } from './MockUtils';
+import {
+  AssociationType,
+  AssociationTypeBuilder,
+  EntityType,
+  EntityTypeBuilder,
+  FullyQualifiedName,
+  PropertyType,
+  PropertyTypeBuilder,
+} from '../../models';
 
 const MOCK_NAMESPACE = 'OPENLATTICE';
 
@@ -114,53 +123,84 @@ const MOCK_ENTITY_SET_DM :Object = {
   contacts: ['LATTICE']
 };
 
-const MOCK_ENTITY_TYPE_DM :Object = {
-  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  type: { namespace: 'LATTICE', name: 'MockType' },
-  title: 'title',
-  description: 'description',
-  schemas: [{ namespace: 'LATTICE', name: 'MockSchema' }],
-  key: [
+const MOCK_ENTITY_TYPE :EntityType = new EntityTypeBuilder()
+  .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
+  .setType(new FullyQualifiedName('OL', 'MockEntityType'))
+  .setTitle('title')
+  .setDescription('description')
+  .setKey([
     '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e',
     '4b08e1f9-4a00-4169-92ea-10e377070220'
-  ],
-  properties: [
+  ])
+  .setPropertyTypes([
     '8f79e123-3411-4099-a41f-88e5d22d0e8d',
     'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
     'fae6af98-2675-45bd-9a5b-1619a87235a8'
-  ],
-  baseType: '9a768c9b-b76f-4fa1-be60-0178695cdbc3',
-  category: SecurableTypes.EntityType
-};
+  ])
+  .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
+  .setCategory(SecurableTypes.EntityType)
+  .setSchemas([new FullyQualifiedName('OL', 'MockSchema')])
+  .build();
 
-function genRandomEntityType() :Object {
-  return {
-    id: genRandomUUID(),
-    type: { namespace: genRandomString(), name: genRandomString() },
-    title: genRandomString(),
-    description: genRandomString(),
-    schemas: [{ namespace: genRandomString(), name: genRandomString() }],
-    key: [genRandomUUID(), genRandomUUID()],
-    properties: [genRandomUUID(), genRandomUUID(), genRandomUUID()],
-    baseType: genRandomUUID(),
-    category: SecurableTypes.EntityType
-  };
+function genRandomEntityType() :EntityType {
+  return new EntityTypeBuilder()
+    .setId(genRandomUUID())
+    .setType(new FullyQualifiedName(genRandomString(), genRandomString()))
+    .setTitle(genRandomString())
+    .setDescription(genRandomString())
+    .setKey([genRandomUUID(), genRandomUUID()])
+    .setPropertyTypes([genRandomUUID(), genRandomUUID(), genRandomUUID()])
+    .setBaseType(genRandomUUID())
+    .setCategory(SecurableTypes.EntityType)
+    .setSchemas([new FullyQualifiedName(genRandomString(), genRandomString())])
+    .build();
 }
 
-const MOCK_ASSOCIATION_TYPE_DM :Object = {
-  bidirectional: false,
-  dst: ['3d46c10d-c20c-4126-a88f-af72347b24ff'],
-  entityType: MOCK_ENTITY_TYPE_DM,
-  src: ['5f02c387-6e68-4c3c-9d13-84c05a9aedac'],
-};
+const MOCK_ASSOCIATION_TYPE :AssociationType = new AssociationTypeBuilder()
+  .setEntityType(MOCK_ENTITY_TYPE)
+  .setSourceEntityTypeIds([
+    'c49832e9-8c49-4d24-984a-2221b4fa249b',
+    'bec4adc8-79dc-48ab-afda-e203c5573ff5',
+  ])
+  .setDestinationEntityTypeIds([
+    '91385fae-babc-4bd3-ba42-74decb9036f0',
+    '80630df9-f6a4-4213-bbcb-b89826cf14a6',
+    'c1366efe-f619-4f30-bb6a-0b7437966e65',
+  ])
+  .setBidirectional(false)
+  .build();
 
-function genRandomAssociationType() :Object {
-  return {
-    bidirectional: genRandomBoolean(),
-    dst: [genRandomUUID(), genRandomUUID()],
-    entityType: genRandomEntityType(),
-    src: [genRandomUUID()],
-  };
+function genRandomAssociationType() :AssociationType {
+  return new AssociationTypeBuilder()
+    .setEntityType(genRandomEntityType())
+    .setSourceEntityTypeIds([genRandomUUID(), genRandomUUID()])
+    .setDestinationEntityTypeIds([genRandomUUID(), genRandomUUID(), genRandomUUID()])
+    .setBidirectional(genRandomBoolean())
+    .build();
+}
+
+const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
+  .setId('3771c28a-cdee-403b-9cea-48845210f8ab')
+  .setType(new FullyQualifiedName('OL', 'MockPropertyType'))
+  .setTitle('title')
+  .setDescription('description')
+  .setDataType('String')
+  .setAnalyzer(AnalyzerTypes.STANDARD)
+  .setPii(false)
+  .setSchemas([new FullyQualifiedName('OL', 'MockSchema')])
+  .build();
+
+function genRandomPropertyType() :PropertyType {
+  return new PropertyTypeBuilder()
+    .setId(genRandomUUID())
+    .setType(new FullyQualifiedName(genRandomString(), genRandomString()))
+    .setTitle(genRandomString())
+    .setDescription(genRandomString())
+    .setDataType('String')
+    .setSchemas([new FullyQualifiedName(genRandomString(), genRandomString())])
+    .setPii(genRandomBoolean())
+    .setAnalyzer(AnalyzerTypes.STANDARD)
+    .build();
 }
 
 const MOCK_LINKING_ENTITY_SET_DM :Object = {
@@ -177,7 +217,7 @@ const MOCK_LINKING_ENTITY_SET_DM :Object = {
 };
 
 const MOCK_LINKING_ENTITY_TYPE_DM :Object = {
-  entityType: MOCK_ENTITY_TYPE_DM,
+  entityType: MOCK_ENTITY_TYPE,
   entityTypeIds: [
     'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
     'fae6af98-2675-45bd-9a5b-1619a87235a8'
@@ -212,15 +252,6 @@ const MOCK_PRINCIPAL_DM :Object = {
   id: 'mockPrincipalId'
 };
 
-const MOCK_PROPERTY_TYPE_DM :Object = {
-  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  type: { namespace: 'LATTICE', name: 'MockType' },
-  title: 'title',
-  description: 'description',
-  datatype: 'datatype',
-  schemas: [{ namespace: 'LATTICE', name: 'MockSchema' }]
-};
-
 const MOCK_REQUEST_DM :Object = {
   aclKey: MOCK_ACL_KEY,
   permissions: ['READ'],
@@ -243,15 +274,15 @@ const MOCK_ROLE_DM :Object = {
 
 const MOCK_SCHEMA_DM :Object = {
   fqn: MOCK_FQN,
-  entityTypes: [MOCK_ENTITY_TYPE_DM],
-  propertyTypes: [MOCK_PROPERTY_TYPE_DM]
+  entityTypes: [MOCK_ENTITY_TYPE],
+  propertyTypes: [MOCK_PROPERTY_TYPE]
 };
 
 const MOCK_EDM_DM :Object = {
-  associationTypes: [MOCK_ASSOCIATION_TYPE_DM],
-  entityTypes: [MOCK_ENTITY_TYPE_DM],
+  associationTypes: [MOCK_ASSOCIATION_TYPE],
+  entityTypes: [MOCK_ENTITY_TYPE],
   namespaces: [MOCK_NAMESPACE],
-  propertyTypes: [MOCK_PROPERTY_TYPE_DM],
+  propertyTypes: [MOCK_PROPERTY_TYPE],
   schemas: [MOCK_SCHEMA_DM],
   version: 'd7553374-4ab8-4954-ae50-857948f5265f',
 };
@@ -303,7 +334,7 @@ export {
   MOCK_ACL_KEY,
   MOCK_APP_DM,
   MOCK_APP_TYPE_DM,
-  MOCK_ASSOCIATION_TYPE_DM,
+  MOCK_ASSOCIATION_TYPE,
   MOCK_DATA_EDGE_KEY_DM,
   MOCK_DATA_EDGE_DM,
   MOCK_DATA_GRAPH_DM,
@@ -311,7 +342,7 @@ export {
   MOCK_EDM_DM,
   MOCK_ENTITY_DATA_KEY_DM,
   MOCK_ENTITY_SET_DM,
-  MOCK_ENTITY_TYPE_DM,
+  MOCK_ENTITY_TYPE,
   MOCK_FQN,
   MOCK_LINKING_ENTITY_SET_DM,
   MOCK_LINKING_ENTITY_TYPE_DM,
@@ -319,7 +350,7 @@ export {
   MOCK_NAMESPACE,
   MOCK_ORGANIZATION_DM,
   MOCK_PRINCIPAL_DM,
-  MOCK_PROPERTY_TYPE_DM,
+  MOCK_PROPERTY_TYPE,
   MOCK_REQUEST_DM,
   MOCK_REQUEST_STATUS_DM,
   MOCK_ROLE_DM,
@@ -327,4 +358,5 @@ export {
   genRandomAssociationType,
   genRandomDataGraph,
   genRandomEntityType,
+  genRandomPropertyType,
 };

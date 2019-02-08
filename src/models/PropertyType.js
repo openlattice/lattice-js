@@ -124,14 +124,9 @@ export default class PropertyType {
     return propertyTypeObj;
   }
 
-  toString() :string {
+  valueOf() :number {
 
-    return JSON.stringify(this.toObject());
-  }
-
-  valueOf() :string {
-
-    return this.toString();
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -208,7 +203,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :Array<FQN | FQNObject | string>) :PropertyTypeBuilder {
+  setSchemas(schemas :FQN[]) :PropertyTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -219,7 +214,7 @@ export class PropertyTypeBuilder {
     }
 
     this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFQN :FQN | FQNObject | string) => {
+      schemas.forEach((schemaFQN :FQN) => {
         set.add(new FullyQualifiedName(schemaFQN));
       });
     }).toJS();
@@ -343,3 +338,7 @@ export function isValidPropertyTypeArray(propertyTypes :PropertyType[]) :boolean
 
   return validateNonEmptyArray(propertyTypes, (propertyType :PropertyType) => isValidPropertyType(propertyType));
 }
+
+export type {
+  PropertyTypeObject,
+};
