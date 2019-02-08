@@ -3,7 +3,7 @@
  */
 
 import has from 'lodash/has';
-import { Set, fromJS } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
 import SecurableTypes from '../constants/types/SecurableTypes';
@@ -129,14 +129,9 @@ export default class EntityType {
     return entityTypeObj;
   }
 
-  toString() :string {
+  valueOf() :number {
 
-    return JSON.stringify(this.toObject());
-  }
-
-  valueOf() :string {
-
-    return this.toString();
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -204,7 +199,7 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :Array<FQN | FQNObject | string>) :EntityTypeBuilder {
+  setSchemas(schemas :FQN[]) :EntityTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -215,7 +210,7 @@ export class EntityTypeBuilder {
     }
 
     this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFQN :FQN | FQNObject | string) => {
+      schemas.forEach((schemaFQN :FQN) => {
         set.add(new FullyQualifiedName(schemaFQN));
       });
     }).toJS();
@@ -383,3 +378,7 @@ export function isValidEntityTypeArray(entityTypes :EntityType[]) :boolean {
 
   return validateNonEmptyArray(entityTypes, (entityType :EntityType) => isValidEntityType(entityType));
 }
+
+export type {
+  EntityTypeObject,
+};

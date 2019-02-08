@@ -1,4 +1,4 @@
-import { Map, Set } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import AssociationType, { AssociationTypeBuilder, isValidAssociationType as isValid } from './AssociationType';
 
@@ -10,7 +10,7 @@ import {
 } from '../utils/testing/Invalid';
 
 import {
-  MOCK_ASSOCIATION_TYPE_DM as MOCK_DM,
+  MOCK_ASSOCIATION_TYPE,
   genRandomAssociationType,
 } from '../utils/testing/MockDataModels';
 
@@ -19,7 +19,7 @@ const {
   dst: mockDstEntityTypeIds,
   entityType: mockEntityType,
   src: mockSrcEntityTypeIds,
-} = MOCK_DM;
+} = MOCK_ASSOCIATION_TYPE;
 
 describe('AssociationType', () => {
 
@@ -215,7 +215,7 @@ describe('AssociationType', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_DM)).toEqual(true);
+        expect(isValid(MOCK_ASSOCIATION_TYPE)).toEqual(true);
       });
 
       test('should return true when given a valid object instance ', () => {
@@ -254,27 +254,39 @@ describe('AssociationType', () => {
 
       test('should return false when given an object literal with an invalid "entityType" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { entityType: invalidInput }))).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { entityType: invalidInput }))
+          ).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "sourceEntityTypeIds" property', () => {
         INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { sourceEntityTypeIds: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_DM, { sourceEntityTypeIds: [invalidInput] }))).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { sourceEntityTypeIds: invalidInput }))
+          ).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { sourceEntityTypeIds: [invalidInput] }))
+          ).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "dstEntityTypeIds" property', () => {
         INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { destinationEntityTypeIds: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_DM, { destinationEntityTypeIds: [invalidInput] }))).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { destinationEntityTypeIds: invalidInput }))
+          ).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { destinationEntityTypeIds: [invalidInput] }))
+          ).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "bidirectional" property', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { bidirectional: invalidInput }))).toEqual(false);
+          expect(
+            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { bidirectional: invalidInput }))
+          ).toEqual(false);
         });
       });
 
@@ -338,78 +350,77 @@ describe('AssociationType', () => {
       const associationType = new AssociationType(
         mockEntityType, mockSrcEntityTypeIds, mockDstEntityTypeIds, mockBidi
       );
-      expect(associationType.valueOf()).toEqual(JSON.stringify({
-        bidirectional: mockBidi,
-        dst: mockDstEntityTypeIds,
-        entityType: mockEntityType,
-        src: mockSrcEntityTypeIds,
-      }));
+      expect(associationType.valueOf()).toEqual(
+        fromJS({
+          bidirectional: mockBidi,
+          dst: mockDstEntityTypeIds,
+          entityType: mockEntityType.toObject(),
+          src: mockSrcEntityTypeIds,
+        }).hashCode()
+      );
     });
 
     test('Immutable.Set', () => {
 
-      const {
-        bidirectional: randomBidi,
-        dst: randomDstEntityTypeIds,
-        entityType: randomEntityType,
-        src: randomSrcEntityTypeIds,
-      } = genRandomAssociationType();
+      const randomAssociationType = genRandomAssociationType();
+      const associationType0 = new AssociationType(
+        MOCK_ASSOCIATION_TYPE.entityType,
+        MOCK_ASSOCIATION_TYPE.src,
+        MOCK_ASSOCIATION_TYPE.dst,
+        MOCK_ASSOCIATION_TYPE.bidirectional,
+      );
+      const associationType1 = new AssociationType(
+        MOCK_ASSOCIATION_TYPE.entityType,
+        MOCK_ASSOCIATION_TYPE.src,
+        MOCK_ASSOCIATION_TYPE.dst,
+        MOCK_ASSOCIATION_TYPE.bidirectional,
+      );
 
-      const testSet = Set().withMutations((mutableSet) => {
-        mutableSet.add(new AssociationType(
-          mockEntityType, mockSrcEntityTypeIds, mockDstEntityTypeIds, mockBidi
-        ));
-        mutableSet.add(new AssociationType(
-          randomEntityType, randomSrcEntityTypeIds, randomDstEntityTypeIds, randomBidi
-        ));
-        mutableSet.add(new AssociationType(
-          mockEntityType, mockSrcEntityTypeIds, mockDstEntityTypeIds, mockBidi
-        ));
-      });
+      const testSet = Set()
+        .add(associationType0)
+        .add(randomAssociationType)
+        .add(associationType1);
 
       expect(testSet.size).toEqual(2);
       expect(testSet.count()).toEqual(2);
 
-      expect(testSet.first().bidirectional).toEqual(mockBidi);
-      expect(testSet.first().dst).toEqual(mockDstEntityTypeIds);
-      expect(testSet.first().entityType).toEqual(mockEntityType);
-      expect(testSet.first().src).toEqual(mockSrcEntityTypeIds);
+      expect(testSet.first().bidirectional).toEqual(MOCK_ASSOCIATION_TYPE.bidirectional);
+      expect(testSet.first().dst).toEqual(MOCK_ASSOCIATION_TYPE.dst);
+      expect(testSet.first().entityType).toEqual(MOCK_ASSOCIATION_TYPE.entityType);
+      expect(testSet.first().src).toEqual(MOCK_ASSOCIATION_TYPE.src);
 
-      expect(testSet.last().bidirectional).toEqual(randomBidi);
-      expect(testSet.last().dst).toEqual(randomDstEntityTypeIds);
-      expect(testSet.last().entityType).toEqual(randomEntityType);
-      expect(testSet.last().src).toEqual(randomSrcEntityTypeIds);
+      expect(testSet.last().bidirectional).toEqual(randomAssociationType.bidirectional);
+      expect(testSet.last().dst).toEqual(randomAssociationType.dst);
+      expect(testSet.last().entityType).toEqual(randomAssociationType.entityType);
+      expect(testSet.last().src).toEqual(randomAssociationType.src);
     });
 
     test('Immutable.Map', () => {
 
-      const {
-        bidirectional: randomBidi,
-        dst: randomDstEntityTypeIds,
-        entityType: randomEntityType,
-        src: randomSrcEntityTypeIds,
-      } = genRandomAssociationType();
-
+      const randomAssociationType = genRandomAssociationType();
       const associationType0 = new AssociationType(
-        mockEntityType, mockSrcEntityTypeIds, mockDstEntityTypeIds, mockBidi
+        MOCK_ASSOCIATION_TYPE.entityType,
+        MOCK_ASSOCIATION_TYPE.src,
+        MOCK_ASSOCIATION_TYPE.dst,
+        MOCK_ASSOCIATION_TYPE.bidirectional,
       );
       const associationType1 = new AssociationType(
-        randomEntityType, randomSrcEntityTypeIds, randomDstEntityTypeIds, randomBidi
-      );
-      const associationType2 = new AssociationType(
-        mockEntityType, mockSrcEntityTypeIds, mockDstEntityTypeIds, mockBidi
+        MOCK_ASSOCIATION_TYPE.entityType,
+        MOCK_ASSOCIATION_TYPE.src,
+        MOCK_ASSOCIATION_TYPE.dst,
+        MOCK_ASSOCIATION_TYPE.bidirectional,
       );
 
-      const testMap = Map().withMutations((mutableMap) => {
-        mutableMap.set(associationType0, 'test_value_1');
-        mutableMap.set(associationType1, 'test_value_2');
-        mutableMap.set(associationType2, 'test_value_3');
-      });
+      const testMap = Map()
+        .set(associationType0, 'test_value_1')
+        .set(randomAssociationType, 'test_value_2')
+        .set(associationType1, 'test_value_3');
+
       expect(testMap.size).toEqual(2);
       expect(testMap.count()).toEqual(2);
       expect(testMap.get(associationType0)).toEqual('test_value_3');
-      expect(testMap.get(associationType1)).toEqual('test_value_2');
-      expect(testMap.get(associationType2)).toEqual('test_value_3');
+      expect(testMap.get(randomAssociationType)).toEqual('test_value_2');
+      expect(testMap.get(associationType1)).toEqual('test_value_3');
     });
 
   });

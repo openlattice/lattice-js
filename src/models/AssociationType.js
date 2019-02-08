@@ -4,14 +4,22 @@
 
 import has from 'lodash/has';
 import isBoolean from 'lodash/isBoolean';
-import { Set, fromJS } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
-import EntityType, { isValidEntityType } from './EntityType';
+import EntityType, { EntityTypeBuilder, isValidEntityType } from './EntityType';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
 import { isValidUuidArray } from '../utils/ValidationUtils';
+import type { EntityTypeObject } from './EntityType';
 
 const LOG = new Logger('AssociationType');
+
+type AssociationTypeObject = {|
+  bidirectional :boolean;
+  dst :UUID[];
+  entityType :EntityTypeObject;
+  src :UUID[];
+|};
 
 /**
  * @class AssociationType
@@ -19,16 +27,16 @@ const LOG = new Logger('AssociationType');
  */
 export default class AssociationType {
 
+  bidirectional :boolean;
+  dst :UUID[];
   entityType :EntityType;
   src :UUID[];
-  dst :UUID[];
-  bidirectional :boolean;
 
   constructor(
     entityType :EntityType,
     sourceEntityTypeIds :UUID[],
     destinationEntityTypeIds :UUID[],
-    bidirectional :boolean
+    bidirectional :boolean,
   ) {
 
     // required properties
@@ -38,27 +46,27 @@ export default class AssociationType {
     this.bidirectional = bidirectional;
   }
 
-  asImmutable() :Map<string, Object> {
+  toImmutable() :Map<*, *> {
 
-    const associationTypeObj = {};
-
-    // required properties
-    associationTypeObj.entityType = this.entityType.toImmutable();
-    associationTypeObj.src = this.src;
-    associationTypeObj.dst = this.dst;
-    associationTypeObj.bidirectional = this.bidirectional;
-
-    return fromJS(associationTypeObj);
+    return fromJS(this.toObject());
   }
 
-  valueOf() :string {
+  toObject() :AssociationTypeObject {
 
-    return JSON.stringify({
+    // required properties
+    const associationTypeObj :AssociationTypeObject = {
       bidirectional: this.bidirectional,
       dst: this.dst,
-      entityType: this.entityType,
+      entityType: this.entityType.toObject(),
       src: this.src,
-    });
+    };
+
+    return associationTypeObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -68,10 +76,10 @@ export default class AssociationType {
  */
 export class AssociationTypeBuilder {
 
+  bidirectional :boolean;
+  destinationEntityTypeIds :UUID[];
   entityType :EntityType;
   sourceEntityTypeIds :UUID[];
-  destinationEntityTypeIds :UUID[];
-  bidirectional :boolean;
 
   setEntityType(entityType :EntityType) :AssociationTypeBuilder {
 
@@ -79,7 +87,17 @@ export class AssociationTypeBuilder {
       throw new Error('invalid parameter: entityType must be a valid EntityType');
     }
 
-    this.entityType = entityType;
+    this.entityType = new EntityTypeBuilder()
+      .setBaseType(entityType.baseType)
+      .setCategory(entityType.category)
+      .setDescription(entityType.description)
+      .setId(entityType.id)
+      .setKey(entityType.key)
+      .setPropertyTypes(entityType.properties)
+      .setSchemas(entityType.schemas)
+      .setTitle(entityType.title)
+      .setType(entityType.type)
+      .build();
     return this;
   }
 
@@ -205,3 +223,7 @@ export function isValidAssociationType(associationType :any) :boolean {
     return false;
   }
 }
+
+export type {
+  AssociationTypeObject,
+};
