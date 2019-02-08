@@ -27,8 +27,8 @@ import {
   MOCK_EDM_DM,
   MOCK_FQN,
   MOCK_ENTITY_SET_DM,
-  MOCK_ENTITY_TYPE_DM,
-  MOCK_PROPERTY_TYPE_DM,
+  MOCK_ENTITY_TYPE,
+  MOCK_PROPERTY_TYPE,
   MOCK_SCHEMA_DM
 } from '../utils/testing/MockDataModels';
 
@@ -321,8 +321,8 @@ function testUpdateSchema() {
     const validParams = [
       MOCK_FQN,
       MOCK_ACTION,
-      [MOCK_ENTITY_TYPE_DM.id],
-      [MOCK_PROPERTY_TYPE_DM.id]
+      [MOCK_ENTITY_TYPE.id],
+      [MOCK_PROPERTY_TYPE.id]
     ];
 
     const invalidParams = [
@@ -336,8 +336,8 @@ function testUpdateSchema() {
       `/${SCHEMA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`,
       {
         action: MOCK_ACTION,
-        entityTypes: [MOCK_ENTITY_TYPE_DM.id],
-        propertyTypes: [MOCK_PROPERTY_TYPE_DM.id]
+        entityTypes: [MOCK_ENTITY_TYPE.id],
+        propertyTypes: [MOCK_PROPERTY_TYPE.id]
       }
     ];
 
@@ -461,9 +461,9 @@ function testGetEntityType() {
 
     const fnToTest = EntityDataModelApi.getEntityType;
 
-    const validParams = [MOCK_ENTITY_TYPE_DM.id];
+    const validParams = [MOCK_ENTITY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_DM.id}`];
+    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -513,9 +513,9 @@ function testCreateEntityType() {
 
     const fnToTest = EntityDataModelApi.createEntityType;
 
-    const validParams = [MOCK_ENTITY_TYPE_DM];
+    const validParams = [MOCK_ENTITY_TYPE];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${ENTITY_TYPE_PATH}`, MOCK_ENTITY_TYPE_DM];
+    const axiosParams = [`/${ENTITY_TYPE_PATH}`, MOCK_ENTITY_TYPE];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -531,9 +531,9 @@ function testDeleteEntityType() {
 
     const fnToTest = EntityDataModelApi.deleteEntityType;
 
-    const validParams = [MOCK_ENTITY_TYPE_DM.id];
+    const validParams = [MOCK_ENTITY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_DM.id}`];
+    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -549,9 +549,9 @@ function testAddPropertyTypeToEntityType() {
 
     const fnToTest = EntityDataModelApi.addPropertyTypeToEntityType;
 
-    const validParams = [MOCK_ENTITY_TYPE_DM.id, MOCK_PROPERTY_TYPE_DM.id];
+    const validParams = [MOCK_ENTITY_TYPE.id, MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_DM.id}/${MOCK_PROPERTY_TYPE_DM.id}`];
+    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -567,9 +567,9 @@ function testRemovePropertyTypeFromEntityType() {
 
     const fnToTest = EntityDataModelApi.removePropertyTypeFromEntityType;
 
-    const validParams = [MOCK_ENTITY_TYPE_DM.id, MOCK_PROPERTY_TYPE_DM.id];
+    const validParams = [MOCK_ENTITY_TYPE.id, MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_DM.id}/${MOCK_PROPERTY_TYPE_DM.id}`];
+    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -585,9 +585,9 @@ function testUpdateEntityTypeMetaData() {
 
     const fnToTest = EntityDataModelApi.updateEntityTypeMetaData;
 
-    const validParams = [MOCK_ENTITY_TYPE_DM.id, MOCK_METADATA_UPDATE];
+    const validParams = [MOCK_ENTITY_TYPE.id, MOCK_METADATA_UPDATE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE_DM.id}`, MOCK_METADATA_UPDATE];
+    const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`, MOCK_METADATA_UPDATE];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -603,9 +603,9 @@ function testGetPropertyType() {
 
     const fnToTest = EntityDataModelApi.getPropertyType;
 
-    const validParams = [MOCK_PROPERTY_TYPE_DM.id];
+    const validParams = [MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_DM.id}`];
+    const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -673,9 +673,9 @@ function testCreatePropertyType() {
 
     const fnToTest = EntityDataModelApi.createPropertyType;
 
-    const validParams = [MOCK_PROPERTY_TYPE_DM];
+    const validParams = [MOCK_PROPERTY_TYPE];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${PROPERTY_TYPE_PATH}`, MOCK_PROPERTY_TYPE_DM];
+    const axiosParams = [`/${PROPERTY_TYPE_PATH}`, MOCK_PROPERTY_TYPE];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -691,9 +691,9 @@ function testDeletePropertyType() {
 
     const fnToTest = EntityDataModelApi.deletePropertyType;
 
-    const validParams = [MOCK_PROPERTY_TYPE_DM.id];
+    const validParams = [MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_DM.id}`];
+    const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
@@ -709,9 +709,9 @@ function testUpdatePropertyTypeMetaData() {
 
     const fnToTest = EntityDataModelApi.updatePropertyTypeMetaData;
 
-    const validParams = [MOCK_PROPERTY_TYPE_DM.id, MOCK_METADATA_UPDATE];
+    const validParams = [MOCK_PROPERTY_TYPE.id, MOCK_METADATA_UPDATE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE_DM.id}`, MOCK_METADATA_UPDATE];
+    const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`, MOCK_METADATA_UPDATE];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
