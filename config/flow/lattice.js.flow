@@ -53,7 +53,7 @@ declare module "lattice" {
   declare export class AssociationType {
     bidirectional :boolean;
     dst :UUID[];
-    entityType :EntityTypeObject;
+    entityType :EntityType;
     src :UUID[];
     toImmutable() :Map<*, *>;
     toObject() :AssociationTypeObject;
