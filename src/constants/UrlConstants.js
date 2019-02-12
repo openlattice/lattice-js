@@ -31,6 +31,7 @@ export const ENTITY_SET_PATH :string = 'entity/set';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const ENUM_TYPE_PATH :string = 'enum/type';
 export const EXPIRATION_PATH :string = 'expiration';
+export const EXPLAIN_PATH :string = 'explain';
 export const FILE_TYPE :string = 'fileType';
 export const FORCE_PATH :string = 'force';
 export const FQN_PATH :string = 'fqn';
