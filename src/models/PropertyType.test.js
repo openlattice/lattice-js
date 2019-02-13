@@ -590,7 +590,7 @@ describe('PropertyType', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const entityType = new PropertyType(
+      const propertyType = new PropertyType(
         MOCK_PROPERTY_TYPE.id,
         MOCK_PROPERTY_TYPE.type,
         MOCK_PROPERTY_TYPE.title,
@@ -600,7 +600,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.piiField,
         MOCK_PROPERTY_TYPE.analyzer,
       );
-      expect(entityType.valueOf()).toEqual(
+      expect(propertyType.valueOf()).toEqual(
         fromJS({
           id: MOCK_PROPERTY_TYPE.id,
           type: MOCK_PROPERTY_TYPE.type.toObject(),
