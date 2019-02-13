@@ -23,6 +23,10 @@ import { PERMISSIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isValidUuidArray } from '../utils/ValidationUtils';
 
+import {
+  EXPLAIN_PATH
+} from '../constants/UrlConstants';
+
 const LOG = new Logger('PermissionsApi');
 
 /**
@@ -102,6 +106,38 @@ export function updateAcl(aclData :AclData) :Promise<*> {
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .patch('/', aclData)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /permissions/explain`
+ *
+ * Retrieves the acl for a particular aclKey, with an explanation of where the permissions come from.
+ *
+ * @static
+ * @memberof lattice.PermissionsApi
+ * @param {UUID[]} aclKey
+ * @returns {Promise<Object>}
+ *
+ * @example
+ * PermissionsApi.getAclExplanation(['ec6865e6-e60e-424b-a071-6a9c1603d735']);
+ */
+export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuidArray(aclKey)) {
+    errorMsg = 'invalid parameter: aclKey must be a valid UUID array';
+    LOG.error(errorMsg, aclKey);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .post(`/${EXPLAIN_PATH}`, aclKey)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
