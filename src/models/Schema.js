@@ -2,7 +2,7 @@
  * @flow
  */
 
-import { Map, Set, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 import EntityType, { EntityTypeBuilder, isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
