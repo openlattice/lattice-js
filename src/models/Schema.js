@@ -2,7 +2,7 @@
  * @flow
  */
 
-import { Map, Set, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 import EntityType, { EntityTypeBuilder, isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
@@ -95,23 +95,20 @@ export class SchemaBuilder {
       throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
     }
 
-    this.entityTypes = Set().withMutations((set :Set<EntityType>) => {
-      entityTypes.forEach((entityType :EntityType) => {
-        set.add(
-          new EntityTypeBuilder()
-            .setBaseType(entityType.baseType)
-            .setCategory(entityType.category)
-            .setDescription(entityType.description)
-            .setId(entityType.id)
-            .setKey(entityType.key)
-            .setPropertyTypes(entityType.properties)
-            .setSchemas(entityType.schemas)
-            .setTitle(entityType.title)
-            .setType(entityType.type)
-            .build()
-        );
-      });
-    }).toJS();
+    // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
+    this.entityTypes = entityTypes.map((entityType :EntityType) => (
+      new EntityTypeBuilder()
+        .setBaseType(entityType.baseType)
+        .setCategory(entityType.category)
+        .setDescription(entityType.description)
+        .setId(entityType.id)
+        .setKey(entityType.key)
+        .setPropertyTypes(entityType.properties)
+        .setSchemas(entityType.schemas)
+        .setTitle(entityType.title)
+        .setType(entityType.type)
+        .build()
+    ));
 
     return this;
   }
@@ -126,22 +123,19 @@ export class SchemaBuilder {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
     }
 
-    this.propertyTypes = Set().withMutations((set :Set<PropertyType>) => {
-      propertyTypes.forEach((propertyType :PropertyType) => {
-        set.add(
-          new PropertyTypeBuilder()
-            .setAnalyzer(propertyType.analyzer)
-            .setDataType(propertyType.datatype)
-            .setDescription(propertyType.description)
-            .setId(propertyType.id)
-            .setPii(propertyType.piiField)
-            .setSchemas(propertyType.schemas)
-            .setTitle(propertyType.title)
-            .setType(propertyType.type)
-            .build()
-        );
-      });
-    }).toJS();
+    // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
+    this.propertyTypes = propertyTypes.map((propertyType :PropertyType) => (
+      new PropertyTypeBuilder()
+        .setAnalyzer(propertyType.analyzer)
+        .setDataType(propertyType.datatype)
+        .setDescription(propertyType.description)
+        .setId(propertyType.id)
+        .setPii(propertyType.piiField)
+        .setSchemas(propertyType.schemas)
+        .setTitle(propertyType.title)
+        .setType(propertyType.type)
+        .build()
+    ));
 
     return this;
   }
