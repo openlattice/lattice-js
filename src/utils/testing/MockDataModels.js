@@ -17,6 +17,8 @@ import {
   FullyQualifiedName,
   PropertyType,
   PropertyTypeBuilder,
+  Schema,
+  SchemaBuilder,
 } from '../../models';
 
 const MOCK_NAMESPACE = 'OPENLATTICE';
@@ -272,18 +274,26 @@ const MOCK_ROLE_DM :Object = {
   principal: { type: 'ROLE', id: 'roleid' }
 };
 
-const MOCK_SCHEMA_DM :Object = {
-  fqn: MOCK_FQN,
-  entityTypes: [MOCK_ENTITY_TYPE],
-  propertyTypes: [MOCK_PROPERTY_TYPE]
-};
+const MOCK_SCHEMA :Schema = new SchemaBuilder()
+  .setEntityTypes([MOCK_ENTITY_TYPE])
+  .setFullyQualifiedName(new FullyQualifiedName('OL', 'MockSchema'))
+  .setPropertyTypes([MOCK_PROPERTY_TYPE])
+  .build();
+
+function genRandomSchema() :Schema {
+  return new SchemaBuilder()
+    .setEntityTypes([genRandomEntityType()])
+    .setFullyQualifiedName(new FullyQualifiedName(genRandomString(), genRandomString()))
+    .setPropertyTypes([genRandomPropertyType(), genRandomPropertyType()])
+    .build();
+}
 
 const MOCK_EDM_DM :Object = {
   associationTypes: [MOCK_ASSOCIATION_TYPE],
   entityTypes: [MOCK_ENTITY_TYPE],
   namespaces: [MOCK_NAMESPACE],
   propertyTypes: [MOCK_PROPERTY_TYPE],
-  schemas: [MOCK_SCHEMA_DM],
+  schemas: [MOCK_SCHEMA],
   version: 'd7553374-4ab8-4954-ae50-857948f5265f',
 };
 
@@ -354,9 +364,10 @@ export {
   MOCK_REQUEST_DM,
   MOCK_REQUEST_STATUS_DM,
   MOCK_ROLE_DM,
-  MOCK_SCHEMA_DM,
+  MOCK_SCHEMA,
   genRandomAssociationType,
   genRandomDataGraph,
   genRandomEntityType,
   genRandomPropertyType,
+  genRandomSchema,
 };

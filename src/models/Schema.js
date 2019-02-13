@@ -2,15 +2,24 @@
  * @flow
  */
 
-import { fromJS } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
-import EntityType, { isValidEntityTypeArray } from './EntityType';
+import EntityType, { EntityTypeBuilder, isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
-import PropertyType, { isValidPropertyTypeArray } from './PropertyType';
+import PropertyType, { PropertyTypeBuilder, isValidPropertyTypeArray } from './PropertyType';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
+import type { EntityTypeObject } from './EntityType';
+import type { FQN, FQNObject } from './FullyQualifiedName';
+import type { PropertyTypeObject } from './PropertyType';
 
 const LOG = new Logger('Schema');
+
+type SchemaObject = {|
+  entityTypes :EntityTypeObject[];
+  fqn :FQNObject;
+  propertyTypes :PropertyTypeObject[];
+|};
 
 /**
  * @class Schema
@@ -18,12 +27,12 @@ const LOG = new Logger('Schema');
  */
 export default class Schema {
 
-  fqn :FullyQualifiedName;
   entityTypes :EntityType[];
+  fqn :FQN;
   propertyTypes :PropertyType[];
 
   constructor(
-    fqn :FullyQualifiedName,
+    fqn :FQN,
     entityTypes :EntityType[],
     propertyTypes :PropertyType[]
   ) {
@@ -33,16 +42,26 @@ export default class Schema {
     this.propertyTypes = propertyTypes;
   }
 
-  asImmutable() {
+  toImmutable() :Map<*, *> {
 
-    const plainObj = {};
+    return fromJS(this.toObject());
+  }
+
+  toObject() :SchemaObject {
 
     // required properties
-    plainObj.fqn = this.fqn;
-    plainObj.entityTypes = this.entityTypes.map((entityType :EntityType) => entityType.toImmutable());
-    plainObj.propertyTypes = this.propertyTypes.map((propertyType :PropertyType) => propertyType.toImmutable());
+    const schemaObj :SchemaObject = {
+      entityTypes: this.entityTypes.map((entityType :EntityType) => entityType.toObject()),
+      fqn: this.fqn.toObject(),
+      propertyTypes: this.propertyTypes.map((propertyType :PropertyType) => propertyType.toObject()),
+    };
 
-    return fromJS(plainObj);
+    return schemaObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -52,7 +71,7 @@ export default class Schema {
  */
 export class SchemaBuilder {
 
-  fqn :FullyQualifiedName;
+  fqn :FQN;
   entityTypes :EntityType[];
   propertyTypes :PropertyType[];
 
@@ -76,9 +95,24 @@ export class SchemaBuilder {
       throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
     }
 
-    // TODO: Immutable.Set() to dedupe
+    this.entityTypes = Set().withMutations((set :Set<EntityType>) => {
+      entityTypes.forEach((entityType :EntityType) => {
+        set.add(
+          new EntityTypeBuilder()
+            .setBaseType(entityType.baseType)
+            .setCategory(entityType.category)
+            .setDescription(entityType.description)
+            .setId(entityType.id)
+            .setKey(entityType.key)
+            .setPropertyTypes(entityType.properties)
+            .setSchemas(entityType.schemas)
+            .setTitle(entityType.title)
+            .setType(entityType.type)
+            .build()
+        );
+      });
+    }).toJS();
 
-    this.entityTypes = entityTypes;
     return this;
   }
 
@@ -92,9 +126,23 @@ export class SchemaBuilder {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
     }
 
-    // TODO: Immutable.Set() to dedupe
+    this.propertyTypes = Set().withMutations((set :Set<PropertyType>) => {
+      propertyTypes.forEach((propertyType :PropertyType) => {
+        set.add(
+          new PropertyTypeBuilder()
+            .setAnalyzer(propertyType.analyzer)
+            .setDataType(propertyType.datatype)
+            .setDescription(propertyType.description)
+            .setId(propertyType.id)
+            .setPii(propertyType.piiField)
+            .setSchemas(propertyType.schemas)
+            .setTitle(propertyType.title)
+            .setType(propertyType.type)
+            .build()
+        );
+      });
+    }).toJS();
 
-    this.propertyTypes = propertyTypes;
     return this;
   }
 
@@ -115,7 +163,7 @@ export class SchemaBuilder {
     return new Schema(
       this.fqn,
       this.entityTypes,
-      this.propertyTypes
+      this.propertyTypes,
     );
   }
 }

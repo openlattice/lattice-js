@@ -29,7 +29,7 @@ import {
   MOCK_ENTITY_SET_DM,
   MOCK_ENTITY_TYPE,
   MOCK_PROPERTY_TYPE,
-  MOCK_SCHEMA_DM
+  MOCK_SCHEMA,
 } from '../utils/testing/MockDataModels';
 
 import {
@@ -281,9 +281,9 @@ function testCreateSchema() {
 
     const fnToTest = EntityDataModelApi.createSchema;
 
-    const validParams = [MOCK_SCHEMA_DM];
+    const validParams = [MOCK_SCHEMA];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${SCHEMA_PATH}`, MOCK_SCHEMA_DM];
+    const axiosParams = [`/${SCHEMA_PATH}`, MOCK_SCHEMA];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
