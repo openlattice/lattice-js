@@ -33,6 +33,7 @@ const EXPECTED = Map({
   ENTITY_TYPE_PATH              : 'entity/type',
   ENUM_TYPE_PATH                : 'enum/type',
   EXPIRATION_PATH               : 'expiration',
+  EXPLAIN_PATH                  : 'explain',
   FILE_TYPE                     : 'fileType',
   FORCE_PATH                    : 'force',
   FQN_PATH                      : 'fqn',

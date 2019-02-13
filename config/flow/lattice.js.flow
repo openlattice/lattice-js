@@ -53,11 +53,11 @@ declare module "lattice" {
   declare export class AssociationType {
     bidirectional :boolean;
     dst :UUID[];
-    entityType :EntityTypeObject;
+    entityType :EntityType;
     src :UUID[];
     toImmutable() :Map<*, *>;
     toObject() :AssociationTypeObject;
-    valueOf() :string;
+    valueOf() :number;
   }
 
   declare export class AssociationTypeBuilder {
@@ -92,7 +92,7 @@ declare module "lattice" {
     type :FQN;
     toImmutable() :Map<*, *>;
     toObject() :EntityTypeObject;
-    valueOf() :string;
+    valueOf() :number;
   }
 
   declare export class EntityTypeBuilder {
@@ -130,7 +130,7 @@ declare module "lattice" {
     type :FQN;
     toImmutable() :Map<*, *>;
     toObject() :PropertyTypeObject;
-    valueOf() :string;
+    valueOf() :number;
   }
 
   declare export class PropertyTypeBuilder {
@@ -143,6 +143,28 @@ declare module "lattice" {
     setSchemas(schemas :FQN[]) :PropertyTypeBuilder;
     setTitle(title :string) :PropertyTypeBuilder;
     setType(propertyTypeFQN :FQN | FQNObject | string) :PropertyTypeBuilder;
+  }
+
+  declare export type SchemaObject = {|
+    entityTypes :EntityTypeObject[];
+    fqn :FQNObject;
+    propertyTypes :PropertyTypeObject[];
+  |};
+
+  declare export class Schema {
+    entityTypes :EntityType[];
+    fqn :FQN;
+    propertyTypes :PropertyType[];
+    toImmutable() :Map<*, *>;
+    toObject() :SchemaObject;
+    valueOf() :number;
+  }
+
+  declare export class SchemaBuilder {
+    build() :Schema;
+    setEntityTypes(entityTypes :EntityType[]) :SchemaBuilder;
+    setFullyQualifiedName(fqn :FullyQualifiedName) :SchemaBuilder;
+    setPropertyTypes(propertyTypes :PropertyType[]) :SchemaBuilder;
   }
 
   /*
@@ -216,6 +238,8 @@ declare module "lattice" {
     FullyQualifiedName :typeof FullyQualifiedName;
     PropertyType :typeof PropertyType;
     PropertyTypeBuilder :typeof PropertyTypeBuilder;
+    Schema :typeof Schema;
+    SchemaBuilder :typeof SchemaBuilder;
   };
 
   declare export var Types :{
