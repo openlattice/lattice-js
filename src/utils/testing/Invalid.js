@@ -70,7 +70,7 @@ INVALID_PARAMS_FOR_OPTIONAL_STRING.splice(13, 1); // remove "''"
 INVALID_PARAMS_FOR_OPTIONAL_STRING.splice(1, 1); // remove "null"
 INVALID_PARAMS_FOR_OPTIONAL_STRING.splice(0, 1); // remove "undefined"
 
-// SS = special string, for cases where strings have to be of a specific format/value, such as UUIDs and Enums
+// SS = special string, for cases where strings have to be of a specific format/value, such as FQNs, UUIDs, Enums
 const INVALID_PARAMS_SS = INVALID_PARAMS.slice(0);
 INVALID_PARAMS_SS.push('invalid_special_string_value');
 
