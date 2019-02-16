@@ -5,7 +5,7 @@
 declare module "lattice" {
 
   declare export type LatticeConfig = {
-    authToken ? :string;
+    authToken ?:?string;
     baseUrl :string;
   };
 
