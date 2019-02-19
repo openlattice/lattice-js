@@ -32,6 +32,7 @@ import {
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
   ENTITY_SETS_PATH,
+  INTEGRATION_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
   ROLES_PATH,
@@ -1127,6 +1128,38 @@ export function assembleEntitySets(organizationId :UUID, entitySetIds :UUID[]) :
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .post(`/${organizationId}/${ENTITY_SETS_PATH}/${ASSEMBLE_PATH}`, entitySetIds)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /organizations/{orgId}/integration`
+ *
+ * Returns integration credentials for organization owners.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @return {Promise} - a Promise that resolves with an OrganizationIntegrationAccount
+ *
+ * @example
+ * OrganizationsApi.getOrganizationIntegrationAccount("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+export function getOrganizationIntegrationAccount(organizationId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${INTEGRATION_PATH}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
