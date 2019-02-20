@@ -483,7 +483,7 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<*> {
  * )
  */
 export function updateSchema(
-  schemaFqn :FullyQualifiedName,
+  schemaFQN :FullyQualifiedName,
   action :string,
   entityTypeIds :UUID[],
   propertyTypeIds :UUID[]
@@ -491,9 +491,9 @@ export function updateSchema(
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
+  if (!FullyQualifiedName.isValid(schemaFQN)) {
+    errorMsg = 'invalid parameter: schemaFQN must be a valid FQN';
+    LOG.error(errorMsg, schemaFQN);
     return Promise.reject(errorMsg);
   }
 
@@ -537,7 +537,7 @@ export function updateSchema(
     }).toJS();
   }
 
-  const { namespace, name } = schemaFqn;
+  const { namespace, name } = schemaFQN;
 
   const data = {
     action,
