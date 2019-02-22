@@ -242,8 +242,8 @@ export class PropertyTypeBuilder {
       return this;
     }
 
-    if (analyzer !== AnalyzerTypes.METAPHONE && analyzer !== AnalyzerTypes.STANDARD) {
-      throw new Error('invalid parameter: analyzer must be one of ["METAPHONE","STANDARD"]');
+    if (!AnalyzerTypes[analyzer]) {
+      throw new Error('invalid parameter: analyzer must be a valid AnalyzerType');
     }
 
     this.analyzer = analyzer;
