@@ -184,6 +184,8 @@ declare module "lattice" {
 
   declare export type AnalyzerTypes = {|
     METAPHONE :'METAPHONE';
+    NONE :'NONE';
+    NOT_ANALYZED :'NOT_ANALYZED';
     STANDARD :'STANDARD';
   |};
 
@@ -224,6 +226,20 @@ declare module "lattice" {
    *
    */
 
+  declare export var AnalysisApi;
+  declare export var AppApi;
+  declare export var AuthorizationApi;
+  declare export var DataApi;
+  declare export var DataIntegrationApi;
+  declare export var EntityDataModelApi;
+  declare export var LinkingApi;
+  declare export var OrganizationsApi;
+  declare export var PermissionsApi;
+  declare export var PersistentSearchApi;
+  declare export var PrincipalsApi;
+  declare export var RequestsApi;
+  declare export var SearchApi;
+
   declare export var Constants :{
     AT_CLASS :'@class';
     AT_ID :'@id';
@@ -256,6 +272,19 @@ declare module "lattice" {
   };
 
   declare export default {
+    AnalysisApi :Object;
+    AppApi :Object;
+    AuthorizationApi :Object;
+    DataApi :Object;
+    DataIntegrationApi :Object;
+    EntityDataModelApi :Object;
+    LinkingApi :Object;
+    OrganizationsApi :Object;
+    PermissionsApi :Object;
+    PersistentSearchApi :Object;
+    PrincipalsApi :Object;
+    RequestsApi :Object;
+    SearchApi :Object;
     Constants :typeof Constants;
     Models :typeof Models;
     Types :typeof Types;
