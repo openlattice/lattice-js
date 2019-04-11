@@ -35,7 +35,9 @@ import {
   INTEGRATION_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
+  REFRESH_PATH,
   ROLES_PATH,
+  SYNCHRONIZE_PATH,
   TITLE_PATH
 } from '../constants/UrlConstants';
 
@@ -1160,6 +1162,90 @@ export function getOrganizationIntegrationAccount(organizationId :UUID) :Promise
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${INTEGRATION_PATH}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /organizations/{orgId}/{entitySetId}/synchronize`
+ *
+ * Synchronizes EDM changes to the requested materialized entity set in the organization.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.synchronizeEdmChanges(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ * );
+ */
+export function synchronizeEdmChanges(organizationId :UUID, entitySetId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${entitySetId}/${SYNCHRONIZE_PATH}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /organizations/{orgId}/{entitySetId}/refresh`
+ *
+ * Refreshes the requested materialized entity set with data changes in the organization.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} entitySetId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.refreshDataChanges(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
+ * );
+ */
+export function refreshDataChanges(organizationId :UUID, entitySetId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${entitySetId}/${REFRESH_PATH}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
