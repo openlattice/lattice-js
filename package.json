@@ -64,8 +64,8 @@
     "webpack-dev-server": "~3.3.0"
   },
   "peerDependencies": {
-    "@babel/polyfill": "~7.2.0",
-    "@babel/runtime": "~7.3.0"
+    "@babel/polyfill": "~7.4.0",
+    "@babel/runtime": "~7.4.0"
   },
   "scripts": {
     "build:dev": "webpack --config config/webpack/webpack.config.js --env.development",

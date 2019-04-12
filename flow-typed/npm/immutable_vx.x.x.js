@@ -16,38 +16,3 @@
 declare module 'immutable' {
   declare module.exports: any;
 }
-
-/**
- * We include stubs for each file inside this npm package in case you need to
- * require those files directly. Feel free to delete any files that aren't
- * needed.
- */
-declare module 'immutable/contrib/cursor/index' {
-  declare module.exports: any;
-}
-
-declare module 'immutable/dist/immutable.es' {
-  declare module.exports: any;
-}
-
-declare module 'immutable/dist/immutable' {
-  declare module.exports: any;
-}
-
-declare module 'immutable/dist/immutable.min' {
-  declare module.exports: any;
-}
-
-// Filename aliases
-declare module 'immutable/contrib/cursor/index.js' {
-  declare module.exports: $Exports<'immutable/contrib/cursor/index'>;
-}
-declare module 'immutable/dist/immutable.es.js' {
-  declare module.exports: $Exports<'immutable/dist/immutable.es'>;
-}
-declare module 'immutable/dist/immutable.js' {
-  declare module.exports: $Exports<'immutable/dist/immutable'>;
-}
-declare module 'immutable/dist/immutable.min.js' {
-  declare module.exports: $Exports<'immutable/dist/immutable.min'>;
-}
