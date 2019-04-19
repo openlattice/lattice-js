@@ -114,7 +114,7 @@ declare module "lattice" {
     description ?:string;
     id ?:UUID;
     multiValued ?:boolean;
-    piiField ?:boolean;
+    pii ?:boolean;
     schemas :FQNObject[];
     title :string;
     type :FQNObject;
@@ -126,7 +126,7 @@ declare module "lattice" {
     description :?string;
     id :?UUID;
     multiValued :?boolean;
-    piiField :?boolean;
+    pii :?boolean;
     schemas :FQN[];
     title :string;
     type :FQN;
