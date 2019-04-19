@@ -188,7 +188,7 @@ describe('PropertyType', () => {
 
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          (new PropertyTypeBuilder()).setPii(MOCK_PROPERTY_TYPE.piiField);
+          (new PropertyTypeBuilder()).setPii(MOCK_PROPERTY_TYPE.pii);
         }).not.toThrow();
       });
 
@@ -289,7 +289,7 @@ describe('PropertyType', () => {
             .setDescription(MOCK_PROPERTY_TYPE.description)
             .setDataType(MOCK_PROPERTY_TYPE.datatype)
             .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.piiField)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
             .build();
@@ -302,20 +302,7 @@ describe('PropertyType', () => {
             .setTitle(MOCK_PROPERTY_TYPE.title)
             .setDataType(MOCK_PROPERTY_TYPE.datatype)
             .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.piiField)
-            .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
-            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          (new PropertyTypeBuilder())
-            .setId(MOCK_PROPERTY_TYPE.id)
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDescription(MOCK_PROPERTY_TYPE.description)
-            .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
             .build();
@@ -329,7 +316,7 @@ describe('PropertyType', () => {
             .setDescription(MOCK_PROPERTY_TYPE.description)
             .setDataType(MOCK_PROPERTY_TYPE.datatype)
             .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.piiField)
+            .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
             .build();
         }).not.toThrow();
@@ -342,7 +329,20 @@ describe('PropertyType', () => {
             .setDescription(MOCK_PROPERTY_TYPE.description)
             .setDataType(MOCK_PROPERTY_TYPE.datatype)
             .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.piiField)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .build();
+        }).not.toThrow();
+
+        expect(() => {
+          (new PropertyTypeBuilder())
+            .setId(MOCK_PROPERTY_TYPE.id)
+            .setType(MOCK_PROPERTY_TYPE.type)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .build();
         }).not.toThrow();
@@ -357,7 +357,7 @@ describe('PropertyType', () => {
           .setDescription(MOCK_PROPERTY_TYPE.description)
           .setDataType(MOCK_PROPERTY_TYPE.datatype)
           .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-          .setPii(MOCK_PROPERTY_TYPE.piiField)
+          .setPii(MOCK_PROPERTY_TYPE.pii)
           .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
           .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
           .build();
@@ -370,7 +370,7 @@ describe('PropertyType', () => {
         expect(propertyType.description).toBeDefined();
         expect(propertyType.datatype).toBeDefined();
         expect(propertyType.schemas).toBeDefined();
-        expect(propertyType.piiField).toBeDefined();
+        expect(propertyType.pii).toBeDefined();
         expect(propertyType.analyzer).toBeDefined();
         expect(propertyType.multiValued).toBeDefined();
 
@@ -380,7 +380,7 @@ describe('PropertyType', () => {
         expect(propertyType.description).toEqual(MOCK_PROPERTY_TYPE.description);
         expect(propertyType.datatype).toEqual(MOCK_PROPERTY_TYPE.datatype);
         expect(propertyType.schemas).toEqual(MOCK_PROPERTY_TYPE.schemas);
-        expect(propertyType.piiField).toEqual(MOCK_PROPERTY_TYPE.piiField);
+        expect(propertyType.pii).toEqual(MOCK_PROPERTY_TYPE.pii);
         expect(propertyType.analyzer).toEqual(MOCK_PROPERTY_TYPE.analyzer);
         expect(propertyType.multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
       });
@@ -406,7 +406,7 @@ describe('PropertyType', () => {
             MOCK_PROPERTY_TYPE.description,
             MOCK_PROPERTY_TYPE.datatype,
             MOCK_PROPERTY_TYPE.schemas,
-            MOCK_PROPERTY_TYPE.piiField,
+            MOCK_PROPERTY_TYPE.pii,
             MOCK_PROPERTY_TYPE.analyzer,
             MOCK_PROPERTY_TYPE.multiValued,
           )
@@ -422,7 +422,7 @@ describe('PropertyType', () => {
           .setDescription(MOCK_PROPERTY_TYPE.description)
           .setDataType(MOCK_PROPERTY_TYPE.datatype)
           .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-          .setPii(MOCK_PROPERTY_TYPE.piiField)
+          .setPii(MOCK_PROPERTY_TYPE.pii)
           .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
           .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
           .build();
@@ -481,9 +481,9 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should return false when given an object literal with an invalid "piiField" property', () => {
+      test('should return false when given an object literal with an invalid "pii" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { piiField: invalidInput }))).toEqual(false);
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { pii: invalidInput }))).toEqual(false);
         });
       });
 
@@ -509,7 +509,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.description,
               MOCK_PROPERTY_TYPE.datatype,
               MOCK_PROPERTY_TYPE.schemas,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
             )
@@ -527,7 +527,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.description,
               MOCK_PROPERTY_TYPE.datatype,
               MOCK_PROPERTY_TYPE.schemas,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
             )
@@ -545,7 +545,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.description,
               MOCK_PROPERTY_TYPE.datatype,
               MOCK_PROPERTY_TYPE.schemas,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
             )
@@ -563,7 +563,7 @@ describe('PropertyType', () => {
               invalidInput,
               MOCK_PROPERTY_TYPE.datatype,
               MOCK_PROPERTY_TYPE.schemas,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
             )
@@ -581,7 +581,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.description,
               invalidInput,
               MOCK_PROPERTY_TYPE.schemas,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
             )
@@ -599,7 +599,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.description,
               MOCK_PROPERTY_TYPE.datatype,
               invalidInput,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
             )
@@ -607,7 +607,7 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should return false when given an instance with an invalid "piiField" property', () => {
+      test('should return false when given an instance with an invalid "pii" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
           expect(isValid(
             new PropertyType(
@@ -635,7 +635,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.description,
               MOCK_PROPERTY_TYPE.datatype,
               MOCK_PROPERTY_TYPE.schemas,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               invalidInput,
               MOCK_PROPERTY_TYPE.multiValued,
             )
@@ -653,7 +653,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.description,
               MOCK_PROPERTY_TYPE.datatype,
               MOCK_PROPERTY_TYPE.schemas,
-              MOCK_PROPERTY_TYPE.piiField,
+              MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               invalidInput,
             )
@@ -675,7 +675,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.description,
         MOCK_PROPERTY_TYPE.datatype,
         MOCK_PROPERTY_TYPE.schemas,
-        MOCK_PROPERTY_TYPE.piiField,
+        MOCK_PROPERTY_TYPE.pii,
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
       );
@@ -687,7 +687,7 @@ describe('PropertyType', () => {
           description: MOCK_PROPERTY_TYPE.description,
           datatype: MOCK_PROPERTY_TYPE.datatype,
           schemas: MOCK_PROPERTY_TYPE.schemas.map(fqn => fqn.toObject()),
-          piiField: MOCK_PROPERTY_TYPE.piiField,
+          pii: MOCK_PROPERTY_TYPE.pii,
           analyzer: MOCK_PROPERTY_TYPE.analyzer,
           multiValued: MOCK_PROPERTY_TYPE.multiValued,
         }).hashCode()
@@ -704,7 +704,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.description,
         MOCK_PROPERTY_TYPE.datatype,
         MOCK_PROPERTY_TYPE.schemas,
-        MOCK_PROPERTY_TYPE.piiField,
+        MOCK_PROPERTY_TYPE.pii,
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
       );
@@ -715,7 +715,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.description,
         MOCK_PROPERTY_TYPE.datatype,
         MOCK_PROPERTY_TYPE.schemas,
-        MOCK_PROPERTY_TYPE.piiField,
+        MOCK_PROPERTY_TYPE.pii,
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
       );
@@ -734,7 +734,7 @@ describe('PropertyType', () => {
       expect(testSet.first().description).toEqual(MOCK_PROPERTY_TYPE.description);
       expect(testSet.first().datatype).toEqual(MOCK_PROPERTY_TYPE.datatype);
       expect(testSet.first().schemas).toEqual(MOCK_PROPERTY_TYPE.schemas);
-      expect(testSet.first().piiField).toEqual(MOCK_PROPERTY_TYPE.piiField);
+      expect(testSet.first().pii).toEqual(MOCK_PROPERTY_TYPE.pii);
       expect(testSet.first().analyzer).toEqual(MOCK_PROPERTY_TYPE.analyzer);
       expect(testSet.first().multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
 
@@ -744,7 +744,7 @@ describe('PropertyType', () => {
       expect(testSet.last().description).toEqual(randomPropertyType.description);
       expect(testSet.last().datatype).toEqual(randomPropertyType.datatype);
       expect(testSet.last().schemas).toEqual(randomPropertyType.schemas);
-      expect(testSet.last().piiField).toEqual(randomPropertyType.piiField);
+      expect(testSet.last().pii).toEqual(randomPropertyType.pii);
       expect(testSet.last().analyzer).toEqual(randomPropertyType.analyzer);
       expect(testSet.last().multiValued).toEqual(randomPropertyType.multiValued);
     });
@@ -759,7 +759,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.description,
         MOCK_PROPERTY_TYPE.datatype,
         MOCK_PROPERTY_TYPE.schemas,
-        MOCK_PROPERTY_TYPE.piiField,
+        MOCK_PROPERTY_TYPE.pii,
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
       );
@@ -770,7 +770,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.description,
         MOCK_PROPERTY_TYPE.datatype,
         MOCK_PROPERTY_TYPE.schemas,
-        MOCK_PROPERTY_TYPE.piiField,
+        MOCK_PROPERTY_TYPE.pii,
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
       );

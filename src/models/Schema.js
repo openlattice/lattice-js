@@ -130,7 +130,7 @@ export class SchemaBuilder {
         .setDataType(propertyType.datatype)
         .setDescription(propertyType.description)
         .setId(propertyType.id)
-        .setPii(propertyType.piiField)
+        .setPii(propertyType.pii)
         .setSchemas(propertyType.schemas)
         .setTitle(propertyType.title)
         .setType(propertyType.type)

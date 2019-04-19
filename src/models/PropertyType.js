@@ -34,7 +34,7 @@ type PropertyTypeObject = {|
   description ?:string;
   id ?:UUID;
   multiValued ?:boolean;
-  piiField ?:boolean;
+  pii ?:boolean;
   schemas :FQNObject[];
   title :string;
   type :FQNObject;
@@ -51,7 +51,7 @@ export default class PropertyType {
   description :?string;
   id :?UUID;
   multiValued :?boolean;
-  piiField :?boolean;
+  pii :?boolean;
   schemas :FQN[];
   title :string;
   type :FQN;
@@ -63,7 +63,7 @@ export default class PropertyType {
     description :?string,
     datatype :string,
     schemas :FQN[],
-    piiField :?boolean,
+    pii :?boolean,
     analyzer :?AnalyzerType,
     multiValued :?boolean,
   ) {
@@ -91,8 +91,8 @@ export default class PropertyType {
       this.multiValued = multiValued;
     }
 
-    if (isDefined(piiField)) {
-      this.piiField = piiField;
+    if (isDefined(pii)) {
+      this.pii = pii;
     }
   }
 
@@ -128,8 +128,8 @@ export default class PropertyType {
       propertyTypeObj.multiValued = this.multiValued;
     }
 
-    if (isDefined(this.piiField)) {
-      propertyTypeObj.piiField = this.piiField;
+    if (isDefined(this.pii)) {
+      propertyTypeObj.pii = this.pii;
     }
 
     return propertyTypeObj;
@@ -152,7 +152,7 @@ export class PropertyTypeBuilder {
   description :?string;
   id :?UUID;
   multiValued :?boolean;
-  piiField :?boolean;
+  pii :?boolean;
   schemas :FQN[];
   title :string;
   type :FQN;
@@ -244,7 +244,7 @@ export class PropertyTypeBuilder {
       throw new Error('invalid parameter: pii must be a boolean');
     }
 
-    this.piiField = pii;
+    this.pii = pii;
     return this;
   }
 
@@ -308,7 +308,7 @@ export class PropertyTypeBuilder {
       this.description,
       this.datatype,
       this.schemas,
-      this.piiField,
+      this.pii,
       this.analyzer,
       this.multiValued,
     );
@@ -351,8 +351,8 @@ export function isValidPropertyType(propertyType :any) :boolean {
       propertyTypeBuilder.setMultiValued(propertyType.multiValued);
     }
 
-    if (has(propertyType, 'piiField')) {
-      propertyTypeBuilder.setPii(propertyType.piiField);
+    if (has(propertyType, 'pii')) {
+      propertyTypeBuilder.setPii(propertyType.pii);
     }
 
     propertyTypeBuilder.build();
