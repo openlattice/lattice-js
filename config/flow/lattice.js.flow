@@ -103,7 +103,7 @@ declare module "lattice" {
     setId(entityTypeId :?UUID) :EntityTypeBuilder;
     setKey(key :UUID[]) :EntityTypeBuilder;
     setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder;
-    setSchemas(schemas :FQN[]) :EntityTypeBuilder;
+    setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :EntityTypeBuilder;
     setTitle(title :string) :EntityTypeBuilder;
     setType(entityTypeFQN :FQN | FQNObject | string) :EntityTypeBuilder;
   }
@@ -113,6 +113,7 @@ declare module "lattice" {
     datatype :string;
     description ?:string;
     id ?:UUID;
+    multiValued ?:boolean;
     piiField ?:boolean;
     schemas :FQNObject[];
     title :string;
@@ -124,6 +125,7 @@ declare module "lattice" {
     datatype :string;
     description :?string;
     id :?UUID;
+    multiValued :?boolean;
     piiField :?boolean;
     schemas :FQN[];
     title :string;
@@ -139,8 +141,9 @@ declare module "lattice" {
     setDataType(datatype :string) :PropertyTypeBuilder;
     setDescription(description :?string) :PropertyTypeBuilder;
     setId(propertyTypeId :?UUID) :PropertyTypeBuilder;
+    setMultiValued(multiValued :?boolean) :PropertyTypeBuilder;
     setPii(pii :?boolean) :PropertyTypeBuilder;
-    setSchemas(schemas :FQN[]) :PropertyTypeBuilder;
+    setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :PropertyTypeBuilder;
     setTitle(title :string) :PropertyTypeBuilder;
     setType(propertyTypeFQN :FQN | FQNObject | string) :PropertyTypeBuilder;
   }
@@ -162,9 +165,9 @@ declare module "lattice" {
 
   declare export class SchemaBuilder {
     build() :Schema;
-    setEntityTypes(entityTypes :EntityType[]) :SchemaBuilder;
+    setEntityTypes(entityTypes :$ReadOnlyArray<EntityType | EntityTypeObject>) :SchemaBuilder;
     setFullyQualifiedName(fqn :FullyQualifiedName) :SchemaBuilder;
-    setPropertyTypes(propertyTypes :PropertyType[]) :SchemaBuilder;
+    setPropertyTypes(propertyTypes :$ReadOnlyArray<PropertyType | PropertyTypeObject>) :SchemaBuilder;
   }
 
   /*

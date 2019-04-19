@@ -199,7 +199,7 @@ export class EntityTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :FQN[]) :EntityTypeBuilder {
+  setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :EntityTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -210,7 +210,7 @@ export class EntityTypeBuilder {
     }
 
     this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFQN :FQN) => {
+      schemas.forEach((schemaFQN :FQN | FQNObject) => {
         set.add(new FullyQualifiedName(schemaFQN));
       });
     }).toJS();
@@ -374,9 +374,9 @@ export function isValidEntityType(entityType :any) :boolean {
   }
 }
 
-export function isValidEntityTypeArray(entityTypes :EntityType[]) :boolean {
+export function isValidEntityTypeArray(entityTypes :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(entityTypes, (entityType :EntityType) => isValidEntityType(entityType));
+  return validateNonEmptyArray(entityTypes, (entityType :any) => isValidEntityType(entityType));
 }
 
 export type {
