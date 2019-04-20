@@ -191,6 +191,7 @@ const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
   .setPii(false)
   .setSchemas([new FullyQualifiedName('OL', 'MockSchema')])
   .setMultiValued(false)
+  .setEnumValues(['ENUM_1', 'ENUM_2'])
   .build();
 
 function genRandomPropertyType() :PropertyType {
@@ -204,6 +205,7 @@ function genRandomPropertyType() :PropertyType {
     .setPii(genRandomBoolean())
     .setAnalyzer(AnalyzerTypes.STANDARD)
     .setMultiValued(genRandomBoolean())
+    .setEnumValues([genRandomString(), genRandomString()])
     .build();
 }
 

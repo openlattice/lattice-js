@@ -32,6 +32,7 @@ type PropertyTypeObject = {|
   analyzer ?:AnalyzerType;
   datatype :string;
   description ?:string;
+  enumValues ?:string[];
   id ?:UUID;
   multiValued ?:boolean;
   pii ?:boolean;
@@ -49,6 +50,7 @@ export default class PropertyType {
   analyzer :?AnalyzerType;
   datatype :string;
   description :?string;
+  enumValues :?string[];
   id :?UUID;
   multiValued :?boolean;
   pii :?boolean;
@@ -66,6 +68,7 @@ export default class PropertyType {
     pii :?boolean,
     analyzer :?AnalyzerType,
     multiValued :?boolean,
+    enumValues :?string[],
   ) {
 
     // required properties
@@ -81,6 +84,10 @@ export default class PropertyType {
 
     if (isDefined(description)) {
       this.description = description;
+    }
+
+    if (isDefined(enumValues)) {
+      this.enumValues = enumValues;
     }
 
     if (isDefined(id)) {
@@ -120,6 +127,10 @@ export default class PropertyType {
       propertyTypeObj.description = this.description;
     }
 
+    if (isDefined(this.enumValues)) {
+      propertyTypeObj.enumValues = this.enumValues;
+    }
+
     if (isDefined(this.id)) {
       propertyTypeObj.id = this.id;
     }
@@ -150,6 +161,7 @@ export class PropertyTypeBuilder {
   analyzer :?AnalyzerType;
   datatype :string;
   description :?string;
+  enumValues :?string[];
   id :?UUID;
   multiValued :?boolean;
   pii :?boolean;
@@ -276,6 +288,25 @@ export class PropertyTypeBuilder {
     return this;
   }
 
+  setEnumValues(enumValues :string[]) :PropertyTypeBuilder {
+
+    if (!isDefined(enumValues) || isEmptyArray(enumValues)) {
+      return this;
+    }
+
+    if (!validateNonEmptyArray(enumValues, isNonEmptyString)) {
+      throw new Error('invalid parameter: enumValues must be a non-empty array of non-empty strings');
+    }
+
+    this.enumValues = Set().withMutations((set :Set<string>) => {
+      enumValues.forEach((enumValue :string) => {
+        set.add(enumValue);
+      });
+    }).toJS();
+
+    return this;
+  }
+
   build() :PropertyType {
 
     let errorMsg :string = '';
@@ -311,6 +342,7 @@ export class PropertyTypeBuilder {
       this.pii,
       this.analyzer,
       this.multiValued,
+      this.enumValues,
     );
   }
 }
@@ -343,6 +375,10 @@ export function isValidPropertyType(propertyType :any) :boolean {
       propertyTypeBuilder.setDescription(propertyType.description);
     }
 
+    if (has(propertyType, 'enumValues')) {
+      propertyTypeBuilder.setEnumValues(propertyType.enumValues);
+    }
+
     if (has(propertyType, 'id')) {
       propertyTypeBuilder.setId(propertyType.id);
     }
@@ -367,7 +403,7 @@ export function isValidPropertyType(propertyType :any) :boolean {
 
 export function isValidPropertyTypeArray(propertyTypes :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(propertyTypes, (propertyType :any) => isValidPropertyType(propertyType));
+  return validateNonEmptyArray(propertyTypes, isValidPropertyType);
 }
 
 export type {
