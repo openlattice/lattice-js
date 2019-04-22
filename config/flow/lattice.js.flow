@@ -112,7 +112,9 @@ declare module "lattice" {
     analyzer ?:AnalyzerType;
     datatype :string;
     description ?:string;
+    enumValues ?:string[];
     id ?:UUID;
+    indexType ?:IndexType;
     multiValued ?:boolean;
     pii ?:boolean;
     schemas :FQNObject[];
@@ -124,7 +126,9 @@ declare module "lattice" {
     analyzer :?AnalyzerType;
     datatype :string;
     description :?string;
+    enumValues :?string[];
     id :?UUID;
+    indexType :?IndexType;
     multiValued :?boolean;
     pii :?boolean;
     schemas :FQN[];
@@ -140,7 +144,9 @@ declare module "lattice" {
     setAnalyzer(analyzer :?AnalyzerType) :PropertyTypeBuilder;
     setDataType(datatype :string) :PropertyTypeBuilder;
     setDescription(description :?string) :PropertyTypeBuilder;
+    setEnumValues(enumValues :?$ReadOnlyArray<string>) :PropertyTypeBuilder;
     setId(propertyTypeId :?UUID) :PropertyTypeBuilder;
+    setIndexType(indexType :?IndexType) :PropertyTypeBuilder;
     setMultiValued(multiValued :?boolean) :PropertyTypeBuilder;
     setPii(pii :?boolean) :PropertyTypeBuilder;
     setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :PropertyTypeBuilder;
@@ -200,6 +206,15 @@ declare module "lattice" {
   |};
 
   declare export type DeleteType = $Values<DeleteTypes>;
+
+  declare export type IndexTypes = {|
+    BTREE :'BTREE';
+    GIN :'GIN';
+    HASH :'HASH';
+    NONE :'NONE';
+  |};
+
+  declare export type IndexType = $Values<IndexTypes>;
 
   declare export type SecurableTypes = {|
     AssociationType :'AssociationType';
@@ -268,6 +283,8 @@ declare module "lattice" {
     AnalyzerTypes :AnalyzerTypes;
     DeleteType :DeleteType;
     DeleteTypes :DeleteTypes;
+    IndexType :IndexType;
+    IndexTypes :IndexTypes;
     SecurableType :SecurableType;
     SecurableTypes :SecurableTypes;
     UpdateType :UpdateType;
