@@ -1452,7 +1452,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<*> {
  *       { "namespace": "LATTICE", "name": "MySchema" }
  *     ],
  *     "datatype": "String",
- *     "piiField": false,
+ *     "pii": false,
  *     "analyzer": "STANDARD"
  *   }
  * );
@@ -2110,7 +2110,7 @@ export function getAllEnumTypes() :Promise<*> {
  *     ],
  *     "datatype": "String",
  *     "flags": false,
- *     "piiField": false,
+ *     "pii": false,
  *     "analyzer": "STANDARD"
  *   }
  * );

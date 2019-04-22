@@ -85,7 +85,7 @@ export class SchemaBuilder {
     return this;
   }
 
-  setEntityTypes(entityTypes :EntityType[]) :SchemaBuilder {
+  setEntityTypes(entityTypes :$ReadOnlyArray<EntityType | EntityTypeObject>) :SchemaBuilder {
 
     if (!isDefined(entityTypes) || isEmptyArray(entityTypes)) {
       return this;
@@ -96,15 +96,17 @@ export class SchemaBuilder {
     }
 
     // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
-    this.entityTypes = entityTypes.map((entityType :EntityType) => (
+    this.entityTypes = entityTypes.map((entityType :EntityType | EntityTypeObject) => (
       new EntityTypeBuilder()
         .setBaseType(entityType.baseType)
         .setCategory(entityType.category)
         .setDescription(entityType.description)
         .setId(entityType.id)
         .setKey(entityType.key)
+        .setPropertyTags(entityType.propertyTags)
         .setPropertyTypes(entityType.properties)
         .setSchemas(entityType.schemas)
+        .setShards(entityType.shards)
         .setTitle(entityType.title)
         .setType(entityType.type)
         .build()
@@ -113,7 +115,7 @@ export class SchemaBuilder {
     return this;
   }
 
-  setPropertyTypes(propertyTypes :PropertyType[]) :SchemaBuilder {
+  setPropertyTypes(propertyTypes :$ReadOnlyArray<PropertyType | PropertyTypeObject>) :SchemaBuilder {
 
     if (!isDefined(propertyTypes) || isEmptyArray(propertyTypes)) {
       return this;
@@ -124,13 +126,16 @@ export class SchemaBuilder {
     }
 
     // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
-    this.propertyTypes = propertyTypes.map((propertyType :PropertyType) => (
+    this.propertyTypes = propertyTypes.map((propertyType :PropertyTypeObject | PropertyType) => (
       new PropertyTypeBuilder()
         .setAnalyzer(propertyType.analyzer)
         .setDataType(propertyType.datatype)
         .setDescription(propertyType.description)
+        .setEnumValues(propertyType.enumValues)
         .setId(propertyType.id)
-        .setPii(propertyType.piiField)
+        .setIndexType(propertyType.indexType)
+        .setMultiValued(propertyType.multiValued)
+        .setPii(propertyType.pii)
         .setSchemas(propertyType.schemas)
         .setTitle(propertyType.title)
         .setType(propertyType.type)
