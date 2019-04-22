@@ -267,6 +267,30 @@ describe('PropertyType', () => {
 
     });
 
+    describe('setIndexType', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
+          expect(() => {
+            (new PropertyTypeBuilder()).setIndexType(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when not given any parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setIndexType();
+        }).not.toThrow();
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setIndexType(MOCK_PROPERTY_TYPE.indexType);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('build()', () => {
 
       test('should throw when a required property has not been set', () => {
@@ -319,6 +343,7 @@ describe('PropertyType', () => {
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setIndexType(MOCK_PROPERTY_TYPE.indexType)
             .build();
         }).not.toThrow();
 
@@ -334,6 +359,7 @@ describe('PropertyType', () => {
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setIndexType(MOCK_PROPERTY_TYPE.indexType)
             .build();
         }).not.toThrow();
 
@@ -349,6 +375,7 @@ describe('PropertyType', () => {
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setIndexType(MOCK_PROPERTY_TYPE.indexType)
             .build();
         }).not.toThrow();
 
@@ -364,6 +391,7 @@ describe('PropertyType', () => {
             .setPii(MOCK_PROPERTY_TYPE.pii)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setIndexType(MOCK_PROPERTY_TYPE.indexType)
             .build();
         }).not.toThrow();
 
@@ -379,6 +407,7 @@ describe('PropertyType', () => {
             .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setIndexType(MOCK_PROPERTY_TYPE.indexType)
             .build();
         }).not.toThrow();
 
@@ -394,6 +423,23 @@ describe('PropertyType', () => {
             .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
             .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+            .build();
+        }).not.toThrow();
+
+        expect(() => {
+          // omitting setIndexType()
+          (new PropertyTypeBuilder())
+            .setId(MOCK_PROPERTY_TYPE.id)
+            .setType(MOCK_PROPERTY_TYPE.type)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
             .build();
         }).not.toThrow();
       });
@@ -411,6 +457,7 @@ describe('PropertyType', () => {
           .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
           .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
           .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+          .setIndexType(MOCK_PROPERTY_TYPE.indexType)
           .build();
 
         expect(propertyType).toBeInstanceOf(PropertyType);
@@ -425,6 +472,7 @@ describe('PropertyType', () => {
         expect(propertyType.analyzer).toBeDefined();
         expect(propertyType.multiValued).toBeDefined();
         expect(propertyType.enumValues).toBeDefined();
+        expect(propertyType.indexType).toBeDefined();
 
         expect(propertyType.id).toEqual(MOCK_PROPERTY_TYPE.id);
         expect(propertyType.type).toEqual(MOCK_PROPERTY_TYPE.type);
@@ -436,6 +484,7 @@ describe('PropertyType', () => {
         expect(propertyType.analyzer).toEqual(MOCK_PROPERTY_TYPE.analyzer);
         expect(propertyType.multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
         expect(propertyType.enumValues).toEqual(MOCK_PROPERTY_TYPE.enumValues);
+        expect(propertyType.indexType).toEqual(MOCK_PROPERTY_TYPE.indexType);
       });
 
     });
@@ -463,6 +512,7 @@ describe('PropertyType', () => {
             MOCK_PROPERTY_TYPE.analyzer,
             MOCK_PROPERTY_TYPE.multiValued,
             MOCK_PROPERTY_TYPE.enumValues,
+            MOCK_PROPERTY_TYPE.indexType,
           )
         )).toEqual(true);
       });
@@ -480,6 +530,7 @@ describe('PropertyType', () => {
           .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
           .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
           .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+          .setIndexType(MOCK_PROPERTY_TYPE.indexType)
           .build();
 
         expect(isValid(propertyType)).toEqual(true);
@@ -560,6 +611,12 @@ describe('PropertyType', () => {
         });
       });
 
+      test('should return false when given an object literal with an invalid "indexType" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { indexType: invalidInput }))).toEqual(false);
+        });
+      });
+
       test('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
@@ -574,6 +631,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -593,6 +651,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -612,6 +671,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -631,6 +691,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -650,6 +711,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -669,6 +731,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -688,6 +751,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -707,6 +771,7 @@ describe('PropertyType', () => {
               invalidInput,
               MOCK_PROPERTY_TYPE.multiValued,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -726,6 +791,7 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.analyzer,
               invalidInput,
               MOCK_PROPERTY_TYPE.enumValues,
+              MOCK_PROPERTY_TYPE.indexType,
             )
           )).toEqual(false);
         });
@@ -744,7 +810,28 @@ describe('PropertyType', () => {
               MOCK_PROPERTY_TYPE.pii,
               MOCK_PROPERTY_TYPE.analyzer,
               MOCK_PROPERTY_TYPE.multiValued,
-              invalidInput
+              invalidInput,
+              MOCK_PROPERTY_TYPE.indexType,
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "indexType" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
+          expect(isValid(
+            new PropertyType(
+              MOCK_PROPERTY_TYPE.id,
+              MOCK_PROPERTY_TYPE.type,
+              MOCK_PROPERTY_TYPE.title,
+              MOCK_PROPERTY_TYPE.description,
+              MOCK_PROPERTY_TYPE.datatype,
+              MOCK_PROPERTY_TYPE.schemas,
+              MOCK_PROPERTY_TYPE.pii,
+              MOCK_PROPERTY_TYPE.analyzer,
+              MOCK_PROPERTY_TYPE.multiValued,
+              MOCK_PROPERTY_TYPE.enumValues,
+              invalidInput,
             )
           )).toEqual(false);
         });
@@ -768,6 +855,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
         MOCK_PROPERTY_TYPE.enumValues,
+        MOCK_PROPERTY_TYPE.indexType,
       );
       expect(propertyType.valueOf()).toEqual(
         fromJS({
@@ -781,6 +869,7 @@ describe('PropertyType', () => {
           analyzer: MOCK_PROPERTY_TYPE.analyzer,
           multiValued: MOCK_PROPERTY_TYPE.multiValued,
           enumValues: MOCK_PROPERTY_TYPE.enumValues,
+          indexType: MOCK_PROPERTY_TYPE.indexType,
         }).hashCode()
       );
     });
@@ -799,6 +888,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
         MOCK_PROPERTY_TYPE.enumValues,
+        MOCK_PROPERTY_TYPE.indexType,
       );
       const propertyType1 = new PropertyType(
         MOCK_PROPERTY_TYPE.id,
@@ -811,6 +901,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
         MOCK_PROPERTY_TYPE.enumValues,
+        MOCK_PROPERTY_TYPE.indexType,
       );
 
       const testSet = Set()
@@ -831,6 +922,7 @@ describe('PropertyType', () => {
       expect(testSet.first().analyzer).toEqual(MOCK_PROPERTY_TYPE.analyzer);
       expect(testSet.first().multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
       expect(testSet.first().enumValues).toEqual(MOCK_PROPERTY_TYPE.enumValues);
+      expect(testSet.first().indexType).toEqual(MOCK_PROPERTY_TYPE.indexType);
 
       expect(testSet.last().id).toEqual(randomPropertyType.id);
       expect(testSet.last().type).toEqual(randomPropertyType.type);
@@ -842,6 +934,7 @@ describe('PropertyType', () => {
       expect(testSet.last().analyzer).toEqual(randomPropertyType.analyzer);
       expect(testSet.last().multiValued).toEqual(randomPropertyType.multiValued);
       expect(testSet.last().enumValues).toEqual(randomPropertyType.enumValues);
+      expect(testSet.last().indexType).toEqual(randomPropertyType.indexType);
     });
 
     test('Immutable.Map', () => {
@@ -858,6 +951,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
         MOCK_PROPERTY_TYPE.enumValues,
+        MOCK_PROPERTY_TYPE.indexType,
       );
       const propertyType1 = new PropertyType(
         MOCK_PROPERTY_TYPE.id,
@@ -870,6 +964,7 @@ describe('PropertyType', () => {
         MOCK_PROPERTY_TYPE.analyzer,
         MOCK_PROPERTY_TYPE.multiValued,
         MOCK_PROPERTY_TYPE.enumValues,
+        MOCK_PROPERTY_TYPE.indexType,
       );
 
       const testMap = Map()

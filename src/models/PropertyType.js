@@ -8,6 +8,7 @@ import { Map, Set, fromJS } from 'immutable';
 import FullyQualifiedName from './FullyQualifiedName';
 
 import AnalyzerTypes from '../constants/types/AnalyzerTypes';
+import IndexTypes from '../constants/types/IndexTypes';
 import Logger from '../utils/Logger';
 
 import {
@@ -24,7 +25,7 @@ import {
 } from '../utils/ValidationUtils';
 
 import type { FQN, FQNObject } from './FullyQualifiedName';
-import type { AnalyzerType } from '../constants/types';
+import type { AnalyzerType, IndexType } from '../constants/types';
 
 const LOG = new Logger('PropertyType');
 
@@ -34,6 +35,7 @@ type PropertyTypeObject = {|
   description ?:string;
   enumValues ?:string[];
   id ?:UUID;
+  indexType ?:IndexType;
   multiValued ?:boolean;
   pii ?:boolean;
   schemas :FQNObject[];
@@ -52,6 +54,7 @@ export default class PropertyType {
   description :?string;
   enumValues :?string[];
   id :?UUID;
+  indexType :?IndexType;
   multiValued :?boolean;
   pii :?boolean;
   schemas :FQN[];
@@ -69,6 +72,7 @@ export default class PropertyType {
     analyzer :?AnalyzerType,
     multiValued :?boolean,
     enumValues :?string[],
+    indexType :?IndexType,
   ) {
 
     // required properties
@@ -92,6 +96,10 @@ export default class PropertyType {
 
     if (isDefined(id)) {
       this.id = id;
+    }
+
+    if (isDefined(indexType)) {
+      this.indexType = indexType;
     }
 
     if (isDefined(multiValued)) {
@@ -135,6 +143,10 @@ export default class PropertyType {
       propertyTypeObj.id = this.id;
     }
 
+    if (isDefined(this.indexType)) {
+      propertyTypeObj.indexType = this.indexType;
+    }
+
     if (isDefined(this.multiValued)) {
       propertyTypeObj.multiValued = this.multiValued;
     }
@@ -163,6 +175,7 @@ export class PropertyTypeBuilder {
   description :?string;
   enumValues :?string[];
   id :?UUID;
+  indexType :?IndexType;
   multiValued :?boolean;
   pii :?boolean;
   schemas :FQN[];
@@ -308,6 +321,20 @@ export class PropertyTypeBuilder {
     return this;
   }
 
+  setIndexType(indexType :?IndexType) :PropertyTypeBuilder {
+
+    if (!isDefined(indexType) || isEmptyString(indexType)) {
+      return this;
+    }
+
+    if (!IndexTypes[indexType]) {
+      throw new Error('invalid parameter: indexType must be a valid IndexType');
+    }
+
+    this.indexType = indexType;
+    return this;
+  }
+
   build() :PropertyType {
 
     let errorMsg :string = '';
@@ -344,6 +371,7 @@ export class PropertyTypeBuilder {
       this.analyzer,
       this.multiValued,
       this.enumValues,
+      this.indexType,
     );
   }
 }
@@ -382,6 +410,10 @@ export function isValidPropertyType(propertyType :any) :boolean {
 
     if (has(propertyType, 'id')) {
       propertyTypeBuilder.setId(propertyType.id);
+    }
+
+    if (has(propertyType, 'indexType')) {
+      propertyTypeBuilder.setIndexType(propertyType.indexType);
     }
 
     if (has(propertyType, 'multiValued')) {

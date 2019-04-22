@@ -5,6 +5,7 @@
 import { genRandomBoolean, genRandomString, genRandomUUID } from './MockUtils';
 import {
   AnalyzerTypes,
+  IndexTypes,
   PrincipalTypes,
   RequestStateTypes,
   SecurableTypes,
@@ -192,6 +193,7 @@ const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
   .setSchemas([new FullyQualifiedName('OL', 'MockSchema')])
   .setMultiValued(false)
   .setEnumValues(['ENUM_1', 'ENUM_2'])
+  .setIndexType(IndexTypes.BTREE)
   .build();
 
 function genRandomPropertyType() :PropertyType {
@@ -206,6 +208,7 @@ function genRandomPropertyType() :PropertyType {
     .setAnalyzer(AnalyzerTypes.STANDARD)
     .setMultiValued(genRandomBoolean())
     .setEnumValues([genRandomString(), genRandomString()])
+    .setIndexType(IndexTypes.HASH)
     .build();
 }
 
