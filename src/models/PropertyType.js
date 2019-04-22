@@ -8,6 +8,7 @@ import { Map, Set, fromJS } from 'immutable';
 import FullyQualifiedName from './FullyQualifiedName';
 
 import AnalyzerTypes from '../constants/types/AnalyzerTypes';
+import IndexTypes from '../constants/types/IndexTypes';
 import Logger from '../utils/Logger';
 
 import {
@@ -24,7 +25,7 @@ import {
 } from '../utils/ValidationUtils';
 
 import type { FQN, FQNObject } from './FullyQualifiedName';
-import type { AnalyzerType } from '../constants/types';
+import type { AnalyzerType, IndexType } from '../constants/types';
 
 const LOG = new Logger('PropertyType');
 
@@ -32,8 +33,11 @@ type PropertyTypeObject = {|
   analyzer ?:AnalyzerType;
   datatype :string;
   description ?:string;
+  enumValues ?:string[];
   id ?:UUID;
-  piiField ?:boolean;
+  indexType ?:IndexType;
+  multiValued ?:boolean;
+  pii ?:boolean;
   schemas :FQNObject[];
   title :string;
   type :FQNObject;
@@ -48,8 +52,11 @@ export default class PropertyType {
   analyzer :?AnalyzerType;
   datatype :string;
   description :?string;
+  enumValues :?string[];
   id :?UUID;
-  piiField :?boolean;
+  indexType :?IndexType;
+  multiValued :?boolean;
+  pii :?boolean;
   schemas :FQN[];
   title :string;
   type :FQN;
@@ -61,8 +68,11 @@ export default class PropertyType {
     description :?string,
     datatype :string,
     schemas :FQN[],
-    piiField :?boolean,
+    pii :?boolean,
     analyzer :?AnalyzerType,
+    multiValued :?boolean,
+    enumValues :?string[],
+    indexType :?IndexType,
   ) {
 
     // required properties
@@ -80,12 +90,24 @@ export default class PropertyType {
       this.description = description;
     }
 
+    if (isDefined(enumValues)) {
+      this.enumValues = enumValues;
+    }
+
     if (isDefined(id)) {
       this.id = id;
     }
 
-    if (isDefined(piiField)) {
-      this.piiField = piiField;
+    if (isDefined(indexType)) {
+      this.indexType = indexType;
+    }
+
+    if (isDefined(multiValued)) {
+      this.multiValued = multiValued;
+    }
+
+    if (isDefined(pii)) {
+      this.pii = pii;
     }
   }
 
@@ -105,20 +127,32 @@ export default class PropertyType {
     };
 
     // optional properties
-    if (isDefined(this.id)) {
-      propertyTypeObj.id = this.id;
+    if (isDefined(this.analyzer)) {
+      propertyTypeObj.analyzer = this.analyzer;
     }
 
     if (isDefined(this.description)) {
       propertyTypeObj.description = this.description;
     }
 
-    if (isDefined(this.piiField)) {
-      propertyTypeObj.piiField = this.piiField;
+    if (isDefined(this.enumValues)) {
+      propertyTypeObj.enumValues = this.enumValues;
     }
 
-    if (isDefined(this.analyzer)) {
-      propertyTypeObj.analyzer = this.analyzer;
+    if (isDefined(this.id)) {
+      propertyTypeObj.id = this.id;
+    }
+
+    if (isDefined(this.indexType)) {
+      propertyTypeObj.indexType = this.indexType;
+    }
+
+    if (isDefined(this.multiValued)) {
+      propertyTypeObj.multiValued = this.multiValued;
+    }
+
+    if (isDefined(this.pii)) {
+      propertyTypeObj.pii = this.pii;
     }
 
     return propertyTypeObj;
@@ -139,8 +173,11 @@ export class PropertyTypeBuilder {
   analyzer :?AnalyzerType;
   datatype :string;
   description :?string;
+  enumValues :?string[];
   id :?UUID;
-  piiField :?boolean;
+  indexType :?IndexType;
+  multiValued :?boolean;
+  pii :?boolean;
   schemas :FQN[];
   title :string;
   type :FQN;
@@ -203,7 +240,7 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setSchemas(schemas :FQN[]) :PropertyTypeBuilder {
+  setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :PropertyTypeBuilder {
 
     if (!isDefined(schemas) || isEmptyArray(schemas)) {
       return this;
@@ -214,7 +251,7 @@ export class PropertyTypeBuilder {
     }
 
     this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFQN :FQN) => {
+      schemas.forEach((schemaFQN :FQN | FQNObject) => {
         set.add(new FullyQualifiedName(schemaFQN));
       });
     }).toJS();
@@ -232,7 +269,7 @@ export class PropertyTypeBuilder {
       throw new Error('invalid parameter: pii must be a boolean');
     }
 
-    this.piiField = pii;
+    this.pii = pii;
     return this;
   }
 
@@ -247,6 +284,54 @@ export class PropertyTypeBuilder {
     }
 
     this.analyzer = analyzer;
+    return this;
+  }
+
+  setMultiValued(multiValued :?boolean) :PropertyTypeBuilder {
+
+    if (!isDefined(multiValued)) {
+      return this;
+    }
+
+    if (multiValued !== true && multiValued !== false) {
+      throw new Error('invalid parameter: multiValued must be a boolean');
+    }
+
+    this.multiValued = multiValued;
+    return this;
+  }
+
+  setEnumValues(enumValues :?$ReadOnlyArray<string>) :PropertyTypeBuilder {
+
+    if (!isDefined(enumValues) || isEmptyArray(enumValues)) {
+      return this;
+    }
+
+    const values = enumValues || [];
+    if (!validateNonEmptyArray(values, isNonEmptyString)) {
+      throw new Error('invalid parameter: enumValues must be a non-empty array of non-empty strings');
+    }
+
+    this.enumValues = Set().withMutations((set :Set<string>) => {
+      values.forEach((enumValue :string) => {
+        set.add(enumValue);
+      });
+    }).toJS();
+
+    return this;
+  }
+
+  setIndexType(indexType :?IndexType) :PropertyTypeBuilder {
+
+    if (!isDefined(indexType) || isEmptyString(indexType)) {
+      return this;
+    }
+
+    if (!IndexTypes[indexType]) {
+      throw new Error('invalid parameter: indexType must be a valid IndexType');
+    }
+
+    this.indexType = indexType;
     return this;
   }
 
@@ -282,8 +367,11 @@ export class PropertyTypeBuilder {
       this.description,
       this.datatype,
       this.schemas,
-      this.piiField,
+      this.pii,
       this.analyzer,
+      this.multiValued,
+      this.enumValues,
+      this.indexType,
     );
   }
 }
@@ -316,12 +404,24 @@ export function isValidPropertyType(propertyType :any) :boolean {
       propertyTypeBuilder.setDescription(propertyType.description);
     }
 
+    if (has(propertyType, 'enumValues')) {
+      propertyTypeBuilder.setEnumValues(propertyType.enumValues);
+    }
+
     if (has(propertyType, 'id')) {
       propertyTypeBuilder.setId(propertyType.id);
     }
 
-    if (has(propertyType, 'piiField')) {
-      propertyTypeBuilder.setPii(propertyType.piiField);
+    if (has(propertyType, 'indexType')) {
+      propertyTypeBuilder.setIndexType(propertyType.indexType);
+    }
+
+    if (has(propertyType, 'multiValued')) {
+      propertyTypeBuilder.setMultiValued(propertyType.multiValued);
+    }
+
+    if (has(propertyType, 'pii')) {
+      propertyTypeBuilder.setPii(propertyType.pii);
     }
 
     propertyTypeBuilder.build();
@@ -334,9 +434,9 @@ export function isValidPropertyType(propertyType :any) :boolean {
   }
 }
 
-export function isValidPropertyTypeArray(propertyTypes :PropertyType[]) :boolean {
+export function isValidPropertyTypeArray(propertyTypes :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(propertyTypes, (propertyType :PropertyType) => isValidPropertyType(propertyType));
+  return validateNonEmptyArray(propertyTypes, isValidPropertyType);
 }
 
 export type {

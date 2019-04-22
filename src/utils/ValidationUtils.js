@@ -21,7 +21,7 @@ type ValidatorFn = (value :any) => boolean;
  */
 const BASE_UUID_PATTERN :RegExp = /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
 
-export function validateNonEmptyArray(value :any[], validatorFn :ValidatorFn) :boolean {
+export function validateNonEmptyArray(value :$ReadOnlyArray<any>, validatorFn :ValidatorFn) :boolean {
 
   if (!isNonEmptyArray(value)) {
     return false;
@@ -41,17 +41,17 @@ export function isValidUuid(value :any) :boolean {
   return BASE_UUID_PATTERN.test(value);
 }
 
-export function isValidUuidArray(uuids :any[]) :boolean {
+export function isValidUuidArray(uuids :$ReadOnlyArray<any>) :boolean {
 
   return validateNonEmptyArray(uuids, (id :any) => isValidUuid(id));
 }
 
-export function isValidFqnArray(fqns :any[]) :boolean {
+export function isValidFqnArray(fqns :$ReadOnlyArray<any>) :boolean {
 
   return validateNonEmptyArray(fqns, (fqn :any) => FullyQualifiedName.isValid(fqn));
 }
 
-export function isValidPermissionArray(permissions :any[]) :boolean {
+export function isValidPermissionArray(permissions :$ReadOnlyArray<any>) :boolean {
 
   return validateNonEmptyArray(permissions, (permission :any) => (
     isNonEmptyString(permission) && PermissionTypes[permission]
@@ -108,7 +108,7 @@ export function isValidOrEmptyMultimap(value :any, validatorFn :ValidatorFn) :bo
   return true;
 }
 
-export function isValidMultimapArray(values :any[], validatorFn :ValidatorFn) :boolean {
+export function isValidMultimapArray(values :$ReadOnlyArray<any>, validatorFn :ValidatorFn) :boolean {
 
   return validateNonEmptyArray(values, (value :any) => isValidMultimap(value, validatorFn));
 }

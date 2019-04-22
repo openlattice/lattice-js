@@ -85,7 +85,7 @@ export class SchemaBuilder {
     return this;
   }
 
-  setEntityTypes(entityTypes :EntityType[]) :SchemaBuilder {
+  setEntityTypes(entityTypes :$ReadOnlyArray<EntityType | EntityTypeObject>) :SchemaBuilder {
 
     if (!isDefined(entityTypes) || isEmptyArray(entityTypes)) {
       return this;
@@ -96,7 +96,7 @@ export class SchemaBuilder {
     }
 
     // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
-    this.entityTypes = entityTypes.map((entityType :EntityType) => (
+    this.entityTypes = entityTypes.map((entityType :EntityType | EntityTypeObject) => (
       new EntityTypeBuilder()
         .setBaseType(entityType.baseType)
         .setCategory(entityType.category)
@@ -113,7 +113,7 @@ export class SchemaBuilder {
     return this;
   }
 
-  setPropertyTypes(propertyTypes :PropertyType[]) :SchemaBuilder {
+  setPropertyTypes(propertyTypes :$ReadOnlyArray<PropertyType | PropertyTypeObject>) :SchemaBuilder {
 
     if (!isDefined(propertyTypes) || isEmptyArray(propertyTypes)) {
       return this;
@@ -124,16 +124,19 @@ export class SchemaBuilder {
     }
 
     // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
-    this.propertyTypes = propertyTypes.map((propertyType :PropertyType) => (
+    this.propertyTypes = propertyTypes.map((propertyType :PropertyTypeObject | PropertyType) => (
       new PropertyTypeBuilder()
         .setAnalyzer(propertyType.analyzer)
         .setDataType(propertyType.datatype)
         .setDescription(propertyType.description)
         .setId(propertyType.id)
-        .setPii(propertyType.piiField)
+        .setPii(propertyType.pii)
         .setSchemas(propertyType.schemas)
         .setTitle(propertyType.title)
         .setType(propertyType.type)
+        .setMultiValued(propertyType.multiValued)
+        .setEnumValues(propertyType.enumValues)
+        .setIndexType(propertyType.indexType)
         .build()
     ));
 
