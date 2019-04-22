@@ -134,6 +134,8 @@ export class SchemaBuilder {
         .setSchemas(propertyType.schemas)
         .setTitle(propertyType.title)
         .setType(propertyType.type)
+        .setMultiValued(propertyType.multiValued)
+        .setEnumValues(propertyType.enumValues)
         .build()
     ));
 

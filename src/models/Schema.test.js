@@ -1,6 +1,11 @@
 import { Map, Set, fromJS } from 'immutable';
 import Schema, { SchemaBuilder, isValidSchema as isValid } from './Schema';
-import { MOCK_SCHEMA, genRandomSchema } from '../utils/testing/MockDataModels';
+import {
+  MOCK_ENTITY_TYPE,
+  MOCK_PROPERTY_TYPE,
+  MOCK_SCHEMA,
+  genRandomSchema,
+} from '../utils/testing/MockDataModels';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
@@ -146,6 +151,10 @@ describe('Schema', () => {
 
         expect(schema.propertyTypes).toBeDefined();
         expect(schema.propertyTypes).toEqual(MOCK_SCHEMA.propertyTypes);
+
+        // ensure setEntityTypes() and setPropertyTypes() are calling all builder .set() methods
+        expect(schema.entityTypes).toEqual([MOCK_ENTITY_TYPE]);
+        expect(schema.propertyTypes).toEqual([MOCK_PROPERTY_TYPE]);
       });
 
     });

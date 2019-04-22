@@ -288,18 +288,19 @@ export class PropertyTypeBuilder {
     return this;
   }
 
-  setEnumValues(enumValues :string[]) :PropertyTypeBuilder {
+  setEnumValues(enumValues :?$ReadOnlyArray<string>) :PropertyTypeBuilder {
 
     if (!isDefined(enumValues) || isEmptyArray(enumValues)) {
       return this;
     }
 
-    if (!validateNonEmptyArray(enumValues, isNonEmptyString)) {
+    const values = enumValues || [];
+    if (!validateNonEmptyArray(values, isNonEmptyString)) {
       throw new Error('invalid parameter: enumValues must be a non-empty array of non-empty strings');
     }
 
     this.enumValues = Set().withMutations((set :Set<string>) => {
-      enumValues.forEach((enumValue :string) => {
+      values.forEach((enumValue :string) => {
         set.add(enumValue);
       });
     }).toJS();
