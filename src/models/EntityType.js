@@ -13,6 +13,7 @@ import Logger from '../utils/Logger';
 import {
   isDefined,
   isEmptyArray,
+  isEmptyObject,
   isEmptyString,
   isNonEmptyString
 } from '../utils/LangUtils';
@@ -312,7 +313,7 @@ export class EntityTypeBuilder {
 
   setPropertyTags(propertyTags :?Object) :EntityTypeBuilder {
 
-    if (!isDefined(propertyTags)) {
+    if (!isDefined(propertyTags) || isEmptyObject(propertyTags)) {
       return this;
     }
 

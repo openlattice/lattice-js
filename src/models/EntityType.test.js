@@ -31,13 +31,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setId();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setId('');
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setId(MOCK_ENTITY_TYPE.id);
         }).not.toThrow();
@@ -48,17 +48,14 @@ describe('EntityType', () => {
     describe('setType()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setType();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setType(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new EntityTypeBuilder()).setType();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -72,17 +69,14 @@ describe('EntityType', () => {
     describe('setTitle()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setTitle();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setTitle(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new EntityTypeBuilder()).setTitle();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -103,13 +97,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setDescription();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setDescription('');
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setDescription(MOCK_ENTITY_TYPE.description);
         }).not.toThrow();
@@ -138,13 +132,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setSchemas();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setSchemas([]);
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setSchemas(MOCK_ENTITY_TYPE.schemas);
         }).not.toThrow();
@@ -173,13 +167,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setKey();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setKey([]);
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setKey(MOCK_ENTITY_TYPE.key);
         }).not.toThrow();
@@ -208,13 +202,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setPropertyTypes();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setPropertyTypes([]);
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setPropertyTypes(MOCK_ENTITY_TYPE.properties);
         }).not.toThrow();
@@ -232,13 +226,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setBaseType();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setBaseType('');
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setBaseType(MOCK_ENTITY_TYPE.baseType);
         }).not.toThrow();
@@ -256,13 +250,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setCategory();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setCategory('');
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setCategory(MOCK_ENTITY_TYPE.category);
         }).not.toThrow();
@@ -280,13 +274,13 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setPropertyTags();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setPropertyTags({});
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setPropertyTags(MOCK_ENTITY_TYPE.propertyTags);
         }).not.toThrow();
@@ -304,13 +298,10 @@ describe('EntityType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setShards();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setShards(MOCK_ENTITY_TYPE.shards);
         }).not.toThrow();
