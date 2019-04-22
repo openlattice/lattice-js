@@ -171,7 +171,7 @@ describe('PropertyType', () => {
 
     });
 
-    describe('setPii', () => {
+    describe('setPii()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
@@ -195,7 +195,7 @@ describe('PropertyType', () => {
 
     });
 
-    describe('setAnalyzer', () => {
+    describe('setAnalyzer()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
@@ -219,7 +219,7 @@ describe('PropertyType', () => {
 
     });
 
-    describe('setMultiValued', () => {
+    describe('setMultiValued()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
@@ -243,7 +243,7 @@ describe('PropertyType', () => {
 
     });
 
-    describe('setEnumValues', () => {
+    describe('setEnumValues()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
@@ -267,7 +267,7 @@ describe('PropertyType', () => {
 
     });
 
-    describe('setIndexType', () => {
+    describe('setIndexType()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
@@ -609,6 +609,9 @@ describe('PropertyType', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { enumValues: invalidInput }))).toEqual(false);
         });
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { enumValues: [invalidInput] }))).toEqual(false);
+        });
       });
 
       test('should return false when given an object literal with an invalid "indexType" property', () => {
@@ -859,17 +862,17 @@ describe('PropertyType', () => {
       );
       expect(propertyType.valueOf()).toEqual(
         fromJS({
-          id: MOCK_PROPERTY_TYPE.id,
-          type: MOCK_PROPERTY_TYPE.type.toObject(),
-          title: MOCK_PROPERTY_TYPE.title,
-          description: MOCK_PROPERTY_TYPE.description,
-          datatype: MOCK_PROPERTY_TYPE.datatype,
-          schemas: MOCK_PROPERTY_TYPE.schemas.map(fqn => fqn.toObject()),
-          pii: MOCK_PROPERTY_TYPE.pii,
           analyzer: MOCK_PROPERTY_TYPE.analyzer,
-          multiValued: MOCK_PROPERTY_TYPE.multiValued,
+          datatype: MOCK_PROPERTY_TYPE.datatype,
+          description: MOCK_PROPERTY_TYPE.description,
           enumValues: MOCK_PROPERTY_TYPE.enumValues,
+          id: MOCK_PROPERTY_TYPE.id,
           indexType: MOCK_PROPERTY_TYPE.indexType,
+          multiValued: MOCK_PROPERTY_TYPE.multiValued,
+          pii: MOCK_PROPERTY_TYPE.pii,
+          schemas: MOCK_PROPERTY_TYPE.schemas.map(fqn => fqn.toObject()),
+          title: MOCK_PROPERTY_TYPE.title,
+          type: MOCK_PROPERTY_TYPE.type.toObject(),
         }).hashCode()
       );
     });
@@ -912,29 +915,29 @@ describe('PropertyType', () => {
       expect(testSet.size).toEqual(2);
       expect(testSet.count()).toEqual(2);
 
-      expect(testSet.first().id).toEqual(MOCK_PROPERTY_TYPE.id);
-      expect(testSet.first().type).toEqual(MOCK_PROPERTY_TYPE.type);
-      expect(testSet.first().title).toEqual(MOCK_PROPERTY_TYPE.title);
-      expect(testSet.first().description).toEqual(MOCK_PROPERTY_TYPE.description);
-      expect(testSet.first().datatype).toEqual(MOCK_PROPERTY_TYPE.datatype);
-      expect(testSet.first().schemas).toEqual(MOCK_PROPERTY_TYPE.schemas);
-      expect(testSet.first().pii).toEqual(MOCK_PROPERTY_TYPE.pii);
       expect(testSet.first().analyzer).toEqual(MOCK_PROPERTY_TYPE.analyzer);
-      expect(testSet.first().multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
+      expect(testSet.first().datatype).toEqual(MOCK_PROPERTY_TYPE.datatype);
+      expect(testSet.first().description).toEqual(MOCK_PROPERTY_TYPE.description);
       expect(testSet.first().enumValues).toEqual(MOCK_PROPERTY_TYPE.enumValues);
+      expect(testSet.first().id).toEqual(MOCK_PROPERTY_TYPE.id);
       expect(testSet.first().indexType).toEqual(MOCK_PROPERTY_TYPE.indexType);
+      expect(testSet.first().multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
+      expect(testSet.first().pii).toEqual(MOCK_PROPERTY_TYPE.pii);
+      expect(testSet.first().schemas).toEqual(MOCK_PROPERTY_TYPE.schemas);
+      expect(testSet.first().title).toEqual(MOCK_PROPERTY_TYPE.title);
+      expect(testSet.first().type).toEqual(MOCK_PROPERTY_TYPE.type);
 
-      expect(testSet.last().id).toEqual(randomPropertyType.id);
-      expect(testSet.last().type).toEqual(randomPropertyType.type);
-      expect(testSet.last().title).toEqual(randomPropertyType.title);
-      expect(testSet.last().description).toEqual(randomPropertyType.description);
-      expect(testSet.last().datatype).toEqual(randomPropertyType.datatype);
-      expect(testSet.last().schemas).toEqual(randomPropertyType.schemas);
-      expect(testSet.last().pii).toEqual(randomPropertyType.pii);
       expect(testSet.last().analyzer).toEqual(randomPropertyType.analyzer);
-      expect(testSet.last().multiValued).toEqual(randomPropertyType.multiValued);
+      expect(testSet.last().datatype).toEqual(randomPropertyType.datatype);
+      expect(testSet.last().description).toEqual(randomPropertyType.description);
       expect(testSet.last().enumValues).toEqual(randomPropertyType.enumValues);
+      expect(testSet.last().id).toEqual(randomPropertyType.id);
       expect(testSet.last().indexType).toEqual(randomPropertyType.indexType);
+      expect(testSet.last().multiValued).toEqual(randomPropertyType.multiValued);
+      expect(testSet.last().pii).toEqual(randomPropertyType.pii);
+      expect(testSet.last().schemas).toEqual(randomPropertyType.schemas);
+      expect(testSet.last().title).toEqual(randomPropertyType.title);
+      expect(testSet.last().type).toEqual(randomPropertyType.type);
     });
 
     test('Immutable.Map', () => {

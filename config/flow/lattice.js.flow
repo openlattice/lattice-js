@@ -75,6 +75,7 @@ declare module "lattice" {
     id ?:UUID;
     key :UUID[];
     properties :UUID[];
+    propertyTags ?:Object;
     schemas :FQNObject[];
     title :string;
     type :FQNObject;
@@ -87,6 +88,7 @@ declare module "lattice" {
     id :?UUID;
     key :UUID[];
     properties :UUID[];
+    propertyTags :?Object;
     schemas :FQN[];
     title :string;
     type :FQN;
@@ -102,6 +104,7 @@ declare module "lattice" {
     setDescription(description :?string) :EntityTypeBuilder;
     setId(entityTypeId :?UUID) :EntityTypeBuilder;
     setKey(key :UUID[]) :EntityTypeBuilder;
+    setPropertyTags(propertyTags :?Object) :EntityTypeBuilder;
     setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder;
     setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :EntityTypeBuilder;
     setTitle(title :string) :EntityTypeBuilder;

@@ -18,9 +18,10 @@ import {
 
 import {
   isValidFqnArray,
+  isValidMultimap,
   isValidUuid,
   isValidUuidArray,
-  validateNonEmptyArray
+  validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
 import type { FQN, FQNObject } from './FullyQualifiedName';
@@ -35,6 +36,7 @@ type EntityTypeObject = {|
   id ?:UUID;
   key :UUID[];
   properties :UUID[];
+  propertyTags ?:Object; // LinkedHashMultimap<UUID, String>
   schemas :FQNObject[];
   title :string;
   type :FQNObject;
@@ -52,6 +54,7 @@ export default class EntityType {
   id :?UUID;
   key :UUID[];
   properties :UUID[];
+  propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
   title :string;
   type :FQN;
@@ -65,7 +68,8 @@ export default class EntityType {
     key :UUID[],
     properties :UUID[],
     baseType :?UUID,
-    category :?SecurableType
+    category :?SecurableType,
+    propertyTags :?Object,
   ) {
 
     // required properties
@@ -90,6 +94,10 @@ export default class EntityType {
 
     if (isDefined(id)) {
       this.id = id;
+    }
+
+    if (isDefined(propertyTags)) {
+      this.propertyTags = propertyTags;
     }
   }
 
@@ -126,6 +134,10 @@ export default class EntityType {
       entityTypeObj.category = this.category;
     }
 
+    if (isDefined(this.propertyTags)) {
+      entityTypeObj.propertyTags = this.propertyTags;
+    }
+
     return entityTypeObj;
   }
 
@@ -147,6 +159,7 @@ export class EntityTypeBuilder {
   id :?UUID;
   key :UUID[];
   properties :UUID[];
+  propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
   title :string;
   type :FQN;
@@ -284,6 +297,20 @@ export class EntityTypeBuilder {
     return this;
   }
 
+  setPropertyTags(propertyTags :?Object) :EntityTypeBuilder {
+
+    if (!isDefined(propertyTags)) {
+      return this;
+    }
+
+    if (!isValidMultimap(propertyTags, isValidUuid)) {
+      throw new Error('invalid parameter: propertyTags must be a non-empty multimap object');
+    }
+
+    this.propertyTags = propertyTags;
+    return this;
+  }
+
   build() :EntityType {
 
     let errorMsg :string = '';
@@ -322,12 +349,13 @@ export class EntityTypeBuilder {
       this.key,
       this.properties,
       this.baseType,
-      this.category
+      this.category,
+      this.propertyTags,
     );
   }
 }
 
-export function isValidEntityType(entityType :any) :boolean {
+export function isValidEntityType(entityType :?EntityType | EntityTypeObject) :boolean {
 
   if (!isDefined(entityType)) {
 
@@ -362,6 +390,10 @@ export function isValidEntityType(entityType :any) :boolean {
 
     if (has(entityType, 'id')) {
       entityTypeBuilder.setId(entityType.id);
+    }
+
+    if (has(entityType, 'propertyTags')) {
+      entityTypeBuilder.setPropertyTags(entityType.propertyTags);
     }
 
     entityTypeBuilder.build();
