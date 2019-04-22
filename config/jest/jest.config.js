@@ -10,6 +10,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/build/',
     '<rootDir>/config/',
+    '<rootDir>/docs/',
     '<rootDir>/flow-typed/',
     '<rootDir>/src/models/template.js',
     '<rootDir>/src/models/template.test.js',

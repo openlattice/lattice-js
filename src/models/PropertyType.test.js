@@ -26,13 +26,13 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setId();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setId('');
+        }).not.toThrow();
         expect(() => {
           (new PropertyTypeBuilder()).setId(MOCK_PROPERTY_TYPE.id);
         }).not.toThrow();
@@ -43,17 +43,14 @@ describe('PropertyType', () => {
     describe('setType()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setType();
+        }).toThrow();
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             (new PropertyTypeBuilder()).setType(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setType();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -67,17 +64,14 @@ describe('PropertyType', () => {
     describe('setTitle()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setTitle();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             (new PropertyTypeBuilder()).setTitle(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setTitle();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -98,13 +92,13 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setDescription();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setDescription('');
+        }).not.toThrow();
         expect(() => {
           (new PropertyTypeBuilder()).setDescription(MOCK_PROPERTY_TYPE.description);
         }).not.toThrow();
@@ -115,17 +109,14 @@ describe('PropertyType', () => {
     describe('setDataType()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setDataType();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             (new PropertyTypeBuilder()).setDataType(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setDataType();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -157,13 +148,13 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setSchemas();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setSchemas([]);
+        }).not.toThrow();
         expect(() => {
           (new PropertyTypeBuilder()).setSchemas(MOCK_PROPERTY_TYPE.schemas);
         }).not.toThrow();
@@ -181,13 +172,10 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setPii();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setPii(MOCK_PROPERTY_TYPE.pii);
         }).not.toThrow();
@@ -205,13 +193,13 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setAnalyzer();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setAnalyzer('');
+        }).not.toThrow();
         expect(() => {
           (new PropertyTypeBuilder()).setAnalyzer(MOCK_PROPERTY_TYPE.analyzer);
         }).not.toThrow();
@@ -229,13 +217,10 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setMultiValued();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setPii(MOCK_PROPERTY_TYPE.multiValued);
         }).not.toThrow();
@@ -253,13 +238,13 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setEnumValues();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setEnumValues([]);
+        }).not.toThrow();
         expect(() => {
           (new PropertyTypeBuilder()).setEnumValues(MOCK_PROPERTY_TYPE.enumValues);
         }).not.toThrow();
@@ -277,13 +262,13 @@ describe('PropertyType', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new PropertyTypeBuilder()).setIndexType();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new PropertyTypeBuilder()).setIndexType('');
+        }).not.toThrow();
         expect(() => {
           (new PropertyTypeBuilder()).setIndexType(MOCK_PROPERTY_TYPE.indexType);
         }).not.toThrow();
@@ -334,112 +319,112 @@ describe('PropertyType', () => {
         expect(() => {
           // omitting setId()
           (new PropertyTypeBuilder())
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDescription(MOCK_PROPERTY_TYPE.description)
-            .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
-            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
             .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setType(MOCK_PROPERTY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
           // omitting setDescription()
           (new PropertyTypeBuilder())
-            .setId(MOCK_PROPERTY_TYPE.id)
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
-            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setId(MOCK_PROPERTY_TYPE.id)
             .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setType(MOCK_PROPERTY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
           // omitting setPii()
           (new PropertyTypeBuilder())
-            .setId(MOCK_PROPERTY_TYPE.id)
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDescription(MOCK_PROPERTY_TYPE.description)
-            .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
-            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setId(MOCK_PROPERTY_TYPE.id)
             .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setType(MOCK_PROPERTY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
           // omitting setAnalyzer()
           (new PropertyTypeBuilder())
-            .setId(MOCK_PROPERTY_TYPE.id)
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDescription(MOCK_PROPERTY_TYPE.description)
             .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.pii)
-            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setId(MOCK_PROPERTY_TYPE.id)
             .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setType(MOCK_PROPERTY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
           // omitting setMultiValued()
           (new PropertyTypeBuilder())
-            .setId(MOCK_PROPERTY_TYPE.id)
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDescription(MOCK_PROPERTY_TYPE.description)
-            .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setId(MOCK_PROPERTY_TYPE.id)
             .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setType(MOCK_PROPERTY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
           // omitting setEnumValues()
           (new PropertyTypeBuilder())
-            .setId(MOCK_PROPERTY_TYPE.id)
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDescription(MOCK_PROPERTY_TYPE.description)
-            .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
-            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
+            .setId(MOCK_PROPERTY_TYPE.id)
             .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setType(MOCK_PROPERTY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
           // omitting setIndexType()
           (new PropertyTypeBuilder())
-            .setId(MOCK_PROPERTY_TYPE.id)
-            .setType(MOCK_PROPERTY_TYPE.type)
-            .setTitle(MOCK_PROPERTY_TYPE.title)
-            .setDescription(MOCK_PROPERTY_TYPE.description)
-            .setDataType(MOCK_PROPERTY_TYPE.datatype)
-            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-            .setPii(MOCK_PROPERTY_TYPE.pii)
             .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
-            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setDataType(MOCK_PROPERTY_TYPE.datatype)
+            .setDescription(MOCK_PROPERTY_TYPE.description)
             .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+            .setId(MOCK_PROPERTY_TYPE.id)
+            .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+            .setPii(MOCK_PROPERTY_TYPE.pii)
+            .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+            .setTitle(MOCK_PROPERTY_TYPE.title)
+            .setType(MOCK_PROPERTY_TYPE.type)
             .build();
         }).not.toThrow();
       });
@@ -447,44 +432,44 @@ describe('PropertyType', () => {
       test('should return a valid instance', () => {
 
         const propertyType = (new PropertyTypeBuilder())
-          .setId(MOCK_PROPERTY_TYPE.id)
-          .setType(MOCK_PROPERTY_TYPE.type)
-          .setTitle(MOCK_PROPERTY_TYPE.title)
-          .setDescription(MOCK_PROPERTY_TYPE.description)
-          .setDataType(MOCK_PROPERTY_TYPE.datatype)
-          .setSchemas(MOCK_PROPERTY_TYPE.schemas)
-          .setPii(MOCK_PROPERTY_TYPE.pii)
           .setAnalyzer(MOCK_PROPERTY_TYPE.analyzer)
-          .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+          .setDataType(MOCK_PROPERTY_TYPE.datatype)
+          .setDescription(MOCK_PROPERTY_TYPE.description)
           .setEnumValues(MOCK_PROPERTY_TYPE.enumValues)
+          .setId(MOCK_PROPERTY_TYPE.id)
           .setIndexType(MOCK_PROPERTY_TYPE.indexType)
+          .setMultiValued(MOCK_PROPERTY_TYPE.multiValued)
+          .setPii(MOCK_PROPERTY_TYPE.pii)
+          .setSchemas(MOCK_PROPERTY_TYPE.schemas)
+          .setTitle(MOCK_PROPERTY_TYPE.title)
+          .setType(MOCK_PROPERTY_TYPE.type)
           .build();
 
         expect(propertyType).toBeInstanceOf(PropertyType);
 
-        expect(propertyType.id).toBeDefined();
-        expect(propertyType.type).toBeDefined();
-        expect(propertyType.title).toBeDefined();
-        expect(propertyType.description).toBeDefined();
-        expect(propertyType.datatype).toBeDefined();
-        expect(propertyType.schemas).toBeDefined();
-        expect(propertyType.pii).toBeDefined();
         expect(propertyType.analyzer).toBeDefined();
-        expect(propertyType.multiValued).toBeDefined();
+        expect(propertyType.datatype).toBeDefined();
+        expect(propertyType.description).toBeDefined();
         expect(propertyType.enumValues).toBeDefined();
+        expect(propertyType.id).toBeDefined();
         expect(propertyType.indexType).toBeDefined();
+        expect(propertyType.multiValued).toBeDefined();
+        expect(propertyType.pii).toBeDefined();
+        expect(propertyType.schemas).toBeDefined();
+        expect(propertyType.title).toBeDefined();
+        expect(propertyType.type).toBeDefined();
 
-        expect(propertyType.id).toEqual(MOCK_PROPERTY_TYPE.id);
-        expect(propertyType.type).toEqual(MOCK_PROPERTY_TYPE.type);
-        expect(propertyType.title).toEqual(MOCK_PROPERTY_TYPE.title);
-        expect(propertyType.description).toEqual(MOCK_PROPERTY_TYPE.description);
-        expect(propertyType.datatype).toEqual(MOCK_PROPERTY_TYPE.datatype);
-        expect(propertyType.schemas).toEqual(MOCK_PROPERTY_TYPE.schemas);
-        expect(propertyType.pii).toEqual(MOCK_PROPERTY_TYPE.pii);
         expect(propertyType.analyzer).toEqual(MOCK_PROPERTY_TYPE.analyzer);
-        expect(propertyType.multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
+        expect(propertyType.datatype).toEqual(MOCK_PROPERTY_TYPE.datatype);
+        expect(propertyType.description).toEqual(MOCK_PROPERTY_TYPE.description);
         expect(propertyType.enumValues).toEqual(MOCK_PROPERTY_TYPE.enumValues);
+        expect(propertyType.id).toEqual(MOCK_PROPERTY_TYPE.id);
         expect(propertyType.indexType).toEqual(MOCK_PROPERTY_TYPE.indexType);
+        expect(propertyType.multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
+        expect(propertyType.pii).toEqual(MOCK_PROPERTY_TYPE.pii);
+        expect(propertyType.schemas).toEqual(MOCK_PROPERTY_TYPE.schemas);
+        expect(propertyType.title).toEqual(MOCK_PROPERTY_TYPE.title);
+        expect(propertyType.type).toEqual(MOCK_PROPERTY_TYPE.type);
       });
 
     });
