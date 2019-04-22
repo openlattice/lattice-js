@@ -376,7 +376,7 @@ export class PropertyTypeBuilder {
   }
 }
 
-export function isValidPropertyType(propertyType :any) :boolean {
+export function isValidPropertyType(propertyType :?PropertyType | PropertyTypeObject) :boolean {
 
   if (!isDefined(propertyType)) {
 

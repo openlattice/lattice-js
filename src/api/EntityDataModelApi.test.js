@@ -18,8 +18,8 @@ import {
 
 import {
   INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
 } from '../utils/testing/Invalid';
 
 
@@ -328,8 +328,8 @@ function testUpdateSchema() {
     const invalidParams = [
       INVALID_PARAMS_SS,
       INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
-      INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
+      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY
     ];
 
     const axiosParams = [

@@ -3,6 +3,7 @@
  */
 
 import has from 'lodash/has';
+import isInteger from 'lodash/isInteger';
 import { Map, Set, fromJS } from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
@@ -18,9 +19,10 @@ import {
 
 import {
   isValidFqnArray,
+  isValidMultimap,
   isValidUuid,
   isValidUuidArray,
-  validateNonEmptyArray
+  validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
 import type { FQN, FQNObject } from './FullyQualifiedName';
@@ -35,7 +37,9 @@ type EntityTypeObject = {|
   id ?:UUID;
   key :UUID[];
   properties :UUID[];
+  propertyTags ?:Object; // LinkedHashMultimap<UUID, String>
   schemas :FQNObject[];
+  shards ?:number;
   title :string;
   type :FQNObject;
 |};
@@ -52,7 +56,9 @@ export default class EntityType {
   id :?UUID;
   key :UUID[];
   properties :UUID[];
+  propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
+  shards :?number;
   title :string;
   type :FQN;
 
@@ -65,7 +71,9 @@ export default class EntityType {
     key :UUID[],
     properties :UUID[],
     baseType :?UUID,
-    category :?SecurableType
+    category :?SecurableType,
+    propertyTags :?Object,
+    shards :?number,
   ) {
 
     // required properties
@@ -90,6 +98,14 @@ export default class EntityType {
 
     if (isDefined(id)) {
       this.id = id;
+    }
+
+    if (isDefined(propertyTags)) {
+      this.propertyTags = propertyTags;
+    }
+
+    if (isDefined(shards)) {
+      this.shards = shards;
     }
   }
 
@@ -126,6 +142,14 @@ export default class EntityType {
       entityTypeObj.category = this.category;
     }
 
+    if (isDefined(this.propertyTags)) {
+      entityTypeObj.propertyTags = this.propertyTags;
+    }
+
+    if (isDefined(this.shards)) {
+      entityTypeObj.shards = this.shards;
+    }
+
     return entityTypeObj;
   }
 
@@ -147,7 +171,9 @@ export class EntityTypeBuilder {
   id :?UUID;
   key :UUID[];
   properties :UUID[];
+  propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
+  shards :?number;
   title :string;
   type :FQN;
 
@@ -284,6 +310,39 @@ export class EntityTypeBuilder {
     return this;
   }
 
+  setPropertyTags(propertyTags :?Object) :EntityTypeBuilder {
+
+    if (!isDefined(propertyTags)) {
+      return this;
+    }
+
+    if (!isValidMultimap(propertyTags, isValidUuid)) {
+      throw new Error('invalid parameter: propertyTags must be a non-empty multimap object');
+    }
+
+    this.propertyTags = propertyTags;
+    return this;
+  }
+
+  setShards(shards :?number) :EntityTypeBuilder {
+
+    if (!isDefined(shards)) {
+      return this;
+    }
+
+    if (!isInteger(shards)) {
+      throw new Error('invalid parameter: shards must be an integer');
+    }
+
+    // com.openlattice.edm.type.EntityType
+    if (shards <= 0 || shards >= 20) {
+      throw new Error('invalid parameter: shards must be a valid integer');
+    }
+
+    this.shards = shards;
+    return this;
+  }
+
   build() :EntityType {
 
     let errorMsg :string = '';
@@ -322,12 +381,14 @@ export class EntityTypeBuilder {
       this.key,
       this.properties,
       this.baseType,
-      this.category
+      this.category,
+      this.propertyTags,
+      this.shards,
     );
   }
 }
 
-export function isValidEntityType(entityType :any) :boolean {
+export function isValidEntityType(entityType :?EntityType | EntityTypeObject) :boolean {
 
   if (!isDefined(entityType)) {
 
@@ -362,6 +423,14 @@ export function isValidEntityType(entityType :any) :boolean {
 
     if (has(entityType, 'id')) {
       entityTypeBuilder.setId(entityType.id);
+    }
+
+    if (has(entityType, 'propertyTags')) {
+      entityTypeBuilder.setPropertyTags(entityType.propertyTags);
+    }
+
+    if (has(entityType, 'shards')) {
+      entityTypeBuilder.setShards(entityType.shards);
     }
 
     entityTypeBuilder.build();
