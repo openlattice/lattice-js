@@ -4,10 +4,10 @@ import { MOCK_REQUEST_DM } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
+  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
 } from '../utils/testing/Invalid';
 
 describe('Request', () => {
@@ -62,7 +62,7 @@ describe('Request', () => {
     describe('setPermissions()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(invalidInput);
           }).toThrow();
@@ -73,7 +73,7 @@ describe('Request', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
           }).toThrow();
@@ -220,7 +220,7 @@ describe('Request', () => {
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { permissions: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { permissions: [invalidInput] }))).toEqual(false);
         });
@@ -248,7 +248,7 @@ describe('Request', () => {
       });
 
       test('should return false when given an instance with an invalid "permissions" property', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Request(
               MOCK_REQUEST_DM.aclKey, invalidInput, MOCK_REQUEST_DM.reason

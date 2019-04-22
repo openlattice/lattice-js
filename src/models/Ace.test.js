@@ -1,6 +1,6 @@
 import Ace, { AceBuilder, isValidAce as isValid } from './Ace';
 import { PermissionTypes } from '../constants/types';
-import { INVALID_PARAMS, INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY } from '../utils/testing/Invalid';
 import { MOCK_ACE_DM } from '../utils/testing/MockDataModels';
 
 describe('Ace', () => {
@@ -44,7 +44,7 @@ describe('Ace', () => {
     describe('setPermissions()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(invalidInput);
           }).toThrow();
@@ -55,7 +55,7 @@ describe('Ace', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
           }).toThrow();
@@ -160,7 +160,7 @@ describe('Ace', () => {
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: [invalidInput] }))).toEqual(false);
         });
@@ -177,7 +177,7 @@ describe('Ace', () => {
       });
 
       test('should return false when given an instance with an invalid "permissions" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
               MOCK_ACE_DM.principal, invalidInput

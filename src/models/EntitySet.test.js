@@ -3,10 +3,10 @@ import { MOCK_ENTITY_SET_DM } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
+  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_SS,
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_FOR_OPTIONAL_SS
 } from '../utils/testing/Invalid';
 
 describe('EntitySet', () => {
@@ -146,7 +146,7 @@ describe('EntitySet', () => {
     describe('setContacts()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
             builder.setContacts(invalidInput);
           }).toThrow();
@@ -157,7 +157,7 @@ describe('EntitySet', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
             builder.setContacts(Object.values(MOCK_ENTITY_SET_DM.contacts).push(invalidInput));
           }).toThrow();
@@ -354,7 +354,7 @@ describe('EntitySet', () => {
       });
 
       test('should return false when given an object literal with an invalid "contacts" property', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { contacts: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { contacts: [invalidInput] }))).toEqual(false);
         });
@@ -436,7 +436,7 @@ describe('EntitySet', () => {
       });
 
       test('should return false when given an instance with an invalid "contacts" property', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
               MOCK_ENTITY_SET_DM.id,

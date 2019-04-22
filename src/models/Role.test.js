@@ -3,9 +3,9 @@ import { MOCK_ROLE_DM } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_SS,
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_FOR_OPTIONAL_SS
 } from '../utils/testing/Invalid';
 
 describe('Role', () => {

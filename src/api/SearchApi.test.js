@@ -16,8 +16,8 @@ import {
 
 import {
   INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
 } from '../utils/testing/Invalid';
 
 import {
@@ -485,10 +485,10 @@ function searchEntityNeighborsWithFilter() {
     const invalidParams = [
       INVALID_PARAMS_SS,
       {
-        destinationEntitySetIds: INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
-        edgeEntitySetIds: INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
+        destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+        edgeEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
         entityKeyIds: INVALID_PARAMS_SS,
-        sourceEntitySetIds: INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
+        sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
       },
     ];
     const axiosParams = [

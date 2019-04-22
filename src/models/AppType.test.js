@@ -3,9 +3,9 @@ import { MOCK_APP_TYPE_DM } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_SS,
+  INVALID_PARAMS_FOR_OPTIONAL_SS,
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
-  INVALID_PARAMS_FOR_OPTIONAL_SS
+  INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
 describe('AppType', () => {

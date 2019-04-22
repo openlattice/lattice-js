@@ -5,8 +5,8 @@ import AssociationType, { AssociationTypeBuilder, isValidAssociationType as isVa
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_BOOLEANS_ALLOWED,
+  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
 } from '../utils/testing/Invalid';
 
 import {
@@ -52,7 +52,7 @@ describe('AssociationType', () => {
     describe('setSourceEntityTypeIds()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new AssociationTypeBuilder()).setSourceEntityTypeIds(invalidInput);
           }).toThrow();
@@ -87,7 +87,7 @@ describe('AssociationType', () => {
     describe('setDestinationEntityTypeIds()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new AssociationTypeBuilder()).setDestinationEntityTypeIds(invalidInput);
           }).toThrow();
@@ -261,7 +261,7 @@ describe('AssociationType', () => {
       });
 
       test('should return false when given an object literal with an invalid "sourceEntityTypeIds" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(
             isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { sourceEntityTypeIds: invalidInput }))
           ).toEqual(false);
@@ -272,7 +272,7 @@ describe('AssociationType', () => {
       });
 
       test('should return false when given an object literal with an invalid "dstEntityTypeIds" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(
             isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { destinationEntityTypeIds: invalidInput }))
           ).toEqual(false);
@@ -301,7 +301,7 @@ describe('AssociationType', () => {
       });
 
       test('should return false when given an instance with an invalid "sourceEntityTypeIds" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new AssociationType(
               mockEntityType, invalidInput, mockDstEntityTypeIds, mockBidi
@@ -316,7 +316,7 @@ describe('AssociationType', () => {
       });
 
       test('should return false when given an instance with an invalid "destinationEntityTypeIds" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new AssociationType(
               mockEntityType, mockSrcEntityTypeIds, invalidInput, mockBidi
