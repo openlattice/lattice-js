@@ -106,6 +106,7 @@ export class SchemaBuilder {
         .setPropertyTags(entityType.propertyTags)
         .setPropertyTypes(entityType.properties)
         .setSchemas(entityType.schemas)
+        .setShards(entityType.shards)
         .setTitle(entityType.title)
         .setType(entityType.type)
         .build()

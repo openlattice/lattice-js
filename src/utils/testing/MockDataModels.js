@@ -147,6 +147,7 @@ const MOCK_ENTITY_TYPE :EntityType = new EntityTypeBuilder()
     '11f65a3c-158e-4bea-9e6d-dc7ff2396ef0': ['TAG_0', 'TAG_1'],
     '5993e81e-1265-4d00-8b25-9dafb5261bd4': ['TAG_0'],
   })
+  .setShards(1)
   .build();
 
 function genRandomEntityType() :EntityType {
@@ -164,6 +165,7 @@ function genRandomEntityType() :EntityType {
       [genRandomUUID()]: [genRandomString(), genRandomString()],
       [genRandomUUID()]: [genRandomString()],
     })
+    .setShards(1)
     .build();
 }
 

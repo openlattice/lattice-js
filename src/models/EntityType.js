@@ -3,6 +3,7 @@
  */
 
 import has from 'lodash/has';
+import isInteger from 'lodash/isInteger';
 import { Map, Set, fromJS } from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
@@ -38,6 +39,7 @@ type EntityTypeObject = {|
   properties :UUID[];
   propertyTags ?:Object; // LinkedHashMultimap<UUID, String>
   schemas :FQNObject[];
+  shards ?:number;
   title :string;
   type :FQNObject;
 |};
@@ -56,6 +58,7 @@ export default class EntityType {
   properties :UUID[];
   propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
+  shards :?number;
   title :string;
   type :FQN;
 
@@ -70,6 +73,7 @@ export default class EntityType {
     baseType :?UUID,
     category :?SecurableType,
     propertyTags :?Object,
+    shards :?number,
   ) {
 
     // required properties
@@ -98,6 +102,10 @@ export default class EntityType {
 
     if (isDefined(propertyTags)) {
       this.propertyTags = propertyTags;
+    }
+
+    if (isDefined(shards)) {
+      this.shards = shards;
     }
   }
 
@@ -138,6 +146,10 @@ export default class EntityType {
       entityTypeObj.propertyTags = this.propertyTags;
     }
 
+    if (isDefined(this.shards)) {
+      entityTypeObj.shards = this.shards;
+    }
+
     return entityTypeObj;
   }
 
@@ -161,6 +173,7 @@ export class EntityTypeBuilder {
   properties :UUID[];
   propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
+  shards :?number;
   title :string;
   type :FQN;
 
@@ -311,6 +324,25 @@ export class EntityTypeBuilder {
     return this;
   }
 
+  setShards(shards :?number) :EntityTypeBuilder {
+
+    if (!isDefined(shards)) {
+      return this;
+    }
+
+    if (!isInteger(shards)) {
+      throw new Error('invalid parameter: shards must be an integer');
+    }
+
+    // com.openlattice.edm.type.EntityType
+    if (shards <= 0 || shards >= 20) {
+      throw new Error('invalid parameter: shards must be a valid integer');
+    }
+
+    this.shards = shards;
+    return this;
+  }
+
   build() :EntityType {
 
     let errorMsg :string = '';
@@ -351,6 +383,7 @@ export class EntityTypeBuilder {
       this.baseType,
       this.category,
       this.propertyTags,
+      this.shards,
     );
   }
 }
@@ -394,6 +427,10 @@ export function isValidEntityType(entityType :?EntityType | EntityTypeObject) :b
 
     if (has(entityType, 'propertyTags')) {
       entityTypeBuilder.setPropertyTags(entityType.propertyTags);
+    }
+
+    if (has(entityType, 'shards')) {
+      entityTypeBuilder.setShards(entityType.shards);
     }
 
     entityTypeBuilder.build();
