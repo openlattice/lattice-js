@@ -9,7 +9,7 @@ import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/t
 
 import {
   INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS
 } from '../utils/testing/Invalid';
 
@@ -81,7 +81,7 @@ function testGetAccessibleObjects() {
     const invalidParams = [
       INVALID_PARAMS_SS,
       INVALID_PARAMS_SS,
-      INVALID_PARAMS_EMPTY_STRING_ALLOWED
+      INVALID_PARAMS_FOR_OPTIONAL_STRING,
     ];
 
     const axiosParams = [

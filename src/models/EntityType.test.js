@@ -5,11 +5,11 @@ import { MOCK_ENTITY_TYPE, genRandomEntityType } from '../utils/testing/MockData
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
   INVALID_PARAMS_FOR_OPTIONAL_OBJECT,
   INVALID_PARAMS_FOR_OPTIONAL_NUMBER,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
+  INVALID_PARAMS_FOR_OPTIONAL_SS,
   INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED,
 } from '../utils/testing/Invalid';
 
 const INVALID_PARAMS_FOR_SHARD = INVALID_PARAMS_FOR_OPTIONAL_NUMBER.slice(0);
@@ -24,7 +24,7 @@ describe('EntityType', () => {
     describe('setId()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setId(invalidInput);
           }).toThrow();
@@ -96,7 +96,7 @@ describe('EntityType', () => {
     describe('setDescription()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setDescription(invalidInput);
           }).toThrow();
@@ -225,7 +225,7 @@ describe('EntityType', () => {
     describe('setBaseType()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setBaseType(invalidInput);
           }).toThrow();
@@ -249,7 +249,7 @@ describe('EntityType', () => {
     describe('setCategory()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setCategory(invalidInput);
           }).toThrow();
@@ -550,7 +550,7 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -568,7 +568,7 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { description: invalidInput }))).toEqual(false);
         });
       });
@@ -594,13 +594,13 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an object literal with an invalid "baseType" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { baseType: invalidInput }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "category" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { category: invalidInput }))).toEqual(false);
         });
       });
@@ -618,7 +618,7 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               invalidInput,
@@ -678,7 +678,7 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -788,7 +788,7 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an instance with an invalid "baseType" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -808,7 +808,7 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an instance with an invalid "category" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,

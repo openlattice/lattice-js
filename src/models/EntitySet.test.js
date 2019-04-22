@@ -4,9 +4,9 @@ import { MOCK_ENTITY_SET_DM } from '../utils/testing/MockDataModels';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED
+  INVALID_PARAMS_FOR_OPTIONAL_SS
 } from '../utils/testing/Invalid';
 
 describe('EntitySet', () => {
@@ -26,7 +26,7 @@ describe('EntitySet', () => {
     describe('setId()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
@@ -122,7 +122,7 @@ describe('EntitySet', () => {
     describe('setDescription()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
@@ -324,7 +324,7 @@ describe('EntitySet', () => {
       });
 
       test('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -348,7 +348,7 @@ describe('EntitySet', () => {
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { description: invalidInput }))).toEqual(false);
         });
       });
@@ -361,7 +361,7 @@ describe('EntitySet', () => {
       });
 
       test('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
               invalidInput,
@@ -421,7 +421,7 @@ describe('EntitySet', () => {
       });
 
       test('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(
             new EntitySet(
               MOCK_ENTITY_SET_DM.id,

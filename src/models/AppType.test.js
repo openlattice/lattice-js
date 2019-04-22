@@ -4,8 +4,8 @@ import { MOCK_APP_TYPE_DM } from '../utils/testing/MockDataModels';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
-  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
+  INVALID_PARAMS_FOR_OPTIONAL_SS
 } from '../utils/testing/Invalid';
 
 describe('AppType', () => {
@@ -49,7 +49,7 @@ describe('AppType', () => {
     describe('setDescription()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(() => {
             builder.setDescription(invalidInput);
           }).toThrow();
@@ -73,7 +73,7 @@ describe('AppType', () => {
     describe('setId()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             builder.setId(invalidInput);
           }).toThrow();
@@ -279,13 +279,13 @@ describe('AppType', () => {
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_TYPE_DM, { description: invalidInput }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_APP_TYPE_DM, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -303,7 +303,7 @@ describe('AppType', () => {
       });
 
       test('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(
             new AppType(
               invalidInput,
@@ -331,7 +331,7 @@ describe('AppType', () => {
       });
 
       test('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new AppType(
               MOCK_APP_TYPE_DM.description,
