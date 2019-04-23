@@ -369,6 +369,11 @@ export class EntityTypeBuilder {
       this.properties = [];
     }
 
+    // "propertyTags" is not required, but the backend returns it even if it's empty, so we'll treat it as required
+    if (!this.propertyTags) {
+      this.propertyTags = {};
+    }
+
     if (!this.schemas) {
       this.schemas = [];
     }
