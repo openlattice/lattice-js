@@ -26,7 +26,12 @@ import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
 import { UpdateTypes, DeleteTypes } from '../constants/types';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isDefined, isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
+import {
+  isDefined,
+  isEmptyArray,
+  isNonEmptyObject,
+  isNonEmptyString
+} from '../utils/LangUtils';
 
 import {
   ALL,

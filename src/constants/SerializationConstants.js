@@ -2,8 +2,6 @@
  * @flow
  */
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
-
 export const DESTINATION :string = 'dst';
 export const DESTINATION_ES_IDS = 'destinationEntitySetIds';
 export const EDGE :string = 'edge';
