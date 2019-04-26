@@ -26,17 +26,26 @@ import Logger from '../utils/Logger';
 import { DATA_API } from '../constants/ApiNames';
 import { UpdateTypes, DeleteTypes } from '../constants/types';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
+import { isDefined, isEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 
 import {
   ALL,
   ASSOCIATION_PATH,
   COUNT_PATH,
   FILE_TYPE,
+  NEIGHBORS_PATH,
   SET_ID,
   SET_PATH,
   TYPE_PATH
 } from '../constants/UrlConstants';
+
+import {
+  DESTINATION,
+  DESTINATION_ES_IDS,
+  ENTITY_KEY_IDS,
+  SOURCE,
+  SOURCE_ES_IDS
+} from '../constants/GlobalConstants';
 
 import {
   isValidMultimap,
@@ -234,6 +243,93 @@ export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :D
 
   return getApiAxiosInstance(DATA_API)
     .delete(`/${SET_PATH}/${entitySetId}/${entityKeyId}?${TYPE_PATH}=${deleteType}`)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /data/set/{entitySetId}/neighbors?type=Hard`
+ *
+ *  Deletes the entities matching the given entity ids and all of its neighbor entities provided in the filter.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {Object} filter
+ * @param {DeleteType} deleteType
+ * @return {Promise} - a Promise that resolves with the count of entities that were deleted
+ *
+ * @example
+ * DataApi.deleteEntitiesAndNeighbors(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "entityKeyIds": ["3bf2a30d-fda0-4389-a1e6-8546b230efad", "ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *     "destinationEntitySetIds": ["11442cb3-99dc-4842-8736-6c76e6fcc7c4"],
+ *     "sourceEntitySetIds": ["6317fab5-905d-42f4-8d67-2b78b3c56c77"],
+ *   },
+ *   "Hard"
+ * );
+ */
+
+export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, deleteType :DeleteType) :Promise<*> {
+
+  let errorMsg = '';
+  const data :Object = {};
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(filter)) {
+    errorMsg = 'invalid parameter: filter must be a non-empty object';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUuidArray(filter[ENTITY_KEY_IDS])) {
+    errorMsg = `invalid parameter: filter.${ENTITY_KEY_IDS} must be a non-empty set of valid UUIDs`;
+    LOG.error(errorMsg, filter[ENTITY_KEY_IDS]);
+    return Promise.reject(errorMsg);
+  }
+
+  const entityKeyIds :UUID[] = Set().withMutations((set :Set<UUID>) => (
+    filter[ENTITY_KEY_IDS].forEach((id :UUID) => set.add(id))
+  )).toJS();
+  data[ENTITY_KEY_IDS] = entityKeyIds;
+
+  let destinationEntitySetIds :?UUID[];
+  if (isEmptyArray(filter[DESTINATION_ES_IDS]) || isValidUuidArray(filter[DESTINATION_ES_IDS])) {
+    destinationEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[DESTINATION_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+    data[DESTINATION] = destinationEntitySetIds;
+  }
+  else if (isDefined(filter[DESTINATION_ES_IDS])) {
+    errorMsg = `invalid parameter: filter.${DESTINATION_ES_IDS} must be a set of valid UUIDs`;
+    LOG.error(errorMsg, filter[DESTINATION_ES_IDS]);
+    return Promise.reject(errorMsg);
+  }
+
+  let sourceEntitySetIds :?UUID[];
+  if (isEmptyArray(filter[SOURCE_ES_IDS]) || isValidUuidArray(filter[SOURCE_ES_IDS])) {
+    sourceEntitySetIds = Set().withMutations((set :Set<UUID>) => (
+      filter[SOURCE_ES_IDS].forEach((id :UUID) => set.add(id))
+    )).toJS();
+    data[SOURCE] = sourceEntitySetIds;
+  }
+  else if (isDefined(filter[SOURCE_ES_IDS])) {
+    errorMsg = `invalid parameter: filter.${SOURCE_ES_IDS} must be a set of valid UUIDs`;
+    LOG.error(errorMsg, filter[SOURCE_ES_IDS]);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post(`/${SET_PATH}/${entitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${deleteType}`, data)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
