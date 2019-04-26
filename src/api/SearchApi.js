@@ -39,6 +39,26 @@ import {
 } from '../constants/UrlConstants';
 
 import {
+  DESTINATION,
+  DESTINATION_ES_IDS,
+  EDGE,
+  EDGE_ES_IDS,
+  ENTITY_KEY_IDS,
+  ENTITY_TYPE_ID,
+  FUZZY,
+  KEYWORD,
+  MAX_HITS,
+  NAME,
+  NAMESPACE,
+  PROPERTY_TYPE_IDS,
+  SEARCH_FIELDS,
+  SEARCH_TERM,
+  SOURCE,
+  SOURCE_ES_IDS,
+  START
+} from '../constants/SerializationConstants';
+
+import {
   isDefined,
   isEmptyArray,
   isNonEmptyArray,
@@ -47,24 +67,6 @@ import {
 } from '../utils/LangUtils';
 
 const LOG = new Logger('SearchApi');
-
-const DESTINATION :string = 'dst';
-const DESTINATION_ES_IDS = 'destinationEntitySetIds';
-const EDGE :string = 'edge';
-const EDGE_ES_IDS = 'edgeEntitySetIds';
-const ENTITY_KEY_IDS :string = 'entityKeyIds';
-const ENTITY_TYPE_ID :string = 'entityTypeId';
-const FUZZY :string = 'fuzzy';
-const KEYWORD :string = 'kw';
-const MAX_HITS :string = 'maxHits';
-const NAME :string = 'name';
-const NAMESPACE :string = 'namespace';
-const PROPERTY_TYPE_IDS :string = 'pid';
-const SEARCH_FIELDS :string = 'searchFields';
-const SEARCH_TERM :string = 'searchTerm';
-const SOURCE :string = 'src';
-const SOURCE_ES_IDS = 'sourceEntitySetIds';
-const START :string = 'start';
 
 /* TODO update all frontend projects and remove this garbage */
 const addIDField = (searchResult) => {
