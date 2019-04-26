@@ -148,10 +148,6 @@ function deleteEntitiesAndNeighbors() {
       },
       INVALID_PARAMS_SS,
     ];
-    const axiosParams = [
-      `/${mockEntitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${DeleteTypes.Soft}`,
-      { entityKeyIds: [mockEntityKeyId] },
-    ];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);

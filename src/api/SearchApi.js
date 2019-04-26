@@ -56,7 +56,7 @@ import {
   SOURCE,
   SOURCE_ES_IDS,
   START
-} from '../constants/GlobalConstants';
+} from '../constants/SerializationConstants';
 
 import {
   isDefined,

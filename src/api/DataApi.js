@@ -45,7 +45,7 @@ import {
   ENTITY_KEY_IDS,
   SOURCE,
   SOURCE_ES_IDS
-} from '../constants/GlobalConstants';
+} from '../constants/SerializationConstants';
 
 import {
   isValidMultimap,
