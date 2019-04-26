@@ -333,6 +333,12 @@ export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, de
     return Promise.reject(errorMsg);
   }
 
+  if (!isNonEmptyString(deleteType) || !DeleteTypes[deleteType]) {
+    errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
+    LOG.error(errorMsg, deleteType);
+    return Promise.reject(errorMsg);
+  }
+
   return getApiAxiosInstance(DATA_API)
     .post(`/${SET_PATH}/${entitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${deleteType}`, data)
     .then(axiosResponse => axiosResponse.data)
