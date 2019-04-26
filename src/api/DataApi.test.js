@@ -155,17 +155,19 @@ function deleteEntitiesAndNeighbors() {
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
 
     test('type=Soft', () => {
-      const apiInvocationParams = [mockEntitySetId, 'Soft'];
+      const apiInvocationParams = [mockEntitySetId, { entityKeyIds: [mockEntityKeyId] }, DeleteTypes.Soft];
       const expectedAxiosParams = [
-        `/${SET_PATH}/${mockEntitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${DeleteTypes.Soft}`
+        `/${SET_PATH}/${mockEntitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${DeleteTypes.Soft}`,
+        { entityKeyIds: [mockEntityKeyId] },
       ];
       return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
     });
 
     test('type=Hard', () => {
-      const apiInvocationParams = [mockEntitySetId, 'Hard'];
+      const apiInvocationParams = [mockEntitySetId, { entityKeyIds: [mockEntityKeyId] }, DeleteTypes.Hard];
       const expectedAxiosParams = [
-        `/${SET_PATH}/${mockEntitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${DeleteTypes.Hard}`
+        `/${SET_PATH}/${mockEntitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${DeleteTypes.Hard}`,
+        { entityKeyIds: [mockEntityKeyId] },
       ];
       return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
     });
