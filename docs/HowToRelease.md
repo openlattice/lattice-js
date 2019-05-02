@@ -4,9 +4,7 @@
 All changes that need to go out in a release must be merged into the `develop` branch.
 
 #### 2. Open a new Pull Request titled `changes for the next release` or `YYYY-MM-DD release`
-Once all necessary changes are on `develop`, it's time to open a new Pull Request to merge `develop` into `master`. Set the `base` branch as `master`, set the `compare` branch as `develop`, and please title this Pull Request:
-
-    changes for the next release
+Once all necessary changes are on `develop`, it's time to open a new Pull Request to merge `develop` into `master`. Set the `base` branch as `master`, set the `compare` branch as `develop`.
 
 **IMPORTANT:** The Pull Request can be merged only when the continuous integration checks pass.
 
