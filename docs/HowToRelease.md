@@ -28,10 +28,6 @@ Please take note of the release version; you'll see things like `releasing v0.1.
 **IMPORTANT:** We're not done yet!
 
 #### 4. Open a new Pull Request titled `changes from release v0.1.2` or `v0.1.2 release`
-Once the release script finishes, it's time to open a new Pull Request to merge `master` into `develop`. Set the `base` branch as `develop`, set the `compare` branch as `master`, and please title this Pull Request:
-
-    changes from release {version}
-
-... where `{version}` is the version that was just released (`v0.1.2` from the example above).
+Once the release script finishes, it's time to open a new Pull Request to merge `master` into `develop`. Set the `base` branch as `develop`, set the `compare` branch as `master`.
 
 #### 5. We're done! Let's celebrate! :tada: :beers:
