@@ -25,7 +25,6 @@
   "main": "build/lattice.js",
   "dependencies": {
     "axios": "~0.18.0",
-    "date-fns": "~1.30.0",
     "immutable": "4.0.0-rc.12",
     "lodash": "~4.17.10",
     "loglevel": "~1.6.0",
@@ -51,7 +50,7 @@
     "eslint-config-airbnb-base": "~13.1.0",
     "eslint-import-resolver-webpack": "~0.11.0",
     "eslint-loader": "~2.1.0",
-    "eslint-plugin-flowtype": "~3.6.0",
+    "eslint-plugin-flowtype": "~3.7.0",
     "eslint-plugin-import": "~2.17.0",
     "eslint-plugin-jest": "~22.5.0",
     "flow-bin": "~0.98.0",
