@@ -6,7 +6,6 @@ import isEmpty from 'lodash/isEmpty';
 import isError from 'lodash/isError';
 import isString from 'lodash/isString';
 import log from 'loglevel';
-import { format } from 'date-fns';
 
 // injected by Webpack.DefinePlugin
 declare var __ENV_DEV__ :boolean;
@@ -20,8 +19,6 @@ const LOG_LEVELS = {
   WARN: 'warn',
   ERROR: 'error',
 };
-
-const TIMESTAMP_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
 if (__ENV_DEV__) {
   log.setLevel(log.levels.TRACE);
@@ -40,7 +37,7 @@ function isNonEmptyString(value :any) :boolean {
 
 function getMessagePrefix(loggerLevel :string, loggerName :string) :string {
 
-  return `[${format(new Date(), TIMESTAMP_FORMAT)} ${loggerLevel.toUpperCase()} ${__PACKAGE__}] ${loggerName}`;
+  return `[${(new Date()).toISOString()} ${loggerLevel.toUpperCase()} ${__PACKAGE__}] ${loggerName}`;
 }
 
 export default class Logger {

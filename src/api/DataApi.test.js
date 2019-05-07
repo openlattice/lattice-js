@@ -1,6 +1,9 @@
 /* eslint-disable no-use-before-define */
 
+import { fromJS } from 'immutable';
+
 import * as AxiosUtils from '../utils/axios';
+import * as Config from '../config/Configuration';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
 import { MOCK_DATA_EDGE_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
@@ -8,6 +11,7 @@ import { UpdateTypes, DeleteTypes } from '../constants/types';
 
 import {
   ASSOCIATION_PATH,
+  CSRF_TOKEN,
   COUNT_PATH,
   NEIGHBORS_PATH,
   SET_ID,
@@ -46,6 +50,7 @@ const MOCK_BASE_URL = genMockBaseUrl();
 const MOCK_FILE_TYPE = 'json';
 
 jest.mock('../utils/axios');
+jest.mock('../config/Configuration');
 AxiosUtils.getApiBaseUrl.mockImplementation(() => MOCK_BASE_URL);
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
 
@@ -354,6 +359,7 @@ function getEntitySetDataFileUrl() {
 
     const apiToTest = DataApi.getEntitySetDataFileUrl;
     const mockEntitySetId = genRandomUUID();
+    const mockCSRFToken = 'mock_csrf_token';
 
     const validParams = [
       mockEntitySetId,
@@ -365,17 +371,25 @@ function getEntitySetDataFileUrl() {
       INVALID_PARAMS
     ];
 
+    Config.getConfig.mockImplementation(() => fromJS({
+      csrfToken: mockCSRFToken,
+    }));
+
     test('should return the correct URL', () => {
 
       expect(DataApi.getEntitySetDataFileUrl(mockEntitySetId, MOCK_FILE_TYPE)).toEqual(
-        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}?fileType=${MOCK_FILE_TYPE}`
+        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}`
+        + `?fileType=${MOCK_FILE_TYPE}`
+        + `&${CSRF_TOKEN}=${mockCSRFToken}`
       );
     });
 
     test('should correctly set the "fileType" query param as lowercase', () => {
 
       expect(DataApi.getEntitySetDataFileUrl(mockEntitySetId, MOCK_FILE_TYPE.toUpperCase())).toEqual(
-        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}?fileType=${MOCK_FILE_TYPE}`
+        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}`
+        + `?fileType=${MOCK_FILE_TYPE}`
+        + `&${CSRF_TOKEN}=${mockCSRFToken}`
       );
     });
 

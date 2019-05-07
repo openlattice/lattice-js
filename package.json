@@ -25,7 +25,6 @@
   "main": "build/lattice.js",
   "dependencies": {
     "axios": "~0.18.0",
-    "date-fns": "~1.30.0",
     "immutable": "4.0.0-rc.12",
     "lodash": "~4.17.10",
     "loglevel": "~1.6.0",

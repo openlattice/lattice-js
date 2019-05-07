@@ -15,6 +15,12 @@ import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 // injected by Webpack.DefinePlugin
 declare var __ENV_PROD__ :boolean;
 
+type LatticeConfig = {
+  authToken ?:string;
+  baseUrl :string;
+  csrfToken ?:string;
+};
+
 const LOG = new Logger('Configuration');
 
 const ENV_URLS :Map<string, string> = fromJS({
@@ -28,7 +34,7 @@ let configuration :Map<string, string> = fromJS({
   baseUrl: ENV_URLS.get('LOCAL')
 });
 
-function setAuthToken(config :Object) :void {
+function setAuthToken(config :LatticeConfig) :void {
 
   // authToken is optional, so null and undefined are allowed
   if (config.authToken === null || config.authToken === undefined) {
@@ -46,7 +52,7 @@ function setAuthToken(config :Object) :void {
   }
 }
 
-function setBaseUrl(config :Object) :void {
+function setBaseUrl(config :LatticeConfig) :void {
 
   if (isNonEmptyString(config.baseUrl)) {
     if (config.baseUrl === 'localhost' || config.baseUrl === ENV_URLS.get('LOCAL')) {
@@ -75,13 +81,31 @@ function setBaseUrl(config :Object) :void {
   }
 }
 
+function setCSRFToken(config :LatticeConfig) {
+
+  // csrfToken is optional, so null and undefined are allowed
+  if (config.csrfToken === null || config.csrfToken === undefined) {
+    LOG.warn('csrfToken has not been configured, expect errors');
+    configuration = configuration.delete('csrfToken');
+  }
+  else if (isNonEmptyString(config.csrfToken)) {
+    configuration = configuration.set('csrfToken', config.csrfToken);
+  }
+  else {
+    const errorMsg = 'invalid parameter - csrfToken must be a non-empty string';
+    LOG.error(errorMsg, config.csrfToken);
+    throw new Error(errorMsg);
+  }
+}
+
 /**
  * @memberof lattice.Configuration
  * @param {Object} config - an object literal containing all configuration options
  * @param {string} config.authToken - a Base64-encoded JWT auth token (optional)
  * @param {string} config.baseUrl - a full URL, or a simple URL identifier (required)
+ * @param {string} config.csrfToken - a random string (optional)
  */
-function configure(config :Object) {
+function configure(config :LatticeConfig) {
 
   if (!isNonEmptyObject(config)) {
     const errorMsg = 'invalid parameter - config must be a non-empty configuration object';
@@ -91,6 +115,7 @@ function configure(config :Object) {
 
   setAuthToken(config);
   setBaseUrl(config);
+  setCSRFToken(config);
 }
 
 function getConfig() :Map<*, *> {

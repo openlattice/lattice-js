@@ -23,6 +23,7 @@ import { Set } from 'immutable';
 import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
+import { getConfig } from '../config/Configuration';
 import { DATA_API } from '../constants/ApiNames';
 import { UpdateTypes, DeleteTypes } from '../constants/types';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
@@ -30,18 +31,19 @@ import {
   isDefined,
   isEmptyArray,
   isNonEmptyObject,
-  isNonEmptyString
+  isNonEmptyString,
 } from '../utils/LangUtils';
 
 import {
   ALL,
   ASSOCIATION_PATH,
+  CSRF_TOKEN,
   COUNT_PATH,
   FILE_TYPE,
   NEIGHBORS_PATH,
   SET_ID,
   SET_PATH,
-  TYPE_PATH
+  TYPE_PATH,
 } from '../constants/UrlConstants';
 
 import {
@@ -49,14 +51,14 @@ import {
   DESTINATION_ES_IDS,
   ENTITY_KEY_IDS,
   SOURCE,
-  SOURCE_ES_IDS
+  SOURCE_ES_IDS,
 } from '../constants/SerializationConstants';
 
 import {
   isValidMultimap,
   isValidMultimapArray,
   isValidUuid,
-  isValidUuidArray
+  isValidUuidArray,
 } from '../utils/ValidationUtils';
 
 import type { UpdateType, DeleteType } from '../constants/types';
@@ -553,7 +555,17 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
     return null;
   }
 
-  return `${getApiBaseUrl(DATA_API)}/${SET_PATH}/${entitySetId}?${FILE_TYPE}=${fileType.toLowerCase()}`;
+  // NOTE: CSRF token must be equal to CSRF cookie
+  const csrfToken :?string = getConfig().get('csrfToken', '');
+  if (!isNonEmptyString(csrfToken)) {
+    errorMsg = 'invalid csrf token';
+    LOG.error(errorMsg, csrfToken);
+    return null;
+  }
+
+  return `${getApiBaseUrl(DATA_API)}/${SET_PATH}/${entitySetId}`
+    + `?${FILE_TYPE}=${fileType.toLowerCase()}`
+    + `&${CSRF_TOKEN}=${csrfToken}`;
 }
 
 /**
