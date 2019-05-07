@@ -14,6 +14,7 @@ export const BULK_PATH :string = 'bulk';
 export const COMPLEX_TYPE_PATH :string = 'complex/type';
 export const CONFIG_PATH :string = 'config';
 export const COUNT_PATH :string = 'count';
+export const CSRF_TOKEN :string = 'csrfToken';
 export const CURRENT_PATH :string = 'current';
 export const DATASTORE_PATH :string = 'datastore';
 export const DATA_PATH :string = 'data';
