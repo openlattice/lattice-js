@@ -5,9 +5,9 @@
 declare module "lattice" {
 
   declare export type LatticeConfig = {
-    authToken ?:string;
+    authToken ?:?string;
     baseUrl :string;
-    csrfToken ?:string;
+    csrfToken ?:?string;
   };
 
   declare function configure(config :LatticeConfig) :void;

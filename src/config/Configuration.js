@@ -16,9 +16,9 @@ import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 declare var __ENV_PROD__ :boolean;
 
 type LatticeConfig = {
-  authToken ?:string;
+  authToken ?:?string;
   baseUrl :string;
-  csrfToken ?:string;
+  csrfToken ?:?string;
 };
 
 const LOG = new Logger('Configuration');
