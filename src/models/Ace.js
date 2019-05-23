@@ -9,7 +9,7 @@ import Principal, { isValidPrincipal } from './Principal';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
 import { isValidPermissionArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
-import type { Permission } from '../constants/types/PermissionTypes';
+import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('Ace');
 
@@ -20,9 +20,9 @@ const LOG = new Logger('Ace');
 export default class Ace {
 
   principal :Principal;
-  permissions :Permission[];
+  permissions :PermissionType[];
 
-  constructor(principal :Principal, permissions :Permission[]) {
+  constructor(principal :Principal, permissions :PermissionType[]) {
 
     this.principal = principal;
     this.permissions = permissions;
@@ -36,7 +36,7 @@ export default class Ace {
 export class AceBuilder {
 
   principal :Principal;
-  permissions :Permission[];
+  permissions :PermissionType[];
 
   setPrincipal(principal :Principal) :AceBuilder {
 
@@ -48,7 +48,7 @@ export class AceBuilder {
     return this;
   }
 
-  setPermissions(permissions :Permission[]) :AceBuilder {
+  setPermissions(permissions :PermissionType[]) :AceBuilder {
 
     if (!isDefined(permissions) || isEmptyArray(permissions)) {
       return this;
@@ -58,8 +58,8 @@ export class AceBuilder {
       throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
     }
 
-    this.permissions = Set().withMutations((set :Set<Permission>) => {
-      permissions.forEach((permission :Permission) => {
+    this.permissions = Set().withMutations((set :Set<PermissionType>) => {
+      permissions.forEach((permission :PermissionType) => {
         set.add(permission);
       });
     }).toJS();

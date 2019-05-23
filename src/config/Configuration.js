@@ -23,6 +23,7 @@ type LatticeConfig = {
 
 const LOG = new Logger('Configuration');
 
+// TODO: move these to "constants" and export as part of the library
 const ENV_URLS :Map<string, string> = fromJS({
   LOCAL: 'http://localhost:8080',
   STAGING: 'https://api.staging.openlattice.com',
@@ -126,4 +127,8 @@ function getConfig() :Map<*, *> {
 export {
   configure,
   getConfig
+};
+
+export type {
+  LatticeConfig
 };

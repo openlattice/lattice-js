@@ -2,16 +2,25 @@
  * @flow
  */
 
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-const PermissionTypes = {
+type PermissionTypesEnum = {|
+  DISCOVER :'DISCOVER';
+  LINK :'LINK';
+  MATERIALIZE :'MATERIALIZE';
+  OWNER :'OWNER';
+  READ :'READ';
+  WRITE :'WRITE';
+|};
+
+type PermissionType = $Values<PermissionTypesEnum>;
+
+const PermissionTypes :{| ...PermissionTypesEnum |} = Object.freeze({
   DISCOVER: 'DISCOVER',
   LINK: 'LINK',
   MATERIALIZE: 'MATERIALIZE',
   OWNER: 'OWNER',
   READ: 'READ',
-  WRITE: 'WRITE'
-};
+  WRITE: 'WRITE',
+});
 
-export type Permission = $Keys<typeof PermissionTypes>;
-
-export { PermissionTypes as default };
+export default PermissionTypes;
+export type { PermissionType };

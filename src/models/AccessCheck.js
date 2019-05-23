@@ -9,7 +9,7 @@ import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
 import { isValidPermissionArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
-import type { Permission } from '../constants/types/PermissionTypes';
+import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AccessCheck');
 
@@ -20,9 +20,9 @@ const LOG = new Logger('AccessCheck');
 export default class AccessCheck {
 
   aclKey :UUID[];
-  permissions :Permission[];
+  permissions :PermissionType[];
 
-  constructor(aclKey :UUID[], permissions :Permission[]) {
+  constructor(aclKey :UUID[], permissions :PermissionType[]) {
 
     this.aclKey = aclKey;
     this.permissions = permissions;
@@ -36,7 +36,7 @@ export default class AccessCheck {
 export class AccessCheckBuilder {
 
   aclKey :UUID[];
-  permissions :Permission[];
+  permissions :PermissionType[];
 
   setAclKey(aclKey :UUID[]) :AccessCheckBuilder {
 
@@ -52,7 +52,7 @@ export class AccessCheckBuilder {
     return this;
   }
 
-  setPermissions(permissions :Permission[]) :AccessCheckBuilder {
+  setPermissions(permissions :PermissionType[]) :AccessCheckBuilder {
 
     if (!isDefined(permissions) || isEmptyArray(permissions)) {
       return this;
@@ -62,8 +62,8 @@ export class AccessCheckBuilder {
       throw new Error('invalid parameter: permissions must be an array of valid Permissions');
     }
 
-    this.permissions = Set().withMutations((set :Set<Permission>) => {
-      permissions.forEach((permission :Permission) => {
+    this.permissions = Set().withMutations((set :Set<PermissionType>) => {
+      permissions.forEach((permission :PermissionType) => {
         set.add(permission);
       });
     }).toJS();

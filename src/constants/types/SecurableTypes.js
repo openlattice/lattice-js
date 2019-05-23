@@ -2,7 +2,7 @@
  * @flow
  */
 
-type SecurableTypeEnum = {|
+type SecurableTypesEnum = {|
   AssociationType :'AssociationType';
   ComplexType :'ComplexType';
   EdgeType :'EdgeType';
@@ -14,9 +14,9 @@ type SecurableTypeEnum = {|
   PropertyTypeInEntitySet :'PropertyTypeInEntitySet';
 |};
 
-type SecurableType = $Values<SecurableTypeEnum>;
+type SecurableType = $Values<SecurableTypesEnum>;
 
-const SecurableTypes :SecurableTypeEnum = Object.freeze({
+const SecurableTypes :{| ...SecurableTypesEnum |} = Object.freeze({
   AssociationType: 'AssociationType',
   ComplexType: 'ComplexType',
   EdgeType: 'EdgeType',
@@ -28,5 +28,5 @@ const SecurableTypes :SecurableTypeEnum = Object.freeze({
   PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
 });
 
-export { SecurableTypes as default };
+export default SecurableTypes;
 export type { SecurableType };

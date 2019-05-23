@@ -21,7 +21,7 @@ import {
   UPDATE_PATH
 } from '../constants/UrlConstants';
 
-import type { Permission } from '../constants/types/PermissionTypes';
+import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AppApi');
 
@@ -623,7 +623,7 @@ export function updateAppConfigPermissions(
   organizationId :UUID,
   appId :UUID,
   appTypeId :UUID,
-  permissions :Permission[]
+  permissions :PermissionType[]
 ) :Promise<*> {
 
   let errorMsg = '';
@@ -647,7 +647,7 @@ export function updateAppConfigPermissions(
   }
 
   if (!isValidPermissionArray(permissions)) {
-    errorMsg = 'invalid parameter: permissions must be a valid permissions array';
+    errorMsg = 'invalid parameter: permissions must be a valid PermissionType array';
     LOG.error(errorMsg, permissions);
     return Promise.reject(errorMsg);
   }

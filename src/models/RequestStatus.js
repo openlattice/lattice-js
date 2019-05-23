@@ -9,17 +9,17 @@ import Request, { isValidRequest } from './Request';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
 import { validateNonEmptyArray } from '../utils/ValidationUtils';
 
-import type { RequestState } from '../constants/types/RequestStateTypes';
+import type { RequestStateType } from '../constants/types/RequestStateTypes';
 
 const LOG = new Logger('RequestStatus');
 
 export default class RequestStatus {
 
   request :Request;
-  state :RequestState;
+  state :RequestStateType;
   principal :Principal;
 
-  constructor(request :Request, state :RequestState, principal :Principal) {
+  constructor(request :Request, state :RequestStateType, principal :Principal) {
 
     this.request = request;
     this.state = state;
@@ -30,7 +30,7 @@ export default class RequestStatus {
 export class RequestStatusBuilder {
 
   request :Request;
-  state :RequestState;
+  state :RequestStateType;
   principal :Principal;
 
   setRequest(request :Request) :RequestStatusBuilder {
@@ -43,7 +43,7 @@ export class RequestStatusBuilder {
     return this;
   }
 
-  setRequestState(state :RequestState) :RequestStatusBuilder {
+  setRequestState(state :RequestStateType) :RequestStatusBuilder {
 
     if (!isNonEmptyString(state) || !RequestStateTypes[state]) {
       throw new Error('invalid parameter: state must be a valid RequestState');

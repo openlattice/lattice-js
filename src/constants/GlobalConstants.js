@@ -2,10 +2,12 @@
  * @flow
  */
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
+const AT_CLASS :'@class' = '@class';
+const AT_ID :'@id' = '@id';
+const OPENLATTICE_ID_FQN :'openlattice.@id' = 'openlattice.@id';
 
-export const AT_CLASS :string = '@class';
-export const AT_ID :string = '@id';
-
-export const OPENLATTICE_ID_FQN :string = FullyQualifiedName.toString('openlattice', AT_ID);
-export const ROLE_PKG :string = 'com.openlattice.organization.roles.Role';
+export {
+  AT_CLASS,
+  AT_ID,
+  OPENLATTICE_ID_FQN,
+};
