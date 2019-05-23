@@ -37,7 +37,7 @@ import {
   isNonEmptyString
 } from '../utils/LangUtils';
 
-import type { RequestState } from '../constants/types/RequestStateTypes';
+import type { RequestStateType } from '../constants/types/RequestStateTypes';
 
 const LOG = new Logger('RequestsApi');
 
@@ -52,7 +52,7 @@ const LOG = new Logger('RequestsApi');
  *
  * @static
  * @memberof lattice.RequestsApi
- * @param {RequestState} state (optional)
+ * @param {RequestStateType} state (optional)
  * @param {UUID[][]} aclKeys (optional)
  * @returns {Promise<RequestStatus[]>}
  *
@@ -86,7 +86,7 @@ const LOG = new Logger('RequestsApi');
  * );
  */
 type StateAclKeysObject = {
-  state :RequestState,
+  state :RequestStateType,
   aclKeys :UUID[][]
 };
 export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<*> {
@@ -107,7 +107,7 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<*> {
   if (isNonEmptyObject(options) && has(options, 'state')) {
 
     if (!isNonEmptyString(options.state) || !RequestStateTypes[options.state]) {
-      errorMsg = 'invalid parameter: when given, state must be a valid RequestState';
+      errorMsg = 'invalid parameter: when given, state must be a valid RequestStateType';
       LOG.error(errorMsg, options.state);
       return Promise.reject(errorMsg);
     }

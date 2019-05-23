@@ -2,21 +2,21 @@
  * @flow
  */
 
-type IndexTypeEnum = {|
+type IndexTypesEnum = {|
   BTREE :'BTREE';
   GIN :'GIN';
   HASH :'HASH';
   NONE :'NONE';
 |};
 
-type IndexType = $Values<IndexTypeEnum>;
+type IndexType = $Values<IndexTypesEnum>;
 
-const IndexTypes :IndexTypeEnum = Object.freeze({
+const IndexTypes :{| ...IndexTypesEnum |} = Object.freeze({
   BTREE: 'BTREE',
   GIN: 'GIN',
   HASH: 'HASH',
   NONE: 'NONE',
 });
 
-export { IndexTypes as default };
+export default IndexTypes;
 export type { IndexType };

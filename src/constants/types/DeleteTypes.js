@@ -2,11 +2,21 @@
  * @flow
  */
 
-const DeleteTypes = {
+type DeleteTypesEnum = {|
+  HARD :'Hard';
+  Hard :'Hard';
+  SOFT :'Soft';
+  Soft :'Soft';
+|};
+
+type DeleteType = $Values<DeleteTypesEnum>;
+
+const DeleteTypes :{| ...DeleteTypesEnum |} = Object.freeze({
+  HARD: 'Hard',
   Hard: 'Hard',
+  SOFT: 'Soft',
   Soft: 'Soft',
-};
+});
 
-export type DeleteType = $Keys<typeof DeleteTypes>;
-
-export { DeleteTypes as default };
+export default DeleteTypes;
+export type { DeleteType };

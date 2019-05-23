@@ -11,12 +11,12 @@ type AnalyzerTypeEnum = {|
 
 type AnalyzerType = $Values<AnalyzerTypeEnum>;
 
-const AnalyzerTypes :AnalyzerTypeEnum = Object.freeze({
+const AnalyzerTypes :{| ...AnalyzerTypeEnum |} = Object.freeze({
   METAPHONE: 'METAPHONE',
   NONE: 'NONE',
   NOT_ANALYZED: 'NOT_ANALYZED',
   STANDARD: 'STANDARD',
 });
 
-export { AnalyzerTypes as default };
+export default AnalyzerTypes;
 export type { AnalyzerType };

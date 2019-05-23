@@ -13,7 +13,8 @@
 #
 [ignore]
 ./build/.*
+./config/.*
 .*/node_modules/.*
 
 [libs]
-./config/flow
+./src/types.js.flow

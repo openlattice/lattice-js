@@ -7,7 +7,7 @@ import Logger from '../utils/Logger';
 import Acl, { isValidAcl } from './Acl';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
 
-import type { Action } from '../constants/types/ActionTypes';
+import type { ActionType } from '../constants/types/ActionTypes';
 
 const LOG = new Logger('AclData');
 
@@ -18,9 +18,9 @@ const LOG = new Logger('AclData');
 export default class AclData {
 
   acl :Acl;
-  action :Action;
+  action :ActionType;
 
-  constructor(acl :Acl, action :Action) {
+  constructor(acl :Acl, action :ActionType) {
 
     this.acl = acl;
     this.action = action;
@@ -34,7 +34,7 @@ export default class AclData {
 export class AclDataBuilder {
 
   acl :Acl;
-  action :Action;
+  action :ActionType;
 
   setAcl(acl :Acl) :AclDataBuilder {
 
@@ -46,7 +46,7 @@ export class AclDataBuilder {
     return this;
   }
 
-  setAction(action :Action) :AclDataBuilder {
+  setAction(action :ActionType) :AclDataBuilder {
 
     if (!isNonEmptyString(action) || !ActionTypes[action]) {
       throw new Error('invalid parameter: action must be a valid Action');

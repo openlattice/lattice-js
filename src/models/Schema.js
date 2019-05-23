@@ -191,3 +191,7 @@ export function isValidSchema(schema :any) :boolean {
     return false;
   }
 }
+
+export type {
+  SchemaObject
+};

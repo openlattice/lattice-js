@@ -27,7 +27,7 @@ import { AUTHORIZATION_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isDefined, isEmptyArray, isNonEmptyString } from '../utils/LangUtils';
 
-import type { Permission } from '../constants/types/PermissionTypes';
+import type { PermissionType } from '../constants/types/PermissionTypes';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('AuthorizationApi');
@@ -80,12 +80,12 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<*> {
 /**
  * `GET /authorizations`
  *
- * Gets all authorized objects of the given SecurableType with the given Permission.
+ * Gets all authorized objects of the given SecurableType with the given PermissionType.
  *
  * @static
  * @memberof lattice.AuthorizationApi
  * @param {SecurableType} securableType
- * @param {Permission} permission
+ * @param {PermissionType} permission
  * @param {string} pagingToken (optional)
  * @returns {Promise<AuthorizedObjectsSearchResult>} - a Promise that will resolve with the authorized objects and a
  * paging token as its fulfillment value
@@ -99,7 +99,7 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<*> {
  */
 export function getAccessibleObjects(
   securableType :SecurableType,
-  permission :Permission,
+  permission :PermissionType,
   pagingToken :string
 ) :Promise<*> {
 
@@ -112,7 +112,7 @@ export function getAccessibleObjects(
   }
 
   if (!isNonEmptyString(permission) || !PermissionTypes[permission]) {
-    errorMsg = 'invalid parameter: permission must be a valid Permission';
+    errorMsg = 'invalid parameter: permission must be a valid PermissionType';
     LOG.error(errorMsg, permission);
     return Promise.reject(errorMsg);
   }
