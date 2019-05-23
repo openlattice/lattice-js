@@ -82,6 +82,7 @@ describe('EntityDataModelApi', () => {
   testUpdateSchema();
   testGetEntitySet();
   testGetEntitySetId();
+  testGetEntitySetIds();
   testGetAllEntitySets();
   testCreateEntitySets();
   testDeleteEntitySet();
@@ -382,6 +383,27 @@ function testGetEntitySetId() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+  });
+}
+
+function testGetEntitySetIds() {
+
+  describe('getEntitySetIds()', () => {
+
+    const fnToTest = EntityDataModelApi.getEntitySetIds;
+
+    const validParams = [[MOCK_ENTITY_SET_DM.name]];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = [
+      `/${IDS_PATH}/${ENTITY_SET_PATH}`,
+      [MOCK_ENTITY_SET_DM.name],
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
   });
 }
 
