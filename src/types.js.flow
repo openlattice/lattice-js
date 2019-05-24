@@ -2,4 +2,4 @@
  * @flow
  */
 
-type UUID = string;
+declare type UUID = string;
