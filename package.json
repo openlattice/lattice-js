@@ -31,7 +31,7 @@
     "validator": "~11.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "~7.2.0",
+    "@babel/cli": "~7.4.4",
     "@babel/core": "~7.4.0",
     "@babel/plugin-proposal-class-properties": "~7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "~7.4.0",
@@ -42,7 +42,7 @@
     "@babel/register": "~7.4.0",
     "@babel/runtime": "~7.4.0",
     "babel-eslint": "~10.0.0",
-    "babel-jest": "~24.1.0",
+    "babel-jest": "~24.8.0",
     "babel-loader": "~8.0.0",
     "bluebird": "~3.5.3",
     "documentation": "~11.0.0",
@@ -54,7 +54,7 @@
     "eslint-plugin-import": "~2.17.0",
     "eslint-plugin-jest": "~22.6.0",
     "flow-bin": "~0.99.0",
-    "jest": "~24.1.0",
+    "jest": "~24.8.0",
     "npm-run-all": "~4.1.0",
     "rimraf": "~2.6.0",
     "uuid": "~3.3.0",
