@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/openlattice/lattice-js/issues"
   },
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "main": "build/index.js",
   "dependencies": {
     "axios": "~0.18.0",
