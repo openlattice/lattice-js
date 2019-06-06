@@ -19,6 +19,7 @@
 
 import Logger from '../utils/Logger';
 import { SUBSCRIPTION_API } from '../constants/ApiNames';
+import { ALL } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('SubscriptionApi');
@@ -38,7 +39,7 @@ const LOG = new Logger('SubscriptionApi');
 export function getAllSubscriptions() :Promise<*> {
 
   return getApiAxiosInstance(SUBSCRIPTION_API)
-    .get('/')
+    .get(`/${ALL}`)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
