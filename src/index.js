@@ -23,6 +23,7 @@ import * as PersistentSearchApi from './api/PersistentSearchApi';
 import * as PrincipalsApi from './api/PrincipalsApi';
 import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
+import * as SubscriptionApi from './api/SubscriptionApi';
 
 import * as Constants from './constants/GlobalConstants';
 import * as Types from './constants/types';
@@ -47,6 +48,7 @@ export {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
+  SubscriptionApi,
 
   Constants,
   Models,
@@ -69,6 +71,7 @@ export default {
   PrincipalsApi,
   RequestsApi,
   SearchApi,
+  SubscriptionApi,
 
   Constants,
   Models,

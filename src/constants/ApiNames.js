@@ -15,3 +15,4 @@ export const PERSISTENT_SEARCH_API :string = 'PersistentSearchApi';
 export const PRINCIPALS_API :string = 'PrincipalsApi';
 export const REQUESTS_API :string = 'RequestsApi';
 export const SEARCH_API :string = 'SearchApi';
+export const SUBSCRIPTION_API :string = 'SubscriptionApi';

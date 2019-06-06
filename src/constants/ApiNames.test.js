@@ -17,6 +17,7 @@ const EXPECTED_APIS = Map({
   PRINCIPALS_API       : 'PrincipalsApi',
   REQUESTS_API         : 'RequestsApi',
   SEARCH_API           : 'SearchApi',
+  SUBSCRIPTION_API     : 'SubscriptionApi',
 }).sortBy((value, key) => key);
 /* eslint-enable */
 

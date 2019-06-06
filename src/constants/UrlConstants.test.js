@@ -64,6 +64,7 @@ const EXPECTED = Map({
   SET_ID                        : 'setId',
   SET_PATH                      : 'set',
   SRC_PATH                      : 'src',
+  SUBSCRIPTIONS_PATH            : 'subscriptions',
   SYNCHRONIZE_PATH              : 'synchronize',
   TITLE_PATH                    : 'title',
   TYPES_PATH                    : 'types',

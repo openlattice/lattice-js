@@ -62,6 +62,7 @@ export const SEARCH_PROPERTY_TYPES_PATH :string = 'property_types';
 export const SET_ID :string = 'setId';
 export const SET_PATH :string = 'set';
 export const SRC_PATH :string = 'src';
+export const SUBSCRIPTIONS_PATH :string = 'subscriptions';
 export const SYNCHRONIZE_PATH :string = 'synchronize';
 export const TITLE_PATH :string = 'title';
 export const TYPES_PATH :string = 'types';

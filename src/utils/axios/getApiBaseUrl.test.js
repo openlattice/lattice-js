@@ -27,6 +27,7 @@ const API_TO_PATH_MAP = Map({
   [ApiNames.PRINCIPALS_API]       : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.PRINCIPALS_PATH}`,
   [ApiNames.REQUESTS_API]         : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.REQUESTS_PATH}`,
   [ApiNames.SEARCH_API]           : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.SEARCH_PATH}`,
+  [ApiNames.SUBSCRIPTION_API]     : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.SUBSCRIPTIONS_PATH}`,
 }).sortBy((value, key) => key);
 /* eslint-enable */
 
