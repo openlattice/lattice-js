@@ -26,11 +26,11 @@ const LOG = new Logger('FeedsApi');
 /**
  * `GET /feeds`
  *
- * Loads a FeedEntry
+ * Loads a Neighborhood
  *
  * @static
  * @memberof lattice.FeedsApi
- * @returns {Promise<FeedEntry>} - a Promise that resolves with the user's FeedEntry
+ * @returns {Promise<Neighborhood>} - a Promise that resolves with the user's Neighborhood
  *
  * @example
  * FeedsApi.getLatestFeed();
