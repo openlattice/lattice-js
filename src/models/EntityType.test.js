@@ -4,11 +4,18 @@ import { MOCK_ENTITY_TYPE, genRandomEntityType } from '../utils/testing/MockData
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED
+  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_NUMBER,
+  INVALID_PARAMS_FOR_OPTIONAL_OBJECT,
+  INVALID_PARAMS_FOR_OPTIONAL_SS,
+  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
 } from '../utils/testing/Invalid';
+
+const INVALID_PARAMS_FOR_SHARD = INVALID_PARAMS_FOR_OPTIONAL_NUMBER.slice(0);
+INVALID_PARAMS_FOR_SHARD.push(-1);
+INVALID_PARAMS_FOR_SHARD.push(0);
+INVALID_PARAMS_FOR_SHARD.push(20);
 
 describe('EntityType', () => {
 
@@ -17,20 +24,20 @@ describe('EntityType', () => {
     describe('setId()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setId(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setId();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setId('');
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setId(MOCK_ENTITY_TYPE.id);
         }).not.toThrow();
@@ -41,17 +48,14 @@ describe('EntityType', () => {
     describe('setType()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setType();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setType(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new EntityTypeBuilder()).setType();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -65,17 +69,14 @@ describe('EntityType', () => {
     describe('setTitle()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setTitle();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setTitle(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new EntityTypeBuilder()).setTitle();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
@@ -89,20 +90,20 @@ describe('EntityType', () => {
     describe('setDescription()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setDescription(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setDescription();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setDescription('');
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setDescription(MOCK_ENTITY_TYPE.description);
         }).not.toThrow();
@@ -113,7 +114,7 @@ describe('EntityType', () => {
     describe('setSchemas()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setSchemas(invalidInput);
           }).toThrow();
@@ -124,20 +125,20 @@ describe('EntityType', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setSchemas([...MOCK_ENTITY_TYPE.schemas, invalidInput]);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setSchemas();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setSchemas([]);
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setSchemas(MOCK_ENTITY_TYPE.schemas);
         }).not.toThrow();
@@ -148,7 +149,7 @@ describe('EntityType', () => {
     describe('setKey()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setKey(invalidInput);
           }).toThrow();
@@ -159,20 +160,20 @@ describe('EntityType', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setKey([...MOCK_ENTITY_TYPE.key, invalidInput]);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setKey();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setKey([]);
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setKey(MOCK_ENTITY_TYPE.key);
         }).not.toThrow();
@@ -183,7 +184,7 @@ describe('EntityType', () => {
     describe('setPropertyTypes()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setPropertyTypes(invalidInput);
           }).toThrow();
@@ -194,20 +195,20 @@ describe('EntityType', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setPropertyTypes([...MOCK_ENTITY_TYPE.properties, invalidInput]);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setPropertyTypes();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setPropertyTypes([]);
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setPropertyTypes(MOCK_ENTITY_TYPE.properties);
         }).not.toThrow();
@@ -218,20 +219,20 @@ describe('EntityType', () => {
     describe('setBaseType()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setBaseType(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setBaseType();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setBaseType('');
+        }).not.toThrow();
         expect(() => {
           (new EntityTypeBuilder()).setBaseType(MOCK_ENTITY_TYPE.baseType);
         }).not.toThrow();
@@ -242,22 +243,67 @@ describe('EntityType', () => {
     describe('setCategory()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityTypeBuilder()).setCategory(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new EntityTypeBuilder()).setCategory();
         }).not.toThrow();
+        expect(() => {
+          (new EntityTypeBuilder()).setCategory('');
+        }).not.toThrow();
+        expect(() => {
+          (new EntityTypeBuilder()).setCategory(MOCK_ENTITY_TYPE.category);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setPropertyTags()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_OBJECT.forEach((invalidInput) => {
+          expect(() => {
+            (new EntityTypeBuilder()).setPropertyTags(invalidInput);
+          }).toThrow();
+        });
       });
 
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          (new EntityTypeBuilder()).setCategory(MOCK_ENTITY_TYPE.category);
+          (new EntityTypeBuilder()).setPropertyTags();
+        }).not.toThrow();
+        expect(() => {
+          (new EntityTypeBuilder()).setPropertyTags({});
+        }).not.toThrow();
+        expect(() => {
+          (new EntityTypeBuilder()).setPropertyTags(MOCK_ENTITY_TYPE.propertyTags);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setShards()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_SHARD.forEach((invalidInput) => {
+          expect(() => {
+            (new EntityTypeBuilder()).setShards(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntityTypeBuilder()).setShards();
+        }).not.toThrow();
+        expect(() => {
+          (new EntityTypeBuilder()).setShards(MOCK_ENTITY_TYPE.shards);
         }).not.toThrow();
       });
 
@@ -280,54 +326,98 @@ describe('EntityType', () => {
       test('should not throw when an optional property has not been set', () => {
 
         expect(() => {
+          // omitting setId()
           (new EntityTypeBuilder())
-            .setType(MOCK_ENTITY_TYPE.type)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
             .setBaseType(MOCK_ENTITY_TYPE.baseType)
             .setCategory(MOCK_ENTITY_TYPE.category)
+            .setDescription(MOCK_ENTITY_TYPE.description)
+            .setKey(MOCK_ENTITY_TYPE.key)
+            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
+            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
+            .setSchemas(MOCK_ENTITY_TYPE.schemas)
+            .setShards(MOCK_ENTITY_TYPE.shards)
+            .setTitle(MOCK_ENTITY_TYPE.title)
+            .setType(MOCK_ENTITY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
+          // omitting setDescription()
           (new EntityTypeBuilder())
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
             .setBaseType(MOCK_ENTITY_TYPE.baseType)
             .setCategory(MOCK_ENTITY_TYPE.category)
+            .setId(MOCK_ENTITY_TYPE.id)
+            .setKey(MOCK_ENTITY_TYPE.key)
+            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
+            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
+            .setSchemas(MOCK_ENTITY_TYPE.schemas)
+            .setShards(MOCK_ENTITY_TYPE.shards)
+            .setTitle(MOCK_ENTITY_TYPE.title)
+            .setType(MOCK_ENTITY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
+          // omitting setBaseType()
           (new EntityTypeBuilder())
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
             .setCategory(MOCK_ENTITY_TYPE.category)
+            .setDescription(MOCK_ENTITY_TYPE.description)
+            .setId(MOCK_ENTITY_TYPE.id)
+            .setKey(MOCK_ENTITY_TYPE.key)
+            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
+            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
+            .setSchemas(MOCK_ENTITY_TYPE.schemas)
+            .setShards(MOCK_ENTITY_TYPE.shards)
+            .setTitle(MOCK_ENTITY_TYPE.title)
+            .setType(MOCK_ENTITY_TYPE.type)
             .build();
         }).not.toThrow();
 
         expect(() => {
+          // omitting setCategory()
           (new EntityTypeBuilder())
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .setTitle(MOCK_ENTITY_TYPE.title)
+            .setBaseType(MOCK_ENTITY_TYPE.baseType)
             .setDescription(MOCK_ENTITY_TYPE.description)
+            .setId(MOCK_ENTITY_TYPE.id)
+            .setKey(MOCK_ENTITY_TYPE.key)
+            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
+            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
             .setSchemas(MOCK_ENTITY_TYPE.schemas)
+            .setShards(MOCK_ENTITY_TYPE.shards)
+            .setTitle(MOCK_ENTITY_TYPE.title)
+            .setType(MOCK_ENTITY_TYPE.type)
+            .build();
+        }).not.toThrow();
+
+        expect(() => {
+          // omitting setPropertyTags()
+          (new EntityTypeBuilder())
+            .setBaseType(MOCK_ENTITY_TYPE.baseType)
+            .setCategory(MOCK_ENTITY_TYPE.category)
+            .setDescription(MOCK_ENTITY_TYPE.description)
+            .setId(MOCK_ENTITY_TYPE.id)
             .setKey(MOCK_ENTITY_TYPE.key)
             .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
+            .setSchemas(MOCK_ENTITY_TYPE.schemas)
+            .setShards(MOCK_ENTITY_TYPE.shards)
+            .setTitle(MOCK_ENTITY_TYPE.title)
+            .setType(MOCK_ENTITY_TYPE.type)
+            .build();
+        }).not.toThrow();
+
+        expect(() => {
+          // omitting setShards()
+          (new EntityTypeBuilder())
             .setBaseType(MOCK_ENTITY_TYPE.baseType)
+            .setCategory(MOCK_ENTITY_TYPE.category)
+            .setDescription(MOCK_ENTITY_TYPE.description)
+            .setId(MOCK_ENTITY_TYPE.id)
+            .setKey(MOCK_ENTITY_TYPE.key)
+            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
+            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
+            .setSchemas(MOCK_ENTITY_TYPE.schemas)
+            .setTitle(MOCK_ENTITY_TYPE.title)
+            .setType(MOCK_ENTITY_TYPE.type)
             .build();
         }).not.toThrow();
       });
@@ -347,38 +437,44 @@ describe('EntityType', () => {
       test('should return a valid instance', () => {
 
         const entityType = (new EntityTypeBuilder())
-          .setId(MOCK_ENTITY_TYPE.id)
-          .setType(MOCK_ENTITY_TYPE.type)
-          .setTitle(MOCK_ENTITY_TYPE.title)
-          .setDescription(MOCK_ENTITY_TYPE.description)
-          .setSchemas(MOCK_ENTITY_TYPE.schemas)
-          .setKey(MOCK_ENTITY_TYPE.key)
-          .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
           .setBaseType(MOCK_ENTITY_TYPE.baseType)
           .setCategory(MOCK_ENTITY_TYPE.category)
+          .setDescription(MOCK_ENTITY_TYPE.description)
+          .setId(MOCK_ENTITY_TYPE.id)
+          .setKey(MOCK_ENTITY_TYPE.key)
+          .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
+          .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
+          .setSchemas(MOCK_ENTITY_TYPE.schemas)
+          .setShards(MOCK_ENTITY_TYPE.shards)
+          .setTitle(MOCK_ENTITY_TYPE.title)
+          .setType(MOCK_ENTITY_TYPE.type)
           .build();
 
         expect(entityType).toBeInstanceOf(EntityType);
 
-        expect(entityType.id).toBeDefined();
-        expect(entityType.type).toBeDefined();
-        expect(entityType.title).toBeDefined();
-        expect(entityType.description).toBeDefined();
-        expect(entityType.schemas).toBeDefined();
-        expect(entityType.key).toBeDefined();
-        expect(entityType.properties).toBeDefined();
         expect(entityType.baseType).toBeDefined();
         expect(entityType.category).toBeDefined();
+        expect(entityType.description).toBeDefined();
+        expect(entityType.id).toBeDefined();
+        expect(entityType.key).toBeDefined();
+        expect(entityType.properties).toBeDefined();
+        expect(entityType.propertyTags).toBeDefined();
+        expect(entityType.schemas).toBeDefined();
+        expect(entityType.shards).toBeDefined();
+        expect(entityType.title).toBeDefined();
+        expect(entityType.type).toBeDefined();
 
-        expect(entityType.id).toEqual(MOCK_ENTITY_TYPE.id);
-        expect(entityType.type).toEqual(MOCK_ENTITY_TYPE.type);
-        expect(entityType.title).toEqual(MOCK_ENTITY_TYPE.title);
-        expect(entityType.description).toEqual(MOCK_ENTITY_TYPE.description);
-        expect(entityType.schemas).toEqual(MOCK_ENTITY_TYPE.schemas);
-        expect(entityType.key).toEqual(MOCK_ENTITY_TYPE.key);
-        expect(entityType.properties).toEqual(MOCK_ENTITY_TYPE.properties);
         expect(entityType.baseType).toEqual(MOCK_ENTITY_TYPE.baseType);
         expect(entityType.category).toEqual(MOCK_ENTITY_TYPE.category);
+        expect(entityType.description).toEqual(MOCK_ENTITY_TYPE.description);
+        expect(entityType.id).toEqual(MOCK_ENTITY_TYPE.id);
+        expect(entityType.key).toEqual(MOCK_ENTITY_TYPE.key);
+        expect(entityType.properties).toEqual(MOCK_ENTITY_TYPE.properties);
+        expect(entityType.propertyTags).toEqual(MOCK_ENTITY_TYPE.propertyTags);
+        expect(entityType.schemas).toEqual(MOCK_ENTITY_TYPE.schemas);
+        expect(entityType.shards).toEqual(MOCK_ENTITY_TYPE.shards);
+        expect(entityType.title).toEqual(MOCK_ENTITY_TYPE.title);
+        expect(entityType.type).toEqual(MOCK_ENTITY_TYPE.type);
       });
 
     });
@@ -404,7 +500,9 @@ describe('EntityType', () => {
             MOCK_ENTITY_TYPE.key,
             MOCK_ENTITY_TYPE.properties,
             MOCK_ENTITY_TYPE.baseType,
-            MOCK_ENTITY_TYPE.category
+            MOCK_ENTITY_TYPE.category,
+            MOCK_ENTITY_TYPE.propertyTags,
+            MOCK_ENTITY_TYPE.shards,
           )
         )).toEqual(true);
       });
@@ -412,15 +510,17 @@ describe('EntityType', () => {
       test('should return true when given an instance constructed by the builder', () => {
 
         const entityType = (new EntityTypeBuilder())
-          .setId(MOCK_ENTITY_TYPE.id)
-          .setType(MOCK_ENTITY_TYPE.type)
-          .setTitle(MOCK_ENTITY_TYPE.title)
-          .setDescription(MOCK_ENTITY_TYPE.description)
-          .setSchemas(MOCK_ENTITY_TYPE.schemas)
-          .setKey(MOCK_ENTITY_TYPE.key)
-          .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
           .setBaseType(MOCK_ENTITY_TYPE.baseType)
           .setCategory(MOCK_ENTITY_TYPE.category)
+          .setDescription(MOCK_ENTITY_TYPE.description)
+          .setId(MOCK_ENTITY_TYPE.id)
+          .setKey(MOCK_ENTITY_TYPE.key)
+          .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
+          .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
+          .setSchemas(MOCK_ENTITY_TYPE.schemas)
+          .setShards(MOCK_ENTITY_TYPE.shards)
+          .setTitle(MOCK_ENTITY_TYPE.title)
+          .setType(MOCK_ENTITY_TYPE.type)
           .build();
 
         expect(isValid(entityType)).toEqual(true);
@@ -441,7 +541,7 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an object literal with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { id: invalidInput }))).toEqual(false);
         });
       });
@@ -459,45 +559,57 @@ describe('EntityType', () => {
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { description: invalidInput }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "schemas" property', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { schemas: invalidInput }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "key" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { key: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { key: [invalidInput] }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "properties" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { properties: invalidInput }))).toEqual(false);
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { properties: [invalidInput] }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "baseType" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { baseType: invalidInput }))).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "category" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { category: invalidInput }))).toEqual(false);
         });
       });
 
+      test('should return false when given an object literal with an invalid "propertyTags" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_OBJECT.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { propertyTags: invalidInput }))).toEqual(false);
+        });
+      });
+
+      test('should return false when given an object literal with an invalid "shards" property', () => {
+        INVALID_PARAMS_FOR_SHARD.forEach((invalidInput) => {
+          expect(isValid(Object.assign({}, MOCK_ENTITY_TYPE, { shards: invalidInput }))).toEqual(false);
+        });
+      });
+
       test('should return false when given an instance with an invalid "id" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               invalidInput,
@@ -509,6 +621,8 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
@@ -527,6 +641,8 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
@@ -545,13 +661,15 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -563,13 +681,15 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "schemas" property', () => {
-        INVALID_PARAMS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -581,13 +701,15 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "key" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -599,6 +721,8 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
           expect(isValid(
@@ -612,13 +736,15 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "properties" property', () => {
-        INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -630,6 +756,8 @@ describe('EntityType', () => {
               invalidInput,
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
           expect(isValid(
@@ -643,13 +771,15 @@ describe('EntityType', () => {
               [invalidInput],
               MOCK_ENTITY_TYPE.baseType,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "baseType" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -661,13 +791,15 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.properties,
               invalidInput,
               MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
             )
           )).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "category" property', () => {
-        INVALID_PARAMS_SS_EMPTY_STRING_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
             new EntityType(
               MOCK_ENTITY_TYPE.id,
@@ -678,6 +810,48 @@ describe('EntityType', () => {
               MOCK_ENTITY_TYPE.key,
               MOCK_ENTITY_TYPE.properties,
               MOCK_ENTITY_TYPE.baseType,
+              invalidInput,
+              MOCK_ENTITY_TYPE.propertyTags,
+              MOCK_ENTITY_TYPE.shards,
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "propertyTags" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_OBJECT.forEach((invalidInput) => {
+          expect(isValid(
+            new EntityType(
+              MOCK_ENTITY_TYPE.id,
+              MOCK_ENTITY_TYPE.type,
+              MOCK_ENTITY_TYPE.title,
+              MOCK_ENTITY_TYPE.description,
+              MOCK_ENTITY_TYPE.schemas,
+              MOCK_ENTITY_TYPE.key,
+              MOCK_ENTITY_TYPE.properties,
+              MOCK_ENTITY_TYPE.baseType,
+              MOCK_ENTITY_TYPE.category,
+              invalidInput,
+              MOCK_ENTITY_TYPE.shards,
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "shards" property', () => {
+        INVALID_PARAMS_FOR_SHARD.forEach((invalidInput) => {
+          expect(isValid(
+            new EntityType(
+              MOCK_ENTITY_TYPE.id,
+              MOCK_ENTITY_TYPE.type,
+              MOCK_ENTITY_TYPE.title,
+              MOCK_ENTITY_TYPE.description,
+              MOCK_ENTITY_TYPE.schemas,
+              MOCK_ENTITY_TYPE.key,
+              MOCK_ENTITY_TYPE.properties,
+              MOCK_ENTITY_TYPE.baseType,
+              MOCK_ENTITY_TYPE.category,
+              MOCK_ENTITY_TYPE.propertyTags,
               invalidInput,
             )
           )).toEqual(false);
@@ -701,6 +875,8 @@ describe('EntityType', () => {
         MOCK_ENTITY_TYPE.properties,
         MOCK_ENTITY_TYPE.baseType,
         MOCK_ENTITY_TYPE.category,
+        MOCK_ENTITY_TYPE.propertyTags,
+        MOCK_ENTITY_TYPE.shards,
       );
       expect(entityType.valueOf()).toEqual(
         fromJS({
@@ -710,7 +886,9 @@ describe('EntityType', () => {
           id: MOCK_ENTITY_TYPE.id,
           key: MOCK_ENTITY_TYPE.key,
           properties: MOCK_ENTITY_TYPE.properties,
+          propertyTags: MOCK_ENTITY_TYPE.propertyTags,
           schemas: MOCK_ENTITY_TYPE.schemas.map(fqn => fqn.toObject()),
+          shards: MOCK_ENTITY_TYPE.shards,
           title: MOCK_ENTITY_TYPE.title,
           type: MOCK_ENTITY_TYPE.type.toObject(),
         }).hashCode()
@@ -730,6 +908,8 @@ describe('EntityType', () => {
         MOCK_ENTITY_TYPE.properties,
         MOCK_ENTITY_TYPE.baseType,
         MOCK_ENTITY_TYPE.category,
+        MOCK_ENTITY_TYPE.propertyTags,
+        MOCK_ENTITY_TYPE.shards,
       );
       const entityType1 = new EntityType(
         MOCK_ENTITY_TYPE.id,
@@ -741,6 +921,8 @@ describe('EntityType', () => {
         MOCK_ENTITY_TYPE.properties,
         MOCK_ENTITY_TYPE.baseType,
         MOCK_ENTITY_TYPE.category,
+        MOCK_ENTITY_TYPE.propertyTags,
+        MOCK_ENTITY_TYPE.shards,
       );
 
       const testSet = Set()
@@ -751,25 +933,29 @@ describe('EntityType', () => {
       expect(testSet.size).toEqual(2);
       expect(testSet.count()).toEqual(2);
 
-      expect(testSet.first().id).toEqual(MOCK_ENTITY_TYPE.id);
-      expect(testSet.first().type).toEqual(MOCK_ENTITY_TYPE.type);
-      expect(testSet.first().title).toEqual(MOCK_ENTITY_TYPE.title);
-      expect(testSet.first().description).toEqual(MOCK_ENTITY_TYPE.description);
-      expect(testSet.first().schemas).toEqual(MOCK_ENTITY_TYPE.schemas);
-      expect(testSet.first().key).toEqual(MOCK_ENTITY_TYPE.key);
-      expect(testSet.first().properties).toEqual(MOCK_ENTITY_TYPE.properties);
       expect(testSet.first().baseType).toEqual(MOCK_ENTITY_TYPE.baseType);
       expect(testSet.first().category).toEqual(MOCK_ENTITY_TYPE.category);
+      expect(testSet.first().description).toEqual(MOCK_ENTITY_TYPE.description);
+      expect(testSet.first().id).toEqual(MOCK_ENTITY_TYPE.id);
+      expect(testSet.first().key).toEqual(MOCK_ENTITY_TYPE.key);
+      expect(testSet.first().properties).toEqual(MOCK_ENTITY_TYPE.properties);
+      expect(testSet.first().propertyTags).toEqual(MOCK_ENTITY_TYPE.propertyTags);
+      expect(testSet.first().schemas).toEqual(MOCK_ENTITY_TYPE.schemas);
+      expect(testSet.first().shards).toEqual(MOCK_ENTITY_TYPE.shards);
+      expect(testSet.first().title).toEqual(MOCK_ENTITY_TYPE.title);
+      expect(testSet.first().type).toEqual(MOCK_ENTITY_TYPE.type);
 
-      expect(testSet.last().id).toEqual(randomEntityType.id);
-      expect(testSet.last().type).toEqual(randomEntityType.type);
-      expect(testSet.last().title).toEqual(randomEntityType.title);
-      expect(testSet.last().description).toEqual(randomEntityType.description);
-      expect(testSet.last().schemas).toEqual(randomEntityType.schemas);
-      expect(testSet.last().key).toEqual(randomEntityType.key);
-      expect(testSet.last().properties).toEqual(randomEntityType.properties);
       expect(testSet.last().baseType).toEqual(randomEntityType.baseType);
       expect(testSet.last().category).toEqual(randomEntityType.category);
+      expect(testSet.last().description).toEqual(randomEntityType.description);
+      expect(testSet.last().id).toEqual(randomEntityType.id);
+      expect(testSet.last().key).toEqual(randomEntityType.key);
+      expect(testSet.last().properties).toEqual(randomEntityType.properties);
+      expect(testSet.last().propertyTags).toEqual(randomEntityType.propertyTags);
+      expect(testSet.last().schemas).toEqual(randomEntityType.schemas);
+      expect(testSet.last().shards).toEqual(randomEntityType.shards);
+      expect(testSet.last().title).toEqual(randomEntityType.title);
+      expect(testSet.last().type).toEqual(randomEntityType.type);
     });
 
     test('Immutable.Map', () => {
@@ -785,6 +971,8 @@ describe('EntityType', () => {
         MOCK_ENTITY_TYPE.properties,
         MOCK_ENTITY_TYPE.baseType,
         MOCK_ENTITY_TYPE.category,
+        MOCK_ENTITY_TYPE.propertyTags,
+        MOCK_ENTITY_TYPE.shards,
       );
       const entityType1 = new EntityType(
         MOCK_ENTITY_TYPE.id,
@@ -796,6 +984,8 @@ describe('EntityType', () => {
         MOCK_ENTITY_TYPE.properties,
         MOCK_ENTITY_TYPE.baseType,
         MOCK_ENTITY_TYPE.category,
+        MOCK_ENTITY_TYPE.propertyTags,
+        MOCK_ENTITY_TYPE.shards,
       );
 
       const testMap = Map()

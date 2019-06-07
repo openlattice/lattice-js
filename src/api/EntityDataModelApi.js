@@ -625,6 +625,38 @@ export function getEntitySetId(entitySetName :string) :Promise<*> {
 }
 
 /**
+ * `POST /edm/ids/entity/set`
+ *
+ * Gets the EntitySet UUIDs for the given EntitySet names.
+ *
+ * @static
+ * @memberof lattice.EntityDataModelApi
+ * @param {string} entitySetName
+ * @return {Promise<Map<String, UUID>>} - a Promise that will resolve with the id mapping as its fulfillment value
+ *
+ * @example
+ * EntityDataModelApi.getEntitySetIds(["EntitySet1", "EntitySet2"]);
+ */
+export function getEntitySetIds(entitySetNames :string[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyStringArray(entitySetNames)) {
+    errorMsg = 'invalid parameter: entitySetNames must be a non-empty array of strings';
+    LOG.error(errorMsg, entitySetNames);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(EDM_API)
+    .post(`/${IDS_PATH}/${ENTITY_SET_PATH}`, entitySetNames)
+    .then(axiosResponse => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /edm/entity/set`
  *
  * Gets all EntitySet definitions.
@@ -1452,7 +1484,7 @@ export function getAllPropertyTypesInNamespace(namespace :string) :Promise<*> {
  *       { "namespace": "LATTICE", "name": "MySchema" }
  *     ],
  *     "datatype": "String",
- *     "piiField": false,
+ *     "pii": false,
  *     "analyzer": "STANDARD"
  *   }
  * );
@@ -2110,7 +2142,7 @@ export function getAllEnumTypes() :Promise<*> {
  *     ],
  *     "datatype": "String",
  *     "flags": false,
- *     "piiField": false,
+ *     "pii": false,
  *     "analyzer": "STANDARD"
  *   }
  * );

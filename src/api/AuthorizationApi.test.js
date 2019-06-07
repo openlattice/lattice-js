@@ -8,9 +8,9 @@ import { AUTHORIZATION_API } from '../constants/ApiNames';
 import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
-  INVALID_PARAMS_EMPTY_ARRAY_ALLOWED,
-  INVALID_PARAMS_EMPTY_STRING_ALLOWED,
-  INVALID_PARAMS_SS
+  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
+  INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
 import {
@@ -54,7 +54,7 @@ function testCheckAuthorizations() {
     }];
 
     const validParams = [mockQueries];
-    const invalidParams = [INVALID_PARAMS_EMPTY_ARRAY_ALLOWED];
+    const invalidParams = [INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
     const axiosParams = ['/', mockQueries];
 
     testApiShouldReturnPromise(functionToTest, validParams);
@@ -81,7 +81,7 @@ function testGetAccessibleObjects() {
     const invalidParams = [
       INVALID_PARAMS_SS,
       INVALID_PARAMS_SS,
-      INVALID_PARAMS_EMPTY_STRING_ALLOWED
+      INVALID_PARAMS_FOR_OPTIONAL_STRING,
     ];
 
     const axiosParams = [

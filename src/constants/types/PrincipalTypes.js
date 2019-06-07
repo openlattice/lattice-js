@@ -2,14 +2,21 @@
  * @flow
  */
 
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-const PrincipalTypes = {
+type PrincipalTypesEnum = {|
+  APP :'APP';
+  ORGANIZATION :'ORGANIZATION';
+  ROLE :'ROLE';
+  USER :'USER';
+|};
+
+type PrincipalType = $Values<PrincipalTypesEnum>;
+
+const PrincipalTypes :{| ...PrincipalTypesEnum |} = Object.freeze({
   APP: 'APP',
   ORGANIZATION: 'ORGANIZATION',
   ROLE: 'ROLE',
-  USER: 'USER'
-};
+  USER: 'USER',
+});
 
-export type PrincipalType = $Keys<typeof PrincipalTypes>;
-
-export { PrincipalTypes as default };
+export default PrincipalTypes;
+export type { PrincipalType };

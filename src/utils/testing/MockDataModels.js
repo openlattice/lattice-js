@@ -5,6 +5,7 @@
 import { genRandomBoolean, genRandomString, genRandomUUID } from './MockUtils';
 import {
   AnalyzerTypes,
+  IndexTypes,
   PrincipalTypes,
   RequestStateTypes,
   SecurableTypes,
@@ -126,35 +127,45 @@ const MOCK_ENTITY_SET_DM :Object = {
 };
 
 const MOCK_ENTITY_TYPE :EntityType = new EntityTypeBuilder()
-  .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
-  .setType(new FullyQualifiedName('OL', 'MockEntityType'))
-  .setTitle('title')
+  .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
+  .setCategory(SecurableTypes.EntityType)
   .setDescription('description')
+  .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
   .setKey([
     '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e',
-    '4b08e1f9-4a00-4169-92ea-10e377070220'
+    '4b08e1f9-4a00-4169-92ea-10e377070220',
   ])
+  .setPropertyTags({
+    '11f65a3c-158e-4bea-9e6d-dc7ff2396ef0': ['TAG_0', 'TAG_1'],
+    '5993e81e-1265-4d00-8b25-9dafb5261bd4': ['TAG_0'],
+  })
   .setPropertyTypes([
     '8f79e123-3411-4099-a41f-88e5d22d0e8d',
     'e39dfdfa-a3e6-4f1f-b54b-646a723c3085',
-    'fae6af98-2675-45bd-9a5b-1619a87235a8'
+    'fae6af98-2675-45bd-9a5b-1619a87235a8',
   ])
-  .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
-  .setCategory(SecurableTypes.EntityType)
   .setSchemas([new FullyQualifiedName('OL', 'MockSchema')])
+  .setShards(1)
+  .setTitle('title')
+  .setType(new FullyQualifiedName('OL', 'MockEntityType'))
   .build();
 
 function genRandomEntityType() :EntityType {
   return new EntityTypeBuilder()
-    .setId(genRandomUUID())
-    .setType(new FullyQualifiedName(genRandomString(), genRandomString()))
-    .setTitle(genRandomString())
-    .setDescription(genRandomString())
-    .setKey([genRandomUUID(), genRandomUUID()])
-    .setPropertyTypes([genRandomUUID(), genRandomUUID(), genRandomUUID()])
     .setBaseType(genRandomUUID())
     .setCategory(SecurableTypes.EntityType)
+    .setDescription(genRandomString())
+    .setId(genRandomUUID())
+    .setKey([genRandomUUID(), genRandomUUID()])
+    .setPropertyTags({
+      [genRandomUUID()]: [genRandomString(), genRandomString()],
+      [genRandomUUID()]: [genRandomString()],
+    })
+    .setPropertyTypes([genRandomUUID(), genRandomUUID(), genRandomUUID()])
     .setSchemas([new FullyQualifiedName(genRandomString(), genRandomString())])
+    .setShards(1)
+    .setTitle(genRandomString())
+    .setType(new FullyQualifiedName(genRandomString(), genRandomString()))
     .build();
 }
 
@@ -182,26 +193,32 @@ function genRandomAssociationType() :AssociationType {
 }
 
 const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
-  .setId('3771c28a-cdee-403b-9cea-48845210f8ab')
-  .setType(new FullyQualifiedName('OL', 'MockPropertyType'))
-  .setTitle('title')
-  .setDescription('description')
-  .setDataType('String')
   .setAnalyzer(AnalyzerTypes.STANDARD)
+  .setDataType('String')
+  .setDescription('description')
+  .setEnumValues(['ENUM_1', 'ENUM_2'])
+  .setId('3771c28a-cdee-403b-9cea-48845210f8ab')
+  .setIndexType(IndexTypes.BTREE)
+  .setMultiValued(false)
   .setPii(false)
   .setSchemas([new FullyQualifiedName('OL', 'MockSchema')])
+  .setTitle('title')
+  .setType(new FullyQualifiedName('OL', 'MockPropertyType'))
   .build();
 
 function genRandomPropertyType() :PropertyType {
   return new PropertyTypeBuilder()
-    .setId(genRandomUUID())
-    .setType(new FullyQualifiedName(genRandomString(), genRandomString()))
-    .setTitle(genRandomString())
-    .setDescription(genRandomString())
-    .setDataType('String')
-    .setSchemas([new FullyQualifiedName(genRandomString(), genRandomString())])
-    .setPii(genRandomBoolean())
     .setAnalyzer(AnalyzerTypes.STANDARD)
+    .setDataType('String')
+    .setDescription(genRandomString())
+    .setEnumValues([genRandomString(), genRandomString()])
+    .setId(genRandomUUID())
+    .setIndexType(IndexTypes.HASH)
+    .setMultiValued(genRandomBoolean())
+    .setPii(genRandomBoolean())
+    .setSchemas([new FullyQualifiedName(genRandomString(), genRandomString())])
+    .setTitle(genRandomString())
+    .setType(new FullyQualifiedName(genRandomString(), genRandomString()))
     .build();
 }
 

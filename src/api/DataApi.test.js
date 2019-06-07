@@ -1,6 +1,9 @@
 /* eslint-disable no-use-before-define */
 
+import { fromJS } from 'immutable';
+
 import * as AxiosUtils from '../utils/axios';
+import * as Config from '../config/Configuration';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
 import { MOCK_DATA_EDGE_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
@@ -8,7 +11,9 @@ import { UpdateTypes, DeleteTypes } from '../constants/types';
 
 import {
   ASSOCIATION_PATH,
+  CSRF_TOKEN,
   COUNT_PATH,
+  NEIGHBORS_PATH,
   SET_ID,
   SET_PATH,
   TYPE_PATH
@@ -16,8 +21,8 @@ import {
 
 import {
   INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
 } from '../utils/testing/Invalid';
 
 import {
@@ -45,6 +50,7 @@ const MOCK_BASE_URL = genMockBaseUrl();
 const MOCK_FILE_TYPE = 'json';
 
 jest.mock('../utils/axios');
+jest.mock('../config/Configuration');
 AxiosUtils.getApiBaseUrl.mockImplementation(() => MOCK_BASE_URL);
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
 
@@ -61,6 +67,7 @@ describe('DataApi', () => {
   createAssociations();
   createEntityAndAssociationData();
   createOrMergeEntityData();
+  deleteEntitiesAndNeighbors();
   deleteEntity();
   deleteEntitySet();
   getEntityData();
@@ -126,6 +133,49 @@ function createOrMergeEntityData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+  });
+}
+
+function deleteEntitiesAndNeighbors() {
+
+  describe('deleteEntitiesAndNeighbors()', () => {
+
+    const apiToTest = DataApi.deleteEntitiesAndNeighbors;
+    const mockEntitySetId = genRandomUUID();
+    const mockEntityKeyId = genRandomUUID();
+    const validParams = [mockEntitySetId, { entityKeyIds: [mockEntityKeyId] }, DeleteTypes.Soft];
+    const invalidParams = [
+      INVALID_PARAMS_SS,
+      {
+        destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+        entityKeyIds: INVALID_PARAMS_SS,
+        sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+      },
+      INVALID_PARAMS_SS,
+    ];
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+
+    test('type=Soft', () => {
+      const apiInvocationParams = [mockEntitySetId, { entityKeyIds: [mockEntityKeyId] }, DeleteTypes.Soft];
+      const expectedAxiosParams = [
+        `/${SET_PATH}/${mockEntitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${DeleteTypes.Soft}`,
+        { entityKeyIds: [mockEntityKeyId] },
+      ];
+      return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
+    });
+
+    test('type=Hard', () => {
+      const apiInvocationParams = [mockEntitySetId, { entityKeyIds: [mockEntityKeyId] }, DeleteTypes.Hard];
+      const expectedAxiosParams = [
+        `/${SET_PATH}/${mockEntitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${DeleteTypes.Hard}`,
+        { entityKeyIds: [mockEntityKeyId] },
+      ];
+      return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
+    });
   });
 }
 
@@ -223,8 +273,8 @@ function getEntitySetData() {
 
     const invalidParams = [
       INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
-      INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
+      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY
     ];
 
     describe('should send a POST request with the correct params', () => {
@@ -309,6 +359,7 @@ function getEntitySetDataFileUrl() {
 
     const apiToTest = DataApi.getEntitySetDataFileUrl;
     const mockEntitySetId = genRandomUUID();
+    const mockCSRFToken = 'mock_csrf_token';
 
     const validParams = [
       mockEntitySetId,
@@ -320,17 +371,25 @@ function getEntitySetDataFileUrl() {
       INVALID_PARAMS
     ];
 
+    Config.getConfig.mockImplementation(() => fromJS({
+      csrfToken: mockCSRFToken,
+    }));
+
     test('should return the correct URL', () => {
 
       expect(DataApi.getEntitySetDataFileUrl(mockEntitySetId, MOCK_FILE_TYPE)).toEqual(
-        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}?fileType=${MOCK_FILE_TYPE}`
+        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}`
+        + `?fileType=${MOCK_FILE_TYPE}`
+        + `&${CSRF_TOKEN}=${mockCSRFToken}`
       );
     });
 
     test('should correctly set the "fileType" query param as lowercase', () => {
 
       expect(DataApi.getEntitySetDataFileUrl(mockEntitySetId, MOCK_FILE_TYPE.toUpperCase())).toEqual(
-        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}?fileType=${MOCK_FILE_TYPE}`
+        `${MOCK_BASE_URL}/${SET_PATH}/${mockEntitySetId}`
+        + `?fileType=${MOCK_FILE_TYPE}`
+        + `&${CSRF_TOKEN}=${mockCSRFToken}`
       );
     });
 

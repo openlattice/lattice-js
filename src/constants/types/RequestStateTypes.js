@@ -2,13 +2,19 @@
  * @flow
  */
 
-// TODO: use either Immutable.Map() or Object.freeze(), or look into possible "enum" libraries
-const RequestStateTypes = {
+type RequestStateTypesEnum = {|
+  APPROVED :'APPROVED';
+  DECLINED :'DECLINED';
+  SUBMITTED :'SUBMITTED';
+|};
+
+type RequestStateType = $Values<RequestStateTypesEnum>;
+
+const RequestStateTypes :{| ...RequestStateTypesEnum |} = Object.freeze({
   APPROVED: 'APPROVED',
   DECLINED: 'DECLINED',
-  SUBMITTED: 'SUBMITTED'
-};
+  SUBMITTED: 'SUBMITTED',
+});
 
-export type RequestState = $Keys<typeof RequestStateTypes>;
-
-export { RequestStateTypes as default };
+export default RequestStateTypes;
+export type { RequestStateType };

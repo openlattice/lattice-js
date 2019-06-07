@@ -32,6 +32,10 @@ import * as Types from './constants/types';
 import * as Models from './models';
 import { configure } from './config/Configuration';
 
+export type * from './config';
+export type * from './constants/types';
+export type * from './models';
+
 // injected by Webpack.DefinePlugin
 declare var __VERSION__ :string;
 const version :string = __VERSION__;

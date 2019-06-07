@@ -17,6 +17,7 @@ const EXPECTED = Map({
   COMPLEX_TYPE_PATH             : 'complex/type',
   CONFIG_PATH                   : 'config',
   COUNT_PATH                    : 'count',
+  CSRF_TOKEN                    : 'csrfToken',
   CURRENT_PATH                  : 'current',
   DATASTORE_PATH                : 'datastore',
   DATA_PATH                     : 'data',

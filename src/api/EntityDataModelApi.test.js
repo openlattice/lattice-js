@@ -18,8 +18,8 @@ import {
 
 import {
   INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
-  INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
 } from '../utils/testing/Invalid';
 
 
@@ -82,6 +82,7 @@ describe('EntityDataModelApi', () => {
   testUpdateSchema();
   testGetEntitySet();
   testGetEntitySetId();
+  testGetEntitySetIds();
   testGetAllEntitySets();
   testCreateEntitySets();
   testDeleteEntitySet();
@@ -328,8 +329,8 @@ function testUpdateSchema() {
     const invalidParams = [
       INVALID_PARAMS_SS,
       INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED,
-      INVALID_PARAMS_SS_EMPTY_ARRAY_ALLOWED
+      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY
     ];
 
     const axiosParams = [
@@ -382,6 +383,27 @@ function testGetEntitySetId() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+  });
+}
+
+function testGetEntitySetIds() {
+
+  describe('getEntitySetIds()', () => {
+
+    const fnToTest = EntityDataModelApi.getEntitySetIds;
+
+    const validParams = [[MOCK_ENTITY_SET_DM.name]];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = [
+      `/${IDS_PATH}/${ENTITY_SET_PATH}`,
+      [MOCK_ENTITY_SET_DM.name],
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
   });
 }
 
