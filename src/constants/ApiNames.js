@@ -5,6 +5,7 @@
 export const ANALYSIS_API :string = 'AnalysisApi';
 export const APP_API :string = 'AppApi';
 export const AUTHORIZATION_API :string = 'AuthorizationApi';
+export const CODEX_API :string = 'CodexApi';
 export const DATA_API :string = 'DataApi';
 export const DATA_INTEGRATION_API :string = 'DataIntegrationApi';
 export const EDM_API :string = 'EntityDataModelApi';

@@ -13,6 +13,7 @@
 import * as AnalysisApi from './api/AnalysisApi';
 import * as AppApi from './api/AppApi';
 import * as AuthorizationApi from './api/AuthorizationApi';
+import * as CodexApi from './api/CodexApi';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
@@ -39,6 +40,7 @@ export {
   AnalysisApi,
   AppApi,
   AuthorizationApi,
+  CodexApi,
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,
@@ -63,6 +65,7 @@ export default {
   AnalysisApi,
   AppApi,
   AuthorizationApi,
+  CodexApi,
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,

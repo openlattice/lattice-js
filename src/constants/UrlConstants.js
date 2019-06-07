@@ -11,6 +11,7 @@ export const ASSOCIATION_PATH :string = 'association';
 export const ASSOCIATION_TYPE_PATH :string = 'association/type';
 export const AUTHORIZATIONS_PATH :string = 'authorizations';
 export const BULK_PATH :string = 'bulk';
+export const CODEX_PATH :string = 'codex';
 export const COMPLEX_TYPE_PATH :string = 'complex/type';
 export const CONFIG_PATH :string = 'config';
 export const COUNT_PATH :string = 'count';

@@ -48,9 +48,9 @@ export function getAllSubscriptions() :Promise<*> {
 }
 
 /**
- * `PUT /subscriptions`
+ * `POST /subscriptions`
  *
- * Creates a new subscription
+ * Creates or updates a new subscription
  *
  * @static
  * @memberof lattice.SubscriptionApi
@@ -58,43 +58,14 @@ export function getAllSubscriptions() :Promise<*> {
  * @returns {Promise} - a Promise that resolves without a value
  *
  * @example
- * SubscriptionApi.addSubscription(
+ * SubscriptionApi.createOrUpdateSubscription(
  *   {
  *     "ids": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
  *     "outgingEntityTypeIds": ["11442cb3-99dc-4842-8736-6c76e6fcc7c4"]
  *   }
  * );
  */
-export function addSubscription(subscription :Object) :Promise<*> {
-
-  return getApiAxiosInstance(SUBSCRIPTION_API)
-    .put('/', subscription)
-    .then(axiosResponse => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `POST /subscriptions`
- *
- * Updates a subscription
- *
- * @static
- * @memberof lattice.SubscriptionApi
- * @param {Object} subscription
- * @returns {Promise>} - a Promise that resolves without a value
- *
- * @example
- * SubscriptionApi.updateSubscription(
- *   {
- *     "ids": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
- *     "outgingEntityTypeIds": ["11442cb3-99dc-4842-8736-6c76e6fcc7c4"]
- *   }
- * );
- */
-export function updateSubscription(subscription :Object) :Promise<*> {
+export function createOrUpdateSubscription(subscription :Object) :Promise<*> {
 
   return getApiAxiosInstance(SUBSCRIPTION_API)
     .post('/', subscription)

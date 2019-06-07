@@ -13,6 +13,7 @@ const EXPECTED = Map({
   ASSOCIATION_TYPE_PATH         : 'association/type',
   AUTHORIZATIONS_PATH           : 'authorizations',
   BULK_PATH                     : 'bulk',
+  CODEX_PATH                    : 'codex',
   COMPLEX_TYPE_PATH             : 'complex/type',
   CONFIG_PATH                   : 'config',
   COUNT_PATH                    : 'count',
