@@ -19,7 +19,7 @@
 
 import Logger from '../utils/Logger';
 import { SUBSCRIPTION_API } from '../constants/ApiNames';
-import { ALL, ORGANIZATION_PATH } from '../constants/UrlConstants';
+import { ALL, CONTACT_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('SubscriptionApi');
@@ -59,17 +59,16 @@ export function getAllSubscriptions() :Promise<*> {
  *
  * @example
  * SubscriptionApi.createOrUpdateSubscription(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
  *     "ids": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
  *     "outgingEntityTypeIds": ["11442cb3-99dc-4842-8736-6c76e6fcc7c4"]
  *   }
  * );
  */
-export function createOrUpdateSubscription(organizationId :UUID, subscription :Object) :Promise<*> {
+export function createOrUpdateSubscription(subscription :Object) :Promise<*> {
 
   return getApiAxiosInstance(SUBSCRIPTION_API)
-    .post(`/${ORGANIZATION_PATH}/${organizationId}`, subscription)
+    .post(`/${CONTACT_PATH}`, subscription)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
