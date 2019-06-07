@@ -16,6 +16,7 @@ import * as AuthorizationApi from './api/AuthorizationApi';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
+import * as FeedsApi from './api/FeedsApi';
 import * as LinkingApi from './api/LinkingApi';
 import * as OrganizationsApi from './api/OrganizationsApi';
 import * as PermissionsApi from './api/PermissionsApi';
@@ -41,6 +42,7 @@ export {
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,
+  FeedsApi,
   LinkingApi,
   OrganizationsApi,
   PermissionsApi,
@@ -64,6 +66,7 @@ export default {
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,
+  FeedsApi,
   LinkingApi,
   OrganizationsApi,
   PermissionsApi,

@@ -20,6 +20,7 @@ const API_TO_PATH_MAP = Map({
   [ApiNames.DATA_INTEGRATION_API] : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.INTEGRATION_PATH}`,
   [ApiNames.DATA_SOURCES_API]     : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.DATA_SOURCES_PATH}`,
   [ApiNames.EDM_API]              : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.EDM_PATH}`,
+  [ApiNames.FEEDS_API]            : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.FEEDS_PATH}`,
   [ApiNames.LINKING_API]          : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.LINKING_PATH}`,
   [ApiNames.ORGANIZATIONS_API]    : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ORGANIZATIONS_PATH}`,
   [ApiNames.PERMISSIONS_API]      : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.PERMISSIONS_PATH}`,
