@@ -35,17 +35,17 @@ const LOG = new Logger('CodexApi');
  *
  * @example
  * CodexApi.sendOutgoingText(
- *   "8975812d-0325-4934-83a9-5b41bebd4c67",
  *   {
+ *     "organizationId": "8975812d-0325-4934-83a9-5b41bebd4c67",
  *     "messageContents": "This is a message.",
  *     "phoneNumber": "+19876543210"
  *   }
  * );
  */
-export function sendOutgoingText(organizationId :UUID, messageRequest :Object) :Promise<*> {
+export function sendOutgoingText(messageRequest :Object) :Promise<*> {
 
   return getApiAxiosInstance(CODEX_API)
-    .post(`/${organizationId}`, messageRequest)
+    .post('/', messageRequest)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
