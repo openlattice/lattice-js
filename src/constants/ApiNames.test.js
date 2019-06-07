@@ -7,9 +7,11 @@ const EXPECTED_APIS = Map({
   ANALYSIS_API         : 'AnalysisApi',
   APP_API              : 'AppApi',
   AUTHORIZATION_API    : 'AuthorizationApi',
+  CODEX_API            : 'CodexApi',
   DATA_API             : 'DataApi',
   DATA_INTEGRATION_API : 'DataIntegrationApi',
   EDM_API              : 'EntityDataModelApi',
+  FEEDS_API            : 'FeedsApi',
   LINKING_API          : 'LinkingApi',
   ORGANIZATIONS_API    : 'OrganizationsApi',
   PERMISSIONS_API      : 'PermissionsApi',
@@ -17,6 +19,7 @@ const EXPECTED_APIS = Map({
   PRINCIPALS_API       : 'PrincipalsApi',
   REQUESTS_API         : 'RequestsApi',
   SEARCH_API           : 'SearchApi',
+  SUBSCRIPTION_API     : 'SubscriptionApi',
 }).sortBy((value, key) => key);
 /* eslint-enable */
 
