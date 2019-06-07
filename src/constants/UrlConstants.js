@@ -47,6 +47,7 @@ export const MEMBERS_PATH :string = 'members';
 export const NAMESPACE_PATH :string = 'namespace';
 export const NEIGHBORS_PATH :string = 'neighbors';
 export const ORGANIZATIONS_PATH :string = 'organizations';
+export const ORGANIZATION_PATH :string = 'organization';
 export const PARTIAL :string = 'partial';
 export const PERMISSIONS_PATH :string = 'permissions';
 export const PERSISTENT_SEARCH_PATH :string = 'persistentsearch';

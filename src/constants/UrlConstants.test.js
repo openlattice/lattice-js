@@ -49,6 +49,7 @@ const EXPECTED = Map({
   NAMESPACE_PATH                : 'namespace',
   NEIGHBORS_PATH                : 'neighbors',
   ORGANIZATIONS_PATH            : 'organizations',
+  ORGANIZATION_PATH             : 'organization',
   PARTIAL                       : 'partial',
   PERMISSIONS_PATH              : 'permissions',
   PERSISTENT_SEARCH_PATH        : 'persistentsearch',
