@@ -25,7 +25,7 @@ import Role, { isValidRole } from '../models/Role';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUuid } from '../utils/ValidationUtils';
 
 import {
   ASSEMBLE_PATH,
@@ -1103,16 +1103,18 @@ export function getFilteredOrganizationEntitySets(organizationId :UUID, flags :s
  * @static
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
- * @param {UUID[]} entitySetIds
+ * @param {Object} refreshRatesOfEntitySets
  * @return {Promise} - a Promise that resolves without a value
  *
  * @example
  * OrganizationsApi.assembleEntitySets(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"]
+ *   {
+ *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": null
+ *   }
  * );
  */
-export function assembleEntitySets(organizationId :UUID, entitySetIds :UUID[]) :Promise<*> {
+export function assembleEntitySets(organizationId :UUID, refreshRatesOfEntitySets :Object) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1122,14 +1124,8 @@ export function assembleEntitySets(organizationId :UUID, entitySetIds :UUID[]) :
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuidArray(entitySetIds)) {
-    errorMsg = 'invalid parameter: entitySetIds must be a valid UUID array';
-    LOG.error(errorMsg, entitySetIds);
-    return Promise.reject(errorMsg);
-  }
-
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/${organizationId}/${ENTITY_SETS_PATH}/${ASSEMBLE_PATH}`, entitySetIds)
+    .post(`/${organizationId}/${ENTITY_SETS_PATH}/${ASSEMBLE_PATH}`, refreshRatesOfEntitySets)
     .then(axiosResponse => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
