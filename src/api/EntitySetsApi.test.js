@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 
 import * as AxiosUtils from '../utils/axios';
-import * as EntityDataModelApi from './EntityDataModelApi';
+import * as EntitySetsApi from './EntitySetsApi';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import { genMockBaseUrl, genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
@@ -51,7 +51,7 @@ AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
  * tests
  */
 
-describe('EntityDataModelApi', () => {
+describe('EntitySetsApi', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -63,14 +63,14 @@ describe('EntityDataModelApi', () => {
   testGetAllEntitySets();
   testCreateEntitySets();
   testDeleteEntitySet();
-  testUpdateEntitySetMetaData();
+  testUpdateEntitySetMetadata();
 });
 
 function testGetEntitySet() {
 
   describe('getEntitySet()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntitySet;
+    const fnToTest = EntitySetsApi.getEntitySet;
 
     const validParams = [MOCK_ENTITY_SET_DM.id];
     const invalidParams = [INVALID_PARAMS_SS];
@@ -88,7 +88,7 @@ function testGetEntitySetId() {
 
   describe('getEntitySetId()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntitySetId;
+    const fnToTest = EntitySetsApi.getEntitySetId;
 
     const validParams = [MOCK_ENTITY_SET_DM.name];
     const invalidParams = [INVALID_PARAMS];
@@ -106,7 +106,7 @@ function testGetEntitySetIds() {
 
   describe('getEntitySetIds()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntitySetIds;
+    const fnToTest = EntitySetsApi.getEntitySetIds;
 
     const validParams = [[MOCK_ENTITY_SET_DM.name]];
     const invalidParams = [INVALID_PARAMS];
@@ -127,7 +127,7 @@ function testGetAllEntitySets() {
 
   describe('getAllEntitySets()', () => {
 
-    const fnToTest = EntityDataModelApi.getAllEntitySets;
+    const fnToTest = EntitySetsApi.getAllEntitySets;
 
     const validParams = [];
     const axiosParams = ['/'];
@@ -143,7 +143,7 @@ function testCreateEntitySets() {
 
   describe('createEntitySets()', () => {
 
-    const fnToTest = EntityDataModelApi.createEntitySets;
+    const fnToTest = EntitySetsApi.createEntitySets;
 
     const validParams = [[MOCK_ENTITY_SET_DM]];
     const invalidParams = [INVALID_PARAMS];
@@ -161,7 +161,7 @@ function testDeleteEntitySet() {
 
   describe('deleteEntitySet()', () => {
 
-    const fnToTest = EntityDataModelApi.deleteEntitySet;
+    const fnToTest = EntitySetsApi.deleteEntitySet;
 
     const validParams = [MOCK_ENTITY_SET_DM.id];
     const invalidParams = [INVALID_PARAMS_SS];
@@ -175,11 +175,11 @@ function testDeleteEntitySet() {
   });
 }
 
-function testUpdateEntitySetMetaData() {
+function testUpdateEntitySetMetadata() {
 
-  describe('updateEntitySetMetaData()', () => {
+  describe('updateEntitySetMetadata()', () => {
 
-    const fnToTest = EntityDataModelApi.updateEntitySetMetaData;
+    const fnToTest = EntitySetsApi.updateEntitySetMetadata;
 
     const validParams = [MOCK_ENTITY_SET_DM.id, MOCK_METADATA_UPDATE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];

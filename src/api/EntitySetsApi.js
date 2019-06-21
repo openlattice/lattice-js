@@ -436,7 +436,7 @@ export function updateEntitySetPropertyMetadata(
  * @return {Promise} - a Promise that resolves without a value
  *
  * @example
- * EntitySetsApi.updateEntitySetMetaData(
+ * EntitySetsApi.updateEntitySetMetadata(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   {
  *     "type": { namespace: "LATTICE", name: "UpdatedEntitySet" },
