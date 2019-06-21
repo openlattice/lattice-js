@@ -11,6 +11,7 @@ const EXPECTED_APIS = Map({
   DATA_API             : 'DataApi',
   DATA_INTEGRATION_API : 'DataIntegrationApi',
   EDM_API              : 'EntityDataModelApi',
+  ENTITY_SETS_API      : 'EntitySetsApi',
   FEEDS_API            : 'FeedsApi',
   LINKING_API          : 'LinkingApi',
   ORGANIZATIONS_API    : 'OrganizationsApi',
