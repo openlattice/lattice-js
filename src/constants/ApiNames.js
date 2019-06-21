@@ -9,6 +9,7 @@ export const CODEX_API :string = 'CodexApi';
 export const DATA_API :string = 'DataApi';
 export const DATA_INTEGRATION_API :string = 'DataIntegrationApi';
 export const EDM_API :string = 'EntityDataModelApi';
+export const ENTITY_SETS_API :string = 'EntitySetsApi';
 export const FEEDS_API :string = 'FeedsApi';
 export const LINKING_API :string = 'LinkingApi';
 export const ORGANIZATIONS_API :string = 'OrganizationsApi';

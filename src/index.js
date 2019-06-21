@@ -17,6 +17,7 @@ import * as CodexApi from './api/CodexApi';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
+import * as EntitySetsApi from './api/EntitySetsApi';
 import * as FeedsApi from './api/FeedsApi';
 import * as LinkingApi from './api/LinkingApi';
 import * as OrganizationsApi from './api/OrganizationsApi';
@@ -48,6 +49,7 @@ export {
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,
+  EntitySetsApi,
   FeedsApi,
   LinkingApi,
   OrganizationsApi,
@@ -73,6 +75,7 @@ export default {
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,
+  EntitySetsApi,
   FeedsApi,
   LinkingApi,
   OrganizationsApi,
