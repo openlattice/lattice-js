@@ -2,6 +2,8 @@
  * @flow
  */
 
+import { Map, fromJS } from 'immutable';
+
 import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
@@ -11,29 +13,44 @@ import type { PrincipalType } from '../constants/types/PrincipalTypes';
 
 const LOG = new Logger('Principal');
 
+type PrincipalObject = {|
+  id :string;
+  type :PrincipalType;
+|};
+
 /**
  * @class Principal
  * @memberof lattice
  */
 export default class Principal {
 
-  type :PrincipalType;
   id :string;
+  type :PrincipalType;
 
-  constructor(type :PrincipalType, id :string) {
+  constructor(id :string, type :PrincipalType) {
 
     this.type = type;
     this.id = id;
   }
 
-  // for immutable.js equality
-  // TODO: need a better way to evaluate equality for models
-  valueOf() :string {
+  toImmutable() :Map<*, *> {
 
-    return JSON.stringify({
+    return fromJS(this.toObject());
+  }
+
+  toObject() :PrincipalObject {
+
+    const principalObj :PrincipalObject = {
+      id: this.id,
       type: this.type,
-      id: this.id
-    });
+    };
+
+    return principalObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -43,18 +60,8 @@ export default class Principal {
  */
 export class PrincipalBuilder {
 
-  type :PrincipalType;
   id :string;
-
-  setType(type :PrincipalType) :PrincipalBuilder {
-
-    if (!isNonEmptyString(type) || !PrincipalTypes[type]) {
-      throw new Error('invalid parameter: type must be a non-empty string');
-    }
-
-    this.type = type;
-    return this;
-  }
+  type :PrincipalType;
 
   setId(id :string) :PrincipalBuilder {
 
@@ -66,17 +73,27 @@ export class PrincipalBuilder {
     return this;
   }
 
-  build() :Principal {
+  setType(type :PrincipalType) :PrincipalBuilder {
 
-    if (!this.type) {
-      throw new Error('missing property: type is a required property');
+    if (!isNonEmptyString(type) || !PrincipalTypes[type]) {
+      throw new Error('invalid parameter: type must be a non-empty string');
     }
+
+    this.type = type;
+    return this;
+  }
+
+  build() :Principal {
 
     if (!this.id) {
       throw new Error('missing property: id is a required property');
     }
 
-    return new Principal(this.type, this.id);
+    if (!this.type) {
+      throw new Error('missing property: type is a required property');
+    }
+
+    return new Principal(this.id, this.type);
   }
 }
 
@@ -91,8 +108,8 @@ export function isValidPrincipal(principal :any) :boolean {
   try {
 
     (new PrincipalBuilder())
-      .setType(principal.type)
       .setId(principal.id)
+      .setType(principal.type)
       .build();
 
     return true;
@@ -108,3 +125,7 @@ export function isValidPrincipalArray(principals :Principal[]) :boolean {
 
   return validateNonEmptyArray(principals, (principal :Principal) => isValidPrincipal(principal));
 }
+
+export type {
+  PrincipalObject
+};
