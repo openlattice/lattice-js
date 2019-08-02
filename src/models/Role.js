@@ -3,13 +3,27 @@
  */
 
 import has from 'lodash/has';
+import { Map, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import Principal, { isValidPrincipal } from './Principal';
+import { AT_CLASS } from '../constants/GlobalConstants';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidUuid } from '../utils/ValidationUtils';
 
+import type { PrincipalObject } from './Principal';
+
 const LOG = new Logger('Role');
+const ROLE_CLASS_PACKAGE :'com.openlattice.organization.roles.Role' = 'com.openlattice.organization.roles.Role';
+
+type RoleObject = {|
+  [typeof AT_CLASS] :typeof ROLE_CLASS_PACKAGE;
+  description ?:string;
+  id ?:UUID;
+  organizationId :UUID;
+  principal :PrincipalObject;
+  title :string;
+|};
 
 /**
  * @class Role
@@ -17,33 +31,68 @@ const LOG = new Logger('Role');
  */
 export default class Role {
 
+  description :?string;
   id :?UUID;
   organizationId :UUID;
-  title :string;
-  description :?string;
   principal :Principal
+  title :string;
 
   constructor(
     id :?UUID,
     organizationId :UUID,
     title :string,
     description :?string,
-    principal :Principal
+    principal :Principal,
   ) {
 
     // required properties
     this.organizationId = organizationId;
-    this.title = title;
     this.principal = principal;
+    this.title = title;
+
+    // $FlowFixMe
+    this[AT_CLASS] = ROLE_CLASS_PACKAGE;
 
     // optional properties
-    if (isDefined(id)) {
-      this.id = id;
-    }
-
     if (isDefined(description)) {
       this.description = description;
     }
+
+    if (isDefined(id)) {
+      this.id = id;
+    }
+  }
+
+  toImmutable() :Map<*, *> {
+
+    return fromJS(this.toObject());
+  }
+
+  toObject() :RoleObject {
+
+    // required properties
+    const roleObj :RoleObject = {
+      organizationId: this.organizationId,
+      principal: this.principal.toObject(),
+      title: this.title,
+    };
+    roleObj[AT_CLASS] = ROLE_CLASS_PACKAGE;
+
+    // optional properties
+    if (isDefined(this.description)) {
+      roleObj.description = this.description;
+    }
+
+    if (isDefined(this.id)) {
+      roleObj.id = this.id;
+    }
+
+    return roleObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -53,11 +102,11 @@ export default class Role {
  */
 export class RoleBuilder {
 
+  description :?string;
   id :?UUID;
   organizationId :UUID;
-  title :string;
-  description :?string;
   principal :Principal;
+  title :string;
 
   setId(id :?UUID) :RoleBuilder {
 
@@ -179,3 +228,11 @@ export function isValidRole(role :any) :boolean {
     return false;
   }
 }
+
+export {
+  ROLE_CLASS_PACKAGE,
+};
+
+export type {
+  RoleObject,
+};
