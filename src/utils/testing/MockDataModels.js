@@ -2,7 +2,12 @@
  * @flow
  */
 
-import { genRandomBoolean, genRandomString, genRandomUUID } from './MockUtils';
+import {
+  genRandomBoolean,
+  genRandomString,
+  genRandomUUID,
+  pickRandomValue,
+} from './MockUtils';
 import {
   AnalyzerTypes,
   IndexTypes,
@@ -16,8 +21,12 @@ import {
   EntityType,
   EntityTypeBuilder,
   FullyQualifiedName,
+  Principal,
+  PrincipalBuilder,
   PropertyType,
   PropertyTypeBuilder,
+  Role,
+  RoleBuilder,
   Schema,
   SchemaBuilder,
 } from '../../models';
@@ -192,6 +201,18 @@ function genRandomAssociationType() :AssociationType {
     .build();
 }
 
+const MOCK_PRINCIPAL :Principal = new PrincipalBuilder()
+  .setId('MockPrincipalId')
+  .setType(PrincipalTypes.USER)
+  .build();
+
+function genRandomPrincipal() :Principal {
+  return new PrincipalBuilder()
+    .setId(genRandomUUID())
+    .setType(pickRandomValue(PrincipalTypes))
+    .build();
+}
+
 const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
   .setAnalyzer(AnalyzerTypes.STANDARD)
   .setDataType('String')
@@ -219,6 +240,24 @@ function genRandomPropertyType() :PropertyType {
     .setSchemas([new FullyQualifiedName(genRandomString(), genRandomString())])
     .setTitle(genRandomString())
     .setType(new FullyQualifiedName(genRandomString(), genRandomString()))
+    .build();
+}
+
+const MOCK_ROLE :Role = new RoleBuilder()
+  .setDescription('description')
+  .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
+  .setOrganizationId('80630df9-f6a4-4213-bbcb-b89826cf14a6')
+  .setPrincipal(MOCK_PRINCIPAL)
+  .setTitle('title')
+  .build();
+
+function genRandomRole() :Role {
+  return new RoleBuilder()
+    .setDescription(genRandomString())
+    .setId(genRandomUUID())
+    .setOrganizationId(genRandomUUID())
+    .setPrincipal(genRandomPrincipal())
+    .setTitle(genRandomString())
     .build();
 }
 
@@ -266,11 +305,6 @@ const MOCK_ORGANIZATION_DM :Object = {
   ]
 };
 
-const MOCK_PRINCIPAL_DM :Object = {
-  type: PrincipalTypes.USER,
-  id: 'mockPrincipalId'
-};
-
 const MOCK_REQUEST_DM :Object = {
   aclKey: MOCK_ACL_KEY,
   permissions: ['READ'],
@@ -280,7 +314,7 @@ const MOCK_REQUEST_DM :Object = {
 const MOCK_REQUEST_STATUS_DM :Object = {
   request: MOCK_REQUEST_DM,
   state: RequestStateTypes.SUBMITTED,
-  principal: MOCK_PRINCIPAL_DM
+  principal: MOCK_PRINCIPAL.toObject()
 };
 
 const MOCK_ROLE_DM :Object = {
@@ -362,8 +396,8 @@ export {
   MOCK_APP_DM,
   MOCK_APP_TYPE_DM,
   MOCK_ASSOCIATION_TYPE,
-  MOCK_DATA_EDGE_KEY_DM,
   MOCK_DATA_EDGE_DM,
+  MOCK_DATA_EDGE_KEY_DM,
   MOCK_DATA_GRAPH_DM,
   MOCK_DATA_SOURCE_DM,
   MOCK_EDM_DM,
@@ -376,15 +410,18 @@ export {
   MOCK_LINKING_REQUEST_DM,
   MOCK_NAMESPACE,
   MOCK_ORGANIZATION_DM,
-  MOCK_PRINCIPAL_DM,
+  MOCK_PRINCIPAL,
   MOCK_PROPERTY_TYPE,
   MOCK_REQUEST_DM,
   MOCK_REQUEST_STATUS_DM,
+  MOCK_ROLE,
   MOCK_ROLE_DM,
   MOCK_SCHEMA,
   genRandomAssociationType,
   genRandomDataGraph,
   genRandomEntityType,
+  genRandomPrincipal,
   genRandomPropertyType,
+  genRandomRole,
   genRandomSchema,
 };

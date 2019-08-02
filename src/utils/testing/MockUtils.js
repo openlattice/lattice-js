@@ -51,12 +51,19 @@ function getMockAxiosInstance() :Object {
   return mockAxiosInstance;
 }
 
+function pickRandomValue(thing :Object) :any {
+
+  const keys = Object.keys(thing);
+  return thing[keys[Math.floor(Math.random() * keys.length)]];
+}
+
 export {
   genMockAuthToken,
   genMockBaseUrl,
   genRandomBoolean,
   genRandomString,
   genRandomUUID,
-  getMockPromise,
   getMockAxiosInstance,
+  getMockPromise,
+  pickRandomValue,
 };

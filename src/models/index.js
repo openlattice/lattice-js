@@ -29,7 +29,9 @@ import Schema, { SchemaBuilder } from './Schema';
 export type { AssociationTypeObject } from './AssociationType';
 export type { EntityTypeObject } from './EntityType';
 export type { FQN, FQNObject } from './FullyQualifiedName';
+export type { PrincipalObject } from './Principal';
 export type { PropertyTypeObject } from './PropertyType';
+export type { RoleObject } from './Role';
 export type { SchemaObject } from './Schema';
 
 export {
