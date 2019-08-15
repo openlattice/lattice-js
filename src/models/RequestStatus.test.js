@@ -184,19 +184,19 @@ describe('RequestStatus', () => {
 
       test('should return false when given an object literal with an invalid "request" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_REQUEST_STATUS_DM, { request: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_STATUS_DM, request: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "state" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_REQUEST_STATUS_DM, { state: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_STATUS_DM, state: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_REQUEST_STATUS_DM, { principal: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_STATUS_DM, principal: invalidInput })).toEqual(false);
         });
       });
 

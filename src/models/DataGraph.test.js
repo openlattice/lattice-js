@@ -140,13 +140,13 @@ describe('DataGraph', () => {
 
       test('should return false when given an object literal with an invalid "associations" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_OBJECT.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { associations: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, associations: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "entities" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { entities: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, entities: invalidInput })).toEqual(false);
         });
       });
 

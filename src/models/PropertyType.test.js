@@ -537,71 +537,71 @@ describe('PropertyType', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { id: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "type" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { type: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, type: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { title: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, title: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { description: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, description: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "datatype" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { datatype: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, datatype: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "schemas" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { schemas: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { schemas: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, schemas: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, schemas: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "pii" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { pii: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, pii: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "analyzer" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { analyzer: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, analyzer: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "multiValued" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { multiValued: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, multiValued: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "enumValues" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { enumValues: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, enumValues: invalidInput })).toEqual(false);
         });
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { enumValues: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, enumValues: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "indexType" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PROPERTY_TYPE, { indexType: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PROPERTY_TYPE, indexType: invalidInput })).toEqual(false);
         });
       });
 
@@ -855,7 +855,7 @@ describe('PropertyType', () => {
           indexType: MOCK_PROPERTY_TYPE.indexType,
           multiValued: MOCK_PROPERTY_TYPE.multiValued,
           pii: MOCK_PROPERTY_TYPE.pii,
-          schemas: MOCK_PROPERTY_TYPE.schemas.map(fqn => fqn.toObject()),
+          schemas: MOCK_PROPERTY_TYPE.schemas.map((fqn) => fqn.toObject()),
           title: MOCK_PROPERTY_TYPE.title,
           type: MOCK_PROPERTY_TYPE.type.toObject(),
         }).hashCode()

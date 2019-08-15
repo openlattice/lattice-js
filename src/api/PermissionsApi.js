@@ -54,7 +54,7 @@ export function getAcl(aclKey :UUID[]) :Promise<*> {
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post('/', aclKey)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -106,7 +106,7 @@ export function updateAcl(aclData :AclData) :Promise<*> {
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .patch('/', aclData)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -138,7 +138,7 @@ export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post(`/${EXPLAIN_PATH}`, aclKey)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

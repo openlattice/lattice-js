@@ -132,13 +132,13 @@ describe('Principal', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PRINCIPAL, { id: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PRINCIPAL, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "type" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_PRINCIPAL, { type: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_PRINCIPAL, type: invalidInput })).toEqual(false);
         });
       });
 

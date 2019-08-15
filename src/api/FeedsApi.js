@@ -39,7 +39,7 @@ export function getLatestFeed() :Promise<*> {
 
   return getApiAxiosInstance(FEEDS_API)
     .get('/')
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

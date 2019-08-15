@@ -163,15 +163,15 @@ describe('Acl', () => {
 
       test('should return false when given an object literal with an invalid "aclKey" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACL_DM, { aclKey: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_ACL_DM, { aclKey: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DM, aclKey: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DM, aclKey: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "aces" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACL_DM, { aces: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_ACL_DM, { aces: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DM, aces: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DM, aces: [invalidInput] })).toEqual(false);
         });
       });
 

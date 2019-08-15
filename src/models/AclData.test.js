@@ -146,13 +146,13 @@ describe('AclData', () => {
 
       test('should return false when given an object literal with an invalid "acl" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACL_DATA_DM, { acl: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DATA_DM, acl: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "action" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACL_DATA_DM, { action: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DATA_DM, action: invalidInput })).toEqual(false);
         });
       });
 

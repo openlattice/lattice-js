@@ -65,7 +65,7 @@ export function createPersistentSearch(persistentSearch :Object) :Promise<*> {
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
     .post('', persistentSearch)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -89,7 +89,7 @@ export function loadPersistentSearches(includeExpired :boolean) :Promise<*> {
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
     .get(`?includeExpired=${String(includeExpired)}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -119,7 +119,7 @@ export function updatePersistentSearchExpiration(persistentSearchId :UUID, expir
     .patch(`/${persistentSearchId}/${EXPIRATION_PATH}`, expiration, {
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -160,7 +160,7 @@ export function updatePersistentSearchConstraints(persistentSearchId :UUID, sear
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
     .patch(`/${persistentSearchId}`, searchConstraints)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -184,7 +184,7 @@ export function expirePersistentSearch(persistentSearchId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
     .delete(`/${persistentSearchId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

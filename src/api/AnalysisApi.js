@@ -73,7 +73,7 @@ export function getTopUtilizers(
 
   return getApiAxiosInstance(ANALYSIS_API)
     .post(url, options)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -105,7 +105,7 @@ export function getNeighborTypes(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ANALYSIS_API)
     .get(`/${entitySetId}/${TYPES_PATH}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

@@ -94,7 +94,7 @@ describe('Model', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { id: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, id: invalidInput })).toEqual(false);
         });
       });
 

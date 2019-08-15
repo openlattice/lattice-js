@@ -255,7 +255,7 @@ describe('AssociationType', () => {
       test('should return false when given an object literal with an invalid "entityType" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { entityType: invalidInput }))
+            isValid({ ...MOCK_ASSOCIATION_TYPE.toObject(), entityType: invalidInput })
           ).toEqual(false);
         });
       });
@@ -263,10 +263,10 @@ describe('AssociationType', () => {
       test('should return false when given an object literal with an invalid "sourceEntityTypeIds" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { sourceEntityTypeIds: invalidInput }))
+            isValid({ ...MOCK_ASSOCIATION_TYPE.toObject(), sourceEntityTypeIds: invalidInput })
           ).toEqual(false);
           expect(
-            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { sourceEntityTypeIds: [invalidInput] }))
+            isValid({ ...MOCK_ASSOCIATION_TYPE.toObject(), sourceEntityTypeIds: [invalidInput] })
           ).toEqual(false);
         });
       });
@@ -274,10 +274,10 @@ describe('AssociationType', () => {
       test('should return false when given an object literal with an invalid "dstEntityTypeIds" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { destinationEntityTypeIds: invalidInput }))
+            isValid({ ...MOCK_ASSOCIATION_TYPE.toObject(), destinationEntityTypeIds: invalidInput })
           ).toEqual(false);
           expect(
-            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { destinationEntityTypeIds: [invalidInput] }))
+            isValid({ ...MOCK_ASSOCIATION_TYPE.toObject(), destinationEntityTypeIds: [invalidInput] })
           ).toEqual(false);
         });
       });
@@ -285,7 +285,7 @@ describe('AssociationType', () => {
       test('should return false when given an object literal with an invalid "bidirectional" property', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_ASSOCIATION_TYPE.toObject(), { bidirectional: invalidInput }))
+            isValid({ ...MOCK_ASSOCIATION_TYPE.toObject(), bidirectional: invalidInput })
           ).toEqual(false);
         });
       });

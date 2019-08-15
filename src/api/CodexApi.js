@@ -46,7 +46,7 @@ export function sendOutgoingText(messageRequest :Object) :Promise<*> {
 
   return getApiAxiosInstance(CODEX_API)
     .post('/', messageRequest)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

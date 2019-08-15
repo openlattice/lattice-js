@@ -177,19 +177,19 @@ describe('DataEdgeKey', () => {
 
       test('should return false when given an object literal with an invalid "dst" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { dst: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, dst: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "edge" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { edge: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, edge: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "src" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { src: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, src: invalidInput })).toEqual(false);
         });
       });
 

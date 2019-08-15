@@ -37,7 +37,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockApiBaseUrl2 = `${mockBaseUrl}/${mockApi2}`;
     const mockAuthToken = genMockAuthToken();
 
-    getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
+    getApiBaseUrl.mockImplementation((api) => `${mockBaseUrl}/${api}`);
     Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken
     }));
@@ -61,7 +61,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockApiBaseUrl = `${mockBaseUrl}/${mockApi}`;
     const mockAuthToken = genMockAuthToken();
 
-    getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
+    getApiBaseUrl.mockImplementation((api) => `${mockBaseUrl}/${api}`);
     Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken
     }));
@@ -91,7 +91,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockAuthToken1 = genMockAuthToken();
     const mockAuthToken2 = genMockAuthToken();
 
-    getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
+    getApiBaseUrl.mockImplementation((api) => `${mockBaseUrl}/${api}`);
     Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken1
     }));
@@ -121,7 +121,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockBaseUrl = genMockBaseUrl();
     const mockApiBaseUrl = `${mockBaseUrl}/${mockApi}`;
 
-    getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
+    getApiBaseUrl.mockImplementation((api) => `${mockBaseUrl}/${api}`);
     Config.getConfig.mockImplementation(() => Map());
 
     const axiosInstance = getApiAxiosInstance(mockApi);
@@ -137,7 +137,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockApiBaseUrl = `${mockBaseUrl}/${mockApi}`;
     const mockAuthToken = genMockAuthToken();
 
-    getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
+    getApiBaseUrl.mockImplementation((api) => `${mockBaseUrl}/${api}`);
     Config.getConfig.mockImplementation(() => fromJS({
       authToken: mockAuthToken
     }));
@@ -166,7 +166,7 @@ describe('AxiosUtils : getApiAxiosInstance()', () => {
     const mockApiBaseUrl = `${mockBaseUrl}/${mockApi}`;
     const mockAuthToken = genMockAuthToken();
 
-    getApiBaseUrl.mockImplementation(api => `${mockBaseUrl}/${api}`);
+    getApiBaseUrl.mockImplementation((api) => `${mockBaseUrl}/${api}`);
     Config.getConfig.mockImplementation(() => Map());
 
     const axiosInstance1 = getApiAxiosInstance(mockApi);

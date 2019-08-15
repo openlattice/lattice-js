@@ -155,14 +155,14 @@ describe('Ace', () => {
 
       test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACE_DM, { principal: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACE_DM, principal: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_ACE_DM, { permissions: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACE_DM, permissions: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACE_DM, permissions: [invalidInput] })).toEqual(false);
         });
       });
 
