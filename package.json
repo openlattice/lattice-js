@@ -53,7 +53,7 @@
     "eslint-plugin-flowtype": "~4.2.0",
     "eslint-plugin-import": "~2.18.0",
     "eslint-plugin-jest": "~22.15.0",
-    "flow-bin": "~0.104.0",
+    "flow-bin": "~0.105.0",
     "jest": "~24.8.0",
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
