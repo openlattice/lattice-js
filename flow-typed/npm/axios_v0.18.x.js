@@ -1,5 +1,5 @@
-// flow-typed signature: e6e29bc05fd630504928348b2e063259
-// flow-typed version: 66338731ff/axios_v0.18.x/flow_>=v0.80.x
+// flow-typed signature: 28b99b28928dadb6bbb61861e86dc699
+// flow-typed version: c6154227d1/axios_v0.18.x/flow_>=v0.104.x
 
 declare module 'axios' {
   declare interface AxiosTransformer<T> {
@@ -11,6 +11,7 @@ declare module 'axios' {
     auth?: {
       username: string,
       password: string,
+      ...
     };
   }
   declare interface Cancel {
@@ -36,6 +37,7 @@ declare module 'axios' {
     auth?: {
       username: string,
       password: string,
+      ...
     };
     baseURL?: string;
     cancelToken?: CancelToken;
@@ -135,8 +137,9 @@ declare module 'axios' {
     interceptors: {
       request: AxiosRequestInterceptor<mixed>,
       response: AxiosResponseInterceptor<mixed>,
+      ...
     };
-    defaults: { headers: Object } & AxiosXHRConfig<*, *>;
+    defaults: { headers: Object, ... } & AxiosXHRConfig<*, *>;
   }
 
   declare class AxiosError<T, R = T> extends Error {
