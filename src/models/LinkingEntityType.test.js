@@ -196,17 +196,17 @@ describe('LinkingEntityType', () => {
 
       test('should return false when given an object literal with an invalid "entityType" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityType: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_LINKING_ENTITY_TYPE_DM, entityType: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "entityTypeIds" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityTypeIds: invalidInput }))
+            isValid({ ...MOCK_LINKING_ENTITY_TYPE_DM, entityTypeIds: invalidInput })
           ).toEqual(false);
           expect(
-            isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { entityTypeIds: [invalidInput] }))
+            isValid({ ...MOCK_LINKING_ENTITY_TYPE_DM, entityTypeIds: [invalidInput] })
           ).toEqual(false);
         });
       });
@@ -214,7 +214,7 @@ describe('LinkingEntityType', () => {
       test('should return false when given an object literal with an invalid "deidentified" property', () => {
         INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_LINKING_ENTITY_TYPE_DM, { deidentified: invalidInput }))
+            isValid({ ...MOCK_LINKING_ENTITY_TYPE_DM, deidentified: invalidInput })
           ).toEqual(false);
         });
       });

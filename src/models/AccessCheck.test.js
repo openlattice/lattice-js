@@ -160,15 +160,15 @@ describe('AccessCheck', () => {
 
       test('should return false when given an object literal with an invalid "aclKey" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACCESS_CHECK_DM, { aclKey: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_ACCESS_CHECK_DM, { aclKey: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_DM, aclKey: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_DM, aclKey: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ACCESS_CHECK_DM, { permissions: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_ACCESS_CHECK_DM, { permissions: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_DM, permissions: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_DM, permissions: [invalidInput] })).toEqual(false);
         });
       });
 

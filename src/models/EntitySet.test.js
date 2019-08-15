@@ -325,38 +325,38 @@ describe('EntitySet', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { id: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET_DM, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "entityTypeId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { entityTypeId: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET_DM, entityTypeId: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "name" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { name: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET_DM, name: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { title: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET_DM, title: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { description: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET_DM, description: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "contacts" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { contacts: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_ENTITY_SET_DM, { contacts: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET_DM, contacts: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET_DM, contacts: [invalidInput] })).toEqual(false);
         });
       });
 

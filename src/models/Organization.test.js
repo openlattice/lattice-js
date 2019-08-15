@@ -392,49 +392,49 @@ describe('Organization', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { id: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { title: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, title: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { description: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, description: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { principal: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, principal: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "members" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { members: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, members: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "roles" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { roles: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, roles: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "emails" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { emails: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, emails: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "apps" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ORGANIZATION_DM, { apps: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION_DM, apps: invalidInput })).toEqual(false);
         });
       });
 

@@ -66,7 +66,7 @@ export function getAllEntitySets() :Promise<*> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .get('/')
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -111,7 +111,7 @@ export function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .post('/', entitySets)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -143,7 +143,7 @@ export function getEntitySetIds(entitySetNames :string[]) :Promise<*> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .post(`/${IDS_PATH}`, entitySetNames)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -175,7 +175,7 @@ export function getEntitySetId(entitySetName :string) :Promise<*> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .get(`/${IDS_PATH}/${entitySetName}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -207,7 +207,7 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .delete(`/${ALL}/${entitySetId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -239,7 +239,7 @@ export function getEntitySet(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .get(`/${ALL}/${entitySetId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -271,7 +271,7 @@ export function getPropertyMetadataForEntitySets(entitySetIds :UUID[]) :Promise<
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .post(`/${ALL}/${METADATA_PATH}`, entitySetIds)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -304,7 +304,7 @@ export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .get(`/${ALL}/${entitySetId}/${METADATA_PATH}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -346,7 +346,7 @@ export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .get(`/${ALL}/${entitySetId}/${PROPERTIES_PATH}/${propertyTypeId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -417,7 +417,7 @@ export function updateEntitySetPropertyMetadata(
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .post(`/${ALL}/${entitySetId}/${PROPERTIES_PATH}/${propertyTypeId}`, metadata)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -495,7 +495,7 @@ export function updateEntitySetMetadata(entitySetId :UUID, metadata :Object) :Pr
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .patch(`/${ALL}/${entitySetId}/${METADATA_PATH}`, metadata)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

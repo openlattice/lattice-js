@@ -257,31 +257,31 @@ describe('Role', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ROLE, { id: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ROLE, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "organizationId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ROLE, { organizationId: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ROLE, organizationId: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ROLE, { title: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ROLE, title: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ROLE, { description: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ROLE, description: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_ROLE, { principal: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_ROLE, principal: invalidInput })).toEqual(false);
         });
       });
 

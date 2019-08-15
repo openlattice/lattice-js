@@ -105,7 +105,7 @@ export function createAssociations(associations :Object) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${ASSOCIATION_PATH}`, associations)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -153,7 +153,7 @@ export function createEntityAndAssociationData(data :DataGraph) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .post('/', data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -200,7 +200,7 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${SET_PATH}/?${SET_ID}=${entitySetId}`, entities)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -250,7 +250,7 @@ export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :D
 
   return getApiAxiosInstance(DATA_API)
     .delete(`/${SET_PATH}/${entitySetId}/${entityKeyId}?${TYPE_PATH}=${deleteType}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -343,7 +343,7 @@ export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, de
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${SET_PATH}/${entitySetId}/${NEIGHBORS_PATH}?${TYPE_PATH}=${deleteType}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -395,7 +395,7 @@ export function deleteEntitySet(entitySetId :UUID, deleteType :DeleteType) :Prom
 
   return getApiAxiosInstance(DATA_API)
     .delete(`/${SET_PATH}/${entitySetId}/${ALL}?${TYPE_PATH}=${deleteType}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -443,7 +443,7 @@ export function getEntityData(entitySetId :UUID, entityKeyId :UUID) :Promise<*> 
 
   return getApiAxiosInstance(DATA_API)
     .get(`/${entitySetId}/${entityKeyId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -518,7 +518,7 @@ export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], ent
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${SET_PATH}/${entitySetId}`, entitySetSelection)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -593,7 +593,7 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(DATA_API)
     .get(`/${entitySetId}/${COUNT_PATH}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -671,7 +671,7 @@ export function updateEntityData(entitySetId :UUID, entities :Object, updateType
 
   return getApiAxiosInstance(DATA_API)
     .put(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${updateType}`, entities)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -737,7 +737,7 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
 
   return getApiAxiosInstance(DATA_API)
     .put(`/${SET_PATH}/${entitySetId}/${entityKeyId}`, entity)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -792,7 +792,7 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
 
   return getApiAxiosInstance(DATA_API)
     .post(`/${SET_PATH}/${entitySetId}/${entityKeyId}`, entity)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

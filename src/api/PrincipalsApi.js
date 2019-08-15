@@ -54,7 +54,7 @@ export function getUser(userId :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}/${userId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -72,7 +72,7 @@ export function getAllRoles() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${ROLES_PATH}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -90,7 +90,7 @@ export function getAllUsers() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -119,7 +119,7 @@ export function searchAllUsersByEmail(emailSearchQuery :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${emailSearchQuery}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -148,7 +148,7 @@ export function searchAllUsers(searchQuery :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}/${SEARCH_PATH}/${searchQuery}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -177,7 +177,7 @@ export function getSecurablePrincipal(principal :Principal) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .post('/', principal)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -197,7 +197,7 @@ export function getDbAccessCredential() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${DB_PATH}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -228,7 +228,7 @@ export function addRoleToUser(userId :string, role :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .put(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -253,7 +253,7 @@ export function removeRoleFromUser(userId :string, role :string) :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .delete(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

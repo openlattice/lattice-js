@@ -204,21 +204,21 @@ describe('Schema', () => {
 
       test('should return false when given an object literal with an invalid "fqn" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_SCHEMA, { fqn: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA, fqn: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "entityTypes" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_SCHEMA, { entityTypes: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_SCHEMA, { entityTypes: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA, entityTypes: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA, entityTypes: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "propertyTypes" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_SCHEMA, { propertyTypes: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_SCHEMA, { propertyTypes: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA, propertyTypes: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA, propertyTypes: [invalidInput] })).toEqual(false);
         });
       });
 
@@ -277,8 +277,8 @@ describe('Schema', () => {
       expect(schema.valueOf()).toEqual(
         fromJS({
           fqn: MOCK_SCHEMA.fqn.toObject(),
-          entityTypes: MOCK_SCHEMA.entityTypes.map(entityType => entityType.toObject()),
-          propertyTypes: MOCK_SCHEMA.propertyTypes.map(propertyType => propertyType.toObject()),
+          entityTypes: MOCK_SCHEMA.entityTypes.map((entityType) => entityType.toObject()),
+          propertyTypes: MOCK_SCHEMA.propertyTypes.map((propertyType) => propertyType.toObject()),
         }).hashCode()
       );
     });

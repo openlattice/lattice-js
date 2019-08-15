@@ -155,7 +155,7 @@ describe('LinkingRequest', () => {
       test('should return false when given an object literal with an invalid "linkingEntitySet" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_LINKING_REQUEST_DM, { linkingEntitySet: invalidInput }))
+            isValid({ ...MOCK_LINKING_REQUEST_DM, linkingEntitySet: invalidInput })
           ).toEqual(false);
         });
       });
@@ -163,10 +163,10 @@ describe('LinkingRequest', () => {
       test('should return false when given an object literal with an invalid "propertyTypeIds" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(
-            isValid(Object.assign({}, MOCK_LINKING_REQUEST_DM, { propertyTypeIds: invalidInput }))
+            isValid({ ...MOCK_LINKING_REQUEST_DM, propertyTypeIds: invalidInput })
           ).toEqual(false);
           expect(
-            isValid(Object.assign({}, MOCK_LINKING_REQUEST_DM, { propertyTypeIds: [invalidInput] }))
+            isValid({ ...MOCK_LINKING_REQUEST_DM, propertyTypeIds: [invalidInput] })
           ).toEqual(false);
         });
       });
