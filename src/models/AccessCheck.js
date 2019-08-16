@@ -3,7 +3,7 @@
  */
 
 import has from 'lodash/has';
-import { Set } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
@@ -12,6 +12,11 @@ import { isValidPermissionArray, isValidUuidArray, validateNonEmptyArray } from 
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AccessCheck');
+
+type AccessCheckObject = {|
+  aclKey :UUID[];
+  permissions :PermissionType[];
+|};
 
 /**
  * @class AccessCheck
@@ -24,8 +29,30 @@ export default class AccessCheck {
 
   constructor(aclKey :UUID[], permissions :PermissionType[]) {
 
+    // required properties
     this.aclKey = aclKey;
     this.permissions = permissions;
+  }
+
+  toImmutable() :Map<*, *> {
+
+    return fromJS(this.toObject());
+  }
+
+  toObject() :AccessCheckObject {
+
+    // required properties
+    const accessCheckObj :AccessCheckObject = {
+      aclKey: this.aclKey,
+      permissions: this.permissions,
+    };
+
+    return accessCheckObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -119,3 +146,7 @@ export function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
 
   return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => isValidAccessCheck(accessCheck));
 }
+
+export type {
+  AccessCheckObject,
+};

@@ -11,11 +11,14 @@ import {
 import {
   AnalyzerTypes,
   IndexTypes,
+  PermissionTypes,
   PrincipalTypes,
   RequestStateTypes,
   SecurableTypes,
 } from '../../constants/types';
 import {
+  AccessCheck,
+  AccessCheckBuilder,
   AssociationType,
   AssociationTypeBuilder,
   EntityType,
@@ -41,11 +44,6 @@ const MOCK_ACL_KEY :string[] = [
 const MOCK_FQN :Object = {
   namespace: 'LATTICE',
   name: 'Data'
-};
-
-const MOCK_ACCESS_CHECK_DM :Object = {
-  aclKey: MOCK_ACL_KEY,
-  permissions: ['READ']
 };
 
 const MOCK_ACE_DM :Object = {
@@ -387,8 +385,20 @@ function genRandomDataGraph() :Object {
   };
 }
 
+const MOCK_ACCESS_CHECK :AccessCheck = new AccessCheckBuilder()
+  .setAclKey(MOCK_ACL_KEY)
+  .setPermissions([PermissionTypes.READ])
+  .build();
+
+function genRandomAccessCheck() :AccessCheck {
+  return new AccessCheckBuilder()
+    .setAclKey([genRandomUUID(), genRandomUUID()])
+    .setPermissions([pickRandomValue(PermissionTypes)])
+    .build();
+}
+
 export {
-  MOCK_ACCESS_CHECK_DM,
+  MOCK_ACCESS_CHECK,
   MOCK_ACE_DM,
   MOCK_ACL_DATA_DM,
   MOCK_ACL_DM,
@@ -417,6 +427,7 @@ export {
   MOCK_ROLE,
   MOCK_ROLE_DM,
   MOCK_SCHEMA,
+  genRandomAccessCheck,
   genRandomAssociationType,
   genRandomDataGraph,
   genRandomEntityType,
