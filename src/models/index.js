@@ -26,6 +26,7 @@ import RequestStatus, { RequestStatusBuilder } from './RequestStatus';
 import Role, { RoleBuilder } from './Role';
 import Schema, { SchemaBuilder } from './Schema';
 
+export type { AccessCheckObject } from './AccessCheck';
 export type { AssociationTypeObject } from './AssociationType';
 export type { EntityTypeObject } from './EntityType';
 export type { FQN, FQNObject } from './FullyQualifiedName';
