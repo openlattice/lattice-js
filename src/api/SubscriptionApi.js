@@ -40,7 +40,7 @@ export function getAllSubscriptions() :Promise<*> {
 
   return getApiAxiosInstance(SUBSCRIPTION_API)
     .get(`/${ALL}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -69,7 +69,7 @@ export function createOrUpdateSubscription(subscription :Object) :Promise<*> {
 
   return getApiAxiosInstance(SUBSCRIPTION_API)
     .post(`/${CONTACT_PATH}`, subscription)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -93,7 +93,7 @@ export function deleteSubscription(entityKeyId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(SUBSCRIPTION_API)
     .delete(`/${entityKeyId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

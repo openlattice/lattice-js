@@ -124,7 +124,7 @@ export function getEntitySets(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .get(`/${SEARCH_ENTITY_SETS_PATH}/${start}/${maxHits}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -258,7 +258,7 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post('/', data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -322,7 +322,7 @@ export function executeSearch(searchConstraints :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .patch('/', searchConstraints)
-    .then(axiosResponse => addIDField(axiosResponse.data))
+    .then((axiosResponse) => addIDField(axiosResponse.data))
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -402,7 +402,7 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${entitySetId}`, data)
-    .then(axiosResponse => addIDField(axiosResponse.data))
+    .then((axiosResponse) => addIDField(axiosResponse.data))
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -481,7 +481,7 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${ADVANCED_PATH}/${entitySetId}`, data)
-    .then(axiosResponse => addIDField(axiosResponse.data))
+    .then((axiosResponse) => addIDField(axiosResponse.data))
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -548,7 +548,7 @@ export function searchOrganizations(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${ORGANIZATIONS_PATH}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -615,7 +615,7 @@ export function searchEntityTypes(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${SEARCH_ENTITY_TYPES_PATH}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -681,7 +681,7 @@ export function searchAssociationTypes(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${SEARCH_ASSOCIATION_TYPES_PATH}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -757,7 +757,7 @@ export function searchEntityTypesByFQN(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${SEARCH_ENTITY_TYPES_PATH}/${FQN_PATH}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -824,7 +824,7 @@ export function searchPropertyTypes(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${SEARCH_PROPERTY_TYPES_PATH}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -900,7 +900,7 @@ export function searchPropertyTypesByFQN(searchOptions :Object) :Promise<*> {
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${SEARCH_PROPERTY_TYPES_PATH}/${FQN_PATH}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -942,7 +942,7 @@ export function searchEntityNeighbors(entitySetId :UUID, entityKeyId :UUID) :Pro
 
   return getApiAxiosInstance(SEARCH_API)
     .get(`/${entitySetId}/${entityKeyId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -1041,7 +1041,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
 
   return getApiAxiosInstance(SEARCH_API)
     .post(`/${entitySetId}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`, data)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

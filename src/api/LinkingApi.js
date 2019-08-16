@@ -64,7 +64,7 @@ export function createLinkingEntityType(linkingEntityType :LinkingEntityType) :P
 
   return getApiAxiosInstance(LINKING_API)
     .post(`/${TYPE_PATH}`, linkingEntityType)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -113,7 +113,7 @@ export function linkEntitySets(linkingRequest :LinkingRequest) :Promise<*> {
 
   return getApiAxiosInstance(LINKING_API)
     .post('/', linkingRequest)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

@@ -101,7 +101,7 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
 
   return getApiAxiosInstance(DATA_INTEGRATION_API)
     .post('/', bulkDataCreation)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

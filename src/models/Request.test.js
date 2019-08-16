@@ -214,21 +214,21 @@ describe('Request', () => {
 
       test('should return false when given an object literal with an invalid "aclKey" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { aclKey: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { aclKey: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_DM, aclKey: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_DM, aclKey: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { permissions: invalidInput }))).toEqual(false);
-          expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { permissions: [invalidInput] }))).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_DM, permissions: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_DM, permissions: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "reason" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_REQUEST_DM, { reason: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_REQUEST_DM, reason: invalidInput })).toEqual(false);
         });
       });
 

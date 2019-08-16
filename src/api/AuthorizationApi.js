@@ -70,7 +70,7 @@ export function checkAuthorizations(queries :AccessCheck[]) :Promise<*> {
 
   return getApiAxiosInstance(AUTHORIZATION_API)
     .post('/', accessChecks)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -130,7 +130,7 @@ export function getAccessibleObjects(
 
   return getApiAxiosInstance(AUTHORIZATION_API)
     .get(url)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

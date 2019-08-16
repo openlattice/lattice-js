@@ -18,7 +18,7 @@ function assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, r
   return functionToTest(...functionParams)
     .then(() => {
       ['delete', 'get', 'patch', 'post', 'put', 'request']
-        .filter(fn => (fn !== axiosFunction))
+        .filter((fn) => (fn !== axiosFunction))
         .forEach((fn) => {
           expect(mockAxiosInstance[fn]).not.toHaveBeenCalled();
         });

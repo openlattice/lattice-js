@@ -41,7 +41,7 @@ export function getApps() :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get('/')
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -74,7 +74,7 @@ export function getApp(appId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${appId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -107,7 +107,7 @@ export function getAppByName(appName :string) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${LOOKUP_PATH}/${appName}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -143,7 +143,7 @@ export function getAppTypesForAppTypeIds(appTypeIds :UUID[]) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .post(`/${TYPE_PATH}/${BULK_PATH}`, appTypeIds)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -175,7 +175,7 @@ export function getConfigurations(appId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${CONFIG_PATH}/${appId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -225,7 +225,7 @@ export function installApp(appId :UUID, organizationId :UUID, prefix :string) :P
 
   return getApiAxiosInstance(APP_API)
     .get(`/${INSTALL_PATH}/${appId}/${organizationId}/${prefix}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -263,7 +263,7 @@ export function createApp(app :Object) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .post('/', app)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -303,7 +303,7 @@ export function createAppType(appType :Object) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .post(`/${TYPE_PATH}`, appType)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -336,7 +336,7 @@ export function getAppType(appTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${TYPE_PATH}/${appTypeId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -373,7 +373,7 @@ export function getAppTypeByFqn(appTypeFqn :FullyQualifiedName) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .get(`/${TYPE_PATH}/${LOOKUP_PATH}/${namespace}/${name}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -406,7 +406,7 @@ export function deleteApp(appId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .delete(`/${appId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -439,7 +439,7 @@ export function deleteAppType(appTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .delete(`/${TYPE_PATH}/${appTypeId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -482,7 +482,7 @@ export function addAppTypeToApp(appId :UUID, appTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .post(`/${UPDATE_PATH}/${appId}/${appTypeId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -525,7 +525,7 @@ export function removeAppTypeFromApp(appId :UUID, appTypeId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(APP_API)
     .delete(`/${UPDATE_PATH}/${appId}/${appTypeId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -590,7 +590,7 @@ export function updateAppEntitySetConfig(
 
   return getApiAxiosInstance(APP_API)
     .get(`/${UPDATE_PATH}/${organizationId}/${appId}/${appTypeId}/${entitySetId}`)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -654,7 +654,7 @@ export function updateAppConfigPermissions(
 
   return getApiAxiosInstance(APP_API)
     .post(`/${UPDATE_PATH}/${organizationId}/${appId}/${appTypeId}`, permissions)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -736,7 +736,7 @@ export function updateAppMetadata(appId :UUID, metadataUpdate :Object) :Promise<
 
   return getApiAxiosInstance(APP_API)
     .post(`/${UPDATE_PATH}/${appId}`, metadataUpdate)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
@@ -811,7 +811,7 @@ export function updateAppTypeMetadata(appTypeId :UUID, metadataUpdate :Object) :
 
   return getApiAxiosInstance(APP_API)
     .post(`/${TYPE_PATH}/${UPDATE_PATH}/${appTypeId}`, metadataUpdate)
-    .then(axiosResponse => axiosResponse.data)
+    .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);

@@ -137,13 +137,13 @@ describe('EntityDataKey', () => {
 
       test('should return false when given an object literal with an invalid "entityKeyId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { entityKeyId: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, entityKeyId: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "entitySetId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(Object.assign({}, MOCK_DM, { entitySetId: invalidInput }))).toEqual(false);
+          expect(isValid({ ...MOCK_DM, entitySetId: invalidInput })).toEqual(false);
         });
       });
 
