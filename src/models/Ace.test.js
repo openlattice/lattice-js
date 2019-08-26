@@ -1,41 +1,30 @@
+import { Map, Set, fromJS } from 'immutable';
+
 import Ace, { AceBuilder, isValidAce as isValid } from './Ace';
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY } from '../utils/testing/Invalid';
-import { MOCK_ACE_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ACE, genRandomAce } from '../utils/testing/MockDataModels';
 
 describe('Ace', () => {
 
   describe('AceBuilder', () => {
 
-    let builder = null;
-
-    beforeEach(() => {
-      builder = new AceBuilder();
-    });
-
-    afterEach(() => {
-      builder = null;
-    });
-
     describe('setPrincipal()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new AceBuilder()).setPrincipal();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setPrincipal(invalidInput);
+            (new AceBuilder()).setPrincipal(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setPrincipal();
-        }).toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setPrincipal(MOCK_ACE_DM.principal);
+          (new AceBuilder()).setPrincipal(MOCK_ACE.principal);
         }).not.toThrow();
       });
 
@@ -46,10 +35,10 @@ describe('Ace', () => {
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setPermissions(invalidInput);
+            (new AceBuilder()).setPermissions(invalidInput);
           }).toThrow();
           expect(() => {
-            builder.setPermissions([invalidInput]);
+            (new AceBuilder()).setPermissions([invalidInput]);
           }).toThrow();
         });
       });
@@ -57,21 +46,21 @@ describe('Ace', () => {
       test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setPermissions(Object.values(PermissionTypes).push(invalidInput));
+            (new AceBuilder()).setPermissions(Object.values(PermissionTypes).push(invalidInput));
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
-        expect(() => {
-          builder.setPermissions();
-        }).not.toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new AceBuilder()).setPermissions();
+        }).not.toThrow();
+        expect(() => {
+          (new AceBuilder()).setPermissions([]);
+        }).not.toThrow();
         Object.values(PermissionTypes).forEach((type) => {
           expect(() => {
-            builder.setPermissions([type]);
+            (new AceBuilder()).setPermissions([type]);
           }).not.toThrow();
         });
       });
@@ -89,24 +78,24 @@ describe('Ace', () => {
 
       test('should set required properties that are allowed to be empty', () => {
 
-        const ace = builder.setPrincipal(MOCK_ACE_DM.principal).build();
+        const ace = (new AceBuilder()).setPrincipal(MOCK_ACE.principal).build();
         expect(ace.permissions).toEqual([]);
       });
 
       test('should return a valid instance', () => {
 
-        const ace = builder
-          .setPrincipal(MOCK_ACE_DM.principal)
-          .setPermissions(MOCK_ACE_DM.permissions)
+        const ace = (new AceBuilder())
+          .setPrincipal(MOCK_ACE.principal)
+          .setPermissions(MOCK_ACE.permissions)
           .build();
 
         expect(ace).toBeInstanceOf(Ace);
 
-        expect(ace.principal).toBeDefined();
-        expect(ace.principal).toEqual(MOCK_ACE_DM.principal);
-
         expect(ace.permissions).toBeDefined();
-        expect(ace.permissions).toEqual(MOCK_ACE_DM.permissions);
+        expect(ace.principal).toBeDefined();
+
+        expect(ace.permissions).toEqual(MOCK_ACE.permissions);
+        expect(ace.principal).toEqual(MOCK_ACE.principal);
       });
 
     });
@@ -118,13 +107,14 @@ describe('Ace', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACE_DM)).toEqual(true);
+        expect(isValid(MOCK_ACE)).toEqual(true);
       });
 
       test('should return true when given a valid object instance ', () => {
         expect(isValid(
           new Ace(
-            MOCK_ACE_DM.principal, MOCK_ACE_DM.permissions
+            MOCK_ACE.principal,
+            MOCK_ACE.permissions,
           )
         )).toEqual(true);
       });
@@ -132,8 +122,8 @@ describe('Ace', () => {
       test('should return true when given an instance constructed by the builder', () => {
 
         const ace = (new AceBuilder())
-          .setPrincipal(MOCK_ACE_DM.principal)
-          .setPermissions(MOCK_ACE_DM.permissions)
+          .setPrincipal(MOCK_ACE.principal)
+          .setPermissions(MOCK_ACE.permissions)
           .build();
 
         expect(isValid(ace)).toEqual(true);
@@ -155,14 +145,14 @@ describe('Ace', () => {
 
       test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACE_DM, principal: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACE, principal: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACE_DM, permissions: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ACE_DM, permissions: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ACE, permissions: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACE, permissions: [invalidInput] })).toEqual(false);
         });
       });
 
@@ -170,7 +160,8 @@ describe('Ace', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
-              invalidInput, MOCK_ACE_DM.permissions
+              invalidInput,
+              MOCK_ACE.permissions,
             )
           )).toEqual(false);
         });
@@ -180,17 +171,87 @@ describe('Ace', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Ace(
-              MOCK_ACE_DM.principal, invalidInput
+              MOCK_ACE.principal,
+              invalidInput,
             )
           )).toEqual(false);
           expect(isValid(
             new Ace(
-              MOCK_ACE_DM.principal, [invalidInput]
+              MOCK_ACE.principal,
+              [invalidInput],
             )
           )).toEqual(false);
         });
       });
 
+    });
+
+  });
+
+  describe('equality', () => {
+
+    test('valueOf()', () => {
+      const ace = new Ace(
+        MOCK_ACE.principal,
+        MOCK_ACE.permissions,
+      );
+      expect(ace.valueOf()).toEqual(
+        fromJS({
+          permissions: MOCK_ACE.permissions,
+          principal: MOCK_ACE.principal.toObject(),
+        }).hashCode()
+      );
+    });
+
+    test('Immutable.Set', () => {
+
+      const randomAce = genRandomAce();
+      const ace0 = new Ace(
+        MOCK_ACE.principal,
+        MOCK_ACE.permissions,
+      );
+      const ace1 = new Ace(
+        MOCK_ACE.principal,
+        MOCK_ACE.permissions,
+      );
+
+      const testSet = Set()
+        .add(ace0)
+        .add(randomAce)
+        .add(ace1);
+
+      expect(testSet.size).toEqual(2);
+      expect(testSet.count()).toEqual(2);
+
+      expect(testSet.first().permissions).toEqual(MOCK_ACE.permissions);
+      expect(testSet.first().principal).toEqual(MOCK_ACE.principal);
+
+      expect(testSet.last().permissions).toEqual(randomAce.permissions);
+      expect(testSet.last().principal).toEqual(randomAce.principal);
+    });
+
+    test('Immutable.Map', () => {
+
+      const randomAce = genRandomAce();
+      const ace0 = new Ace(
+        MOCK_ACE.principal,
+        MOCK_ACE.permissions,
+      );
+      const ace1 = new Ace(
+        MOCK_ACE.principal,
+        MOCK_ACE.permissions,
+      );
+
+      const testMap = Map()
+        .set(ace0, 'test_value_1')
+        .set(randomAce, 'test_value_2')
+        .set(ace1, 'test_value_3');
+
+      expect(testMap.size).toEqual(2);
+      expect(testMap.count()).toEqual(2);
+      expect(testMap.get(ace0)).toEqual('test_value_3');
+      expect(testMap.get(randomAce)).toEqual('test_value_2');
+      expect(testMap.get(ace1)).toEqual('test_value_3');
     });
 
   });

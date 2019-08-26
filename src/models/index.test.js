@@ -1,4 +1,4 @@
-import { OrderedSet, Set } from 'immutable';
+import { Set } from 'immutable';
 
 import * as Models from './index';
 
@@ -48,14 +48,24 @@ const EXPECTED_MODELS = Set([
   'Role',
   'RoleBuilder',
   'Schema',
-  'SchemaBuilder'
-]).sort();
+  'SchemaBuilder',
+  'isValidAce',
+  'isValidAceArray',
+  'isValidAcl',
+  'isValidAclArray',
+  'isValidAclData',
+  'isValidAclDataArray',
+  'isValidOrganization',
+  'isValidPrincipal',
+  'isValidPrincipalArray',
+  'isValidRole',
+]);
 /* eslint-enable */
 
 describe('Lattice.Models', () => {
 
   test('should only export expected models', () => {
-    expect(OrderedSet(Object.keys(Models))).toEqual(EXPECTED_MODELS);
+    expect(Set(Object.keys(Models))).toEqual(EXPECTED_MODELS);
   });
 
   EXPECTED_MODELS.forEach((model) => {

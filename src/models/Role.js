@@ -193,7 +193,6 @@ export class RoleBuilder {
 export function isValidRole(role :any) :boolean {
 
   if (!isDefined(role)) {
-
     LOG.error('invalid parameter: role must be defined', role);
     return false;
   }
@@ -223,8 +222,7 @@ export function isValidRole(role :any) :boolean {
     return true;
   }
   catch (e) {
-
-    LOG.error(e, role);
+    LOG.error(`invalid Role: ${e.message}`, role);
     return false;
   }
 }

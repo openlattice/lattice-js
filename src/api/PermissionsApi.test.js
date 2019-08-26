@@ -4,7 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as PermissionsApi from './PermissionsApi';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ACL_KEY, MOCK_ACL_DATA_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ACL_KEY, MOCK_ACL_DATA } from '../utils/testing/MockDataModels';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
@@ -61,9 +61,9 @@ function testUpdateAcl() {
 
     const functionToTest = PermissionsApi.updateAcl;
 
-    const validParams = [MOCK_ACL_DATA_DM];
+    const validParams = [MOCK_ACL_DATA];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = ['/', MOCK_ACL_DATA_DM];
+    const axiosParams = ['/', MOCK_ACL_DATA];
 
     testApiShouldReturnPromise(functionToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PERMISSIONS_API);
