@@ -20,12 +20,32 @@
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
-import Organization, { isValidOrganization } from '../models/Organization';
-import Role, { isValidRole } from '../models/Role';
+import * as PermissionsApi from './PermissionsApi';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
 import { isValidUuid } from '../utils/ValidationUtils';
+
+import {
+  Ace,
+  AceBuilder,
+  Acl,
+  AclBuilder,
+  AclData,
+  AclDataBuilder,
+  Organization,
+  Principal,
+  PrincipalBuilder,
+  Role,
+  isValidOrganization,
+  isValidRole,
+} from '../models';
+
+import {
+  ActionTypes,
+  PermissionTypes,
+  PrincipalTypes,
+} from '../constants/types';
 
 import {
   ASSEMBLE_PATH,
@@ -40,6 +60,8 @@ import {
   SYNCHRONIZE_PATH,
   TITLE_PATH
 } from '../constants/UrlConstants';
+
+import type { ActionType } from '../constants/types';
 
 const LOG = new Logger('OrganizationsApi');
 
@@ -1247,4 +1269,93 @@ export function refreshDataChanges(organizationId :UUID, entitySetId :UUID) :Pro
       LOG.error(error);
       return Promise.reject(error);
     });
+}
+
+function updateTrustForOrganization(organizationId :UUID, principalId :string, action :ActionType) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(principalId)) {
+    errorMsg = 'invalid parameter: principalId must be a non-empty string';
+    LOG.error(errorMsg, principalId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(action) || !ActionTypes[action]) {
+    errorMsg = 'invalid parameter: action must be a valid ActionType';
+    LOG.error(errorMsg, action);
+    return Promise.reject(errorMsg);
+  }
+
+  const principal :Principal = (new PrincipalBuilder())
+    .setId(principalId)
+    .setType(PrincipalTypes.ORGANIZATION)
+    .build();
+
+  const ace :Ace = (new AceBuilder())
+    .setPermissions([PermissionTypes.READ])
+    .setPrincipal(principal)
+    .build();
+
+  const acl :Acl = (new AclBuilder())
+    .setAclKey([organizationId])
+    .setAces([ace])
+    .build();
+
+  const acldata :AclData = (new AclDataBuilder())
+    .setAction(action)
+    .setAcl(acl)
+    .build();
+
+  return PermissionsApi.updateAcl(acldata);
+}
+
+/**
+ * `PATCH /permissions`
+ *
+ * Grants trust between organizations by adding READ permission on the organization Principal.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} trustedPrincipalId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.grantTrustToOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "trustedPrincipalId"
+ * );
+ */
+export function grantTrustToOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
+
+  return updateTrustForOrganization(organizationId, trustedPrincipalId, ActionTypes.ADD);
+}
+
+/**
+ * `PATCH /permissions`
+ *
+ * Revokes trust between organizations by removing READ permission on the organization Principal.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} trustedPrincipalId
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.revokeTrustFromOrganization(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "trustedPrincipalId"
+ * );
+ */
+export function revokeTrustFromOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
+
+  return updateTrustForOrganization(organizationId, trustedPrincipalId, ActionTypes.REMOVE);
 }
