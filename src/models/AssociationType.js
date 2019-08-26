@@ -186,7 +186,6 @@ export class AssociationTypeBuilder {
 export function isValidAssociationType(associationType :any) :boolean {
 
   if (!isDefined(associationType)) {
-
     LOG.error('invalid parameter: associationType must be defined', associationType);
     return false;
   }
@@ -218,8 +217,7 @@ export function isValidAssociationType(associationType :any) :boolean {
     return true;
   }
   catch (e) {
-
-    LOG.error(e, associationType);
+    LOG.error(`invalid AssociationType: ${e.message}`, associationType);
     return false;
   }
 }

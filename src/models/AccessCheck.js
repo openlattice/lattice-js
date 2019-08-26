@@ -115,13 +115,11 @@ export class AccessCheckBuilder {
 export function isValidAccessCheck(accessCheck :any) :boolean {
 
   if (!isDefined(accessCheck)) {
-
     LOG.error('invalid parameter: accessCheck must be defined', accessCheck);
     return false;
   }
 
   if (!has(accessCheck, 'aclKey') || !has(accessCheck, 'permissions')) {
-
     LOG.error('missing properties: accessCheck is missing required properties');
     return false;
   }
@@ -136,8 +134,7 @@ export function isValidAccessCheck(accessCheck :any) :boolean {
     return true;
   }
   catch (e) {
-
-    LOG.error(e, accessCheck);
+    LOG.error(`invalid AccessCheck: ${e.message}`, accessCheck);
     return false;
   }
 }

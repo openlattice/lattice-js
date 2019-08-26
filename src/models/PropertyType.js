@@ -379,7 +379,6 @@ export class PropertyTypeBuilder {
 export function isValidPropertyType(propertyType :?PropertyType | PropertyTypeObject) :boolean {
 
   if (!isDefined(propertyType)) {
-
     LOG.error('invalid parameter: propertyType must be defined', propertyType);
     return false;
   }
@@ -428,8 +427,7 @@ export function isValidPropertyType(propertyType :?PropertyType | PropertyTypeOb
     return true;
   }
   catch (e) {
-
-    LOG.error(e, propertyType);
+    LOG.error(`invalid PropertyType: ${e.message}`, propertyType);
     return false;
   }
 }

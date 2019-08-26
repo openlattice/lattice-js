@@ -1,41 +1,30 @@
+import { Map, Set, fromJS } from 'immutable';
+
 import AclData, { AclDataBuilder, isValidAclData as isValid } from './AclData';
 import { ActionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ACL_DATA_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ACL_DATA, genRandomAclData } from '../utils/testing/MockDataModels';
 
 describe('AclData', () => {
 
   describe('AclDataBuilder', () => {
 
-    let builder = null;
-
-    beforeEach(() => {
-      builder = new AclDataBuilder();
-    });
-
-    afterEach(() => {
-      builder = null;
-    });
-
     describe('setAcl()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new AclDataBuilder()).setAcl();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setAcl(invalidInput);
+            (new AclDataBuilder()).setAcl(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setAcl();
-        }).toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setAcl(MOCK_ACL_DATA_DM.acl);
+          (new AclDataBuilder()).setAcl(MOCK_ACL_DATA.acl);
         }).not.toThrow();
       });
 
@@ -44,23 +33,20 @@ describe('AclData', () => {
     describe('setAction()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new AclDataBuilder()).setAction();
+        }).toThrow();
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
-            builder.setAction(invalidInput);
+            (new AclDataBuilder()).setAction(invalidInput);
           }).toThrow();
         });
-      });
-
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setAction();
-        }).toThrow();
       });
 
       test('should not throw when given valid parameters', () => {
         Object.values(ActionTypes).forEach((type) => {
           expect(() => {
-            builder.setAction(type);
+            (new AclDataBuilder()).setAction(type);
           }).not.toThrow();
         });
       });
@@ -73,31 +59,31 @@ describe('AclData', () => {
 
         expect(() => {
           (new AclDataBuilder())
-            .setAcl(MOCK_ACL_DATA_DM.acl)
+            .setAcl(MOCK_ACL_DATA.acl)
             .build();
         }).toThrow();
 
         expect(() => {
           (new AclDataBuilder())
-            .setAction(MOCK_ACL_DATA_DM.action)
+            .setAction(MOCK_ACL_DATA.action)
             .build();
         }).toThrow();
       });
 
       test('should return a valid instance', () => {
 
-        const acl = builder
-          .setAcl(MOCK_ACL_DATA_DM.acl)
-          .setAction(MOCK_ACL_DATA_DM.action)
+        const acl = (new AclDataBuilder())
+          .setAcl(MOCK_ACL_DATA.acl)
+          .setAction(MOCK_ACL_DATA.action)
           .build();
 
         expect(acl).toBeInstanceOf(AclData);
 
         expect(acl.acl).toBeDefined();
-        expect(acl.acl).toEqual(MOCK_ACL_DATA_DM.acl);
-
         expect(acl.action).toBeDefined();
-        expect(acl.action).toEqual(MOCK_ACL_DATA_DM.action);
+
+        expect(acl.acl).toEqual(MOCK_ACL_DATA.acl);
+        expect(acl.action).toEqual(MOCK_ACL_DATA.action);
       });
 
     });
@@ -109,13 +95,14 @@ describe('AclData', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACL_DATA_DM)).toEqual(true);
+        expect(isValid(MOCK_ACL_DATA)).toEqual(true);
       });
 
       test('should return true when given a valid instance ', () => {
         expect(isValid(
           new AclData(
-            MOCK_ACL_DATA_DM.acl, MOCK_ACL_DATA_DM.action
+            MOCK_ACL_DATA.acl,
+            MOCK_ACL_DATA.action,
           )
         )).toEqual(true);
       });
@@ -123,8 +110,8 @@ describe('AclData', () => {
       test('should return true when given an instance constructed by the builder', () => {
 
         const acl = (new AclDataBuilder())
-          .setAcl(MOCK_ACL_DATA_DM.acl)
-          .setAction(MOCK_ACL_DATA_DM.action)
+          .setAcl(MOCK_ACL_DATA.acl)
+          .setAction(MOCK_ACL_DATA.action)
           .build();
 
         expect(isValid(acl)).toEqual(true);
@@ -146,13 +133,13 @@ describe('AclData', () => {
 
       test('should return false when given an object literal with an invalid "acl" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACL_DATA_DM, acl: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DATA, acl: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "action" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACL_DATA_DM, action: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_DATA, action: invalidInput })).toEqual(false);
         });
       });
 
@@ -160,7 +147,8 @@ describe('AclData', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new AclData(
-              invalidInput, MOCK_ACL_DATA_DM.action
+              invalidInput,
+              MOCK_ACL_DATA.action,
             )
           )).toEqual(false);
         });
@@ -170,12 +158,81 @@ describe('AclData', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
             new AclData(
-              MOCK_ACL_DATA_DM.acl, invalidInput
+              MOCK_ACL_DATA.acl,
+              invalidInput,
             )
           )).toEqual(false);
         });
       });
 
+    });
+
+  });
+
+  describe('equality', () => {
+
+    test('valueOf()', () => {
+      const aclData = new AclData(
+        MOCK_ACL_DATA.acl,
+        MOCK_ACL_DATA.action,
+      );
+      expect(aclData.valueOf()).toEqual(
+        fromJS({
+          acl: MOCK_ACL_DATA.acl.toObject(),
+          action: MOCK_ACL_DATA.action,
+        }).hashCode()
+      );
+    });
+
+    test('Immutable.Set', () => {
+
+      const randomAclData = genRandomAclData();
+      const aclData0 = new AclData(
+        MOCK_ACL_DATA.acl,
+        MOCK_ACL_DATA.action,
+      );
+      const aclData1 = new AclData(
+        MOCK_ACL_DATA.acl,
+        MOCK_ACL_DATA.action,
+      );
+
+      const testSet = Set()
+        .add(aclData0)
+        .add(randomAclData)
+        .add(aclData1);
+
+      expect(testSet.size).toEqual(2);
+      expect(testSet.count()).toEqual(2);
+
+      expect(testSet.first().acl).toEqual(MOCK_ACL_DATA.acl);
+      expect(testSet.first().action).toEqual(MOCK_ACL_DATA.action);
+
+      expect(testSet.last().acl).toEqual(randomAclData.acl);
+      expect(testSet.last().action).toEqual(randomAclData.action);
+    });
+
+    test('Immutable.Map', () => {
+
+      const randomAclData = genRandomAclData();
+      const aclData0 = new AclData(
+        MOCK_ACL_DATA.acl,
+        MOCK_ACL_DATA.action,
+      );
+      const aclData1 = new AclData(
+        MOCK_ACL_DATA.acl,
+        MOCK_ACL_DATA.action,
+      );
+
+      const testMap = Map()
+        .set(aclData0, 'test_value_1')
+        .set(randomAclData, 'test_value_2')
+        .set(aclData1, 'test_value_3');
+
+      expect(testMap.size).toEqual(2);
+      expect(testMap.count()).toEqual(2);
+      expect(testMap.get(aclData0)).toEqual('test_value_3');
+      expect(testMap.get(randomAclData)).toEqual('test_value_2');
+      expect(testMap.get(aclData1)).toEqual('test_value_3');
     });
 
   });

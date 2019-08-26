@@ -1,4 +1,5 @@
 import { Map, Set, fromJS } from 'immutable';
+
 import Principal, { PrincipalBuilder, isValidPrincipal as isValid } from './Principal';
 import { PrincipalTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
@@ -78,11 +79,11 @@ describe('Principal', () => {
 
         expect(principal).toBeInstanceOf(Principal);
 
-        expect(principal.type).toBeDefined();
-        expect(principal.type).toEqual(MOCK_PRINCIPAL.type);
-
         expect(principal.id).toBeDefined();
+        expect(principal.type).toBeDefined();
+
         expect(principal.id).toEqual(MOCK_PRINCIPAL.id);
+        expect(principal.type).toEqual(MOCK_PRINCIPAL.type);
       });
 
     });

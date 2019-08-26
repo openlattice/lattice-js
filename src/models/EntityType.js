@@ -397,7 +397,6 @@ export class EntityTypeBuilder {
 export function isValidEntityType(entityType :?EntityType | EntityTypeObject) :boolean {
 
   if (!isDefined(entityType)) {
-
     LOG.error('invalid parameter: entityType must be defined', entityType);
     return false;
   }
@@ -443,8 +442,7 @@ export function isValidEntityType(entityType :?EntityType | EntityTypeObject) :b
     return true;
   }
   catch (e) {
-
-    LOG.error(e, entityType);
+    LOG.error(`invalid EntityType: ${e.message}`, entityType);
     return false;
   }
 }
