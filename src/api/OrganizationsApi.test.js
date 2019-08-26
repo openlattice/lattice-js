@@ -2,7 +2,7 @@
 
 import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
-import { ORGANIZATIONS_API } from '../constants/ApiNames';
+import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import { MOCK_ORGANIZATION_DM, MOCK_ROLE_DM } from '../utils/testing/MockDataModels';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
@@ -13,8 +13,21 @@ import {
   MEMBERS_PATH,
   PRINCIPALS_PATH,
   ROLES_PATH,
-  TITLE_PATH
+  TITLE_PATH,
 } from '../constants/UrlConstants';
+
+import {
+  ActionTypes,
+  PermissionTypes,
+  PrincipalTypes,
+} from '../constants/types';
+
+import {
+  AceBuilder,
+  AclBuilder,
+  AclDataBuilder,
+  PrincipalBuilder,
+} from '../models';
 
 import {
   testApiShouldNotThrowOnInvalidParameters,
@@ -71,6 +84,8 @@ describe('OrganizationsApi', () => {
   testGetAllMembers();
   testAddMemberToOrganization();
   testRemoveMemberFromOrganization();
+  testGrantTrustToOrganization();
+  testRevokeTrustFromOrganization();
 });
 
 function testGetOrganization() {
@@ -532,5 +547,81 @@ function testRemoveMemberFromOrganization() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+  });
+}
+
+function testGrantTrustToOrganization() {
+
+  describe('grantTrustToOrganization()', () => {
+
+    const fnToTest = OrganizationsApi.grantTrustToOrganization;
+
+    const mockPrincipal = (new PrincipalBuilder())
+      .setId('justbeamit')
+      .setType(PrincipalTypes.ORGANIZATION)
+      .build();
+
+    const mockAce = (new AceBuilder())
+      .setPermissions([PermissionTypes.READ])
+      .setPrincipal(mockPrincipal)
+      .build();
+
+    const mockAcl = (new AclBuilder())
+      .setAclKey([MOCK_ORGANIZATION_DM.id])
+      .setAces([mockAce])
+      .build();
+
+    const mockAclData = (new AclDataBuilder())
+      .setAction(ActionTypes.ADD)
+      .setAcl(mockAcl)
+      .build();
+
+    const validParams = [MOCK_ORGANIZATION_DM.id, mockPrincipal.id];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = ['/', mockAclData];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
+  });
+}
+
+function testRevokeTrustFromOrganization() {
+
+  describe('revokeTrustFromOrganization()', () => {
+
+    const fnToTest = OrganizationsApi.revokeTrustFromOrganization;
+
+    const mockPrincipal = (new PrincipalBuilder())
+      .setId('justbeamit')
+      .setType(PrincipalTypes.ORGANIZATION)
+      .build();
+
+    const mockAce = (new AceBuilder())
+      .setPermissions([PermissionTypes.READ])
+      .setPrincipal(mockPrincipal)
+      .build();
+
+    const mockAcl = (new AclBuilder())
+      .setAclKey([MOCK_ORGANIZATION_DM.id])
+      .setAces([mockAce])
+      .build();
+
+    const mockAclData = (new AclDataBuilder())
+      .setAction(ActionTypes.REMOVE)
+      .setAcl(mockAcl)
+      .build();
+
+    const validParams = [MOCK_ORGANIZATION_DM.id, mockPrincipal.id];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = ['/', mockAclData];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
   });
 }

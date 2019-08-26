@@ -9,6 +9,7 @@ import {
   pickRandomValue,
 } from './MockUtils';
 import {
+  ActionTypes,
   AnalyzerTypes,
   IndexTypes,
   PermissionTypes,
@@ -19,6 +20,12 @@ import {
 import {
   AccessCheck,
   AccessCheckBuilder,
+  Ace,
+  AceBuilder,
+  Acl,
+  AclBuilder,
+  AclData,
+  AclDataBuilder,
   AssociationType,
   AssociationTypeBuilder,
   EntityType,
@@ -44,21 +51,6 @@ const MOCK_ACL_KEY :string[] = [
 const MOCK_FQN :Object = {
   namespace: 'LATTICE',
   name: 'Data'
-};
-
-const MOCK_ACE_DM :Object = {
-  principal: { type: 'USER', id: 'principalId' },
-  permissions: ['READ']
-};
-
-const MOCK_ACL_DM :Object = {
-  aclKey: MOCK_ACL_KEY,
-  aces: [MOCK_ACE_DM]
-};
-
-const MOCK_ACL_DATA_DM :Object = {
-  acl: MOCK_ACL_DM,
-  action: 'ADD'
 };
 
 const MOCK_APP_DM :Object = {
@@ -385,7 +377,7 @@ function genRandomDataGraph() :Object {
   };
 }
 
-const MOCK_ACCESS_CHECK :AccessCheck = new AccessCheckBuilder()
+const MOCK_ACCESS_CHECK :AccessCheck = (new AccessCheckBuilder())
   .setAclKey(MOCK_ACL_KEY)
   .setPermissions([PermissionTypes.READ])
   .build();
@@ -397,11 +389,47 @@ function genRandomAccessCheck() :AccessCheck {
     .build();
 }
 
+const MOCK_ACE :Ace = (new AceBuilder())
+  .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
+  .setPrincipal(MOCK_PRINCIPAL)
+  .build();
+
+function genRandomAce() :Ace {
+  return new AceBuilder()
+    .setPermissions([pickRandomValue(PermissionTypes)])
+    .setPrincipal(genRandomPrincipal())
+    .build();
+}
+
+const MOCK_ACL :Acl = (new AclBuilder())
+  .setAces([MOCK_ACE])
+  .setAclKey(MOCK_ACL_KEY)
+  .build();
+
+function genRandomAcl() :Acl {
+  return new AclBuilder()
+    .setAces([genRandomAce(), genRandomAce()])
+    .setAclKey([genRandomUUID(), genRandomUUID()])
+    .build();
+}
+
+const MOCK_ACL_DATA :AclData = (new AclDataBuilder())
+  .setAcl(MOCK_ACL)
+  .setAction(ActionTypes.ADD)
+  .build();
+
+function genRandomAclData() :AclData {
+  return new AclDataBuilder()
+    .setAcl(genRandomAcl())
+    .setAction(pickRandomValue(ActionTypes))
+    .build();
+}
+
 export {
   MOCK_ACCESS_CHECK,
-  MOCK_ACE_DM,
-  MOCK_ACL_DATA_DM,
-  MOCK_ACL_DM,
+  MOCK_ACE,
+  MOCK_ACL_DATA,
+  MOCK_ACL,
   MOCK_ACL_KEY,
   MOCK_APP_DM,
   MOCK_APP_TYPE_DM,
@@ -428,6 +456,9 @@ export {
   MOCK_ROLE_DM,
   MOCK_SCHEMA,
   genRandomAccessCheck,
+  genRandomAce,
+  genRandomAcl,
+  genRandomAclData,
   genRandomAssociationType,
   genRandomDataGraph,
   genRandomEntityType,

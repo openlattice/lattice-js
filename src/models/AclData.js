@@ -2,14 +2,24 @@
  * @flow
  */
 
+import has from 'lodash/has';
+import { Map, fromJS } from 'immutable';
+
 import ActionTypes from '../constants/types/ActionTypes';
 import Logger from '../utils/Logger';
 import Acl, { isValidAcl } from './Acl';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
+import { validateNonEmptyArray } from '../utils/ValidationUtils';
 
+import type { AclObject } from './Acl';
 import type { ActionType } from '../constants/types/ActionTypes';
 
 const LOG = new Logger('AclData');
+
+type AclDataObject = {|
+  acl :AclObject;
+  action :ActionType;
+|};
 
 /**
  * @class AclData
@@ -24,6 +34,26 @@ export default class AclData {
 
     this.acl = acl;
     this.action = action;
+  }
+
+  toImmutable() :Map<*, *> {
+
+    return fromJS(this.toObject());
+  }
+
+  toObject() :AclDataObject {
+
+    const aclDataObj :AclDataObject = {
+      acl: this.acl.toObject(),
+      action: this.action,
+    };
+
+    return aclDataObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -49,7 +79,7 @@ export class AclDataBuilder {
   setAction(action :ActionType) :AclDataBuilder {
 
     if (!isNonEmptyString(action) || !ActionTypes[action]) {
-      throw new Error('invalid parameter: action must be a valid Action');
+      throw new Error('invalid parameter: action must be a valid ActionType');
     }
 
     this.action = action;
@@ -73,8 +103,12 @@ export class AclDataBuilder {
 export function isValidAclData(aclData :any) :boolean {
 
   if (!isDefined(aclData)) {
-
     LOG.error('invalid parameter: aclData must be defined', aclData);
+    return false;
+  }
+
+  if (!has(aclData, 'acl') || !has(aclData, 'action')) {
+    LOG.error('invalid parameter: aclData is missing required properties');
     return false;
   }
 
@@ -88,8 +122,16 @@ export function isValidAclData(aclData :any) :boolean {
     return true;
   }
   catch (e) {
-
-    LOG.error(e, aclData);
+    LOG.error(`invalid AclData: ${e.message}`, aclData);
     return false;
   }
 }
+
+export function isValidAclDataArray(values :any[]) :boolean {
+
+  return validateNonEmptyArray(values, (value :any) => isValidAclData(value));
+}
+
+export type {
+  AclDataObject,
+};

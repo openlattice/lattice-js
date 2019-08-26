@@ -66,7 +66,7 @@ export class PrincipalBuilder {
   setId(id :string) :PrincipalBuilder {
 
     if (!isNonEmptyString(id)) {
-      throw new Error('invalid parameter: type must be a non-empty string');
+      throw new Error('invalid parameter: id must be a non-empty string');
     }
 
     this.id = id;
@@ -76,7 +76,7 @@ export class PrincipalBuilder {
   setType(type :PrincipalType) :PrincipalBuilder {
 
     if (!isNonEmptyString(type) || !PrincipalTypes[type]) {
-      throw new Error('invalid parameter: type must be a non-empty string');
+      throw new Error('invalid parameter: type must be a valid PrincipalType');
     }
 
     this.type = type;
@@ -100,8 +100,7 @@ export class PrincipalBuilder {
 export function isValidPrincipal(principal :any) :boolean {
 
   if (!isDefined(principal)) {
-
-    LOG.error('invalid parameter: principal must be defined', principal);
+    LOG.error('invalid principal: principal must be defined', principal);
     return false;
   }
 
@@ -115,8 +114,7 @@ export function isValidPrincipal(principal :any) :boolean {
     return true;
   }
   catch (e) {
-
-    LOG.error(e, principal);
+    LOG.error(`invalid Principal: ${e.message}`, principal);
     return false;
   }
 }
