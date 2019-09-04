@@ -119,9 +119,9 @@ export function isValidPrincipal(principal :any) :boolean {
   }
 }
 
-export function isValidPrincipalArray(principals :Principal[]) :boolean {
+export function isValidPrincipalArray(principals :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(principals, (principal :Principal) => isValidPrincipal(principal));
+  return validateNonEmptyArray(principals, isValidPrincipal);
 }
 
 export type {

@@ -3,25 +3,43 @@
  */
 
 import has from 'lodash/has';
-import { Set } from 'immutable';
+import isFinite from 'lodash/isFinite';
+import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import Principal, { isValidPrincipal, isValidPrincipalArray } from './Principal';
+import Role, { isValidRoleArray } from './Role';
 
 import {
   isDefined,
   isEmptyArray,
   isEmptyString,
   isNonEmptyString,
-  isNonEmptyStringArray
+  isNonEmptyStringArray,
 } from '../utils/LangUtils';
 
 import {
   isValidUuid,
-  isValidUuidArray
+  isValidUuidArray,
+  validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
+import type { PrincipalObject } from './Principal';
+import type { RoleObject } from './Role';
+
 const LOG = new Logger('Organization');
+
+type OrganizationObject = {|
+  apps :UUID[];
+  description ?:string;
+  emails :string[];
+  id ?:UUID;
+  members :PrincipalObject[];
+  partitions ?:number[];
+  principal :PrincipalObject;
+  roles :RoleObject[];
+  title :string;
+|};
 
 /**
  * @class Organization
@@ -29,14 +47,15 @@ const LOG = new Logger('Organization');
  */
 export default class Organization {
 
-  id :?UUID;
-  title :string;
-  description :?string;
-  principal :Principal;
-  members :Principal[];
-  roles :Principal[];
-  emails :string[];
   apps :UUID[];
+  description :?string;
+  emails :string[];
+  id :?UUID;
+  members :Principal[];
+  partitions :?number[];
+  principal :Principal;
+  roles :Role[];
+  title :string;
 
   constructor(
     id :?UUID,
@@ -44,27 +63,70 @@ export default class Organization {
     description :?string,
     principal :Principal,
     members :Principal[],
-    roles :Principal[],
+    roles :Role[],
     emails :string[],
-    apps :UUID[]
+    apps :UUID[],
+    partitions :?number[],
   ) {
 
     // required properties
-    this.title = title;
-    this.principal = principal;
-    this.members = members;
-    this.roles = roles;
-    this.emails = emails;
     this.apps = apps;
+    this.emails = emails;
+    this.members = members;
+    this.principal = principal;
+    this.roles = roles;
+    this.title = title;
 
     // optional properties
+    if (isDefined(description)) {
+      this.description = description;
+    }
+
     if (isDefined(id)) {
       this.id = id;
     }
 
-    if (isDefined(description)) {
-      this.description = description;
+    if (isDefined(partitions)) {
+      this.partitions = partitions;
     }
+  }
+
+  toImmutable() :Map<*, *> {
+
+    return fromJS(this.toObject());
+  }
+
+  toObject() :OrganizationObject {
+
+    // required properties
+    const orgObj :OrganizationObject = {
+      apps: this.apps,
+      emails: this.emails,
+      members: this.members.map((p :Principal) => p.toObject()),
+      principal: this.principal.toObject(),
+      roles: this.roles.map((r :Role) => r.toObject()),
+      title: this.title,
+    };
+
+    // optional properties
+    if (isDefined(this.description)) {
+      orgObj.description = this.description;
+    }
+
+    if (isDefined(this.id)) {
+      orgObj.id = this.id;
+    }
+
+    if (isDefined(this.partitions)) {
+      orgObj.partitions = this.partitions;
+    }
+
+    return orgObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -74,17 +136,20 @@ export default class Organization {
  */
 export class OrganizationBuilder {
 
-  id :?UUID;
-  title :string;
-  description :?string;
-  principal :Principal;
-  members :Principal[];
-  roles :Principal[];
-  emails :string[];
   apps :UUID[];
+  description :?string;
+  emails :string[];
+  id :?UUID;
+  members :Principal[];
+  partitions :?number[];
+  principal :Principal;
+  roles :Role[];
+  title :string;
 
   setId(id :?UUID) :OrganizationBuilder {
 
+    // NOTE: I remember having to add these checks, but I don't remember why...
+    // why would it be ok to call .setId() or .setId('') on purpose?
     if (!isDefined(id) || isEmptyString(id)) {
       return this;
     }
@@ -109,7 +174,8 @@ export class OrganizationBuilder {
 
   setDescription(description :?string) :OrganizationBuilder {
 
-
+    // NOTE: I remember having to add these checks, but I don't remember why...
+    // why would it be ok to call .setDescription() or .setDescription('') on purpose?
     if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
@@ -132,8 +198,10 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setMembers(members :Principal[]) :OrganizationBuilder {
+  setMembers(members :$ReadOnlyArray<Principal | PrincipalObject>) :OrganizationBuilder {
 
+    // NOTE: I remember having to add these checks, but I don't remember why...
+    // why would it be ok to call .setMembers() or .setMembers([]) on purpose?
     if (!isDefined(members) || isEmptyArray(members)) {
       return this;
     }
@@ -143,7 +211,7 @@ export class OrganizationBuilder {
     }
 
     this.members = Set().withMutations((set :Set<Principal>) => {
-      members.forEach((member :Principal) => {
+      members.forEach((member :Principal | PrincipalObject) => {
         set.add(member);
       });
     }).toJS();
@@ -151,18 +219,20 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setRoles(roles :Principal[]) :OrganizationBuilder {
+  setRoles(roles :$ReadOnlyArray<Role | RoleObject>) :OrganizationBuilder {
 
+    // NOTE: I remember having to add these checks, but I don't remember why...
+    // why would it be ok to call .setRoles() or .setRoles([]) on purpose?
     if (!isDefined(roles) || isEmptyArray(roles)) {
       return this;
     }
 
-    if (!isValidPrincipalArray(roles)) {
-      throw new Error('invalid parameter: roles must be a non-empty array of valid Principals');
+    if (!isValidRoleArray(roles)) {
+      throw new Error('invalid parameter: roles must be a non-empty array of valid Roles');
     }
 
-    this.roles = Set().withMutations((set :Set<Principal>) => {
-      roles.forEach((role :Principal) => {
+    this.roles = Set().withMutations((set :Set<Role>) => {
+      roles.forEach((role :Role | RoleObject) => {
         set.add(role);
       });
     }).toJS();
@@ -170,8 +240,10 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setAutoApprovedEmails(emails :string[]) :OrganizationBuilder {
+  setAutoApprovedEmails(emails :$ReadOnlyArray<string>) :OrganizationBuilder {
 
+    // NOTE: I remember having to add these checks, but I don't remember why...
+    // why would it be ok to call .setAutoApprovedEmails() or .setAutoApprovedEmails([]) on purpose?
     if (!isDefined(emails) || isEmptyArray(emails)) {
       return this;
     }
@@ -180,7 +252,7 @@ export class OrganizationBuilder {
       throw new Error('invalid parameter: emails must be a non-empty array of strings');
     }
 
-    this.emails = Set().withMutations((set :Set<Principal>) => {
+    this.emails = Set().withMutations((set :Set<string>) => {
       emails.forEach((email :string) => {
         set.add(email);
       });
@@ -189,7 +261,10 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setApps(apps :UUID[]) :OrganizationBuilder {
+  setApps(apps :$ReadOnlyArray<UUID>) :OrganizationBuilder {
+
+    // NOTE: I remember having to add these checks, but I don't remember why...
+    // why would it be ok to call .setApps() or .setApps([]) on purpose?
     if (!isDefined(apps) || isEmptyArray(apps)) {
       return this;
     }
@@ -198,12 +273,28 @@ export class OrganizationBuilder {
       throw new Error('invalid parameter: apps must be a valid UUID array');
     }
 
-    this.apps = Set().withMutations((set :Set<Principal>) => {
+    this.apps = Set().withMutations((set :Set<UUID>) => {
       apps.forEach((app :UUID) => {
         set.add(app);
       });
     }).toJS();
 
+    return this;
+  }
+
+  setPartitions(partitions :$ReadOnlyArray<number>) :OrganizationBuilder {
+
+    // NOTE: I remember having to add these checks, but I don't remember why...
+    // why would it be ok to call .setPartitions() or .setPartitions([]) on purpose?
+    if (!isDefined(partitions) || isEmptyArray(partitions)) {
+      return this;
+    }
+
+    if (!validateNonEmptyArray(partitions, isFinite)) {
+      throw new Error('invalid parameter: partitions must be a valid number array');
+    }
+
+    this.partitions = [...partitions];
     return this;
   }
 
@@ -241,7 +332,8 @@ export class OrganizationBuilder {
       this.members,
       this.roles,
       this.emails,
-      this.apps
+      this.apps,
+      this.partitions,
     );
   }
 }
@@ -249,7 +341,6 @@ export class OrganizationBuilder {
 export function isValidOrganization(organization :any) :boolean {
 
   if (!isDefined(organization)) {
-
     LOG.error('invalid parameter: organization must be defined', organization);
     return false;
   }
@@ -260,21 +351,25 @@ export function isValidOrganization(organization :any) :boolean {
 
     // required properties
     organizationBuilder
-      .setTitle(organization.title)
-      .setPrincipal(organization.principal)
-      .setMembers(organization.members)
-      .setRoles(organization.roles)
-      .setAutoApprovedEmails(organization.emails)
       .setApps(organization.apps)
+      .setAutoApprovedEmails(organization.emails)
+      .setMembers(organization.members)
+      .setPrincipal(organization.principal)
+      .setRoles(organization.roles)
+      .setTitle(organization.title)
       .build();
 
     // optional properties
+    if (has(organization, 'description')) {
+      organizationBuilder.setDescription(organization.description);
+    }
+
     if (has(organization, 'id')) {
       organizationBuilder.setId(organization.id);
     }
 
-    if (has(organization, 'description')) {
-      organizationBuilder.setDescription(organization.description);
+    if (has(organization, 'partitions')) {
+      organizationBuilder.setPartitions(organization.partitions);
     }
 
     organizationBuilder.build();
@@ -282,8 +377,16 @@ export function isValidOrganization(organization :any) :boolean {
     return true;
   }
   catch (e) {
-
-    LOG.error(e, organization);
+    LOG.error(`invalid Organization: ${e.message}`, organization);
     return false;
   }
 }
+
+export function isValidOrganizationArray(organizations :$ReadOnlyArray<any>) :boolean {
+
+  return validateNonEmptyArray(organizations, isValidOrganization);
+}
+
+export type {
+  OrganizationObject,
+};

@@ -4,6 +4,7 @@
 
 import {
   genRandomBoolean,
+  genRandomInt,
   genRandomString,
   genRandomUUID,
   pickRandomValue,
@@ -31,6 +32,8 @@ import {
   EntityType,
   EntityTypeBuilder,
   FullyQualifiedName,
+  Organization,
+  OrganizationBuilder,
   Principal,
   PrincipalBuilder,
   PropertyType,
@@ -281,20 +284,6 @@ const MOCK_LINKING_REQUEST_DM :Object = {
   ]
 };
 
-const MOCK_ORGANIZATION_DM :Object = {
-  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  title: 'title',
-  description: 'description',
-  principal: { type: 'ORGANIZATION', id: 'orgid' },
-  members: [{ type: 'USER', id: 'principalId_0' }],
-  roles: [{ type: 'ROLE', id: 'principalId_1' }],
-  emails: ['openlattice.com'],
-  apps: [
-    '4b08e1f9-4a00-4169-92ea-10e377070220',
-    'ec6865e6-e60e-424b-a071-6a9c1603d735'
-  ]
-};
-
 const MOCK_REQUEST_DM :Object = {
   aclKey: MOCK_ACL_KEY,
   permissions: ['READ'],
@@ -305,14 +294,6 @@ const MOCK_REQUEST_STATUS_DM :Object = {
   request: MOCK_REQUEST_DM,
   state: RequestStateTypes.SUBMITTED,
   principal: MOCK_PRINCIPAL.toObject()
-};
-
-const MOCK_ROLE_DM :Object = {
-  id: 'fae6af98-2675-45bd-9a5b-1619a87235a8',
-  organizationId: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  title: 'title',
-  description: 'description',
-  principal: { type: 'ROLE', id: 'roleid' }
 };
 
 const MOCK_SCHEMA :Schema = new SchemaBuilder()
@@ -425,6 +406,78 @@ function genRandomAclData() :AclData {
     .build();
 }
 
+const MOCK_ORGANIZATION :Organization = (new OrganizationBuilder())
+  .setApps([genRandomUUID(), genRandomUUID()])
+  .setAutoApprovedEmails(['openlattice.com'])
+  .setDescription('MockOrgDescription')
+  .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
+  .setMembers([
+    (new PrincipalBuilder())
+      .setId('MockOrgMemberPrincipal')
+      .setType(PrincipalTypes.USER)
+      .build()
+  ])
+  .setPartitions([128])
+  .setPrincipal(
+    (new PrincipalBuilder())
+      .setId('MockOrgPrincipalId')
+      .setType(PrincipalTypes.ORGANIZATION)
+      .build()
+  )
+  .setRoles([
+    (new RoleBuilder())
+      .setDescription('MockOrgRoleDescription')
+      .setId('4b08e1f9-4a00-4169-92ea-10e377070220')
+      .setOrganizationId('ec6865e6-e60e-424b-a071-6a9c1603d735')
+      .setPrincipal(
+        (new PrincipalBuilder())
+          .setId('MockOrgRolePrincipalId')
+          .setType(PrincipalTypes.ROLE)
+          .build()
+      )
+      .setTitle('MockOrgRoleTitle')
+      .build()
+  ])
+  .setTitle('MockOrgTitle')
+  .build();
+
+function genRandomOrganization() :Organization {
+  return new OrganizationBuilder()
+    .setApps([genRandomUUID(), genRandomUUID()])
+    .setAutoApprovedEmails([`${genRandomString()}.com`])
+    .setDescription(genRandomString())
+    .setId(genRandomUUID())
+    .setMembers([
+      (new PrincipalBuilder())
+        .setId(genRandomString())
+        .setType(PrincipalTypes.USER)
+        .build()
+    ])
+    .setPartitions([genRandomInt()])
+    .setPrincipal(
+      (new PrincipalBuilder())
+        .setId(genRandomString())
+        .setType(PrincipalTypes.ORGANIZATION)
+        .build()
+    )
+    .setRoles([
+      (new RoleBuilder())
+        .setDescription(genRandomString())
+        .setId(genRandomUUID())
+        .setOrganizationId(genRandomUUID())
+        .setPrincipal(
+          (new PrincipalBuilder())
+            .setId(genRandomString())
+            .setType(PrincipalTypes.ROLE)
+            .build()
+        )
+        .setTitle(genRandomString())
+        .build()
+    ])
+    .setTitle(genRandomString())
+    .build();
+}
+
 export {
   MOCK_ACCESS_CHECK,
   MOCK_ACE,
@@ -447,13 +500,12 @@ export {
   MOCK_LINKING_ENTITY_TYPE_DM,
   MOCK_LINKING_REQUEST_DM,
   MOCK_NAMESPACE,
-  MOCK_ORGANIZATION_DM,
+  MOCK_ORGANIZATION,
   MOCK_PRINCIPAL,
   MOCK_PROPERTY_TYPE,
   MOCK_REQUEST_DM,
   MOCK_REQUEST_STATUS_DM,
   MOCK_ROLE,
-  MOCK_ROLE_DM,
   MOCK_SCHEMA,
   genRandomAccessCheck,
   genRandomAce,
@@ -462,6 +514,7 @@ export {
   genRandomAssociationType,
   genRandomDataGraph,
   genRandomEntityType,
+  genRandomOrganization,
   genRandomPrincipal,
   genRandomPropertyType,
   genRandomRole,

@@ -9,6 +9,14 @@ function genRandomBoolean() :boolean {
   return Math.random() >= 0.5;
 }
 
+function genRandomInt(minimum :number = 0, maximum :number = 100) {
+
+  const min = Math.ceil(minimum);
+  const max = Math.floor(maximum);
+  // max is inclusive, min is inclusive
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function genRandomString() :string {
 
   // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
@@ -19,6 +27,19 @@ function genRandomString() :string {
 function genRandomUUID() :string {
 
   return randomUUID();
+}
+
+function genRandomX(randomX :Function, count :number) {
+
+  if (count === null || count === undefined || count === 0) {
+    return randomX();
+  }
+
+  const result = [];
+  for (let i = 0; i < count; i += 1) {
+    result.push(randomX());
+  }
+  return result;
 }
 
 function genMockAuthToken() :string {
@@ -61,8 +82,10 @@ export {
   genMockAuthToken,
   genMockBaseUrl,
   genRandomBoolean,
+  genRandomInt,
   genRandomString,
   genRandomUUID,
+  genRandomX,
   getMockAxiosInstance,
   getMockPromise,
   pickRandomValue,
