@@ -20,7 +20,6 @@ type AceObject = {|
   permissions :PermissionType[];
 |};
 
-
 /**
  * @class Ace
  * @memberof lattice

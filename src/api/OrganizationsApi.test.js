@@ -4,7 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
 import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ORGANIZATION_DM, MOCK_ROLE_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockDataModels';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
@@ -94,9 +94,9 @@ function testGetOrganization() {
 
     const fnToTest = OrganizationsApi.getOrganization;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -128,9 +128,9 @@ function testCreateOrganization() {
 
     const fnToTest = OrganizationsApi.createOrganization;
 
-    const validParams = [MOCK_ORGANIZATION_DM];
+    const validParams = [MOCK_ORGANIZATION];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', MOCK_ORGANIZATION_DM];
+    const axiosParams = ['/', MOCK_ORGANIZATION];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -146,9 +146,9 @@ function testDeleteOrganization() {
 
     const fnToTest = OrganizationsApi.deleteOrganization;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -164,10 +164,10 @@ function testUpdateTitle() {
 
     const fnToTest = OrganizationsApi.updateTitle;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_TITLE];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_TITLE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${TITLE_PATH}`,
+      `/${MOCK_ORGANIZATION.id}/${TITLE_PATH}`,
       MOCK_TITLE,
       {
         headers: {
@@ -190,10 +190,10 @@ function testUpdateDescription() {
 
     const fnToTest = OrganizationsApi.updateDescription;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_DESCRIPTION];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_DESCRIPTION];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${DESCRIPTION_PATH}`,
+      `/${MOCK_ORGANIZATION.id}/${DESCRIPTION_PATH}`,
       MOCK_DESCRIPTION,
       {
         headers: {
@@ -216,9 +216,9 @@ function testGetAutoApprovedEmailDomains() {
 
     const fnToTest = OrganizationsApi.getAutoApprovedEmailDomains;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -234,9 +234,9 @@ function testAddAutoApprovedEmailDomain() {
 
     const fnToTest = OrganizationsApi.addAutoApprovedEmailDomain;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_EMAIL_DOMAIN];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_EMAIL_DOMAIN];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -254,9 +254,9 @@ function testAddAutoApprovedEmailDomains() {
 
     const fnToTest = OrganizationsApi.addAutoApprovedEmailDomains;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, [MOCK_EMAIL_DOMAIN]];
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`, [MOCK_EMAIL_DOMAIN]];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`, [MOCK_EMAIL_DOMAIN]];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -274,9 +274,9 @@ function testSetAutoApprovedEmailDomains() {
 
     const fnToTest = OrganizationsApi.setAutoApprovedEmailDomains;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, [MOCK_EMAIL_DOMAIN]];
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`, [MOCK_EMAIL_DOMAIN]];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`, [MOCK_EMAIL_DOMAIN]];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -292,9 +292,9 @@ function testRemoveAutoApprovedEmailDomain() {
 
     const fnToTest = OrganizationsApi.removeAutoApprovedEmailDomain;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_EMAIL_DOMAIN];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_EMAIL_DOMAIN];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -312,10 +312,10 @@ function testRemoveAutoApprovedEmailDomains() {
 
     const fnToTest = OrganizationsApi.removeAutoApprovedEmailDomains;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, [MOCK_EMAIL_DOMAIN]];
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [{
-      url: `/${MOCK_ORGANIZATION_DM.id}/${EMAIL_DOMAINS_PATH}`,
+      url: `/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`,
       method: 'delete',
       data: [MOCK_EMAIL_DOMAIN]
     }];
@@ -334,9 +334,9 @@ function testGetRole() {
 
     const fnToTest = OrganizationsApi.getRole;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_ROLE_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -352,9 +352,9 @@ function testGetAllRoles() {
 
     const fnToTest = OrganizationsApi.getAllRoles;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -370,9 +370,9 @@ function testCreateRole() {
 
     const fnToTest = OrganizationsApi.createRole;
 
-    const validParams = [MOCK_ROLE_DM];
+    const validParams = [MOCK_ROLE];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${ROLES_PATH}`, MOCK_ROLE_DM];
+    const axiosParams = [`/${ROLES_PATH}`, MOCK_ROLE];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -388,9 +388,9 @@ function testDeleteRole() {
 
     const fnToTest = OrganizationsApi.deleteRole;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_ROLE_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -406,10 +406,10 @@ function testUpdateRoleTitle() {
 
     const fnToTest = OrganizationsApi.updateRoleTitle;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_ROLE_DM.id, MOCK_TITLE];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_TITLE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${TITLE_PATH}`,
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${TITLE_PATH}`,
       MOCK_TITLE,
       {
         headers: {
@@ -432,10 +432,10 @@ function testUpdateRoleDescription() {
 
     const fnToTest = OrganizationsApi.updateRoleDescription;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_ROLE_DM.id, MOCK_DESCRIPTION];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_DESCRIPTION];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${DESCRIPTION_PATH}`,
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${DESCRIPTION_PATH}`,
       MOCK_DESCRIPTION,
       {
         headers: {
@@ -458,11 +458,11 @@ function testAddRoleToMember() {
 
     const fnToTest = OrganizationsApi.addRoleToMember;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_ROLE_DM.id, MOCK_MEMBER_ID];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_MEMBER_ID];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
     /* eslint-disable max-len */
     const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
     ];
     /* eslint-enable */
 
@@ -480,11 +480,11 @@ function testRemoveRoleFromMember() {
 
     const fnToTest = OrganizationsApi.removeRoleFromMember;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_ROLE_DM.id, MOCK_MEMBER_ID];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_MEMBER_ID];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
     /* eslint-disable max-len */
     const axiosParams = [
-      `/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE_DM.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
     ];
     /* eslint-enable */
 
@@ -502,9 +502,9 @@ function testGetAllMembers() {
 
     const fnToTest = OrganizationsApi.getAllMembers;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -520,9 +520,9 @@ function testAddMemberToOrganization() {
 
     const fnToTest = OrganizationsApi.addMemberToOrganization;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_MEMBER_ID];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_MEMBER_ID];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -538,9 +538,9 @@ function testRemoveMemberFromOrganization() {
 
     const fnToTest = OrganizationsApi.removeMemberFromOrganization;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_MEMBER_ID];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_MEMBER_ID];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION_DM.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -567,7 +567,7 @@ function testGrantTrustToOrganization() {
       .build();
 
     const mockAcl = (new AclBuilder())
-      .setAclKey([MOCK_ORGANIZATION_DM.id])
+      .setAclKey([MOCK_ORGANIZATION.id])
       .setAces([mockAce])
       .build();
 
@@ -576,7 +576,7 @@ function testGrantTrustToOrganization() {
       .setAcl(mockAcl)
       .build();
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, mockPrincipal.id];
+    const validParams = [MOCK_ORGANIZATION.id, mockPrincipal.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = ['/', mockAclData];
 
@@ -605,7 +605,7 @@ function testRevokeTrustFromOrganization() {
       .build();
 
     const mockAcl = (new AclBuilder())
-      .setAclKey([MOCK_ORGANIZATION_DM.id])
+      .setAclKey([MOCK_ORGANIZATION.id])
       .setAces([mockAce])
       .build();
 
@@ -614,7 +614,7 @@ function testRevokeTrustFromOrganization() {
       .setAcl(mockAcl)
       .build();
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, mockPrincipal.id];
+    const validParams = [MOCK_ORGANIZATION.id, mockPrincipal.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = ['/', mockAclData];
 

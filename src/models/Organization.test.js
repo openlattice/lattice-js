@@ -1,5 +1,6 @@
+import { Map, Set, fromJS } from 'immutable';
 import Organization, { OrganizationBuilder, isValidOrganization as isValid } from './Organization';
-import { MOCK_ORGANIZATION_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ORGANIZATION, genRandomOrganization } from '../utils/testing/MockDataModels';
 
 import {
   INVALID_PARAMS,
@@ -12,35 +13,25 @@ describe('Organization', () => {
 
   describe('OrganizationBuilder', () => {
 
-    let builder = null;
-
-    beforeEach(() => {
-      builder = new OrganizationBuilder();
-    });
-
-    afterEach(() => {
-      builder = null;
-    });
-
     describe('setId()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(() => {
-            builder.setId(invalidInput);
+            (new OrganizationBuilder()).setId(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
-        expect(() => {
-          builder.setId();
-        }).not.toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setId(MOCK_ORGANIZATION_DM.id);
+          (new OrganizationBuilder()).setId();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setId('');
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setId(MOCK_ORGANIZATION.id);
         }).not.toThrow();
       });
 
@@ -49,22 +40,19 @@ describe('Organization', () => {
     describe('setTitle()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new OrganizationBuilder()).setTitle();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setTitle(invalidInput);
+            (new OrganizationBuilder()).setTitle(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setTitle();
-        }).toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setTitle(MOCK_ORGANIZATION_DM.title);
+          (new OrganizationBuilder()).setTitle(MOCK_ORGANIZATION.title);
         }).not.toThrow();
       });
 
@@ -75,20 +63,20 @@ describe('Organization', () => {
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(() => {
-            builder.setDescription(invalidInput);
+            (new OrganizationBuilder()).setDescription(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
-        expect(() => {
-          builder.setDescription();
-        }).not.toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setDescription(MOCK_ORGANIZATION_DM.description);
+          (new OrganizationBuilder()).setDescription();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setDescription('');
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setDescription(MOCK_ORGANIZATION.description);
         }).not.toThrow();
       });
 
@@ -97,22 +85,19 @@ describe('Organization', () => {
     describe('setPrincipal()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new OrganizationBuilder()).setPrincipal();
+        }).toThrow();
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(() => {
-            builder.setPrincipal(invalidInput);
+            (new OrganizationBuilder()).setPrincipal(invalidInput);
           }).toThrow();
         });
       });
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          builder.setPrincipal();
-        }).toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setPrincipal(MOCK_ORGANIZATION_DM.principal);
+          (new OrganizationBuilder()).setPrincipal(MOCK_ORGANIZATION.principal);
         }).not.toThrow();
       });
 
@@ -123,7 +108,7 @@ describe('Organization', () => {
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setMembers(invalidInput);
+            (new OrganizationBuilder()).setMembers(invalidInput);
           }).toThrow();
         });
       });
@@ -131,20 +116,20 @@ describe('Organization', () => {
       test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setMembers([...MOCK_ORGANIZATION_DM.members, invalidInput]);
+            (new OrganizationBuilder()).setMembers([...MOCK_ORGANIZATION.members, invalidInput]);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
-        expect(() => {
-          builder.setMembers();
-        }).not.toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setMembers(MOCK_ORGANIZATION_DM.members);
+          (new OrganizationBuilder()).setMembers();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setMembers([]);
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setMembers(MOCK_ORGANIZATION.members);
         }).not.toThrow();
       });
 
@@ -155,7 +140,7 @@ describe('Organization', () => {
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setRoles(invalidInput);
+            (new OrganizationBuilder()).setRoles(invalidInput);
           }).toThrow();
         });
       });
@@ -163,20 +148,20 @@ describe('Organization', () => {
       test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setRoles([...MOCK_ORGANIZATION_DM.roles, invalidInput]);
+            (new OrganizationBuilder()).setRoles([...MOCK_ORGANIZATION.roles, invalidInput]);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
-        expect(() => {
-          builder.setRoles();
-        }).not.toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setRoles(MOCK_ORGANIZATION_DM.roles);
+          (new OrganizationBuilder()).setRoles();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setRoles([]);
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setRoles(MOCK_ORGANIZATION.roles);
         }).not.toThrow();
       });
 
@@ -187,7 +172,7 @@ describe('Organization', () => {
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setAutoApprovedEmails(invalidInput);
+            (new OrganizationBuilder()).setAutoApprovedEmails(invalidInput);
           }).toThrow();
         });
       });
@@ -195,20 +180,20 @@ describe('Organization', () => {
       test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setAutoApprovedEmails([...MOCK_ORGANIZATION_DM.emails, invalidInput]);
+            (new OrganizationBuilder()).setAutoApprovedEmails([...MOCK_ORGANIZATION.emails, invalidInput]);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
-        expect(() => {
-          builder.setAutoApprovedEmails();
-        }).not.toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails);
+          (new OrganizationBuilder()).setAutoApprovedEmails();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setAutoApprovedEmails([]);
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setAutoApprovedEmails(MOCK_ORGANIZATION.emails);
         }).not.toThrow();
       });
 
@@ -219,7 +204,7 @@ describe('Organization', () => {
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setApps(invalidInput);
+            (new OrganizationBuilder()).setApps(invalidInput);
           }).toThrow();
         });
       });
@@ -227,20 +212,20 @@ describe('Organization', () => {
       test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            builder.setApps([...MOCK_ORGANIZATION_DM.apps, invalidInput]);
+            (new OrganizationBuilder()).setApps([...MOCK_ORGANIZATION.apps, invalidInput]);
           }).toThrow();
         });
       });
 
-      test('should not throw when not given any parameters', () => {
-        expect(() => {
-          builder.setApps();
-        }).not.toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          builder.setApps(MOCK_ORGANIZATION_DM.apps);
+          (new OrganizationBuilder()).setApps();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setApps([]);
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setApps(MOCK_ORGANIZATION.apps);
         }).not.toThrow();
       });
 
@@ -250,89 +235,112 @@ describe('Organization', () => {
 
       test('should throw when a required property has not been set', () => {
 
+        // omitting setPrincipal()
         expect(() => {
-          (new OrganizationBuilder()).build();
+          (new OrganizationBuilder())
+            .setTitle(MOCK_ORGANIZATION.title)
+            .build();
+        }).toThrow();
+
+        // omitting setTitle()
+        expect(() => {
+          (new OrganizationBuilder())
+            .setPrincipal(MOCK_ORGANIZATION.principal)
+            .build();
         }).toThrow();
       });
 
       test('should not throw when an optional property has not been set', () => {
 
+        // omitting setDescription()
         expect(() => {
           (new OrganizationBuilder())
-            .setTitle(MOCK_ORGANIZATION_DM.title)
-            .setDescription(MOCK_ORGANIZATION_DM.description)
-            .setPrincipal(MOCK_ORGANIZATION_DM.principal)
-            .setMembers(MOCK_ORGANIZATION_DM.members)
-            .setRoles(MOCK_ORGANIZATION_DM.roles)
-            .setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails)
-            .setApps(MOCK_ORGANIZATION_DM.apps)
+            .setApps(MOCK_ORGANIZATION.apps)
+            .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+            .setId(MOCK_ORGANIZATION.id)
+            .setMembers(MOCK_ORGANIZATION.members)
+            .setPartitions(MOCK_ORGANIZATION.partitions)
+            .setPrincipal(MOCK_ORGANIZATION.principal)
+            .setRoles(MOCK_ORGANIZATION.roles)
+            .setTitle(MOCK_ORGANIZATION.title)
             .build();
         }).not.toThrow();
 
+        // omitting setId()
         expect(() => {
           (new OrganizationBuilder())
-            .setId(MOCK_ORGANIZATION_DM.id)
-            .setTitle(MOCK_ORGANIZATION_DM.title)
-            .setPrincipal(MOCK_ORGANIZATION_DM.principal)
-            .setMembers(MOCK_ORGANIZATION_DM.members)
-            .setRoles(MOCK_ORGANIZATION_DM.roles)
-            .setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails)
-            .setApps(MOCK_ORGANIZATION_DM.apps)
+            .setApps(MOCK_ORGANIZATION.apps)
+            .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+            .setDescription(MOCK_ORGANIZATION.description)
+            .setMembers(MOCK_ORGANIZATION.members)
+            .setPartitions(MOCK_ORGANIZATION.partitions)
+            .setPrincipal(MOCK_ORGANIZATION.principal)
+            .setRoles(MOCK_ORGANIZATION.roles)
+            .setTitle(MOCK_ORGANIZATION.title)
+            .build();
+        }).not.toThrow();
+
+        // omitting setPartitions()
+        expect(() => {
+          (new OrganizationBuilder())
+            .setApps(MOCK_ORGANIZATION.apps)
+            .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+            .setDescription(MOCK_ORGANIZATION.description)
+            .setId(MOCK_ORGANIZATION.id)
+            .setMembers(MOCK_ORGANIZATION.members)
+            .setPrincipal(MOCK_ORGANIZATION.principal)
+            .setRoles(MOCK_ORGANIZATION.roles)
+            .setTitle(MOCK_ORGANIZATION.title)
             .build();
         }).not.toThrow();
       });
 
       test('should set required properties that are allowed to be empty', () => {
 
-        const org = builder
-          .setTitle(MOCK_ORGANIZATION_DM.title)
-          .setPrincipal(MOCK_ORGANIZATION_DM.principal)
+        const org = (new OrganizationBuilder())
+          .setPrincipal(MOCK_ORGANIZATION.principal)
+          .setTitle(MOCK_ORGANIZATION.title)
           .build();
 
+        expect(org.apps).toEqual([]);
+        expect(org.emails).toEqual([]);
         expect(org.members).toEqual([]);
         expect(org.roles).toEqual([]);
-        expect(org.emails).toEqual([]);
-        expect(org.apps).toEqual([]);
       });
 
       test('should return a valid instance', () => {
 
-        const org = builder
-          .setId(MOCK_ORGANIZATION_DM.id)
-          .setTitle(MOCK_ORGANIZATION_DM.title)
-          .setDescription(MOCK_ORGANIZATION_DM.description)
-          .setPrincipal(MOCK_ORGANIZATION_DM.principal)
-          .setMembers(MOCK_ORGANIZATION_DM.members)
-          .setRoles(MOCK_ORGANIZATION_DM.roles)
-          .setAutoApprovedEmails(MOCK_ORGANIZATION_DM.emails)
-          .setApps(MOCK_ORGANIZATION_DM.apps)
+        const org = (new OrganizationBuilder())
+          .setApps(MOCK_ORGANIZATION.apps)
+          .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+          .setDescription(MOCK_ORGANIZATION.description)
+          .setId(MOCK_ORGANIZATION.id)
+          .setMembers(MOCK_ORGANIZATION.members)
+          .setPartitions(MOCK_ORGANIZATION.partitions)
+          .setPrincipal(MOCK_ORGANIZATION.principal)
+          .setRoles(MOCK_ORGANIZATION.roles)
+          .setTitle(MOCK_ORGANIZATION.title)
           .build();
 
         expect(org).toBeInstanceOf(Organization);
 
-        expect(org.id).toBeDefined();
-        expect(org.id).toEqual(MOCK_ORGANIZATION_DM.id);
-
-        expect(org.title).toBeDefined();
-        expect(org.title).toEqual(MOCK_ORGANIZATION_DM.title);
-
-        expect(org.description).toBeDefined();
-        expect(org.description).toEqual(MOCK_ORGANIZATION_DM.description);
-
-        expect(org.principal).toBeDefined();
-        expect(org.principal).toEqual(MOCK_ORGANIZATION_DM.principal);
-
-        expect(org.members).toBeDefined();
-        expect(org.members).toEqual(MOCK_ORGANIZATION_DM.members);
-
-        expect(org.roles).toBeDefined();
-        expect(org.roles).toEqual(MOCK_ORGANIZATION_DM.roles);
-
-        expect(org.emails).toBeDefined();
-        expect(org.emails).toEqual(MOCK_ORGANIZATION_DM.emails);
-
         expect(org.apps).toBeDefined();
-        expect(org.apps).toEqual(MOCK_ORGANIZATION_DM.apps);
+        expect(org.description).toBeDefined();
+        expect(org.emails).toBeDefined();
+        expect(org.id).toBeDefined();
+        expect(org.members).toBeDefined();
+        expect(org.principal).toBeDefined();
+        expect(org.roles).toBeDefined();
+        expect(org.title).toBeDefined();
+
+        expect(org.apps).toEqual(MOCK_ORGANIZATION.apps);
+        expect(org.description).toEqual(MOCK_ORGANIZATION.description);
+        expect(org.emails).toEqual(MOCK_ORGANIZATION.emails);
+        expect(org.id).toEqual(MOCK_ORGANIZATION.id);
+        expect(org.members).toEqual(MOCK_ORGANIZATION.members);
+        expect(org.principal).toEqual(MOCK_ORGANIZATION.principal);
+        expect(org.roles).toEqual(MOCK_ORGANIZATION.roles);
+        expect(org.title).toEqual(MOCK_ORGANIZATION.title);
       });
 
     });
@@ -344,19 +352,21 @@ describe('Organization', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ORGANIZATION_DM)).toEqual(true);
+        expect(isValid(MOCK_ORGANIZATION)).toEqual(true);
       });
 
       test('should return true when given a valid object instance ', () => {
         expect(isValid(
           new Organization(
-            MOCK_ORGANIZATION_DM.id,
-            MOCK_ORGANIZATION_DM.title,
-            MOCK_ORGANIZATION_DM.description,
-            MOCK_ORGANIZATION_DM.principal,
-            MOCK_ORGANIZATION_DM.members,
-            MOCK_ORGANIZATION_DM.roles,
-            MOCK_ORGANIZATION_DM.apps
+            MOCK_ORGANIZATION.id,
+            MOCK_ORGANIZATION.title,
+            MOCK_ORGANIZATION.description,
+            MOCK_ORGANIZATION.principal,
+            MOCK_ORGANIZATION.members,
+            MOCK_ORGANIZATION.roles,
+            MOCK_ORGANIZATION.emails,
+            MOCK_ORGANIZATION.apps,
+            MOCK_ORGANIZATION.partitions,
           )
         )).toEqual(true);
       });
@@ -364,13 +374,15 @@ describe('Organization', () => {
       test('should return true when given an instance constructed by the builder', () => {
 
         const org = (new OrganizationBuilder())
-          .setId(MOCK_ORGANIZATION_DM.id)
-          .setTitle(MOCK_ORGANIZATION_DM.title)
-          .setDescription(MOCK_ORGANIZATION_DM.description)
-          .setPrincipal(MOCK_ORGANIZATION_DM.principal)
-          .setMembers(MOCK_ORGANIZATION_DM.members)
-          .setRoles(MOCK_ORGANIZATION_DM.roles)
-          .setApps(MOCK_ORGANIZATION_DM.apps)
+          .setApps(MOCK_ORGANIZATION.apps)
+          .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+          .setDescription(MOCK_ORGANIZATION.description)
+          .setId(MOCK_ORGANIZATION.id)
+          .setMembers(MOCK_ORGANIZATION.members)
+          .setPartitions(MOCK_ORGANIZATION.partitions)
+          .setPrincipal(MOCK_ORGANIZATION.principal)
+          .setRoles(MOCK_ORGANIZATION.roles)
+          .setTitle(MOCK_ORGANIZATION.title)
           .build();
 
         expect(isValid(org)).toEqual(true);
@@ -392,49 +404,55 @@ describe('Organization', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, id: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, title: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, title: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, description: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, description: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "principal" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, principal: invalidInput })).toEqual(false);
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ORGANIZATION, principal: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "members" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, members: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, members: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "roles" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, roles: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, roles: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "emails" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, emails: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, emails: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "apps" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION_DM, apps: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, apps: invalidInput })).toEqual(false);
+        });
+      });
+
+      test('should return false when given an object literal with an invalid "partitions" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ORGANIZATION, partitions: invalidInput })).toEqual(false);
         });
       });
 
@@ -443,13 +461,14 @@ describe('Organization', () => {
           expect(isValid(
             new Organization(
               invalidInput,
-              MOCK_ORGANIZATION_DM.title,
-              MOCK_ORGANIZATION_DM.description,
-              MOCK_ORGANIZATION_DM.principal,
-              MOCK_ORGANIZATION_DM.members,
-              MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails,
-              MOCK_ORGANIZATION_DM.apps
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
@@ -459,14 +478,15 @@ describe('Organization', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORGANIZATION_DM.id,
+              MOCK_ORGANIZATION.id,
               invalidInput,
-              MOCK_ORGANIZATION_DM.description,
-              MOCK_ORGANIZATION_DM.principal,
-              MOCK_ORGANIZATION_DM.members,
-              MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails,
-              MOCK_ORGANIZATION_DM.apps
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
@@ -476,31 +496,33 @@ describe('Organization', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORGANIZATION_DM.id,
-              MOCK_ORGANIZATION_DM.title,
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
               invalidInput,
-              MOCK_ORGANIZATION_DM.principal,
-              MOCK_ORGANIZATION_DM.members,
-              MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails,
-              MOCK_ORGANIZATION_DM.apps
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "principal" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORGANIZATION_DM.id,
-              MOCK_ORGANIZATION_DM.title,
-              MOCK_ORGANIZATION_DM.description,
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
               invalidInput,
-              MOCK_ORGANIZATION_DM.members,
-              MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails,
-              MOCK_ORGANIZATION_DM.apps
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
@@ -510,13 +532,15 @@ describe('Organization', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORGANIZATION_DM.id,
-              MOCK_ORGANIZATION_DM.title,
-              MOCK_ORGANIZATION_DM.description,
-              MOCK_ORGANIZATION_DM.principal,
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
               invalidInput,
-              MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
@@ -526,14 +550,15 @@ describe('Organization', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORGANIZATION_DM.id,
-              MOCK_ORGANIZATION_DM.title,
-              MOCK_ORGANIZATION_DM.description,
-              MOCK_ORGANIZATION_DM.principal,
-              MOCK_ORGANIZATION_DM.members,
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
               invalidInput,
-              MOCK_ORGANIZATION_DM.emails,
-              MOCK_ORGANIZATION_DM.apps
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
@@ -543,14 +568,15 @@ describe('Organization', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORGANIZATION_DM.id,
-              MOCK_ORGANIZATION_DM.title,
-              MOCK_ORGANIZATION_DM.description,
-              MOCK_ORGANIZATION_DM.principal,
-              MOCK_ORGANIZATION_DM.members,
-              MOCK_ORGANIZATION_DM.roles,
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
               invalidInput,
-              MOCK_ORGANIZATION_DM.apps
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
@@ -560,19 +586,162 @@ describe('Organization', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
-              MOCK_ORGANIZATION_DM.id,
-              MOCK_ORGANIZATION_DM.title,
-              MOCK_ORGANIZATION_DM.description,
-              MOCK_ORGANIZATION_DM.principal,
-              MOCK_ORGANIZATION_DM.members,
-              MOCK_ORGANIZATION_DM.roles,
-              MOCK_ORGANIZATION_DM.emails,
-              invalidInput
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              invalidInput,
+              MOCK_ORGANIZATION.partitions,
             )
           )).toEqual(false);
         });
       });
 
+      test('should return false when given an instance with an invalid "partitions" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(isValid(
+            new Organization(
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              invalidInput,
+            )
+          )).toEqual(false);
+        });
+      });
+
+    });
+
+  });
+
+  describe('equality', () => {
+
+    test('valueOf()', () => {
+      const organization = new Organization(
+        MOCK_ORGANIZATION.id,
+        MOCK_ORGANIZATION.title,
+        MOCK_ORGANIZATION.description,
+        MOCK_ORGANIZATION.principal,
+        MOCK_ORGANIZATION.members,
+        MOCK_ORGANIZATION.roles,
+        MOCK_ORGANIZATION.emails,
+        MOCK_ORGANIZATION.apps,
+        MOCK_ORGANIZATION.partitions,
+      );
+      expect(organization.valueOf()).toEqual(
+        fromJS({
+          apps: MOCK_ORGANIZATION.apps,
+          description: MOCK_ORGANIZATION.description,
+          emails: MOCK_ORGANIZATION.emails,
+          id: MOCK_ORGANIZATION.id,
+          members: MOCK_ORGANIZATION.members.map((p) => p.toObject()),
+          partitions: MOCK_ORGANIZATION.partitions,
+          principal: MOCK_ORGANIZATION.principal.toObject(),
+          roles: MOCK_ORGANIZATION.roles.map((r) => r.toObject()),
+          title: MOCK_ORGANIZATION.title,
+        }).hashCode()
+      );
+    });
+
+    test('Immutable.Set', () => {
+
+      const randomOrganization = genRandomOrganization();
+      const organization0 = new Organization(
+        MOCK_ORGANIZATION.id,
+        MOCK_ORGANIZATION.title,
+        MOCK_ORGANIZATION.description,
+        MOCK_ORGANIZATION.principal,
+        MOCK_ORGANIZATION.members,
+        MOCK_ORGANIZATION.roles,
+        MOCK_ORGANIZATION.emails,
+        MOCK_ORGANIZATION.apps,
+        MOCK_ORGANIZATION.partitions,
+      );
+      const organization1 = new Organization(
+        MOCK_ORGANIZATION.id,
+        MOCK_ORGANIZATION.title,
+        MOCK_ORGANIZATION.description,
+        MOCK_ORGANIZATION.principal,
+        MOCK_ORGANIZATION.members,
+        MOCK_ORGANIZATION.roles,
+        MOCK_ORGANIZATION.emails,
+        MOCK_ORGANIZATION.apps,
+        MOCK_ORGANIZATION.partitions,
+      );
+
+      const testSet = Set()
+        .add(organization0)
+        .add(randomOrganization)
+        .add(organization1);
+
+      expect(testSet.size).toEqual(2);
+      expect(testSet.count()).toEqual(2);
+
+      expect(testSet.first().apps).toEqual(MOCK_ORGANIZATION.apps);
+      expect(testSet.first().description).toEqual(MOCK_ORGANIZATION.description);
+      expect(testSet.first().emails).toEqual(MOCK_ORGANIZATION.emails);
+      expect(testSet.first().id).toEqual(MOCK_ORGANIZATION.id);
+      expect(testSet.first().members).toEqual(MOCK_ORGANIZATION.members);
+      expect(testSet.first().partitions).toEqual(MOCK_ORGANIZATION.partitions);
+      expect(testSet.first().principal).toEqual(MOCK_ORGANIZATION.principal);
+      expect(testSet.first().roles).toEqual(MOCK_ORGANIZATION.roles);
+      expect(testSet.first().title).toEqual(MOCK_ORGANIZATION.title);
+
+      expect(testSet.last().apps).toEqual(randomOrganization.apps);
+      expect(testSet.last().description).toEqual(randomOrganization.description);
+      expect(testSet.last().emails).toEqual(randomOrganization.emails);
+      expect(testSet.last().id).toEqual(randomOrganization.id);
+      expect(testSet.last().members).toEqual(randomOrganization.members);
+      expect(testSet.last().partitions).toEqual(randomOrganization.partitions);
+      expect(testSet.last().principal).toEqual(randomOrganization.principal);
+      expect(testSet.last().roles).toEqual(randomOrganization.roles);
+      expect(testSet.last().title).toEqual(randomOrganization.title);
+    });
+
+    test('Immutable.Map', () => {
+
+      const randomOrganization = genRandomOrganization();
+      const organization0 = new Organization(
+        MOCK_ORGANIZATION.id,
+        MOCK_ORGANIZATION.title,
+        MOCK_ORGANIZATION.description,
+        MOCK_ORGANIZATION.principal,
+        MOCK_ORGANIZATION.members,
+        MOCK_ORGANIZATION.roles,
+        MOCK_ORGANIZATION.emails,
+        MOCK_ORGANIZATION.apps,
+        MOCK_ORGANIZATION.partitions,
+      );
+      const organization1 = new Organization(
+        MOCK_ORGANIZATION.id,
+        MOCK_ORGANIZATION.title,
+        MOCK_ORGANIZATION.description,
+        MOCK_ORGANIZATION.principal,
+        MOCK_ORGANIZATION.members,
+        MOCK_ORGANIZATION.roles,
+        MOCK_ORGANIZATION.emails,
+        MOCK_ORGANIZATION.apps,
+        MOCK_ORGANIZATION.partitions,
+      );
+
+      const testMap = Map()
+        .set(organization0, 'test_value_1')
+        .set(randomOrganization, 'test_value_2')
+        .set(organization1, 'test_value_3');
+
+      expect(testMap.size).toEqual(2);
+      expect(testMap.count()).toEqual(2);
+      expect(testMap.get(organization0)).toEqual('test_value_3');
+      expect(testMap.get(randomOrganization)).toEqual('test_value_2');
+      expect(testMap.get(organization1)).toEqual('test_value_3');
     });
 
   });

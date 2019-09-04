@@ -9,7 +9,7 @@ import Logger from '../utils/Logger';
 import Principal, { isValidPrincipal } from './Principal';
 import { AT_CLASS } from '../constants/GlobalConstants';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUuid, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PrincipalObject } from './Principal';
 
@@ -34,7 +34,7 @@ export default class Role {
   description :?string;
   id :?UUID;
   organizationId :UUID;
-  principal :Principal
+  principal :Principal;
   title :string;
 
   constructor(
@@ -225,6 +225,11 @@ export function isValidRole(role :any) :boolean {
     LOG.error(`invalid Role: ${e.message}`, role);
     return false;
   }
+}
+
+export function isValidRoleArray(roles :$ReadOnlyArray<any>) :boolean {
+
+  return validateNonEmptyArray(roles, isValidRole);
 }
 
 export {
