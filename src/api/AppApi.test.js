@@ -10,7 +10,7 @@ import {
   MOCK_APP_TYPE_DM,
   MOCK_ENTITY_SET_DM,
   MOCK_FQN,
-  MOCK_ORGANIZATION_DM
+  MOCK_ORGANIZATION,
 } from '../utils/testing/MockDataModels';
 import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
@@ -176,7 +176,7 @@ function testInstallApp() {
 
     const validParams = [
       mockId,
-      MOCK_ORGANIZATION_DM.id,
+      MOCK_ORGANIZATION.id,
       mockPrefix
     ];
 
@@ -187,7 +187,7 @@ function testInstallApp() {
     ];
 
     const axiosParams = [
-      `/${INSTALL_PATH}/${mockId}/${MOCK_ORGANIZATION_DM.id}/${mockPrefix}`
+      `/${INSTALL_PATH}/${mockId}/${MOCK_ORGANIZATION.id}/${mockPrefix}`
     ];
 
     testApiShouldReturnPromise(functionToTest, validParams);
@@ -348,10 +348,10 @@ function testUpdateAppEntitySetConfig() {
 
     const fnToTest = AppApi.updateAppEntitySetConfig;
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, MOCK_ENTITY_SET_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, MOCK_ENTITY_SET_DM.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS];
     const axiosParams = [
-      `/${UPDATE_PATH}/${MOCK_ORGANIZATION_DM.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}/${MOCK_ENTITY_SET_DM.id}`
+      `/${UPDATE_PATH}/${MOCK_ORGANIZATION.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}/${MOCK_ENTITY_SET_DM.id}`
     ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -369,7 +369,7 @@ function testUpdateAppConfigPermissions() {
     const fnToTest = AppApi.updateAppConfigPermissions;
     const permissions = [PermissionTypes.READ, PermissionTypes.WRITE];
 
-    const validParams = [MOCK_ORGANIZATION_DM.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, permissions];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, permissions];
     const invalidParams = [
       INVALID_PARAMS_SS,
       INVALID_PARAMS_SS,
@@ -377,7 +377,7 @@ function testUpdateAppConfigPermissions() {
       [INVALID_PARAMS_SS, INVALID_PARAMS_SS]
     ];
     const axiosParams = [
-      `/${UPDATE_PATH}/${MOCK_ORGANIZATION_DM.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}`,
+      `/${UPDATE_PATH}/${MOCK_ORGANIZATION.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}`,
       permissions
     ];
 
