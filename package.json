@@ -1,6 +1,6 @@
 {
   "name": "lattice",
-  "version": "0.63.0",
+  "version": "0.64.0",
   "homepage": "https://github.com/openlattice/lattice-js",
   "description": "JavaScript SDK for all OpenLattice REST APIs",
   "author": {
