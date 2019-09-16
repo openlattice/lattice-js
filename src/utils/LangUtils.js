@@ -15,12 +15,12 @@ function isDefined(value :any) :boolean %checks {
   return !isNull(value) && !isUndefined(value);
 }
 
-function isEmptyArray(value :any) :boolean {
+function isEmptyArray(value :any) :boolean %checks {
 
   return isArray(value) && isEmpty(value);
 }
 
-function isEmptyObject(value :any) :boolean {
+function isEmptyObject(value :any) :boolean %checks {
 
   return isPlainObject(value) && isEmpty(value);
 }
@@ -30,12 +30,12 @@ function isEmptyString(value :any) :boolean %checks {
   return isString(value) && isEmpty(value);
 }
 
-function isNonEmptyArray(value :any) :boolean {
+function isNonEmptyArray(value :any) :boolean %checks {
 
   return isArray(value) && !isEmpty(value);
 }
 
-function isNonEmptyObject(value :any) :boolean {
+function isNonEmptyObject(value :any) :boolean %checks {
 
   return isPlainObject(value) && !isEmpty(value);
 }

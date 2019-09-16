@@ -61,7 +61,7 @@ export function getTopUtilizers(
   entitySetId :UUID,
   count :number,
   options :Object,
-  fileType :string
+  fileType :?string
 ) :Promise<*> {
 
   // TODO: everything
