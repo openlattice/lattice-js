@@ -3,7 +3,7 @@
  */
 
 export const ADVANCED_PATH :string = 'advanced';
-export const ALL :string = 'all';
+export const ALL_PATH :string = 'all';
 export const ANALYSIS_PATH :string = 'analysis';
 export const APP_PATH :string = 'app';
 export const ASSEMBLE_PATH :string = 'assemble';

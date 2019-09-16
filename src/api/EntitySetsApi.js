@@ -17,61 +17,22 @@
  * // EntitySetsApi.get...
  */
 
-import has from 'lodash/has';
+import { Set } from 'immutable';
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
-
 import EntitySet, { isValidEntitySetArray } from '../models/EntitySet';
-
 import { ENTITY_SETS_API } from '../constants/ApiNames';
-import { getApiAxiosInstance } from '../utils/axios';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
-
 import {
-  ALL,
+  ALL_PATH,
   IDS_PATH,
   METADATA_PATH,
-  PROPERTIES_PATH
+  PROPERTIES_PATH,
 } from '../constants/UrlConstants';
-
-import {
-  isNonEmptyObject,
-  isNonEmptyString,
-  isNonEmptyStringArray
-} from '../utils/LangUtils';
+import { getApiAxiosInstance } from '../utils/axios';
+import { isDefined, isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
+import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntitySetsApi');
-
-/*
- *
- * EntitySetsApi APIs
- *
- */
-
-
-/**
- * `GET /entity-sets`
- *
- * Gets all EntitySet definitions.
- *
- * @static
- * @memberof lattice.EntitySetsApi
- * @return {Promise<EntitySet[]>} - a Promise that will resolve with all EntitySet definitions
- *
- * @example
- * EntitySetsApi.getAllEntitySets();
- */
-export function getAllEntitySets() :Promise<*> {
-
-  return getApiAxiosInstance(ENTITY_SETS_API)
-    .get('/')
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
 
 /**
  * `POST /entity-sets`
@@ -97,7 +58,7 @@ export function getAllEntitySets() :Promise<*> {
  *   ]
  * );
  */
-export function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
+function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -119,70 +80,6 @@ export function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 }
 
 /**
- * `POST /entity-sets/ids`
- *
- * Gets the EntitySet UUIDs for the given EntitySet names.
- *
- * @static
- * @memberof lattice.EntitySetsApi
- * @param {string} entitySetName
- * @return {Promise<Map<String, UUID>>} - a Promise that will resolve with the id mapping as its fulfillment value
- *
- * @example
- * EntitySetsApi.getEntitySetIds(["EntitySet1", "EntitySet2"]);
- */
-export function getEntitySetIds(entitySetNames :string[]) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyStringArray(entitySetNames)) {
-    errorMsg = 'invalid parameter: entitySetNames must be a non-empty array of strings';
-    LOG.error(errorMsg, entitySetNames);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ENTITY_SETS_API)
-    .post(`/${IDS_PATH}`, entitySetNames)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /entity-sets/ids/{name}`
- *
- * Gets the EntitySet UUID for the given EntitySet name.
- *
- * @static
- * @memberof lattice.EntitySetsApi
- * @param {string} entitySetName
- * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
- *
- * @example
- * EntitySetsApi.getEntitySetId("MyEntitySet");
- */
-export function getEntitySetId(entitySetName :string) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(entitySetName)) {
-    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
-    LOG.error(errorMsg, entitySetName);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ENTITY_SETS_API)
-    .get(`/${IDS_PATH}/${entitySetName}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `DELETE /entity-sets/all/{uuid}`
  *
  * Deletes the EntitySet definition for the given EntitySet UUID.
@@ -195,7 +92,7 @@ export function getEntitySetId(entitySetName :string) :Promise<*> {
  * @example
  * EntitySetsApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteEntitySet(entitySetId :UUID) :Promise<*> {
+function deleteEntitySet(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -206,7 +103,30 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<*> {
   }
 
   return getApiAxiosInstance(ENTITY_SETS_API)
-    .delete(`/${ALL}/${entitySetId}`)
+    .delete(`/${ALL_PATH}/${entitySetId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /entity-sets`
+ *
+ * Gets all EntitySet definitions.
+ *
+ * @static
+ * @memberof lattice.EntitySetsApi
+ * @return {Promise<EntitySet[]>} - a Promise that will resolve with all EntitySet definitions
+ *
+ * @example
+ * EntitySetsApi.getAllEntitySets();
+ */
+function getAllEntitySets() :Promise<*> {
+
+  return getApiAxiosInstance(ENTITY_SETS_API)
+    .get('/')
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -227,7 +147,7 @@ export function deleteEntitySet(entitySetId :UUID) :Promise<*> {
  * @example
  * EntitySetsApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getEntitySet(entitySetId :UUID) :Promise<*> {
+function getEntitySet(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -238,7 +158,126 @@ export function getEntitySet(entitySetId :UUID) :Promise<*> {
   }
 
   return getApiAxiosInstance(ENTITY_SETS_API)
-    .get(`/${ALL}/${entitySetId}`)
+    .get(`/${ALL_PATH}/${entitySetId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /entity-sets/ids/{name}`
+ *
+ * Gets the EntitySet UUID for the given EntitySet name.
+ *
+ * @static
+ * @memberof lattice.EntitySetsApi
+ * @param {string} entitySetName
+ * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
+ *
+ * @example
+ * EntitySetsApi.getEntitySetId("MyEntitySet");
+ */
+function getEntitySetId(entitySetName :string) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyString(entitySetName)) {
+    errorMsg = 'invalid parameter: entitySetName must be a non-empty string';
+    LOG.error(errorMsg, entitySetName);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ENTITY_SETS_API)
+    .get(`/${IDS_PATH}/${entitySetName}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /entity-sets/ids`
+ *
+ * Gets the EntitySet UUIDs for the given EntitySet names.
+ *
+ * @static
+ * @memberof lattice.EntitySetsApi
+ * @param {string} entitySetName
+ * @return {Promise<Map<String, UUID>>} - a Promise that will resolve with the id mapping as its fulfillment value
+ *
+ * @example
+ * EntitySetsApi.getEntitySetIds(["EntitySet1", "EntitySet2"]);
+ */
+function getEntitySetIds(entitySetNames :string[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyStringArray(entitySetNames)) {
+    errorMsg = 'invalid parameter: entitySetNames must be a non-empty array of strings';
+    LOG.error(errorMsg, entitySetNames);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ENTITY_SETS_API)
+    .post(`/${IDS_PATH}`, entitySetNames)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /entity-sets/all/{entitySetId}/metadata`
+ * `GET /entity-sets/all/{entitySetId}/properties/{propertyTypeId}`
+ *
+ * The call returns all PropertyType metadata for the given EntitySet id. If a PropertyType id is given, the call
+ * returns only the PropertyType metadata matching the given PropertyType id for the given EntitySet id.
+ *
+ * @static
+ * @memberof lattice.EntitySetsApi
+ * @param {UUID} entitySetId
+ * @param {UUID} propertyTypeId
+ * @return {Promise}
+ *
+ * @example
+ * EntitySetsApi.getPropertyTypeMetaDataForEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ * EntitySetsApi.getPropertyTypeMetaDataForEntitySet(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "4b08e1f9-4a00-4169-92ea-10e377070220"
+ * );
+ */
+function getPropertyTypeMetaDataForEntitySet(entitySetId :UUID, propertyTypeId ?:UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUuid(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isDefined(propertyTypeId)) {
+    return getApiAxiosInstance(ENTITY_SETS_API)
+      .get(`/${ALL_PATH}/${entitySetId}/${METADATA_PATH}`)
+      .then((axiosResponse) => axiosResponse.data)
+      .catch((error :Error) => {
+        LOG.error(error);
+        return Promise.reject(error);
+      });
+  }
+
+  if (isDefined(propertyTypeId) && !isValidUuid(propertyTypeId)) {
+    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
+    LOG.error(errorMsg, propertyTypeId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ENTITY_SETS_API)
+    .get(`/${ALL_PATH}/${entitySetId}/${PROPERTIES_PATH}/${propertyTypeId}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -249,7 +288,7 @@ export function getEntitySet(entitySetId :UUID) :Promise<*> {
 /**
  * `POST /entity-sets/all/metadata`
  *
- * Returns all property type metadata for the requested entity sets
+ * The call returns all PropertyType metadata for all EntitySets matching the given EntitySet ids.
  *
  * @static
  * @memberof lattice.EntitySetsApi
@@ -257,9 +296,9 @@ export function getEntitySet(entitySetId :UUID) :Promise<*> {
  * @return {Promise}
  *
  * @example
- * EntitySetsApi.getPropertyMetadataForEntitySets(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
+ * EntitySetsApi.getPropertyTypeMetaDataForEntitySets(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
  */
-export function getPropertyMetadataForEntitySets(entitySetIds :UUID[]) :Promise<*> {
+function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -269,8 +308,9 @@ export function getPropertyMetadataForEntitySets(entitySetIds :UUID[]) :Promise<
     return Promise.reject(errorMsg);
   }
 
+  const entitySetIdsSet :UUID[] = Set(entitySetIds).toJS();
   return getApiAxiosInstance(ENTITY_SETS_API)
-    .post(`/${ALL}/${METADATA_PATH}`, entitySetIds)
+    .post(`/${ALL_PATH}/${METADATA_PATH}`, entitySetIdsSet)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -278,226 +318,13 @@ export function getPropertyMetadataForEntitySets(entitySetIds :UUID[]) :Promise<
     });
 }
 
-
-/**
- * `GET /entity-sets/all/{uuid}/metadata`
- *
- * Returns all property type metadata for an entity set
- *
- * @static
- * @memberof lattice.EntitySetsApi
- * @param {UUID} entitySetId
- * @return {Promise}
- *
- * @example
- * EntitySetsApi.getAllEntitySetPropertyMetadata("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-export function getAllEntitySetPropertyMetadata(entitySetId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ENTITY_SETS_API)
-    .get(`/${ALL}/${entitySetId}/${METADATA_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /entity-sets/all/{uuid}/properties/{uuid}`
- *
- * Returns specified property type metadata for an entity set
- *
- * @static
- * @memberof lattice.EntitySetsApi
- * @param {UUID} entitySetId
- * @param {UUID} propertyTypeId
- * @return {Promise}
- *
- * @example
- * EntitySetsApi.getEntitySetPropertyMetadata(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220"
- * );
- */
-export function getEntitySetPropertyMetadata(entitySetId :UUID, propertyTypeId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ENTITY_SETS_API)
-    .get(`/${ALL}/${entitySetId}/${PROPERTIES_PATH}/${propertyTypeId}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-
-/**
- * `POST /entity-sets/all/{uuid}/properties/{uuid}`
- *
- * Updates the property type metadata for the given entity set.
- *
- * @static
- * @memberof lattice.EntitySetsApi
- * @param {UUID} entitySetId
- * @param {UUID} propertyTypeId
- * @param {Object} metadata
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntitySetsApi.updateEntitySetPropertyMetadata(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "4b08e1f9-4a00-4169-92ea-10e377070220",
- *   {
- *     "title": "MyPropertyType",
- *     "description": "MyPropertyType description",
- *     "defaultShow": false
- *   }
- * );
- */
-export function updateEntitySetPropertyMetadata(
-  entitySetId :UUID,
-  propertyTypeId :UUID,
-  metadata :Object
-) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUuid(propertyTypeId)) {
-    errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
-    LOG.error(errorMsg, propertyTypeId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyObject(metadata)) {
-    errorMsg = 'invalid parameter: metadata must be a non-empty object';
-    LOG.error(errorMsg, metadata);
-    return Promise.reject(errorMsg);
-  }
-
-  if (has(metadata, 'title') && !isNonEmptyString(metadata.title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, metadata.title);
-    return Promise.reject(errorMsg);
-  }
-
-  if (has(metadata, 'description') && !isNonEmptyString(metadata.description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, metadata.description);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ENTITY_SETS_API)
-    .post(`/${ALL}/${entitySetId}/${PROPERTIES_PATH}/${propertyTypeId}`, metadata)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `PATCH /entity-sets/all/{uuid}/metadata`
- *
- * Updates the EntityType definition for the given EntitySet UUID with the given metadata.
- *
- * @static
- * @memberof lattice.EntitySetsApi
- * @param {UUID} entitySetId
- * @param {Object} metadata
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * EntitySetsApi.updateEntitySetMetadata(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "type": { namespace: "LATTICE", name: "UpdatedEntitySet" },
- *     "name": "MyEntitySet",
- *     "title": "MyEntitySet",
- *     "description": "MyEntitySet description",
- *     "contacts": ["support@openlattice.com"]
- *   }
- * );
- */
-export function updateEntitySetMetadata(entitySetId :UUID, metadata :Object) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUuid(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyObject(metadata)) {
-    errorMsg = 'invalid parameter: metadata must be a non-empty object';
-    LOG.error(errorMsg, metadata);
-    return Promise.reject(errorMsg);
-  }
-
-  if (has(metadata, 'type') && !FullyQualifiedName.isValid(metadata.type)) {
-    errorMsg = 'invalid parameter: type must be a valid FQN';
-    LOG.error(errorMsg, metadata.type);
-    return Promise.reject(errorMsg);
-  }
-
-  if (has(metadata, 'name') && !isNonEmptyString(metadata.name)) {
-    errorMsg = 'invalid parameter: name must be a non-empty string';
-    LOG.error(errorMsg, metadata.name);
-    return Promise.reject(errorMsg);
-  }
-
-  if (has(metadata, 'title') && !isNonEmptyString(metadata.title)) {
-    errorMsg = 'invalid parameter: title must be a non-empty string';
-    LOG.error(errorMsg, metadata.title);
-    return Promise.reject(errorMsg);
-  }
-
-  if (has(metadata, 'description') && !isNonEmptyString(metadata.description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
-    LOG.error(errorMsg, metadata.description);
-    return Promise.reject(errorMsg);
-  }
-
-  if (has(metadata, 'contacts') && !isNonEmptyStringArray(metadata.contacts)) {
-    errorMsg = 'invalid parameter: contacts must be a non-empty string';
-    LOG.error(errorMsg, metadata.contacts);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ENTITY_SETS_API)
-    .patch(`/${ALL}/${entitySetId}/${METADATA_PATH}`, metadata)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
+export {
+  createEntitySets,
+  deleteEntitySet,
+  getAllEntitySets,
+  getEntitySet,
+  getEntitySetId,
+  getEntitySetIds,
+  getPropertyTypeMetaDataForEntitySet,
+  getPropertyTypeMetaDataForEntitySets,
+};

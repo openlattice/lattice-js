@@ -35,7 +35,7 @@ import {
 } from '../utils/LangUtils';
 
 import {
-  ALL,
+  ALL_PATH,
   ASSOCIATION_PATH,
   CSRF_TOKEN,
   COUNT_PATH,
@@ -394,7 +394,7 @@ export function deleteEntitySet(entitySetId :UUID, deleteType :DeleteType) :Prom
   }
 
   return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}/${ALL}?${TYPE_PATH}=${deleteType}`)
+    .delete(`/${SET_PATH}/${entitySetId}/${ALL_PATH}?${TYPE_PATH}=${deleteType}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

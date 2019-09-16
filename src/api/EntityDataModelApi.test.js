@@ -2,16 +2,14 @@
 
 import * as AxiosUtils from '../utils/axios';
 import * as EntityDataModelApi from './EntityDataModelApi';
-import { EDM_API, ENTITY_SETS_API } from '../constants/ApiNames';
+import { EDM_API } from '../constants/ApiNames';
 import { genMockBaseUrl, genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
-  ALL,
   DIFF_PATH,
   IDS_PATH,
   NAMESPACE_PATH,
   ENTITY_TYPE_PATH,
-  METADATA_PATH,
   PROPERTY_TYPE_PATH,
   SCHEMA_PATH,
   VERSION_PATH,
@@ -27,7 +25,6 @@ import {
 import {
   MOCK_EDM_DM,
   MOCK_FQN,
-  MOCK_ENTITY_SET_DM,
   MOCK_ENTITY_TYPE,
   MOCK_PROPERTY_TYPE,
   MOCK_SCHEMA,
@@ -81,13 +78,6 @@ describe('EntityDataModelApi', () => {
   testCreateSchema();
   testCreateEmptySchema();
   testUpdateSchema();
-  testGetEntitySet();
-  testGetEntitySetId();
-  testGetEntitySetIds();
-  testGetAllEntitySets();
-  testCreateEntitySets();
-  testDeleteEntitySet();
-  testUpdateEntitySetMetaData();
   testGetEntityType();
   testGetEntityTypeId();
   testGetAllEntityTypes();
@@ -345,133 +335,6 @@ function testUpdateSchema() {
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
-  });
-}
-
-function testGetEntitySet() {
-
-  describe('getEntitySet()', () => {
-
-    const fnToTest = EntityDataModelApi.getEntitySet;
-
-    const validParams = [MOCK_ENTITY_SET_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${ALL}/${MOCK_ENTITY_SET_DM.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-  });
-}
-
-function testGetEntitySetId() {
-
-  describe('getEntitySetId()', () => {
-
-    const fnToTest = EntityDataModelApi.getEntitySetId;
-
-    const validParams = [MOCK_ENTITY_SET_DM.name];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${IDS_PATH}/${MOCK_ENTITY_SET_DM.name}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-  });
-}
-
-function testGetEntitySetIds() {
-
-  describe('getEntitySetIds()', () => {
-
-    const fnToTest = EntityDataModelApi.getEntitySetIds;
-
-    const validParams = [[MOCK_ENTITY_SET_DM.name]];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [
-      `/${IDS_PATH}`,
-      [MOCK_ENTITY_SET_DM.name],
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-  });
-}
-
-function testGetAllEntitySets() {
-
-  describe('getAllEntitySets()', () => {
-
-    const fnToTest = EntityDataModelApi.getAllEntitySets;
-
-    const validParams = [];
-    const axiosParams = ['/'];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-  });
-}
-
-function testCreateEntitySets() {
-
-  describe('createEntitySets()', () => {
-
-    const fnToTest = EntityDataModelApi.createEntitySets;
-
-    const validParams = [[MOCK_ENTITY_SET_DM]];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', [MOCK_ENTITY_SET_DM]];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-  });
-}
-
-function testDeleteEntitySet() {
-
-  describe('deleteEntitySet()', () => {
-
-    const fnToTest = EntityDataModelApi.deleteEntitySet;
-
-    const validParams = [MOCK_ENTITY_SET_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${ALL}/${MOCK_ENTITY_SET_DM.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-  });
-}
-
-function testUpdateEntitySetMetaData() {
-
-  describe('updateEntitySetMetaData()', () => {
-
-    const fnToTest = EntityDataModelApi.updateEntitySetMetaData;
-
-    const validParams = [MOCK_ENTITY_SET_DM.id, MOCK_METADATA_UPDATE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${ALL}/${MOCK_ENTITY_SET_DM.id}/${METADATA_PATH}`, MOCK_METADATA_UPDATE];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');

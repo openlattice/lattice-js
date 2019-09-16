@@ -17,6 +17,7 @@
  * // OrganizationsApi.get...
  */
 
+import isString from 'lodash/isString';
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
@@ -271,8 +272,8 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(description)) {
-    errorMsg = 'invalid parameter: description must be a non-empty string';
+  if (!isString(description)) {
+    errorMsg = 'invalid parameter: description must be a string';
     LOG.error(errorMsg, description);
     return Promise.reject(errorMsg);
   }
