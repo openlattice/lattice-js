@@ -3,7 +3,7 @@
 import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
 import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
-import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_STRING, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import { MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockDataModels';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
@@ -191,7 +191,7 @@ function testUpdateDescription() {
     const fnToTest = OrganizationsApi.updateDescription;
 
     const validParams = [MOCK_ORGANIZATION.id, MOCK_DESCRIPTION];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
     const axiosParams = [
       `/${MOCK_ORGANIZATION.id}/${DESCRIPTION_PATH}`,
       MOCK_DESCRIPTION,
