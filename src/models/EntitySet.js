@@ -3,7 +3,7 @@
  */
 
 import has from 'lodash/has';
-import { Set } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isValidUuid, validateNonEmptyArray } from '../utils/ValidationUtils';
@@ -18,18 +18,27 @@ import {
 
 const LOG = new Logger('EntitySet');
 
+type EntitySetObject = {|
+  contacts :string[];
+  description ?:string;
+  entityTypeId :UUID;
+  id ?:UUID;
+  name :string;
+  title :string;
+|};
+
 /**
  * @class EntitySet
  * @memberof lattice
  */
 export default class EntitySet {
 
-  id :?UUID;
+  contacts :string[];
+  description :?string;
   entityTypeId :UUID;
+  id :?UUID;
   name :string;
   title :string;
-  description :?string;
-  contacts :string[];
 
   constructor(
     id :?UUID,
@@ -37,7 +46,7 @@ export default class EntitySet {
     name :string,
     title :string,
     description :?string,
-    contacts :string[]
+    contacts :string[],
   ) {
 
     // required properties
@@ -47,15 +56,45 @@ export default class EntitySet {
     this.contacts = contacts;
 
     // optional properties
-    if (isDefined(id)) {
-      this.id = id;
-    }
-
     if (isDefined(description)) {
       this.description = description;
     }
 
-    // TODO: use Immutable.hash() for implementing valueOf()
+    if (isDefined(id)) {
+      this.id = id;
+    }
+  }
+
+  toImmutable() :Map<*, *> {
+
+    return fromJS(this.toObject());
+  }
+
+  toObject() :EntitySetObject {
+
+    // required properties
+    const entitySetObj :EntitySetObject = {
+      contacts: this.contacts,
+      entityTypeId: this.entityTypeId,
+      name: this.name,
+      title: this.title,
+    };
+
+    // optional properties
+    if (isDefined(this.id)) {
+      entitySetObj.id = this.id;
+    }
+
+    if (isDefined(this.description)) {
+      entitySetObj.description = this.description;
+    }
+
+    return entitySetObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
@@ -130,7 +169,7 @@ export class EntitySetBuilder {
     return this;
   }
 
-  setContacts(contacts :string[]) :EntitySetBuilder {
+  setContacts(contacts :$ReadOnlyArray<string>) :EntitySetBuilder {
 
     if (!isDefined(contacts) || isEmptyArray(contacts)) {
       return this;
@@ -173,7 +212,7 @@ export class EntitySetBuilder {
       this.name,
       this.title,
       this.description,
-      this.contacts
+      this.contacts,
     );
   }
 }
@@ -181,7 +220,6 @@ export class EntitySetBuilder {
 export function isValidEntitySet(entitySet :any) :boolean {
 
   if (!isDefined(entitySet)) {
-
     LOG.error('invalid parameter: entitySet must be defined', entitySet);
     return false;
   }
@@ -192,18 +230,18 @@ export function isValidEntitySet(entitySet :any) :boolean {
 
     // required properties
     entitySetBuilder
+      .setContacts(entitySet.contacts)
       .setEntityTypeId(entitySet.entityTypeId)
       .setName(entitySet.name)
-      .setTitle(entitySet.title)
-      .setContacts(entitySet.contacts);
+      .setTitle(entitySet.title);
 
     // optional properties
-    if (has(entitySet, 'id')) {
-      entitySetBuilder.setId(entitySet.id);
-    }
-
     if (has(entitySet, 'description')) {
       entitySetBuilder.setDescription(entitySet.description);
+    }
+
+    if (has(entitySet, 'id')) {
+      entitySetBuilder.setId(entitySet.id);
     }
 
     entitySetBuilder.build();
@@ -217,7 +255,11 @@ export function isValidEntitySet(entitySet :any) :boolean {
   }
 }
 
-export function isValidEntitySetArray(entitySets :EntitySet[]) :boolean {
+export function isValidEntitySetArray(entitySets :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(entitySets, (entitySet :EntitySet) => isValidEntitySet(entitySet));
+  return validateNonEmptyArray(entitySets, isValidEntitySet);
 }
+
+export type {
+  EntitySetObject,
+};

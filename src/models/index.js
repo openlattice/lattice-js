@@ -12,15 +12,15 @@ import AssociationType, { AssociationTypeBuilder } from './AssociationType';
 import DataEdgeKey, { DataEdgeKeyBuilder } from './DataEdgeKey';
 import DataGraph, { DataGraphBuilder } from './DataGraph';
 import EntityDataKey, { EntityDataKeyBuilder } from './EntityDataKey';
-import EntitySet, { EntitySetBuilder } from './EntitySet';
-import EntityType, { EntityTypeBuilder } from './EntityType';
+import EntitySet, { EntitySetBuilder, isValidEntitySet, isValidEntitySetArray } from './EntitySet';
+import EntityType, { EntityTypeBuilder, isValidEntityType, isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
 import LinkingEntitySet, { LinkingEntitySetBuilder } from './LinkingEntitySet';
 import LinkingEntityType, { LinkingEntityTypeBuilder } from './LinkingEntityType';
 import LinkingRequest, { LinkingRequestBuilder } from './LinkingRequest';
 import Organization, { OrganizationBuilder, isValidOrganization } from './Organization';
 import Principal, { PrincipalBuilder, isValidPrincipal, isValidPrincipalArray } from './Principal';
-import PropertyType, { PropertyTypeBuilder } from './PropertyType';
+import PropertyType, { PropertyTypeBuilder, isValidPropertyType, isValidPropertyTypeArray } from './PropertyType';
 import Request, { RequestBuilder } from './Request';
 import RequestStatus, { RequestStatusBuilder } from './RequestStatus';
 import Role, { RoleBuilder, isValidRole } from './Role';
@@ -31,6 +31,7 @@ export type { AceObject } from './Ace';
 export type { AclObject } from './Acl';
 export type { AclDataObject } from './AclData';
 export type { AssociationTypeObject } from './AssociationType';
+export type { EntitySetObject } from './EntitySet';
 export type { EntityTypeObject } from './EntityType';
 export type { FQN, FQNObject } from './FullyQualifiedName';
 export type { PrincipalObject } from './Principal';
@@ -90,8 +91,14 @@ export {
   isValidAclArray,
   isValidAclData,
   isValidAclDataArray,
+  isValidEntitySet,
+  isValidEntitySetArray,
+  isValidEntityType,
+  isValidEntityTypeArray,
   isValidOrganization,
   isValidPrincipal,
   isValidPrincipalArray,
+  isValidPropertyType,
+  isValidPropertyTypeArray,
   isValidRole,
 };

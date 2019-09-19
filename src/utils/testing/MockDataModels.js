@@ -29,6 +29,8 @@ import {
   AclDataBuilder,
   AssociationType,
   AssociationTypeBuilder,
+  EntitySet,
+  EntitySetBuilder,
   EntityType,
   EntityTypeBuilder,
   FullyQualifiedName,
@@ -119,14 +121,25 @@ const MOCK_ENTITY_DATA_KEY_DM :Object = {
   entitySetId: 'f74f01b0-3629-4b97-b6ac-0813b9f11551',
 };
 
-const MOCK_ENTITY_SET_DM :Object = {
-  id: 'ec6865e6-e60e-424b-a071-6a9c1603d735',
-  entityTypeId: '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e',
-  name: 'name',
-  title: 'title',
-  description: 'description',
-  contacts: ['LATTICE']
-};
+const MOCK_ENTITY_SET :EntitySet = new EntitySetBuilder()
+  .setContacts(['OPENLATTICE'])
+  .setDescription('MockEntitySetDescription')
+  .setEntityTypeId('78ad8735-d5dc-42ab-96d9-677bca55e60f')
+  .setId('6685abaf-5508-4f34-a3c7-46b687f66ddd')
+  .setName('MockEntitySet')
+  .setTitle('MockEntitySetTitle')
+  .build();
+
+function genRandomEntitySet() :EntitySet {
+  return new EntitySetBuilder()
+    .setContacts([genRandomString()])
+    .setDescription(genRandomString())
+    .setEntityTypeId(genRandomUUID())
+    .setId(genRandomUUID())
+    .setName(genRandomString())
+    .setTitle(genRandomString())
+    .build();
+}
 
 const MOCK_ENTITY_TYPE :EntityType = new EntityTypeBuilder()
   .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
@@ -255,7 +268,7 @@ function genRandomRole() :Role {
 }
 
 const MOCK_LINKING_ENTITY_SET_DM :Object = {
-  entitySet: MOCK_ENTITY_SET_DM,
+  entitySet: MOCK_ENTITY_SET,
   linkingProperties: [
     {
       '0c8be4b7-0bd5-4dd1-a623-da78871c9d0e': '4b08e1f9-4a00-4169-92ea-10e377070220',
@@ -481,8 +494,8 @@ function genRandomOrganization() :Organization {
 export {
   MOCK_ACCESS_CHECK,
   MOCK_ACE,
-  MOCK_ACL_DATA,
   MOCK_ACL,
+  MOCK_ACL_DATA,
   MOCK_ACL_KEY,
   MOCK_APP_DM,
   MOCK_APP_TYPE_DM,
@@ -493,7 +506,7 @@ export {
   MOCK_DATA_SOURCE_DM,
   MOCK_EDM_DM,
   MOCK_ENTITY_DATA_KEY_DM,
-  MOCK_ENTITY_SET_DM,
+  MOCK_ENTITY_SET,
   MOCK_ENTITY_TYPE,
   MOCK_FQN,
   MOCK_LINKING_ENTITY_SET_DM,
@@ -513,6 +526,7 @@ export {
   genRandomAclData,
   genRandomAssociationType,
   genRandomDataGraph,
+  genRandomEntitySet,
   genRandomEntityType,
   genRandomOrganization,
   genRandomPrincipal,

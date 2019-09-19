@@ -55,9 +55,15 @@ const EXPECTED_MODELS = Set([
   'isValidAclArray',
   'isValidAclData',
   'isValidAclDataArray',
+  'isValidEntitySet',
+  'isValidEntitySetArray',
+  'isValidEntityType',
+  'isValidEntityTypeArray',
   'isValidOrganization',
   'isValidPrincipal',
   'isValidPrincipalArray',
+  'isValidPropertyType',
+  'isValidPropertyTypeArray',
   'isValidRole',
 ]);
 /* eslint-enable */
