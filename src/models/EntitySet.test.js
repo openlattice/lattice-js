@@ -1,4 +1,3 @@
-// @flow
 import { Map, Set, fromJS } from 'immutable';
 import EntitySet, { EntitySetBuilder, isValidEntitySet as isValid } from './EntitySet';
 import { MOCK_ENTITY_SET, genRandomEntitySet } from '../utils/testing/MockDataModels';
