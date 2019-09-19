@@ -4,7 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as EntitySetsApi from './EntitySetsApi';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ENTITY_SET_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ENTITY_SET } from '../utils/testing/MockDataModels';
 import { genMockBaseUrl, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   ALL_PATH,
@@ -56,9 +56,9 @@ function testCreateEntitySets() {
 
     const fnToTest = EntitySetsApi.createEntitySets;
 
-    const validParams = [[MOCK_ENTITY_SET_DM]];
+    const validParams = [[MOCK_ENTITY_SET]];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', [MOCK_ENTITY_SET_DM]];
+    const axiosParams = ['/', [MOCK_ENTITY_SET]];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
@@ -74,9 +74,9 @@ function testDeleteEntitySet() {
 
     const fnToTest = EntitySetsApi.deleteEntitySet;
 
-    const validParams = [MOCK_ENTITY_SET_DM.id];
+    const validParams = [MOCK_ENTITY_SET.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${ALL_PATH}/${MOCK_ENTITY_SET_DM.id}`];
+    const axiosParams = [`/${ALL_PATH}/${MOCK_ENTITY_SET.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
@@ -108,9 +108,9 @@ function testGetEntitySet() {
 
     const fnToTest = EntitySetsApi.getEntitySet;
 
-    const validParams = [MOCK_ENTITY_SET_DM.id];
+    const validParams = [MOCK_ENTITY_SET.id];
     const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${ALL_PATH}/${MOCK_ENTITY_SET_DM.id}`];
+    const axiosParams = [`/${ALL_PATH}/${MOCK_ENTITY_SET.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
@@ -126,9 +126,9 @@ function testGetEntitySetId() {
 
     const fnToTest = EntitySetsApi.getEntitySetId;
 
-    const validParams = [MOCK_ENTITY_SET_DM.name];
+    const validParams = [MOCK_ENTITY_SET.name];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${IDS_PATH}/${MOCK_ENTITY_SET_DM.name}`];
+    const axiosParams = [`/${IDS_PATH}/${MOCK_ENTITY_SET.name}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
@@ -144,11 +144,11 @@ function testGetEntitySetIds() {
 
     const fnToTest = EntitySetsApi.getEntitySetIds;
 
-    const validParams = [[MOCK_ENTITY_SET_DM.name]];
+    const validParams = [[MOCK_ENTITY_SET.name]];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [
       `/${IDS_PATH}`,
-      [MOCK_ENTITY_SET_DM.name],
+      [MOCK_ENTITY_SET.name],
     ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
