@@ -8,7 +8,7 @@ import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import {
   MOCK_APP_DM,
   MOCK_APP_TYPE_DM,
-  MOCK_ENTITY_SET_DM,
+  MOCK_ENTITY_SET,
   MOCK_FQN,
   MOCK_ORGANIZATION,
 } from '../utils/testing/MockDataModels';
@@ -348,10 +348,10 @@ function testUpdateAppEntitySetConfig() {
 
     const fnToTest = AppApi.updateAppEntitySetConfig;
 
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, MOCK_ENTITY_SET_DM.id];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, MOCK_ENTITY_SET.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS];
     const axiosParams = [
-      `/${UPDATE_PATH}/${MOCK_ORGANIZATION.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}/${MOCK_ENTITY_SET_DM.id}`
+      `/${UPDATE_PATH}/${MOCK_ORGANIZATION.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}/${MOCK_ENTITY_SET.id}`
     ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
