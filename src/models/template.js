@@ -4,7 +4,7 @@
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
 
 const LOG = new Logger('Model');
 
@@ -30,7 +30,7 @@ export class ModelBuilder {
 
   setId(id :UUID) :ModelBuilder {
 
-    if (!isValidUuid(id)) {
+    if (!isValidUUID(id)) {
       throw new Error('invalid parameter: id must be a valid UUID');
     }
 

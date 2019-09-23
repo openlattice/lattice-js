@@ -25,7 +25,7 @@ import * as PermissionsApi from './PermissionsApi';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
 
 import {
   Ace,
@@ -83,7 +83,7 @@ export function getOrganization(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -182,7 +182,7 @@ export function deleteOrganization(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -218,7 +218,7 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -266,7 +266,7 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -310,7 +310,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -346,7 +346,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -390,7 +390,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -440,7 +440,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -488,7 +488,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -532,7 +532,7 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -581,13 +581,13 @@ export function getRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(roleId)) {
+  if (!isValidUUID(roleId)) {
     errorMsg = 'invalid parameter: roleId must be a valid UUID';
     LOG.error(errorMsg, roleId);
     return Promise.reject(errorMsg);
@@ -619,7 +619,7 @@ export function getAllRoles(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -693,13 +693,13 @@ export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(roleId)) {
+  if (!isValidUUID(roleId)) {
     errorMsg = 'invalid parameter: roleId must be a valid UUID';
     LOG.error(errorMsg, roleId);
     return Promise.reject(errorMsg);
@@ -737,13 +737,13 @@ export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :strin
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(roleId)) {
+  if (!isValidUUID(roleId)) {
     errorMsg = 'invalid parameter: roleId must be a valid UUID';
     LOG.error(errorMsg, roleId);
     return Promise.reject(errorMsg);
@@ -793,13 +793,13 @@ export function updateRoleDescription(organizationId :UUID, roleId :UUID, descri
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(roleId)) {
+  if (!isValidUUID(roleId)) {
     errorMsg = 'invalid parameter: roleId must be a valid UUID';
     LOG.error(errorMsg, roleId);
     return Promise.reject(errorMsg);
@@ -850,13 +850,13 @@ export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :st
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(roleId)) {
+  if (!isValidUUID(roleId)) {
     errorMsg = 'invalid parameter: roleId must be a valid UUID';
     LOG.error(errorMsg, roleId);
     return Promise.reject(errorMsg);
@@ -901,13 +901,13 @@ export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberI
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(roleId)) {
+  if (!isValidUUID(roleId)) {
     errorMsg = 'invalid parameter: roleId must be a valid UUID';
     LOG.error(errorMsg, roleId);
     return Promise.reject(errorMsg);
@@ -945,7 +945,7 @@ export function getAllMembers(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -981,7 +981,7 @@ export function addMemberToOrganization(organizationId :UUID, memberId :string) 
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -1023,7 +1023,7 @@ export function removeMemberFromOrganization(organizationId :UUID, memberId :str
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -1061,7 +1061,7 @@ export function getOrganizationEntitySets(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -1097,7 +1097,7 @@ export function getFilteredOrganizationEntitySets(organizationId :UUID, flags :s
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -1141,7 +1141,7 @@ export function assembleEntitySets(organizationId :UUID, refreshRatesOfEntitySet
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -1173,7 +1173,7 @@ export function getOrganizationIntegrationAccount(organizationId :UUID) :Promise
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -1209,13 +1209,13 @@ export function synchronizeEdmChanges(organizationId :UUID, entitySetId :UUID) :
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -1251,13 +1251,13 @@ export function refreshDataChanges(organizationId :UUID, entitySetId :UUID) :Pro
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -1276,7 +1276,7 @@ function updateTrustForOrganization(organizationId :UUID, principalId :string, a
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);

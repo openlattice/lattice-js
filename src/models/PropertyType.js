@@ -19,8 +19,8 @@ import {
 } from '../utils/LangUtils';
 
 import {
-  isValidUuid,
-  isValidFqnArray,
+  isValidUUID,
+  isValidFQNArray,
   validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
@@ -188,7 +188,7 @@ export class PropertyTypeBuilder {
       return this;
     }
 
-    if (!isValidUuid(propertyTypeId)) {
+    if (!isValidUUID(propertyTypeId)) {
       throw new Error('invalid parameter: propertyTypeId must be a valid UUID');
     }
 
@@ -246,7 +246,7 @@ export class PropertyTypeBuilder {
       return this;
     }
 
-    if (!isValidFqnArray(schemas)) {
+    if (!isValidFQNArray(schemas)) {
       throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 

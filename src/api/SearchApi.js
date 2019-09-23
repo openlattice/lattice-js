@@ -25,7 +25,7 @@ import Logger from '../utils/Logger';
 import { SEARCH_API } from '../constants/ApiNames';
 import { OPENLATTICE_ID_FQN } from '../constants/GlobalConstants';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 
 import {
   ADVANCED_PATH,
@@ -235,7 +235,7 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<*> {
   }
 
   if (isDefined(entityTypeId)) {
-    if (!isValidUuid(entityTypeId)) {
+    if (!isValidUUID(entityTypeId)) {
       errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
       LOG.error(errorMsg, entityTypeId);
       return Promise.reject(errorMsg);
@@ -244,7 +244,7 @@ export function searchEntitySetMetaData(searchOptions :Object) :Promise<*> {
   }
 
   if (isDefined(propertyTypeIds)) {
-    if (!isValidUuidArray(propertyTypeIds)) {
+    if (!isValidUUIDArray(propertyTypeIds)) {
       errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
       LOG.error(errorMsg, propertyTypeIds);
       return Promise.reject(errorMsg);
@@ -302,7 +302,7 @@ export function executeSearch(searchConstraints :Object) :Promise<*> {
     maxHits
   } = searchConstraints;
 
-  if (!isValidUuidArray(entitySetIds)) {
+  if (!isValidUUIDArray(entitySetIds)) {
     errorMsg = 'invalid parameter: entitySetIds must be a non-empty array of valid UUIDs';
     LOG.error(errorMsg, entitySetIds);
     return Promise.reject(errorMsg);
@@ -354,7 +354,7 @@ export function searchEntitySetData(entitySetId :UUID, searchOptions :Object) :P
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -436,7 +436,7 @@ export function advancedSearchEntitySetData(entitySetId :UUID, searchOptions :Ob
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -928,13 +928,13 @@ export function searchEntityNeighbors(entitySetId :UUID, entityKeyId :UUID) :Pro
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityKeyId)) {
+  if (!isValidUUID(entityKeyId)) {
     errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);
@@ -977,7 +977,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   let errorMsg = '';
   const data :Object = {};
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -989,7 +989,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuidArray(filter[ENTITY_KEY_IDS])) {
+  if (!isValidUUIDArray(filter[ENTITY_KEY_IDS])) {
     errorMsg = `invalid parameter: filter.${ENTITY_KEY_IDS} must be a non-empty set of valid UUIDs`;
     LOG.error(errorMsg, filter[ENTITY_KEY_IDS]);
     return Promise.reject(errorMsg);
@@ -1001,7 +1001,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   data[ENTITY_KEY_IDS] = entityKeyIds;
 
   let destinationEntitySetIds :?UUID[];
-  if (isEmptyArray(filter[DESTINATION_ES_IDS]) || isValidUuidArray(filter[DESTINATION_ES_IDS])) {
+  if (isEmptyArray(filter[DESTINATION_ES_IDS]) || isValidUUIDArray(filter[DESTINATION_ES_IDS])) {
     destinationEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[DESTINATION_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();
@@ -1014,7 +1014,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   }
 
   let edgeEntitySetIds :?UUID[];
-  if (isEmptyArray(filter[EDGE_ES_IDS]) || isValidUuidArray(filter[EDGE_ES_IDS])) {
+  if (isEmptyArray(filter[EDGE_ES_IDS]) || isValidUUIDArray(filter[EDGE_ES_IDS])) {
     edgeEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[EDGE_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();
@@ -1027,7 +1027,7 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   }
 
   let sourceEntitySetIds :?UUID[];
-  if (isEmptyArray(filter[SOURCE_ES_IDS]) || isValidUuidArray(filter[SOURCE_ES_IDS])) {
+  if (isEmptyArray(filter[SOURCE_ES_IDS]) || isValidUUIDArray(filter[SOURCE_ES_IDS])) {
     sourceEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[SOURCE_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();

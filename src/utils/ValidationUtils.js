@@ -35,17 +35,17 @@ export function validateNonEmptyArray(value :$ReadOnlyArray<any>, validatorFn :V
   return true;
 }
 
-export function isValidUuid(value :any) :boolean %checks {
+export function isValidUUID(value :any) :boolean %checks {
 
   return BASE_UUID_PATTERN.test(value);
 }
 
-export function isValidUuidArray(uuids :$ReadOnlyArray<any>) :boolean %checks {
+export function isValidUUIDArray(uuids :$ReadOnlyArray<any>) :boolean %checks {
 
-  return validateNonEmptyArray(uuids, (id :any) => isValidUuid(id));
+  return validateNonEmptyArray(uuids, (id :any) => isValidUUID(id));
 }
 
-export function isValidFqnArray(fqns :$ReadOnlyArray<any>) :boolean %checks {
+export function isValidFQNArray(fqns :$ReadOnlyArray<any>) :boolean %checks {
 
   return validateNonEmptyArray(fqns, (fqn :any) => FullyQualifiedName.isValid(fqn));
 }

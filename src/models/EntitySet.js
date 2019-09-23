@@ -16,8 +16,8 @@ import {
 } from '../utils/LangUtils';
 import {
   isValidTypeArray,
-  isValidUuid,
-  isValidUuidArray,
+  isValidUUID,
+  isValidUUIDArray,
   validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 import type { EntitySetFlagType } from '../constants/types';
@@ -159,7 +159,7 @@ export class EntitySetBuilder {
       return this;
     }
 
-    if (!isValidUuid(entitySetId)) {
+    if (!isValidUUID(entitySetId)) {
       throw new Error('invalid parameter: entitySetId must be a valid UUID');
     }
 
@@ -169,7 +169,7 @@ export class EntitySetBuilder {
 
   setEntityTypeId(entityTypeId :UUID) :EntitySetBuilder {
 
-    if (!isValidUuid(entityTypeId)) {
+    if (!isValidUUID(entityTypeId)) {
       throw new Error('invalid parameter: entityTypeId must be a valid UUID');
     }
 
@@ -236,7 +236,7 @@ export class EntitySetBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(entitySetIds)) {
+    if (!isValidUUIDArray(entitySetIds)) {
       throw new Error('invalid parameter: entitySetIds must be an array of valid UUIDs');
     }
 
@@ -274,7 +274,7 @@ export class EntitySetBuilder {
       return this;
     }
 
-    if (!isValidUuid(organizationId)) {
+    if (!isValidUUID(organizationId)) {
       throw new Error('invalid parameter: organizationId must be a valid UUID');
     }
 

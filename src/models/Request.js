@@ -9,7 +9,7 @@ import { Set } from 'immutable';
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
 import { isDefined, isEmptyArray, isEmptyString } from '../utils/LangUtils';
-import { isValidTypeArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidTypeArray, isValidUUIDArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
@@ -37,7 +37,7 @@ export class RequestBuilder {
 
   setAclKey(aclKey :UUID[]) :RequestBuilder {
 
-    if (!isValidUuidArray(aclKey)) {
+    if (!isValidUUIDArray(aclKey)) {
       throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
     }
 
