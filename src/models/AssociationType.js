@@ -9,7 +9,7 @@ import { Map, Set, fromJS } from 'immutable';
 import Logger from '../utils/Logger';
 import EntityType, { EntityTypeBuilder, isValidEntityType } from './EntityType';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUIDArray } from '../utils/ValidationUtils';
 import type { EntityTypeObject } from './EntityType';
 
 const LOG = new Logger('AssociationType');
@@ -107,7 +107,7 @@ export class AssociationTypeBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(sourceEntityTypeIds)) {
+    if (!isValidUUIDArray(sourceEntityTypeIds)) {
       throw new Error('invalid parameter: sourceEntityTypeIds must be an array of valid UUIDs');
     }
 
@@ -126,7 +126,7 @@ export class AssociationTypeBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(destinationEntityTypeIds)) {
+    if (!isValidUUIDArray(destinationEntityTypeIds)) {
       throw new Error('invalid parameter: destinationEntityTypeIds must be an array of valid UUIDs');
     }
 

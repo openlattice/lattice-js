@@ -9,7 +9,7 @@ import Logger from '../utils/Logger';
 import Principal, { isValidPrincipal } from './Principal';
 import { AT_CLASS } from '../constants/GlobalConstants';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUuid, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PrincipalObject } from './Principal';
 
@@ -114,7 +114,7 @@ export class RoleBuilder {
       return this;
     }
 
-    if (!isValidUuid(id)) {
+    if (!isValidUUID(id)) {
       throw new Error('invalid parameter: id must be a valid UUID');
     }
 
@@ -124,7 +124,7 @@ export class RoleBuilder {
 
   setOrganizationId(organizationId :UUID) :RoleBuilder {
 
-    if (!isValidUuid(organizationId)) {
+    if (!isValidUUID(organizationId)) {
       throw new Error('invalid parameter: organizationId must be a valid UUID');
     }
 

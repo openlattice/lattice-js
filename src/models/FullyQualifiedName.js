@@ -45,6 +45,7 @@ import Logger from '../utils/Logger';
 import { isNonEmptyString } from '../utils/LangUtils';
 
 const LOG = new Logger('FullyQualifiedName');
+const FQN_MAX_LENGTH :number = 63;
 
 type FQNObject = {|
   namespace :string;
@@ -136,7 +137,7 @@ function processArgs(...args :any[]) :FQNObject {
   };
 }
 
-function toFqnString(namespace :any, name :any) :string {
+function toString(namespace :string, name :string) :string {
 
   return (isNonEmptyString(namespace) && isNonEmptyString(name))
     ? `${namespace}.${name}`
@@ -155,7 +156,8 @@ export default class FullyQualifiedName {
     }
 
     const { namespace, name } = processArgs(...args);
-    return isNonEmptyString(namespace) && isNonEmptyString(name);
+    const fqn :string = toString(namespace, name);
+    return isNonEmptyString(namespace) && isNonEmptyString(name) && fqn.length <= FQN_MAX_LENGTH;
   }
 
   static toString = (...args :any[]) :string => {
@@ -165,7 +167,12 @@ export default class FullyQualifiedName {
     }
 
     const { namespace, name } = processArgs(...args);
-    return toFqnString(namespace, name);
+    const fqn :string = toString(namespace, name);
+
+    if (fqn.length > FQN_MAX_LENGTH) {
+      return '';
+    }
+    return fqn;
   }
 
   constructor(...args :any[]) {
@@ -187,6 +194,13 @@ export default class FullyQualifiedName {
     if (!isNonEmptyString(name)) {
       const error = 'invalid FQN: name must be a non-empty string';
       LOG.error(error);
+      throw new Error(error);
+    }
+
+    const fqn :string = toString(namespace, name);
+    if (fqn.length > FQN_MAX_LENGTH) {
+      const error = `invalid FQN: FQNs must be <= 63 characters, got ${fqn.length}`;
+      LOG.error(error, fqn);
       throw new Error(error);
     }
 
@@ -228,7 +242,7 @@ export default class FullyQualifiedName {
 
   toString() :string {
 
-    return toFqnString(this.namespace, this.name);
+    return toString(this.namespace, this.name);
   }
 
   // for Immutable.js equality
@@ -239,9 +253,7 @@ export default class FullyQualifiedName {
   }
 }
 
-type FQN = FullyQualifiedName;
-
 export type {
-  FQN,
+  FullyQualifiedName as FQN,
   FQNObject,
 };

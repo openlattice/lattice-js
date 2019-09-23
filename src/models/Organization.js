@@ -19,8 +19,8 @@ import {
 } from '../utils/LangUtils';
 
 import {
-  isValidUuid,
-  isValidUuidArray,
+  isValidUUID,
+  isValidUUIDArray,
   validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
@@ -154,7 +154,7 @@ export class OrganizationBuilder {
       return this;
     }
 
-    if (!isValidUuid(id)) {
+    if (!isValidUUID(id)) {
       throw new Error('invalid parameter: id must be a valid UUID');
     }
 
@@ -269,7 +269,7 @@ export class OrganizationBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(apps)) {
+    if (!isValidUUIDArray(apps)) {
       throw new Error('invalid parameter: apps must be a valid UUID array');
     }
 

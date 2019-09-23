@@ -28,7 +28,7 @@ import RequestStatus from '../models/RequestStatus';
 import Logger from '../utils/Logger';
 import { REQUESTS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUIDArray } from '../utils/ValidationUtils';
 
 import {
   isDefined,
@@ -126,7 +126,7 @@ export function getAllRequestStatuses(options :StateAclKeysObject) :Promise<*> {
     const aclKeysSet :Set<List<UUID>> = Set().withMutations((set :Set<List<UUID>>) => {
       for (let index = 0; index < options.aclKeys.length; index += 1) {
         const aclKey = options.aclKeys[index];
-        if (!isValidUuidArray(aclKey)) {
+        if (!isValidUUIDArray(aclKey)) {
           errorMsg = `invalid parameter: when given, aclKeys[${index}] must be a non-empty array of UUIDs`;
           LOG.error(errorMsg, aclKey);
           break;

@@ -30,7 +30,7 @@ import Schema, { isValidSchema } from '../models/Schema';
 
 import { EDM_API } from '../constants/ApiNames';
 import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 
 import {
   ASSOCIATION_TYPE_PATH,
@@ -505,7 +505,7 @@ export function updateSchema(
   if (isUndefined(entityTypeIds) || isEmptyArray(entityTypeIds)) {
     entityTypeIdsSet = [];
   }
-  else if (!isValidUuidArray(entityTypeIds)) {
+  else if (!isValidUUIDArray(entityTypeIds)) {
     errorMsg = 'invalid parameter: entityTypeIds must be an array of valid UUIDs';
     LOG.error(errorMsg, entityTypeIds);
     return Promise.reject(errorMsg);
@@ -522,7 +522,7 @@ export function updateSchema(
   if (isUndefined(propertyTypeIds) || isEmptyArray(propertyTypeIds)) {
     propertyTypeIdsSet = [];
   }
-  else if (!isValidUuidArray(propertyTypeIds)) {
+  else if (!isValidUUIDArray(propertyTypeIds)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
@@ -575,7 +575,7 @@ export function getEntityType(entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -746,7 +746,7 @@ export function deleteEntityType(entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -782,13 +782,13 @@ export function addPropertyTypeToEntityType(entityTypeId :UUID, propertyTypeId :
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(propertyTypeId)) {
+  if (!isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -824,13 +824,13 @@ export function removePropertyTypeFromEntityType(entityTypeId :UUID, propertyTyp
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(propertyTypeId)) {
+  if (!isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -867,13 +867,13 @@ export function forceRemovePropertyTypeFromEntityType(entityTypeId :UUID, proper
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(propertyTypeId)) {
+  if (!isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -911,13 +911,13 @@ export function reorderPropertyTypesInEntityType(entityTypeId :UUID, propertyTyp
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuidArray(propertyTypeIds)) {
+  if (!isValidUUIDArray(propertyTypeIds)) {
     errorMsg = 'invalid parameter: propertyTypeIds must be an array of valid UUIDs';
     LOG.error(errorMsg, propertyTypeIds);
     return Promise.reject(errorMsg);
@@ -961,7 +961,7 @@ export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -1032,7 +1032,7 @@ export function getEntityTypeHierarchy(entityTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -1071,7 +1071,7 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(propertyTypeId)) {
+  if (!isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -1241,7 +1241,7 @@ export function deletePropertyType(propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(propertyTypeId)) {
+  if (!isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -1274,7 +1274,7 @@ export function forceDeletePropertyType(propertyTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(propertyTypeId)) {
+  if (!isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -1318,7 +1318,7 @@ export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Objec
 
   let errorMsg = '';
 
-  if (!isValidUuid(propertyTypeId)) {
+  if (!isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -1395,7 +1395,7 @@ export function getAssociationType(associationTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(associationTypeId)) {
+  if (!isValidUUID(associationTypeId)) {
     errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
     LOG.error(errorMsg, associationTypeId);
     return Promise.reject(errorMsg);
@@ -1456,7 +1456,7 @@ export function getAssociationTypeDetails(associationTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(associationTypeId)) {
+  if (!isValidUUID(associationTypeId)) {
     errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
     LOG.error(errorMsg, associationTypeId);
     return Promise.reject(errorMsg);
@@ -1491,7 +1491,7 @@ export function getAllAvailableAssociationTypes(entityTypeId :UUID) :Promise<*> 
 
   let errorMsg = '';
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -1566,7 +1566,7 @@ export function deleteAssociationType(associationTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(associationTypeId)) {
+  if (!isValidUUID(associationTypeId)) {
     errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
     LOG.error(errorMsg, associationTypeId);
     return Promise.reject(errorMsg);
@@ -1606,7 +1606,7 @@ export function getComplexType(complexTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(complexTypeId)) {
+  if (!isValidUUID(complexTypeId)) {
     errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
     LOG.error(errorMsg, complexTypeId);
     return Promise.reject(errorMsg);
@@ -1667,7 +1667,7 @@ export function getComplexTypeHierarchy(complexTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(complexTypeId)) {
+  if (!isValidUUID(complexTypeId)) {
     errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
     LOG.error(errorMsg, complexTypeId);
     return Promise.reject(errorMsg);
@@ -1752,7 +1752,7 @@ export function deleteComplexType(complexTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(complexTypeId)) {
+  if (!isValidUUID(complexTypeId)) {
     errorMsg = 'invalid parameter: complexTypeId must be a valid UUID';
     LOG.error(errorMsg, complexTypeId);
     return Promise.reject(errorMsg);
@@ -1792,7 +1792,7 @@ export function getEnumType(enumTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(enumTypeId)) {
+  if (!isValidUUID(enumTypeId)) {
     errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
     LOG.error(errorMsg, enumTypeId);
     return Promise.reject(errorMsg);
@@ -1903,7 +1903,7 @@ export function deleteEnumType(enumTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(enumTypeId)) {
+  if (!isValidUUID(enumTypeId)) {
     errorMsg = 'invalid parameter: enumTypeId must be a valid UUID';
     LOG.error(errorMsg, enumTypeId);
     return Promise.reject(errorMsg);
@@ -1939,13 +1939,13 @@ export function addSrcEntityTypeToAssociationType(associationTypeId :UUID, entit
 
   let errorMsg = '';
 
-  if (!isValidUuid(associationTypeId)) {
+  if (!isValidUUID(associationTypeId)) {
     errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
     LOG.error(errorMsg, associationTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -1981,13 +1981,13 @@ export function addDstEntityTypeToAssociationType(associationTypeId :UUID, entit
 
   let errorMsg = '';
 
-  if (!isValidUuid(associationTypeId)) {
+  if (!isValidUUID(associationTypeId)) {
     errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
     LOG.error(errorMsg, associationTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -2024,13 +2024,13 @@ export function removeSrcEntityTypeFromAssociationType(associationTypeId :UUID, 
 
   let errorMsg = '';
 
-  if (!isValidUuid(associationTypeId)) {
+  if (!isValidUUID(associationTypeId)) {
     errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
     LOG.error(errorMsg, associationTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);
@@ -2067,13 +2067,13 @@ export function removeDstEntityTypeFromAssociationType(associationTypeId :UUID, 
 
   let errorMsg = '';
 
-  if (!isValidUuid(associationTypeId)) {
+  if (!isValidUUID(associationTypeId)) {
     errorMsg = 'invalid parameter: associationTypeId must be a valid UUID';
     LOG.error(errorMsg, associationTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityTypeId)) {
+  if (!isValidUUID(entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, entityTypeId);
     return Promise.reject(errorMsg);

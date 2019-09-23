@@ -10,7 +10,7 @@ import {
   isNonEmptyString
 } from '../utils/LangUtils';
 
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
 import FullyQualifiedName from './FullyQualifiedName';
 
 const LOG = new Logger('AppType');
@@ -79,7 +79,7 @@ export class AppTypeBuilder {
 
   setEntityTypeId(entityTypeId :UUID) :AppTypeBuilder {
 
-    if (!isValidUuid(entityTypeId)) {
+    if (!isValidUUID(entityTypeId)) {
       throw new Error('invalid parameter: entityTypeId must be a valid UUID');
     }
 
@@ -93,7 +93,7 @@ export class AppTypeBuilder {
       return this;
     }
 
-    if (!isValidUuid(appTypeId)) {
+    if (!isValidUUID(appTypeId)) {
       throw new Error('invalid parameter: appTypeId must be a valid UUID');
     }
 

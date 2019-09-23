@@ -19,10 +19,10 @@ import {
 } from '../utils/LangUtils';
 
 import {
-  isValidFqnArray,
+  isValidFQNArray,
   isValidMultimap,
-  isValidUuid,
-  isValidUuidArray,
+  isValidUUID,
+  isValidUUIDArray,
   validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
@@ -184,7 +184,7 @@ export class EntityTypeBuilder {
       return this;
     }
 
-    if (!isValidUuid(entityTypeId)) {
+    if (!isValidUUID(entityTypeId)) {
       throw new Error('invalid parameter: entityTypeId must be a valid UUID');
     }
 
@@ -232,7 +232,7 @@ export class EntityTypeBuilder {
       return this;
     }
 
-    if (!isValidFqnArray(schemas)) {
+    if (!isValidFQNArray(schemas)) {
       throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
     }
 
@@ -251,7 +251,7 @@ export class EntityTypeBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(key)) {
+    if (!isValidUUIDArray(key)) {
       throw new Error('invalid parameter: key must be a non-empty array of valid UUIDs');
     }
 
@@ -270,7 +270,7 @@ export class EntityTypeBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(propertyTypes)) {
+    if (!isValidUUIDArray(propertyTypes)) {
       throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
     }
 
@@ -289,7 +289,7 @@ export class EntityTypeBuilder {
       return this;
     }
 
-    if (!isValidUuid(baseType)) {
+    if (!isValidUUID(baseType)) {
       throw new Error('invalid parameter: baseType must be a valid UUID');
     }
 
@@ -317,7 +317,7 @@ export class EntityTypeBuilder {
       return this;
     }
 
-    if (!isValidMultimap(propertyTags, isValidUuid)) {
+    if (!isValidMultimap(propertyTags, isValidUUID)) {
       throw new Error('invalid parameter: propertyTags must be a non-empty multimap object');
     }
 

@@ -5,7 +5,7 @@
 import Logger from '../utils/Logger';
 import LinkingEntitySet, { isValidLinkingEntitySet } from './LinkingEntitySet';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUIDArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('LinkingRequest');
 
@@ -38,7 +38,7 @@ export class LinkingRequestBuilder {
 
   setPropertyTypeIds(propertyTypeIds :UUID[]) :LinkingRequestBuilder {
 
-    if (!isValidUuidArray(propertyTypeIds)) {
+    if (!isValidUUIDArray(propertyTypeIds)) {
       throw new Error('invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs');
     }
 

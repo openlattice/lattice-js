@@ -5,7 +5,7 @@
 import { Map, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
 import { isDefined } from '../utils/LangUtils';
 
 const LOG = new Logger('EntityDataKey');
@@ -68,7 +68,7 @@ export class EntityDataKeyBuilder {
 
   setEntityKeyId(entityKeyId :UUID) :EntityDataKeyBuilder {
 
-    if (!isValidUuid(entityKeyId)) {
+    if (!isValidUUID(entityKeyId)) {
       throw new Error('invalid parameter: entityKeyId must be a valid UUID');
     }
 
@@ -78,7 +78,7 @@ export class EntityDataKeyBuilder {
 
   setEntitySetId(entitySetId :UUID) :EntityDataKeyBuilder {
 
-    if (!isValidUuid(entitySetId)) {
+    if (!isValidUUID(entitySetId)) {
       throw new Error('invalid parameter: entitySetId must be a valid UUID');
     }
 

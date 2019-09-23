@@ -21,7 +21,7 @@ import Logger from '../utils/Logger';
 import AclData, { isValidAclData } from '../models/AclData';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUIDArray } from '../utils/ValidationUtils';
 
 import {
   EXPLAIN_PATH
@@ -46,7 +46,7 @@ export function getAcl(aclKey :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuidArray(aclKey)) {
+  if (!isValidUUIDArray(aclKey)) {
     errorMsg = 'invalid parameter: aclKey must be a non-empty array of valid UUIDs';
     LOG.error(errorMsg, aclKey);
     return Promise.reject(errorMsg);
@@ -130,7 +130,7 @@ export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuidArray(aclKey)) {
+  if (!isValidUUIDArray(aclKey)) {
     errorMsg = 'invalid parameter: aclKey must be a valid UUID array';
     LOG.error(errorMsg, aclKey);
     return Promise.reject(errorMsg);

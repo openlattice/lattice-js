@@ -25,7 +25,7 @@ import { ANALYSIS_API } from '../constants/ApiNames';
 import { TYPES_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString } from '../utils/LangUtils';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
 
 const LOG = new Logger('AnalysisApi');
 
@@ -97,7 +97,7 @@ export function getNeighborTypes(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);

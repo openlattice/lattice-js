@@ -8,7 +8,7 @@ import { Map, Set, fromJS } from 'immutable';
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidTypeArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidTypeArray, isValidUUIDArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
@@ -72,7 +72,7 @@ export class AccessCheckBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(aclKey)) {
+    if (!isValidUUIDArray(aclKey)) {
       throw new Error('invalid parameter: aclKey must be an array of valid UUIDs');
     }
 
