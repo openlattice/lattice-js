@@ -6,6 +6,7 @@ import has from 'lodash/has';
 import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
+import { EntitySetFlagTypes } from '../constants/types';
 import {
   isDefined,
   isEmptyArray,
@@ -14,10 +15,12 @@ import {
   isNonEmptyStringArray
 } from '../utils/LangUtils';
 import {
+  isValidTypeArray,
   isValidUuid,
   isValidUuidArray,
   validateNonEmptyArray,
 } from '../utils/ValidationUtils';
+import type { EntitySetFlagType } from '../constants/types';
 
 const LOG = new Logger('EntitySet');
 
@@ -25,9 +28,11 @@ type EntitySetObject = {|
   contacts :string[];
   description ?:string;
   entityTypeId :UUID;
+  flags ?:EntitySetFlagType[];
   id ?:UUID;
   linkedEntitySets ?:UUID[];
   name :string;
+  organizationId ?:UUID;
   title :string;
 |};
 
@@ -40,9 +45,11 @@ export default class EntitySet {
   contacts :string[];
   description :?string;
   entityTypeId :UUID;
+  flags :?EntitySetFlagType[];
   id :?UUID;
   linkedEntitySets :?UUID[];
   name :string;
+  organizationId :?UUID;
   title :string;
 
   constructor(
@@ -53,6 +60,8 @@ export default class EntitySet {
     description :?string,
     contacts :string[],
     linkedEntitySets :?UUID[],
+    flags :?EntitySetFlagType[],
+    organizationId :?UUID,
   ) {
 
     // required properties
@@ -73,6 +82,14 @@ export default class EntitySet {
     if (isDefined(linkedEntitySets)) {
       this.linkedEntitySets = linkedEntitySets;
     }
+
+    if (isDefined(flags)) {
+      this.flags = flags;
+    }
+
+    if (isDefined(organizationId)) {
+      this.organizationId = organizationId;
+    }
   }
 
   toImmutable() :Map<*, *> {
@@ -91,16 +108,24 @@ export default class EntitySet {
     };
 
     // optional properties
-    if (isDefined(this.id)) {
-      entitySetObj.id = this.id;
-    }
-
     if (isDefined(this.description)) {
       entitySetObj.description = this.description;
     }
 
+    if (isDefined(this.flags)) {
+      entitySetObj.flags = this.flags;
+    }
+
+    if (isDefined(this.id)) {
+      entitySetObj.id = this.id;
+    }
+
     if (isDefined(this.linkedEntitySets)) {
       entitySetObj.linkedEntitySets = this.linkedEntitySets;
+    }
+
+    if (isDefined(this.organizationId)) {
+      entitySetObj.organizationId = this.organizationId;
     }
 
     return entitySetObj;
@@ -121,9 +146,11 @@ export class EntitySetBuilder {
   contacts :string[];
   description :?string;
   entityTypeId :UUID;
+  flags :?EntitySetFlagType[];
   id :?UUID;
   linkedEntitySets :?UUID[];
   name :string;
+  organizationId :?UUID;
   title :string;
 
   setId(entitySetId :?UUID) :EntitySetBuilder {
@@ -222,6 +249,39 @@ export class EntitySetBuilder {
     return this;
   }
 
+  setFlags(flags :$ReadOnlyArray<EntitySetFlagType>) :EntitySetBuilder {
+
+    if (!isDefined(flags) || isEmptyArray(flags)) {
+      return this;
+    }
+
+    if (!isValidTypeArray(flags, EntitySetFlagTypes)) {
+      throw new Error('invalid parameter: flags must be an array of valid EntitySetFlagTypes');
+    }
+
+    this.flags = Set().withMutations((set :Set<EntitySetFlagType>) => {
+      flags.forEach((flag :EntitySetFlagType) => {
+        set.add(flag);
+      });
+    }).toJS();
+
+    return this;
+  }
+
+  setOrganizationId(organizationId :?UUID) :EntitySetBuilder {
+
+    if (!isDefined(organizationId) || isEmptyString(organizationId)) {
+      return this;
+    }
+
+    if (!isValidUuid(organizationId)) {
+      throw new Error('invalid parameter: organizationId must be a valid UUID');
+    }
+
+    this.organizationId = organizationId;
+    return this;
+  }
+
   build() :EntitySet {
 
     if (!this.entityTypeId) {
@@ -248,6 +308,8 @@ export class EntitySetBuilder {
       this.description,
       this.contacts,
       this.linkedEntitySets,
+      this.flags,
+      this.organizationId,
     );
   }
 }
@@ -275,12 +337,20 @@ export function isValidEntitySet(entitySet :any) :boolean {
       entitySetBuilder.setDescription(entitySet.description);
     }
 
+    if (has(entitySet, 'flags')) {
+      entitySetBuilder.setFlags(entitySet.flags);
+    }
+
     if (has(entitySet, 'id')) {
       entitySetBuilder.setId(entitySet.id);
     }
 
     if (has(entitySet, 'linkedEntitySets')) {
       entitySetBuilder.setLinkedEntitySets(entitySet.linkedEntitySets);
+    }
+
+    if (has(entitySet, 'organizationId')) {
+      entitySetBuilder.setOrganizationId(entitySet.organizationId);
     }
 
     entitySetBuilder.build();

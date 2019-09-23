@@ -7,8 +7,9 @@ import isString from 'lodash/isString';
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
+import { PermissionTypes } from '../constants/types';
 import { isDefined, isEmptyArray, isEmptyString } from '../utils/LangUtils';
-import { isValidPermissionArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidTypeArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
@@ -50,8 +51,8 @@ export class RequestBuilder {
       return this;
     }
 
-    if (!isValidPermissionArray(permissions)) {
-      throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
+    if (!isValidTypeArray(permissions, PermissionTypes)) {
+      throw new Error('invalid parameter: permissions must be a non-empty array of valid PermissionTypes');
     }
 
     this.permissions = Set().withMutations((set :Set<PermissionType>) => {

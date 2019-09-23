@@ -6,8 +6,9 @@ import has from 'lodash/has';
 import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
+import { PermissionTypes } from '../constants/types';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidPermissionArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidTypeArray, isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
@@ -85,8 +86,8 @@ export class AccessCheckBuilder {
       return this;
     }
 
-    if (!isValidPermissionArray(permissions)) {
-      throw new Error('invalid parameter: permissions must be an array of valid Permissions');
+    if (!isValidTypeArray(permissions, PermissionTypes)) {
+      throw new Error('invalid parameter: permissions must be an array of valid PermissionTypes');
     }
 
     this.permissions = Set().withMutations((set :Set<PermissionType>) => {

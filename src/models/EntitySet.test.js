@@ -198,6 +198,67 @@ describe('EntitySet', () => {
 
     });
 
+    describe('setFlags()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+          expect(() => {
+            (new EntitySetBuilder()).setFlags(invalidInput);
+          }).toThrow();
+          expect(() => {
+            (new EntitySetBuilder()).setFlags([invalidInput]);
+          }).toThrow();
+        });
+      });
+
+      test('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+          expect(() => {
+            (new EntitySetBuilder()).setFlags(
+              Object.values(MOCK_ENTITY_SET.flags).push(invalidInput)
+            );
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntitySetBuilder()).setFlags();
+        }).not.toThrow();
+        expect(() => {
+          (new EntitySetBuilder()).setFlags([]);
+        }).not.toThrow();
+        expect(() => {
+          (new EntitySetBuilder()).setFlags(MOCK_ENTITY_SET.flags);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setOrganizationId()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
+          expect(() => {
+            (new EntitySetBuilder()).setOrganizationId(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new EntitySetBuilder()).setOrganizationId();
+        }).not.toThrow();
+        expect(() => {
+          (new EntitySetBuilder()).setOrganizationId('');
+        }).not.toThrow();
+        expect(() => {
+          (new EntitySetBuilder()).setOrganizationId(MOCK_ENTITY_SET.organizationId);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('build()', () => {
 
       test('should throw when a required property has not been set', () => {
@@ -207,9 +268,11 @@ describe('EntitySet', () => {
           (new EntitySetBuilder())
             .setContacts(MOCK_ENTITY_SET.contacts)
             .setDescription(MOCK_ENTITY_SET.description)
+            .setFlags(MOCK_ENTITY_SET.flags)
             .setId(MOCK_ENTITY_SET.id)
             .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
             .setName(MOCK_ENTITY_SET.name)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
             .setTitle(MOCK_ENTITY_SET.title)
             .build();
         }).toThrow();
@@ -220,8 +283,10 @@ describe('EntitySet', () => {
             .setContacts(MOCK_ENTITY_SET.contacts)
             .setDescription(MOCK_ENTITY_SET.description)
             .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setFlags(MOCK_ENTITY_SET.flags)
             .setId(MOCK_ENTITY_SET.id)
             .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
             .setTitle(MOCK_ENTITY_SET.title)
             .build();
         }).toThrow();
@@ -232,9 +297,11 @@ describe('EntitySet', () => {
             .setContacts(MOCK_ENTITY_SET.contacts)
             .setDescription(MOCK_ENTITY_SET.description)
             .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setFlags(MOCK_ENTITY_SET.flags)
             .setId(MOCK_ENTITY_SET.id)
             .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
             .setName(MOCK_ENTITY_SET.name)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
             .build();
         }).toThrow();
       });
@@ -246,9 +313,11 @@ describe('EntitySet', () => {
           (new EntitySetBuilder())
             .setDescription(MOCK_ENTITY_SET.description)
             .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setFlags(MOCK_ENTITY_SET.flags)
             .setId(MOCK_ENTITY_SET.id)
             .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
             .setName(MOCK_ENTITY_SET.name)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
             .setTitle(MOCK_ENTITY_SET.title)
             .build();
         }).not.toThrow();
@@ -258,9 +327,24 @@ describe('EntitySet', () => {
           (new EntitySetBuilder())
             .setContacts(MOCK_ENTITY_SET.contacts)
             .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setFlags(MOCK_ENTITY_SET.flags)
             .setId(MOCK_ENTITY_SET.id)
             .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
             .setName(MOCK_ENTITY_SET.name)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
+            .setTitle(MOCK_ENTITY_SET.title)
+            .build();
+        }).not.toThrow();
+
+        expect(() => {
+          // omitting setFlags()
+          (new EntitySetBuilder())
+            .setDescription(MOCK_ENTITY_SET.description)
+            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setId(MOCK_ENTITY_SET.id)
+            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
+            .setName(MOCK_ENTITY_SET.name)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
             .setTitle(MOCK_ENTITY_SET.title)
             .build();
         }).not.toThrow();
@@ -271,8 +355,10 @@ describe('EntitySet', () => {
             .setContacts(MOCK_ENTITY_SET.contacts)
             .setDescription(MOCK_ENTITY_SET.description)
             .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setFlags(MOCK_ENTITY_SET.flags)
             .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
             .setName(MOCK_ENTITY_SET.name)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
             .setTitle(MOCK_ENTITY_SET.title)
             .build();
         }).not.toThrow();
@@ -282,7 +368,23 @@ describe('EntitySet', () => {
           (new EntitySetBuilder())
             .setDescription(MOCK_ENTITY_SET.description)
             .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setFlags(MOCK_ENTITY_SET.flags)
             .setId(MOCK_ENTITY_SET.id)
+            .setName(MOCK_ENTITY_SET.name)
+            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
+            .setTitle(MOCK_ENTITY_SET.title)
+            .build();
+        }).not.toThrow();
+
+        expect(() => {
+          // omitting setOrganizationId()
+          (new EntitySetBuilder())
+            .setContacts(MOCK_ENTITY_SET.contacts)
+            .setDescription(MOCK_ENTITY_SET.description)
+            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+            .setFlags(MOCK_ENTITY_SET.flags)
+            .setId(MOCK_ENTITY_SET.id)
+            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
             .setName(MOCK_ENTITY_SET.name)
             .setTitle(MOCK_ENTITY_SET.title)
             .build();
@@ -295,9 +397,11 @@ describe('EntitySet', () => {
         const entitySet = (new EntitySetBuilder())
           .setDescription(MOCK_ENTITY_SET.description)
           .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+          .setFlags(MOCK_ENTITY_SET.flags)
           .setId(MOCK_ENTITY_SET.id)
           .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
           .setName(MOCK_ENTITY_SET.name)
+          .setOrganizationId(MOCK_ENTITY_SET.organizationId)
           .setTitle(MOCK_ENTITY_SET.title)
           .build();
 
@@ -310,9 +414,11 @@ describe('EntitySet', () => {
           .setContacts(MOCK_ENTITY_SET.contacts)
           .setDescription(MOCK_ENTITY_SET.description)
           .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+          .setFlags(MOCK_ENTITY_SET.flags)
           .setId(MOCK_ENTITY_SET.id)
           .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
           .setName(MOCK_ENTITY_SET.name)
+          .setOrganizationId(MOCK_ENTITY_SET.organizationId)
           .setTitle(MOCK_ENTITY_SET.title)
           .build();
 
@@ -321,17 +427,21 @@ describe('EntitySet', () => {
         expect(entitySet.contacts).toBeDefined();
         expect(entitySet.description).toBeDefined();
         expect(entitySet.entityTypeId).toBeDefined();
+        expect(entitySet.flags).toBeDefined();
         expect(entitySet.id).toBeDefined();
         expect(entitySet.linkedEntitySets).toBeDefined();
         expect(entitySet.name).toBeDefined();
+        expect(entitySet.organizationId).toBeDefined();
         expect(entitySet.title).toBeDefined();
 
         expect(entitySet.contacts).toEqual(MOCK_ENTITY_SET.contacts);
         expect(entitySet.description).toEqual(MOCK_ENTITY_SET.description);
         expect(entitySet.entityTypeId).toEqual(MOCK_ENTITY_SET.entityTypeId);
+        expect(entitySet.flags).toEqual(MOCK_ENTITY_SET.flags);
         expect(entitySet.id).toEqual(MOCK_ENTITY_SET.id);
         expect(entitySet.linkedEntitySets).toEqual(MOCK_ENTITY_SET.linkedEntitySets);
         expect(entitySet.name).toEqual(MOCK_ENTITY_SET.name);
+        expect(entitySet.organizationId).toEqual(MOCK_ENTITY_SET.organizationId);
         expect(entitySet.title).toEqual(MOCK_ENTITY_SET.title);
       });
 
@@ -357,6 +467,8 @@ describe('EntitySet', () => {
             MOCK_ENTITY_SET.description,
             MOCK_ENTITY_SET.contacts,
             MOCK_ENTITY_SET.linkedEntitySets,
+            MOCK_ENTITY_SET.flags,
+            MOCK_ENTITY_SET.organizationId,
           )
         )).toEqual(true);
       });
@@ -367,9 +479,11 @@ describe('EntitySet', () => {
           .setContacts(MOCK_ENTITY_SET.contacts)
           .setDescription(MOCK_ENTITY_SET.description)
           .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
+          .setFlags(MOCK_ENTITY_SET.flags)
           .setId(MOCK_ENTITY_SET.id)
           .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
           .setName(MOCK_ENTITY_SET.name)
+          .setOrganizationId(MOCK_ENTITY_SET.organizationId)
           .setTitle(MOCK_ENTITY_SET.title)
           .build();
 
@@ -434,6 +548,19 @@ describe('EntitySet', () => {
         });
       });
 
+      test('should return false when given an object literal with an invalid "flags" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ENTITY_SET, flags: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_SET, flags: [invalidInput] })).toEqual(false);
+        });
+      });
+
+      test('should return false when given an object literal with an invalid "organizationId" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ENTITY_SET, organizationId: invalidInput })).toEqual(false);
+        });
+      });
+
       test('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
@@ -444,6 +571,9 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.title,
               MOCK_ENTITY_SET.description,
               MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
         });
@@ -459,6 +589,9 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.title,
               MOCK_ENTITY_SET.description,
               MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
         });
@@ -474,6 +607,9 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.title,
               MOCK_ENTITY_SET.description,
               MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
         });
@@ -489,6 +625,9 @@ describe('EntitySet', () => {
               invalidInput,
               MOCK_ENTITY_SET.description,
               MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
         });
@@ -504,6 +643,9 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.title,
               invalidInput,
               MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
         });
@@ -519,6 +661,9 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.title,
               MOCK_ENTITY_SET.description,
               invalidInput,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
           expect(isValid(
@@ -529,6 +674,9 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.title,
               MOCK_ENTITY_SET.description,
               [invalidInput],
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
         });
@@ -545,6 +693,8 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.description,
               MOCK_ENTITY_SET.contacts,
               invalidInput,
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
             )
           )).toEqual(false);
           expect(isValid(
@@ -556,6 +706,57 @@ describe('EntitySet', () => {
               MOCK_ENTITY_SET.description,
               MOCK_ENTITY_SET.contacts,
               [invalidInput],
+              MOCK_ENTITY_SET.flags,
+              MOCK_ENTITY_SET.organizationId,
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "flags" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+          expect(isValid(
+            new EntitySet(
+              MOCK_ENTITY_SET.id,
+              MOCK_ENTITY_SET.entityTypeId,
+              MOCK_ENTITY_SET.name,
+              MOCK_ENTITY_SET.title,
+              MOCK_ENTITY_SET.description,
+              MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              invalidInput,
+              MOCK_ENTITY_SET.organizationId,
+            )
+          )).toEqual(false);
+          expect(isValid(
+            new EntitySet(
+              MOCK_ENTITY_SET.id,
+              MOCK_ENTITY_SET.entityTypeId,
+              MOCK_ENTITY_SET.name,
+              MOCK_ENTITY_SET.title,
+              MOCK_ENTITY_SET.description,
+              MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              [invalidInput],
+              MOCK_ENTITY_SET.organizationId,
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "organizationId" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
+          expect(isValid(
+            new EntitySet(
+              MOCK_ENTITY_SET.id,
+              MOCK_ENTITY_SET.entityTypeId,
+              MOCK_ENTITY_SET.name,
+              MOCK_ENTITY_SET.title,
+              MOCK_ENTITY_SET.description,
+              MOCK_ENTITY_SET.contacts,
+              MOCK_ENTITY_SET.linkedEntitySets,
+              MOCK_ENTITY_SET.flags,
+              invalidInput,
             )
           )).toEqual(false);
         });
@@ -576,15 +777,19 @@ describe('EntitySet', () => {
         MOCK_ENTITY_SET.description,
         MOCK_ENTITY_SET.contacts,
         MOCK_ENTITY_SET.linkedEntitySets,
+        MOCK_ENTITY_SET.flags,
+        MOCK_ENTITY_SET.organizationId,
       );
       expect(entitySet.valueOf()).toEqual(
         fromJS({
           contacts: MOCK_ENTITY_SET.contacts,
           description: MOCK_ENTITY_SET.description,
           entityTypeId: MOCK_ENTITY_SET.entityTypeId,
+          flags: MOCK_ENTITY_SET.flags,
           id: MOCK_ENTITY_SET.id,
           linkedEntitySets: MOCK_ENTITY_SET.linkedEntitySets,
           name: MOCK_ENTITY_SET.name,
+          organizationId: MOCK_ENTITY_SET.organizationId,
           title: MOCK_ENTITY_SET.title,
         }).hashCode()
       );
@@ -601,6 +806,8 @@ describe('EntitySet', () => {
         MOCK_ENTITY_SET.description,
         MOCK_ENTITY_SET.contacts,
         MOCK_ENTITY_SET.linkedEntitySets,
+        MOCK_ENTITY_SET.flags,
+        MOCK_ENTITY_SET.organizationId,
       );
       const entitySet1 = new EntitySet(
         MOCK_ENTITY_SET.id,
@@ -610,6 +817,8 @@ describe('EntitySet', () => {
         MOCK_ENTITY_SET.description,
         MOCK_ENTITY_SET.contacts,
         MOCK_ENTITY_SET.linkedEntitySets,
+        MOCK_ENTITY_SET.flags,
+        MOCK_ENTITY_SET.organizationId,
       );
 
       const testSet = Set()
@@ -623,17 +832,21 @@ describe('EntitySet', () => {
       expect(testSet.first().contacts).toEqual(MOCK_ENTITY_SET.contacts);
       expect(testSet.first().description).toEqual(MOCK_ENTITY_SET.description);
       expect(testSet.first().entityTypeId).toEqual(MOCK_ENTITY_SET.entityTypeId);
+      expect(testSet.first().flags).toEqual(MOCK_ENTITY_SET.flags);
       expect(testSet.first().id).toEqual(MOCK_ENTITY_SET.id);
       expect(testSet.first().linkedEntitySets).toEqual(MOCK_ENTITY_SET.linkedEntitySets);
       expect(testSet.first().name).toEqual(MOCK_ENTITY_SET.name);
+      expect(testSet.first().organizationId).toEqual(MOCK_ENTITY_SET.organizationId);
       expect(testSet.first().title).toEqual(MOCK_ENTITY_SET.title);
 
       expect(testSet.last().contacts).toEqual(randomEntitySet.contacts);
       expect(testSet.last().description).toEqual(randomEntitySet.description);
       expect(testSet.last().entityTypeId).toEqual(randomEntitySet.entityTypeId);
+      expect(testSet.last().flags).toEqual(randomEntitySet.flags);
       expect(testSet.last().id).toEqual(randomEntitySet.id);
       expect(testSet.last().linkedEntitySets).toEqual(randomEntitySet.linkedEntitySets);
       expect(testSet.last().name).toEqual(randomEntitySet.name);
+      expect(testSet.last().organizationId).toEqual(randomEntitySet.organizationId);
       expect(testSet.last().title).toEqual(randomEntitySet.title);
     });
 
@@ -648,6 +861,8 @@ describe('EntitySet', () => {
         MOCK_ENTITY_SET.description,
         MOCK_ENTITY_SET.contacts,
         MOCK_ENTITY_SET.linkedEntitySets,
+        MOCK_ENTITY_SET.flags,
+        MOCK_ENTITY_SET.organizationId,
       );
       const entitySet1 = new EntitySet(
         MOCK_ENTITY_SET.id,
@@ -657,6 +872,8 @@ describe('EntitySet', () => {
         MOCK_ENTITY_SET.description,
         MOCK_ENTITY_SET.contacts,
         MOCK_ENTITY_SET.linkedEntitySets,
+        MOCK_ENTITY_SET.flags,
+        MOCK_ENTITY_SET.organizationId,
       );
 
       const testMap = Map()
