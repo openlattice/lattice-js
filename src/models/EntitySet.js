@@ -191,7 +191,7 @@ export class EntitySetBuilder {
     }
 
     if (!isNonEmptyStringArray(contacts)) {
-      throw new Error('invalid parameter: contacts must be a non-empty array of strings');
+      throw new Error('invalid parameter: contacts must be an array of strings');
     }
 
     this.contacts = Set().withMutations((set :Set<string>) => {
@@ -210,7 +210,7 @@ export class EntitySetBuilder {
     }
 
     if (!isValidUuidArray(entitySetIds)) {
-      throw new Error('invalid parameter: entitySetIds must be a non-empty array of strings');
+      throw new Error('invalid parameter: entitySetIds must be an array of valid UUIDs');
     }
 
     this.linkedEntitySets = Set().withMutations((set :Set<UUID>) => {
