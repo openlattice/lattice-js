@@ -126,6 +126,7 @@ const MOCK_ENTITY_SET :EntitySet = new EntitySetBuilder()
   .setDescription('MockEntitySetDescription')
   .setEntityTypeId('78ad8735-d5dc-42ab-96d9-677bca55e60f')
   .setId('6685abaf-5508-4f34-a3c7-46b687f66ddd')
+  .setLinkedEntitySets(['cf72e97f-109c-46a1-bb89-93a8753fd7ac'])
   .setName('MockEntitySet')
   .setTitle('MockEntitySetTitle')
   .build();
@@ -136,6 +137,7 @@ function genRandomEntitySet() :EntitySet {
     .setDescription(genRandomString())
     .setEntityTypeId(genRandomUUID())
     .setId(genRandomUUID())
+    .setLinkedEntitySets([genRandomUUID(), genRandomUUID()])
     .setName(genRandomString())
     .setTitle(genRandomString())
     .build();

@@ -6,8 +6,6 @@ import has from 'lodash/has';
 import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
-import { isValidUuid, validateNonEmptyArray } from '../utils/ValidationUtils';
-
 import {
   isDefined,
   isEmptyArray,
@@ -15,6 +13,11 @@ import {
   isNonEmptyString,
   isNonEmptyStringArray
 } from '../utils/LangUtils';
+import {
+  isValidUuid,
+  isValidUuidArray,
+  validateNonEmptyArray,
+} from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntitySet');
 
@@ -23,6 +26,7 @@ type EntitySetObject = {|
   description ?:string;
   entityTypeId :UUID;
   id ?:UUID;
+  linkedEntitySets ?:UUID[];
   name :string;
   title :string;
 |};
@@ -37,6 +41,7 @@ export default class EntitySet {
   description :?string;
   entityTypeId :UUID;
   id :?UUID;
+  linkedEntitySets :?UUID[];
   name :string;
   title :string;
 
@@ -47,6 +52,7 @@ export default class EntitySet {
     title :string,
     description :?string,
     contacts :string[],
+    linkedEntitySets :?UUID[],
   ) {
 
     // required properties
@@ -62,6 +68,10 @@ export default class EntitySet {
 
     if (isDefined(id)) {
       this.id = id;
+    }
+
+    if (isDefined(linkedEntitySets)) {
+      this.linkedEntitySets = linkedEntitySets;
     }
   }
 
@@ -89,6 +99,10 @@ export default class EntitySet {
       entitySetObj.description = this.description;
     }
 
+    if (isDefined(this.linkedEntitySets)) {
+      entitySetObj.linkedEntitySets = this.linkedEntitySets;
+    }
+
     return entitySetObj;
   }
 
@@ -104,12 +118,13 @@ export default class EntitySet {
  */
 export class EntitySetBuilder {
 
-  id :?UUID;
+  contacts :string[];
+  description :?string;
   entityTypeId :UUID;
+  id :?UUID;
+  linkedEntitySets :?UUID[];
   name :string;
   title :string;
-  description :?string;
-  contacts :string[];
 
   setId(entitySetId :?UUID) :EntitySetBuilder {
 
@@ -176,12 +191,31 @@ export class EntitySetBuilder {
     }
 
     if (!isNonEmptyStringArray(contacts)) {
-      throw new Error('invalid parameter: contacts must be a non-empty array of strings');
+      throw new Error('invalid parameter: contacts must be an array of strings');
     }
 
     this.contacts = Set().withMutations((set :Set<string>) => {
       contacts.forEach((contact :string) => {
         set.add(contact);
+      });
+    }).toJS();
+
+    return this;
+  }
+
+  setLinkedEntitySets(entitySetIds :$ReadOnlyArray<UUID>) :EntitySetBuilder {
+
+    if (!isDefined(entitySetIds) || isEmptyArray(entitySetIds)) {
+      return this;
+    }
+
+    if (!isValidUuidArray(entitySetIds)) {
+      throw new Error('invalid parameter: entitySetIds must be an array of valid UUIDs');
+    }
+
+    this.linkedEntitySets = Set().withMutations((set :Set<UUID>) => {
+      entitySetIds.forEach((entitySetId :UUID) => {
+        set.add(entitySetId);
       });
     }).toJS();
 
@@ -213,6 +247,7 @@ export class EntitySetBuilder {
       this.title,
       this.description,
       this.contacts,
+      this.linkedEntitySets,
     );
   }
 }
@@ -242,6 +277,10 @@ export function isValidEntitySet(entitySet :any) :boolean {
 
     if (has(entitySet, 'id')) {
       entitySetBuilder.setId(entitySet.id);
+    }
+
+    if (has(entitySet, 'linkedEntitySets')) {
+      entitySetBuilder.setLinkedEntitySets(entitySet.linkedEntitySets);
     }
 
     entitySetBuilder.build();
