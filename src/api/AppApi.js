@@ -11,7 +11,7 @@ import { isValidApp } from '../models/App';
 import { isValidAppType } from '../models/AppType';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyObject } from '../utils/LangUtils';
-import { isValidTypeArray, isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidTypeArray, isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 
 import {
   BULK_PATH,
@@ -67,7 +67,7 @@ export function getApp(appId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
@@ -136,7 +136,7 @@ export function getAppTypesForAppTypeIds(appTypeIds :UUID[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuidArray(appTypeIds)) {
+  if (!isValidUUIDArray(appTypeIds)) {
     errorMsg = 'invalid parameter: appTypeIds must be a valid UUID array';
     LOG.error(errorMsg, appTypeIds);
     return Promise.reject(errorMsg);
@@ -168,7 +168,7 @@ export function getConfigurations(appId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
@@ -206,13 +206,13 @@ export function installApp(appId :UUID, organizationId :UUID, prefix :string) :P
 
   let errorMsg = '';
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
@@ -329,7 +329,7 @@ export function getAppType(appTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(appTypeId)) {
+  if (!isValidUUID(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
     return Promise.reject(errorMsg);
@@ -399,7 +399,7 @@ export function deleteApp(appId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
@@ -432,7 +432,7 @@ export function deleteAppType(appTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(appTypeId)) {
+  if (!isValidUUID(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
     return Promise.reject(errorMsg);
@@ -469,13 +469,13 @@ export function addAppTypeToApp(appId :UUID, appTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(appTypeId)) {
+  if (!isValidUUID(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
     return Promise.reject(errorMsg);
@@ -512,13 +512,13 @@ export function removeAppTypeFromApp(appId :UUID, appTypeId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(appTypeId)) {
+  if (!isValidUUID(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
     return Promise.reject(errorMsg);
@@ -565,25 +565,25 @@ export function updateAppEntitySetConfig(
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(appTypeId)) {
+  if (!isValidUUID(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -629,19 +629,19 @@ export function updateAppConfigPermissions(
 
   let errorMsg = '';
 
-  if (!isValidUuid(organizationId)) {
+  if (!isValidUUID(organizationId)) {
     errorMsg = 'invalid parameter: organizationId must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(appTypeId)) {
+  if (!isValidUUID(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
     return Promise.reject(errorMsg);
@@ -687,7 +687,7 @@ export function updateAppMetadata(appId :UUID, metadataUpdate :Object) :Promise<
 
   let errorMsg = '';
 
-  if (!isValidUuid(appId)) {
+  if (!isValidUUID(appId)) {
     errorMsg = 'invalid parameter: appId must be a valid UUID';
     LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
@@ -723,13 +723,13 @@ export function updateAppMetadata(appId :UUID, metadataUpdate :Object) :Promise<
     return Promise.reject(errorMsg);
   }
 
-  if (has(metadataUpdate, 'id') && !isValidUuid(metadataUpdate.id)) {
+  if (has(metadataUpdate, 'id') && !isValidUUID(metadataUpdate.id)) {
     errorMsg = 'invalid parameter: id must be a valid UUID';
     LOG.error(errorMsg, metadataUpdate.id);
     return Promise.reject(errorMsg);
   }
 
-  if (has(metadataUpdate, 'appTypeIds') && !isValidUuidArray(metadataUpdate.appTypeIds)) {
+  if (has(metadataUpdate, 'appTypeIds') && !isValidUUIDArray(metadataUpdate.appTypeIds)) {
     errorMsg = 'invalid parameter: appTypeIds must be a valid UUID array';
     LOG.error(errorMsg, metadataUpdate.appTypeIds);
     return Promise.reject(errorMsg);
@@ -768,7 +768,7 @@ export function updateAppTypeMetadata(appTypeId :UUID, metadataUpdate :Object) :
 
   let errorMsg = '';
 
-  if (!isValidUuid(appTypeId)) {
+  if (!isValidUUID(appTypeId)) {
     errorMsg = 'invalid parameter: appTypeId must be a valid UUID';
     LOG.error(errorMsg, appTypeId);
     return Promise.reject(errorMsg);
@@ -792,7 +792,7 @@ export function updateAppTypeMetadata(appTypeId :UUID, metadataUpdate :Object) :
     return Promise.reject(errorMsg);
   }
 
-  if (has(metadataUpdate, 'entityTypeId') && !isValidUuid(metadataUpdate.entityTypeId)) {
+  if (has(metadataUpdate, 'entityTypeId') && !isValidUUID(metadataUpdate.entityTypeId)) {
     errorMsg = 'invalid parameter: entityTypeId must be a valid UUID';
     LOG.error(errorMsg, metadataUpdate.entityTypeId);
     return Promise.reject(errorMsg);
@@ -804,7 +804,7 @@ export function updateAppTypeMetadata(appTypeId :UUID, metadataUpdate :Object) :
     return Promise.reject(errorMsg);
   }
 
-  if (has(metadataUpdate, 'id') && !isValidUuid(metadataUpdate.id)) {
+  if (has(metadataUpdate, 'id') && !isValidUUID(metadataUpdate.id)) {
     errorMsg = 'invalid parameter: id must be a valid UUID';
     LOG.error(errorMsg, metadataUpdate.id);
     return Promise.reject(errorMsg);

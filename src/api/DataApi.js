@@ -57,8 +57,8 @@ import {
 import {
   isValidMultimap,
   isValidMultimapArray,
-  isValidUuid,
-  isValidUuidArray,
+  isValidUUID,
+  isValidUUIDArray,
 } from '../utils/ValidationUtils';
 
 import type { UpdateType, DeleteType } from '../constants/types';
@@ -185,14 +185,14 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
   // TODO: validate SetMultimap
-  if (!isValidMultimapArray(entities, isValidUuid)) {
+  if (!isValidMultimapArray(entities, isValidUUID)) {
     errorMsg = 'invalid parameter: entities must be a non-empty multimap array';
     LOG.error(errorMsg, entities);
     return Promise.reject(errorMsg);
@@ -230,13 +230,13 @@ export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :D
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityKeyId)) {
+  if (!isValidUUID(entityKeyId)) {
     errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);
@@ -286,7 +286,7 @@ export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, de
   let errorMsg = '';
   const data :Object = {};
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -298,7 +298,7 @@ export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, de
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuidArray(filter[ENTITY_KEY_IDS])) {
+  if (!isValidUUIDArray(filter[ENTITY_KEY_IDS])) {
     errorMsg = `invalid parameter: filter.${ENTITY_KEY_IDS} must be a non-empty set of valid UUIDs`;
     LOG.error(errorMsg, filter[ENTITY_KEY_IDS]);
     return Promise.reject(errorMsg);
@@ -310,7 +310,7 @@ export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, de
   data[ENTITY_KEY_IDS] = entityKeyIds;
 
   let destinationEntitySetIds :?UUID[];
-  if (isEmptyArray(filter[DESTINATION_ES_IDS]) || isValidUuidArray(filter[DESTINATION_ES_IDS])) {
+  if (isEmptyArray(filter[DESTINATION_ES_IDS]) || isValidUUIDArray(filter[DESTINATION_ES_IDS])) {
     destinationEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[DESTINATION_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();
@@ -323,7 +323,7 @@ export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, de
   }
 
   let sourceEntitySetIds :?UUID[];
-  if (isEmptyArray(filter[SOURCE_ES_IDS]) || isValidUuidArray(filter[SOURCE_ES_IDS])) {
+  if (isEmptyArray(filter[SOURCE_ES_IDS]) || isValidUUIDArray(filter[SOURCE_ES_IDS])) {
     sourceEntitySetIds = Set().withMutations((set :Set<UUID>) => (
       filter[SOURCE_ES_IDS].forEach((id :UUID) => set.add(id))
     )).toJS();
@@ -381,7 +381,7 @@ export function deleteEntitySet(entitySetId :UUID, deleteType :DeleteType) :Prom
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -429,13 +429,13 @@ export function getEntityData(entitySetId :UUID, entityKeyId :UUID) :Promise<*> 
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityKeyId)) {
+  if (!isValidUUID(entityKeyId)) {
     errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);
@@ -482,7 +482,7 @@ export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], ent
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -490,7 +490,7 @@ export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], ent
 
   const entitySetSelection = {};
 
-  if (isValidUuidArray(propertyTypeIds)) {
+  if (isValidUUIDArray(propertyTypeIds)) {
     entitySetSelection.properties = Set().withMutations((set :Set<UUID>) => {
       propertyTypeIds.forEach((propertyTypeId :UUID) => {
         set.add(propertyTypeId);
@@ -503,7 +503,7 @@ export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], ent
     return Promise.reject(errorMsg);
   }
 
-  if (isValidUuidArray(entityKeyIds)) {
+  if (isValidUUIDArray(entityKeyIds)) {
     entitySetSelection.ids = Set().withMutations((set :Set<UUID>) => {
       entityKeyIds.forEach((entityKeyId :UUID) => {
         set.add(entityKeyId);
@@ -541,7 +541,7 @@ export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?s
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return null;
@@ -585,7 +585,7 @@ export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -628,7 +628,7 @@ export function updateEntityData(entitySetId :UUID, entities :Object, updateType
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -645,7 +645,7 @@ export function updateEntityData(entitySetId :UUID, entities :Object, updateType
   // validate all keys are UUIDs
   for (let index1 = 0; index1 < ids.length; index1 += 1) {
     const id :any = ids[index1];
-    if (!isValidUuid(id)) {
+    if (!isValidUUID(id)) {
       errorMsg = 'invalid parameter: entities must be a non-empty object where all keys are UUIDs';
       LOG.error(errorMsg, id);
       return Promise.reject(errorMsg);
@@ -656,7 +656,7 @@ export function updateEntityData(entitySetId :UUID, entities :Object, updateType
   // TODO: validate SetMultimap
   for (let index2 = 0; index2 < ids.length; index2 += 1) {
     const value :any = entities[ids[index2]];
-    if (!isValidMultimap(value, isValidUuid)) {
+    if (!isValidMultimap(value, isValidUUID)) {
       errorMsg = 'invalid parameter: entities must be a non-empty object where all values are multimaps';
       LOG.error(errorMsg, value);
       return Promise.reject(errorMsg);
@@ -716,20 +716,20 @@ export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, e
   let errorMsg = '';
   LOG.warn('DataApi.replaceEntityInEntitySet() is deprecated. Please use DataApi.updateEntityData() instead.');
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityKeyId)) {
+  if (!isValidUUID(entityKeyId)) {
     errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);
   }
 
   // TODO: validate SetMultimap
-  if (!isValidMultimap(entity, isValidUuid)) {
+  if (!isValidMultimap(entity, isValidUUID)) {
     errorMsg = 'invalid parameter: entity must be a non-empty multimap';
     LOG.error(errorMsg, entity);
     return Promise.reject(errorMsg);
@@ -771,13 +771,13 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
   let errorMsg = '';
   LOG.warn('DataApi.replaceEntityInEntitySetUsingFqns() is deprecated. Please use DataApi.updateEntityData() instead.');
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUuid(entityKeyId)) {
+  if (!isValidUUID(entityKeyId)) {
     errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);

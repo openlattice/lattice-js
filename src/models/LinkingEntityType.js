@@ -9,7 +9,7 @@ import { Set } from 'immutable';
 import Logger from '../utils/Logger';
 import EntityType, { isValidEntityType } from './EntityType';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUIDArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('LinkingEntityType');
 
@@ -53,7 +53,7 @@ export class LinkingEntityTypeBuilder {
 
   setEntityTypeIds(entityTypeIds :UUID[]) :LinkingEntityTypeBuilder {
 
-    if (!isValidUuidArray(entityTypeIds)) {
+    if (!isValidUUIDArray(entityTypeIds)) {
       throw new Error('invalid parameter: entityTypeIds must be an array of valid UUIDs');
     }
 

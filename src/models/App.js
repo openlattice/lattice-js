@@ -14,8 +14,8 @@ import {
 } from '../utils/LangUtils';
 
 import {
-  isValidUuid,
-  isValidUuidArray
+  isValidUUID,
+  isValidUUIDArray
 } from '../utils/ValidationUtils';
 
 const LOG = new Logger('App');
@@ -75,7 +75,7 @@ export class AppBuilder {
   url :string;
 
   setAppTypeIds(appTypeIds :UUID[]) :AppBuilder {
-    if (!isValidUuidArray(appTypeIds)) {
+    if (!isValidUUIDArray(appTypeIds)) {
       throw new Error('invalid parameter: appTypeIds must be a valid UUID array');
     }
 
@@ -107,7 +107,7 @@ export class AppBuilder {
       return this;
     }
 
-    if (!isValidUuid(appId)) {
+    if (!isValidUUID(appId)) {
       throw new Error('invalid parameter: appId must be a valid UUID');
     }
 

@@ -7,7 +7,7 @@ import { Map, Set, fromJS } from 'immutable';
 import Logger from '../utils/Logger';
 import EntitySet, { isValidEntitySet } from './EntitySet';
 import { isDefined, isNonEmptyArray } from '../utils/LangUtils';
-import { isValidUuid } from '../utils/ValidationUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
 
 const LOG = new Logger('LinkingEntitySet');
 
@@ -54,8 +54,8 @@ export class LinkingEntitySetBuilder {
           return;
         }
 
-        const allKeysUuids = property.keySeq().every((key :UUID) => isValidUuid(key));
-        const allValuesUuids = property.valueSeq().every((value :UUID) => isValidUuid(value));
+        const allKeysUuids = property.keySeq().every((key :UUID) => isValidUUID(key));
+        const allValuesUuids = property.valueSeq().every((value :UUID) => isValidUUID(value));
 
         if (!allKeysUuids) {
           errorMsg = 'invalid parameter: linkingProperties entry keys must all be UUIDs';

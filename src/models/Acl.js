@@ -8,7 +8,7 @@ import { Map, fromJS } from 'immutable';
 import Ace, { isValidAceArray } from './Ace';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidUuidArray, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidUUIDArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { AceObject } from './Ace';
 
@@ -84,7 +84,7 @@ export class AclBuilder {
       return this;
     }
 
-    if (!isValidUuidArray(aclKey)) {
+    if (!isValidUUIDArray(aclKey)) {
       throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
     }
 

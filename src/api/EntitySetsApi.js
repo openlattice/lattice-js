@@ -30,7 +30,7 @@ import {
 } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isDefined, isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
-import { isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntitySetsApi');
 
@@ -96,7 +96,7 @@ function deleteEntitySet(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -151,7 +151,7 @@ function getEntitySet(entitySetId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -254,7 +254,7 @@ function getPropertyTypeMetaDataForEntitySet(entitySetId :UUID, propertyTypeId ?
 
   let errorMsg = '';
 
-  if (!isValidUuid(entitySetId)) {
+  if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
@@ -270,7 +270,7 @@ function getPropertyTypeMetaDataForEntitySet(entitySetId :UUID, propertyTypeId ?
       });
   }
 
-  if (isDefined(propertyTypeId) && !isValidUuid(propertyTypeId)) {
+  if (isDefined(propertyTypeId) && !isValidUUID(propertyTypeId)) {
     errorMsg = 'invalid parameter: propertyTypeId must be a valid UUID';
     LOG.error(errorMsg, propertyTypeId);
     return Promise.reject(errorMsg);
@@ -302,7 +302,7 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
 
   let errorMsg = '';
 
-  if (!isValidUuidArray(entitySetIds)) {
+  if (!isValidUUIDArray(entitySetIds)) {
     errorMsg = 'invalid parameter: entitySetIds must be a valid UUID array';
     LOG.error(errorMsg, entitySetIds);
     return Promise.reject(errorMsg);
