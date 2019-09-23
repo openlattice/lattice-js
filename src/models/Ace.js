@@ -7,8 +7,9 @@ import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
 import Principal, { isValidPrincipal } from './Principal';
+import { PermissionTypes } from '../constants/types';
 import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidPermissionArray, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidTypeArray, validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { PrincipalObject } from './Principal';
 import type { PermissionType } from '../constants/types/PermissionTypes';
@@ -71,8 +72,8 @@ export class AceBuilder {
       return this;
     }
 
-    if (!isValidPermissionArray(permissions)) {
-      throw new Error('invalid parameter: permissions must be a non-empty array of valid Permissions');
+    if (!isValidTypeArray(permissions, PermissionTypes)) {
+      throw new Error('invalid parameter: permissions must be a non-empty array of valid PermissionTypes');
     }
 
     this.permissions = Set().withMutations((set :Set<PermissionType>) => {

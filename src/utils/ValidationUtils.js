@@ -5,7 +5,6 @@
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 
-import PermissionTypes from '../constants/types/PermissionTypes';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import { isNonEmptyArray, isNonEmptyObject, isNonEmptyString } from './LangUtils';
 
@@ -51,10 +50,10 @@ export function isValidFqnArray(fqns :$ReadOnlyArray<any>) :boolean %checks {
   return validateNonEmptyArray(fqns, (fqn :any) => FullyQualifiedName.isValid(fqn));
 }
 
-export function isValidPermissionArray(permissions :$ReadOnlyArray<any>) :boolean %checks {
+export function isValidTypeArray(values :$ReadOnlyArray<any>, types :Object) :boolean %checks {
 
-  return validateNonEmptyArray(permissions, (permission :any) => (
-    isNonEmptyString(permission) && PermissionTypes[permission]
+  return validateNonEmptyArray(values, (value :any) => (
+    isNonEmptyString(value) && types[value]
   ));
 }
 

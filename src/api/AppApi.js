@@ -5,12 +5,13 @@ import has from 'lodash/has';
 import Logger from '../utils/Logger';
 
 import FullyQualifiedName from '../models/FullyQualifiedName';
+import { APP_API } from '../constants/ApiNames';
+import { PermissionTypes } from '../constants/types';
 import { isValidApp } from '../models/App';
 import { isValidAppType } from '../models/AppType';
-import { APP_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isNonEmptyString, isNonEmptyObject } from '../utils/LangUtils';
-import { isValidPermissionArray, isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
+import { isValidTypeArray, isValidUuid, isValidUuidArray } from '../utils/ValidationUtils';
 
 import {
   BULK_PATH,
@@ -646,7 +647,7 @@ export function updateAppConfigPermissions(
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidPermissionArray(permissions)) {
+  if (!isValidTypeArray(permissions, PermissionTypes)) {
     errorMsg = 'invalid parameter: permissions must be a valid PermissionType array';
     LOG.error(errorMsg, permissions);
     return Promise.reject(errorMsg);
