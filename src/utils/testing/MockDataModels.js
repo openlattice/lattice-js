@@ -12,6 +12,7 @@ import {
 import {
   ActionTypes,
   AnalyzerTypes,
+  EntitySetFlagTypes,
   IndexTypes,
   PermissionTypes,
   PrincipalTypes,
@@ -125,8 +126,11 @@ const MOCK_ENTITY_SET :EntitySet = new EntitySetBuilder()
   .setContacts(['OPENLATTICE'])
   .setDescription('MockEntitySetDescription')
   .setEntityTypeId('78ad8735-d5dc-42ab-96d9-677bca55e60f')
+  .setFlags([EntitySetFlagTypes.LINKING])
   .setId('6685abaf-5508-4f34-a3c7-46b687f66ddd')
+  .setLinkedEntitySets(['cf72e97f-109c-46a1-bb89-93a8753fd7ac'])
   .setName('MockEntitySet')
+  .setOrganizationId('9b93bc80-79c3-44c8-807c-ada1a8d6484f')
   .setTitle('MockEntitySetTitle')
   .build();
 
@@ -135,8 +139,11 @@ function genRandomEntitySet() :EntitySet {
     .setContacts([genRandomString()])
     .setDescription(genRandomString())
     .setEntityTypeId(genRandomUUID())
+    .setFlags([pickRandomValue(EntitySetFlagTypes)])
     .setId(genRandomUUID())
+    .setLinkedEntitySets([genRandomUUID(), genRandomUUID()])
     .setName(genRandomString())
+    .setOrganizationId(genRandomUUID())
     .setTitle(genRandomString())
     .build();
 }
