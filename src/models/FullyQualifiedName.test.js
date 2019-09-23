@@ -1,4 +1,5 @@
 /* eslint-disable no-use-before-define, no-new */
+import randomUUID from 'uuid/v4';
 import { fromJS } from 'immutable';
 
 import FullyQualifiedName from './FullyQualifiedName';
@@ -117,6 +118,21 @@ describe('FullyQualifiedName', () => {
             new FullyQualifiedName(fqn);
           }).toThrow('invalid FQN: name must be a non-empty string');
         });
+      });
+
+      test('should throw when given more than 63 characters', () => {
+        expect(() => {
+          new FullyQualifiedName(`${randomUUID()}.${randomUUID()}`);
+        }).toThrow('invalid FQN: FQNs must be <= 63 characters, got 73');
+        expect(() => {
+          new FullyQualifiedName(randomUUID(), randomUUID());
+        }).toThrow('invalid FQN: FQNs must be <= 63 characters, got 73');
+        expect(() => {
+          new FullyQualifiedName({ namespace: randomUUID(), name: randomUUID() });
+        }).toThrow('invalid FQN: FQNs must be <= 63 characters, got 73');
+        expect(() => {
+          new FullyQualifiedName(fromJS({ namespace: randomUUID(), name: randomUUID() }));
+        }).toThrow('invalid FQN: FQNs must be <= 63 characters, got 73');
       });
 
     });
@@ -271,6 +287,13 @@ describe('FullyQualifiedName', () => {
         });
       });
 
+      test('should return false when given more than 63 characters', () => {
+        expect(FullyQualifiedName.isValid(`${randomUUID()}.${randomUUID()}`)).toEqual(false);
+        expect(FullyQualifiedName.isValid(randomUUID(), randomUUID())).toEqual(false);
+        expect(FullyQualifiedName.isValid({ namespace: randomUUID(), name: randomUUID() })).toEqual(false);
+        expect(FullyQualifiedName.isValid(fromJS({ namespace: randomUUID(), name: randomUUID() }))).toEqual(false);
+      });
+
     });
 
   });
@@ -365,6 +388,13 @@ describe('FullyQualifiedName', () => {
           fqn.name = invalidInput;
           expect(FullyQualifiedName.toString(fqn)).toEqual('');
         });
+      });
+
+      test('should return an empty string when given more than 63 characters', () => {
+        expect(FullyQualifiedName.toString(`${randomUUID()}.${randomUUID()}`)).toEqual('');
+        expect(FullyQualifiedName.toString(randomUUID(), randomUUID())).toEqual('');
+        expect(FullyQualifiedName.toString({ namespace: randomUUID(), name: randomUUID() })).toEqual('');
+        expect(FullyQualifiedName.toString(fromJS({ namespace: randomUUID(), name: randomUUID() }))).toEqual('');
       });
 
     });
