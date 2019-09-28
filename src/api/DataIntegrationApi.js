@@ -24,7 +24,13 @@ import Logger from '../utils/Logger';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
 import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyObject, isNonEmptyArray } from '../utils/LangUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
+import {
+  isNonEmptyObject,
+  isNonEmptyArray,
+  isEmptyObject,
+  isEmptyString
+} from '../utils/LangUtils';
 
 const LOG = new Logger('DataIntegrationApi');
 
@@ -125,12 +131,30 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
  *
  * DataIntegrationApi.getEntityKeyIds({ entityIds: [entityKey_1, entityKey_2, ...] });
  */
-export function getEntityKeyIds(entityKeys :string[]) :Promise<*> {
+export function getEntityKeyIds(entityKeys :Object[]) :Promise<*> {
 
   let errorMsg = '';
 
   if (isUndefined(entityKeys) || !isNonEmptyArray(entityKeys)) {
-    errorMsg = 'invalid parameter: entityIdsCreation must be a non-empty set of entityIds';
+    errorMsg = 'invalid parameter: entityIdsCreation must be a non-empty set of entityKeys';
+  }
+  console.log(entityKeys)
+  if (isNonEmptyArray(entityKeys)) {
+    entityKeys.forEach((entityKey) => {
+      if (isEmptyObject(entityKey)) {
+        errorMsg = 'invalid parameter: entityKeys must be non-empty objects';
+      }
+      const { entitySetId, entityId } = entityKey;
+      if (!isValidUUID(entitySetId)) {
+        errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+      }
+      if (isEmptyString(entityId)) {
+        errorMsg = 'invalid parameter: entityId must be a non-empty String';
+      }
+    });
+  }
+
+  if (errorMsg) {
     LOG.error(errorMsg);
     return Promise.reject(errorMsg);
   }
