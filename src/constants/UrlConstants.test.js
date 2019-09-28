@@ -31,6 +31,7 @@ const EXPECTED = Map({
   EDM_PATH                      : 'edm',
   EMAIL_DOMAINS_PATH            : 'email-domains',
   EMAIL_PATH                    : 'email',
+  ENTITY_KEY_IDS_PATH           : 'entityKeyIds',
   ENTITY_SETS_PATH              : 'entity-sets',
   ENTITY_TYPE_PATH              : 'entity/type',
   ENUM_TYPE_PATH                : 'enum/type',
