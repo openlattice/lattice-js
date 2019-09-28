@@ -3,6 +3,7 @@
 import * as AxiosUtils from '../utils/axios';
 import * as DataIntegrationApi from './DataIntegrationApi';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
+import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
 
 import {
   genMockBaseUrl,
@@ -61,6 +62,13 @@ const MOCK_ASSOCIATIATIONS = [
   }
 ];
 
+const MOCK_ENTITY_KEYS = [
+  { entitySetId: genRandomUUID(), entityId: genRandomString() },
+  { entitySetId: genRandomUUID(), entityId: genRandomString() },
+  { entitySetId: genRandomUUID(), entityId: genRandomString() },
+  { entitySetId: genRandomUUID(), entityId: genRandomString() }
+];
+
 const MOCK_BASE_URL = genMockBaseUrl();
 
 jest.mock('../utils/axios');
@@ -78,6 +86,7 @@ describe('DataIntegrationApi', () => {
   });
 
   createEntityAndAssociationData();
+  getEntityKeyIds();
 });
 
 // TODO: write unit tests for createEntityAndAssociationData()
@@ -121,5 +130,16 @@ function createEntityAndAssociationData() {
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_INTEGRATION_API);
   });
+}
 
+function getEntityKeyIds() {
+  describe('getEntityKeyIds()', () => {
+
+    const apiToTest = DataIntegrationApi.getEntityKeyIds;
+
+    const validParams = MOCK_ENTITY_KEYS;
+
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_INTEGRATION_API);
+  });
 }
