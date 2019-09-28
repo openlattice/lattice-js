@@ -3,7 +3,6 @@
 import * as AxiosUtils from '../utils/axios';
 import * as DataIntegrationApi from './DataIntegrationApi';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
-import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
 
 import {
   genMockBaseUrl,
