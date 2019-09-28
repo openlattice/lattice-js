@@ -22,8 +22,9 @@ import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
+import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyObject } from '../utils/LangUtils';
+import { isNonEmptyObject, isNonEmptyArray } from '../utils/LangUtils';
 
 const LOG = new Logger('DataIntegrationApi');
 
@@ -101,6 +102,42 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
 
   return getApiAxiosInstance(DATA_INTEGRATION_API)
     .post('/', bulkDataCreation)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+/**
+ * `POST /integration`
+ *
+ * Creates entities linked by associations for the given entity data.
+ *
+ * @static
+ * @memberof lattice.DataIntegrationApi
+ * @param {Object} entityKeys
+ * @return {Promise} - a Promise that resolves with a set of the entityKeyIds that were created for the given entityIds
+ *
+ * @example
+ *
+ * entityKey_1 = { entitySetId: "entitySetId_1", entityId: "entityId_1" };
+ * entityKey_2 = { entitySetId: "entitySetId_2", entityId: "entityId_2" };
+ *
+ * DataIntegrationApi.getEntityKeyIds({ entityIds: [entityKey_1, entityKey_2, ...] });
+ */
+export function getEntityKeyIds(entityKeys :string[]) :Promise<*> {
+
+  let errorMsg = '';
+  console.log(entityKeys);
+
+  if (isUndefined(entityKeys) || !isNonEmptyArray(entityKeys)) {
+    errorMsg = 'invalid parameter: entityIdsCreation must be a non-empty set of entityIds';
+    LOG.error(errorMsg);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_INTEGRATION_API)
+    .post(`/${ENTITY_KEY_IDS_PATH}`, entityKeys)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
