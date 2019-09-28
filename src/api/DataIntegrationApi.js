@@ -134,7 +134,7 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
  * entityKey_1 = { entitySetId: "entitySetId_1", entityId: "entityId_1" };
  * entityKey_2 = { entitySetId: "entitySetId_2", entityId: "entityId_2" };
  *
- * DataIntegrationApi.getEntityKeyIds({ entityIds: [entityKey_1, entityKey_2, ...] });
+ * DataIntegrationApi.getEntityKeyIds([entityKey_1, entityKey_2, ...]);
  */
 export function getEntityKeyIds(entityKeys :EntityKey) :Promise<*> {
 
