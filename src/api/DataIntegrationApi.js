@@ -32,6 +32,11 @@ import {
   isEmptyString
 } from '../utils/LangUtils';
 
+type EntityKey = {|
+  entityId :string;
+  entitySetId :UUID;
+|};
+
 const LOG = new Logger('DataIntegrationApi');
 
 /**
@@ -131,7 +136,7 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
  *
  * DataIntegrationApi.getEntityKeyIds({ entityIds: [entityKey_1, entityKey_2, ...] });
  */
-export function getEntityKeyIds(entityKeys :Object[]) :Promise<*> {
+export function getEntityKeyIds(entityKeys :EntityKey) :Promise<*> {
 
   let errorMsg = '';
 
