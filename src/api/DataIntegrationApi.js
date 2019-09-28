@@ -109,7 +109,7 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
     });
 }
 /**
- * `POST /integration`
+ * `POST /integration/entityKeyIds`
  *
  * Creates entities linked by associations for the given entity data.
  *
