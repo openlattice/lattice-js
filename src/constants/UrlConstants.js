@@ -30,6 +30,7 @@ export const EDM_PATH :string = 'edm';
 export const EMAIL_DOMAINS_PATH :string = 'email-domains';
 export const EMAIL_PATH :string = 'email';
 export const ENTITY_SETS_PATH :string = 'entity-sets';
+export const ENTITY_KEY_IDS_PATH :string = 'entityKeyIds';
 export const ENTITY_TYPE_PATH :string = 'entity/type';
 export const ENUM_TYPE_PATH :string = 'enum/type';
 export const EXPIRATION_PATH :string = 'expiration';
