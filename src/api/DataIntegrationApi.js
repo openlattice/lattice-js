@@ -128,7 +128,6 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
 export function getEntityKeyIds(entityKeys :string[]) :Promise<*> {
 
   let errorMsg = '';
-  console.log(entityKeys);
 
   if (isUndefined(entityKeys) || !isNonEmptyArray(entityKeys)) {
     errorMsg = 'invalid parameter: entityIdsCreation must be a non-empty set of entityIds';
