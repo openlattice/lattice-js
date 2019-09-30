@@ -3,7 +3,13 @@
 import * as AxiosUtils from '../utils/axios';
 import * as PrincipalsApi from './PrincipalsApi';
 import { PRINCIPALS_API } from '../constants/ApiNames';
-import { EMAIL_PATH, SEARCH_PATH, USERS_PATH } from '../constants/UrlConstants';
+import {
+  CURRENT_PATH,
+  EMAIL_PATH,
+  ROLES_PATH,
+  SEARCH_PATH,
+  USERS_PATH,
+} from '../constants/UrlConstants';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
@@ -32,8 +38,10 @@ describe('PrincipalsApi', () => {
     jest.clearAllMocks();
   });
 
-  testGetUser();
+  testGetAllRoles();
   testGetAllUsers();
+  testGetCurrentRoles();
+  testGetUser();
   testSearchAllUsers();
   testSearchAllUsersByEmail();
 });
@@ -64,12 +72,43 @@ function testGetAllUsers() {
     const functionToTest = PrincipalsApi.getAllUsers;
 
     const validParams = [];
-    const invalidParams = [];
     const axiosParams = [`/${USERS_PATH}`];
 
     testApiShouldReturnPromise(functionToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest);
+    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+  });
+}
+
+function testGetAllRoles() {
+
+  describe('getAllRoles()', () => {
+
+    const functionToTest = PrincipalsApi.getAllRoles;
+
+    const validParams = [];
+    const axiosParams = [`/${ROLES_PATH}`];
+
+    testApiShouldReturnPromise(functionToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest);
+    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+  });
+}
+
+function testGetCurrentRoles() {
+
+  describe('getCurrentRoles()', () => {
+
+    const functionToTest = PrincipalsApi.getCurrentRoles;
+
+    const validParams = [];
+    const axiosParams = [`/${ROLES_PATH}/${CURRENT_PATH}`];
+
+    testApiShouldReturnPromise(functionToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest);
     testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
   });
 }
