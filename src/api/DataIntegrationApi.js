@@ -26,6 +26,7 @@ import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isValidUUID } from '../utils/ValidationUtils';
 import {
+  isDefined,
   isNonEmptyObject,
   isNonEmptyArray,
   isEmptyObject,
@@ -145,15 +146,17 @@ export function getEntityKeyIds(entityKeys :EntityKey[]) :Promise<*> {
   }
   else {
     entityKeys.forEach((entityKey) => {
-      if (isEmptyObject(entityKey)) {
+      if (!isDefined(entityKey) || isEmptyObject(entityKey)) {
         errorMsg = 'invalid parameter: entityKeys must be non-empty objects';
       }
-      const { entitySetId, entityId } = entityKey;
-      if (!isValidUUID(entitySetId)) {
-        errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-      }
-      if (isEmptyString(entityId)) {
-        errorMsg = 'invalid parameter: entityId must be a non-empty String';
+      else {
+        const { entitySetId, entityId } = entityKey;
+        if (!isValidUUID(entitySetId)) {
+          errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+        }
+        if (isEmptyString(entityId)) {
+          errorMsg = 'invalid parameter: entityId must be a non-empty String';
+        }
       }
     });
   }

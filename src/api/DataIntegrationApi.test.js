@@ -4,6 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as DataIntegrationApi from './DataIntegrationApi';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
 import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
+import { INVALID_PARAMS } from '../utils/testing/Invalid';
 
 import {
   genMockBaseUrl,
@@ -70,12 +71,6 @@ const MOCK_ENTITY_KEYS = [
   { entitySetId: genRandomUUID(), entityId: genRandomString() },
   { entitySetId: genRandomUUID(), entityId: genRandomString() },
   { entitySetId: genRandomUUID(), entityId: genRandomString() }
-];
-const INVALID_MOCK_ENTITY_KEYS = [
-  { entitySetId: genRandomString(), entityId: '' },
-  { entitySetId: genRandomString(), entityId: '' },
-  { entitySetId: genRandomString(), entityId: '' },
-  { entitySetId: genRandomString(), entityId: '' }
 ];
 
 const MOCK_BASE_URL = genMockBaseUrl();
@@ -148,7 +143,7 @@ function getEntityKeyIds() {
 
     const validParams = [MOCK_ENTITY_KEYS];
 
-    const invalidParams = [INVALID_MOCK_ENTITY_KEYS];
+    const invalidParams = [INVALID_PARAMS];
 
     const axiosParams = [`/${ENTITY_KEY_IDS_PATH}`, MOCK_ENTITY_KEYS];
 
