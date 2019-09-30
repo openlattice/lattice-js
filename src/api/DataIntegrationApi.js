@@ -136,7 +136,7 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
  *
  * DataIntegrationApi.getEntityKeyIds([entityKey_1, entityKey_2, ...]);
  */
-export function getEntityKeyIds(entityKeys :EntityKey) :Promise<*> {
+export function getEntityKeyIds(entityKeys :EntityKey[]) :Promise<*> {
 
   let errorMsg = '';
 
