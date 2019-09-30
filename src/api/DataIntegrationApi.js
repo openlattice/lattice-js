@@ -22,8 +22,21 @@ import isUndefined from 'lodash/isUndefined';
 
 import Logger from '../utils/Logger';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
+import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyObject } from '../utils/LangUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
+import {
+  isDefined,
+  isNonEmptyObject,
+  isNonEmptyArray,
+  isEmptyObject,
+  isEmptyString
+} from '../utils/LangUtils';
+
+type EntityKey = {|
+  entityId :string;
+  entitySetId :UUID;
+|};
 
 const LOG = new Logger('DataIntegrationApi');
 
@@ -101,6 +114,60 @@ export function createEntityAndAssociationData(bulkDataCreation :Object) :Promis
 
   return getApiAxiosInstance(DATA_INTEGRATION_API)
     .post('/', bulkDataCreation)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+/**
+ * `POST /integration/entityKeyIds`
+ *
+ * Creates entities linked by associations for the given entity data.
+ *
+ * @static
+ * @memberof lattice.DataIntegrationApi
+ * @param {Object} entityKeys
+ * @return {Promise} - a Promise that resolves with a set of the entityKeyIds that were created for the given entityIds
+ *
+ * @example
+ *
+ * entityKey_1 = { entitySetId: "entitySetId_1", entityId: "entityId_1" };
+ * entityKey_2 = { entitySetId: "entitySetId_2", entityId: "entityId_2" };
+ *
+ * DataIntegrationApi.getEntityKeyIds([entityKey_1, entityKey_2, ...]);
+ */
+export function getEntityKeyIds(entityKeys :EntityKey[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyArray(entityKeys)) {
+    errorMsg = 'invalid parameter: entityKeys must be a non-empty set of entityKeys';
+  }
+  else {
+    entityKeys.forEach((entityKey) => {
+      if (!isDefined(entityKey) || isEmptyObject(entityKey)) {
+        errorMsg = 'invalid parameter: entityKeys must be non-empty objects';
+      }
+      else {
+        const { entitySetId, entityId } = entityKey;
+        if (!isValidUUID(entitySetId)) {
+          errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+        }
+        if (isEmptyString(entityId)) {
+          errorMsg = 'invalid parameter: entityId must be a non-empty String';
+        }
+      }
+    });
+  }
+
+  if (errorMsg) {
+    LOG.error(errorMsg);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_INTEGRATION_API)
+    .post(`/${ENTITY_KEY_IDS_PATH}`, entityKeys)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
