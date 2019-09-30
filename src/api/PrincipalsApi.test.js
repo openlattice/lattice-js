@@ -71,12 +71,27 @@ function testGetAllUsers() {
     const functionToTest = PrincipalsApi.getAllUsers;
 
     const validParams = [];
-    const invalidParams = [];
     const axiosParams = [`/${USERS_PATH}`];
 
     testApiShouldReturnPromise(functionToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest);
+    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+  });
+}
+
+function testGetAllRoles() {
+
+  describe('getAllRoles()', () => {
+
+    const functionToTest = PrincipalsApi.getAllRoles;
+
+    const validParams = [];
+    const axiosParams = [`/${ROLES_PATH}`];
+
+    testApiShouldReturnPromise(functionToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest);
     testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
   });
 }
@@ -88,12 +103,11 @@ function testGetCurrentRoles() {
     const functionToTest = PrincipalsApi.getCurrentRoles;
 
     const validParams = [];
-    const invalidParams = [];
     const axiosParams = [`/${ROLES_PATH}/${CURRENT_PATH}`];
 
     testApiShouldReturnPromise(functionToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest);
     testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
   });
 }
