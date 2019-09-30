@@ -3,7 +3,13 @@
 import * as AxiosUtils from '../utils/axios';
 import * as PrincipalsApi from './PrincipalsApi';
 import { PRINCIPALS_API } from '../constants/ApiNames';
-import { EMAIL_PATH, SEARCH_PATH, USERS_PATH } from '../constants/UrlConstants';
+import {
+  CURRENT_PATH,
+  EMAIL_PATH,
+  ROLES_PATH,
+  SEARCH_PATH,
+  USERS_PATH,
+} from '../constants/UrlConstants';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
@@ -34,6 +40,7 @@ describe('PrincipalsApi', () => {
 
   testGetUser();
   testGetAllUsers();
+  testGetCurrentRoles();
   testSearchAllUsers();
   testSearchAllUsersByEmail();
 });
@@ -66,6 +73,23 @@ function testGetAllUsers() {
     const validParams = [];
     const invalidParams = [];
     const axiosParams = [`/${USERS_PATH}`];
+
+    testApiShouldReturnPromise(functionToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);
+    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
+    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+  });
+}
+
+function testGetCurrentRoles() {
+
+  describe('getCurrentRoles()', () => {
+
+    const functionToTest = PrincipalsApi.getCurrentRoles;
+
+    const validParams = [];
+    const invalidParams = [];
+    const axiosParams = [`/${ROLES_PATH}/${CURRENT_PATH}`];
 
     testApiShouldReturnPromise(functionToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PRINCIPALS_API);

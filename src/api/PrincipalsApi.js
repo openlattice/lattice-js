@@ -29,7 +29,8 @@ import {
   EMAIL_PATH,
   ROLES_PATH,
   SEARCH_PATH,
-  USERS_PATH
+  USERS_PATH,
+  CURRENT_PATH
 } from '../constants/UrlConstants';
 
 const LOG = new Logger('PrincipalsApi');
@@ -72,6 +73,24 @@ export function getAllRoles() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${ROLES_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /principals/roles`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise}
+ */
+export function getCurrentRoles() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${ROLES_PATH}/${CURRENT_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
