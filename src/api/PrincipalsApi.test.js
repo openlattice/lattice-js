@@ -38,9 +38,10 @@ describe('PrincipalsApi', () => {
     jest.clearAllMocks();
   });
 
-  testGetUser();
+  testGetAllRoles();
   testGetAllUsers();
   testGetCurrentRoles();
+  testGetUser();
   testSearchAllUsers();
   testSearchAllUsersByEmail();
 });
