@@ -141,7 +141,7 @@ export function getEntityKeyIds(entityKeys :EntityKey[]) :Promise<*> {
   let errorMsg = '';
 
   if (!isNonEmptyArray(entityKeys)) {
-    errorMsg = 'invalid parameter: entityIdsCreation must be a non-empty set of entityKeys';
+    errorMsg = 'invalid parameter: entityKeys must be a non-empty set of entityKeys';
   }
   else {
     entityKeys.forEach((entityKey) => {
