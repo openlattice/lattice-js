@@ -230,18 +230,19 @@ export class EntitySetBuilder {
     return this;
   }
 
-  setLinkedEntitySets(entitySetIds :$ReadOnlyArray<UUID>) :EntitySetBuilder {
+  setLinkedEntitySets(entitySetIds :?$ReadOnlyArray<UUID>) :EntitySetBuilder {
 
     if (!isDefined(entitySetIds) || isEmptyArray(entitySetIds)) {
       return this;
     }
 
-    if (!isValidUUIDArray(entitySetIds)) {
+    const ids = entitySetIds || [];
+    if (!isValidUUIDArray(ids)) {
       throw new Error('invalid parameter: entitySetIds must be an array of valid UUIDs');
     }
 
     this.linkedEntitySets = Set().withMutations((set :Set<UUID>) => {
-      entitySetIds.forEach((entitySetId :UUID) => {
+      ids.forEach((entitySetId :UUID) => {
         set.add(entitySetId);
       });
     }).toJS();
@@ -249,12 +250,13 @@ export class EntitySetBuilder {
     return this;
   }
 
-  setFlags(flags :$ReadOnlyArray<EntitySetFlagType>) :EntitySetBuilder {
+  setFlags(entitySetFlags :?$ReadOnlyArray<EntitySetFlagType>) :EntitySetBuilder {
 
-    if (!isDefined(flags) || isEmptyArray(flags)) {
+    if (!isDefined(entitySetFlags) || isEmptyArray(entitySetFlags)) {
       return this;
     }
 
+    const flags = entitySetFlags || [];
     if (!isValidTypeArray(flags, EntitySetFlagTypes)) {
       throw new Error('invalid parameter: flags must be an array of valid EntitySetFlagTypes');
     }
