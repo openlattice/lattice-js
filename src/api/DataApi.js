@@ -208,25 +208,29 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 }
 
 /**
- * `DELETE /data/set/{entitySetId}/{entityKeyId}?type=Soft`
+ * `DELETE /data/set/{entitySetId}?type=Soft`
  *
- * Deletes the entity with the given entityKeyId from the EntitySet with the given entitySetId.
+ * Deletes entities with the given entityKeyIds from the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
+ * @param {UUID || UUID[]} entityKeyIds
  * @param {DeleteType} deleteType
- * @return {Promise} - a Promise that resolves with the count of entities that were deleted (should be 1)
+ * @return {Promise} - a Promise that resolves with the count of entities that were deleted
  *
  * @example
- * DataApi.deleteEntity(
+ * DataApi.deleteEntityData(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["ec6865e6-e60e-424b-a071-6a9c1603d735", "3bf2a30d-fda0-4389-a1e6-8546b230efad"],
  *   "Soft"
  * );
  */
-export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :DeleteType) :Promise<*> {
+export function deleteEntityData(
+  entitySetId :UUID,
+  entityKeyIds :UUID | UUID[],
+  deleteType ?:DeleteType = DeleteTypes.SOFT
+) :Promise<*> {
 
   let errorMsg = '';
 
@@ -236,25 +240,39 @@ export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :D
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUUID(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
+  // $FlowFixMe
+  if (!isValidUUID(entityKeyIds) && !isValidUUIDArray(entityKeyIds)) {
+    errorMsg = 'invalid parameter: entityKeyIds must be a valid UUID or array of UUIDs';
+    LOG.error(errorMsg, entityKeyIds);
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(deleteType) || !DeleteTypes[deleteType]) {
+  if (!DeleteTypes[deleteType]) {
     errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
     LOG.error(errorMsg, deleteType);
     return Promise.reject(errorMsg);
   }
 
+  let data = entityKeyIds;
+  if (typeof entityKeyIds === 'string') {
+    data = [entityKeyIds];
+  }
+
   return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}/${entityKeyId}?${TYPE_PATH}=${deleteType}`)
+    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}`, { data })
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
     });
+}
+
+/**
+ * @deprecated
+ */
+export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :DeleteType) :Promise<*> {
+  LOG.error('DataApi.deleteEntity() is deprecated. Please use DataApi.deleteEntityData() instead');
+  return deleteEntityData(entitySetId, entityKeyId, deleteType);
 }
 
 /**

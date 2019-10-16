@@ -961,6 +961,48 @@ export function getAllMembers(organizationId :UUID) :Promise<*> {
 }
 
 /**
+ * `GET /organizations/{orgId}/principals/roles/{roleId}/members`
+ *
+ * Gets all members with a given Role for the given Organization UUID.
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @returns {Promise<Member[]>} - a Promise that resolves with an array of member objects
+ *
+ * @example
+ * OrganizationsApi.getAllUsersOfRole(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8"
+ * );
+ */
+export function getAllUsersOfRole(organizationId :UUID, roleId :UUID) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${MEMBERS_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PUT /organizations/{orgId}/principals/members/{memberId}`
  *
  * Adds the member identified by the given member UUID to the organization identified by the given org UUID.
