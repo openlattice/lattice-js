@@ -22,6 +22,7 @@ import {
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
@@ -188,7 +189,7 @@ function deleteEntity() {
     const mockEKID = genRandomUUID();
     const mockESID = genRandomUUID();
     const validParams = [mockESID, mockEKID, DeleteTypes.Soft];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
@@ -218,20 +219,20 @@ function deleteEntityData() {
       const mockEKID = genRandomUUID();
       const mockBody = { data: [mockEKID] };
       const validParams = [mockESID, mockEKID, DeleteTypes.Soft];
-      const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+      const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
       testApiShouldReturnPromise(apiToTest, validParams);
       testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
       testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
       testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
 
       test('type=Soft', () => {
-        const apiInvocationParams = [mockESID, mockEKID, 'Soft'];
+        const apiInvocationParams = [mockESID, mockEKID, DeleteTypes.Soft];
         const expectedAxiosParams = [`/${SET_PATH}/${mockESID}?${TYPE_PATH}=${DeleteTypes.Soft}`, mockBody];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
       });
 
       test('type=Hard', () => {
-        const apiInvocationParams = [mockESID, mockEKID, 'Hard'];
+        const apiInvocationParams = [mockESID, mockEKID, DeleteTypes.Hard];
         const expectedAxiosParams = [`/${SET_PATH}/${mockESID}?${TYPE_PATH}=${DeleteTypes.Hard}`, mockBody];
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
       });
@@ -241,7 +242,11 @@ function deleteEntityData() {
       const mockEKIDs = [genRandomUUID()];
       const mockBody = { data: mockEKIDs };
       const validParams = [mockESID, mockEKIDs, DeleteTypes.Soft];
-      const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY, INVALID_PARAMS_SS];
+      const invalidParams = [
+        INVALID_PARAMS_SS,
+        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+        INVALID_PARAMS_FOR_OPTIONAL_STRING
+      ];
       testApiShouldReturnPromise(apiToTest, validParams);
       testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
       testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);

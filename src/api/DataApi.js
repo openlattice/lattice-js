@@ -226,7 +226,7 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
  *   "Soft"
  * );
  */
-export function deleteEntityData(entitySetId :UUID, entityKeyIds :UUID | UUID[], deleteType :DeleteType) :Promise<*> {
+export function deleteEntityData(entitySetId :UUID, entityKeyIds :UUID | UUID[], deleteType ?:DeleteType = DeleteTypes.SOFT) :Promise<*> {
 
   let errorMsg = '';
 
@@ -243,7 +243,7 @@ export function deleteEntityData(entitySetId :UUID, entityKeyIds :UUID | UUID[],
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(deleteType) || !DeleteTypes[deleteType]) {
+  if (!DeleteTypes[deleteType]) {
     errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
     LOG.error(errorMsg, deleteType);
     return Promise.reject(errorMsg);
