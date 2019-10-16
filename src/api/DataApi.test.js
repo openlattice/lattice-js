@@ -197,13 +197,13 @@ function deleteEntity() {
 
     test('type=Soft', () => {
       const apiInvocationParams = [mockESID, mockEKID, 'Soft'];
-      const expectedAxiosParams = [`/${SET_PATH}/${mockESID}/${mockEKID}?${TYPE_PATH}=${DeleteTypes.Soft}`];
+      const expectedAxiosParams = [`/${SET_PATH}/${mockESID}?${TYPE_PATH}=${DeleteTypes.Soft}`, { data: [mockEKID] }];
       return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
     });
 
     test('type=Hard', () => {
       const apiInvocationParams = [mockESID, mockEKID, 'Hard'];
-      const expectedAxiosParams = [`/${SET_PATH}/${mockESID}/${mockEKID}?${TYPE_PATH}=${DeleteTypes.Hard}`];
+      const expectedAxiosParams = [`/${SET_PATH}/${mockESID}?${TYPE_PATH}=${DeleteTypes.Hard}`, { data: [mockEKID] }];
       return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
     });
   });
