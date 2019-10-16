@@ -82,6 +82,7 @@ describe('OrganizationsApi', () => {
   testAddRoleToMember();
   testRemoveRoleFromMember();
   testGetAllMembers();
+  testGetAllUsersOfRole();
   testAddMemberToOrganization();
   testRemoveMemberFromOrganization();
   testGrantTrustToOrganization();
@@ -505,6 +506,24 @@ function testGetAllMembers() {
     const validParams = [MOCK_ORGANIZATION.id];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+  });
+}
+
+function testGetAllUsersOfRole() {
+
+  describe('getAllUsersOfRole()', () => {
+
+    const fnToTest = OrganizationsApi.getAllUsersOfRole;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${MEMBERS_PATH}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
