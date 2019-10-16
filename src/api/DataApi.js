@@ -226,7 +226,11 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
  *   "Soft"
  * );
  */
-export function deleteEntityData(entitySetId :UUID, entityKeyIds :UUID | UUID[], deleteType ?:DeleteType = DeleteTypes.SOFT) :Promise<*> {
+export function deleteEntityData(
+  entitySetId :UUID,
+  entityKeyIds :UUID | UUID[],
+  deleteType ?:DeleteType = DeleteTypes.SOFT
+) :Promise<*> {
 
   let errorMsg = '';
 
