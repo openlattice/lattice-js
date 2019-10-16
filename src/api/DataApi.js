@@ -258,6 +258,62 @@ export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :D
 }
 
 /**
+ * `DELETE /data/set/{entitySetId}?type=Soft`
+ *
+ * Deletes entities with the given entityKeyIds from the EntitySet with the given entitySetId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID || UUID[]} entityKeyIds
+ * @param {DeleteType} deleteType
+ * @return {Promise} - a Promise that resolves with the count of entities that were deleted
+ *
+ * @example
+ * DataApi.deleteEntityData(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   ["ec6865e6-e60e-424b-a071-6a9c1603d735", "3bf2a30d-fda0-4389-a1e6-8546b230efad"],
+ *   "Soft"
+ * );
+ */
+export function deleteEntityData(entitySetId :UUID, entityKeyIds :UUID | UUID[], deleteType :DeleteType) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  // $FlowFixMe
+  if (!isValidUUID(entityKeyIds) && !isValidUUIDArray(entityKeyIds)) {
+    errorMsg = 'invalid parameter: entityKeyIds must be a valid UUID or array of UUIDs';
+    LOG.error(errorMsg, entityKeyIds);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(deleteType) || !DeleteTypes[deleteType]) {
+    errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
+    LOG.error(errorMsg, deleteType);
+    return Promise.reject(errorMsg);
+  }
+
+  let data = entityKeyIds;
+  if (typeof entityKeyIds === 'string') {
+    data = [entityKeyIds];
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}`, { data })
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `POST /data/set/{entitySetId}/neighbors?type=Hard`
  *
  *  Deletes the entities matching the given entity ids and all of its neighbor entities provided in the filter.
