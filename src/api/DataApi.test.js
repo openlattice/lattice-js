@@ -264,7 +264,6 @@ function deleteEntityData() {
         return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'delete');
       });
     });
-1
   });
 }
 
