@@ -46,7 +46,7 @@
     "babel-loader": "~8.0.0",
     "bluebird": "~3.7.0",
     "documentation": "~12.1.0",
-    "eslint": "~6.5.0",
+    "eslint": "~6.6.0",
     "eslint-config-airbnb-base": "~14.0.0",
     "eslint-import-resolver-webpack": "~0.11.0",
     "eslint-loader": "~3.0.0",
