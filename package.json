@@ -28,7 +28,7 @@
     "immutable": "4.0.0-rc.12",
     "lodash": "~4.17.10",
     "loglevel": "~1.6.0",
-    "validator": "~11.1.0"
+    "validator": "~12.0.0"
   },
   "devDependencies": {
     "@babel/cli": "~7.6.0",
@@ -46,25 +46,25 @@
     "babel-loader": "~8.0.0",
     "bluebird": "~3.7.0",
     "documentation": "~12.1.0",
-    "eslint": "~6.5.0",
+    "eslint": "~6.6.0",
     "eslint-config-airbnb-base": "~14.0.0",
     "eslint-import-resolver-webpack": "~0.11.0",
     "eslint-loader": "~3.0.0",
     "eslint-plugin-flowtype": "~4.3.0",
     "eslint-plugin-import": "~2.18.0",
-    "eslint-plugin-jest": "~22.19.0",
-    "flow-bin": "~0.109.0",
+    "eslint-plugin-jest": "~23.0.0",
+    "flow-bin": "~0.110.0",
     "jest": "~24.8.0",
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
     "uuid": "~3.3.0",
     "webpack": "~4.41.0",
     "webpack-cli": "~3.3.0",
-    "webpack-dev-server": "~3.8.0"
+    "webpack-dev-server": "~3.9.0"
   },
   "peerDependencies": {
-    "@babel/polyfill": "~7.4.0",
-    "@babel/runtime": "~7.4.0"
+    "@babel/polyfill": "~7.6.0",
+    "@babel/runtime": "~7.6.0"
   },
   "scripts": {
     "build:dev": "webpack --config config/webpack/webpack.config.js --env.development",
