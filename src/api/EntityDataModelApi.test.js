@@ -31,6 +31,7 @@ import {
 } from '../utils/testing/MockDataModels';
 
 import {
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnNullOnInvalidParameters,
@@ -99,15 +100,16 @@ function testGetEntityDataModel() {
 
   describe('getEntityDataModel()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntityDataModel;
+    const apiToTest = EntityDataModelApi.getEntityDataModel;
 
     const validParams = [];
     const axiosParams = ['/'];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -115,17 +117,18 @@ function testGetEntityDataModelDiff() {
 
   describe('getEntityDataModelDiff()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntityDataModelDiff;
+    const apiToTest = EntityDataModelApi.getEntityDataModelDiff;
 
     const validParams = [MOCK_EDM_DM];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${DIFF_PATH}`, MOCK_EDM_DM];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -133,7 +136,7 @@ function testGetEntityDataModelProjection() {
 
   describe('getEntityDataModelProjection()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntityDataModelProjection;
+    const apiToTest = EntityDataModelApi.getEntityDataModelProjection;
 
     // TODO: create mock projection object
     const mockProjection = [{}];
@@ -141,12 +144,13 @@ function testGetEntityDataModelProjection() {
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', mockProjection];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     // TODO: add invalid parameters tests
-    // testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    // testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -154,15 +158,16 @@ function testGetEntityDataModelVersion() {
 
   describe('getEntityDataModelVersion()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntityDataModelVersion;
+    const apiToTest = EntityDataModelApi.getEntityDataModelVersion;
 
     const validParams = [];
     const axiosParams = [`/${VERSION_PATH}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -170,17 +175,18 @@ function testUpdateEntityDataModel() {
 
   describe('updateEntityDataModel()', () => {
 
-    const fnToTest = EntityDataModelApi.updateEntityDataModel;
+    const apiToTest = EntityDataModelApi.updateEntityDataModel;
 
     const validParams = [MOCK_EDM_DM];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', MOCK_EDM_DM];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'patch');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -188,17 +194,18 @@ function testGetSchema() {
 
   describe('getSchema()', () => {
 
-    const fnToTest = EntityDataModelApi.getSchema;
+    const apiToTest = EntityDataModelApi.getSchema;
 
     const validParams = [MOCK_FQN];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${SCHEMA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -206,7 +213,7 @@ function testGetSchemaFileUrl() {
 
   describe('getSchemaFileUrl()', () => {
 
-    const fnToTest = EntityDataModelApi.getSchemaFileUrl;
+    const apiToTest = EntityDataModelApi.getSchemaFileUrl;
 
     const MOCK_FILE_TYPE = 'json';
     const validParams = [MOCK_FQN, MOCK_FILE_TYPE];
@@ -228,8 +235,8 @@ function testGetSchemaFileUrl() {
       );
     });
 
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldReturnNullOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldReturnNullOnInvalidParameters(apiToTest, validParams, invalidParams);
   });
 }
 
@@ -237,15 +244,16 @@ function testGetAllSchemas() {
 
   describe('getAllSchemas()', () => {
 
-    const fnToTest = EntityDataModelApi.getAllSchemas;
+    const apiToTest = EntityDataModelApi.getAllSchemas;
 
     const validParams = [];
     const axiosParams = [`/${SCHEMA_PATH}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -253,17 +261,18 @@ function testGetAllSchemasInNamespace() {
 
   describe('getAllSchemasInNamespace()', () => {
 
-    const fnToTest = EntityDataModelApi.getAllSchemasInNamespace;
+    const apiToTest = EntityDataModelApi.getAllSchemasInNamespace;
 
     const validParams = [MOCK_FQN.namespace];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${SCHEMA_PATH}/${MOCK_FQN.namespace}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -271,17 +280,18 @@ function testCreateSchema() {
 
   describe('createSchema()', () => {
 
-    const fnToTest = EntityDataModelApi.createSchema;
+    const apiToTest = EntityDataModelApi.createSchema;
 
     const validParams = [MOCK_SCHEMA];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${SCHEMA_PATH}`, MOCK_SCHEMA];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -289,17 +299,18 @@ function testCreateEmptySchema() {
 
   describe('createEmptySchema()', () => {
 
-    const fnToTest = EntityDataModelApi.createEmptySchema;
+    const apiToTest = EntityDataModelApi.createEmptySchema;
 
     const validParams = [MOCK_FQN];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${SCHEMA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -307,7 +318,7 @@ function testUpdateSchema() {
 
   describe('updateSchema()', () => {
 
-    const fnToTest = EntityDataModelApi.updateSchema;
+    const apiToTest = EntityDataModelApi.updateSchema;
     const MOCK_ACTION = 'ADD';
 
     const validParams = [
@@ -333,11 +344,12 @@ function testUpdateSchema() {
       }
     ];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'patch');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -345,17 +357,18 @@ function testGetEntityType() {
 
   describe('getEntityType()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntityType;
+    const apiToTest = EntityDataModelApi.getEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -363,17 +376,18 @@ function testGetEntityTypeId() {
 
   describe('getEntityTypeId()', () => {
 
-    const fnToTest = EntityDataModelApi.getEntityTypeId;
+    const apiToTest = EntityDataModelApi.getEntityTypeId;
 
     const validParams = [MOCK_FQN];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${IDS_PATH}/${ENTITY_TYPE_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -381,15 +395,16 @@ function testGetAllEntityTypes() {
 
   describe('getAllEntityTypes()', () => {
 
-    const fnToTest = EntityDataModelApi.getAllEntityTypes;
+    const apiToTest = EntityDataModelApi.getAllEntityTypes;
 
     const validParams = [];
     const axiosParams = [`/${ENTITY_TYPE_PATH}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -397,17 +412,18 @@ function testCreateEntityType() {
 
   describe('createEntityType()', () => {
 
-    const fnToTest = EntityDataModelApi.createEntityType;
+    const apiToTest = EntityDataModelApi.createEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}`, MOCK_ENTITY_TYPE];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -415,17 +431,18 @@ function testDeleteEntityType() {
 
   describe('deleteEntityType()', () => {
 
-    const fnToTest = EntityDataModelApi.deleteEntityType;
+    const apiToTest = EntityDataModelApi.deleteEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -433,17 +450,18 @@ function testAddPropertyTypeToEntityType() {
 
   describe('addPropertyTypeToEntityType()', () => {
 
-    const fnToTest = EntityDataModelApi.addPropertyTypeToEntityType;
+    const apiToTest = EntityDataModelApi.addPropertyTypeToEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id, MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}/${MOCK_PROPERTY_TYPE.id}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -451,17 +469,18 @@ function testRemovePropertyTypeFromEntityType() {
 
   describe('removePropertyTypeFromEntityType()', () => {
 
-    const fnToTest = EntityDataModelApi.removePropertyTypeFromEntityType;
+    const apiToTest = EntityDataModelApi.removePropertyTypeFromEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id, MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}/${MOCK_PROPERTY_TYPE.id}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -469,17 +488,18 @@ function testUpdateEntityTypeMetaData() {
 
   describe('updateEntityTypeMetaData()', () => {
 
-    const fnToTest = EntityDataModelApi.updateEntityTypeMetaData;
+    const apiToTest = EntityDataModelApi.updateEntityTypeMetaData;
 
     const validParams = [MOCK_ENTITY_TYPE.id, MOCK_METADATA_UPDATE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`, MOCK_METADATA_UPDATE];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'patch');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -487,17 +507,18 @@ function testGetPropertyType() {
 
   describe('getPropertyType()', () => {
 
-    const fnToTest = EntityDataModelApi.getPropertyType;
+    const apiToTest = EntityDataModelApi.getPropertyType;
 
     const validParams = [MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -505,17 +526,18 @@ function testGetPropertyTypeId() {
 
   describe('getPropertyTypeId()', () => {
 
-    const fnToTest = EntityDataModelApi.getPropertyTypeId;
+    const apiToTest = EntityDataModelApi.getPropertyTypeId;
 
     const validParams = [MOCK_FQN];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${IDS_PATH}/${PROPERTY_TYPE_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -523,15 +545,16 @@ function testGetAllPropertyTypes() {
 
   describe('getAllPropertyTypes()', () => {
 
-    const fnToTest = EntityDataModelApi.getAllPropertyTypes;
+    const apiToTest = EntityDataModelApi.getAllPropertyTypes;
 
     const validParams = [];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -539,17 +562,18 @@ function testGetAllPropertyTypesInNamespace() {
 
   describe('getAllPropertyTypesInNamespace()', () => {
 
-    const fnToTest = EntityDataModelApi.getAllPropertyTypesInNamespace;
+    const apiToTest = EntityDataModelApi.getAllPropertyTypesInNamespace;
 
     const validParams = [MOCK_FQN.namespace];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${NAMESPACE_PATH}/${MOCK_FQN.namespace}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -557,17 +581,18 @@ function testCreatePropertyType() {
 
   describe('createPropertyType()', () => {
 
-    const fnToTest = EntityDataModelApi.createPropertyType;
+    const apiToTest = EntityDataModelApi.createPropertyType;
 
     const validParams = [MOCK_PROPERTY_TYPE];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}`, MOCK_PROPERTY_TYPE];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -575,17 +600,18 @@ function testDeletePropertyType() {
 
   describe('deletePropertyType()', () => {
 
-    const fnToTest = EntityDataModelApi.deletePropertyType;
+    const apiToTest = EntityDataModelApi.deletePropertyType;
 
     const validParams = [MOCK_PROPERTY_TYPE.id];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -593,16 +619,17 @@ function testUpdatePropertyTypeMetaData() {
 
   describe('updatePropertyTypeMetaData()', () => {
 
-    const fnToTest = EntityDataModelApi.updatePropertyTypeMetaData;
+    const apiToTest = EntityDataModelApi.updatePropertyTypeMetaData;
 
     const validParams = [MOCK_PROPERTY_TYPE.id, MOCK_METADATA_UPDATE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`, MOCK_METADATA_UPDATE];
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, EDM_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
+    testApiShouldReturnPromise(apiToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, EDM_API);
+    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'patch');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
