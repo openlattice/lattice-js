@@ -35,6 +35,7 @@ import {
 
 import {
   assertApiShouldSendCorrectHttpRequest,
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
@@ -95,6 +96,7 @@ function createAssociations() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -112,6 +114,7 @@ function createEntityAndAssociationData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -135,6 +138,7 @@ function createOrMergeEntityData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -160,6 +164,7 @@ function deleteEntitiesAndNeighbors() {
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
 
     test('type=Soft', () => {
       const apiInvocationParams = [mockEntitySetId, { entityKeyIds: [mockEntityKeyId] }, DeleteTypes.Soft];
@@ -195,6 +200,7 @@ function deleteEntity() {
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
 
     test('type=Soft', () => {
       const apiInvocationParams = [mockESID, mockEKID, 'Soft'];
@@ -224,6 +230,7 @@ function deleteEntityData() {
       testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
       testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
       testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+      testApiShouldCatchRejectedPromise(apiToTest, validParams);
 
       test('type=Soft', () => {
         const apiInvocationParams = [mockESID, mockEKID, DeleteTypes.Soft];
@@ -251,6 +258,7 @@ function deleteEntityData() {
       testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
       testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
       testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+      testApiShouldCatchRejectedPromise(apiToTest, validParams);
 
       test('type=Soft', () => {
         const apiInvocationParams = [mockESID, mockEKIDs, 'Soft'];
@@ -280,6 +288,7 @@ function deleteEntitySet() {
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
 
     test('type=Soft', () => {
       const apiInvocationParams = [mockEntitySetId, 'Soft'];
@@ -312,6 +321,7 @@ function getEntityData() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -409,6 +419,7 @@ function getEntitySetData() {
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -474,6 +485,7 @@ function getEntitySetSize() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -499,6 +511,7 @@ function replaceEntityData() {
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_API);
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
 
     // TODO: add tests to validate "partial" query param is being set correctly for invalid values
     describe('should send a PUT request with the correct params', () => {
@@ -546,6 +559,7 @@ function replaceEntityInEntitySet() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
@@ -571,5 +585,6 @@ function replaceEntityInEntitySetUsingFqns() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
