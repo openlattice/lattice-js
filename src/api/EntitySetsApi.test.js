@@ -13,6 +13,7 @@ import {
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
 import {
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
@@ -65,6 +66,7 @@ function testCreateEntitySets() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -83,6 +85,7 @@ function testDeleteEntitySet() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -99,6 +102,7 @@ function testGetAllEntitySets() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ENTITY_SETS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -117,6 +121,7 @@ function testGetEntitySet() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -135,6 +140,7 @@ function testGetEntitySetId() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -156,6 +162,7 @@ function testGetEntitySetIds() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -174,6 +181,7 @@ function testGetPropertyTypeMetaDataForEntitySet() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
   describe('getPropertyTypeMetaDataForEntitySet() - entitySetId, propertyTypeId', () => {
@@ -189,6 +197,7 @@ function testGetPropertyTypeMetaDataForEntitySet() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -207,5 +216,6 @@ function testGetPropertyTypeMetaDataForEntitySets() {
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
