@@ -59,41 +59,6 @@ function testApiShouldCatchRejectedPromise(functionToTest, functionParams) {
   });
 }
 
-function testApiShouldSendCorrectDeleteRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a DELETE request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'delete');
-  });
-}
-
-function testApiShouldSendCorrectGetRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a GET request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'get');
-  });
-}
-
-function testApiShouldSendCorrectPatchRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a PATCH request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'patch');
-  });
-}
-
-function testApiShouldSendCorrectPostRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a POST request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'post');
-  });
-}
-
-function testApiShouldSendCorrectPutRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a PUT request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'put');
-  });
-}
-
 // AxiosUtils.getApiAxiosInstance() is expected to be mocked with jest.mock() in the test file
 function testApiShouldReturnPromise(functionToTest, validParams) {
 
@@ -291,12 +256,7 @@ export {
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnNullOnInvalidParameters,
   testApiShouldReturnPromise,
-  testApiShouldSendCorrectDeleteRequest,
-  testApiShouldSendCorrectGetRequest,
   testApiShouldSendCorrectHttpRequest,
-  testApiShouldSendCorrectPatchRequest,
-  testApiShouldSendCorrectPostRequest,
-  testApiShouldSendCorrectPutRequest,
   testApiShouldUseCorrectAxiosInstance,
   testEnumIntegrity,
 };
