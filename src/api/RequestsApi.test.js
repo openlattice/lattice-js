@@ -12,6 +12,7 @@ import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
   assertApiShouldSendCorrectHttpRequest,
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
@@ -84,33 +85,35 @@ function testGetAllRequestStatuses() {
 
     describe('get all RequestStatuses', () => {
 
-      const apiToTest = RequestsApi.getAllRequestStatuses;
+      const fnToTest = RequestsApi.getAllRequestStatuses;
       const validParams = [];
       const axiosParams = [{ url: '/', method: 'get' }];
 
-      testApiShouldReturnPromise(apiToTest, validParams);
-      testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, REQUESTS_API);
-      testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'request');
+      testApiShouldReturnPromise(fnToTest, validParams);
+      testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, REQUESTS_API);
+      testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
+      testApiShouldCatchRejectedPromise(fnToTest, validParams);
     });
 
     describe('get all RequestStatuses for the specified RequestState', () => {
 
-      const apiToTest = RequestsApi.getAllRequestStatuses;
+      const fnToTest = RequestsApi.getAllRequestStatuses;
       const validParams = [{ state: RequestStateTypes.SUBMITTED }];
       const invalidParams = [INVALID_PARAMS_NOT_DEFINED_ALLOWED];
       const axiosParams = [{ url: `/${RequestStateTypes.SUBMITTED}`, method: 'get' }];
 
-      testApiShouldReturnPromise(apiToTest, validParams);
-      testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, REQUESTS_API);
-      testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-      testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-      testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'request');
+      testApiShouldReturnPromise(fnToTest, validParams);
+      testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, REQUESTS_API);
+      testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
+      testApiShouldCatchRejectedPromise(fnToTest, validParams);
     });
 
     describe('get all RequestStatuses for the specified AclKeys', () => {
 
       // TODO: temporary
-      const apiToTest = RequestsApi.getAllRequestStatuses;
+      const fnToTest = RequestsApi.getAllRequestStatuses;
       let validParams = [{ aclKeys: [MOCK_ACL_KEY] }];
       const invalidParams = [INVALID_PARAMS_NOT_DEFINED_ALLOWED];
       let axiosParams = [{
@@ -119,11 +122,12 @@ function testGetAllRequestStatuses() {
         data: [MOCK_ACL_KEY]
       }];
 
-      testApiShouldReturnPromise(apiToTest, validParams);
-      testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, REQUESTS_API);
-      testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-      testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-      testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'request');
+      testApiShouldReturnPromise(fnToTest, validParams);
+      testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, REQUESTS_API);
+      testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
+      testApiShouldCatchRejectedPromise(fnToTest, validParams);
 
       test('should send a Set of AclKeys by correctly removing duplicates', () => {
 
@@ -149,23 +153,24 @@ function testGetAllRequestStatuses() {
           ]
         }];
 
-        return assertApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'request');
+        return assertApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
       });
     });
 
     describe('get all RequestStatuses for the specified RequestState and AclKeys', () => {
 
       // TODO: temporary
-      const apiToTest = RequestsApi.getAllRequestStatuses;
+      const fnToTest = RequestsApi.getAllRequestStatuses;
       const validParams = [{ state: RequestStateTypes.SUBMITTED, aclKeys: [MOCK_ACL_KEY] }];
       const invalidParams = [INVALID_PARAMS_NOT_DEFINED_ALLOWED];
       const axiosParams = [{ url: `/${RequestStateTypes.SUBMITTED}`, method: 'post', data: [MOCK_ACL_KEY] }];
 
-      testApiShouldReturnPromise(apiToTest, validParams);
-      testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, REQUESTS_API);
-      testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-      testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-      testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'request');
+      testApiShouldReturnPromise(fnToTest, validParams);
+      testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, REQUESTS_API);
+      testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
+      testApiShouldCatchRejectedPromise(fnToTest, validParams);
     });
   });
 }
@@ -174,16 +179,17 @@ function testSubmitRequests() {
 
   describe('submitRequests()', () => {
 
-    const apiToTest = RequestsApi.submitRequests;
+    const fnToTest = RequestsApi.submitRequests;
 
     const validParams = [[MOCK_REQUEST_DM]];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', [MOCK_REQUEST_DM]];
 
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, REQUESTS_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'put');
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, REQUESTS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
