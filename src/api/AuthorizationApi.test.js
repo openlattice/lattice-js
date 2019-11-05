@@ -14,11 +14,11 @@ import {
 } from '../utils/testing/Invalid';
 
 import {
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
-  testApiShouldSendCorrectGetRequest,
-  testApiShouldSendCorrectPostRequest,
+  testApiShouldSendCorrectHttpRequest,
   testApiShouldUseCorrectAxiosInstance
 } from '../utils/testing/TestUtils';
 
@@ -47,7 +47,7 @@ function testCheckAuthorizations() {
 
   describe('checkAuthorizations()', () => {
 
-    const functionToTest = AuthorizationApi.checkAuthorizations;
+    const fnToTest = AuthorizationApi.checkAuthorizations;
     const mockQueries = [{
       aclKey: [genRandomUUID()],
       permissions: [PermissionTypes.READ]
@@ -57,11 +57,12 @@ function testCheckAuthorizations() {
     const invalidParams = [INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
     const axiosParams = ['/', mockQueries];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, AUTHORIZATION_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, AUTHORIZATION_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -69,7 +70,7 @@ function testGetAccessibleObjects() {
 
   describe('getAccessibleObjects()', () => {
 
-    const functionToTest = AuthorizationApi.getAccessibleObjects;
+    const fnToTest = AuthorizationApi.getAccessibleObjects;
     const mockPagingToken = genRandomString();
 
     const validParams = [
@@ -88,10 +89,11 @@ function testGetAccessibleObjects() {
       `/?objectType=${SecurableTypes.EntityType}&permission=${PermissionTypes.READ}&pagingToken=${mockPagingToken}`
     ];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, AUTHORIZATION_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, AUTHORIZATION_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
