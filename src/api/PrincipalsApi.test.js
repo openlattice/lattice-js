@@ -62,7 +62,7 @@ function testGetUser() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
@@ -79,7 +79,7 @@ function testGetAllUsers() {
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
@@ -96,7 +96,7 @@ function testGetAllRoles() {
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
@@ -113,7 +113,7 @@ function testGetCurrentRoles() {
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
@@ -133,7 +133,7 @@ function testSearchAllUsersByEmail() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
@@ -153,7 +153,7 @@ function testSearchAllUsers() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }

@@ -52,7 +52,7 @@ function testCreateLinkingEntityType() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, LINKING_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
@@ -71,7 +71,7 @@ function testLinkEntitySets() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, LINKING_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
