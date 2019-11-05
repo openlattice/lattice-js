@@ -18,14 +18,11 @@
  */
 
 import Logger from '../utils/Logger';
-import AclData, { isValidAclData } from '../models/AclData';
+import AclData, { isValidAclData, isValidAclDataArray } from '../models/AclData';
 import { PERMISSIONS_API } from '../constants/ApiNames';
+import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
 import { isValidUUIDArray } from '../utils/ValidationUtils';
-
-import {
-  EXPLAIN_PATH
-} from '../constants/UrlConstants';
 
 const LOG = new Logger('PermissionsApi');
 
@@ -62,6 +59,38 @@ export function getAcl(aclKey :UUID[]) :Promise<*> {
 }
 
 /**
+ * `POST /permissions/explain`
+ *
+ * Retrieves the acl for a particular aclKey, with an explanation of where the permissions come from.
+ *
+ * @static
+ * @memberof lattice.PermissionsApi
+ * @param {UUID[]} aclKey
+ * @returns {Promise<Object>}
+ *
+ * @example
+ * PermissionsApi.getAclExplanation(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
+ */
+export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUIDArray(aclKey)) {
+    errorMsg = 'invalid parameter: aclKey must be a valid UUID array';
+    LOG.error(errorMsg, aclKey);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .post(`/${EXPLAIN_PATH}`, aclKey)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PATCH /permissions`
  *
  * Updates the Ace for a particular ACL Key, only if the user is the owner of the ACL Key.
@@ -72,22 +101,18 @@ export function getAcl(aclKey :UUID[]) :Promise<*> {
  * @returns {Promise}
  *
  * @example
- * PermissionsApi.updateAcl(
+ * PermissionsApi.updateAcls(
  *   {
- *     action: 'ADD',
- *     acl: {
- *       aclKey: [
- *         'ec6865e6-e60e-424b-a071-6a9c1603d735'
- *       ],
- *       aces: [
+ *     "action": "ADD",
+ *     "acl": {
+ *       "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *       "aces": [
  *         {
- *           principal: {
- *             type: 'USER',
- *             id: 'principalId'
+ *           "principal": {
+ *             "type": "USER",
+ *             "id": "userId"
  *           },
- *           permissions: [
- *             'READ'
- *           ]
+ *           "permissions": ["READ"]
  *         }
  *       ]
  *     }
@@ -114,30 +139,46 @@ export function updateAcl(aclData :AclData) :Promise<*> {
 }
 
 /**
- * `POST /permissions/explain`
+ * `PATCH /permissions/update`
  *
- * Retrieves the acl for a particular aclKey, with an explanation of where the permissions come from.
+ * Updates the Ace for a set of ACL Keys, only if the user is the owner of the ACL Keys.
  *
  * @static
  * @memberof lattice.PermissionsApi
- * @param {UUID[]} aclKey
- * @returns {Promise<Object>}
+ * @param {AclData[]} aclData
+ * @returns {Promise}
  *
  * @example
- * PermissionsApi.getAclExplanation(['ec6865e6-e60e-424b-a071-6a9c1603d735']);
+ * PermissionsApi.updateAcls(
+ *   [{
+ *     "action": "ADD",
+ *     "acl": {
+ *       "aclKey": ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *       "aces": [
+ *         {
+ *           "principal": {
+ *             "type": "USER",
+ *             "id": "userId"
+ *           },
+ *           "permissions": ["READ"]
+ *         }
+ *       ]
+ *     }
+ *   }]
+ * );
  */
-export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
+export function updateAcls(aclData :AclData[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidUUIDArray(aclKey)) {
-    errorMsg = 'invalid parameter: aclKey must be a valid UUID array';
-    LOG.error(errorMsg, aclKey);
+  if (!isValidAclDataArray(aclData)) {
+    errorMsg = 'invalid parameter: aclData must be an array of valid AclData objects';
+    LOG.error(errorMsg, aclData);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
-    .post(`/${EXPLAIN_PATH}`, aclKey)
+    .patch(`/${UPDATE_PATH}`, aclData)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
