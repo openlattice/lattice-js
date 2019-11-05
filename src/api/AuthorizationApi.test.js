@@ -14,11 +14,11 @@ import {
 } from '../utils/testing/Invalid';
 
 import {
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
-  testApiShouldSendCorrectGetRequest,
-  testApiShouldSendCorrectPostRequest,
+  testApiShouldSendCorrectHttpRequest,
   testApiShouldUseCorrectAxiosInstance
 } from '../utils/testing/TestUtils';
 
@@ -61,7 +61,8 @@ function testCheckAuthorizations() {
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, AUTHORIZATION_API);
     testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(functionToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(functionToTest, validParams);
   });
 }
 
@@ -92,6 +93,7 @@ function testGetAccessibleObjects() {
     testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, AUTHORIZATION_API);
     testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(functionToTest, validParams);
   });
 }
