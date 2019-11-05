@@ -24,12 +24,11 @@ import {
 } from '../constants/UrlConstants';
 
 import {
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
-  testApiShouldSendCorrectDeleteRequest,
-  testApiShouldSendCorrectGetRequest,
-  testApiShouldSendCorrectPostRequest,
+  testApiShouldSendCorrectHttpRequest,
   testApiShouldUseCorrectAxiosInstance
 } from '../utils/testing/TestUtils';
 
@@ -74,16 +73,17 @@ function testGetApps() {
 
   describe('getApps()', () => {
 
-    const functionToTest = AppApi.getApps;
+    const fnToTest = AppApi.getApps;
 
     const validParams = [];
     const invalidParams = [];
     const axiosParams = ['/'];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -91,18 +91,19 @@ function testGetApp() {
 
   describe('getApp()', () => {
 
-    const functionToTest = AppApi.getApp;
+    const fnToTest = AppApi.getApp;
     const mockId = genRandomUUID();
 
     const validParams = [mockId];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${mockId}`];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -110,18 +111,19 @@ function testGetAppByName() {
 
   describe('getAppByName', () => {
 
-    const functionToTest = AppApi.getAppByName;
+    const fnToTest = AppApi.getAppByName;
     const mockName = genRandomString();
 
     const validParams = [mockName];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${LOOKUP_PATH}/${mockName}`];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -129,7 +131,7 @@ function testGetAppTypesForAppTypeIds() {
 
   describe('getAppTypesForAppTypeIds', () => {
 
-    const functionToTest = AppApi.getAppTypesForAppTypeIds;
+    const fnToTest = AppApi.getAppTypesForAppTypeIds;
     const mockId = genRandomUUID();
 
     const validParams = [[mockId]];
@@ -139,11 +141,12 @@ function testGetAppTypesForAppTypeIds() {
       [mockId]
     ];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -151,18 +154,19 @@ function testGetConfigurations() {
 
   describe('getConfigurations()', () => {
 
-    const functionToTest = AppApi.getConfigurations;
+    const fnToTest = AppApi.getConfigurations;
     const mockId = genRandomUUID();
 
     const validParams = [mockId];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${CONFIG_PATH}/${mockId}`];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -170,7 +174,7 @@ function testInstallApp() {
 
   describe('installApp()', () => {
 
-    const functionToTest = AppApi.installApp;
+    const fnToTest = AppApi.installApp;
     const mockId = genRandomUUID();
     const mockPrefix = genRandomString();
 
@@ -190,11 +194,12 @@ function testInstallApp() {
       `/${INSTALL_PATH}/${mockId}/${MOCK_ORGANIZATION.id}/${mockPrefix}`
     ];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -202,17 +207,18 @@ function testCreateApp() {
 
   describe('createApp()', () => {
 
-    const functionToTest = AppApi.createApp;
+    const fnToTest = AppApi.createApp;
 
     const validParams = [MOCK_APP_DM];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', MOCK_APP_DM];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -220,17 +226,18 @@ function testCreateAppType() {
 
   describe('createAppType()', () => {
 
-    const functionToTest = AppApi.createAppType;
+    const fnToTest = AppApi.createAppType;
 
     const validParams = [MOCK_APP_TYPE_DM];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${TYPE_PATH}`, MOCK_APP_TYPE_DM];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -248,7 +255,8 @@ function testGetAppType() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -266,7 +274,8 @@ function testGetAppTypeByFqn() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -284,7 +293,8 @@ function testDeleteApp() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectDeleteRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -302,7 +312,8 @@ function testDeleteAppType() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectDeleteRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -320,7 +331,8 @@ function testAddAppTypeToApp() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -338,7 +350,8 @@ function testRemoveAppTypeFromApp() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectDeleteRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -358,7 +371,8 @@ function testUpdateAppEntitySetConfig() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectGetRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -385,7 +399,8 @@ function testUpdateAppConfigPermissions() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -411,7 +426,8 @@ function testUpdateAppMetadata() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -436,6 +452,7 @@ function testUpdateAppTypeMetadata() {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(fnToTest, validParams, axiosParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }

@@ -5,18 +5,20 @@ import BBPromise from 'bluebird';
 import isPlainObject from 'lodash/isPlainObject';
 import * as AxiosUtils from '../axios';
 import { INVALID_PARAMS } from './Invalid';
-import { getMockAxiosInstance } from './MockUtils';
+import { genRandomUUID, getMockAxiosInstance } from './MockUtils';
 
 export const OBJECT_TAG = '[object Object]';
 
 // AxiosUtils.getApiAxiosInstance() is expected to be mocked with jest.mock() in the test file
 function assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, axiosFunction) {
 
-  const mockAxiosInstance = getMockAxiosInstance();
+  const mockAxiosResponse = { data: { id: genRandomUUID() } };
+  const mockPromise = new Promise((resolve) => resolve(mockAxiosResponse));
+  const mockAxiosInstance = getMockAxiosInstance(mockPromise);
   AxiosUtils.getApiAxiosInstance.mockImplementationOnce(() => mockAxiosInstance);
-  expect.assertions(7);
+  expect.assertions(8);
   return functionToTest(...functionParams)
-    .then(() => {
+    .then((r) => {
       ['delete', 'get', 'patch', 'post', 'put', 'request']
         .filter((fn) => (fn !== axiosFunction))
         .forEach((fn) => {
@@ -24,6 +26,7 @@ function assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, r
         });
       expect(mockAxiosInstance[axiosFunction.toLowerCase()]).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance[axiosFunction.toLowerCase()]).toHaveBeenCalledWith(...requestParams);
+      expect(r).toEqual(mockAxiosResponse.data);
     });
 }
 
@@ -41,38 +44,18 @@ function testApiShouldSendCorrectHttpRequest(functionToTest, functionParams, req
   }
 }
 
-function testApiShouldSendCorrectDeleteRequest(functionToTest, functionParams, requestParams) {
+function testApiShouldCatchRejectedPromise(functionToTest, functionParams) {
 
-  test('should send a DELETE request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'delete');
-  });
-}
+  test('should catch rejected promise on http error', () => {
 
-function testApiShouldSendCorrectGetRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a GET request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'get');
-  });
-}
-
-function testApiShouldSendCorrectPatchRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a PATCH request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'patch');
-  });
-}
-
-function testApiShouldSendCorrectPostRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a POST request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'post');
-  });
-}
-
-function testApiShouldSendCorrectPutRequest(functionToTest, functionParams, requestParams) {
-
-  test('should send a PUT request with the correct params', () => {
-    return assertApiShouldSendCorrectHttpRequest(functionToTest, functionParams, requestParams, 'put');
+    const axiosError = new Error('failure');
+    const mockPromise = new Promise((resolve, reject) => reject(axiosError));
+    const mockAxiosInstance = getMockAxiosInstance(mockPromise);
+    AxiosUtils.getApiAxiosInstance.mockImplementationOnce(() => mockAxiosInstance);
+    return functionToTest(...functionParams)
+      .catch((e) => {
+        expect(e).toEqual(axiosError);
+      });
   });
 }
 
@@ -268,16 +251,12 @@ function testEnumIntegrity(enumToTest, expectedEnum, caseSensitive = true) {
 
 export {
   assertApiShouldSendCorrectHttpRequest,
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnNullOnInvalidParameters,
   testApiShouldReturnPromise,
-  testApiShouldSendCorrectDeleteRequest,
-  testApiShouldSendCorrectGetRequest,
   testApiShouldSendCorrectHttpRequest,
-  testApiShouldSendCorrectPatchRequest,
-  testApiShouldSendCorrectPostRequest,
-  testApiShouldSendCorrectPutRequest,
   testApiShouldUseCorrectAxiosInstance,
   testEnumIntegrity,
 };

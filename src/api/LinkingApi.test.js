@@ -9,10 +9,11 @@ import { MOCK_LINKING_ENTITY_TYPE_DM, MOCK_LINKING_REQUEST_DM } from '../utils/t
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
-  testApiShouldSendCorrectPostRequest,
+  testApiShouldSendCorrectHttpRequest,
   testApiShouldUseCorrectAxiosInstance
 } from '../utils/testing/TestUtils';
 
@@ -41,17 +42,18 @@ function testCreateLinkingEntityType() {
 
   describe('createLinkingEntityType()', () => {
 
-    const functionToTest = LinkingApi.createLinkingEntityType;
+    const fnToTest = LinkingApi.createLinkingEntityType;
 
     const validParams = [MOCK_LINKING_ENTITY_TYPE_DM];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${TYPE_PATH}`, MOCK_LINKING_ENTITY_TYPE_DM];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, LINKING_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, LINKING_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
@@ -59,16 +61,17 @@ function testLinkEntitySets() {
 
   describe('linkEntitySets()', () => {
 
-    const functionToTest = LinkingApi.linkEntitySets;
+    const fnToTest = LinkingApi.linkEntitySets;
 
     const validParams = [MOCK_LINKING_REQUEST_DM];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', MOCK_LINKING_REQUEST_DM];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, LINKING_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectPostRequest(functionToTest, validParams, axiosParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, LINKING_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }

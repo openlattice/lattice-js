@@ -15,6 +15,7 @@ import {
 
 import {
   assertApiShouldSendCorrectHttpRequest,
+  testApiShouldCatchRejectedPromise,
   testApiShouldReturnPromise,
   testApiShouldUseCorrectAxiosInstance,
   testApiShouldNotThrowOnInvalidParameters,
@@ -98,7 +99,7 @@ function createEntityAndAssociationData() {
 
   describe('createEntityAndAssociationData()', () => {
 
-    const apiToTest = DataIntegrationApi.createEntityAndAssociationData;
+    const fnToTest = DataIntegrationApi.createEntityAndAssociationData;
 
     const validParams = [
       {
@@ -126,31 +127,31 @@ function createEntityAndAssociationData() {
           }
         ];
 
-        return assertApiShouldSendCorrectHttpRequest(apiToTest, apiInvocationParams, expectedAxiosParams, 'post');
+        return assertApiShouldSendCorrectHttpRequest(fnToTest, apiInvocationParams, expectedAxiosParams, 'post');
       });
 
     });
 
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_INTEGRATION_API);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_INTEGRATION_API);
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
 
 function getEntityKeyIds() {
+
   describe('getEntityKeyIds()', () => {
 
-    const apiToTest = DataIntegrationApi.getEntityKeyIds;
-
+    const fnToTest = DataIntegrationApi.getEntityKeyIds;
     const validParams = [MOCK_ENTITY_KEYS];
-
     const invalidParams = [INVALID_PARAMS];
-
     const axiosParams = [`/${ENTITY_KEY_IDS_PATH}`, MOCK_ENTITY_KEYS];
 
-    testApiShouldReturnPromise(apiToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_INTEGRATION_API);
-    testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_INTEGRATION_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 }
