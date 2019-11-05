@@ -36,66 +36,66 @@ describe('PermissionsApi', () => {
 
   describe('getAcl()', () => {
 
-    const functionToTest = PermissionsApi.getAcl;
+    const fnToTest = PermissionsApi.getAcl;
 
     const validParams = [MOCK_ACL_KEY];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = ['/', MOCK_ACL_KEY];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PERMISSIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(functionToTest, validParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
   describe('getAclExplanation()', () => {
 
-    const functionToTest = PermissionsApi.getAclExplanation;
+    const fnToTest = PermissionsApi.getAclExplanation;
 
     const validParams = [MOCK_ACL_KEY];
     const invalidParams = [INVALID_PARAMS_SS];
     const axiosParams = [`/${EXPLAIN_PATH}`, MOCK_ACL_KEY];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PERMISSIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(functionToTest, validParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
   describe('updateAcl()', () => {
 
-    const functionToTest = PermissionsApi.updateAcl;
+    const fnToTest = PermissionsApi.updateAcl;
 
     const validParams = [MOCK_ACL_DATA];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', MOCK_ACL_DATA];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PERMISSIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'patch');
-    testApiShouldCatchRejectedPromise(functionToTest, validParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
   describe('updateAcls()', () => {
 
-    const functionToTest = PermissionsApi.updateAcls;
+    const fnToTest = PermissionsApi.updateAcls;
 
     const validParams = [[MOCK_ACL_DATA]];
     const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${UPDATE_PATH}`, [MOCK_ACL_DATA]];
 
-    testApiShouldReturnPromise(functionToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(functionToTest, validParams, PERMISSIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'patch');
-    testApiShouldCatchRejectedPromise(functionToTest, validParams);
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
 });
