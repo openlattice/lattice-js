@@ -15,6 +15,7 @@ import {
 
 import {
   assertApiShouldSendCorrectHttpRequest,
+  testApiShouldCatchRejectedPromise,
   testApiShouldReturnPromise,
   testApiShouldUseCorrectAxiosInstance,
   testApiShouldNotThrowOnInvalidParameters,
@@ -133,18 +134,17 @@ function createEntityAndAssociationData() {
 
     testApiShouldReturnPromise(apiToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(apiToTest, validParams, DATA_INTEGRATION_API);
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
 
 function getEntityKeyIds() {
+
   describe('getEntityKeyIds()', () => {
 
     const apiToTest = DataIntegrationApi.getEntityKeyIds;
-
     const validParams = [MOCK_ENTITY_KEYS];
-
     const invalidParams = [INVALID_PARAMS];
-
     const axiosParams = [`/${ENTITY_KEY_IDS_PATH}`, MOCK_ENTITY_KEYS];
 
     testApiShouldReturnPromise(apiToTest, validParams);
@@ -152,5 +152,6 @@ function getEntityKeyIds() {
     testApiShouldNotThrowOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(apiToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(apiToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(apiToTest, validParams);
   });
 }
