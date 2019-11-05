@@ -58,15 +58,14 @@ function getMockPromise() :Promise<*> {
     resolve({ data: {} });
   });
 }
-
-function getMockAxiosInstance() :Object {
+function getMockAxiosInstance(mockPromise :?Promise<*>) :Object {
 
   const mockAxiosInstance = {};
 
   ['delete', 'get', 'patch', 'post', 'put', 'request'].forEach((httpMethod) => {
     mockAxiosInstance[httpMethod] = jest.fn()
       .mockName(httpMethod)
-      .mockReturnValue(getMockPromise());
+      .mockReturnValue(mockPromise || getMockPromise());
   });
 
   return mockAxiosInstance;
@@ -87,6 +86,5 @@ export {
   genRandomUUID,
   genRandomX,
   getMockAxiosInstance,
-  getMockPromise,
   pickRandomValue,
 };

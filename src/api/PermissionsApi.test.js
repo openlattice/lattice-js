@@ -9,6 +9,7 @@ import { MOCK_ACL_KEY, MOCK_ACL_DATA } from '../utils/testing/MockDataModels';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
+  testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
@@ -46,6 +47,7 @@ describe('PermissionsApi', () => {
     testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(functionToTest, validParams);
   });
 
   describe('getAclExplanation()', () => {
@@ -61,6 +63,7 @@ describe('PermissionsApi', () => {
     testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(functionToTest, validParams);
   });
 
   describe('updateAcl()', () => {
@@ -76,6 +79,7 @@ describe('PermissionsApi', () => {
     testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'patch');
+    testApiShouldCatchRejectedPromise(functionToTest, validParams);
   });
 
   describe('updateAcls()', () => {
@@ -91,7 +95,7 @@ describe('PermissionsApi', () => {
     testApiShouldNotThrowOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(functionToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(functionToTest, validParams, axiosParams, 'patch');
-
+    testApiShouldCatchRejectedPromise(functionToTest, validParams);
   });
 
 });
