@@ -18,6 +18,7 @@ const ROLE_CLASS_PACKAGE :'com.openlattice.organization.roles.Role' = 'com.openl
 
 type RoleObject = {|
   [typeof AT_CLASS] :typeof ROLE_CLASS_PACKAGE;
+  aclKey ?:UUID[];
   description ?:string;
   id ?:UUID;
   organizationId :UUID;
@@ -31,6 +32,7 @@ type RoleObject = {|
  */
 export default class Role {
 
+  aclKey :?UUID[];
   description :?string;
   id :?UUID;
   organizationId :UUID;
@@ -59,6 +61,7 @@ export default class Role {
     }
 
     if (isDefined(id)) {
+      this.aclKey = [organizationId, id];
       this.id = id;
     }
   }
@@ -84,6 +87,7 @@ export default class Role {
     }
 
     if (isDefined(this.id)) {
+      roleObj.aclKey = [this.organizationId, this.id];
       roleObj.id = this.id;
     }
 

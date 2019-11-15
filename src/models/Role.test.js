@@ -188,6 +188,9 @@ describe('Role', () => {
         expect(role).toBeInstanceOf(Role);
         expect(role[AT_CLASS]).toEqual(ROLE_CLASS_PACKAGE);
 
+        expect(role.aclKey).toBeDefined();
+        expect(role.aclKey).toEqual(MOCK_ROLE.aclKey);
+
         expect(role.description).toBeDefined();
         expect(role.description).toEqual(MOCK_ROLE.description);
 
@@ -372,6 +375,7 @@ describe('Role', () => {
       expect(role.valueOf()).toEqual(
         fromJS({
           [AT_CLASS]: ROLE_CLASS_PACKAGE,
+          aclKey: MOCK_ROLE.aclKey,
           description: MOCK_ROLE.description,
           id: MOCK_ROLE.id,
           organizationId: MOCK_ROLE.organizationId,
@@ -407,12 +411,14 @@ describe('Role', () => {
       expect(testSet.size).toEqual(2);
       expect(testSet.count()).toEqual(2);
 
+      expect(testSet.first().aclKey).toEqual(MOCK_ROLE.aclKey);
       expect(testSet.first().description).toEqual(MOCK_ROLE.description);
       expect(testSet.first().id).toEqual(MOCK_ROLE.id);
       expect(testSet.first().organizationId).toEqual(MOCK_ROLE.organizationId);
       expect(testSet.first().principal).toEqual(MOCK_ROLE.principal);
       expect(testSet.first().type).toEqual(MOCK_ROLE.type);
 
+      expect(testSet.last().aclKey).toEqual(randomRole.aclKey);
       expect(testSet.last().description).toEqual(randomRole.description);
       expect(testSet.last().id).toEqual(randomRole.id);
       expect(testSet.last().organizationId).toEqual(randomRole.organizationId);
