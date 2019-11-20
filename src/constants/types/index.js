@@ -6,6 +6,7 @@ import ActionTypes from './ActionTypes';
 import AnalyzerTypes from './AnalyzerTypes';
 import DeleteTypes from './DeleteTypes';
 import EntitySetFlagTypes from './EntitySetFlagTypes';
+import GrantTypes from './GrantTypes';
 import IndexTypes from './IndexTypes';
 import PermissionTypes from './PermissionTypes';
 import PrincipalTypes from './PrincipalTypes';
@@ -17,6 +18,7 @@ export type { ActionType } from './ActionTypes';
 export type { AnalyzerType } from './AnalyzerTypes';
 export type { DeleteType } from './DeleteTypes';
 export type { EntitySetFlagType } from './EntitySetFlagTypes';
+export type { GrantType } from './GrantTypes';
 export type { IndexType } from './IndexTypes';
 export type { PermissionType } from './PermissionTypes';
 export type { PrincipalType } from './PrincipalTypes';
@@ -29,6 +31,7 @@ export {
   AnalyzerTypes,
   DeleteTypes,
   EntitySetFlagTypes,
+  GrantTypes,
   IndexTypes,
   PermissionTypes,
   PrincipalTypes,

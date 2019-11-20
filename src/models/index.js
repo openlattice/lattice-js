@@ -15,10 +15,11 @@ import EntityDataKey, { EntityDataKeyBuilder } from './EntityDataKey';
 import EntitySet, { EntitySetBuilder, isValidEntitySet, isValidEntitySetArray } from './EntitySet';
 import EntityType, { EntityTypeBuilder, isValidEntityType, isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
+import Grant, { GrantBuilder, isValidGrant, isValidGrantArray } from './Grant';
 import LinkingEntitySet, { LinkingEntitySetBuilder } from './LinkingEntitySet';
 import LinkingEntityType, { LinkingEntityTypeBuilder } from './LinkingEntityType';
 import LinkingRequest, { LinkingRequestBuilder } from './LinkingRequest';
-import Organization, { OrganizationBuilder, isValidOrganization } from './Organization';
+import Organization, { OrganizationBuilder, isValidOrganization, isValidOrganizationArray } from './Organization';
 import Principal, { PrincipalBuilder, isValidPrincipal, isValidPrincipalArray } from './Principal';
 import PropertyType, { PropertyTypeBuilder, isValidPropertyType, isValidPropertyTypeArray } from './PropertyType';
 import Request, { RequestBuilder } from './Request';
@@ -34,6 +35,7 @@ export type { AssociationTypeObject } from './AssociationType';
 export type { EntitySetObject } from './EntitySet';
 export type { EntityTypeObject } from './EntityType';
 export type { FQN, FQNObject } from './FullyQualifiedName';
+export type { GrantObject } from './Grant';
 export type { PrincipalObject } from './Principal';
 export type { PropertyTypeObject } from './PropertyType';
 export type { RoleObject } from './Role';
@@ -65,6 +67,8 @@ export {
   EntityType,
   EntityTypeBuilder,
   FullyQualifiedName,
+  Grant,
+  GrantBuilder,
   LinkingEntitySet,
   LinkingEntitySetBuilder,
   LinkingEntityType,
@@ -95,7 +99,10 @@ export {
   isValidEntitySetArray,
   isValidEntityType,
   isValidEntityTypeArray,
+  isValidGrant,
+  isValidGrantArray,
   isValidOrganization,
+  isValidOrganizationArray,
   isValidPrincipal,
   isValidPrincipalArray,
   isValidPropertyType,

@@ -3,7 +3,7 @@
 import { genRandomString } from '../utils/testing/MockUtils';
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_NOT_DEFINED_ALLOWED
+  INVALID_PARAMS_FOR_OPTIONAL
 } from '../utils/testing/Invalid';
 
 const MOCK_AUTH_TOKEN = `${genRandomString()}.${genRandomString()}.${genRandomString()}`;
@@ -66,7 +66,7 @@ describe('Configuration', () => {
     describe('authToken', () => {
 
       test('should throw if authToken is invalid', () => {
-        INVALID_PARAMS_NOT_DEFINED_ALLOWED.forEach((invalid) => {
+        INVALID_PARAMS_FOR_OPTIONAL.forEach((invalid) => {
           expect(() => {
             Config.configure({
               authToken: invalid,

@@ -4,7 +4,7 @@ import AssociationType, { AssociationTypeBuilder, isValidAssociationType as isVa
 
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_BOOLEANS_ALLOWED,
+  INVALID_PARAMS_FOR_REQUIRED_BOOLEAN,
   INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
@@ -122,7 +122,7 @@ describe('AssociationType', () => {
     describe('setBidirectional()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_REQUIRED_BOOLEAN.forEach((invalidInput) => {
           expect(() => {
             (new AssociationTypeBuilder()).setBidirectional(invalidInput);
           }).toThrow();
@@ -283,7 +283,7 @@ describe('AssociationType', () => {
       });
 
       test('should return false when given an object literal with an invalid "bidirectional" property', () => {
-        INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_REQUIRED_BOOLEAN.forEach((invalidInput) => {
           expect(
             isValid({ ...MOCK_ASSOCIATION_TYPE.toObject(), bidirectional: invalidInput })
           ).toEqual(false);
@@ -331,7 +331,7 @@ describe('AssociationType', () => {
       });
 
       test('should return false when given an instance with an invalid "bidirectional" property', () => {
-        INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_REQUIRED_BOOLEAN.forEach((invalidInput) => {
           expect(isValid(
             new AssociationType(
               mockEntityType, mockSrcEntityTypeIds, mockDstEntityTypeIds, invalidInput

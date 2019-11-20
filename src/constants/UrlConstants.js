@@ -39,6 +39,7 @@ export const FEEDS_PATH :string = 'feeds';
 export const FILE_TYPE :string = 'fileType';
 export const FORCE_PATH :string = 'force';
 export const FQN_PATH :string = 'fqn';
+export const GRANT_PATH :string = 'grant';
 export const HIERARCHY_PATH :string = 'hierarchy';
 export const IDS_PATH :string = 'ids';
 export const INSTALL_PATH :string = 'install';

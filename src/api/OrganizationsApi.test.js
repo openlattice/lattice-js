@@ -4,12 +4,13 @@ import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
 import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_STRING, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockDataModels';
+import { MOCK_GRANT, MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockDataModels';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
+  GRANT_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
   ROLES_PATH,
@@ -88,6 +89,26 @@ describe('OrganizationsApi', () => {
   testRemoveMemberFromOrganization();
   testGrantTrustToOrganization();
   testRevokeTrustFromOrganization();
+
+  describe('updateRoleGrant()', () => {
+
+    const fnToTest = OrganizationsApi.updateRoleGrant;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_GRANT];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${GRANT_PATH}`,
+      MOCK_GRANT,
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
 });
 
 function testGetOrganization() {
