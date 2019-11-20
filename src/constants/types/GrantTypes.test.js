@@ -5,8 +5,8 @@ import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 
 const EXPECTED_ENUM = Map({
   ATTRIBUTE: 'Attribute',
-  AUTO: 'Auto',
   CLAIM: 'Claim',
+  CONNECTION: 'Connection',
   GROUP: 'Group',
   MANUAL: 'Manual',
 }).sortBy((value, key) => key);
