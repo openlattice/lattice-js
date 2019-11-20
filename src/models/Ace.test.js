@@ -3,7 +3,7 @@ import { Map, Set, fromJS } from 'immutable';
 import Ace, { AceBuilder, isValidAce as isValid } from './Ace';
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY } from '../utils/testing/Invalid';
-import { MOCK_ACE, genRandomAce } from '../utils/testing/MockDataModels';
+import { MOCK_ACE, genRandomAce } from '../utils/testing/MockData';
 
 describe('Ace', () => {
 

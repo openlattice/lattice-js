@@ -1,6 +1,6 @@
 import LinkingRequest, { LinkingRequestBuilder, isValidLinkingRequest as isValid } from './LinkingRequest';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_LINKING_REQUEST_DM } from '../utils/testing/MockDataModels';
+import { MOCK_LINKING_REQUEST_DM } from '../utils/testing/MockData';
 
 describe('LinkingRequest', () => {
 

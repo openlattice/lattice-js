@@ -4,7 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
 import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_STRING, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_GRANT, MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockDataModels';
+import { MOCK_GRANT, MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockData';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {

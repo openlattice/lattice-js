@@ -2,7 +2,7 @@ import { Map, Set, fromJS } from 'immutable';
 import AccessCheck, { AccessCheckBuilder, isValidAccessCheck as isValid } from './AccessCheck';
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY } from '../utils/testing/Invalid';
-import { MOCK_ACCESS_CHECK, genRandomAccessCheck } from '../utils/testing/MockDataModels';
+import { MOCK_ACCESS_CHECK, genRandomAccessCheck } from '../utils/testing/MockData';
 
 describe('AccessCheck', () => {
 

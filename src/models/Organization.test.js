@@ -2,7 +2,7 @@ import mapValues from 'lodash/mapValues';
 import { Map, Set, fromJS } from 'immutable';
 
 import Organization, { OrganizationBuilder, isValidOrganization as isValid } from './Organization';
-import { MOCK_ORGANIZATION, genRandomOrganization } from '../utils/testing/MockDataModels';
+import { MOCK_ORGANIZATION, genRandomOrganization } from '../utils/testing/MockData';
 import { genRandomUUID } from '../utils/testing/MockUtils';
 
 import {

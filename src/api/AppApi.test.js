@@ -11,7 +11,7 @@ import {
   MOCK_ENTITY_SET,
   MOCK_FQN,
   MOCK_ORGANIZATION,
-} from '../utils/testing/MockDataModels';
+} from '../utils/testing/MockData';
 import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {

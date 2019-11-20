@@ -1,7 +1,7 @@
 import { Map, Set, fromJS } from 'immutable';
 
 import Acl, { AclBuilder, isValidAcl as isValid } from './Acl';
-import { MOCK_ACL, genRandomAcl } from '../utils/testing/MockDataModels';
+import { MOCK_ACL, genRandomAcl } from '../utils/testing/MockData';
 
 import {
   INVALID_PARAMS,

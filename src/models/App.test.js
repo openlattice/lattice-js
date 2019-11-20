@@ -1,5 +1,5 @@
 import App, { AppBuilder, isValidApp as isValid } from './App';
-import { MOCK_APP_DM } from '../utils/testing/MockDataModels';
+import { MOCK_APP_DM } from '../utils/testing/MockData';
 
 import {
   INVALID_PARAMS,

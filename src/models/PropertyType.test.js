@@ -1,6 +1,6 @@
 import { Map, Set, fromJS } from 'immutable';
 import PropertyType, { PropertyTypeBuilder, isValidPropertyType as isValid } from './PropertyType';
-import { MOCK_PROPERTY_TYPE, genRandomPropertyType } from '../utils/testing/MockDataModels';
+import { MOCK_PROPERTY_TYPE, genRandomPropertyType } from '../utils/testing/MockData';
 
 import {
   INVALID_PARAMS,

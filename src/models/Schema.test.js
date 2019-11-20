@@ -5,7 +5,7 @@ import {
   MOCK_PROPERTY_TYPE,
   MOCK_SCHEMA,
   genRandomSchema,
-} from '../utils/testing/MockDataModels';
+} from '../utils/testing/MockData';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
