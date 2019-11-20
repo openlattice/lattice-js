@@ -1,5 +1,5 @@
 import LinkingEntityType, { LinkingEntityTypeBuilder, isValidLinkingEntityType as isValid } from './LinkingEntityType';
-import { INVALID_PARAMS, INVALID_PARAMS_BOOLEANS_ALLOWED } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_FOR_REQUIRED_BOOLEAN } from '../utils/testing/Invalid';
 import { MOCK_LINKING_ENTITY_TYPE_DM } from '../utils/testing/MockDataModels';
 
 describe('LinkingEntityType', () => {
@@ -78,7 +78,7 @@ describe('LinkingEntityType', () => {
     describe('setDeidentified()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_REQUIRED_BOOLEAN.forEach((invalidInput) => {
           expect(() => {
             builder.setDeidentified(invalidInput);
           }).toThrow();
@@ -212,7 +212,7 @@ describe('LinkingEntityType', () => {
       });
 
       test('should return false when given an object literal with an invalid "deidentified" property', () => {
-        INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_REQUIRED_BOOLEAN.forEach((invalidInput) => {
           expect(
             isValid({ ...MOCK_LINKING_ENTITY_TYPE_DM, deidentified: invalidInput })
           ).toEqual(false);
@@ -245,7 +245,7 @@ describe('LinkingEntityType', () => {
       });
 
       test('should return false when given an instance with an invalid "deidentified" property', () => {
-        INVALID_PARAMS_BOOLEANS_ALLOWED.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_REQUIRED_BOOLEAN.forEach((invalidInput) => {
           expect(isValid(
             new LinkingEntityType(
               MOCK_LINKING_ENTITY_TYPE_DM.entityType, MOCK_LINKING_ENTITY_TYPE_DM.entityTypeIds, invalidInput

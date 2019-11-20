@@ -13,6 +13,7 @@ import {
   ActionTypes,
   AnalyzerTypes,
   EntitySetFlagTypes,
+  GrantTypes,
   IndexTypes,
   PermissionTypes,
   PrincipalTypes,
@@ -34,6 +35,8 @@ import {
   EntitySetBuilder,
   EntityType,
   EntityTypeBuilder,
+  Grant,
+  GrantBuilder,
   FullyQualifiedName,
   Organization,
   OrganizationBuilder,
@@ -430,6 +433,13 @@ const MOCK_ORGANIZATION :Organization = (new OrganizationBuilder())
   .setApps([genRandomUUID(), genRandomUUID()])
   .setAutoApprovedEmails(['openlattice.com'])
   .setDescription('MockOrgDescription')
+  .setEnrollments([genRandomString(), genRandomString()])
+  .setGrants({
+    [genRandomUUID()]: (new GrantBuilder())
+      .setGrantType(GrantTypes.AUTO)
+      .setMappings([genRandomString()])
+      .build()
+  })
   .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
   .setMembers([
     (new PrincipalBuilder())
@@ -498,6 +508,18 @@ function genRandomOrganization() :Organization {
     .build();
 }
 
+const MOCK_GRANT :Grant = (new GrantBuilder())
+  .setGrantType(GrantTypes.AUTO)
+  .setMappings(['mapping1', 'mapping2'])
+  .build();
+
+function genRandomGrant() :Grant {
+  return new GrantBuilder()
+    .setGrantType(pickRandomValue(GrantTypes))
+    .setMappings([genRandomString()])
+    .build();
+}
+
 export {
   MOCK_ACCESS_CHECK,
   MOCK_ACE,
@@ -516,6 +538,7 @@ export {
   MOCK_ENTITY_SET,
   MOCK_ENTITY_TYPE,
   MOCK_FQN,
+  MOCK_GRANT,
   MOCK_LINKING_ENTITY_SET_DM,
   MOCK_LINKING_ENTITY_TYPE_DM,
   MOCK_LINKING_REQUEST_DM,
@@ -535,6 +558,7 @@ export {
   genRandomDataGraph,
   genRandomEntitySet,
   genRandomEntityType,
+  genRandomGrant,
   genRandomOrganization,
   genRandomPrincipal,
   genRandomPropertyType,
