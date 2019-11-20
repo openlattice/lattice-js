@@ -4,16 +4,20 @@
 
 import has from 'lodash/has';
 import isFinite from 'lodash/isFinite';
+import mapValues from 'lodash/mapValues';
 import { Map, Set, fromJS } from 'immutable';
 
 import Logger from '../utils/Logger';
+import Grant, { isValidGrantArray } from './Grant';
 import Principal, { isValidPrincipal, isValidPrincipalArray } from './Principal';
 import Role, { isValidRoleArray } from './Role';
 
 import {
   isDefined,
   isEmptyArray,
+  isEmptyObject,
   isEmptyString,
+  isNonEmptyObject,
   isNonEmptyString,
   isNonEmptyStringArray,
 } from '../utils/LangUtils';
@@ -24,6 +28,7 @@ import {
   validateNonEmptyArray,
 } from '../utils/ValidationUtils';
 
+import type { GrantObject } from './Grant';
 import type { PrincipalObject } from './Principal';
 import type { RoleObject } from './Role';
 
@@ -33,6 +38,8 @@ type OrganizationObject = {|
   apps :UUID[];
   description ?:string;
   emails :string[];
+  enrollments :string[];
+  grants :{ [UUID] :GrantObject };
   id ?:UUID;
   members :PrincipalObject[];
   partitions ?:number[];
@@ -50,6 +57,8 @@ export default class Organization {
   apps :UUID[];
   description :?string;
   emails :string[];
+  enrollments :string[];
+  grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
   partitions :?number[];
@@ -67,11 +76,15 @@ export default class Organization {
     emails :string[],
     apps :UUID[],
     partitions :?number[],
+    enrollments :string[],
+    grants :{ [UUID] :Grant },
   ) {
 
     // required properties
     this.apps = apps;
     this.emails = emails;
+    this.enrollments = enrollments;
+    this.grants = grants;
     this.members = members;
     this.principal = principal;
     this.roles = roles;
@@ -102,6 +115,8 @@ export default class Organization {
     const orgObj :OrganizationObject = {
       apps: this.apps,
       emails: this.emails,
+      enrollments: this.enrollments,
+      grants: mapValues(this.grants, (g :Grant) => g.toObject()),
       members: this.members.map((p :Principal) => p.toObject()),
       principal: this.principal.toObject(),
       roles: this.roles.map((r :Role) => r.toObject()),
@@ -139,6 +154,8 @@ export class OrganizationBuilder {
   apps :UUID[];
   description :?string;
   emails :string[];
+  enrollments :string[];
+  grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
   partitions :?number[];
@@ -148,8 +165,6 @@ export class OrganizationBuilder {
 
   setId(id :?UUID) :OrganizationBuilder {
 
-    // NOTE: I remember having to add these checks, but I don't remember why...
-    // why would it be ok to call .setId() or .setId('') on purpose?
     if (!isDefined(id) || isEmptyString(id)) {
       return this;
     }
@@ -174,8 +189,6 @@ export class OrganizationBuilder {
 
   setDescription(description :?string) :OrganizationBuilder {
 
-    // NOTE: I remember having to add these checks, but I don't remember why...
-    // why would it be ok to call .setDescription() or .setDescription('') on purpose?
     if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
@@ -200,8 +213,6 @@ export class OrganizationBuilder {
 
   setMembers(members :$ReadOnlyArray<Principal | PrincipalObject>) :OrganizationBuilder {
 
-    // NOTE: I remember having to add these checks, but I don't remember why...
-    // why would it be ok to call .setMembers() or .setMembers([]) on purpose?
     if (!isDefined(members) || isEmptyArray(members)) {
       return this;
     }
@@ -221,8 +232,6 @@ export class OrganizationBuilder {
 
   setRoles(roles :$ReadOnlyArray<Role | RoleObject>) :OrganizationBuilder {
 
-    // NOTE: I remember having to add these checks, but I don't remember why...
-    // why would it be ok to call .setRoles() or .setRoles([]) on purpose?
     if (!isDefined(roles) || isEmptyArray(roles)) {
       return this;
     }
@@ -242,8 +251,6 @@ export class OrganizationBuilder {
 
   setAutoApprovedEmails(emails :$ReadOnlyArray<string>) :OrganizationBuilder {
 
-    // NOTE: I remember having to add these checks, but I don't remember why...
-    // why would it be ok to call .setAutoApprovedEmails() or .setAutoApprovedEmails([]) on purpose?
     if (!isDefined(emails) || isEmptyArray(emails)) {
       return this;
     }
@@ -263,8 +270,6 @@ export class OrganizationBuilder {
 
   setApps(apps :$ReadOnlyArray<UUID>) :OrganizationBuilder {
 
-    // NOTE: I remember having to add these checks, but I don't remember why...
-    // why would it be ok to call .setApps() or .setApps([]) on purpose?
     if (!isDefined(apps) || isEmptyArray(apps)) {
       return this;
     }
@@ -284,8 +289,6 @@ export class OrganizationBuilder {
 
   setPartitions(partitions :$ReadOnlyArray<number>) :OrganizationBuilder {
 
-    // NOTE: I remember having to add these checks, but I don't remember why...
-    // why would it be ok to call .setPartitions() or .setPartitions([]) on purpose?
     if (!isDefined(partitions) || isEmptyArray(partitions)) {
       return this;
     }
@@ -295,6 +298,49 @@ export class OrganizationBuilder {
     }
 
     this.partitions = [...partitions];
+    return this;
+  }
+
+  setEnrollments(enrollments :$ReadOnlyArray<string>) :OrganizationBuilder {
+
+    if (!isDefined(enrollments) || isEmptyArray(enrollments)) {
+      return this;
+    }
+
+    if (!isNonEmptyStringArray(enrollments)) {
+      throw new Error('invalid parameter: enrollments must be a non-empty array of strings');
+    }
+
+    this.enrollments = Set().withMutations((set :Set<string>) => {
+      enrollments.forEach((enrollment :string) => {
+        set.add(enrollment);
+      });
+    }).toJS();
+
+    return this;
+  }
+
+  setGrants(grants :$ReadOnly<Object>) :OrganizationBuilder {
+
+    if (!isDefined(grants) || isEmptyObject(grants)) {
+      return this;
+    }
+
+    if (!isNonEmptyObject(grants)) {
+      throw new Error('invalid parameter: grants must be a non-empty object');
+    }
+
+    const keys = Object.keys(grants);
+    if (!isValidUUIDArray(keys)) {
+      throw new Error('invalid parameter: grants must be a non-empty object where all keys are UUIDs');
+    }
+
+    const values = Object.values(grants);
+    if (!isValidGrantArray(values)) {
+      throw new Error('invalid parameter: grants must be a non-empty object where all values are valid Grants');
+    }
+
+    this.grants = grants;
     return this;
   }
 
@@ -324,6 +370,14 @@ export class OrganizationBuilder {
       this.apps = [];
     }
 
+    if (!this.enrollments) {
+      this.enrollments = [];
+    }
+
+    if (!this.grants) {
+      this.grants = {};
+    }
+
     return new Organization(
       this.id,
       this.title,
@@ -334,6 +388,8 @@ export class OrganizationBuilder {
       this.emails,
       this.apps,
       this.partitions,
+      this.enrollments,
+      this.grants,
     );
   }
 }
@@ -357,6 +413,8 @@ export function isValidOrganization(organization :any) :boolean {
       .setPrincipal(organization.principal)
       .setRoles(organization.roles)
       .setTitle(organization.title)
+      .setEnrollments(organization.enrollments)
+      .setGrants(organization.grants)
       .build();
 
     // optional properties

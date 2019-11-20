@@ -231,10 +231,10 @@ function testApiShouldRejectOnInvalidParameters(functionToTest, validParams, inv
   });
 }
 
-function testEnumIntegrity(enumToTest, expectedEnum, caseSensitive = true) {
+function testEnumIntegrity(enumToTest, expectedEnum, keysEqualValues = true) {
 
-  test('should contain only expected enum values', () => {
-    if (caseSensitive) {
+  test('should contain only expected keys and values', () => {
+    if (keysEqualValues) {
       expect(Object.keys(enumToTest)).toEqual(Object.values(enumToTest));
     }
     expect(Object.keys(enumToTest)).toEqual(expectedEnum.keySeq().toJS());
@@ -243,8 +243,8 @@ function testEnumIntegrity(enumToTest, expectedEnum, caseSensitive = true) {
 
   expectedEnum.forEach((value, key) => {
     test(`should contain "${key}":"${value}"`, () => {
-      expect(enumToTest).toHaveProperty(value);
-      expect(enumToTest[value]).toEqual(value);
+      expect(enumToTest).toHaveProperty(key);
+      expect(enumToTest[key]).toEqual(value);
     });
   });
 }

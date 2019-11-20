@@ -6,7 +6,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as RequestsApi from './RequestsApi';
 import { REQUESTS_API } from '../constants/ApiNames';
 // import { isDefined } from '../utils/LangUtils';
-import { INVALID_PARAMS, INVALID_PARAMS_NOT_DEFINED_ALLOWED } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL } from '../utils/testing/Invalid';
 import { MOCK_ACL_KEY, MOCK_REQUEST_DM } from '../utils/testing/MockDataModels';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
@@ -99,7 +99,7 @@ function testGetAllRequestStatuses() {
 
       const fnToTest = RequestsApi.getAllRequestStatuses;
       const validParams = [{ state: RequestStateTypes.SUBMITTED }];
-      const invalidParams = [INVALID_PARAMS_NOT_DEFINED_ALLOWED];
+      const invalidParams = [INVALID_PARAMS_FOR_OPTIONAL];
       const axiosParams = [{ url: `/${RequestStateTypes.SUBMITTED}`, method: 'get' }];
 
       testApiShouldReturnPromise(fnToTest, validParams);
@@ -115,7 +115,7 @@ function testGetAllRequestStatuses() {
       // TODO: temporary
       const fnToTest = RequestsApi.getAllRequestStatuses;
       let validParams = [{ aclKeys: [MOCK_ACL_KEY] }];
-      const invalidParams = [INVALID_PARAMS_NOT_DEFINED_ALLOWED];
+      const invalidParams = [INVALID_PARAMS_FOR_OPTIONAL];
       let axiosParams = [{
         url: '/',
         method: 'post',
@@ -162,7 +162,7 @@ function testGetAllRequestStatuses() {
       // TODO: temporary
       const fnToTest = RequestsApi.getAllRequestStatuses;
       const validParams = [{ state: RequestStateTypes.SUBMITTED, aclKeys: [MOCK_ACL_KEY] }];
-      const invalidParams = [INVALID_PARAMS_NOT_DEFINED_ALLOWED];
+      const invalidParams = [INVALID_PARAMS_FOR_OPTIONAL];
       const axiosParams = [{ url: `/${RequestStateTypes.SUBMITTED}`, method: 'post', data: [MOCK_ACL_KEY] }];
 
       testApiShouldReturnPromise(fnToTest, validParams);

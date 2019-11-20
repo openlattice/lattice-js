@@ -1,13 +1,23 @@
+import mapValues from 'lodash/mapValues';
 import { Map, Set, fromJS } from 'immutable';
+
 import Organization, { OrganizationBuilder, isValidOrganization as isValid } from './Organization';
 import { MOCK_ORGANIZATION, genRandomOrganization } from '../utils/testing/MockDataModels';
+import { genRandomUUID } from '../utils/testing/MockUtils';
 
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_OBJECT,
   INVALID_PARAMS_FOR_OPTIONAL_SS,
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
+  INVALID_PARAMS_FOR_REQUIRED_NUMBER,
 } from '../utils/testing/Invalid';
+
+
+const INVALID_PARAMS_FOR_GRANT = INVALID_PARAMS_FOR_OPTIONAL_OBJECT.slice(0);
+INVALID_PARAMS_FOR_GRANT.push({ invalid_key: 'invalid_value' });
+INVALID_PARAMS_FOR_GRANT.push({ [genRandomUUID()]: 'invalid_value' });
 
 describe('Organization', () => {
 
@@ -231,6 +241,94 @@ describe('Organization', () => {
 
     });
 
+    describe('setPartitions()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(() => {
+            (new OrganizationBuilder()).setPartitions(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_FOR_REQUIRED_NUMBER.forEach((invalidInput) => {
+          expect(() => {
+            (new OrganizationBuilder()).setPartitions([...MOCK_ORGANIZATION.partitions, invalidInput]);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new OrganizationBuilder()).setPartitions();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setPartitions([]);
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setPartitions(MOCK_ORGANIZATION.partitions);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setEnrollments()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(() => {
+            (new OrganizationBuilder()).setEnrollments(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should throw when given a mix of valid and invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(() => {
+            (new OrganizationBuilder()).setEnrollments([...MOCK_ORGANIZATION.enrollments, invalidInput]);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new OrganizationBuilder()).setEnrollments();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setEnrollments([]);
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setEnrollments(MOCK_ORGANIZATION.enrollments);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setGrants()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_GRANT.forEach((invalidInput) => {
+          expect(() => {
+            (new OrganizationBuilder()).setGrants(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new OrganizationBuilder()).setGrants();
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setGrants({});
+        }).not.toThrow();
+        expect(() => {
+          (new OrganizationBuilder()).setGrants(MOCK_ORGANIZATION.grants);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('build()', () => {
 
       test('should throw when a required property has not been set', () => {
@@ -257,6 +355,8 @@ describe('Organization', () => {
           (new OrganizationBuilder())
             .setApps(MOCK_ORGANIZATION.apps)
             .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+            .setEnrollments(MOCK_ORGANIZATION.enrollments)
+            .setGrants(MOCK_ORGANIZATION.grants)
             .setId(MOCK_ORGANIZATION.id)
             .setMembers(MOCK_ORGANIZATION.members)
             .setPartitions(MOCK_ORGANIZATION.partitions)
@@ -272,6 +372,8 @@ describe('Organization', () => {
             .setApps(MOCK_ORGANIZATION.apps)
             .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
             .setDescription(MOCK_ORGANIZATION.description)
+            .setEnrollments(MOCK_ORGANIZATION.enrollments)
+            .setGrants(MOCK_ORGANIZATION.grants)
             .setMembers(MOCK_ORGANIZATION.members)
             .setPartitions(MOCK_ORGANIZATION.partitions)
             .setPrincipal(MOCK_ORGANIZATION.principal)
@@ -286,6 +388,8 @@ describe('Organization', () => {
             .setApps(MOCK_ORGANIZATION.apps)
             .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
             .setDescription(MOCK_ORGANIZATION.description)
+            .setEnrollments(MOCK_ORGANIZATION.enrollments)
+            .setGrants(MOCK_ORGANIZATION.grants)
             .setId(MOCK_ORGANIZATION.id)
             .setMembers(MOCK_ORGANIZATION.members)
             .setPrincipal(MOCK_ORGANIZATION.principal)
@@ -304,6 +408,8 @@ describe('Organization', () => {
 
         expect(org.apps).toEqual([]);
         expect(org.emails).toEqual([]);
+        expect(org.enrollments).toEqual([]);
+        expect(org.grants).toEqual({});
         expect(org.members).toEqual([]);
         expect(org.roles).toEqual([]);
       });
@@ -314,6 +420,8 @@ describe('Organization', () => {
           .setApps(MOCK_ORGANIZATION.apps)
           .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
           .setDescription(MOCK_ORGANIZATION.description)
+          .setEnrollments(MOCK_ORGANIZATION.enrollments)
+          .setGrants(MOCK_ORGANIZATION.grants)
           .setId(MOCK_ORGANIZATION.id)
           .setMembers(MOCK_ORGANIZATION.members)
           .setPartitions(MOCK_ORGANIZATION.partitions)
@@ -327,6 +435,8 @@ describe('Organization', () => {
         expect(org.apps).toBeDefined();
         expect(org.description).toBeDefined();
         expect(org.emails).toBeDefined();
+        expect(org.enrollments).toBeDefined();
+        expect(org.grants).toBeDefined();
         expect(org.id).toBeDefined();
         expect(org.members).toBeDefined();
         expect(org.principal).toBeDefined();
@@ -336,6 +446,8 @@ describe('Organization', () => {
         expect(org.apps).toEqual(MOCK_ORGANIZATION.apps);
         expect(org.description).toEqual(MOCK_ORGANIZATION.description);
         expect(org.emails).toEqual(MOCK_ORGANIZATION.emails);
+        expect(org.enrollments).toEqual(MOCK_ORGANIZATION.enrollments);
+        expect(org.grants).toEqual(MOCK_ORGANIZATION.grants);
         expect(org.id).toEqual(MOCK_ORGANIZATION.id);
         expect(org.members).toEqual(MOCK_ORGANIZATION.members);
         expect(org.principal).toEqual(MOCK_ORGANIZATION.principal);
@@ -377,6 +489,8 @@ describe('Organization', () => {
           .setApps(MOCK_ORGANIZATION.apps)
           .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
           .setDescription(MOCK_ORGANIZATION.description)
+          .setEnrollments(MOCK_ORGANIZATION.enrollments)
+          .setGrants(MOCK_ORGANIZATION.grants)
           .setId(MOCK_ORGANIZATION.id)
           .setMembers(MOCK_ORGANIZATION.members)
           .setPartitions(MOCK_ORGANIZATION.partitions)
@@ -456,6 +570,18 @@ describe('Organization', () => {
         });
       });
 
+      test('should return false when given an object literal with an invalid "enrollments" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ORGANIZATION, enrollments: invalidInput })).toEqual(false);
+        });
+      });
+
+      test('should return false when given an object literal with an invalid "grants" property', () => {
+        INVALID_PARAMS_FOR_GRANT.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ORGANIZATION, grants: invalidInput })).toEqual(false);
+        });
+      });
+
       test('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
@@ -469,6 +595,8 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -487,6 +615,8 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -505,6 +635,8 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -523,6 +655,8 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -541,6 +675,8 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -559,6 +695,8 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -577,6 +715,8 @@ describe('Organization', () => {
               invalidInput,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -595,6 +735,8 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               invalidInput,
               MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
@@ -613,6 +755,48 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               invalidInput,
+              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.grants,
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "enrollments" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(isValid(
+            new Organization(
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
+              invalidInput,
+              MOCK_ORGANIZATION.grants,
+            )
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "grants" property', () => {
+        INVALID_PARAMS_FOR_GRANT.forEach((invalidInput) => {
+          expect(isValid(
+            new Organization(
+              MOCK_ORGANIZATION.id,
+              MOCK_ORGANIZATION.title,
+              MOCK_ORGANIZATION.description,
+              MOCK_ORGANIZATION.principal,
+              MOCK_ORGANIZATION.members,
+              MOCK_ORGANIZATION.roles,
+              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.apps,
+              MOCK_ORGANIZATION.partitions,
+              MOCK_ORGANIZATION.enrollments,
+              invalidInput,
             )
           )).toEqual(false);
         });
@@ -625,22 +809,26 @@ describe('Organization', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const organization = new Organization(
-        MOCK_ORGANIZATION.id,
-        MOCK_ORGANIZATION.title,
-        MOCK_ORGANIZATION.description,
-        MOCK_ORGANIZATION.principal,
-        MOCK_ORGANIZATION.members,
-        MOCK_ORGANIZATION.roles,
-        MOCK_ORGANIZATION.emails,
-        MOCK_ORGANIZATION.apps,
-        MOCK_ORGANIZATION.partitions,
-      );
+      const organization = (new OrganizationBuilder())
+        .setApps(MOCK_ORGANIZATION.apps)
+        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setGrants(MOCK_ORGANIZATION.grants)
+        .setId(MOCK_ORGANIZATION.id)
+        .setMembers(MOCK_ORGANIZATION.members)
+        .setPartitions(MOCK_ORGANIZATION.partitions)
+        .setPrincipal(MOCK_ORGANIZATION.principal)
+        .setRoles(MOCK_ORGANIZATION.roles)
+        .setTitle(MOCK_ORGANIZATION.title)
+        .build();
       expect(organization.valueOf()).toEqual(
         fromJS({
           apps: MOCK_ORGANIZATION.apps,
           description: MOCK_ORGANIZATION.description,
           emails: MOCK_ORGANIZATION.emails,
+          enrollments: MOCK_ORGANIZATION.enrollments,
+          grants: mapValues(MOCK_ORGANIZATION.grants, (g) => g.toObject()),
           id: MOCK_ORGANIZATION.id,
           members: MOCK_ORGANIZATION.members.map((p) => p.toObject()),
           partitions: MOCK_ORGANIZATION.partitions,
@@ -654,28 +842,34 @@ describe('Organization', () => {
     test('Immutable.Set', () => {
 
       const randomOrganization = genRandomOrganization();
-      const organization0 = new Organization(
-        MOCK_ORGANIZATION.id,
-        MOCK_ORGANIZATION.title,
-        MOCK_ORGANIZATION.description,
-        MOCK_ORGANIZATION.principal,
-        MOCK_ORGANIZATION.members,
-        MOCK_ORGANIZATION.roles,
-        MOCK_ORGANIZATION.emails,
-        MOCK_ORGANIZATION.apps,
-        MOCK_ORGANIZATION.partitions,
-      );
-      const organization1 = new Organization(
-        MOCK_ORGANIZATION.id,
-        MOCK_ORGANIZATION.title,
-        MOCK_ORGANIZATION.description,
-        MOCK_ORGANIZATION.principal,
-        MOCK_ORGANIZATION.members,
-        MOCK_ORGANIZATION.roles,
-        MOCK_ORGANIZATION.emails,
-        MOCK_ORGANIZATION.apps,
-        MOCK_ORGANIZATION.partitions,
-      );
+
+      const organization0 = (new OrganizationBuilder())
+        .setApps(MOCK_ORGANIZATION.apps)
+        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setGrants(MOCK_ORGANIZATION.grants)
+        .setId(MOCK_ORGANIZATION.id)
+        .setMembers(MOCK_ORGANIZATION.members)
+        .setPartitions(MOCK_ORGANIZATION.partitions)
+        .setPrincipal(MOCK_ORGANIZATION.principal)
+        .setRoles(MOCK_ORGANIZATION.roles)
+        .setTitle(MOCK_ORGANIZATION.title)
+        .build();
+
+      const organization1 = (new OrganizationBuilder())
+        .setApps(MOCK_ORGANIZATION.apps)
+        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setGrants(MOCK_ORGANIZATION.grants)
+        .setId(MOCK_ORGANIZATION.id)
+        .setMembers(MOCK_ORGANIZATION.members)
+        .setPartitions(MOCK_ORGANIZATION.partitions)
+        .setPrincipal(MOCK_ORGANIZATION.principal)
+        .setRoles(MOCK_ORGANIZATION.roles)
+        .setTitle(MOCK_ORGANIZATION.title)
+        .build();
 
       const testSet = Set()
         .add(organization0)
@@ -709,28 +903,34 @@ describe('Organization', () => {
     test('Immutable.Map', () => {
 
       const randomOrganization = genRandomOrganization();
-      const organization0 = new Organization(
-        MOCK_ORGANIZATION.id,
-        MOCK_ORGANIZATION.title,
-        MOCK_ORGANIZATION.description,
-        MOCK_ORGANIZATION.principal,
-        MOCK_ORGANIZATION.members,
-        MOCK_ORGANIZATION.roles,
-        MOCK_ORGANIZATION.emails,
-        MOCK_ORGANIZATION.apps,
-        MOCK_ORGANIZATION.partitions,
-      );
-      const organization1 = new Organization(
-        MOCK_ORGANIZATION.id,
-        MOCK_ORGANIZATION.title,
-        MOCK_ORGANIZATION.description,
-        MOCK_ORGANIZATION.principal,
-        MOCK_ORGANIZATION.members,
-        MOCK_ORGANIZATION.roles,
-        MOCK_ORGANIZATION.emails,
-        MOCK_ORGANIZATION.apps,
-        MOCK_ORGANIZATION.partitions,
-      );
+
+      const organization0 = (new OrganizationBuilder())
+        .setApps(MOCK_ORGANIZATION.apps)
+        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setGrants(MOCK_ORGANIZATION.grants)
+        .setId(MOCK_ORGANIZATION.id)
+        .setMembers(MOCK_ORGANIZATION.members)
+        .setPartitions(MOCK_ORGANIZATION.partitions)
+        .setPrincipal(MOCK_ORGANIZATION.principal)
+        .setRoles(MOCK_ORGANIZATION.roles)
+        .setTitle(MOCK_ORGANIZATION.title)
+        .build();
+
+      const organization1 = (new OrganizationBuilder())
+        .setApps(MOCK_ORGANIZATION.apps)
+        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setGrants(MOCK_ORGANIZATION.grants)
+        .setId(MOCK_ORGANIZATION.id)
+        .setMembers(MOCK_ORGANIZATION.members)
+        .setPartitions(MOCK_ORGANIZATION.partitions)
+        .setPrincipal(MOCK_ORGANIZATION.principal)
+        .setRoles(MOCK_ORGANIZATION.roles)
+        .setTitle(MOCK_ORGANIZATION.title)
+        .build();
 
       const testMap = Map()
         .set(organization0, 'test_value_1')

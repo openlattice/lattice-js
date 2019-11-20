@@ -34,10 +34,12 @@ import {
   AclBuilder,
   AclData,
   AclDataBuilder,
+  Grant,
   Organization,
   Principal,
   PrincipalBuilder,
   Role,
+  isValidGrant,
   isValidOrganization,
   isValidRole,
 } from '../models';
@@ -53,6 +55,7 @@ import {
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
   ENTITY_SETS_PATH,
+  GRANT_PATH,
   INTEGRATION_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
@@ -67,7 +70,7 @@ import type { ActionType } from '../constants/types';
 const LOG = new Logger('OrganizationsApi');
 
 /**
- * `GET /organizations/{uuid}`
+ * `GET /organizations/{orgId}`
  *
  * Gets the information for the given Organization UUID.
  *
@@ -198,7 +201,7 @@ export function deleteOrganization(organizationId :UUID) :Promise<*> {
 }
 
 /**
- * `PUT /organizations/{uuid}/title`
+ * `PUT /organizations/{orgId}/title`
  *
  * Updates the title for the given Organization UUID.
  *
@@ -246,7 +249,7 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<*> {
 }
 
 /**
- * `PUT /organizations/{uuid}/description`
+ * `PUT /organizations/{orgId}/description`
  *
  * Updates the description for the given Organization UUID.
  *
@@ -294,7 +297,7 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
 }
 
 /**
- * `GET /organizations/{uuid}/email-domains`
+ * `GET /organizations/{orgId}/email-domains`
  *
  * Gets the auto-approved email domains for the given Organization UUID.
  *
@@ -326,7 +329,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<*> {
 }
 
 /**
- * `PUT /organizations/{uuid}/email-domains/{domain}`
+ * `PUT /organizations/{orgId}/email-domains/{domain}`
  *
  * Adds the given email domain to the auto-approved email domains for the given Organization UUID.
  *
@@ -368,7 +371,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
 }
 
 /**
- * `POST /organizations/{uuid}/email-domains`
+ * `POST /organizations/{orgId}/email-domains`
  *
  * Adds the given email domains to the auto-approved email domains for the given Organization UUID.
  *
@@ -418,7 +421,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 }
 
 /**
- * `PUT /organizations/{uuid}/email-domains`
+ * `PUT /organizations/{orgId}/email-domains`
  *
  * Sets the auto-approved email domains for the given Organization UUID.
  *
@@ -468,7 +471,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
 }
 
 /**
- * `DELETE /organizations/{uuid}/email-domains/{domain}`
+ * `DELETE /organizations/{orgId}/email-domains/{domain}`
  *
  * Removes the given email domain from the auto-approved email domains for the given Organization UUID.
  *
@@ -510,7 +513,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
 }
 
 /**
- * `DELETE /organizations/{uuid}/email-domains`
+ * `DELETE /organizations/{orgId}/email-domains`
  *
  * Removes the given email domains from the auto-approved email domains for the given Organization UUID.
  *
@@ -1401,4 +1404,55 @@ export function grantTrustToOrganization(organizationId :UUID, trustedPrincipalI
 export function revokeTrustFromOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
 
   return updateTrustForOrganization(organizationId, trustedPrincipalId, ActionTypes.REMOVE);
+}
+
+/**
+ * `PUT /organizations/{orgId}/principals/roles/{roleId}/grant`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} roleId
+ * @param {Grant} grant
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateRoleGrant(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "fae6af98-2675-45bd-9a5b-1619a87235a8",
+ *   {
+ *     "grantType": "Auto",
+ *     "mappings": ["mapping1"]
+ *   }
+ * );
+ */
+export function updateRoleGrant(organizationId :UUID, roleId :UUID, grant :Grant) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(roleId)) {
+    errorMsg = 'invalid parameter: roleId must be a valid UUID';
+    LOG.error(errorMsg, roleId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidGrant(grant)) {
+    errorMsg = 'invalid parameter: grant must be a valid Grant';
+    LOG.error(errorMsg, grant);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${GRANT_PATH}`, grant)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
 }

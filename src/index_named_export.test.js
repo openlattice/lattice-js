@@ -19,7 +19,7 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   EntitySetsApi      : { size: 8 },
   FeedsApi           : { size: 1 },
   LinkingApi         : { size: 2 },
-  OrganizationsApi   : { size: 32 },
+  OrganizationsApi   : { size: 33 },
   PermissionsApi     : { size: 4 },
   PersistentSearchApi: { size: 5 },
   PrincipalsApi      : { size: 10 },
@@ -27,8 +27,8 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   SearchApi          : { size: 14 },
   SubscriptionApi    : { size: 3 },
   Constants          : { size: 3 },
-  Models             : { size: 61 },
-  Types              : { size: 10 },
+  Models             : { size: 66 },
+  Types              : { size: 11 },
 });
 /* eslint-enable key-spacing */
 
