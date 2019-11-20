@@ -41,6 +41,7 @@ const EXPECTED = Map({
   FILE_TYPE                     : 'fileType',
   FORCE_PATH                    : 'force',
   FQN_PATH                      : 'fqn',
+  GRANT_PATH                    : 'grant',
   HIERARCHY_PATH                : 'hierarchy',
   IDS_PATH                      : 'ids',
   INSTALL_PATH                  : 'install',
