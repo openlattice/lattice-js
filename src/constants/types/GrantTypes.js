@@ -4,8 +4,8 @@
 
 type GrantTypesEnum = {|
   ATTRIBUTE :'Attribute';
-  AUTO :'Auto';
   CLAIM :'Claim';
+  CONNECTION :'Connection';
   GROUP :'Group';
   MANUAL :'Manual';
 |};
@@ -14,8 +14,8 @@ type GrantType = $Values<GrantTypesEnum>;
 
 const GrantTypes :{| ...GrantTypesEnum |} = Object.freeze({
   ATTRIBUTE: 'Attribute',
-  AUTO: 'Auto',
   CLAIM: 'Claim',
+  CONNECTION: 'Connection',
   GROUP: 'Group',
   MANUAL: 'Manual',
 });

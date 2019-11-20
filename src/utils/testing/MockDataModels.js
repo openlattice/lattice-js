@@ -436,7 +436,7 @@ const MOCK_ORGANIZATION :Organization = (new OrganizationBuilder())
   .setEnrollments([genRandomString(), genRandomString()])
   .setGrants({
     [genRandomUUID()]: (new GrantBuilder())
-      .setGrantType(GrantTypes.AUTO)
+      .setGrantType(GrantTypes.MANUAL)
       .setMappings([genRandomString()])
       .build()
   })
@@ -509,7 +509,7 @@ function genRandomOrganization() :Organization {
 }
 
 const MOCK_GRANT :Grant = (new GrantBuilder())
-  .setGrantType(GrantTypes.AUTO)
+  .setGrantType(GrantTypes.MANUAL)
   .setMappings(['mapping1', 'mapping2'])
   .build();
 
