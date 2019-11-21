@@ -1,6 +1,6 @@
 import { Map, Set, fromJS } from 'immutable';
 import EntityType, { EntityTypeBuilder, isValidEntityType as isValid } from './EntityType';
-import { MOCK_ENTITY_TYPE, genRandomEntityType } from '../utils/testing/MockDataModels';
+import { MOCK_ENTITY_TYPE, genRandomEntityType } from '../utils/testing/MockData';
 
 import {
   INVALID_PARAMS,

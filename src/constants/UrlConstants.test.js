@@ -16,6 +16,7 @@ const EXPECTED = Map({
   CODEX_PATH                    : 'codex',
   COMPLEX_TYPE_PATH             : 'complex/type',
   CONFIG_PATH                   : 'config',
+  CONNECTIONS_PATH              : 'connections',
   CONTACT_PATH                  : 'contact',
   COUNT_PATH                    : 'count',
   CSRF_TOKEN                    : 'csrfToken',

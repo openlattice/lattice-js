@@ -2,7 +2,7 @@ import { Map, Set, fromJS } from 'immutable';
 
 import Grant, { GrantBuilder, isValidGrant as isValid } from './Grant';
 import { GrantTypes } from '../constants/types';
-import { MOCK_GRANT, genRandomGrant } from '../utils/testing/MockDataModels';
+import { MOCK_GRANT, genRandomGrant } from '../utils/testing/MockData';
 
 import {
   INVALID_PARAMS,

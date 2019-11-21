@@ -7,7 +7,7 @@ import * as RequestsApi from './RequestsApi';
 import { REQUESTS_API } from '../constants/ApiNames';
 // import { isDefined } from '../utils/LangUtils';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL } from '../utils/testing/Invalid';
-import { MOCK_ACL_KEY, MOCK_REQUEST_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ACL_KEY, MOCK_REQUEST_DM } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {

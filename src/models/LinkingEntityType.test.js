@@ -1,6 +1,6 @@
 import LinkingEntityType, { LinkingEntityTypeBuilder, isValidLinkingEntityType as isValid } from './LinkingEntityType';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_REQUIRED_BOOLEAN } from '../utils/testing/Invalid';
-import { MOCK_LINKING_ENTITY_TYPE_DM } from '../utils/testing/MockDataModels';
+import { MOCK_LINKING_ENTITY_TYPE_DM } from '../utils/testing/MockData';
 
 describe('LinkingEntityType', () => {
 

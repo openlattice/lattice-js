@@ -3,7 +3,7 @@ import { Map, Set, fromJS } from 'immutable';
 import AclData, { AclDataBuilder, isValidAclData as isValid } from './AclData';
 import { ActionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ACL_DATA, genRandomAclData } from '../utils/testing/MockDataModels';
+import { MOCK_ACL_DATA, genRandomAclData } from '../utils/testing/MockData';
 
 describe('AclData', () => {
 

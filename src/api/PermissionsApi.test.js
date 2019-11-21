@@ -5,7 +5,7 @@ import * as PermissionsApi from './PermissionsApi';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ACL_KEY, MOCK_ACL_DATA } from '../utils/testing/MockDataModels';
+import { MOCK_ACL_KEY, MOCK_ACL_DATA } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {

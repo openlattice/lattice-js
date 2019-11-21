@@ -2,7 +2,7 @@ import { Map, Set } from 'immutable';
 
 import EntityDataKey, { EntityDataKeyBuilder, isValidEntityDataKey as isValid } from './EntityDataKey';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ENTITY_DATA_KEY_DM as MOCK_DM } from '../utils/testing/MockDataModels';
+import { MOCK_ENTITY_DATA_KEY_DM as MOCK_DM } from '../utils/testing/MockData';
 import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const {

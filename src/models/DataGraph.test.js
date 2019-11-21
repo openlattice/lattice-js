@@ -6,7 +6,7 @@ import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_OBJECT } from '../utils/tes
 import {
   MOCK_DATA_GRAPH_DM as MOCK_DM,
   genRandomDataGraph,
-} from '../utils/testing/MockDataModels';
+} from '../utils/testing/MockData';
 
 const {
   associations: mockAssociations,

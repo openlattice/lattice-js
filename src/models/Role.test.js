@@ -1,7 +1,7 @@
 import { Map, Set, fromJS } from 'immutable';
 import Role, { ROLE_CLASS_PACKAGE, RoleBuilder, isValidRole as isValid } from './Role';
 import { AT_CLASS } from '../constants/GlobalConstants';
-import { MOCK_ROLE, genRandomRole } from '../utils/testing/MockDataModels';
+import { MOCK_ROLE, genRandomRole } from '../utils/testing/MockData';
 
 import {
   INVALID_PARAMS,
