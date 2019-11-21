@@ -433,7 +433,7 @@ const MOCK_ORGANIZATION :Organization = (new OrganizationBuilder())
   .setApps([genRandomUUID(), genRandomUUID()])
   .setAutoApprovedEmails(['openlattice.com'])
   .setDescription('MockOrgDescription')
-  .setEnrollments([genRandomString(), genRandomString()])
+  .setConnections([genRandomString(), genRandomString()])
   .setGrants({
     [genRandomUUID()]: (new GrantBuilder())
       .setGrantType(GrantTypes.MANUAL)

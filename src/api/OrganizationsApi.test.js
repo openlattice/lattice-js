@@ -3,11 +3,17 @@
 import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
 import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
-import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_STRING, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_GRANT, MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockDataModels';
-import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
+import {
+  INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
+  INVALID_PARAMS_SS,
+} from '../utils/testing/Invalid';
+import { MOCK_GRANT, MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockData';
+import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
+  CONNECTIONS_PATH,
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
   GRANT_PATH,
@@ -44,11 +50,11 @@ import {
  */
 
 const MOCK_EMAIL_DOMAIN = 'openlattice.com';
-const MOCK_DESCRIPTION = genRandomString();
-const MOCK_TITLE = genRandomString();
+const MOCK_DESCRIPTION = 'mock description';
+const MOCK_TITLE = 'mock title';
 
-// const MOCK_MEMBER_ID = 'google-oauth2|850284592837234579086';
-const MOCK_MEMBER_ID = genRandomString();
+const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
+const MOCK_CONNECTION = 'mock_connection';
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
@@ -62,203 +68,6 @@ describe('OrganizationsApi', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
-  testGetOrganization();
-  testGetAllOrganizations();
-  testCreateOrganization();
-  testDeleteOrganization();
-  testUpdateTitle();
-  testUpdateDescription();
-  testGetAutoApprovedEmailDomains();
-  testAddAutoApprovedEmailDomain();
-  testAddAutoApprovedEmailDomains();
-  testSetAutoApprovedEmailDomains();
-  testRemoveAutoApprovedEmailDomain();
-  testRemoveAutoApprovedEmailDomains();
-  testGetRole();
-  testGetAllRoles();
-  testCreateRole();
-  testDeleteRole();
-  testUpdateRoleTitle();
-  testUpdateRoleDescription();
-  testAddRoleToMember();
-  testRemoveRoleFromMember();
-  testGetAllMembers();
-  testGetAllUsersOfRole();
-  testAddMemberToOrganization();
-  testRemoveMemberFromOrganization();
-  testGrantTrustToOrganization();
-  testRevokeTrustFromOrganization();
-
-  describe('updateRoleGrant()', () => {
-
-    const fnToTest = OrganizationsApi.updateRoleGrant;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_GRANT];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${GRANT_PATH}`,
-      MOCK_GRANT,
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
-});
-
-function testGetOrganization() {
-
-  describe('getOrganization()', () => {
-
-    const fnToTest = OrganizationsApi.getOrganization;
-
-    const validParams = [MOCK_ORGANIZATION.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetAllOrganizations() {
-
-  describe('getAllOrganizations()', () => {
-
-    const fnToTest = OrganizationsApi.getAllOrganizations;
-
-    const validParams = [];
-    const axiosParams = ['/'];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testCreateOrganization() {
-
-  describe('createOrganization()', () => {
-
-    const fnToTest = OrganizationsApi.createOrganization;
-
-    const validParams = [MOCK_ORGANIZATION];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', MOCK_ORGANIZATION];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testDeleteOrganization() {
-
-  describe('deleteOrganization()', () => {
-
-    const fnToTest = OrganizationsApi.deleteOrganization;
-
-    const validParams = [MOCK_ORGANIZATION.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testUpdateTitle() {
-
-  describe('updateTitle()', () => {
-
-    const fnToTest = OrganizationsApi.updateTitle;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_TITLE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION.id}/${TITLE_PATH}`,
-      MOCK_TITLE,
-      {
-        headers: {
-          'Content-Type': 'text/plain'
-        }
-      }
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testUpdateDescription() {
-
-  describe('updateDescription()', () => {
-
-    const fnToTest = OrganizationsApi.updateDescription;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_DESCRIPTION];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION.id}/${DESCRIPTION_PATH}`,
-      MOCK_DESCRIPTION,
-      {
-        headers: {
-          'Content-Type': 'text/plain'
-        }
-      }
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetAutoApprovedEmailDomains() {
-
-  describe('getAutoApprovedEmailDomains()', () => {
-
-    const fnToTest = OrganizationsApi.getAutoApprovedEmailDomains;
-
-    const validParams = [MOCK_ORGANIZATION.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testAddAutoApprovedEmailDomain() {
 
   describe('addAutoApprovedEmailDomain()', () => {
 
@@ -275,9 +84,6 @@ function testAddAutoApprovedEmailDomain() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
-
-function testAddAutoApprovedEmailDomains() {
 
   describe('addAutoApprovedEmailDomains()', () => {
 
@@ -296,120 +102,14 @@ function testAddAutoApprovedEmailDomains() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testSetAutoApprovedEmailDomains() {
+  describe('addConnections()', () => {
 
-  describe('setAutoApprovedEmailDomains()', () => {
+    const fnToTest = OrganizationsApi.addConnections;
 
-    // TODO: add test for removing duplicates
-
-    const fnToTest = OrganizationsApi.setAutoApprovedEmailDomains;
-
-    const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`, [MOCK_EMAIL_DOMAIN]];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testRemoveAutoApprovedEmailDomain() {
-
-  describe('removeAutoApprovedEmailDomain()', () => {
-
-    const fnToTest = OrganizationsApi.removeAutoApprovedEmailDomain;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_EMAIL_DOMAIN];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testRemoveAutoApprovedEmailDomains() {
-
-  describe('removeAutoApprovedEmailDomains()', () => {
-
-    // TODO: add test for removing duplicates
-
-    const fnToTest = OrganizationsApi.removeAutoApprovedEmailDomains;
-
-    const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [{
-      url: `/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`,
-      method: 'delete',
-      data: [MOCK_EMAIL_DOMAIN]
-    }];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetRole() {
-
-  describe('getRole()', () => {
-
-    const fnToTest = OrganizationsApi.getRole;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetAllRoles() {
-
-  describe('getAllRoles()', () => {
-
-    const fnToTest = OrganizationsApi.getAllRoles;
-
-    const validParams = [MOCK_ORGANIZATION.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testCreateRole() {
-
-  describe('createRole()', () => {
-
-    const fnToTest = OrganizationsApi.createRole;
-
-    const validParams = [MOCK_ROLE];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${ROLES_PATH}`, MOCK_ROLE];
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_CONNECTION]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, [MOCK_CONNECTION]];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -418,44 +118,14 @@ function testCreateRole() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testDeleteRole() {
+  describe('addMemberToOrganization()', () => {
 
-  describe('deleteRole()', () => {
+    const fnToTest = OrganizationsApi.addMemberToOrganization;
 
-    const fnToTest = OrganizationsApi.deleteRole;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testUpdateRoleTitle() {
-
-  describe('updateRoleTitle()', () => {
-
-    const fnToTest = OrganizationsApi.updateRoleTitle;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_TITLE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${TITLE_PATH}`,
-      MOCK_TITLE,
-      {
-        headers: {
-          'Content-Type': 'text/plain'
-        }
-      }
-    ];
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_MEMBER_ID];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -464,36 +134,6 @@ function testUpdateRoleTitle() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
-
-function testUpdateRoleDescription() {
-
-  describe('updateRoleDescription()', () => {
-
-    const fnToTest = OrganizationsApi.updateRoleDescription;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_DESCRIPTION];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${DESCRIPTION_PATH}`,
-      MOCK_DESCRIPTION,
-      {
-        headers: {
-          'Content-Type': 'text/plain'
-        }
-      }
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testAddRoleToMember() {
 
   describe('addRoleToMember()', () => {
 
@@ -514,21 +154,46 @@ function testAddRoleToMember() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testRemoveRoleFromMember() {
+  describe('createOrganization()', () => {
 
-  describe('removeRoleFromMember()', () => {
+    const fnToTest = OrganizationsApi.createOrganization;
 
-    const fnToTest = OrganizationsApi.removeRoleFromMember;
+    const validParams = [MOCK_ORGANIZATION];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = ['/', MOCK_ORGANIZATION];
 
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_MEMBER_ID];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
-    /* eslint-disable max-len */
-    const axiosParams = [
-      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
-    ];
-    /* eslint-enable */
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('createRole()', () => {
+
+    const fnToTest = OrganizationsApi.createRole;
+
+    const validParams = [MOCK_ROLE];
+    const invalidParams = [INVALID_PARAMS];
+    const axiosParams = [`/${ROLES_PATH}`, MOCK_ROLE];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('deleteOrganization()', () => {
+
+    const fnToTest = OrganizationsApi.deleteOrganization;
+
+    const validParams = [MOCK_ORGANIZATION.id];
+    const invalidParams = [INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -537,9 +202,36 @@ function testRemoveRoleFromMember() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testGetAllMembers() {
+  describe('deleteRole()', () => {
+
+    const fnToTest = OrganizationsApi.deleteRole;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('getAllOrganizations()', () => {
+
+    const fnToTest = OrganizationsApi.getAllOrganizations;
+
+    const validParams = [];
+    const axiosParams = ['/'];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
 
   describe('getAllMembers()', () => {
 
@@ -556,9 +248,22 @@ function testGetAllMembers() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testGetAllUsersOfRole() {
+  describe('getAllRoles()', () => {
+
+    const fnToTest = OrganizationsApi.getAllRoles;
+
+    const validParams = [MOCK_ORGANIZATION.id];
+    const invalidParams = [INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
 
   describe('getAllUsersOfRole()', () => {
 
@@ -575,47 +280,54 @@ function testGetAllUsersOfRole() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testAddMemberToOrganization() {
+  describe('getAutoApprovedEmailDomains()', () => {
 
-  describe('addMemberToOrganization()', () => {
+    const fnToTest = OrganizationsApi.getAutoApprovedEmailDomains;
 
-    const fnToTest = OrganizationsApi.addMemberToOrganization;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_MEMBER_ID];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
+    const validParams = [MOCK_ORGANIZATION.id];
+    const invalidParams = [INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testRemoveMemberFromOrganization() {
+  describe('getOrganization()', () => {
 
-  describe('removeMemberFromOrganization()', () => {
+    const fnToTest = OrganizationsApi.getOrganization;
 
-    const fnToTest = OrganizationsApi.removeMemberFromOrganization;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_MEMBER_ID];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
+    const validParams = [MOCK_ORGANIZATION.id];
+    const invalidParams = [INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testGrantTrustToOrganization() {
+  describe('getRole()', () => {
+
+    const fnToTest = OrganizationsApi.getRole;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
 
   describe('grantTrustToOrganization()', () => {
 
@@ -652,9 +364,96 @@ function testGrantTrustToOrganization() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
 
-function testRevokeTrustFromOrganization() {
+  describe('removeAutoApprovedEmailDomain()', () => {
+
+    const fnToTest = OrganizationsApi.removeAutoApprovedEmailDomain;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_EMAIL_DOMAIN];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}/${MOCK_EMAIL_DOMAIN}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('removeAutoApprovedEmailDomains()', () => {
+
+    // TODO: add test for removing duplicates
+
+    const fnToTest = OrganizationsApi.removeAutoApprovedEmailDomains;
+
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [{
+      url: `/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`,
+      method: 'delete',
+      data: [MOCK_EMAIL_DOMAIN]
+    }];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'request');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('removeConnections()', () => {
+
+    const fnToTest = OrganizationsApi.removeConnections;
+
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_CONNECTION]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, [MOCK_CONNECTION]];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('removeMemberFromOrganization()', () => {
+
+    const fnToTest = OrganizationsApi.removeMemberFromOrganization;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_MEMBER_ID];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('removeRoleFromMember()', () => {
+
+    const fnToTest = OrganizationsApi.removeRoleFromMember;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_MEMBER_ID];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
+    /* eslint-disable max-len */
+    const axiosParams = [
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
+    ];
+    /* eslint-enable */
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
 
   describe('revokeTrustFromOrganization()', () => {
 
@@ -691,4 +490,154 @@ function testRevokeTrustFromOrganization() {
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'patch');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
-}
+
+  describe('setAutoApprovedEmailDomains()', () => {
+
+    // TODO: add test for removing duplicates
+
+    const fnToTest = OrganizationsApi.setAutoApprovedEmailDomains;
+
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`, [MOCK_EMAIL_DOMAIN]];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('setConnections()', () => {
+
+    const fnToTest = OrganizationsApi.setConnections;
+
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_CONNECTION]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, [MOCK_CONNECTION]];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('updateOrganizationDescription()', () => {
+
+    const fnToTest = OrganizationsApi.updateOrganizationDescription;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_DESCRIPTION];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
+    const axiosParams = [
+      `/${MOCK_ORGANIZATION.id}/${DESCRIPTION_PATH}`,
+      MOCK_DESCRIPTION,
+      {
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      }
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('updateRoleDescription()', () => {
+
+    const fnToTest = OrganizationsApi.updateRoleDescription;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_DESCRIPTION];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${DESCRIPTION_PATH}`,
+      MOCK_DESCRIPTION,
+      {
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      }
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('updateRoleGrant()', () => {
+
+    const fnToTest = OrganizationsApi.updateRoleGrant;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_GRANT];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${GRANT_PATH}`,
+      MOCK_GRANT,
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('updateRoleTitle()', () => {
+
+    const fnToTest = OrganizationsApi.updateRoleTitle;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_ROLE.id, MOCK_TITLE];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [
+      `/${MOCK_ORGANIZATION.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${MOCK_ROLE.id}/${TITLE_PATH}`,
+      MOCK_TITLE,
+      {
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      }
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('updateOrganizationTitle()', () => {
+
+    const fnToTest = OrganizationsApi.updateOrganizationTitle;
+
+    const validParams = [MOCK_ORGANIZATION.id, MOCK_TITLE];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const axiosParams = [
+      `/${MOCK_ORGANIZATION.id}/${TITLE_PATH}`,
+      MOCK_TITLE,
+      {
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      }
+    ];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+});

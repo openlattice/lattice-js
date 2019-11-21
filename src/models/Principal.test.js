@@ -3,7 +3,7 @@ import { Map, Set, fromJS } from 'immutable';
 import Principal, { PrincipalBuilder, isValidPrincipal as isValid } from './Principal';
 import { PrincipalTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_PRINCIPAL, genRandomPrincipal } from '../utils/testing/MockDataModels';
+import { MOCK_PRINCIPAL, genRandomPrincipal } from '../utils/testing/MockData';
 
 describe('Principal', () => {
 

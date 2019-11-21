@@ -6,7 +6,7 @@ import * as AxiosUtils from '../utils/axios';
 import * as Config from '../config/Configuration';
 import * as DataApi from './DataApi';
 import { DATA_API } from '../constants/ApiNames';
-import { MOCK_DATA_EDGE_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockDataModels';
+import { MOCK_DATA_EDGE_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockData';
 import { UpdateTypes, DeleteTypes } from '../constants/types';
 
 import {

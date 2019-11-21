@@ -12,7 +12,7 @@ import {
 import {
   MOCK_ASSOCIATION_TYPE,
   genRandomAssociationType,
-} from '../utils/testing/MockDataModels';
+} from '../utils/testing/MockData';
 
 const {
   bidirectional: mockBidi,

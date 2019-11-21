@@ -28,7 +28,7 @@ import {
   MOCK_ENTITY_TYPE,
   MOCK_PROPERTY_TYPE,
   MOCK_SCHEMA,
-} from '../utils/testing/MockDataModels';
+} from '../utils/testing/MockData';
 
 import {
   testApiShouldCatchRejectedPromise,

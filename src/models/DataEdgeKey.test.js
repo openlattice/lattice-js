@@ -3,7 +3,7 @@ import { Map, Set } from 'immutable';
 import DataEdgeKey, { DataEdgeKeyBuilder, isValidDataEdgeKey as isValid } from './DataEdgeKey';
 import EntityDataKey from './EntityDataKey';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
-import { MOCK_DATA_EDGE_KEY_DM as MOCK_DM } from '../utils/testing/MockDataModels';
+import { MOCK_DATA_EDGE_KEY_DM as MOCK_DM } from '../utils/testing/MockData';
 import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const {
