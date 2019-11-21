@@ -3,21 +3,25 @@
  */
 
 type GrantTypesEnum = {|
-  ATTRIBUTE :'Attribute';
+  ATTRIBUTES :'Attributes';
+  AUTOMATIC :'Automatic';
   CLAIM :'Claim';
-  CONNECTION :'Connection';
-  GROUP :'Group';
+  EMAIL_DOMAIN :'EmailDomain';
+  GROUPS :'Groups';
   MANUAL :'Manual';
+  ROLES :'Roles';
 |};
 
 type GrantType = $Values<GrantTypesEnum>;
 
 const GrantTypes :{| ...GrantTypesEnum |} = Object.freeze({
-  ATTRIBUTE: 'Attribute',
+  ATTRIBUTES: 'Attributes',
+  AUTOMATIC: 'Automatic',
   CLAIM: 'Claim',
-  CONNECTION: 'Connection',
-  GROUP: 'Group',
+  EMAIL_DOMAIN: 'EmailDomain',
+  GROUPS: 'Groups',
   MANUAL: 'Manual',
+  ROLES: 'Roles',
 });
 
 export default GrantTypes;

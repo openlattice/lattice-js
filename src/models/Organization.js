@@ -36,9 +36,9 @@ const LOG = new Logger('Organization');
 
 type OrganizationObject = {|
   apps :UUID[];
+  connections :string[];
   description ?:string;
   emails :string[];
-  enrollments :string[];
   grants :{ [UUID] :GrantObject };
   id ?:UUID;
   members :PrincipalObject[];
@@ -55,9 +55,9 @@ type OrganizationObject = {|
 export default class Organization {
 
   apps :UUID[];
+  connections :string[];
   description :?string;
   emails :string[];
-  enrollments :string[];
   grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
@@ -76,14 +76,14 @@ export default class Organization {
     emails :string[],
     apps :UUID[],
     partitions :?number[],
-    enrollments :string[],
+    connections :string[],
     grants :{ [UUID] :Grant },
   ) {
 
     // required properties
     this.apps = apps;
     this.emails = emails;
-    this.enrollments = enrollments;
+    this.connections = connections;
     this.grants = grants;
     this.members = members;
     this.principal = principal;
@@ -114,8 +114,8 @@ export default class Organization {
     // required properties
     const orgObj :OrganizationObject = {
       apps: this.apps,
+      connections: this.connections,
       emails: this.emails,
-      enrollments: this.enrollments,
       grants: mapValues(this.grants, (g :Grant) => g.toObject()),
       members: this.members.map((p :Principal) => p.toObject()),
       principal: this.principal.toObject(),
@@ -152,9 +152,9 @@ export default class Organization {
 export class OrganizationBuilder {
 
   apps :UUID[];
+  connections :string[];
   description :?string;
   emails :string[];
-  enrollments :string[];
   grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
@@ -301,19 +301,19 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setEnrollments(enrollments :$ReadOnlyArray<string>) :OrganizationBuilder {
+  setConnections(connections :$ReadOnlyArray<string>) :OrganizationBuilder {
 
-    if (!isDefined(enrollments) || isEmptyArray(enrollments)) {
+    if (!isDefined(connections) || isEmptyArray(connections)) {
       return this;
     }
 
-    if (!isNonEmptyStringArray(enrollments)) {
-      throw new Error('invalid parameter: enrollments must be a non-empty array of strings');
+    if (!isNonEmptyStringArray(connections)) {
+      throw new Error('invalid parameter: connections must be a non-empty array of strings');
     }
 
-    this.enrollments = Set().withMutations((set :Set<string>) => {
-      enrollments.forEach((enrollment :string) => {
-        set.add(enrollment);
+    this.connections = Set().withMutations((set :Set<string>) => {
+      connections.forEach((connection :string) => {
+        set.add(connection);
       });
     }).toJS();
 
@@ -370,8 +370,8 @@ export class OrganizationBuilder {
       this.apps = [];
     }
 
-    if (!this.enrollments) {
-      this.enrollments = [];
+    if (!this.connections) {
+      this.connections = [];
     }
 
     if (!this.grants) {
@@ -388,7 +388,7 @@ export class OrganizationBuilder {
       this.emails,
       this.apps,
       this.partitions,
-      this.enrollments,
+      this.connections,
       this.grants,
     );
   }
@@ -413,7 +413,7 @@ export function isValidOrganization(organization :any) :boolean {
       .setPrincipal(organization.principal)
       .setRoles(organization.roles)
       .setTitle(organization.title)
-      .setEnrollments(organization.enrollments)
+      .setConnections(organization.connections)
       .setGrants(organization.grants)
       .build();
 

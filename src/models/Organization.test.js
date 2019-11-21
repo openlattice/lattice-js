@@ -273,12 +273,12 @@ describe('Organization', () => {
 
     });
 
-    describe('setEnrollments()', () => {
+    describe('setConnections()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            (new OrganizationBuilder()).setEnrollments(invalidInput);
+            (new OrganizationBuilder()).setConnections(invalidInput);
           }).toThrow();
         });
       });
@@ -286,20 +286,20 @@ describe('Organization', () => {
       test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            (new OrganizationBuilder()).setEnrollments([...MOCK_ORGANIZATION.enrollments, invalidInput]);
+            (new OrganizationBuilder()).setConnections([...MOCK_ORGANIZATION.connections, invalidInput]);
           }).toThrow();
         });
       });
 
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          (new OrganizationBuilder()).setEnrollments();
+          (new OrganizationBuilder()).setConnections();
         }).not.toThrow();
         expect(() => {
-          (new OrganizationBuilder()).setEnrollments([]);
+          (new OrganizationBuilder()).setConnections([]);
         }).not.toThrow();
         expect(() => {
-          (new OrganizationBuilder()).setEnrollments(MOCK_ORGANIZATION.enrollments);
+          (new OrganizationBuilder()).setConnections(MOCK_ORGANIZATION.connections);
         }).not.toThrow();
       });
 
@@ -355,7 +355,7 @@ describe('Organization', () => {
           (new OrganizationBuilder())
             .setApps(MOCK_ORGANIZATION.apps)
             .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-            .setEnrollments(MOCK_ORGANIZATION.enrollments)
+            .setConnections(MOCK_ORGANIZATION.connections)
             .setGrants(MOCK_ORGANIZATION.grants)
             .setId(MOCK_ORGANIZATION.id)
             .setMembers(MOCK_ORGANIZATION.members)
@@ -372,7 +372,7 @@ describe('Organization', () => {
             .setApps(MOCK_ORGANIZATION.apps)
             .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
             .setDescription(MOCK_ORGANIZATION.description)
-            .setEnrollments(MOCK_ORGANIZATION.enrollments)
+            .setConnections(MOCK_ORGANIZATION.connections)
             .setGrants(MOCK_ORGANIZATION.grants)
             .setMembers(MOCK_ORGANIZATION.members)
             .setPartitions(MOCK_ORGANIZATION.partitions)
@@ -388,7 +388,7 @@ describe('Organization', () => {
             .setApps(MOCK_ORGANIZATION.apps)
             .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
             .setDescription(MOCK_ORGANIZATION.description)
-            .setEnrollments(MOCK_ORGANIZATION.enrollments)
+            .setConnections(MOCK_ORGANIZATION.connections)
             .setGrants(MOCK_ORGANIZATION.grants)
             .setId(MOCK_ORGANIZATION.id)
             .setMembers(MOCK_ORGANIZATION.members)
@@ -408,7 +408,7 @@ describe('Organization', () => {
 
         expect(org.apps).toEqual([]);
         expect(org.emails).toEqual([]);
-        expect(org.enrollments).toEqual([]);
+        expect(org.connections).toEqual([]);
         expect(org.grants).toEqual({});
         expect(org.members).toEqual([]);
         expect(org.roles).toEqual([]);
@@ -420,7 +420,7 @@ describe('Organization', () => {
           .setApps(MOCK_ORGANIZATION.apps)
           .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
           .setDescription(MOCK_ORGANIZATION.description)
-          .setEnrollments(MOCK_ORGANIZATION.enrollments)
+          .setConnections(MOCK_ORGANIZATION.connections)
           .setGrants(MOCK_ORGANIZATION.grants)
           .setId(MOCK_ORGANIZATION.id)
           .setMembers(MOCK_ORGANIZATION.members)
@@ -435,7 +435,7 @@ describe('Organization', () => {
         expect(org.apps).toBeDefined();
         expect(org.description).toBeDefined();
         expect(org.emails).toBeDefined();
-        expect(org.enrollments).toBeDefined();
+        expect(org.connections).toBeDefined();
         expect(org.grants).toBeDefined();
         expect(org.id).toBeDefined();
         expect(org.members).toBeDefined();
@@ -446,7 +446,7 @@ describe('Organization', () => {
         expect(org.apps).toEqual(MOCK_ORGANIZATION.apps);
         expect(org.description).toEqual(MOCK_ORGANIZATION.description);
         expect(org.emails).toEqual(MOCK_ORGANIZATION.emails);
-        expect(org.enrollments).toEqual(MOCK_ORGANIZATION.enrollments);
+        expect(org.connections).toEqual(MOCK_ORGANIZATION.connections);
         expect(org.grants).toEqual(MOCK_ORGANIZATION.grants);
         expect(org.id).toEqual(MOCK_ORGANIZATION.id);
         expect(org.members).toEqual(MOCK_ORGANIZATION.members);
@@ -489,7 +489,7 @@ describe('Organization', () => {
           .setApps(MOCK_ORGANIZATION.apps)
           .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
           .setDescription(MOCK_ORGANIZATION.description)
-          .setEnrollments(MOCK_ORGANIZATION.enrollments)
+          .setConnections(MOCK_ORGANIZATION.connections)
           .setGrants(MOCK_ORGANIZATION.grants)
           .setId(MOCK_ORGANIZATION.id)
           .setMembers(MOCK_ORGANIZATION.members)
@@ -570,9 +570,9 @@ describe('Organization', () => {
         });
       });
 
-      test('should return false when given an object literal with an invalid "enrollments" property', () => {
+      test('should return false when given an object literal with an invalid "connections" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION, enrollments: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, connections: invalidInput })).toEqual(false);
         });
       });
 
@@ -595,7 +595,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -615,7 +615,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -635,7 +635,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -655,7 +655,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -675,7 +675,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -695,7 +695,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -715,7 +715,7 @@ describe('Organization', () => {
               invalidInput,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -735,7 +735,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               invalidInput,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
@@ -755,14 +755,14 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               invalidInput,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               MOCK_ORGANIZATION.grants,
             )
           )).toEqual(false);
         });
       });
 
-      test('should return false when given an instance with an invalid "enrollments" property', () => {
+      test('should return false when given an instance with an invalid "connections" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -795,7 +795,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.emails,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
-              MOCK_ORGANIZATION.enrollments,
+              MOCK_ORGANIZATION.connections,
               invalidInput,
             )
           )).toEqual(false);
@@ -813,7 +813,7 @@ describe('Organization', () => {
         .setApps(MOCK_ORGANIZATION.apps)
         .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
         .setDescription(MOCK_ORGANIZATION.description)
-        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setConnections(MOCK_ORGANIZATION.connections)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -827,7 +827,7 @@ describe('Organization', () => {
           apps: MOCK_ORGANIZATION.apps,
           description: MOCK_ORGANIZATION.description,
           emails: MOCK_ORGANIZATION.emails,
-          enrollments: MOCK_ORGANIZATION.enrollments,
+          connections: MOCK_ORGANIZATION.connections,
           grants: mapValues(MOCK_ORGANIZATION.grants, (g) => g.toObject()),
           id: MOCK_ORGANIZATION.id,
           members: MOCK_ORGANIZATION.members.map((p) => p.toObject()),
@@ -847,7 +847,7 @@ describe('Organization', () => {
         .setApps(MOCK_ORGANIZATION.apps)
         .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
         .setDescription(MOCK_ORGANIZATION.description)
-        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setConnections(MOCK_ORGANIZATION.connections)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -861,7 +861,7 @@ describe('Organization', () => {
         .setApps(MOCK_ORGANIZATION.apps)
         .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
         .setDescription(MOCK_ORGANIZATION.description)
-        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setConnections(MOCK_ORGANIZATION.connections)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -908,7 +908,7 @@ describe('Organization', () => {
         .setApps(MOCK_ORGANIZATION.apps)
         .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
         .setDescription(MOCK_ORGANIZATION.description)
-        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setConnections(MOCK_ORGANIZATION.connections)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -922,7 +922,7 @@ describe('Organization', () => {
         .setApps(MOCK_ORGANIZATION.apps)
         .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
         .setDescription(MOCK_ORGANIZATION.description)
-        .setEnrollments(MOCK_ORGANIZATION.enrollments)
+        .setConnections(MOCK_ORGANIZATION.connections)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)

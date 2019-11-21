@@ -3,11 +3,17 @@
 import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
 import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
-import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_STRING, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import {
+  INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
+  INVALID_PARAMS_SS,
+} from '../utils/testing/Invalid';
 import { MOCK_GRANT, MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockData';
-import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
+import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 import {
+  CONNECTIONS_PATH,
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
   GRANT_PATH,
@@ -44,11 +50,11 @@ import {
  */
 
 const MOCK_EMAIL_DOMAIN = 'openlattice.com';
-const MOCK_DESCRIPTION = genRandomString();
-const MOCK_TITLE = genRandomString();
+const MOCK_DESCRIPTION = 'mock description';
+const MOCK_TITLE = 'mock title';
 
-// const MOCK_MEMBER_ID = 'google-oauth2|850284592837234579086';
-const MOCK_MEMBER_ID = genRandomString();
+const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
+const MOCK_CONNECTION = 'mock_connection';
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
@@ -88,6 +94,22 @@ describe('OrganizationsApi', () => {
     const validParams = [MOCK_ORGANIZATION.id, [MOCK_EMAIL_DOMAIN]];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
     const axiosParams = [`/${MOCK_ORGANIZATION.id}/${EMAIL_DOMAINS_PATH}`, [MOCK_EMAIL_DOMAIN]];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('addConnections()', () => {
+
+    const fnToTest = OrganizationsApi.addConnections;
+
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_CONNECTION]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, [MOCK_CONNECTION]];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
@@ -381,6 +403,22 @@ describe('OrganizationsApi', () => {
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
+  describe('removeConnections()', () => {
+
+    const fnToTest = OrganizationsApi.removeConnections;
+
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_CONNECTION]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, [MOCK_CONNECTION]];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
   describe('removeMemberFromOrganization()', () => {
 
     const fnToTest = OrganizationsApi.removeMemberFromOrganization;
@@ -471,9 +509,25 @@ describe('OrganizationsApi', () => {
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
-  describe('updateDescription()', () => {
+  describe('setConnections()', () => {
 
-    const fnToTest = OrganizationsApi.updateDescription;
+    const fnToTest = OrganizationsApi.setConnections;
+
+    const validParams = [MOCK_ORGANIZATION.id, [MOCK_CONNECTION]];
+    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, [MOCK_CONNECTION]];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'put');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('updateOrganizationDescription()', () => {
+
+    const fnToTest = OrganizationsApi.updateOrganizationDescription;
 
     const validParams = [MOCK_ORGANIZATION.id, MOCK_DESCRIPTION];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
@@ -562,9 +616,9 @@ describe('OrganizationsApi', () => {
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
-  describe('updateTitle()', () => {
+  describe('updateOrganizationTitle()', () => {
 
-    const fnToTest = OrganizationsApi.updateTitle;
+    const fnToTest = OrganizationsApi.updateOrganizationTitle;
 
     const validParams = [MOCK_ORGANIZATION.id, MOCK_TITLE];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];

@@ -24,7 +24,12 @@ import Logger from '../utils/Logger';
 import * as PermissionsApi from './PermissionsApi';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
+import {
+  isDefined,
+  isEmptyArray,
+  isNonEmptyString,
+  isNonEmptyStringArray,
+} from '../utils/LangUtils';
 import { isValidUUID } from '../utils/ValidationUtils';
 
 import {
@@ -51,7 +56,7 @@ import {
 } from '../constants/types';
 
 import {
-  ASSEMBLE_PATH,
+  CONNECTIONS_PATH,
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
   ENTITY_SETS_PATH,
@@ -59,10 +64,8 @@ import {
   INTEGRATION_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
-  REFRESH_PATH,
   ROLES_PATH,
-  SYNCHRONIZE_PATH,
-  TITLE_PATH
+  TITLE_PATH,
 } from '../constants/UrlConstants';
 
 import type { ActionType } from '../constants/types';
@@ -82,7 +85,7 @@ const LOG = new Logger('OrganizationsApi');
  * @example
  * OrganizationsApi.getOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getOrganization(organizationId :UUID) :Promise<*> {
+function getOrganization(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -113,7 +116,7 @@ export function getOrganization(organizationId :UUID) :Promise<*> {
  * @example
  * OrganizationsApi.getAllOrganizations();
  */
-export function getAllOrganizations() :Promise<*> {
+function getAllOrganizations() :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get('/')
@@ -149,7 +152,7 @@ export function getAllOrganizations() :Promise<*> {
  *   }
  * );
  */
-export function createOrganization(organization :Organization) :Promise<*> {
+function createOrganization(organization :Organization) :Promise<*> {
 
   let errorMsg = '';
 
@@ -181,7 +184,7 @@ export function createOrganization(organization :Organization) :Promise<*> {
  * @example
  * OrganizationsApi.deleteOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function deleteOrganization(organizationId :UUID) :Promise<*> {
+function deleteOrganization(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -212,12 +215,12 @@ export function deleteOrganization(organizationId :UUID) :Promise<*> {
  * @returns {Promise}
  *
  * @example
- * OrganizationsApi.updateTitle(
+ * OrganizationsApi.updateOrganizationTitle(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "New Title"
  * );
  */
-export function updateTitle(organizationId :UUID, title :string) :Promise<*> {
+function updateOrganizationTitle(organizationId :UUID, title :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -260,12 +263,12 @@ export function updateTitle(organizationId :UUID, title :string) :Promise<*> {
  * @returns {Promise}
  *
  * @example
- * OrganizationsApi.updateDescription(
+ * OrganizationsApi.updateOrganizationDescription(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "new description"
  * );
  */
-export function updateDescription(organizationId :UUID, description :string) :Promise<*> {
+function updateOrganizationDescription(organizationId :UUID, description :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -309,7 +312,7 @@ export function updateDescription(organizationId :UUID, description :string) :Pr
  * @example
  * OrganizationsApi.getAutoApprovedEmailDomains("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<*> {
+function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -345,7 +348,7 @@ export function getAutoApprovedEmailDomains(organizationId :UUID) :Promise<*> {
  *   "openlattice.com"
  * );
  */
-export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<*> {
+function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -389,7 +392,7 @@ export function addAutoApprovedEmailDomain(organizationId :UUID, emailDomain :st
  *   ]
  * );
  */
-export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
+function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -439,7 +442,7 @@ export function addAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  *   ]
  * );
  */
-export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
+function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -487,7 +490,7 @@ export function setAutoApprovedEmailDomains(organizationId :UUID, emailDomains :
  *   "openlattice.com"
  * );
  */
-export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<*> {
+function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -531,7 +534,7 @@ export function removeAutoApprovedEmailDomain(organizationId :UUID, emailDomain 
  *   ]
  * );
  */
-export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
+function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomains :string[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -580,7 +583,7 @@ export function removeAutoApprovedEmailDomains(organizationId :UUID, emailDomain
  * @example
  * OrganizationsApi.getRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
  */
-export function getRole(organizationId :UUID, roleId :UUID) :Promise<*> {
+function getRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -618,7 +621,7 @@ export function getRole(organizationId :UUID, roleId :UUID) :Promise<*> {
  * @example
  * OrganizationsApi.getAllRoles("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllRoles(organizationId :UUID) :Promise<*> {
+function getAllRoles(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -659,7 +662,7 @@ export function getAllRoles(organizationId :UUID) :Promise<*> {
  *   }
  * );
  */
-export function createRole(role :Role) :Promise<*> {
+function createRole(role :Role) :Promise<*> {
 
   let errorMsg = '';
 
@@ -692,7 +695,7 @@ export function createRole(role :Role) :Promise<*> {
  * @example
  * OrganizationsApi.deleteRole("ec6865e6-e60e-424b-a071-6a9c1603d735", "fae6af98-2675-45bd-9a5b-1619a87235a8");
  */
-export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<*> {
+function deleteRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -736,7 +739,7 @@ export function deleteRole(organizationId :UUID, roleId :UUID) :Promise<*> {
  *   "ADMIN"
  * );
  */
-export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :string) :Promise<*> {
+function updateRoleTitle(organizationId :UUID, roleId :UUID, title :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -792,7 +795,7 @@ export function updateRoleTitle(organizationId :UUID, roleId :UUID, title :strin
  *   "The Administrator"
  * );
  */
-export function updateRoleDescription(organizationId :UUID, roleId :UUID, description :string) :Promise<*> {
+function updateRoleDescription(organizationId :UUID, roleId :UUID, description :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -849,7 +852,7 @@ export function updateRoleDescription(organizationId :UUID, roleId :UUID, descri
  *   "memberId"
  * );
  */
-export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<*> {
+function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -900,7 +903,7 @@ export function addRoleToMember(organizationId :UUID, roleId :UUID, memberId :st
  *   "memberId"
  * );
  */
-export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<*> {
+function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -944,7 +947,7 @@ export function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberI
  * @example
  * OrganizationsApi.getAllMembers("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getAllMembers(organizationId :UUID) :Promise<*> {
+function getAllMembers(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -980,7 +983,7 @@ export function getAllMembers(organizationId :UUID) :Promise<*> {
  *   "fae6af98-2675-45bd-9a5b-1619a87235a8"
  * );
  */
-export function getAllUsersOfRole(organizationId :UUID, roleId :UUID) :Promise<*> {
+function getAllUsersOfRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1022,7 +1025,7 @@ export function getAllUsersOfRole(organizationId :UUID, roleId :UUID) :Promise<*
  *   "memberId"
  * );
  */
-export function addMemberToOrganization(organizationId :UUID, memberId :string) :Promise<*> {
+function addMemberToOrganization(organizationId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1064,7 +1067,7 @@ export function addMemberToOrganization(organizationId :UUID, memberId :string) 
  *   "memberId"
  * );
  */
-export function removeMemberFromOrganization(organizationId :UUID, memberId :string) :Promise<*> {
+function removeMemberFromOrganization(organizationId :UUID, memberId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1102,7 +1105,7 @@ export function removeMemberFromOrganization(organizationId :UUID, memberId :str
  * @example
  * OrganizationsApi.getOrganizationEntitySets("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getOrganizationEntitySets(organizationId :UUID) :Promise<*> {
+function getOrganizationEntitySets(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1114,86 +1117,6 @@ export function getOrganizationEntitySets(organizationId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${ENTITY_SETS_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `POST /organizations/{orgId}/entity-sets`
- *
- * Retrieves all the organization entity sets filtered according to the flags provided.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {string[]} flags
- * @return {Promise} - a Promise that resolves with a map from entity set ids to OrganizationEntitySetFlags
- *
- * @example
- * OrganizationsApi.getFilteredOrganizationEntitySets(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   ["INTERNAL"]
- * );
- */
-export function getFilteredOrganizationEntitySets(organizationId :UUID, flags :string[]) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyStringArray(flags)) {
-    errorMsg = 'invalid parameter: flags must be a non-empty string array';
-    LOG.error(errorMsg, flags);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/${organizationId}/${ENTITY_SETS_PATH}`, flags)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `POST /organizations/{orgId}/entity-sets/assemble`
- *
- * Materializes entity sets into the organization database.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {Object} refreshRatesOfEntitySets
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.assembleEntitySets(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e": null
- *   }
- * );
- */
-export function assembleEntitySets(organizationId :UUID, refreshRatesOfEntitySets :Object) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/${organizationId}/${ENTITY_SETS_PATH}/${ASSEMBLE_PATH}`, refreshRatesOfEntitySets)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -1214,7 +1137,7 @@ export function assembleEntitySets(organizationId :UUID, refreshRatesOfEntitySet
  * @example
  * OrganizationsApi.getOrganizationIntegrationAccount("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-export function getOrganizationIntegrationAccount(organizationId :UUID) :Promise<*> {
+function getOrganizationIntegrationAccount(organizationId :UUID) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1226,90 +1149,6 @@ export function getOrganizationIntegrationAccount(organizationId :UUID) :Promise
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .get(`/${organizationId}/${INTEGRATION_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `POST /organizations/{orgId}/{entitySetId}/synchronize`
- *
- * Synchronizes EDM changes to the requested materialized entity set in the organization.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.synchronizeEdmChanges(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
- * );
- */
-export function synchronizeEdmChanges(organizationId :UUID, entitySetId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/${organizationId}/${entitySetId}/${SYNCHRONIZE_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `POST /organizations/{orgId}/{entitySetId}/refresh`
- *
- * Refreshes the requested materialized entity set with data changes in the organization.
- *
- * @static
- * @memberof lattice.OrganizationsApi
- * @param {UUID} organizationId
- * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * OrganizationsApi.refreshDataChanges(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
- * );
- */
-export function refreshDataChanges(organizationId :UUID, entitySetId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(organizationId)) {
-    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/${organizationId}/${entitySetId}/${REFRESH_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -1379,7 +1218,7 @@ function updateTrustForOrganization(organizationId :UUID, principalId :string, a
  *   "trustedPrincipalId"
  * );
  */
-export function grantTrustToOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
+function grantTrustToOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
 
   return updateTrustForOrganization(organizationId, trustedPrincipalId, ActionTypes.ADD);
 }
@@ -1401,7 +1240,7 @@ export function grantTrustToOrganization(organizationId :UUID, trustedPrincipalI
  *   "trustedPrincipalId"
  * );
  */
-export function revokeTrustFromOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
+function revokeTrustFromOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
 
   return updateTrustForOrganization(organizationId, trustedPrincipalId, ActionTypes.REMOVE);
 }
@@ -1426,7 +1265,7 @@ export function revokeTrustFromOrganization(organizationId :UUID, trustedPrincip
  *   }
  * );
  */
-export function updateRoleGrant(organizationId :UUID, roleId :UUID, grant :Grant) :Promise<*> {
+function updateRoleGrant(organizationId :UUID, roleId :UUID, grant :Grant) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1456,3 +1295,185 @@ export function updateRoleGrant(organizationId :UUID, roleId :UUID, grant :Grant
       return Promise.reject(error);
     });
 }
+
+/**
+ * `POST /organizations/{orgId}/connections`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} connections
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.addConnections(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["connection1", "connection2"]
+ * );
+ */
+function addConnections(organizationId :UUID, connections :string[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  let connectionsSet :string[];
+  if (!isDefined(connections) || isEmptyArray(connections)) {
+    connectionsSet = [];
+  }
+  else if (!isNonEmptyStringArray(connections)) {
+    errorMsg = 'invalid parameter: connections must be an array of strings';
+    LOG.error(errorMsg, connections);
+    return Promise.reject(errorMsg);
+  }
+  else {
+    connectionsSet = Set().withMutations((set :Set<UUID>) => (
+      connections.forEach((connection :string) => set.add(connection))
+    )).toJS();
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${CONNECTIONS_PATH}`, connectionsSet)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `PUT /organizations/{orgId}/connections`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} connections
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.setConnections(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["connection1", "connection2"]
+ * );
+ */
+function setConnections(organizationId :UUID, connections :string[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  let connectionsSet :string[];
+  if (!isDefined(connections) || isEmptyArray(connections)) {
+    connectionsSet = [];
+  }
+  else if (!isNonEmptyStringArray(connections)) {
+    errorMsg = 'invalid parameter: connections must be an array of strings';
+    LOG.error(errorMsg, connections);
+    return Promise.reject(errorMsg);
+  }
+  else {
+    connectionsSet = Set().withMutations((set :Set<UUID>) => (
+      connections.forEach((connection :string) => set.add(connection))
+    )).toJS();
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${CONNECTIONS_PATH}`, connectionsSet)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /organizations/{orgId}/connections`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string[]} connections
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.removeConnections(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["connection1", "connection2"]
+ * );
+ */
+function removeConnections(organizationId :UUID, connections :string[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: organizationId must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  let connectionsSet :string[];
+  if (!isDefined(connections) || isEmptyArray(connections)) {
+    connectionsSet = [];
+  }
+  else if (!isNonEmptyStringArray(connections)) {
+    errorMsg = 'invalid parameter: connections must be an array of strings';
+    LOG.error(errorMsg, connections);
+    return Promise.reject(errorMsg);
+  }
+  else {
+    connectionsSet = Set().withMutations((set :Set<UUID>) => (
+      connections.forEach((connection :string) => set.add(connection))
+    )).toJS();
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .delete(`/${organizationId}/${CONNECTIONS_PATH}`, connectionsSet)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+export {
+  addAutoApprovedEmailDomain,
+  addAutoApprovedEmailDomains,
+  addConnections,
+  addMemberToOrganization,
+  addRoleToMember,
+  createOrganization,
+  createRole,
+  deleteOrganization,
+  deleteRole,
+  getAllMembers,
+  getAllOrganizations,
+  getAllRoles,
+  getAllUsersOfRole,
+  getAutoApprovedEmailDomains,
+  getOrganization,
+  getOrganizationEntitySets,
+  getOrganizationIntegrationAccount,
+  getRole,
+  grantTrustToOrganization,
+  removeAutoApprovedEmailDomain,
+  removeAutoApprovedEmailDomains,
+  removeConnections,
+  removeMemberFromOrganization,
+  removeRoleFromMember,
+  revokeTrustFromOrganization,
+  setAutoApprovedEmailDomains,
+  setConnections,
+  updateOrganizationDescription,
+  updateOrganizationTitle,
+  updateRoleDescription,
+  updateRoleGrant,
+  updateRoleTitle,
+};
