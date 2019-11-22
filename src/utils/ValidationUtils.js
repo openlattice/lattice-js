@@ -37,7 +37,7 @@ export function validateNonEmptyArray(value :$ReadOnlyArray<any>, validatorFn :V
 
 export function isValidUUID(value :any) :boolean %checks {
 
-  return BASE_UUID_PATTERN.test(value);
+  return value && BASE_UUID_PATTERN.test(value);
 }
 
 export function isValidUUIDArray(uuids :$ReadOnlyArray<any>) :boolean %checks {
