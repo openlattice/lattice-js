@@ -226,7 +226,7 @@ describe('Grant', () => {
       });
 
       test('should return false when given an instance with an invalid "mappings" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Grant(
               MOCK_GRANT.attribute,
@@ -253,6 +253,7 @@ describe('Grant', () => {
 
       expect(grant.valueOf()).toEqual(
         fromJS({
+          attribute: MOCK_GRANT.attribute,
           grantType: MOCK_GRANT.grantType,
           mappings: MOCK_GRANT.mappings,
         }).hashCode()

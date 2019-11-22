@@ -7,7 +7,13 @@ import { Map, Set, fromJS } from 'immutable';
 
 import GrantTypes from '../constants/types/GrantTypes';
 import Logger from '../utils/Logger';
-import { isDefined, isEmptyArray, isNonEmptyStringArray } from '../utils/LangUtils';
+import {
+  isDefined,
+  isEmptyArray,
+  isEmptyString,
+  isNonEmptyString,
+  isNonEmptyStringArray,
+} from '../utils/LangUtils';
 import { validateNonEmptyArray } from '../utils/ValidationUtils';
 
 import type { GrantType } from '../constants/types/GrantTypes';
@@ -62,7 +68,11 @@ export class GrantBuilder {
 
   setAttribute(attribute :string) :GrantBuilder {
 
-    if (!isString(attribute)) {
+    if (!isDefined(attribute) || isEmptyString(attribute)) {
+      return this;
+    }
+
+    if (!isNonEmptyString(attribute)) {
       throw new Error('invalid parameter: attribute must be a string');
     }
 

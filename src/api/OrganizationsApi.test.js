@@ -409,7 +409,7 @@ describe('OrganizationsApi', () => {
 
     const validParams = [MOCK_ORGANIZATION.id, [MOCK_CONNECTION]];
     const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
-    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, [MOCK_CONNECTION]];
+    const axiosParams = [`/${MOCK_ORGANIZATION.id}/${CONNECTIONS_PATH}`, { data: [MOCK_CONNECTION] }];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, ORGANIZATIONS_API);
