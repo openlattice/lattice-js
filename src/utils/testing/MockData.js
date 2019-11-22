@@ -509,12 +509,14 @@ function genRandomOrganization() :Organization {
 }
 
 const MOCK_GRANT :Grant = (new GrantBuilder())
+  .setAttribute('attribute')
   .setGrantType(GrantTypes.MANUAL)
   .setMappings(['mapping1', 'mapping2'])
   .build();
 
 function genRandomGrant() :Grant {
   return new GrantBuilder()
+    .setAttribute(genRandomString())
     .setGrantType(pickRandomValue(GrantTypes))
     .setMappings([genRandomString()])
     .build();
