@@ -1419,9 +1419,9 @@ function removeConnections(organizationId :UUID, connections :string[]) :Promise
     return Promise.reject(errorMsg);
   }
 
-  let connectionsSet :string[];
+  let data :string[];
   if (!isDefined(connections) || isEmptyArray(connections)) {
-    connectionsSet = [];
+    data = [];
   }
   else if (!isNonEmptyStringArray(connections)) {
     errorMsg = 'invalid parameter: connections must be an array of strings';
@@ -1429,13 +1429,13 @@ function removeConnections(organizationId :UUID, connections :string[]) :Promise
     return Promise.reject(errorMsg);
   }
   else {
-    connectionsSet = Set().withMutations((set :Set<UUID>) => (
+    data = Set().withMutations((set :Set<UUID>) => (
       connections.forEach((connection :string) => set.add(connection))
     )).toJS();
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .delete(`/${organizationId}/${CONNECTIONS_PATH}`, connectionsSet)
+    .delete(`/${organizationId}/${CONNECTIONS_PATH}`, { data })
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

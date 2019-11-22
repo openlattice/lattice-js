@@ -2,6 +2,7 @@
  * @flow
  */
 
+import isString from 'lodash/isString';
 import { Map, Set, fromJS } from 'immutable';
 
 import GrantTypes from '../constants/types/GrantTypes';
@@ -14,17 +15,19 @@ import type { GrantType } from '../constants/types/GrantTypes';
 const LOG = new Logger('Grant');
 
 type GrantObject = {|
+  attribute :string;
   grantType :GrantType;
   mappings :string[];
 |};
 
 export default class Grant {
-
+  attribute :string;
   grantType :GrantType;
   mappings :string[];
 
-  constructor(grantType :GrantType, mappings :string[]) {
+  constructor(attribute :string, grantType :GrantType, mappings :string[]) {
 
+    this.attribute = attribute;
     this.grantType = grantType;
     this.mappings = mappings;
   }
@@ -37,6 +40,7 @@ export default class Grant {
   toObject() :GrantObject {
 
     const grantObj :GrantObject = {
+      attribute: this.attribute,
       grantType: this.grantType,
       mappings: this.mappings,
     };
@@ -52,8 +56,19 @@ export default class Grant {
 
 export class GrantBuilder {
 
+  attribute :string;
   grantType :GrantType;
   mappings :string[];
+
+  setAttribute(attribute :string) :GrantBuilder {
+
+    if (!isString(attribute)) {
+      throw new Error('invalid parameter: attribute must be a string');
+    }
+
+    this.attribute = attribute;
+    return this;
+  }
 
   setGrantType(grantType :GrantType) :GrantBuilder {
 
@@ -86,6 +101,10 @@ export class GrantBuilder {
 
   build() :Grant {
 
+    if (!this.attribute) {
+      this.attribute = '';
+    }
+
     if (!this.grantType) {
       throw new Error('missing property: grantType is a required property');
     }
@@ -94,7 +113,7 @@ export class GrantBuilder {
       this.mappings = [];
     }
 
-    return new Grant(this.grantType, this.mappings);
+    return new Grant(this.attribute, this.grantType, this.mappings);
   }
 }
 
@@ -109,6 +128,7 @@ export function isValidGrant(grant :any) :boolean {
   try {
 
     (new GrantBuilder())
+      .setAttribute(grant.attribute)
       .setGrantType(grant.grantType)
       .setMappings(grant.mappings)
       .build();
