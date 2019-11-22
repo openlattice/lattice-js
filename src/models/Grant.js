@@ -2,7 +2,6 @@
  * @flow
  */
 
-import isString from 'lodash/isString';
 import { Map, Set, fromJS } from 'immutable';
 
 import GrantTypes from '../constants/types/GrantTypes';
