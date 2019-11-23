@@ -177,12 +177,12 @@ describe('Organization', () => {
 
     });
 
-    describe('setAutoApprovedEmails()', () => {
+    describe('setEmailDomains()', () => {
 
       test('should throw when given invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            (new OrganizationBuilder()).setAutoApprovedEmails(invalidInput);
+            (new OrganizationBuilder()).setEmailDomains(invalidInput);
           }).toThrow();
         });
       });
@@ -190,20 +190,20 @@ describe('Organization', () => {
       test('should throw when given a mix of valid and invalid parameters', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(() => {
-            (new OrganizationBuilder()).setAutoApprovedEmails([...MOCK_ORGANIZATION.emails, invalidInput]);
+            (new OrganizationBuilder()).setEmailDomains([...MOCK_ORGANIZATION.emailDomains, invalidInput]);
           }).toThrow();
         });
       });
 
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          (new OrganizationBuilder()).setAutoApprovedEmails();
+          (new OrganizationBuilder()).setEmailDomains();
         }).not.toThrow();
         expect(() => {
-          (new OrganizationBuilder()).setAutoApprovedEmails([]);
+          (new OrganizationBuilder()).setEmailDomains([]);
         }).not.toThrow();
         expect(() => {
-          (new OrganizationBuilder()).setAutoApprovedEmails(MOCK_ORGANIZATION.emails);
+          (new OrganizationBuilder()).setEmailDomains(MOCK_ORGANIZATION.emailDomains);
         }).not.toThrow();
       });
 
@@ -354,8 +354,8 @@ describe('Organization', () => {
         expect(() => {
           (new OrganizationBuilder())
             .setApps(MOCK_ORGANIZATION.apps)
-            .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
             .setConnections(MOCK_ORGANIZATION.connections)
+            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
             .setGrants(MOCK_ORGANIZATION.grants)
             .setId(MOCK_ORGANIZATION.id)
             .setMembers(MOCK_ORGANIZATION.members)
@@ -370,9 +370,9 @@ describe('Organization', () => {
         expect(() => {
           (new OrganizationBuilder())
             .setApps(MOCK_ORGANIZATION.apps)
-            .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-            .setDescription(MOCK_ORGANIZATION.description)
             .setConnections(MOCK_ORGANIZATION.connections)
+            .setDescription(MOCK_ORGANIZATION.description)
+            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
             .setGrants(MOCK_ORGANIZATION.grants)
             .setMembers(MOCK_ORGANIZATION.members)
             .setPartitions(MOCK_ORGANIZATION.partitions)
@@ -386,9 +386,9 @@ describe('Organization', () => {
         expect(() => {
           (new OrganizationBuilder())
             .setApps(MOCK_ORGANIZATION.apps)
-            .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-            .setDescription(MOCK_ORGANIZATION.description)
             .setConnections(MOCK_ORGANIZATION.connections)
+            .setDescription(MOCK_ORGANIZATION.description)
+            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
             .setGrants(MOCK_ORGANIZATION.grants)
             .setId(MOCK_ORGANIZATION.id)
             .setMembers(MOCK_ORGANIZATION.members)
@@ -407,7 +407,7 @@ describe('Organization', () => {
           .build();
 
         expect(org.apps).toEqual([]);
-        expect(org.emails).toEqual([]);
+        expect(org.emailDomains).toEqual([]);
         expect(org.connections).toEqual([]);
         expect(org.grants).toEqual({});
         expect(org.members).toEqual([]);
@@ -418,9 +418,9 @@ describe('Organization', () => {
 
         const org = (new OrganizationBuilder())
           .setApps(MOCK_ORGANIZATION.apps)
-          .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-          .setDescription(MOCK_ORGANIZATION.description)
           .setConnections(MOCK_ORGANIZATION.connections)
+          .setDescription(MOCK_ORGANIZATION.description)
+          .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
           .setGrants(MOCK_ORGANIZATION.grants)
           .setId(MOCK_ORGANIZATION.id)
           .setMembers(MOCK_ORGANIZATION.members)
@@ -433,9 +433,9 @@ describe('Organization', () => {
         expect(org).toBeInstanceOf(Organization);
 
         expect(org.apps).toBeDefined();
-        expect(org.description).toBeDefined();
-        expect(org.emails).toBeDefined();
         expect(org.connections).toBeDefined();
+        expect(org.description).toBeDefined();
+        expect(org.emailDomains).toBeDefined();
         expect(org.grants).toBeDefined();
         expect(org.id).toBeDefined();
         expect(org.members).toBeDefined();
@@ -444,9 +444,9 @@ describe('Organization', () => {
         expect(org.title).toBeDefined();
 
         expect(org.apps).toEqual(MOCK_ORGANIZATION.apps);
-        expect(org.description).toEqual(MOCK_ORGANIZATION.description);
-        expect(org.emails).toEqual(MOCK_ORGANIZATION.emails);
         expect(org.connections).toEqual(MOCK_ORGANIZATION.connections);
+        expect(org.description).toEqual(MOCK_ORGANIZATION.description);
+        expect(org.emailDomains).toEqual(MOCK_ORGANIZATION.emailDomains);
         expect(org.grants).toEqual(MOCK_ORGANIZATION.grants);
         expect(org.id).toEqual(MOCK_ORGANIZATION.id);
         expect(org.members).toEqual(MOCK_ORGANIZATION.members);
@@ -476,7 +476,7 @@ describe('Organization', () => {
             MOCK_ORGANIZATION.principal,
             MOCK_ORGANIZATION.members,
             MOCK_ORGANIZATION.roles,
-            MOCK_ORGANIZATION.emails,
+            MOCK_ORGANIZATION.emailDomains,
             MOCK_ORGANIZATION.apps,
             MOCK_ORGANIZATION.partitions,
           )
@@ -487,9 +487,9 @@ describe('Organization', () => {
 
         const org = (new OrganizationBuilder())
           .setApps(MOCK_ORGANIZATION.apps)
-          .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-          .setDescription(MOCK_ORGANIZATION.description)
           .setConnections(MOCK_ORGANIZATION.connections)
+          .setDescription(MOCK_ORGANIZATION.description)
+          .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
           .setGrants(MOCK_ORGANIZATION.grants)
           .setId(MOCK_ORGANIZATION.id)
           .setMembers(MOCK_ORGANIZATION.members)
@@ -552,9 +552,9 @@ describe('Organization', () => {
         });
       });
 
-      test('should return false when given an object literal with an invalid "emails" property', () => {
+      test('should return false when given an object literal with an invalid "emailDomains" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ORGANIZATION, emails: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ORGANIZATION, emailDomains: invalidInput })).toEqual(false);
         });
       });
 
@@ -592,7 +592,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -612,7 +612,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -632,7 +632,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -652,7 +652,7 @@ describe('Organization', () => {
               invalidInput,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -672,7 +672,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               invalidInput,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -692,7 +692,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               invalidInput,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -702,7 +702,7 @@ describe('Organization', () => {
         });
       });
 
-      test('should return false when given an instance with an invalid "emails" property', () => {
+      test('should return false when given an instance with an invalid "emailDomains" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new Organization(
@@ -732,7 +732,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               invalidInput,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -752,7 +752,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               invalidInput,
               MOCK_ORGANIZATION.connections,
@@ -772,7 +772,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               invalidInput,
@@ -792,7 +792,7 @@ describe('Organization', () => {
               MOCK_ORGANIZATION.principal,
               MOCK_ORGANIZATION.members,
               MOCK_ORGANIZATION.roles,
-              MOCK_ORGANIZATION.emails,
+              MOCK_ORGANIZATION.emailDomains,
               MOCK_ORGANIZATION.apps,
               MOCK_ORGANIZATION.partitions,
               MOCK_ORGANIZATION.connections,
@@ -811,9 +811,9 @@ describe('Organization', () => {
     test('valueOf()', () => {
       const organization = (new OrganizationBuilder())
         .setApps(MOCK_ORGANIZATION.apps)
-        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-        .setDescription(MOCK_ORGANIZATION.description)
         .setConnections(MOCK_ORGANIZATION.connections)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -826,7 +826,7 @@ describe('Organization', () => {
         fromJS({
           apps: MOCK_ORGANIZATION.apps,
           description: MOCK_ORGANIZATION.description,
-          emails: MOCK_ORGANIZATION.emails,
+          emailDomains: MOCK_ORGANIZATION.emailDomains,
           connections: MOCK_ORGANIZATION.connections,
           grants: mapValues(MOCK_ORGANIZATION.grants, (g) => g.toObject()),
           id: MOCK_ORGANIZATION.id,
@@ -845,9 +845,9 @@ describe('Organization', () => {
 
       const organization0 = (new OrganizationBuilder())
         .setApps(MOCK_ORGANIZATION.apps)
-        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-        .setDescription(MOCK_ORGANIZATION.description)
         .setConnections(MOCK_ORGANIZATION.connections)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -859,9 +859,9 @@ describe('Organization', () => {
 
       const organization1 = (new OrganizationBuilder())
         .setApps(MOCK_ORGANIZATION.apps)
-        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-        .setDescription(MOCK_ORGANIZATION.description)
         .setConnections(MOCK_ORGANIZATION.connections)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -881,7 +881,7 @@ describe('Organization', () => {
 
       expect(testSet.first().apps).toEqual(MOCK_ORGANIZATION.apps);
       expect(testSet.first().description).toEqual(MOCK_ORGANIZATION.description);
-      expect(testSet.first().emails).toEqual(MOCK_ORGANIZATION.emails);
+      expect(testSet.first().emailDomains).toEqual(MOCK_ORGANIZATION.emailDomains);
       expect(testSet.first().id).toEqual(MOCK_ORGANIZATION.id);
       expect(testSet.first().members).toEqual(MOCK_ORGANIZATION.members);
       expect(testSet.first().partitions).toEqual(MOCK_ORGANIZATION.partitions);
@@ -891,7 +891,7 @@ describe('Organization', () => {
 
       expect(testSet.last().apps).toEqual(randomOrganization.apps);
       expect(testSet.last().description).toEqual(randomOrganization.description);
-      expect(testSet.last().emails).toEqual(randomOrganization.emails);
+      expect(testSet.last().emailDomains).toEqual(randomOrganization.emailDomains);
       expect(testSet.last().id).toEqual(randomOrganization.id);
       expect(testSet.last().members).toEqual(randomOrganization.members);
       expect(testSet.last().partitions).toEqual(randomOrganization.partitions);
@@ -906,9 +906,9 @@ describe('Organization', () => {
 
       const organization0 = (new OrganizationBuilder())
         .setApps(MOCK_ORGANIZATION.apps)
-        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-        .setDescription(MOCK_ORGANIZATION.description)
         .setConnections(MOCK_ORGANIZATION.connections)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)
@@ -920,9 +920,9 @@ describe('Organization', () => {
 
       const organization1 = (new OrganizationBuilder())
         .setApps(MOCK_ORGANIZATION.apps)
-        .setAutoApprovedEmails(MOCK_ORGANIZATION.emails)
-        .setDescription(MOCK_ORGANIZATION.description)
         .setConnections(MOCK_ORGANIZATION.connections)
+        .setDescription(MOCK_ORGANIZATION.description)
+        .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
         .setGrants(MOCK_ORGANIZATION.grants)
         .setId(MOCK_ORGANIZATION.id)
         .setMembers(MOCK_ORGANIZATION.members)

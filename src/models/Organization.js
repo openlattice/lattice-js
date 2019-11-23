@@ -38,7 +38,7 @@ type OrganizationObject = {|
   apps :UUID[];
   connections :string[];
   description ?:string;
-  emails :string[];
+  emailDomains :string[];
   grants :{ [UUID] :GrantObject };
   id ?:UUID;
   members :PrincipalObject[];
@@ -57,7 +57,7 @@ export default class Organization {
   apps :UUID[];
   connections :string[];
   description :?string;
-  emails :string[];
+  emailDomains :string[];
   grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
@@ -73,7 +73,7 @@ export default class Organization {
     principal :Principal,
     members :Principal[],
     roles :Role[],
-    emails :string[],
+    emailDomains :string[],
     apps :UUID[],
     partitions :?number[],
     connections :string[],
@@ -82,7 +82,7 @@ export default class Organization {
 
     // required properties
     this.apps = apps;
-    this.emails = emails;
+    this.emailDomains = emailDomains;
     this.connections = connections;
     this.grants = grants;
     this.members = members;
@@ -115,7 +115,7 @@ export default class Organization {
     const orgObj :OrganizationObject = {
       apps: this.apps,
       connections: this.connections,
-      emails: this.emails,
+      emailDomains: this.emailDomains,
       grants: mapValues(this.grants, (g :Grant) => g.toObject()),
       members: this.members.map((p :Principal) => p.toObject()),
       principal: this.principal.toObject(),
@@ -154,7 +154,7 @@ export class OrganizationBuilder {
   apps :UUID[];
   connections :string[];
   description :?string;
-  emails :string[];
+  emailDomains :string[];
   grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
@@ -249,18 +249,18 @@ export class OrganizationBuilder {
     return this;
   }
 
-  setAutoApprovedEmails(emails :$ReadOnlyArray<string>) :OrganizationBuilder {
+  setEmailDomains(emailDomains :$ReadOnlyArray<string>) :OrganizationBuilder {
 
-    if (!isDefined(emails) || isEmptyArray(emails)) {
+    if (!isDefined(emailDomains) || isEmptyArray(emailDomains)) {
       return this;
     }
 
-    if (!isNonEmptyStringArray(emails)) {
-      throw new Error('invalid parameter: emails must be a non-empty array of strings');
+    if (!isNonEmptyStringArray(emailDomains)) {
+      throw new Error('invalid parameter: emailDomains must be a non-empty array of strings');
     }
 
-    this.emails = Set().withMutations((set :Set<string>) => {
-      emails.forEach((email :string) => {
+    this.emailDomains = Set().withMutations((set :Set<string>) => {
+      emailDomains.forEach((email :string) => {
         set.add(email);
       });
     }).toJS();
@@ -362,8 +362,8 @@ export class OrganizationBuilder {
       this.roles = [];
     }
 
-    if (!this.emails) {
-      this.emails = [];
+    if (!this.emailDomains) {
+      this.emailDomains = [];
     }
 
     if (!this.apps) {
@@ -385,7 +385,7 @@ export class OrganizationBuilder {
       this.principal,
       this.members,
       this.roles,
-      this.emails,
+      this.emailDomains,
       this.apps,
       this.partitions,
       this.connections,
@@ -408,7 +408,7 @@ export function isValidOrganization(organization :any) :boolean {
     // required properties
     organizationBuilder
       .setApps(organization.apps)
-      .setAutoApprovedEmails(organization.emails)
+      .setEmailDomains(organization.emailDomains)
       .setMembers(organization.members)
       .setPrincipal(organization.principal)
       .setRoles(organization.roles)
