@@ -431,9 +431,9 @@ function genRandomAclData() :AclData {
 
 const MOCK_ORGANIZATION :Organization = (new OrganizationBuilder())
   .setApps([genRandomUUID(), genRandomUUID()])
-  .setAutoApprovedEmails(['openlattice.com'])
-  .setDescription('MockOrgDescription')
   .setConnections([genRandomString(), genRandomString()])
+  .setDescription('MockOrgDescription')
+  .setEmailDomains(['openlattice.com'])
   .setGrants({
     [genRandomUUID()]: (new GrantBuilder())
       .setGrantType(GrantTypes.MANUAL)
@@ -474,7 +474,7 @@ const MOCK_ORGANIZATION :Organization = (new OrganizationBuilder())
 function genRandomOrganization() :Organization {
   return new OrganizationBuilder()
     .setApps([genRandomUUID(), genRandomUUID()])
-    .setAutoApprovedEmails([`${genRandomString()}.com`])
+    .setEmailDomains([`${genRandomString()}.com`])
     .setDescription(genRandomString())
     .setId(genRandomUUID())
     .setMembers([
