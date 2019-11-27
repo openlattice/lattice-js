@@ -28,7 +28,7 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   SubscriptionApi    : { size: 3 },
   Constants          : { size: 3 },
   Models             : { size: 66 },
-  Types              : { size: 11 },
+  Types              : { size: 12 },
 });
 /* eslint-enable key-spacing */
 
