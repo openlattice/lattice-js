@@ -8,6 +8,7 @@ import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/t
 import {
   ADVANCED_PATH,
   FQN_PATH,
+  IDS_PATH,
   NEIGHBORS_PATH,
   ORGANIZATIONS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
@@ -16,6 +17,7 @@ import {
 
 import {
   INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN,
   INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
@@ -489,28 +491,56 @@ function searchEntityNeighborsWithFilter() {
   // TODO: test deduplicating arrays into sets
 
   describe('searchEntityNeighborsWithFilter', () => {
+    describe('default', () => {
+      const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
+      const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }];
+      const invalidParams = [
+        INVALID_PARAMS_SS,
+        {
+          destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+          edgeEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+          entityKeyIds: INVALID_PARAMS_SS,
+          sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+        },
+      ];
+      const axiosParams = [
+        `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`,
+        { entityKeyIds: [MOCK_ENTITY_KEY_ID] },
+      ];
 
-    const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
-    const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }];
-    const invalidParams = [
-      INVALID_PARAMS_SS,
-      {
-        destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-        edgeEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-        entityKeyIds: INVALID_PARAMS_SS,
-        sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-      },
-    ];
-    const axiosParams = [
-      `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`,
-      { entityKeyIds: [MOCK_ENTITY_KEY_ID] },
-    ];
+      testApiShouldReturnPromise(fnToTest, validParams);
+      testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, SEARCH_API);
+      testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+      testApiShouldCatchRejectedPromise(fnToTest, validParams);
+    });
 
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, SEARCH_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+    describe('idsOnly = true', () => {
+      const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
+      const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }, true];
+      const invalidParams = [
+        INVALID_PARAMS_SS,
+        {
+          destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+          edgeEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+          entityKeyIds: INVALID_PARAMS_SS,
+          sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+        },
+        INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN
+      ];
+      const axiosParams = [
+        `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}/${IDS_PATH}`,
+        { entityKeyIds: [MOCK_ENTITY_KEY_ID] },
+      ];
+
+      testApiShouldReturnPromise(fnToTest, validParams);
+      testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, SEARCH_API);
+      testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+      testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
+      testApiShouldCatchRejectedPromise(fnToTest, validParams);
+    });
+
   });
 }

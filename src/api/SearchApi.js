@@ -30,12 +30,13 @@ import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import {
   ADVANCED_PATH,
   FQN_PATH,
+  IDS_PATH,
   NEIGHBORS_PATH,
   ORGANIZATIONS_PATH,
+  SEARCH_ASSOCIATION_TYPES_PATH,
   SEARCH_ENTITY_SETS_PATH,
   SEARCH_ENTITY_TYPES_PATH,
-  SEARCH_ASSOCIATION_TYPES_PATH,
-  SEARCH_PROPERTY_TYPES_PATH
+  SEARCH_PROPERTY_TYPES_PATH,
 } from '../constants/UrlConstants';
 
 import {
@@ -969,10 +970,15 @@ export function searchEntityNeighbors(entitySetId :UUID, entityKeyId :UUID) :Pro
  *     "destinationEntitySetIds": ["11442cb3-99dc-4842-8736-6c76e6fcc7c4"],
  *     "edgeEntitySetIds": ["f8c6c56a-ad39-4587-b216-def81615d69c"],
  *     "sourceEntitySetIds": ["6317fab5-905d-42f4-8d67-2b78b3c56c77"],
- *   }
+ *   },
+ *   true
  * );
  */
-export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Object) :Promise<*> {
+export function searchEntityNeighborsWithFilter(
+  entitySetId :UUID,
+  filter :Object,
+  idsOnly :boolean = false
+) :Promise<*> {
 
   let errorMsg = '';
   const data :Object = {};
@@ -980,6 +986,12 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
   if (!isValidUUID(entitySetId)) {
     errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (typeof idsOnly !== 'boolean') {
+    errorMsg = 'invalid parameter: idsOnly must be a boolean';
+    LOG.error(errorMsg, idsOnly);
     return Promise.reject(errorMsg);
   }
 
@@ -1039,8 +1051,11 @@ export function searchEntityNeighborsWithFilter(entitySetId :UUID, filter :Objec
     return Promise.reject(errorMsg);
   }
 
+  const baseEndpoint = `/${entitySetId}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`;
+  const endpoint = idsOnly ? `${baseEndpoint}/${IDS_PATH}` : baseEndpoint;
+
   return getApiAxiosInstance(SEARCH_API)
-    .post(`/${entitySetId}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`, data)
+    .post(endpoint, data)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
