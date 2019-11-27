@@ -26,7 +26,7 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   RequestsApi        : { size: 3 },
   SearchApi          : { size: 14 },
   SubscriptionApi    : { size: 3 },
-  Constants          : { size: 3 },
+  Constants          : { size: 8 },
   Models             : { size: 66 },
   Types              : { size: 12 },
 });
