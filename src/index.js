@@ -29,8 +29,8 @@ import * as SearchApi from './api/SearchApi';
 import * as SubscriptionApi from './api/SubscriptionApi';
 
 import * as Constants from './constants/GlobalConstants';
-import * as Types from './constants/types';
 import * as Models from './models';
+import * as Types from './constants/types';
 import { configure } from './config/Configuration';
 
 export type * from './config';

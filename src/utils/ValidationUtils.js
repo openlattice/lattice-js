@@ -40,14 +40,14 @@ export function isValidUUID(value :any) :boolean %checks {
   return value && BASE_UUID_PATTERN.test(value);
 }
 
-export function isValidUUIDArray(uuids :$ReadOnlyArray<any>) :boolean %checks {
+export function isValidUUIDArray(value :any) :boolean %checks {
 
-  return validateNonEmptyArray(uuids, (id :any) => isValidUUID(id));
+  return value && validateNonEmptyArray(value, (id :any) => isValidUUID(id));
 }
 
-export function isValidFQNArray(fqns :$ReadOnlyArray<any>) :boolean %checks {
+export function isValidFQNArray(value :any) :boolean %checks {
 
-  return validateNonEmptyArray(fqns, (fqn :any) => FullyQualifiedName.isValid(fqn));
+  return validateNonEmptyArray(value, (fqn :any) => FullyQualifiedName.isValid(fqn));
 }
 
 export function isValidTypeArray(values :$ReadOnlyArray<any>, types :Object) :boolean %checks {
