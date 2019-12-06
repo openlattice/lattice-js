@@ -37,8 +37,9 @@ import {
 import {
   ALL_PATH,
   ASSOCIATION_PATH,
-  CSRF_TOKEN,
   COUNT_PATH,
+  CSRF_TOKEN,
+  DETAILED_PATH,
   FILE_TYPE,
   NEIGHBORS_PATH,
   SET_ID,
@@ -478,72 +479,6 @@ export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
 }
 
 /**
- * `POST /data/set/{entitySetId}`
- *
- * Gets all data for the given EntitySet UUID with respect to the given filters.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID[]} propertyTypeIds
- * @param {UUID[]} entityKeyIds
- * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
- *
- * @example
- * DataApi.getEntitySetData(
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"],
- *   ["0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"]
- * );
- */
-export function getEntitySetData(entitySetId :UUID, propertyTypeIds :UUID[], entityKeyIds :UUID[]) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  const entitySetSelection = {};
-
-  if (isValidUUIDArray(propertyTypeIds)) {
-    entitySetSelection.properties = Set().withMutations((set :Set<UUID>) => {
-      propertyTypeIds.forEach((propertyTypeId :UUID) => {
-        set.add(propertyTypeId);
-      });
-    }).toJS();
-  }
-  else if (!isUndefined(propertyTypeIds) && !isEmptyArray(propertyTypeIds)) {
-    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
-    LOG.error(errorMsg, propertyTypeIds);
-    return Promise.reject(errorMsg);
-  }
-
-  if (isValidUUIDArray(entityKeyIds)) {
-    entitySetSelection.ids = Set().withMutations((set :Set<UUID>) => {
-      entityKeyIds.forEach((entityKeyId :UUID) => {
-        set.add(entityKeyId);
-      });
-    }).toJS();
-  }
-  else if (!isUndefined(entityKeyIds) && !isEmptyArray(entityKeyIds)) {
-    errorMsg = 'invalid parameter: entityKeyIds must be a non-empty array of valid UUIDs';
-    LOG.error(errorMsg, entityKeyIds);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .post(`/${SET_PATH}/${entitySetId}`, entitySetSelection)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
  *
  * @static
@@ -816,3 +751,150 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
       return Promise.reject(error);
     });
 }
+
+
+/*
+ *
+ *
+ *
+ * everything above needs to be looked over, also alphabetized
+ *
+ *
+ *
+ */
+
+
+/**
+ * `POST /data/set/{entitySetId}`
+ *
+ * Gets all data for the given EntitySet UUID with respect to the given filters.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID[]} propertyTypeIds
+ * @param {UUID[]} entityKeyIds
+ * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
+ *
+ * @example
+ * DataApi.getEntitySetData(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"],
+ *   ["8b470000-0000-0000-8000-000000000007"]
+ * );
+ */
+function getEntitySetData(entitySetId :UUID, propertyTypeIds ?:UUID[], entityKeyIds ?:UUID[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  const entitySetSelection = {};
+
+  if (isValidUUIDArray(propertyTypeIds)) {
+    entitySetSelection.properties = Set().withMutations((set :Set<UUID>) => {
+      propertyTypeIds.forEach((propertyTypeId :UUID) => {
+        set.add(propertyTypeId);
+      });
+    }).toJS();
+  }
+  else if (!isUndefined(propertyTypeIds) && !isEmptyArray(propertyTypeIds)) {
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
+  }
+
+  if (isValidUUIDArray(entityKeyIds)) {
+    entitySetSelection.ids = Set().withMutations((set :Set<UUID>) => {
+      entityKeyIds.forEach((entityKeyId :UUID) => {
+        set.add(entityKeyId);
+      });
+    }).toJS();
+  }
+  else if (!isUndefined(entityKeyIds) && !isEmptyArray(entityKeyIds)) {
+    errorMsg = 'invalid parameter: entityKeyIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entityKeyIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post(`/${SET_PATH}/${entitySetId}`, entitySetSelection)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /data/set/{entitySetId}/detailed`
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {UUID[]} propertyTypeIds
+ * @param {UUID[]} entityKeyIds
+ * @return {Promise}
+ *
+ * @example
+ * EntitySetsApi.getLinkedEntitySetBreakdown(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["8f79e123-3411-4099-a41f-88e5d22d0e8d"],
+ *   ["8b470000-0000-0000-8000-000000000007"]
+ * );
+ */
+function getLinkedEntitySetBreakdown(entitySetId :UUID, propertyTypeIds ?:UUID[], entityKeyIds ?:UUID[]) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  const entitySetSelection = {};
+
+  if (isValidUUIDArray(propertyTypeIds)) {
+    entitySetSelection.properties = Set().withMutations((set :Set<UUID>) => {
+      propertyTypeIds.forEach((propertyTypeId :UUID) => {
+        set.add(propertyTypeId);
+      });
+    }).toJS();
+  }
+  else if (!isUndefined(propertyTypeIds) && !isEmptyArray(propertyTypeIds)) {
+    errorMsg = 'invalid parameter: propertyTypeIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, propertyTypeIds);
+    return Promise.reject(errorMsg);
+  }
+
+  if (isValidUUIDArray(entityKeyIds)) {
+    entitySetSelection.ids = Set().withMutations((set :Set<UUID>) => {
+      entityKeyIds.forEach((entityKeyId :UUID) => {
+        set.add(entityKeyId);
+      });
+    }).toJS();
+  }
+  else if (!isUndefined(entityKeyIds) && !isEmptyArray(entityKeyIds)) {
+    errorMsg = 'invalid parameter: entityKeyIds must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entityKeyIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post(`/${SET_PATH}/${entitySetId}/${DETAILED_PATH}`, entitySetSelection)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+export {
+  getEntitySetData,
+  getLinkedEntitySetBreakdown,
+};
