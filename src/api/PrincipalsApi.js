@@ -202,23 +202,3 @@ export function getSecurablePrincipal(principal :Principal) :Promise<*> {
       return Promise.reject(error);
     });
 }
-
-/**
- * `GET /principals/db`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-export function getDbAccessCredential() :Promise<*> {
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${DB_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
