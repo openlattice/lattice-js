@@ -17,21 +17,18 @@
  * // PrincipalsApi.get...
  */
 
-import Principal, { isValidPrincipal } from '../models/Principal';
 import Logger from '../utils/Logger';
+import Principal, { isValidPrincipal } from '../models/Principal';
 import { PRINCIPALS_API } from '../constants/ApiNames';
-import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyString } from '../utils/LangUtils';
-
-
 import {
-  DB_PATH,
+  CURRENT_PATH,
   EMAIL_PATH,
   ROLES_PATH,
   SEARCH_PATH,
   USERS_PATH,
-  CURRENT_PATH
 } from '../constants/UrlConstants';
+import { isNonEmptyString } from '../utils/LangUtils';
+import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('PrincipalsApi');
 
