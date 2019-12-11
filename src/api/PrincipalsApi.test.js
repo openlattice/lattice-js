@@ -8,6 +8,7 @@ import {
   CURRENT_PATH,
   ROLES_PATH,
   SEARCH_PATH,
+  SYNC_PATH,
   USERS_PATH,
 } from '../constants/UrlConstants';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
@@ -128,6 +129,20 @@ describe('PrincipalsApi', () => {
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
+    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
+    testApiShouldCatchRejectedPromise(fnToTest, validParams);
+  });
+
+  describe('sync()', () => {
+
+    const fnToTest = PrincipalsApi.sync;
+
+    const validParams = [];
+    const axiosParams = [`/${SYNC_PATH}`];
+
+    testApiShouldReturnPromise(fnToTest, validParams);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
+    testApiShouldNotThrowOnInvalidParameters(fnToTest);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });

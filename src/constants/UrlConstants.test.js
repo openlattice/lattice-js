@@ -74,6 +74,7 @@ const EXPECTED = Map({
   SRC_PATH                      : 'src',
   SUBSCRIPTIONS_PATH            : 'subscriptions',
   SYNCHRONIZE_PATH              : 'synchronize',
+  SYNC_PATH                     : 'sync',
   TITLE_PATH                    : 'title',
   TYPES_PATH                    : 'types',
   TYPE_PATH                     : 'type',

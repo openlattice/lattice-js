@@ -24,6 +24,7 @@ import {
   CURRENT_PATH,
   ROLES_PATH,
   SEARCH_PATH,
+  SYNC_PATH,
   USERS_PATH,
 } from '../constants/UrlConstants';
 import { isNonEmptyString } from '../utils/LangUtils';
@@ -187,6 +188,27 @@ function searchAllUsers(searchQuery :string) :Promise<*> {
     });
 }
 
+/**
+ * `GET /principals/sync`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * PrincipalsApi.sync();
+ */
+function sync() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${SYNC_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   getAllRoles,
   getAllUsers,
@@ -194,4 +216,5 @@ export {
   getSecurablePrincipal,
   getUser,
   searchAllUsers,
+  sync,
 };
