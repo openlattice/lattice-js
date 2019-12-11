@@ -133,9 +133,9 @@ describe('PrincipalsApi', () => {
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
 
-  describe('sync()', () => {
+  describe('syncUser()', () => {
 
-    const fnToTest = PrincipalsApi.sync;
+    const fnToTest = PrincipalsApi.syncUser;
 
     const validParams = [];
     const axiosParams = [`/${SYNC_PATH}`];

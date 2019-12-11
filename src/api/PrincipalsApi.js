@@ -196,9 +196,9 @@ function searchAllUsers(searchQuery :string) :Promise<*> {
  * @return {Promise} - a Promise that resolves without a value
  *
  * @example
- * PrincipalsApi.sync();
+ * PrincipalsApi.syncUser();
  */
-function sync() :Promise<*> {
+function syncUser() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${SYNC_PATH}`)
@@ -216,5 +216,5 @@ export {
   getSecurablePrincipal,
   getUser,
   searchAllUsers,
-  sync,
+  syncUser,
 };
