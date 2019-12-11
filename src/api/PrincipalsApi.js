@@ -22,7 +22,6 @@ import Principal, { isValidPrincipal } from '../models/Principal';
 import { PRINCIPALS_API } from '../constants/ApiNames';
 import {
   CURRENT_PATH,
-  EMAIL_PATH,
   ROLES_PATH,
   SEARCH_PATH,
   USERS_PATH,
@@ -33,14 +32,113 @@ import { getApiAxiosInstance } from '../utils/axios';
 const LOG = new Logger('PrincipalsApi');
 
 /**
+ * `GET /principals/roles`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise<Map<AclKey, Role>>} - a Promise that will resolve with a map of roles
+ *
+ * @example
+ * PrincipalsApi.getAllRoles();
+ */
+function getAllRoles() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${ROLES_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /principals/users`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of users
+ *
+ * @example
+ * PrincipalsApi.getAllUsers();
+ */
+function getAllUsers() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${USERS_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /principals/roles`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise<Set<SecurablePrincipal>>} - a Promise that will resolve with a set of role SecurablePrincipals
+ *
+ * @example
+ * PrincipalsApi.getCurrentRoles();
+ */
+function getCurrentRoles() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${ROLES_PATH}/${CURRENT_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /principals`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @param {Principal} principal
+ * @return {Promise<SecurablePrincipal>} - a Promise that will resolve with the SecurablePrincipal
+ *
+ * @example
+ * PrincipalsApi.getSecurablePrincipal({
+ *   "id": "auth0|openlattice",
+ *   "type": "USER"
+ * });
+ */
+function getSecurablePrincipal(principal :Principal) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidPrincipal(principal)) {
+    errorMsg = 'invalid parameter: principal must be a valid Principal';
+    LOG.error(errorMsg, principal);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .post('/', principal)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /principals/users/{userId}`
  *
  * @static
  * @memberof lattice.PrincipalsApi
  * @param {string} userId
  * @return {Promise}
+ *
+ * @example
+ * PrincipalsApi.getUser("auth0|openlattice");
  */
-export function getUser(userId :string) :Promise<*> {
+function getUser(userId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -60,70 +158,17 @@ export function getUser(userId :string) :Promise<*> {
 }
 
 /**
- * `GET /principals/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-export function getAllRoles() :Promise<*> {
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${ROLES_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /principals/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-export function getCurrentRoles() :Promise<*> {
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${ROLES_PATH}/${CURRENT_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /principals/users`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-export function getAllUsers() :Promise<*> {
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `GET /principals/users/search/{searchQuery}`
  *
  * @static
  * @memberof lattice.PrincipalsApi
  * @param {string} searchQuery
- * @return {Promise}
+ * @return {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of matching users
  *
- * TODO: add unit tests
+ * @example
+ * PrincipalsApi.searchAllUsers("openlattice");
  */
-export function searchAllUsers(searchQuery :string) :Promise<*> {
+function searchAllUsers(searchQuery :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -142,31 +187,11 @@ export function searchAllUsers(searchQuery :string) :Promise<*> {
     });
 }
 
-/**
- * `POST /principals`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {Principal} principal
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-export function getSecurablePrincipal(principal :Principal) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidPrincipal(principal)) {
-    errorMsg = 'invalid parameter: principal must be a valid Principal';
-    LOG.error(errorMsg, principal);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .post('/', principal)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
+export {
+  getAllRoles,
+  getAllUsers,
+  getCurrentRoles,
+  getSecurablePrincipal,
+  getUser,
+  searchAllUsers,
+};
