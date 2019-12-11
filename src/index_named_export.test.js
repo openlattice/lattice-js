@@ -22,7 +22,7 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   OrganizationsApi   : { size: 32 },
   PermissionsApi     : { size: 4 },
   PersistentSearchApi: { size: 5 },
-  PrincipalsApi      : { size: 7 },
+  PrincipalsApi      : { size: 6 },
   RequestsApi        : { size: 3 },
   SearchApi          : { size: 14 },
   SubscriptionApi    : { size: 3 },

@@ -44,7 +44,6 @@ describe('PrincipalsApi', () => {
   testGetCurrentRoles();
   testGetUser();
   testSearchAllUsers();
-  testSearchAllUsersByEmail();
 });
 
 function testGetUser() {
@@ -113,26 +112,6 @@ function testGetCurrentRoles() {
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testSearchAllUsersByEmail() {
-
-  describe('searchAllUsersByEmail()', () => {
-
-    const fnToTest = PrincipalsApi.searchAllUsersByEmail;
-    const mockEmail = `${genRandomString()}@openlattice.com`;
-
-    const validParams = [mockEmail];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${mockEmail}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
     testApiShouldCatchRejectedPromise(fnToTest, validParams);
   });
