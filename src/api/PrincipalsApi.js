@@ -222,34 +222,3 @@ export function getDbAccessCredential() :Promise<*> {
       return Promise.reject(error);
     });
 }
-
-/*
- *
- * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
- *
- */
-
-export function removeRoleFromUser(userId :string, role :string) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .delete(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
