@@ -17,80 +17,35 @@
  * // PrincipalsApi.get...
  */
 
-import Principal, { isValidPrincipal } from '../models/Principal';
 import Logger from '../utils/Logger';
+import Principal, { isValidPrincipal } from '../models/Principal';
 import { PRINCIPALS_API } from '../constants/ApiNames';
-import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyString } from '../utils/LangUtils';
-
-
 import {
-  DB_PATH,
-  EMAIL_PATH,
+  CURRENT_PATH,
   ROLES_PATH,
   SEARCH_PATH,
+  SYNC_PATH,
   USERS_PATH,
-  CURRENT_PATH
 } from '../constants/UrlConstants';
+import { isNonEmptyString } from '../utils/LangUtils';
+import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('PrincipalsApi');
 
 /**
- * `GET /principals/users/{userId}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} userId
- * @return {Promise}
- */
-export function getUser(userId :string) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}/${userId}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `GET /principals/roles`
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @return {Promise}
+ * @return {Promise<Map<AclKey, Role>>} - a Promise that will resolve with a map of roles
+ *
+ * @example
+ * PrincipalsApi.getAllRoles();
  */
-export function getAllRoles() :Promise<*> {
+function getAllRoles() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${ROLES_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /principals/roles`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @return {Promise}
- */
-export function getCurrentRoles() :Promise<*> {
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${ROLES_PATH}/${CURRENT_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -103,9 +58,12 @@ export function getCurrentRoles() :Promise<*> {
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @return {Promise}
+ * @return {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of users
+ *
+ * @example
+ * PrincipalsApi.getAllUsers();
  */
-export function getAllUsers() :Promise<*> {
+function getAllUsers() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}`)
@@ -117,56 +75,19 @@ export function getAllUsers() :Promise<*> {
 }
 
 /**
- * `GET /principals/users/search/email/{searchQuery}`
+ * `GET /principals/roles`
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @param {string} emailSearchQuery
- * @return {Promise}
+ * @return {Promise<Set<SecurablePrincipal>>} - a Promise that will resolve with a set of role SecurablePrincipals
  *
- * TODO: add unit tests
+ * @example
+ * PrincipalsApi.getCurrentRoles();
  */
-export function searchAllUsersByEmail(emailSearchQuery :string) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(emailSearchQuery)) {
-    errorMsg = 'invalid parameter: emailSearchQuery must be a non-empty string';
-    LOG.error(errorMsg, emailSearchQuery);
-    return Promise.reject(errorMsg);
-  }
+function getCurrentRoles() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}/${SEARCH_PATH}/${EMAIL_PATH}/${emailSearchQuery}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /principals/users/search/{searchQuery}`
- *
- * @static
- * @memberof lattice.PrincipalsApi
- * @param {string} searchQuery
- * @return {Promise}
- *
- * TODO: add unit tests
- */
-export function searchAllUsers(searchQuery :string) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyString(searchQuery)) {
-    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
-    LOG.error(errorMsg, searchQuery);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}/${SEARCH_PATH}/${searchQuery}`)
+    .get(`/${ROLES_PATH}/${CURRENT_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -180,11 +101,15 @@ export function searchAllUsers(searchQuery :string) :Promise<*> {
  * @static
  * @memberof lattice.PrincipalsApi
  * @param {Principal} principal
- * @return {Promise}
+ * @return {Promise<SecurablePrincipal>} - a Promise that will resolve with the SecurablePrincipal
  *
- * TODO: add unit tests
+ * @example
+ * PrincipalsApi.getSecurablePrincipal({
+ *   "id": "auth0|openlattice",
+ *   "type": "USER"
+ * });
  */
-export function getSecurablePrincipal(principal :Principal) :Promise<*> {
+function getSecurablePrincipal(principal :Principal) :Promise<*> {
 
   let errorMsg = '';
 
@@ -204,32 +129,17 @@ export function getSecurablePrincipal(principal :Principal) :Promise<*> {
 }
 
 /**
- * `GET /principals/db`
+ * `GET /principals/users/{userId}`
  *
  * @static
  * @memberof lattice.PrincipalsApi
+ * @param {string} userId
  * @return {Promise}
  *
- * TODO: add unit tests
+ * @example
+ * PrincipalsApi.getUser("auth0|openlattice");
  */
-export function getDbAccessCredential() :Promise<*> {
-
-  return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${DB_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/*
- *
- * EVERYTHING BELOW IS DEPRECATED!!! ONLY DELETE AFTER REMOVING REFERENCES FROM GALLERY!!!
- *
- */
-
-export function addRoleToUser(userId :string, role :string) :Promise<*> {
+function getUser(userId :string) :Promise<*> {
 
   let errorMsg = '';
 
@@ -239,14 +149,8 @@ export function addRoleToUser(userId :string, role :string) :Promise<*> {
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
-    return Promise.reject(errorMsg);
-  }
-
   return getApiAxiosInstance(PRINCIPALS_API)
-    .put(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
+    .get(`/${USERS_PATH}/${userId}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -254,27 +158,63 @@ export function addRoleToUser(userId :string, role :string) :Promise<*> {
     });
 }
 
-export function removeRoleFromUser(userId :string, role :string) :Promise<*> {
+/**
+ * `GET /principals/users/search/{searchQuery}`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @param {string} searchQuery
+ * @return {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of matching users
+ *
+ * @example
+ * PrincipalsApi.searchAllUsers("openlattice");
+ */
+function searchAllUsers(searchQuery :string) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isNonEmptyString(userId)) {
-    errorMsg = 'invalid parameter: userId must be a non-empty string';
-    LOG.error(errorMsg, userId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(role)) {
-    errorMsg = 'invalid parameter: role must be a non-empty string';
-    LOG.error(errorMsg, role);
+  if (!isNonEmptyString(searchQuery)) {
+    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
+    LOG.error(errorMsg, searchQuery);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
-    .delete(`/${USERS_PATH}/${userId}/${ROLES_PATH}/${role}`)
+    .get(`/${USERS_PATH}/${SEARCH_PATH}/${searchQuery}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
       return Promise.reject(error);
     });
 }
+
+/**
+ * `GET /principals/sync`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @return {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * PrincipalsApi.syncUser();
+ */
+function syncUser() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${SYNC_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+export {
+  getAllRoles,
+  getAllUsers,
+  getCurrentRoles,
+  getSecurablePrincipal,
+  getUser,
+  searchAllUsers,
+  syncUser,
+};
