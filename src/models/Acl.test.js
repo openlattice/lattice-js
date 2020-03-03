@@ -1,22 +1,69 @@
 import { Map, Set, fromJS } from 'immutable';
 
-import Acl, { AclBuilder, isValidAcl as isValid } from './Acl';
-import { MOCK_ACL, genRandomAcl } from '../utils/testing/MockData';
+import {
+  MOCK_ACL,
+  Acl,
+  AclBuilder,
+  genRandomAcl,
+  isValidAcl as isValid,
+} from './Acl';
 
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
-  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+  INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
+
+function expectValidInstance(value) {
+
+  expect(value).toBeInstanceOf(Acl);
+
+  expect(value.aces).toBeDefined();
+  expect(value.aclKey).toBeDefined();
+
+  expect(value.aces).toEqual(MOCK_ACL.aces);
+  expect(value.aclKey).toEqual(MOCK_ACL.aclKey);
+}
 
 describe('Acl', () => {
 
   describe('AclBuilder', () => {
 
+    describe('constructor()', () => {
+
+      test('should construct given an instance', () => {
+        expectValidInstance(
+          (new AclBuilder(MOCK_ACL)).build()
+        );
+      });
+
+      test('should construct given an object literal', () => {
+        expectValidInstance(
+          (new AclBuilder({ ...MOCK_ACL })).build()
+        );
+        expectValidInstance(
+          (new AclBuilder(MOCK_ACL.toObject())).build()
+        );
+      });
+
+      test('should construct given an immutable object', () => {
+        expectValidInstance(
+          (new AclBuilder(MOCK_ACL.toImmutable())).build()
+        );
+        expectValidInstance(
+          (new AclBuilder(fromJS({ ...MOCK_ACL }))).build()
+        );
+        expectValidInstance(
+          (new AclBuilder(fromJS(MOCK_ACL.toObject()))).build()
+        );
+      });
+
+    });
+
     describe('setAclKey()', () => {
 
       test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             (new AclBuilder()).setAclKey(invalidInput);
           }).toThrow();
@@ -27,7 +74,7 @@ describe('Acl', () => {
       });
 
       test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             (new AclBuilder()).setAclKey([...MOCK_ACL.aclKey, invalidInput]);
           }).toThrow();
@@ -35,9 +82,6 @@ describe('Acl', () => {
       });
 
       test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AclBuilder()).setAclKey();
-        }).not.toThrow();
         expect(() => {
           (new AclBuilder()).setAclKey(MOCK_ACL.aclKey);
         }).not.toThrow();
@@ -71,6 +115,9 @@ describe('Acl', () => {
           (new AclBuilder()).setAces();
         }).not.toThrow();
         expect(() => {
+          (new AclBuilder()).setAces([]);
+        }).not.toThrow();
+        expect(() => {
           (new AclBuilder()).setAces(MOCK_ACL.aces);
         }).not.toThrow();
       });
@@ -79,12 +126,19 @@ describe('Acl', () => {
 
     describe('build()', () => {
 
+      test('should throw when a required property has not been set', () => {
+        expect(() => {
+          (new AclBuilder()).build();
+        }).toThrow();
+      });
+
       test('should set required properties that are allowed to be empty', () => {
 
-        const org = (new AclBuilder()).build();
+        const acl = (new AclBuilder())
+          .setAclKey(MOCK_ACL.aclKey)
+          .build();
 
-        expect(org.aclKey).toEqual([]);
-        expect(org.aces).toEqual([]);
+        expect(acl.aces).toEqual([]);
       });
 
       test('should return a valid instance', () => {
@@ -94,13 +148,7 @@ describe('Acl', () => {
           .setAces(MOCK_ACL.aces)
           .build();
 
-        expect(acl).toBeInstanceOf(Acl);
-
-        expect(acl.aces).toBeDefined();
-        expect(acl.aclKey).toBeDefined();
-
-        expect(acl.aces).toEqual(MOCK_ACL.aces);
-        expect(acl.aclKey).toEqual(MOCK_ACL.aclKey);
+        expectValidInstance(acl);
       });
 
     });
@@ -112,23 +160,18 @@ describe('Acl', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACL)).toEqual(true);
+        expect(isValid(MOCK_ACL.toObject())).toEqual(true);
       });
 
       test('should return true when given a valid instance ', () => {
-        expect(isValid(
-          new Acl(
-            MOCK_ACL.aclKey,
-            MOCK_ACL.aces,
-          )
-        )).toEqual(true);
+        expect(isValid(MOCK_ACL)).toEqual(true);
       });
 
-      test('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given a valid instance constructed by the builder', () => {
 
         const acl = (new AclBuilder())
-          .setAclKey(MOCK_ACL.aclKey)
           .setAces(MOCK_ACL.aces)
+          .setAclKey(MOCK_ACL.aclKey)
           .build();
 
         expect(isValid(acl)).toEqual(true);
@@ -149,7 +192,7 @@ describe('Acl', () => {
       });
 
       test('should return false when given an object literal with an invalid "aclKey" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_ACL, aclKey: invalidInput })).toEqual(false);
           expect(isValid({ ...MOCK_ACL, aclKey: [invalidInput] })).toEqual(false);
         });
@@ -163,18 +206,18 @@ describe('Acl', () => {
       });
 
       test('should return false when given an instance with an invalid "aclKey" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
-            new Acl(
-              invalidInput,
-              MOCK_ACL.aces,
-            )
+            new Acl({
+              aces: MOCK_ACL.aces,
+              aclKey: invalidInput,
+            })
           )).toEqual(false);
           expect(isValid(
-            new Acl(
-              [invalidInput],
-              MOCK_ACL.aces,
-            )
+            new Acl({
+              aces: MOCK_ACL.aces,
+              aclKey: [invalidInput],
+            })
           )).toEqual(false);
         });
       });
@@ -182,14 +225,16 @@ describe('Acl', () => {
       test('should return false when given an instance with an invalid "aces" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
-            new Acl(
-              MOCK_ACL.aclKey, invalidInput
-            )
+            new Acl({
+              aces: invalidInput,
+              aclKey: MOCK_ACL.aclKey,
+            })
           )).toEqual(false);
           expect(isValid(
-            new Acl(
-              MOCK_ACL.aclKey, [invalidInput]
-            )
+            new Acl({
+              aces: [invalidInput],
+              aclKey: MOCK_ACL.aclKey,
+            })
           )).toEqual(false);
         });
       });
@@ -201,11 +246,7 @@ describe('Acl', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const ace = new Acl(
-        MOCK_ACL.aclKey,
-        MOCK_ACL.aces,
-      );
-      expect(ace.valueOf()).toEqual(
+      expect(MOCK_ACL.valueOf()).toEqual(
         fromJS({
           aces: MOCK_ACL.aces.map((a) => a.toObject()),
           aclKey: MOCK_ACL.aclKey,
@@ -216,14 +257,8 @@ describe('Acl', () => {
     test('Immutable.Set', () => {
 
       const randomAcl = genRandomAcl();
-      const acl0 = new Acl(
-        MOCK_ACL.aclKey,
-        MOCK_ACL.aces,
-      );
-      const acl1 = new Acl(
-        MOCK_ACL.aclKey,
-        MOCK_ACL.aces,
-      );
+      const acl0 = new Acl({ ...MOCK_ACL });
+      const acl1 = new Acl({ ...MOCK_ACL });
 
       const testSet = Set()
         .add(acl0)
@@ -243,14 +278,8 @@ describe('Acl', () => {
     test('Immutable.Map', () => {
 
       const randomAcl = genRandomAcl();
-      const acl0 = new Acl(
-        MOCK_ACL.aclKey,
-        MOCK_ACL.aces,
-      );
-      const acl1 = new Acl(
-        MOCK_ACL.aclKey,
-        MOCK_ACL.aces,
-      );
+      const acl0 = new Acl({ ...MOCK_ACL });
+      const acl1 = new Acl({ ...MOCK_ACL });
 
       const testMap = Map()
         .set(acl0, 'test_value_1')
