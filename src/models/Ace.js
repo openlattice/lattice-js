@@ -85,7 +85,7 @@ class AceBuilder {
     }
   }
 
-  setPermissions(permissions :PermissionType[]) :AceBuilder {
+  setPermissions(permissions :$ReadOnlyArray<PermissionType>) :AceBuilder {
 
     if (!isDefined(permissions)) {
       return this;
