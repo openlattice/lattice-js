@@ -1,13 +1,61 @@
 import { Map, Set, fromJS } from 'immutable';
 
-import Ace, { AceBuilder, isValidAce as isValid } from './Ace';
+import {
+  MOCK_ACE,
+  Ace,
+  AceBuilder,
+  genRandomAce,
+  isValidAce as isValid,
+} from './Ace';
+
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY } from '../utils/testing/Invalid';
-import { MOCK_ACE, genRandomAce } from '../utils/testing/MockData';
+
+function expectValidInstance(value) {
+
+  expect(value).toBeInstanceOf(Ace);
+
+  expect(value.permissions).toBeDefined();
+  expect(value.principal).toBeDefined();
+
+  expect(value.permissions).toEqual(MOCK_ACE.permissions);
+  expect(value.principal).toEqual(MOCK_ACE.principal);
+}
 
 describe('Ace', () => {
 
   describe('AceBuilder', () => {
+
+    describe('constructor()', () => {
+
+      test('should construct given an instance', () => {
+        expectValidInstance(
+          (new AceBuilder(MOCK_ACE)).build()
+        );
+      });
+
+      test('should construct given an object literal', () => {
+        expectValidInstance(
+          (new AceBuilder({ ...MOCK_ACE })).build()
+        );
+        expectValidInstance(
+          (new AceBuilder(MOCK_ACE.toObject())).build()
+        );
+      });
+
+      test('should construct given an immutable object', () => {
+        expectValidInstance(
+          (new AceBuilder(MOCK_ACE.toImmutable())).build()
+        );
+        expectValidInstance(
+          (new AceBuilder(fromJS({ ...MOCK_ACE }))).build()
+        );
+        expectValidInstance(
+          (new AceBuilder(fromJS(MOCK_ACE.toObject()))).build()
+        );
+      });
+
+    });
 
     describe('setPrincipal()', () => {
 
@@ -70,7 +118,6 @@ describe('Ace', () => {
     describe('build()', () => {
 
       test('should throw when a required property has not been set', () => {
-
         expect(() => {
           (new AceBuilder()).build();
         }).toThrow();
@@ -78,24 +125,21 @@ describe('Ace', () => {
 
       test('should set required properties that are allowed to be empty', () => {
 
-        const ace = (new AceBuilder()).setPrincipal(MOCK_ACE.principal).build();
+        const ace = (new AceBuilder())
+          .setPrincipal(MOCK_ACE.principal)
+          .build();
+
         expect(ace.permissions).toEqual([]);
       });
 
       test('should return a valid instance', () => {
 
         const ace = (new AceBuilder())
-          .setPrincipal(MOCK_ACE.principal)
           .setPermissions(MOCK_ACE.permissions)
+          .setPrincipal(MOCK_ACE.principal)
           .build();
 
-        expect(ace).toBeInstanceOf(Ace);
-
-        expect(ace.permissions).toBeDefined();
-        expect(ace.principal).toBeDefined();
-
-        expect(ace.permissions).toEqual(MOCK_ACE.permissions);
-        expect(ace.principal).toEqual(MOCK_ACE.principal);
+        expectValidInstance(ace);
       });
 
     });
@@ -107,23 +151,18 @@ describe('Ace', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
+        expect(isValid(MOCK_ACE.toObject())).toEqual(true);
+      });
+
+      test('should return true when given a valid instance ', () => {
         expect(isValid(MOCK_ACE)).toEqual(true);
       });
 
-      test('should return true when given a valid object instance ', () => {
-        expect(isValid(
-          new Ace(
-            MOCK_ACE.principal,
-            MOCK_ACE.permissions,
-          )
-        )).toEqual(true);
-      });
-
-      test('should return true when given an instance constructed by the builder', () => {
+      test('should return true when given a valid instance constructed by the builder', () => {
 
         const ace = (new AceBuilder())
-          .setPrincipal(MOCK_ACE.principal)
           .setPermissions(MOCK_ACE.permissions)
+          .setPrincipal(MOCK_ACE.principal)
           .build();
 
         expect(isValid(ace)).toEqual(true);
@@ -159,10 +198,10 @@ describe('Ace', () => {
       test('should return false when given an instance with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
-            new Ace(
-              invalidInput,
-              MOCK_ACE.permissions,
-            )
+            new Ace({
+              permissions: MOCK_ACE.permissions,
+              principal: invalidInput,
+            })
           )).toEqual(false);
         });
       });
@@ -170,16 +209,16 @@ describe('Ace', () => {
       test('should return false when given an instance with an invalid "permissions" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
           expect(isValid(
-            new Ace(
-              MOCK_ACE.principal,
-              invalidInput,
-            )
+            new Ace({
+              principal: MOCK_ACE.principal,
+              permissions: invalidInput,
+            })
           )).toEqual(false);
           expect(isValid(
-            new Ace(
-              MOCK_ACE.principal,
-              [invalidInput],
-            )
+            new Ace({
+              principal: MOCK_ACE.principal,
+              permissions: [invalidInput],
+            })
           )).toEqual(false);
         });
       });
@@ -191,11 +230,7 @@ describe('Ace', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const ace = new Ace(
-        MOCK_ACE.principal,
-        MOCK_ACE.permissions,
-      );
-      expect(ace.valueOf()).toEqual(
+      expect(MOCK_ACE.valueOf()).toEqual(
         fromJS({
           permissions: MOCK_ACE.permissions,
           principal: MOCK_ACE.principal.toObject(),
@@ -206,14 +241,8 @@ describe('Ace', () => {
     test('Immutable.Set', () => {
 
       const randomAce = genRandomAce();
-      const ace0 = new Ace(
-        MOCK_ACE.principal,
-        MOCK_ACE.permissions,
-      );
-      const ace1 = new Ace(
-        MOCK_ACE.principal,
-        MOCK_ACE.permissions,
-      );
+      const ace0 = new Ace({ ...MOCK_ACE });
+      const ace1 = new Ace({ ...MOCK_ACE });
 
       const testSet = Set()
         .add(ace0)
@@ -233,14 +262,8 @@ describe('Ace', () => {
     test('Immutable.Map', () => {
 
       const randomAce = genRandomAce();
-      const ace0 = new Ace(
-        MOCK_ACE.principal,
-        MOCK_ACE.permissions,
-      );
-      const ace1 = new Ace(
-        MOCK_ACE.principal,
-        MOCK_ACE.permissions,
-      );
+      const ace0 = new Ace({ ...MOCK_ACE });
+      const ace1 = new Ace({ ...MOCK_ACE });
 
       const testMap = Map()
         .set(ace0, 'test_value_1')

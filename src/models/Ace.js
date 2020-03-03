@@ -2,16 +2,28 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import { Map, Set, fromJS } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  Map,
+  OrderedSet,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
+
+import {
+  MOCK_PRINCIPAL,
+  Principal,
+  PrincipalBuilder,
+  genRandomPrincipal,
+} from './Principal';
+import type { PrincipalObject } from './Principal';
 
 import Logger from '../utils/Logger';
-import Principal, { isValidPrincipal } from './Principal';
 import { PermissionTypes } from '../constants/types';
-import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidTypeArray, validateNonEmptyArray } from '../utils/ValidationUtils';
-
-import type { PrincipalObject } from './Principal';
+import { isDefined, isNonEmptyString } from '../utils/LangUtils';
+import { validateNonEmptyArray } from '../utils/ValidationUtils';
+import { pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('Ace');
@@ -21,19 +33,18 @@ type AceObject = {|
   permissions :PermissionType[];
 |};
 
-/**
- * @class Ace
- * @memberof lattice
- */
-export default class Ace {
+class Ace {
 
   permissions :PermissionType[];
   principal :Principal;
 
-  constructor(principal :Principal, permissions :PermissionType[]) {
+  constructor(ace :{
+    permissions :PermissionType[];
+    principal :Principal;
+  }) {
 
-    this.principal = principal;
-    this.permissions = permissions;
+    this.principal = ace.principal;
+    this.permissions = ace.permissions;
   }
 
   toImmutable() :Map<*, *> {
@@ -57,41 +68,47 @@ export default class Ace {
   }
 }
 
-/**
- * @class AceBuilder
- * @memberof lattice
- */
-export class AceBuilder {
+class AceBuilder {
 
   permissions :PermissionType[];
   principal :Principal;
 
+  constructor(value :any) {
+
+    if (isImmutable(value)) {
+      this.setPermissions(value.get('permissions'));
+      this.setPrincipal(value.get('principal'));
+    }
+    else if (isDefined(value)) {
+      this.setPermissions(value.permissions);
+      this.setPrincipal(value.principal);
+    }
+  }
+
   setPermissions(permissions :PermissionType[]) :AceBuilder {
 
-    if (!isDefined(permissions) || isEmptyArray(permissions)) {
+    if (!isDefined(permissions)) {
       return this;
     }
 
-    if (!isValidTypeArray(permissions, PermissionTypes)) {
-      throw new Error('invalid parameter: permissions must be a non-empty array of valid PermissionTypes');
+    if (!isArray(permissions) && !isCollection(permissions)) {
+      throw new Error('invalid parameter: "permissions" must be an array');
     }
 
-    this.permissions = Set().withMutations((set :Set<PermissionType>) => {
-      permissions.forEach((permission :PermissionType) => {
-        set.add(permission);
-      });
-    }).toJS();
+    const set = OrderedSet(permissions);
+    if (set.every((permission) => isNonEmptyString(permission) && PermissionTypes[permission])) {
+      this.permissions = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "permissions" must be an array of PermissionTypes');
+    }
 
     return this;
   }
 
   setPrincipal(principal :Principal) :AceBuilder {
 
-    if (!isValidPrincipal(principal)) {
-      throw new Error('invalid parameter: principal must be a valid Principal');
-    }
-
-    this.principal = principal;
+    this.principal = (new PrincipalBuilder(principal)).build();
     return this;
   }
 
@@ -105,42 +122,65 @@ export class AceBuilder {
       throw new Error('missing property: principal is a required property');
     }
 
-    return new Ace(this.principal, this.permissions);
+    return new Ace({
+      permissions: this.permissions,
+      principal: this.principal,
+    });
   }
 }
 
-export function isValidAce(ace :any) :boolean {
+function isValidAce(value :any) :boolean {
 
-  if (!isDefined(ace)) {
-    LOG.error('invalid parameter: ace must be defined', ace);
-    return false;
-  }
-
-  if (!has(ace, 'permissions') || !has(ace, 'principal')) {
-    LOG.error('invalid parameter: ace is missing required properties');
+  if (!isDefined(value)) {
+    LOG.error('invalid parameter: "value" is not defined');
     return false;
   }
 
   try {
-
-    (new AceBuilder())
-      .setPrincipal(ace.principal)
-      .setPermissions(ace.permissions)
-      .build();
-
+    (new AceBuilder(value)).build();
     return true;
   }
   catch (e) {
-    LOG.error(`invalid Ace: ${e.message}`, ace);
+    LOG.error(e.message, value);
     return false;
   }
 }
 
-export function isValidAceArray(values :any[]) :boolean {
+function isValidAceArray(values :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(values, (value :any) => isValidAce(value));
+  return validateNonEmptyArray(values, isValidAce);
 }
+
+export {
+  Ace,
+  AceBuilder,
+  isValidAce,
+  isValidAceArray,
+};
 
 export type {
   AceObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const MOCK_ACE = (new AceBuilder())
+  .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
+  .setPrincipal(MOCK_PRINCIPAL)
+  .build();
+
+function genRandomAce() {
+  return (new AceBuilder())
+    .setPermissions([pickRandomValue(PermissionTypes)])
+    .setPrincipal(genRandomPrincipal())
+    .build();
+}
+
+export {
+  MOCK_ACE,
+  genRandomAce,
 };
