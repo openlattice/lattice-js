@@ -232,8 +232,8 @@ describe('Ace', () => {
     test('Immutable.Set', () => {
 
       const randomAce = genRandomAce();
-      const ace0 = new Ace({ ...MOCK_ACE });
-      const ace1 = new Ace({ ...MOCK_ACE });
+      const ace0 = (new AceBuilder(MOCK_ACE)).build();
+      const ace1 = (new AceBuilder(MOCK_ACE)).build();
 
       const testSet = Set()
         .add(ace0)
@@ -253,8 +253,8 @@ describe('Ace', () => {
     test('Immutable.Map', () => {
 
       const randomAce = genRandomAce();
-      const ace0 = new Ace({ ...MOCK_ACE });
-      const ace1 = new Ace({ ...MOCK_ACE });
+      const ace0 = (new AceBuilder(MOCK_ACE)).build();
+      const ace1 = (new AceBuilder(MOCK_ACE)).build();
 
       const testMap = Map()
         .set(ace0, 'test_value_1')

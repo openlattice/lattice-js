@@ -213,8 +213,8 @@ describe('AclData', () => {
     test('Immutable.Set', () => {
 
       const randomAclData = genRandomAclData();
-      const aclData0 = new AclData({ ...MOCK_ACL_DATA });
-      const aclData1 = new AclData({ ...MOCK_ACL_DATA });
+      const aclData0 = (new AclDataBuilder(MOCK_ACL_DATA)).build();
+      const aclData1 = (new AclDataBuilder(MOCK_ACL_DATA)).build();
 
       const testSet = Set()
         .add(aclData0)
@@ -234,8 +234,8 @@ describe('AclData', () => {
     test('Immutable.Map', () => {
 
       const randomAclData = genRandomAclData();
-      const aclData0 = new AclData({ ...MOCK_ACL_DATA });
-      const aclData1 = new AclData({ ...MOCK_ACL_DATA });
+      const aclData0 = (new AclDataBuilder(MOCK_ACL_DATA)).build();
+      const aclData1 = (new AclDataBuilder(MOCK_ACL_DATA)).build();
 
       const testMap = Map()
         .set(aclData0, 'test_value_1')

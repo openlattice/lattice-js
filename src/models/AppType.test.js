@@ -405,8 +405,8 @@ describe('AppType', () => {
     test('Immutable.Set', () => {
 
       const randomAppType = genRandomAppType();
-      const app0 = new AppType({ ...MOCK_APP_TYPE });
-      const app1 = new AppType({ ...MOCK_APP_TYPE });
+      const app0 = (new AppTypeBuilder(MOCK_APP_TYPE)).build();
+      const app1 = (new AppTypeBuilder(MOCK_APP_TYPE)).build();
 
       const testSet = Set()
         .add(app0)
@@ -432,8 +432,8 @@ describe('AppType', () => {
     test('Immutable.Map', () => {
 
       const randomAppType = genRandomAppType();
-      const app0 = new AppType({ ...MOCK_APP_TYPE });
-      const app1 = new AppType({ ...MOCK_APP_TYPE });
+      const app0 = (new AppTypeBuilder(MOCK_APP_TYPE)).build();
+      const app1 = (new AppTypeBuilder(MOCK_APP_TYPE)).build();
 
       const testMap = Map()
         .set(app0, 'test_value_1')

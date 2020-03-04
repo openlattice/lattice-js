@@ -248,8 +248,8 @@ describe('Acl', () => {
     test('Immutable.Set', () => {
 
       const randomAcl = genRandomAcl();
-      const acl0 = new Acl({ ...MOCK_ACL });
-      const acl1 = new Acl({ ...MOCK_ACL });
+      const acl0 = (new AclBuilder(MOCK_ACL)).build();
+      const acl1 = (new AclBuilder(MOCK_ACL)).build();
 
       const testSet = Set()
         .add(acl0)
@@ -269,8 +269,8 @@ describe('Acl', () => {
     test('Immutable.Map', () => {
 
       const randomAcl = genRandomAcl();
-      const acl0 = new Acl({ ...MOCK_ACL });
-      const acl1 = new Acl({ ...MOCK_ACL });
+      const acl0 = (new AclBuilder(MOCK_ACL)).build();
+      const acl1 = (new AclBuilder(MOCK_ACL)).build();
 
       const testMap = Map()
         .set(acl0, 'test_value_1')

@@ -248,8 +248,8 @@ describe('AccessCheck', () => {
     test('Immutable.Set', () => {
 
       const randomAccessCheck = genRandomAccessCheck();
-      const accessCheck0 = new AccessCheck({ ...MOCK_ACCESS_CHECK });
-      const accessCheck1 = new AccessCheck({ ...MOCK_ACCESS_CHECK });
+      const accessCheck0 = (new AccessCheckBuilder(MOCK_ACCESS_CHECK)).build();
+      const accessCheck1 = (new AccessCheckBuilder(MOCK_ACCESS_CHECK)).build();
 
       const testSet = Set()
         .add(accessCheck0)
@@ -269,8 +269,8 @@ describe('AccessCheck', () => {
     test('Immutable.Map', () => {
 
       const randomAccessCheck = genRandomAccessCheck();
-      const accessCheck0 = new AccessCheck({ ...MOCK_ACCESS_CHECK });
-      const accessCheck1 = new AccessCheck({ ...MOCK_ACCESS_CHECK });
+      const accessCheck0 = (new AccessCheckBuilder(MOCK_ACCESS_CHECK)).build();
+      const accessCheck1 = (new AccessCheckBuilder(MOCK_ACCESS_CHECK)).build();
 
       const testMap = Map()
         .set(accessCheck0, 'test_value_1')

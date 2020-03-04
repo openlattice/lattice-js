@@ -500,8 +500,8 @@ describe('App', () => {
     test('Immutable.Set', () => {
 
       const randomApp = genRandomApp();
-      const app0 = new App({ ...MOCK_APP });
-      const app1 = new App({ ...MOCK_APP });
+      const app0 = (new AppBuilder(MOCK_APP)).build();
+      const app1 = (new AppBuilder(MOCK_APP)).build();
 
       const testSet = Set()
         .add(app0)
@@ -529,8 +529,8 @@ describe('App', () => {
     test('Immutable.Map', () => {
 
       const randomApp = genRandomApp();
-      const app0 = new App({ ...MOCK_APP });
-      const app1 = new App({ ...MOCK_APP });
+      const app0 = (new AppBuilder(MOCK_APP)).build();
+      const app1 = (new AppBuilder(MOCK_APP)).build();
 
       const testMap = Map()
         .set(app0, 'test_value_1')
