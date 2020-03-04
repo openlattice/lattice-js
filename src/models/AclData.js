@@ -2,16 +2,21 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS, isImmutable } from 'immutable';
+
+import {
+  MOCK_ACL,
+  Acl,
+  AclBuilder,
+  genRandomAcl,
+} from './Acl';
+import type { AclObject } from './Acl';
 
 import ActionTypes from '../constants/types/ActionTypes';
 import Logger from '../utils/Logger';
-import Acl, { isValidAcl } from './Acl';
-import { isDefined, isNonEmptyString } from '../utils/LangUtils';
+import { isDefined } from '../utils/LangUtils';
 import { validateNonEmptyArray } from '../utils/ValidationUtils';
-
-import type { AclObject } from './Acl';
+import { pickRandomValue } from '../utils/testing/MockUtils';
 import type { ActionType } from '../constants/types/ActionTypes';
 
 const LOG = new Logger('AclData');
@@ -21,19 +26,18 @@ type AclDataObject = {|
   action :ActionType;
 |};
 
-/**
- * @class AclData
- * @memberof lattice
- */
-export default class AclData {
+class AclData {
 
   acl :Acl;
   action :ActionType;
 
-  constructor(acl :Acl, action :ActionType) {
+  constructor(aclData :{
+    acl :Acl;
+    action :ActionType;
+  }) {
 
-    this.acl = acl;
-    this.action = action;
+    this.acl = aclData.acl;
+    this.action = aclData.action;
   }
 
   toImmutable() :Map<*, *> {
@@ -57,29 +61,33 @@ export default class AclData {
   }
 }
 
-/**
- * @class AclDataBuilder
- * @memberof lattice
- */
-export class AclDataBuilder {
+class AclDataBuilder {
 
   acl :Acl;
   action :ActionType;
 
+  constructor(value :any) {
+
+    if (isImmutable(value)) {
+      this.setAcl(value.get('acl'));
+      this.setAction(value.get('action'));
+    }
+    else if (isDefined(value)) {
+      this.setAcl(value.acl);
+      this.setAction(value.action);
+    }
+  }
+
   setAcl(acl :Acl) :AclDataBuilder {
 
-    if (!isValidAcl(acl)) {
-      throw new Error('invalid parameter: acl must be a valid Acl');
-    }
-
-    this.acl = acl;
+    this.acl = (new AclBuilder(acl)).build();
     return this;
   }
 
   setAction(action :ActionType) :AclDataBuilder {
 
-    if (!isNonEmptyString(action) || !ActionTypes[action]) {
-      throw new Error('invalid parameter: action must be a valid ActionType');
+    if (!ActionTypes[action]) {
+      throw new Error('invalid parameter: "action" must be a valid ActionType');
     }
 
     this.action = action;
@@ -89,49 +97,75 @@ export class AclDataBuilder {
   build() {
 
     if (!this.acl) {
-      throw new Error('missing property: acl is a required property');
+      throw new Error('missing property: "acl" is a required property');
     }
 
     if (!this.action) {
-      throw new Error('missing property: action is a required property');
+      throw new Error('missing property: "action" is a required property');
     }
 
-    return new AclData(this.acl, this.action);
+    return new AclData({
+      acl: this.acl,
+      action: this.action,
+    });
   }
 }
 
-export function isValidAclData(aclData :any) :boolean {
+function isValidAclData(value :any) :boolean {
 
-  if (!isDefined(aclData)) {
-    LOG.error('invalid parameter: aclData must be defined', aclData);
-    return false;
-  }
-
-  if (!has(aclData, 'acl') || !has(aclData, 'action')) {
-    LOG.error('invalid parameter: aclData is missing required properties');
+  if (!isDefined(value)) {
+    LOG.error('invalid parameter: "value" is not defined');
     return false;
   }
 
   try {
-
-    (new AclDataBuilder())
-      .setAcl(aclData.acl)
-      .setAction(aclData.action)
-      .build();
-
+    (new AclDataBuilder(value)).build();
     return true;
   }
   catch (e) {
-    LOG.error(`invalid AclData: ${e.message}`, aclData);
+    LOG.error(e.message, value);
     return false;
   }
 }
 
-export function isValidAclDataArray(values :any[]) :boolean {
+function isValidAclDataArray(values :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(values, (value :any) => isValidAclData(value));
+  return validateNonEmptyArray(values, isValidAclData);
 }
+
+export {
+  AclData,
+  AclDataBuilder,
+  isValidAclData,
+  isValidAclDataArray,
+};
 
 export type {
   AclDataObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const MOCK_ACL_DATA = (new AclDataBuilder())
+  .setAcl(MOCK_ACL)
+  .setAction(ActionTypes.ADD)
+  .build();
+
+const MOCK_ACL_DATA_OBJECT = MOCK_ACL_DATA.toObject();
+
+function genRandomAclData() {
+  return (new AclDataBuilder())
+    .setAcl(genRandomAcl())
+    .setAction(pickRandomValue(ActionTypes))
+    .build();
+}
+
+export {
+  MOCK_ACL_DATA,
+  MOCK_ACL_DATA_OBJECT,
+  genRandomAclData,
 };
