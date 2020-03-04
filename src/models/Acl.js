@@ -179,10 +179,7 @@ export type {
 
 const MOCK_ACL = (new AclBuilder())
   .setAces([MOCK_ACE])
-  .setAclKey([
-    'fae6af98-2675-45bd-9a5b-1619a87235a8',
-    'ae9e1cc3-ba0d-4532-9860-e5e7eaf36e83',
-  ])
+  .setAclKey(['fae6af98-2675-45bd-9a5b-1619a87235a8', 'ae9e1cc3-ba0d-4532-9860-e5e7eaf36e83'])
   .build();
 
 function genRandomAcl() {

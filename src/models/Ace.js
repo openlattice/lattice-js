@@ -21,7 +21,7 @@ import type { PrincipalObject } from './Principal';
 
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
-import { isDefined, isNonEmptyString } from '../utils/LangUtils';
+import { isDefined } from '../utils/LangUtils';
 import { validateNonEmptyArray } from '../utils/ValidationUtils';
 import { pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
@@ -96,7 +96,7 @@ class AceBuilder {
     }
 
     const set = OrderedSet(permissions);
-    if (set.every((permission) => isNonEmptyString(permission) && PermissionTypes[permission])) {
+    if (set.every((permission) => PermissionTypes[permission])) {
       this.permissions = set.toJS();
     }
     else {
