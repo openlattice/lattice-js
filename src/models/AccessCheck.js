@@ -13,7 +13,7 @@ import {
 
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
-import { isDefined, isNonEmptyString } from '../utils/LangUtils';
+import { isDefined } from '../utils/LangUtils';
 import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
 import { genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
@@ -176,6 +176,8 @@ const MOCK_ACCESS_CHECK = (new AccessCheckBuilder())
   .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
   .build();
 
+const MOCK_ACCESS_CHECK_OBJECT = MOCK_ACCESS_CHECK.toObject();
+
 function genRandomAccessCheck() {
   return (new AccessCheckBuilder())
     .setAclKey([genRandomUUID(), genRandomUUID()])
@@ -185,5 +187,6 @@ function genRandomAccessCheck() {
 
 export {
   MOCK_ACCESS_CHECK,
+  MOCK_ACCESS_CHECK_OBJECT,
   genRandomAccessCheck,
 };

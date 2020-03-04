@@ -189,7 +189,10 @@ function genRandomAcl() {
     .build();
 }
 
+const MOCK_ACL_OBJECT = MOCK_ACL.toObject();
+
 export {
   MOCK_ACL,
+  MOCK_ACL_OBJECT,
   genRandomAcl,
 };

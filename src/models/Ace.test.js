@@ -2,6 +2,7 @@ import { Map, Set, fromJS } from 'immutable';
 
 import {
   MOCK_ACE,
+  MOCK_ACE_OBJECT,
   Ace,
   AceBuilder,
   genRandomAce,
@@ -39,7 +40,7 @@ describe('Ace', () => {
           (new AceBuilder({ ...MOCK_ACE })).build()
         );
         expectValidInstance(
-          (new AceBuilder(MOCK_ACE.toObject())).build()
+          (new AceBuilder(MOCK_ACE_OBJECT)).build()
         );
       });
 
@@ -51,7 +52,7 @@ describe('Ace', () => {
           (new AceBuilder(fromJS({ ...MOCK_ACE }))).build()
         );
         expectValidInstance(
-          (new AceBuilder(fromJS(MOCK_ACE.toObject()))).build()
+          (new AceBuilder(fromJS(MOCK_ACE_OBJECT))).build()
         );
       });
 
@@ -151,21 +152,11 @@ describe('Ace', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACE.toObject())).toEqual(true);
+        expect(isValid(MOCK_ACE_OBJECT)).toEqual(true);
       });
 
       test('should return true when given a valid instance ', () => {
         expect(isValid(MOCK_ACE)).toEqual(true);
-      });
-
-      test('should return true when given a valid instance constructed by the builder', () => {
-
-        const ace = (new AceBuilder())
-          .setPermissions(MOCK_ACE.permissions)
-          .setPrincipal(MOCK_ACE.principal)
-          .build();
-
-        expect(isValid(ace)).toEqual(true);
       });
 
     });
@@ -184,14 +175,14 @@ describe('Ace', () => {
 
       test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACE, principal: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACE_OBJECT, principal: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACE, permissions: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ACE, permissions: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ACE_OBJECT, permissions: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACE_OBJECT, permissions: [invalidInput] })).toEqual(false);
         });
       });
 

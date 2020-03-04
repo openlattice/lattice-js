@@ -173,6 +173,8 @@ const MOCK_ACE = (new AceBuilder())
   .setPrincipal(MOCK_PRINCIPAL)
   .build();
 
+const MOCK_ACE_OBJECT = MOCK_ACE.toObject();
+
 function genRandomAce() {
   return (new AceBuilder())
     .setPermissions([pickRandomValue(PermissionTypes)])
@@ -182,5 +184,6 @@ function genRandomAce() {
 
 export {
   MOCK_ACE,
+  MOCK_ACE_OBJECT,
   genRandomAce,
 };

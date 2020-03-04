@@ -2,6 +2,7 @@ import { Map, Set, fromJS } from 'immutable';
 
 import {
   MOCK_ACL,
+  MOCK_ACL_OBJECT,
   Acl,
   AclBuilder,
   genRandomAcl,
@@ -42,7 +43,7 @@ describe('Acl', () => {
           (new AclBuilder({ ...MOCK_ACL })).build()
         );
         expectValidInstance(
-          (new AclBuilder(MOCK_ACL.toObject())).build()
+          (new AclBuilder(MOCK_ACL_OBJECT)).build()
         );
       });
 
@@ -54,7 +55,7 @@ describe('Acl', () => {
           (new AclBuilder(fromJS({ ...MOCK_ACL }))).build()
         );
         expectValidInstance(
-          (new AclBuilder(fromJS(MOCK_ACL.toObject()))).build()
+          (new AclBuilder(fromJS(MOCK_ACL_OBJECT))).build()
         );
       });
 
@@ -160,21 +161,11 @@ describe('Acl', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACL.toObject())).toEqual(true);
+        expect(isValid(MOCK_ACL_OBJECT)).toEqual(true);
       });
 
       test('should return true when given a valid instance ', () => {
         expect(isValid(MOCK_ACL)).toEqual(true);
-      });
-
-      test('should return true when given a valid instance constructed by the builder', () => {
-
-        const acl = (new AclBuilder())
-          .setAces(MOCK_ACL.aces)
-          .setAclKey(MOCK_ACL.aclKey)
-          .build();
-
-        expect(isValid(acl)).toEqual(true);
       });
 
     });
@@ -193,15 +184,15 @@ describe('Acl', () => {
 
       test('should return false when given an object literal with an invalid "aclKey" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACL, aclKey: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ACL, aclKey: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_OBJECT, aclKey: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_OBJECT, aclKey: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "aces" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACL, aces: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ACL, aces: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_OBJECT, aces: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACL_OBJECT, aces: [invalidInput] })).toEqual(false);
         });
       });
 

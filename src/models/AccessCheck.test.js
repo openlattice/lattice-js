@@ -2,6 +2,7 @@ import { Map, Set, fromJS } from 'immutable';
 
 import {
   MOCK_ACCESS_CHECK,
+  MOCK_ACCESS_CHECK_OBJECT,
   AccessCheck,
   AccessCheckBuilder,
   genRandomAccessCheck,
@@ -40,7 +41,7 @@ describe('AccessCheck', () => {
           (new AccessCheckBuilder({ ...MOCK_ACCESS_CHECK })).build()
         );
         expectValidInstance(
-          (new AccessCheckBuilder(MOCK_ACCESS_CHECK.toObject())).build()
+          (new AccessCheckBuilder(MOCK_ACCESS_CHECK_OBJECT)).build()
         );
       });
 
@@ -52,7 +53,7 @@ describe('AccessCheck', () => {
           (new AccessCheckBuilder(fromJS({ ...MOCK_ACCESS_CHECK }))).build()
         );
         expectValidInstance(
-          (new AccessCheckBuilder(fromJS(MOCK_ACCESS_CHECK.toObject()))).build()
+          (new AccessCheckBuilder(fromJS(MOCK_ACCESS_CHECK_OBJECT))).build()
         );
       });
 
@@ -160,21 +161,11 @@ describe('AccessCheck', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_ACCESS_CHECK.toObject())).toEqual(true);
+        expect(isValid(MOCK_ACCESS_CHECK_OBJECT)).toEqual(true);
       });
 
       test('should return true when given a valid instance ', () => {
         expect(isValid(MOCK_ACCESS_CHECK)).toEqual(true);
-      });
-
-      test('should return true when given a valid instance constructed by the builder', () => {
-
-        const accessCheck = (new AccessCheckBuilder())
-          .setAclKey(MOCK_ACCESS_CHECK.aclKey)
-          .setPermissions(MOCK_ACCESS_CHECK.permissions)
-          .build();
-
-        expect(isValid(accessCheck)).toEqual(true);
       });
 
     });
@@ -193,15 +184,15 @@ describe('AccessCheck', () => {
 
       test('should return false when given an object literal with an invalid "aclKey" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACCESS_CHECK, aclKey: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ACCESS_CHECK, aclKey: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, aclKey: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, aclKey: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ACCESS_CHECK, permissions: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ACCESS_CHECK, permissions: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, permissions: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, permissions: [invalidInput] })).toEqual(false);
         });
       });
 
