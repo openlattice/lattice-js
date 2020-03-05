@@ -9,14 +9,14 @@ type PrincipalTypesEnum = {|
   USER :'USER';
 |};
 
-type PrincipalType = $Values<PrincipalTypesEnum>;
-
 const PrincipalTypes :{| ...PrincipalTypesEnum |} = Object.freeze({
   APP: 'APP',
   ORGANIZATION: 'ORGANIZATION',
   ROLE: 'ROLE',
   USER: 'USER',
 });
+
+type PrincipalType = $Values<typeof PrincipalTypes>;
 
 export default PrincipalTypes;
 export type { PrincipalType };

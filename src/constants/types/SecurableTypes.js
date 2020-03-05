@@ -14,8 +14,6 @@ type SecurableTypesEnum = {|
   PropertyTypeInEntitySet :'PropertyTypeInEntitySet';
 |};
 
-type SecurableType = $Values<SecurableTypesEnum>;
-
 const SecurableTypes :{| ...SecurableTypesEnum |} = Object.freeze({
   AssociationType: 'AssociationType',
   ComplexType: 'ComplexType',
@@ -27,6 +25,8 @@ const SecurableTypes :{| ...SecurableTypesEnum |} = Object.freeze({
   OrganizationRole: 'OrganizationRole',
   PropertyTypeInEntitySet: 'PropertyTypeInEntitySet',
 });
+
+type SecurableType = $Values<typeof SecurableTypes>;
 
 export default SecurableTypes;
 export type { SecurableType };
