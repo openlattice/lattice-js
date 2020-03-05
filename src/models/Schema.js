@@ -2,16 +2,36 @@
  * @flow
  */
 
-import { Map, fromJS } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  Map,
+  Set,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
-import EntityType, { EntityTypeBuilder, isValidEntityTypeArray } from './EntityType';
 import FullyQualifiedName from './FullyQualifiedName';
-import PropertyType, { PropertyTypeBuilder, isValidPropertyTypeArray } from './PropertyType';
-import Logger from '../utils/Logger';
-import { isDefined, isEmptyArray } from '../utils/LangUtils';
+import {
+  MOCK_ENTITY_TYPE,
+  EntityType,
+  EntityTypeBuilder,
+  genRandomEntityType,
+} from './EntityType';
+import {
+  MOCK_PROPERTY_TYPE,
+  PropertyType,
+  PropertyTypeBuilder,
+  genRandomPropertyType,
+} from './PropertyType';
 import type { EntityTypeObject } from './EntityType';
 import type { FQN, FQNObject } from './FullyQualifiedName';
 import type { PropertyTypeObject } from './PropertyType';
+
+import Logger from '../utils/Logger';
+import { isDefined } from '../utils/LangUtils';
+import { validateNonEmptyArray } from '../utils/ValidationUtils';
+import { genRandomString } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Schema');
 
@@ -21,25 +41,21 @@ type SchemaObject = {|
   propertyTypes :PropertyTypeObject[];
 |};
 
-/**
- * @class Schema
- * @memberof lattice
- */
-export default class Schema {
+class Schema {
 
   entityTypes :EntityType[];
   fqn :FQN;
   propertyTypes :PropertyType[];
 
-  constructor(
-    fqn :FQN,
-    entityTypes :EntityType[],
-    propertyTypes :PropertyType[]
-  ) {
+  constructor(schema :{
+    entityTypes :EntityType[];
+    fqn :FQN;
+    propertyTypes :PropertyType[];
+  }) {
 
-    this.fqn = fqn;
-    this.entityTypes = entityTypes;
-    this.propertyTypes = propertyTypes;
+    this.entityTypes = schema.entityTypes;
+    this.fqn = schema.fqn;
+    this.propertyTypes = schema.propertyTypes;
   }
 
   toImmutable() :Map<*, *> {
@@ -51,9 +67,9 @@ export default class Schema {
 
     // required properties
     const schemaObj :SchemaObject = {
-      entityTypes: this.entityTypes.map((entityType :EntityType) => entityType.toObject()),
+      entityTypes: this.entityTypes.map((entityType) => entityType.toObject()),
       fqn: this.fqn.toObject(),
-      propertyTypes: this.propertyTypes.map((propertyType :PropertyType) => propertyType.toObject()),
+      propertyTypes: this.propertyTypes.map((propertyType) => propertyType.toObject()),
     };
 
     return schemaObj;
@@ -65,82 +81,72 @@ export default class Schema {
   }
 }
 
-/**
- * @class SchemaBuilder
- * @memberof lattice
- */
-export class SchemaBuilder {
+class SchemaBuilder {
 
-  fqn :FQN;
   entityTypes :EntityType[];
+  fqn :FQN;
   propertyTypes :PropertyType[];
 
-  setFullyQualifiedName(fqn :FullyQualifiedName) :SchemaBuilder {
+  constructor(value :any) {
 
-    if (!FullyQualifiedName.isValid(fqn)) {
-      throw new Error('invalid parameter: fqn must be a valid FQN');
+    if (isImmutable(value)) {
+      this.setEntityTypes(value.get('entityTypes'));
+      this.setFQN(value.get('fqn'));
+      this.setPropertyTypes(value.get('propertyTypes'));
     }
-
-    this.fqn = new FullyQualifiedName(fqn);
-    return this;
+    else if (isDefined(value)) {
+      this.setEntityTypes(value.entityTypes);
+      this.setFQN(value.fqn);
+      this.setPropertyTypes(value.propertyTypes);
+    }
   }
 
   setEntityTypes(entityTypes :$ReadOnlyArray<EntityType | EntityTypeObject>) :SchemaBuilder {
 
-    if (!isDefined(entityTypes) || isEmptyArray(entityTypes)) {
+    if (!isDefined(entityTypes)) {
       return this;
     }
 
-    if (!isValidEntityTypeArray(entityTypes)) {
-      throw new Error('invalid parameter: entityTypes must be a non-empty array of valid EntityTypes');
+    if (!isArray(entityTypes) && !isCollection(entityTypes)) {
+      throw new Error('invalid parameter: "entityTypes" must be an array');
     }
 
-    // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
-    this.entityTypes = entityTypes.map((entityType :EntityType | EntityTypeObject) => (
-      new EntityTypeBuilder()
-        .setBaseType(entityType.baseType)
-        .setCategory(entityType.category)
-        .setDescription(entityType.description)
-        .setId(entityType.id)
-        .setKey(entityType.key)
-        .setPropertyTags(entityType.propertyTags)
-        .setPropertyTypes(entityType.properties)
-        .setSchemas(entityType.schemas)
-        .setShards(entityType.shards)
-        .setTitle(entityType.title)
-        .setType(entityType.type)
-        .build()
-    ));
+    try {
+      this.entityTypes = Set(entityTypes).map(
+        (entityType) => (new EntityTypeBuilder(entityType)).build()
+      ).toJS();
+    }
+    catch (e) {
+      throw new Error('invalid parameter: "entityTypes" must be an array of EntityTypes');
+    }
 
+    return this;
+  }
+
+  setFQN(fqn :FQN) :SchemaBuilder {
+
+    this.fqn = FullyQualifiedName.of(fqn);
     return this;
   }
 
   setPropertyTypes(propertyTypes :$ReadOnlyArray<PropertyType | PropertyTypeObject>) :SchemaBuilder {
 
-    if (!isDefined(propertyTypes) || isEmptyArray(propertyTypes)) {
+    if (!isDefined(propertyTypes)) {
       return this;
     }
 
-    if (!isValidPropertyTypeArray(propertyTypes)) {
-      throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid PropertyTypes');
+    if (!isArray(propertyTypes) && !isCollection(propertyTypes)) {
+      throw new Error('invalid parameter: "propertyTypes" must be an array');
     }
 
-    // TODO: can't use Immutable.Set() because of https://github.com/facebook/immutable-js/issues/1643
-    this.propertyTypes = propertyTypes.map((propertyType :PropertyTypeObject | PropertyType) => (
-      new PropertyTypeBuilder()
-        .setAnalyzer(propertyType.analyzer)
-        .setDataType(propertyType.datatype)
-        .setDescription(propertyType.description)
-        .setEnumValues(propertyType.enumValues)
-        .setId(propertyType.id)
-        .setIndexType(propertyType.indexType)
-        .setMultiValued(propertyType.multiValued)
-        .setPii(propertyType.pii)
-        .setSchemas(propertyType.schemas)
-        .setTitle(propertyType.title)
-        .setType(propertyType.type)
-        .build()
-    ));
+    try {
+      this.propertyTypes = Set(propertyTypes).map(
+        (propertyType) => (new PropertyTypeBuilder(propertyType)).build()
+      ).toJS();
+    }
+    catch (e) {
+      throw new Error('invalid parameter: "propertyTypes" must be an array of PropertyTypes');
+    }
 
     return this;
   }
@@ -148,7 +154,7 @@ export class SchemaBuilder {
   build() :Schema {
 
     if (!this.fqn) {
-      throw new Error('missing property: fqn is a required property');
+      throw new Error('missing property: "fqn" is a required property');
     }
 
     if (!this.entityTypes) {
@@ -159,39 +165,71 @@ export class SchemaBuilder {
       this.propertyTypes = [];
     }
 
-    return new Schema(
-      this.fqn,
-      this.entityTypes,
-      this.propertyTypes,
-    );
+    return new Schema({
+      entityTypes: this.entityTypes,
+      fqn: this.fqn,
+      propertyTypes: this.propertyTypes,
+    });
   }
 }
 
-export function isValidSchema(schema :any) :boolean {
+function isValidSchema(value :any) :boolean {
 
-  if (!isDefined(schema)) {
-
-    LOG.error('invalid parameter: schema must be defined', schema);
+  if (!isDefined(value)) {
+    LOG.error('invalid parameter: "value" is not defined');
     return false;
   }
 
   try {
-
-    (new SchemaBuilder())
-      .setFullyQualifiedName(schema.fqn)
-      .setEntityTypes(schema.entityTypes)
-      .setPropertyTypes(schema.propertyTypes)
-      .build();
-
+    (new SchemaBuilder(value)).build();
     return true;
   }
   catch (e) {
-
-    LOG.error(e, schema);
+    LOG.error(e.message, value);
     return false;
   }
 }
 
+function isValidSchemaArray(values :$ReadOnlyArray<any>) :boolean {
+
+  return validateNonEmptyArray(values, isValidSchema);
+}
+
+export {
+  Schema,
+  SchemaBuilder,
+  isValidSchema,
+  isValidSchemaArray,
+};
+
 export type {
-  SchemaObject
+  SchemaObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const MOCK_SCHEMA = (new SchemaBuilder())
+  .setEntityTypes([MOCK_ENTITY_TYPE])
+  .setFQN(FullyQualifiedName.of('mock.schema'))
+  .setPropertyTypes([MOCK_PROPERTY_TYPE])
+  .build();
+
+const MOCK_SCHEMA_OBJECT = MOCK_SCHEMA.toObject();
+
+function genRandomSchema() {
+  return (new SchemaBuilder())
+    .setEntityTypes([genRandomEntityType()])
+    .setFQN(FullyQualifiedName.of(genRandomString(), genRandomString()))
+    .setPropertyTypes([genRandomPropertyType(), genRandomPropertyType()])
+    .build();
+}
+
+export {
+  MOCK_SCHEMA,
+  MOCK_SCHEMA_OBJECT,
+  genRandomSchema,
 };

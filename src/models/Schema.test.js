@@ -1,41 +1,64 @@
 import { Map, Set, fromJS } from 'immutable';
-import Schema, { SchemaBuilder, isValidSchema as isValid } from './Schema';
+
 import {
-  MOCK_ENTITY_TYPE,
-  MOCK_PROPERTY_TYPE,
   MOCK_SCHEMA,
+  MOCK_SCHEMA_OBJECT,
+  Schema,
+  SchemaBuilder,
   genRandomSchema,
-} from '../utils/testing/MockData';
+  isValidSchema as isValid,
+} from './Schema';
+
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
+function expectValidInstance(value) {
+
+  expect(value).toBeInstanceOf(Schema);
+
+  expect(value.fqn).toBeDefined();
+  expect(value.entityTypes).toBeDefined();
+  expect(value.propertyTypes).toBeDefined();
+
+  expect(value.fqn).toEqual(MOCK_SCHEMA.fqn);
+  expect(value.entityTypes).toEqual(MOCK_SCHEMA.entityTypes);
+  expect(value.propertyTypes).toEqual(MOCK_SCHEMA.propertyTypes);
+}
+
 describe('Schema', () => {
 
   describe('SchemaBuilder', () => {
 
-    describe('setFullyQualifiedName()', () => {
+    describe('constructor()', () => {
 
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new SchemaBuilder()).setFullyQualifiedName(invalidInput);
-          }).toThrow();
-        });
+      test('should construct given an instance', () => {
+        expectValidInstance(
+          (new SchemaBuilder(MOCK_SCHEMA)).build()
+        );
       });
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new SchemaBuilder()).setFullyQualifiedName();
-        }).toThrow();
+      test('should construct given an object literal', () => {
+        expectValidInstance(
+          (new SchemaBuilder({ ...MOCK_SCHEMA })).build()
+        );
+        expectValidInstance(
+          (new SchemaBuilder(MOCK_SCHEMA_OBJECT)).build()
+        );
       });
 
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new SchemaBuilder()).setFullyQualifiedName(MOCK_SCHEMA.fqn);
-        }).not.toThrow();
+      test('should construct given an immutable object', () => {
+        expectValidInstance(
+          (new SchemaBuilder(MOCK_SCHEMA.toImmutable())).build()
+        );
+        expectValidInstance(
+          (new SchemaBuilder(fromJS({ ...MOCK_SCHEMA }))).build()
+        );
+        expectValidInstance(
+          (new SchemaBuilder(fromJS(MOCK_SCHEMA_OBJECT))).build()
+        );
       });
 
     });
@@ -61,15 +84,36 @@ describe('Schema', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new SchemaBuilder()).setEntityTypes();
         }).not.toThrow();
+        expect(() => {
+          (new SchemaBuilder()).setEntityTypes([]);
+        }).not.toThrow();
+        expect(() => {
+          (new SchemaBuilder()).setEntityTypes(MOCK_SCHEMA.entityTypes);
+        }).not.toThrow();
+      });
+
+    });
+
+    describe('setFQN()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new SchemaBuilder()).setFQN();
+        }).toThrow();
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
+          expect(() => {
+            (new SchemaBuilder()).setFQN(invalidInput);
+          }).toThrow();
+        });
       });
 
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          (new SchemaBuilder()).setEntityTypes(MOCK_SCHEMA.entityTypes);
+          (new SchemaBuilder()).setFQN(MOCK_SCHEMA.fqn);
         }).not.toThrow();
       });
 
@@ -96,13 +140,13 @@ describe('Schema', () => {
         });
       });
 
-      test('should not throw when not given any parameters', () => {
+      test('should not throw when given valid parameters', () => {
         expect(() => {
           (new SchemaBuilder()).setPropertyTypes();
         }).not.toThrow();
-      });
-
-      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new SchemaBuilder()).setPropertyTypes([]);
+        }).not.toThrow();
         expect(() => {
           (new SchemaBuilder()).setPropertyTypes(MOCK_SCHEMA.propertyTypes);
         }).not.toThrow();
@@ -115,6 +159,7 @@ describe('Schema', () => {
       test('should throw when a required property has not been set', () => {
 
         expect(() => {
+          // omitting setFQN()
           (new SchemaBuilder())
             .setEntityTypes(MOCK_SCHEMA.entityTypes)
             .setPropertyTypes(MOCK_SCHEMA.propertyTypes)
@@ -126,7 +171,7 @@ describe('Schema', () => {
       test('should set required properties that are allowed to be empty', () => {
 
         const schema = (new SchemaBuilder())
-          .setFullyQualifiedName(MOCK_SCHEMA.fqn)
+          .setFQN(MOCK_SCHEMA.fqn)
           .build();
 
         expect(schema.entityTypes).toEqual([]);
@@ -136,25 +181,12 @@ describe('Schema', () => {
       test('should return a valid instance', () => {
 
         const schema = (new SchemaBuilder())
-          .setFullyQualifiedName(MOCK_SCHEMA.fqn)
           .setEntityTypes(MOCK_SCHEMA.entityTypes)
+          .setFQN(MOCK_SCHEMA.fqn)
           .setPropertyTypes(MOCK_SCHEMA.propertyTypes)
           .build();
 
-        expect(schema).toBeInstanceOf(Schema);
-
-        expect(schema.fqn).toBeDefined();
-        expect(schema.fqn).toEqual(MOCK_SCHEMA.fqn);
-
-        expect(schema.entityTypes).toBeDefined();
-        expect(schema.entityTypes).toEqual(MOCK_SCHEMA.entityTypes);
-
-        expect(schema.propertyTypes).toBeDefined();
-        expect(schema.propertyTypes).toEqual(MOCK_SCHEMA.propertyTypes);
-
-        // ensure setEntityTypes() and setPropertyTypes() are calling all builder .set() methods
-        expect(schema.entityTypes).toEqual([MOCK_ENTITY_TYPE]);
-        expect(schema.propertyTypes).toEqual([MOCK_PROPERTY_TYPE]);
+        expectValidInstance(schema);
       });
 
     });
@@ -166,26 +198,11 @@ describe('Schema', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_SCHEMA)).toEqual(true);
+        expect(isValid(MOCK_SCHEMA_OBJECT)).toEqual(true);
       });
 
       test('should return true when given a valid instance ', () => {
-        expect(isValid(
-          new Schema(
-            MOCK_SCHEMA.fqn, MOCK_SCHEMA.entityTypes, MOCK_SCHEMA.propertyTypes
-          )
-        )).toEqual(true);
-      });
-
-      test('should return true when given an instance constructed by the builder', () => {
-
-        const schema = (new SchemaBuilder())
-          .setFullyQualifiedName(MOCK_SCHEMA.fqn)
-          .setEntityTypes(MOCK_SCHEMA.entityTypes)
-          .setPropertyTypes(MOCK_SCHEMA.propertyTypes)
-          .build();
-
-        expect(isValid(schema)).toEqual(true);
+        expect(isValid(MOCK_SCHEMA)).toEqual(true);
       });
 
     });
@@ -202,47 +219,53 @@ describe('Schema', () => {
         });
       });
 
-      test('should return false when given an object literal with an invalid "fqn" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_SCHEMA, fqn: invalidInput })).toEqual(false);
+      test('should return false when given an object literal with an invalid "entityTypes" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_SCHEMA_OBJECT, entityTypes: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA_OBJECT, entityTypes: [invalidInput] })).toEqual(false);
         });
       });
 
-      test('should return false when given an object literal with an invalid "entityTypes" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_SCHEMA, entityTypes: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_SCHEMA, entityTypes: [invalidInput] })).toEqual(false);
+      test('should return false when given an object literal with an invalid "fqn" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_SCHEMA_OBJECT, fqn: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "propertyTypes" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_SCHEMA, propertyTypes: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_SCHEMA, propertyTypes: [invalidInput] })).toEqual(false);
-        });
-      });
-
-      test('should return false when given an instance with an invalid "fqn" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(
-            new Schema(
-              invalidInput, MOCK_SCHEMA.entityTypes, MOCK_SCHEMA.propertyTypes
-            )
-          )).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA_OBJECT, propertyTypes: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_SCHEMA_OBJECT, propertyTypes: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "entityTypes" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
-            new Schema(
-              MOCK_SCHEMA.fqn, invalidInput, MOCK_SCHEMA.propertyTypes
-            )
+            new Schema({
+              entityTypes: invalidInput,
+              fqn: MOCK_SCHEMA.fqn,
+              propertyTypes: MOCK_SCHEMA.propertyTypes,
+            })
           )).toEqual(false);
           expect(isValid(
-            new Schema(
-              MOCK_SCHEMA.fqn, [invalidInput], MOCK_SCHEMA.propertyTypes
-            )
+            new Schema({
+              entityTypes: [invalidInput],
+              fqn: MOCK_SCHEMA.fqn,
+              propertyTypes: MOCK_SCHEMA.propertyTypes,
+            })
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "fqn" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid(
+            new Schema({
+              entityTypes: MOCK_SCHEMA.entityTypes,
+              fqn: invalidInput,
+              propertyTypes: MOCK_SCHEMA.propertyTypes,
+            })
           )).toEqual(false);
         });
       });
@@ -250,14 +273,18 @@ describe('Schema', () => {
       test('should return false when given an instance with an invalid "propertyTypes" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
-            new Schema(
-              MOCK_SCHEMA.fqn, MOCK_SCHEMA.entityTypes, invalidInput
-            )
+            new Schema({
+              entityTypes: MOCK_SCHEMA.entityTypes,
+              fqn: MOCK_SCHEMA.fqn,
+              propertyTypes: invalidInput,
+            })
           )).toEqual(false);
           expect(isValid(
-            new Schema(
-              MOCK_SCHEMA.fqn, MOCK_SCHEMA.entityTypes, [invalidInput]
-            )
+            new Schema({
+              entityTypes: MOCK_SCHEMA.entityTypes,
+              fqn: MOCK_SCHEMA.fqn,
+              propertyTypes: [invalidInput],
+            })
           )).toEqual(false);
         });
       });
@@ -269,15 +296,10 @@ describe('Schema', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const schema = new Schema(
-        MOCK_SCHEMA.fqn,
-        MOCK_SCHEMA.entityTypes,
-        MOCK_SCHEMA.propertyTypes,
-      );
-      expect(schema.valueOf()).toEqual(
+      expect(MOCK_SCHEMA.valueOf()).toEqual(
         fromJS({
-          fqn: MOCK_SCHEMA.fqn.toObject(),
           entityTypes: MOCK_SCHEMA.entityTypes.map((entityType) => entityType.toObject()),
+          fqn: MOCK_SCHEMA.fqn.toObject(),
           propertyTypes: MOCK_SCHEMA.propertyTypes.map((propertyType) => propertyType.toObject()),
         }).hashCode()
       );
@@ -286,16 +308,8 @@ describe('Schema', () => {
     test('Immutable.Set', () => {
 
       const randomSchema = genRandomSchema();
-      const schema0 = new Schema(
-        MOCK_SCHEMA.fqn,
-        MOCK_SCHEMA.entityTypes,
-        MOCK_SCHEMA.propertyTypes,
-      );
-      const schema1 = new Schema(
-        MOCK_SCHEMA.fqn,
-        MOCK_SCHEMA.entityTypes,
-        MOCK_SCHEMA.propertyTypes,
-      );
+      const schema0 = (new SchemaBuilder(MOCK_SCHEMA)).build();
+      const schema1 = (new SchemaBuilder(MOCK_SCHEMA)).build();
 
       const testSet = Set()
         .add(schema0)
@@ -317,16 +331,8 @@ describe('Schema', () => {
     test('Immutable.Map', () => {
 
       const randomSchema = genRandomSchema();
-      const schema0 = new Schema(
-        MOCK_SCHEMA.fqn,
-        MOCK_SCHEMA.entityTypes,
-        MOCK_SCHEMA.propertyTypes,
-      );
-      const schema1 = new Schema(
-        MOCK_SCHEMA.fqn,
-        MOCK_SCHEMA.entityTypes,
-        MOCK_SCHEMA.propertyTypes,
-      );
+      const schema0 = (new SchemaBuilder(MOCK_SCHEMA)).build();
+      const schema1 = (new SchemaBuilder(MOCK_SCHEMA)).build();
 
       const testMap = Map()
         .set(schema0, 'test_value_1')
