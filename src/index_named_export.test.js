@@ -9,7 +9,6 @@ import * as Lattice from './index';
 
 /* eslint-disable key-spacing */
 const EXPECTED_OBJ_EXPORTS = OrderedMap({
-  AnalysisApi        : { size: 2 },
   AppApi             : { size: 18 },
   AuthorizationApi   : { size: 2 },
   CodexApi           : { size: 1 },
@@ -18,16 +17,14 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   EntityDataModelApi : { size: 51 },
   EntitySetsApi      : { size: 8 },
   FeedsApi           : { size: 1 },
-  LinkingApi         : { size: 2 },
   OrganizationsApi   : { size: 32 },
   PermissionsApi     : { size: 4 },
   PersistentSearchApi: { size: 5 },
   PrincipalsApi      : { size: 7 },
-  RequestsApi        : { size: 3 },
   SearchApi          : { size: 14 },
   SubscriptionApi    : { size: 3 },
   Constants          : { size: 8 },
-  Models             : { size: 66 },
+  Models             : { size: 18 },
   Types              : { size: 12 },
 });
 /* eslint-enable key-spacing */
