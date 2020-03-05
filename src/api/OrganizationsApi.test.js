@@ -1,17 +1,9 @@
 /* eslint-disable no-use-before-define */
 
-import * as AxiosUtils from '../utils/axios';
 import * as OrganizationsApi from './OrganizationsApi';
-import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
-import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
-  INVALID_PARAMS_FOR_OPTIONAL_STRING,
-  INVALID_PARAMS_SS,
-} from '../utils/testing/Invalid';
-import { MOCK_GRANT, MOCK_ORGANIZATION, MOCK_ROLE } from '../utils/testing/MockData';
-import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
+import * as AxiosUtils from '../utils/axios';
+import { ORGANIZATIONS_API, PERMISSIONS_API } from '../constants/ApiNames';
 import {
   CONNECTIONS_PATH,
   DESCRIPTION_PATH,
@@ -22,20 +14,27 @@ import {
   ROLES_PATH,
   TITLE_PATH,
 } from '../constants/UrlConstants';
-
 import {
   ActionTypes,
   PermissionTypes,
   PrincipalTypes,
 } from '../constants/types';
-
 import {
   AceBuilder,
   AclBuilder,
   AclDataBuilder,
   PrincipalBuilder,
 } from '../models';
-
+import { MOCK_GRANT } from '../models/Grant';
+import { MOCK_ORGANIZATION } from '../models/Organization';
+import { MOCK_ROLE } from '../models/Role';
+import {
+  INVALID_PARAMS,
+  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
+  INVALID_PARAMS_FOR_OPTIONAL_STRING,
+  INVALID_PARAMS_SS,
+} from '../utils/testing/Invalid';
+import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,

@@ -1,13 +1,13 @@
 /* eslint-disable no-use-before-define */
 
-import * as AxiosUtils from '../utils/axios';
 import * as PermissionsApi from './PermissionsApi';
+
+import * as AxiosUtils from '../utils/axios';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
+import { MOCK_ACL_DATA } from '../models/AclData';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ACL_KEY, MOCK_ACL_DATA } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
-
 import {
   testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
@@ -16,6 +16,11 @@ import {
   testApiShouldSendCorrectHttpRequest,
   testApiShouldUseCorrectAxiosInstance,
 } from '../utils/testing/TestUtils';
+
+const MOCK_ACL_KEY = [
+  'c7586209-552a-4dbd-b826-c6c262070291',
+  'a0f46850-6115-4223-aa8b-abc269a7d375',
+];
 
 /*
  * mocks

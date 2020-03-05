@@ -1,18 +1,12 @@
 /*
  * @flow
  */
+
 import has from 'lodash/has';
-import Logger from '../utils/Logger';
 
 import FullyQualifiedName from '../models/FullyQualifiedName';
+import Logger from '../utils/Logger';
 import { APP_API } from '../constants/ApiNames';
-import { PermissionTypes } from '../constants/types';
-import { isValidApp } from '../models/App';
-import { isValidAppType } from '../models/AppType';
-import { getApiAxiosInstance } from '../utils/axios';
-import { isNonEmptyString, isNonEmptyObject } from '../utils/LangUtils';
-import { isValidTypeArray, isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
-
 import {
   BULK_PATH,
   CONFIG_PATH,
@@ -21,7 +15,12 @@ import {
   TYPE_PATH,
   UPDATE_PATH
 } from '../constants/UrlConstants';
-
+import { PermissionTypes } from '../constants/types';
+import { isValidApp } from '../models/App';
+import { isValidAppType } from '../models/AppType';
+import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
+import { isValidTypeArray, isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
+import { getApiAxiosInstance } from '../utils/axios';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AppApi');

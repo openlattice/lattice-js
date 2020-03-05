@@ -18,11 +18,11 @@
  */
 
 import Logger from '../utils/Logger';
-import AclData, { isValidAclData, isValidAclDataArray } from '../models/AclData';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
-import { getApiAxiosInstance } from '../utils/axios';
+import { AclData, isValidAclData, isValidAclDataArray } from '../models/AclData';
 import { isValidUUIDArray } from '../utils/ValidationUtils';
+import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('PermissionsApi');
 

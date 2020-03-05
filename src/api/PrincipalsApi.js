@@ -18,7 +18,6 @@
  */
 
 import Logger from '../utils/Logger';
-import Principal, { isValidPrincipal } from '../models/Principal';
 import { PRINCIPALS_API } from '../constants/ApiNames';
 import {
   CURRENT_PATH,
@@ -27,6 +26,7 @@ import {
   SYNC_PATH,
   USERS_PATH,
 } from '../constants/UrlConstants';
+import { Principal, isValidPrincipal } from '../models/Principal';
 import { isNonEmptyString } from '../utils/LangUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 

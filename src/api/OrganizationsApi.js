@@ -20,41 +20,10 @@
 import isString from 'lodash/isString';
 import { Set } from 'immutable';
 
-import Logger from '../utils/Logger';
 import * as PermissionsApi from './PermissionsApi';
+
+import Logger from '../utils/Logger';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
-import { getApiAxiosInstance } from '../utils/axios';
-import {
-  isDefined,
-  isEmptyArray,
-  isNonEmptyString,
-  isNonEmptyStringArray,
-} from '../utils/LangUtils';
-import { isValidUUID } from '../utils/ValidationUtils';
-
-import {
-  Ace,
-  AceBuilder,
-  Acl,
-  AclBuilder,
-  AclData,
-  AclDataBuilder,
-  Grant,
-  Organization,
-  Principal,
-  PrincipalBuilder,
-  Role,
-  isValidGrant,
-  isValidOrganization,
-  isValidRole,
-} from '../models';
-
-import {
-  ActionTypes,
-  PermissionTypes,
-  PrincipalTypes,
-} from '../constants/types';
-
 import {
   CONNECTIONS_PATH,
   DESCRIPTION_PATH,
@@ -67,7 +36,26 @@ import {
   ROLES_PATH,
   TITLE_PATH,
 } from '../constants/UrlConstants';
-
+import {
+  ActionTypes,
+  PermissionTypes,
+  PrincipalTypes,
+} from '../constants/types';
+import { Ace, AceBuilder } from '../models/Ace';
+import { Acl, AclBuilder } from '../models/Acl';
+import { AclData, AclDataBuilder } from '../models/AclData';
+import { Grant, isValidGrant } from '../models/Grant';
+import { Organization, isValidOrganization } from '../models/Organization';
+import { Principal, PrincipalBuilder } from '../models/Principal';
+import { Role, isValidRole } from '../models/Role';
+import {
+  isDefined,
+  isEmptyArray,
+  isNonEmptyString,
+  isNonEmptyStringArray,
+} from '../utils/LangUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
+import { getApiAxiosInstance } from '../utils/axios';
 import type { ActionType } from '../constants/types';
 
 const LOG = new Logger('OrganizationsApi');

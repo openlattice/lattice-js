@@ -20,20 +20,17 @@
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
-import DataGraph, { isValidDataGraph } from '../models/DataGraph';
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
 import { getConfig } from '../config/Configuration';
 import { DATA_API } from '../constants/ApiNames';
-import { UpdateTypes, DeleteTypes } from '../constants/types';
-import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
 import {
-  isDefined,
-  isEmptyArray,
-  isNonEmptyObject,
-  isNonEmptyString,
-} from '../utils/LangUtils';
-
+  DESTINATION,
+  DESTINATION_ES_IDS,
+  ENTITY_KEY_IDS,
+  SOURCE,
+  SOURCE_ES_IDS,
+} from '../constants/SerializationConstants';
 import {
   ALL_PATH,
   ASSOCIATION_PATH,
@@ -46,23 +43,22 @@ import {
   SET_PATH,
   TYPE_PATH,
 } from '../constants/UrlConstants';
-
+import { DeleteTypes, UpdateTypes } from '../constants/types';
+import { DataGraph, isValidDataGraph } from '../models/DataGraph';
 import {
-  DESTINATION,
-  DESTINATION_ES_IDS,
-  ENTITY_KEY_IDS,
-  SOURCE,
-  SOURCE_ES_IDS,
-} from '../constants/SerializationConstants';
-
+  isDefined,
+  isEmptyArray,
+  isNonEmptyObject,
+  isNonEmptyString,
+} from '../utils/LangUtils';
 import {
   isValidMultimap,
   isValidMultimapArray,
   isValidUUID,
   isValidUUIDArray,
 } from '../utils/ValidationUtils';
-
-import type { UpdateType, DeleteType } from '../constants/types';
+import { getApiAxiosInstance, getApiBaseUrl } from '../utils/axios';
+import type { DeleteType, UpdateType } from '../constants/types';
 
 const LOG = new Logger('DataApi');
 

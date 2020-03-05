@@ -11,8 +11,8 @@ import {
   SYNC_PATH,
   USERS_PATH,
 } from '../constants/UrlConstants';
+import { genRandomPrincipal } from '../models/Principal';
 import { INVALID_PARAMS } from '../utils/testing/Invalid';
-import { genRandomPrincipal } from '../utils/testing/MockData';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,

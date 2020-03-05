@@ -19,14 +19,13 @@
 
 import isUndefined from 'lodash/isUndefined';
 
-import AccessCheck, { isValidAccessCheckArray } from '../models/AccessCheck';
+import Logger from '../utils/Logger';
 import PermissionTypes from '../constants/types/PermissionTypes';
 import SecurableTypes from '../constants/types/SecurableTypes';
-import Logger from '../utils/Logger';
 import { AUTHORIZATION_API } from '../constants/ApiNames';
-import { getApiAxiosInstance } from '../utils/axios';
+import { AccessCheck, isValidAccessCheckArray } from '../models/AccessCheck';
 import { isDefined, isEmptyArray, isNonEmptyString } from '../utils/LangUtils';
-
+import { getApiAxiosInstance } from '../utils/axios';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 

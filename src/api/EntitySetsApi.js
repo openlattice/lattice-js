@@ -20,7 +20,7 @@
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
-import EntitySet, { isValidEntitySetArray } from '../models/EntitySet';
+import { EntitySet, isValidEntitySetArray } from '../models/EntitySet';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import {
   ALL_PATH,

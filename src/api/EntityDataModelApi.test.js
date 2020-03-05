@@ -1,35 +1,29 @@
 /* eslint-disable no-use-before-define */
 
-import * as AxiosUtils from '../utils/axios';
 import * as EntityDataModelApi from './EntityDataModelApi';
-import { EDM_API } from '../constants/ApiNames';
-import { genMockBaseUrl, genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
+import * as AxiosUtils from '../utils/axios';
+import { EDM_API } from '../constants/ApiNames';
 import {
   DIFF_PATH,
+  ENTITY_TYPE_PATH,
   IDS_PATH,
   NAMESPACE_PATH,
-  ENTITY_TYPE_PATH,
   PROPERTY_TYPE_PATH,
   SCHEMA_PATH,
   VERSION_PATH,
 } from '../constants/UrlConstants';
-
+import { FullyQualifiedName } from '../models';
+import { MOCK_ASSOCIATION_TYPE } from '../models/AssociationType';
+import { MOCK_ENTITY_TYPE } from '../models/EntityType';
+import { MOCK_PROPERTY_TYPE } from '../models/PropertyType';
+import { MOCK_SCHEMA } from '../models/Schema';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
-
-
-import {
-  MOCK_EDM_DM,
-  MOCK_FQN,
-  MOCK_ENTITY_TYPE,
-  MOCK_PROPERTY_TYPE,
-  MOCK_SCHEMA,
-} from '../utils/testing/MockData';
-
+import { genMockBaseUrl, genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
@@ -39,6 +33,17 @@ import {
   testApiShouldSendCorrectHttpRequest,
   testApiShouldUseCorrectAxiosInstance
 } from '../utils/testing/TestUtils';
+
+const MOCK_NAMESPACE = 'mock';
+const MOCK_FQN = FullyQualifiedName.of('mock.fqn');
+const MOCK_EDM_DM = {
+  associationTypes: [MOCK_ASSOCIATION_TYPE],
+  entityTypes: [MOCK_ENTITY_TYPE],
+  namespaces: [MOCK_NAMESPACE],
+  propertyTypes: [MOCK_PROPERTY_TYPE],
+  schemas: [MOCK_SCHEMA],
+  version: 'd7553374-4ab8-4954-ae50-857948f5265f',
+};
 
 /*
  * mocks

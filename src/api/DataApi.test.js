@@ -18,13 +18,13 @@ import {
   TYPE_PATH
 } from '../constants/UrlConstants';
 import { DeleteTypes, UpdateTypes } from '../constants/types';
+import { MOCK_DATA_GRAPH } from '../models/DataGraph';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
-import { MOCK_DATA_EDGE_DM, MOCK_DATA_GRAPH_DM } from '../utils/testing/MockData';
 import {
   genMockBaseUrl,
   genRandomString,
@@ -41,6 +41,22 @@ import {
   testApiShouldSendCorrectHttpRequest,
   testApiShouldUseCorrectAxiosInstance,
 } from '../utils/testing/TestUtils';
+
+const MOCK_DATA_EDGE = {
+  'a680a1d8-73fb-423c-abd2-fd71965693d2': [{
+    data: {
+      '6a74d45c-9451-4f88-b8c8-a0e27c08b2a2': ['value_1', 'value_2'],
+    },
+    dst: {
+      entitySetId: '69682f1e-6039-44da-8342-522395b43738',
+      entityKeyId: 'cf72e97f-109c-46a1-bb89-93a8753fd7ac'
+    },
+    src: {
+      entitySetId: '5e4a579a-ad72-4902-991c-027d80dcd590',
+      entityKeyId: '5e4a579a-ad72-4902-991c-027d80dcd590'
+    },
+  }]
+};
 
 /*
  * mocks
@@ -205,9 +221,9 @@ function createAssociations() {
   describe('createAssociations()', () => {
 
     const fnToTest = DataApi.createAssociations;
-    const validParams = [MOCK_DATA_EDGE_DM];
+    const validParams = [MOCK_DATA_EDGE];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${ASSOCIATION_PATH}`, MOCK_DATA_EDGE_DM];
+    const axiosParams = [`/${ASSOCIATION_PATH}`, MOCK_DATA_EDGE];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);
@@ -223,9 +239,9 @@ function createEntityAndAssociationData() {
   describe('createEntityAndAssociationData()', () => {
 
     const fnToTest = DataApi.createEntityAndAssociationData;
-    const validParams = [MOCK_DATA_GRAPH_DM];
+    const validParams = [MOCK_DATA_GRAPH];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', MOCK_DATA_GRAPH_DM];
+    const axiosParams = ['/', MOCK_DATA_GRAPH];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);

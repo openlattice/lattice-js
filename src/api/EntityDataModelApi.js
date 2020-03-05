@@ -23,15 +23,7 @@ import { Set } from 'immutable';
 
 import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
-
-import EntityType, { isValidEntityType } from '../models/EntityType';
-import PropertyType, { isValidPropertyType } from '../models/PropertyType';
-import Schema, { isValidSchema } from '../models/Schema';
-
 import { EDM_API } from '../constants/ApiNames';
-import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
-
 import {
   ASSOCIATION_TYPE_PATH,
   COMPLEX_TYPE_PATH,
@@ -49,7 +41,9 @@ import {
   SRC_PATH,
   VERSION_PATH,
 } from '../constants/UrlConstants';
-
+import { EntityType, isValidEntityType } from '../models/EntityType';
+import { PropertyType, isValidPropertyType } from '../models/PropertyType';
+import { Schema, isValidSchema } from '../models/Schema';
 import {
   isEmptyArray,
   isNonEmptyArray,
@@ -57,6 +51,8 @@ import {
   isNonEmptyString,
   isNonEmptyStringArray
 } from '../utils/LangUtils';
+import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
+import { getApiAxiosInstance, getApiBaseUrl } from '../utils/axios';
 
 const LOG = new Logger('EntityDataModelApi');
 

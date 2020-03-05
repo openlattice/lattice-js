@@ -1,17 +1,18 @@
 /* eslint-disable no-use-before-define */
 
-import * as AxiosUtils from '../utils/axios';
 import * as EntitySetsApi from './EntitySetsApi';
+
+import * as AxiosUtils from '../utils/axios';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
-import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ENTITY_SET } from '../utils/testing/MockData';
-import { genMockBaseUrl, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   ALL_PATH,
   IDS_PATH,
   METADATA_PATH,
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
+import { MOCK_ENTITY_SET } from '../models/EntitySet';
+import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { genMockBaseUrl, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
