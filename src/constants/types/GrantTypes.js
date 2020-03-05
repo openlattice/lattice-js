@@ -12,8 +12,6 @@ type GrantTypesEnum = {|
   ROLES :'Roles';
 |};
 
-type GrantType = $Values<GrantTypesEnum>;
-
 const GrantTypes :{| ...GrantTypesEnum |} = Object.freeze({
   ATTRIBUTES: 'Attributes',
   AUTOMATIC: 'Automatic',
@@ -23,6 +21,8 @@ const GrantTypes :{| ...GrantTypesEnum |} = Object.freeze({
   MANUAL: 'Manual',
   ROLES: 'Roles',
 });
+
+type GrantType = $Values<typeof GrantTypes>;
 
 export default GrantTypes;
 export type { GrantType };

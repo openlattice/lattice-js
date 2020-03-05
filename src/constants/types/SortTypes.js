@@ -12,8 +12,6 @@ type SortTypesEnum = {|
   Score :'score';
 |};
 
-type SortType = $Values<SortTypesEnum>;
-
 const SortTypes :{| ...SortTypesEnum |} = Object.freeze({
   FIELD: 'field',
   Field: 'field',
@@ -22,6 +20,8 @@ const SortTypes :{| ...SortTypesEnum |} = Object.freeze({
   SCORE: 'score',
   Score: 'score',
 });
+
+type SortType = $Values<typeof SortTypes>;
 
 export default SortTypes;
 export type { SortType };
