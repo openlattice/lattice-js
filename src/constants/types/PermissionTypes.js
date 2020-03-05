@@ -11,8 +11,6 @@ type PermissionTypesEnum = {|
   WRITE :'WRITE';
 |};
 
-type PermissionType = $Values<PermissionTypesEnum>;
-
 const PermissionTypes :{| ...PermissionTypesEnum |} = Object.freeze({
   DISCOVER: 'DISCOVER',
   LINK: 'LINK',
@@ -21,6 +19,8 @@ const PermissionTypes :{| ...PermissionTypesEnum |} = Object.freeze({
   READ: 'READ',
   WRITE: 'WRITE',
 });
+
+type PermissionType = $Values<typeof PermissionTypes>;
 
 export default PermissionTypes;
 export type { PermissionType };
