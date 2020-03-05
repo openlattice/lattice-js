@@ -11,8 +11,6 @@ type UpdateTypesEnum = {|
   Replace :'Replace';
 |};
 
-type UpdateType = $Values<UpdateTypesEnum>;
-
 const UpdateTypes :{| ...UpdateTypesEnum |} = Object.freeze({
   MERGE: 'Merge',
   Merge: 'Merge',
@@ -21,6 +19,8 @@ const UpdateTypes :{| ...UpdateTypesEnum |} = Object.freeze({
   REPLACE: 'Replace',
   Replace: 'Replace',
 });
+
+type UpdateType = $Values<typeof UpdateTypes>;
 
 export default UpdateTypes;
 export type { UpdateType };
