@@ -1,13 +1,62 @@
 import { Map, Set, fromJS } from 'immutable';
 
-import Principal, { PrincipalBuilder, isValidPrincipal as isValid } from './Principal';
+import {
+  MOCK_PRINCIPAL,
+  MOCK_PRINCIPAL_OBJECT,
+  Principal,
+  PrincipalBuilder,
+  genRandomPrincipal,
+  isValidPrincipal as isValid,
+} from './Principal';
+
 import { PrincipalTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_PRINCIPAL, genRandomPrincipal } from '../utils/testing/MockData';
+
+function expectValidInstance(value) {
+
+  expect(value).toBeInstanceOf(Principal);
+
+  expect(value.id).toBeDefined();
+  expect(value.type).toBeDefined();
+
+  expect(value.id).toEqual(MOCK_PRINCIPAL.id);
+  expect(value.type).toEqual(MOCK_PRINCIPAL.type);
+}
 
 describe('Principal', () => {
 
   describe('PrincipalBuilder', () => {
+
+    describe('constructor()', () => {
+
+      test('should construct given an instance', () => {
+        expectValidInstance(
+          (new PrincipalBuilder(MOCK_PRINCIPAL)).build()
+        );
+      });
+
+      test('should construct given an object literal', () => {
+        expectValidInstance(
+          (new PrincipalBuilder({ ...MOCK_PRINCIPAL })).build()
+        );
+        expectValidInstance(
+          (new PrincipalBuilder(MOCK_PRINCIPAL_OBJECT)).build()
+        );
+      });
+
+      test('should construct given an immutable object', () => {
+        expectValidInstance(
+          (new PrincipalBuilder(MOCK_PRINCIPAL.toImmutable())).build()
+        );
+        expectValidInstance(
+          (new PrincipalBuilder(fromJS({ ...MOCK_PRINCIPAL }))).build()
+        );
+        expectValidInstance(
+          (new PrincipalBuilder(fromJS(MOCK_PRINCIPAL_OBJECT))).build()
+        );
+      });
+
+    });
 
     describe('setId()', () => {
 
@@ -58,12 +107,14 @@ describe('Principal', () => {
       test('should throw when a required property has not been set', () => {
 
         expect(() => {
+          // omitting setId()
           (new PrincipalBuilder())
             .setType(MOCK_PRINCIPAL.type)
             .build();
         }).toThrow();
 
         expect(() => {
+          // omitting setType()
           (new PrincipalBuilder())
             .setId(MOCK_PRINCIPAL.id)
             .build();
@@ -77,13 +128,7 @@ describe('Principal', () => {
           .setType(MOCK_PRINCIPAL.type)
           .build();
 
-        expect(principal).toBeInstanceOf(Principal);
-
-        expect(principal.id).toBeDefined();
-        expect(principal.type).toBeDefined();
-
-        expect(principal.id).toEqual(MOCK_PRINCIPAL.id);
-        expect(principal.type).toEqual(MOCK_PRINCIPAL.type);
+        expectValidInstance(principal);
       });
 
     });
@@ -95,26 +140,11 @@ describe('Principal', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_PRINCIPAL)).toEqual(true);
+        expect(isValid(MOCK_PRINCIPAL_OBJECT)).toEqual(true);
       });
 
       test('should return true when given a valid instance ', () => {
-        expect(isValid(
-          new Principal(
-            MOCK_PRINCIPAL.id,
-            MOCK_PRINCIPAL.type,
-          )
-        )).toEqual(true);
-      });
-
-      test('should return true when given an instance constructed by the builder', () => {
-
-        const principal = (new PrincipalBuilder())
-          .setId(MOCK_PRINCIPAL.id)
-          .setType(MOCK_PRINCIPAL.type)
-          .build();
-
-        expect(isValid(principal)).toEqual(true);
+        expect(isValid(MOCK_PRINCIPAL)).toEqual(true);
       });
 
     });
@@ -133,23 +163,23 @@ describe('Principal', () => {
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_PRINCIPAL, id: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_PRINCIPAL_OBJECT, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "type" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_PRINCIPAL, type: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_PRINCIPAL_OBJECT, type: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
-            new Principal(
-              invalidInput,
-              MOCK_PRINCIPAL.type,
-            )
+            new Principal({
+              id: invalidInput,
+              type: MOCK_PRINCIPAL.type,
+            })
           )).toEqual(false);
         });
       });
@@ -157,10 +187,10 @@ describe('Principal', () => {
       test('should return false when given an instance with an invalid "type" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
-            new Principal(
-              MOCK_PRINCIPAL.id,
-              invalidInput,
-            )
+            new Principal({
+              id: MOCK_PRINCIPAL.id,
+              type: invalidInput,
+            })
           )).toEqual(false);
         });
       });
@@ -172,11 +202,7 @@ describe('Principal', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const entityType = new Principal(
-        MOCK_PRINCIPAL.id,
-        MOCK_PRINCIPAL.type,
-      );
-      expect(entityType.valueOf()).toEqual(
+      expect(MOCK_PRINCIPAL.valueOf()).toEqual(
         fromJS({
           id: MOCK_PRINCIPAL.id,
           type: MOCK_PRINCIPAL.type,
@@ -187,14 +213,8 @@ describe('Principal', () => {
     test('Immutable.Set', () => {
 
       const randomPrincipal = genRandomPrincipal();
-      const principal0 = new Principal(
-        MOCK_PRINCIPAL.id,
-        MOCK_PRINCIPAL.type,
-      );
-      const principal1 = new Principal(
-        MOCK_PRINCIPAL.id,
-        MOCK_PRINCIPAL.type,
-      );
+      const principal0 = (new PrincipalBuilder(MOCK_PRINCIPAL)).build();
+      const principal1 = (new PrincipalBuilder(MOCK_PRINCIPAL)).build();
 
       const testSet = Set()
         .add(principal0)
@@ -214,14 +234,8 @@ describe('Principal', () => {
     test('Immutable.Map', () => {
 
       const randomPrincipal = genRandomPrincipal();
-      const principal0 = new Principal(
-        MOCK_PRINCIPAL.id,
-        MOCK_PRINCIPAL.type,
-      );
-      const principal1 = new Principal(
-        MOCK_PRINCIPAL.id,
-        MOCK_PRINCIPAL.type,
-      );
+      const principal0 = (new PrincipalBuilder(MOCK_PRINCIPAL)).build();
+      const principal1 = (new PrincipalBuilder(MOCK_PRINCIPAL)).build();
 
       const testMap = Map()
         .set(principal0, 'test_value_1')
