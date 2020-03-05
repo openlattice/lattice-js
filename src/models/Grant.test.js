@@ -1,9 +1,15 @@
 import { Map, Set, fromJS } from 'immutable';
 
-import Grant, { GrantBuilder, isValidGrant as isValid } from './Grant';
-import { GrantTypes } from '../constants/types';
-import { MOCK_GRANT, genRandomGrant } from '../utils/testing/MockData';
+import {
+  MOCK_GRANT,
+  MOCK_GRANT_OBJECT,
+  Grant,
+  GrantBuilder,
+  genRandomGrant,
+  isValidGrant as isValid,
+} from './Grant';
 
+import { GrantTypes } from '../constants/types';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
@@ -11,9 +17,53 @@ import {
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
+function expectValidInstance(value) {
+
+  expect(value).toBeInstanceOf(Grant);
+
+  expect(value.attribute).toBeDefined();
+  expect(value.grantType).toBeDefined();
+  expect(value.mappings).toBeDefined();
+
+  expect(value.attribute).toEqual(MOCK_GRANT.attribute);
+  expect(value.grantType).toEqual(MOCK_GRANT.grantType);
+  expect(value.mappings).toEqual(MOCK_GRANT.mappings);
+}
+
 describe('Grant', () => {
 
   describe('GrantBuilder', () => {
+
+    describe('constructor()', () => {
+
+      test('should construct given an instance', () => {
+        expectValidInstance(
+          (new GrantBuilder(MOCK_GRANT)).build()
+        );
+      });
+
+      test('should construct given an object literal', () => {
+        expectValidInstance(
+          (new GrantBuilder({ ...MOCK_GRANT })).build()
+        );
+        expectValidInstance(
+          (new GrantBuilder(MOCK_GRANT_OBJECT)).build()
+        );
+      });
+
+      test('should construct given an immutable object', () => {
+        expectValidInstance(
+          (new GrantBuilder(MOCK_GRANT.toImmutable())).build()
+        );
+        expectValidInstance(
+          (new GrantBuilder(fromJS({ ...MOCK_GRANT }))).build()
+        );
+        expectValidInstance(
+          (new GrantBuilder(fromJS(MOCK_GRANT_OBJECT))).build()
+        );
+      });
+
+    });
 
     describe('setAttribute()', () => {
 
@@ -125,15 +175,7 @@ describe('Grant', () => {
           .setMappings(MOCK_GRANT.mappings)
           .build();
 
-        expect(grant).toBeInstanceOf(Grant);
-
-        expect(grant.attribute).toBeDefined();
-        expect(grant.grantType).toBeDefined();
-        expect(grant.mappings).toBeDefined();
-
-        expect(grant.attribute).toEqual(MOCK_GRANT.attribute);
-        expect(grant.grantType).toEqual(MOCK_GRANT.grantType);
-        expect(grant.mappings).toEqual(MOCK_GRANT.mappings);
+        expectValidInstance(grant);
       });
 
     });
@@ -145,28 +187,11 @@ describe('Grant', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
+        expect(isValid(MOCK_GRANT_OBJECT)).toEqual(true);
+      });
+
+      test('should return true when given a valid instance ', () => {
         expect(isValid(MOCK_GRANT)).toEqual(true);
-      });
-
-      test('should return true when given a valid object instance ', () => {
-        expect(isValid(
-          new Grant(
-            MOCK_GRANT.attribute,
-            MOCK_GRANT.grantType,
-            MOCK_GRANT.mappings,
-          )
-        )).toEqual(true);
-      });
-
-      test('should return true when given an instance constructed by the builder', () => {
-
-        const grant = (new GrantBuilder())
-          .setAttribute(MOCK_GRANT.attribute)
-          .setGrantType(MOCK_GRANT.grantType)
-          .setMappings(MOCK_GRANT.mappings)
-          .build();
-
-        expect(isValid(grant)).toEqual(true);
       });
 
     });
@@ -198,17 +223,18 @@ describe('Grant', () => {
       test('should return false when given an object literal with an invalid "mappings" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_GRANT, mappings: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_GRANT, mappings: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "attribute" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
           expect(isValid(
-            new Grant(
-              invalidInput,
-              MOCK_GRANT.grantType,
-              MOCK_GRANT.mappings,
-            )
+            new Grant({
+              attribute: invalidInput,
+              grantType: MOCK_GRANT.grantType,
+              mappings: MOCK_GRANT.mappings,
+            })
           )).toEqual(false);
         });
       });
@@ -216,11 +242,11 @@ describe('Grant', () => {
       test('should return false when given an instance with an invalid "grantType" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
-            new Grant(
-              MOCK_GRANT.attribute,
-              invalidInput,
-              MOCK_GRANT.mappings,
-            )
+            new Grant({
+              attribute: MOCK_GRANT.attribute,
+              grantType: invalidInput,
+              mappings: MOCK_GRANT.mappings,
+            })
           )).toEqual(false);
         });
       });
@@ -228,11 +254,18 @@ describe('Grant', () => {
       test('should return false when given an instance with an invalid "mappings" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
-            new Grant(
-              MOCK_GRANT.attribute,
-              MOCK_GRANT.grantType,
-              invalidInput,
-            )
+            new Grant({
+              attribute: MOCK_GRANT.attribute,
+              grantType: MOCK_GRANT.grantType,
+              mappings: invalidInput,
+            })
+          )).toEqual(false);
+          expect(isValid(
+            new Grant({
+              attribute: MOCK_GRANT.attribute,
+              grantType: MOCK_GRANT.grantType,
+              mappings: [invalidInput],
+            })
           )).toEqual(false);
         });
       });
@@ -244,14 +277,7 @@ describe('Grant', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-
-      const grant = (new GrantBuilder())
-        .setAttribute(MOCK_GRANT.attribute)
-        .setGrantType(MOCK_GRANT.grantType)
-        .setMappings(MOCK_GRANT.mappings)
-        .build();
-
-      expect(grant.valueOf()).toEqual(
+      expect(MOCK_GRANT.valueOf()).toEqual(
         fromJS({
           attribute: MOCK_GRANT.attribute,
           grantType: MOCK_GRANT.grantType,
@@ -263,18 +289,8 @@ describe('Grant', () => {
     test('Immutable.Set', () => {
 
       const randomGrant = genRandomGrant();
-
-      const grant0 = (new GrantBuilder())
-        .setAttribute(MOCK_GRANT.attribute)
-        .setGrantType(MOCK_GRANT.grantType)
-        .setMappings(MOCK_GRANT.mappings)
-        .build();
-
-      const grant1 = (new GrantBuilder())
-        .setAttribute(MOCK_GRANT.attribute)
-        .setGrantType(MOCK_GRANT.grantType)
-        .setMappings(MOCK_GRANT.mappings)
-        .build();
+      const grant0 = (new GrantBuilder(MOCK_GRANT)).build();
+      const grant1 = (new GrantBuilder(MOCK_GRANT)).build();
 
       const testSet = Set()
         .add(grant0)
@@ -296,18 +312,8 @@ describe('Grant', () => {
     test('Immutable.Map', () => {
 
       const randomGrant = genRandomGrant();
-
-      const grant0 = (new GrantBuilder())
-        .setAttribute(MOCK_GRANT.attribute)
-        .setGrantType(MOCK_GRANT.grantType)
-        .setMappings(MOCK_GRANT.mappings)
-        .build();
-
-      const grant1 = (new GrantBuilder())
-        .setAttribute(MOCK_GRANT.attribute)
-        .setGrantType(MOCK_GRANT.grantType)
-        .setMappings(MOCK_GRANT.mappings)
-        .build();
+      const grant0 = (new GrantBuilder(MOCK_GRANT)).build();
+      const grant1 = (new GrantBuilder(MOCK_GRANT)).build();
 
       const testMap = Map()
         .set(grant0, 'test_value_1')
