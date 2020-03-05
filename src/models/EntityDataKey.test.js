@@ -1,22 +1,68 @@
-import { Map, Set } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
-import EntityDataKey, { EntityDataKeyBuilder, isValidEntityDataKey as isValid } from './EntityDataKey';
+import {
+  MOCK_ENTITY_DATA_KEY,
+  MOCK_ENTITY_DATA_KEY_OBJECT,
+  EntityDataKey,
+  EntityDataKeyBuilder,
+  genRandomEntityDataKey,
+  isValidEntityDataKey as isValid,
+} from './EntityDataKey';
+
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import { MOCK_ENTITY_DATA_KEY_DM as MOCK_DM } from '../utils/testing/MockData';
-import { genRandomUUID } from '../utils/testing/MockUtils';
 
-const {
-  entityKeyId: mockEntityKeyId,
-  entitySetId: mockEntitySetId,
-} = MOCK_DM;
+function expectValidInstance(value) {
+
+  expect(value).toBeInstanceOf(EntityDataKey);
+
+  expect(value.entityKeyId).toBeDefined();
+  expect(value.entitySetId).toBeDefined();
+
+  expect(value.entityKeyId).toEqual(MOCK_ENTITY_DATA_KEY.entityKeyId);
+  expect(value.entitySetId).toEqual(MOCK_ENTITY_DATA_KEY.entitySetId);
+}
 
 describe('EntityDataKey', () => {
 
   describe('EntityDataKeyBuilder', () => {
 
+    describe('constructor()', () => {
+
+      test('should construct given an instance', () => {
+        expectValidInstance(
+          (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY)).build()
+        );
+      });
+
+      test('should construct given an object literal', () => {
+        expectValidInstance(
+          (new EntityDataKeyBuilder({ ...MOCK_ENTITY_DATA_KEY })).build()
+        );
+        expectValidInstance(
+          (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY_OBJECT)).build()
+        );
+      });
+
+      test('should construct given an immutable object', () => {
+        expectValidInstance(
+          (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY.toImmutable())).build()
+        );
+        expectValidInstance(
+          (new EntityDataKeyBuilder(fromJS({ ...MOCK_ENTITY_DATA_KEY }))).build()
+        );
+        expectValidInstance(
+          (new EntityDataKeyBuilder(fromJS(MOCK_ENTITY_DATA_KEY_OBJECT))).build()
+        );
+      });
+
+    });
+
     describe('setEntityKeyId()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new EntityDataKeyBuilder()).setEntityKeyId();
+        }).toThrow();
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityDataKeyBuilder()).setEntityKeyId(invalidInput);
@@ -24,15 +70,9 @@ describe('EntityDataKey', () => {
         });
       });
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new EntityDataKeyBuilder()).setEntityKeyId();
-        }).toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          (new EntityDataKeyBuilder()).setEntityKeyId(mockEntityKeyId);
+          (new EntityDataKeyBuilder()).setEntityKeyId(MOCK_ENTITY_DATA_KEY.entityKeyId);
         }).not.toThrow();
       });
 
@@ -41,6 +81,9 @@ describe('EntityDataKey', () => {
     describe('setEntitySetId()', () => {
 
       test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new EntityDataKeyBuilder()).setEntitySetId();
+        }).toThrow();
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(() => {
             (new EntityDataKeyBuilder()).setEntitySetId(invalidInput);
@@ -48,15 +91,9 @@ describe('EntityDataKey', () => {
         });
       });
 
-      test('should throw when not given any parameters', () => {
-        expect(() => {
-          (new EntityDataKeyBuilder()).setEntitySetId();
-        }).toThrow();
-      });
-
       test('should not throw when given valid parameters', () => {
         expect(() => {
-          (new EntityDataKeyBuilder()).setEntitySetId(mockEntitySetId);
+          (new EntityDataKeyBuilder()).setEntitySetId(MOCK_ENTITY_DATA_KEY.entitySetId);
         }).not.toThrow();
       });
 
@@ -67,14 +104,16 @@ describe('EntityDataKey', () => {
       test('should throw when a required property has not been set', () => {
 
         expect(() => {
+          // omitting setEntityKeyId()
           (new EntityDataKeyBuilder())
-            .setEntityKeyId(mockEntityKeyId)
+            .setEntitySetId(MOCK_ENTITY_DATA_KEY.entitySetId)
             .build();
         }).toThrow();
 
         expect(() => {
+          // omitting setEntitySetId()
           (new EntityDataKeyBuilder())
-            .setEntitySetId(mockEntitySetId)
+            .setEntityKeyId(MOCK_ENTITY_DATA_KEY.entityKeyId)
             .build();
         }).toThrow();
       });
@@ -82,13 +121,11 @@ describe('EntityDataKey', () => {
       test('should return a valid instance', () => {
 
         const entityDataKey = (new EntityDataKeyBuilder())
-          .setEntityKeyId(mockEntityKeyId)
-          .setEntitySetId(mockEntitySetId)
+          .setEntityKeyId(MOCK_ENTITY_DATA_KEY.entityKeyId)
+          .setEntitySetId(MOCK_ENTITY_DATA_KEY.entitySetId)
           .build();
 
-        expect(entityDataKey).toBeInstanceOf(EntityDataKey);
-        expect(entityDataKey.entityKeyId).toEqual(mockEntityKeyId);
-        expect(entityDataKey.entitySetId).toEqual(mockEntitySetId);
+        expectValidInstance(entityDataKey);
       });
 
     });
@@ -100,25 +137,11 @@ describe('EntityDataKey', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
-        expect(isValid(MOCK_DM)).toEqual(true);
+        expect(isValid(MOCK_ENTITY_DATA_KEY_OBJECT)).toEqual(true);
       });
 
-      test('should return true when given a valid instance', () => {
-        expect(isValid(
-          new EntityDataKey(
-            mockEntitySetId, mockEntityKeyId
-          )
-        )).toEqual(true);
-      });
-
-      test('should return true when given an instance constructed by the builder', () => {
-
-        const entityDataKey = (new EntityDataKeyBuilder())
-          .setEntityKeyId(mockEntityKeyId)
-          .setEntitySetId(mockEntitySetId)
-          .build();
-
-        expect(isValid(entityDataKey)).toEqual(true);
+      test('should return true when given a valid instance ', () => {
+        expect(isValid(MOCK_ENTITY_DATA_KEY)).toEqual(true);
       });
 
     });
@@ -137,32 +160,34 @@ describe('EntityDataKey', () => {
 
       test('should return false when given an object literal with an invalid "entityKeyId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_DM, entityKeyId: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_DATA_KEY_OBJECT, entityKeyId: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "entitySetId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_DM, entitySetId: invalidInput })).toEqual(false);
-        });
-      });
-
-      test('should return false when given an instance with an invalid "entitySetId" property', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid(
-            new EntityDataKey(
-              invalidInput, mockEntityKeyId
-            )
-          )).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_DATA_KEY_OBJECT, entitySetId: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "entityKeyId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
-            new EntityDataKey(
-              mockEntitySetId, invalidInput
-            )
+            new EntityDataKey({
+              entityKeyId: invalidInput,
+              entitySetId: MOCK_ENTITY_DATA_KEY.entitySetId,
+            })
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "entitySetId" property', () => {
+        INVALID_PARAMS_SS.forEach((invalidInput) => {
+          expect(isValid(
+            new EntityDataKey({
+              entityKeyId: MOCK_ENTITY_DATA_KEY.entityKeyId,
+              entitySetId: invalidInput,
+            })
           )).toEqual(false);
         });
       });
@@ -174,48 +199,51 @@ describe('EntityDataKey', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const entityDataKey = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
-      expect(entityDataKey.valueOf()).toEqual(JSON.stringify({
-        entityKeyId: mockEntityKeyId,
-        entitySetId: mockEntitySetId,
-      }));
+      expect(MOCK_ENTITY_DATA_KEY.valueOf()).toEqual(
+        fromJS({
+          entityKeyId: MOCK_ENTITY_DATA_KEY.entityKeyId,
+          entitySetId: MOCK_ENTITY_DATA_KEY.entitySetId,
+        }).hashCode()
+      );
     });
 
     test('Immutable.Set', () => {
 
-      const randomEntityKeyId = genRandomUUID();
-      const randomEntitySetId = genRandomUUID();
-      const testSet = Set().withMutations((mutableSet) => {
-        mutableSet.add(new EntityDataKey(mockEntitySetId, mockEntityKeyId));
-        mutableSet.add(new EntityDataKey(randomEntitySetId, randomEntityKeyId));
-        mutableSet.add(new EntityDataKey(mockEntitySetId, mockEntityKeyId));
-      });
+      const randomEntityDataKey = genRandomEntityDataKey();
+      const entityDataKey0 = (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY)).build();
+      const entityDataKey1 = (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY)).build();
+
+      const testSet = Set()
+        .add(entityDataKey0)
+        .add(randomEntityDataKey)
+        .add(entityDataKey1);
+
       expect(testSet.size).toEqual(2);
       expect(testSet.count()).toEqual(2);
-      expect(testSet.first().entityKeyId).toEqual(mockEntityKeyId);
-      expect(testSet.first().entitySetId).toEqual(mockEntitySetId);
-      expect(testSet.last().entityKeyId).toEqual(randomEntityKeyId);
-      expect(testSet.last().entitySetId).toEqual(randomEntitySetId);
+
+      expect(testSet.first().acl).toEqual(MOCK_ENTITY_DATA_KEY.acl);
+      expect(testSet.first().action).toEqual(MOCK_ENTITY_DATA_KEY.action);
+
+      expect(testSet.last().acl).toEqual(randomEntityDataKey.acl);
+      expect(testSet.last().action).toEqual(randomEntityDataKey.action);
     });
 
     test('Immutable.Map', () => {
 
-      const randomEntityKeyId = genRandomUUID();
-      const randomEntitySetId = genRandomUUID();
-      const entityDataKey0 = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
-      const entityDataKey1 = new EntityDataKey(randomEntitySetId, randomEntityKeyId);
-      const entityDataKey2 = new EntityDataKey(mockEntitySetId, mockEntityKeyId);
+      const randomEntityDataKey = genRandomEntityDataKey();
+      const entityDataKey0 = (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY)).build();
+      const entityDataKey1 = (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY)).build();
 
-      const testMap = Map().withMutations((mutableMap) => {
-        mutableMap.set(entityDataKey0, 'test_value_1');
-        mutableMap.set(entityDataKey1, 'test_value_2');
-        mutableMap.set(entityDataKey2, 'test_value_3');
-      });
+      const testMap = Map()
+        .set(entityDataKey0, 'test_value_1')
+        .set(randomEntityDataKey, 'test_value_2')
+        .set(entityDataKey1, 'test_value_3');
+
       expect(testMap.size).toEqual(2);
       expect(testMap.count()).toEqual(2);
       expect(testMap.get(entityDataKey0)).toEqual('test_value_3');
-      expect(testMap.get(entityDataKey1)).toEqual('test_value_2');
-      expect(testMap.get(entityDataKey2)).toEqual('test_value_3');
+      expect(testMap.get(randomEntityDataKey)).toEqual('test_value_2');
+      expect(testMap.get(entityDataKey1)).toEqual('test_value_3');
     });
 
   });

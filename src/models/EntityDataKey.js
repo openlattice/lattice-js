@@ -2,69 +2,71 @@
  * @flow
  */
 
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS, isImmutable } from 'immutable';
 
 import Logger from '../utils/Logger';
-import { isValidUUID } from '../utils/ValidationUtils';
 import { isDefined } from '../utils/LangUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
+import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('EntityDataKey');
 
-/**
- * @class EntityDataKey
- * @memberof lattice
- */
-export default class EntityDataKey {
+type EntityDataKeyObject = {|
+  entityKeyId :UUID;
+  entitySetId :UUID;
+|};
+
+class EntityDataKey {
 
   entityKeyId :UUID;
   entitySetId :UUID;
 
-  constructor(entitySetId :UUID, entityKeyId :UUID) {
+  constructor(entityDataKey :{
+    entityKeyId :UUID;
+    entitySetId :UUID;
+  }) {
 
-    this.entityKeyId = entityKeyId;
-    this.entitySetId = entitySetId;
+    this.entityKeyId = entityDataKey.entityKeyId;
+    this.entitySetId = entityDataKey.entitySetId;
   }
 
-  asImmutable() :Map<string, UUID> {
+  toImmutable() :Map<*, *> {
 
-    const plainObj = {};
-
-    // required properties
-    plainObj.entityKeyId = this.entityKeyId;
-    plainObj.entitySetId = this.entitySetId;
-
-    return fromJS(plainObj);
+    return fromJS(this.toObject());
   }
 
-  // equals(value :any) :boolean {
-  //
-  //   return value
-  //     && value.entityKeyId === this.entityKeyId
-  //     && value.entitySetId === this.entitySetId;
-  // }
-  //
-  // hashCode() :number {
-  //
-  //   return this.asImmutable().hashCode();
-  // }
+  toObject() :EntityDataKeyObject {
 
-  valueOf() :string {
-
-    return JSON.stringify({
+    const entityDataKeyObj :EntityDataKeyObject = {
       entityKeyId: this.entityKeyId,
       entitySetId: this.entitySetId,
-    });
+    };
+
+    return entityDataKeyObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
-/**
- * @class EntityDataKeyBuilder
- * @memberof lattice
- */
-export class EntityDataKeyBuilder {
+class EntityDataKeyBuilder {
 
   entityKeyId :UUID;
   entitySetId :UUID;
+
+  constructor(value :any) {
+
+    if (isImmutable(value)) {
+      this.setEntityKeyId(value.get('entityKeyId'));
+      this.setEntitySetId(value.get('entitySetId'));
+    }
+    else if (isDefined(value)) {
+      this.setEntityKeyId(value.entityKeyId);
+      this.setEntitySetId(value.entitySetId);
+    }
+  }
 
   setEntityKeyId(entityKeyId :UUID) :EntityDataKeyBuilder {
 
@@ -96,30 +98,62 @@ export class EntityDataKeyBuilder {
       throw new Error('missing property: entitySetId is a required property');
     }
 
-    return new EntityDataKey(this.entitySetId, this.entityKeyId);
+    return new EntityDataKey({
+      entityKeyId: this.entityKeyId,
+      entitySetId: this.entitySetId,
+    });
   }
 }
 
-export function isValidEntityDataKey(entityDataKey :any) :boolean {
+function isValidEntityDataKey(value :any) :boolean {
 
-  if (!isDefined(entityDataKey)) {
-
-    LOG.error('invalid parameter: entityDataKey must be defined', entityDataKey);
+  if (!isDefined(value)) {
+    LOG.error('invalid parameter: "value" is not defined');
     return false;
   }
 
   try {
-
-    (new EntityDataKeyBuilder())
-      .setEntityKeyId(entityDataKey.entityKeyId)
-      .setEntitySetId(entityDataKey.entitySetId)
-      .build();
-
+    (new EntityDataKeyBuilder(value)).build();
     return true;
   }
   catch (e) {
-
-    LOG.error(e, entityDataKey);
+    LOG.error(e.message, value);
     return false;
   }
 }
+
+export {
+  EntityDataKey,
+  EntityDataKeyBuilder,
+  isValidEntityDataKey,
+};
+
+export type {
+  EntityDataKeyObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const MOCK_ENTITY_DATA_KEY = (new EntityDataKeyBuilder())
+  .setEntityKeyId('3f8bd01a-e211-4912-90d0-fbd2fefefe24')
+  .setEntitySetId('e90e6d9c-d0ed-490b-ba3e-38b30f34a1eb')
+  .build();
+
+const MOCK_ENTITY_DATA_KEY_OBJECT = MOCK_ENTITY_DATA_KEY.toObject();
+
+function genRandomEntityDataKey() {
+  return (new EntityDataKeyBuilder())
+    .setEntityKeyId(genRandomUUID())
+    .setEntitySetId(genRandomUUID())
+    .build();
+}
+
+export {
+  MOCK_ENTITY_DATA_KEY,
+  MOCK_ENTITY_DATA_KEY_OBJECT,
+  genRandomEntityDataKey,
+};
