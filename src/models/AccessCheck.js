@@ -149,9 +149,9 @@ function isValidAccessCheck(value :any) :boolean {
   }
 }
 
-function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
+function isValidAccessCheckArray(values :$ReadOnlyArray<any>) :boolean {
 
-  return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => isValidAccessCheck(accessCheck));
+  return validateNonEmptyArray(values, isValidAccessCheck);
 }
 
 export {

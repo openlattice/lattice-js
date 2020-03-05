@@ -237,7 +237,7 @@ export type {
  *
  */
 
-const MOCK_ASSOCIATION_TYPE = new AssociationTypeBuilder()
+const MOCK_ASSOCIATION_TYPE = (new AssociationTypeBuilder())
   .setEntityType(MOCK_ENTITY_TYPE)
   .setSourceEntityTypeIds(['c49832e9-8c49-4d24-984a-2221b4fa249b', 'bec4adc8-79dc-48ab-afda-e203c5573ff5'])
   .setDestinationEntityTypeIds(['91385fae-babc-4bd3-ba42-74decb9036f0', 'c1366efe-f619-4f30-bb6a-0b7437966e65'])
@@ -247,7 +247,7 @@ const MOCK_ASSOCIATION_TYPE = new AssociationTypeBuilder()
 const MOCK_ASSOCIATION_TYPE_OBJECT = MOCK_ASSOCIATION_TYPE.toObject();
 
 function genRandomAssociationType() {
-  return new AssociationTypeBuilder()
+  return (new AssociationTypeBuilder())
     .setEntityType(genRandomEntityType())
     .setSourceEntityTypeIds([genRandomUUID(), genRandomUUID()])
     .setDestinationEntityTypeIds([genRandomUUID(), genRandomUUID(), genRandomUUID()])

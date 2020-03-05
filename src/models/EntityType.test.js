@@ -584,69 +584,69 @@ describe('EntityType', () => {
 
       test('should return false when given an object literal with an invalid "baseType" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, baseType: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, baseType: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "category" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, category: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, category: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "description" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, description: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, description: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, id: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, id: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "key" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, key: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ENTITY_TYPE, key: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, key: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, key: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "properties" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, properties: invalidInput })).toEqual(false);
-          expect(isValid({ ...MOCK_ENTITY_TYPE, properties: [invalidInput] })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, properties: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, properties: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "propertyTags" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_OBJECT.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, propertyTags: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, propertyTags: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "schemas" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, schemas: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, schemas: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "shards" property', () => {
         INVALID_PARAMS_FOR_SHARD.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, shards: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, shards: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "title" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, title: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, title: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "type" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ENTITY_TYPE, type: invalidInput })).toEqual(false);
+          expect(isValid({ ...MOCK_ENTITY_TYPE_OBJECT, type: invalidInput })).toEqual(false);
         });
       });
 
@@ -942,8 +942,8 @@ describe('EntityType', () => {
     test('Immutable.Set', () => {
 
       const randomEntityType = genRandomEntityType();
-      const entityType0 = new EntityType({ ...MOCK_ENTITY_TYPE });
-      const entityType1 = new EntityType({ ...MOCK_ENTITY_TYPE });
+      const entityType0 = (new EntityTypeBuilder(MOCK_ENTITY_TYPE)).build();
+      const entityType1 = (new EntityTypeBuilder(MOCK_ENTITY_TYPE)).build();
 
       const testSet = Set()
         .add(entityType0)
@@ -981,8 +981,8 @@ describe('EntityType', () => {
     test('Immutable.Map', () => {
 
       const randomEntityType = genRandomEntityType();
-      const entityType0 = new EntityType({ ...MOCK_ENTITY_TYPE });
-      const entityType1 = new EntityType({ ...MOCK_ENTITY_TYPE });
+      const entityType0 = (new EntityTypeBuilder(MOCK_ENTITY_TYPE)).build();
+      const entityType1 = (new EntityTypeBuilder(MOCK_ENTITY_TYPE)).build();
 
       const testMap = Map()
         .set(entityType0, 'test_value_1')

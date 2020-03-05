@@ -59,11 +59,20 @@ describe('EntitySet', () => {
         expectValidInstance(
           (new EntitySetBuilder({ ...MOCK_ENTITY_SET })).build()
         );
+        expectValidInstance(
+          (new EntitySetBuilder(MOCK_ENTITY_SET_OBJECT)).build()
+        );
       });
 
       test('should construct given an immutable object', () => {
         expectValidInstance(
+          (new EntitySetBuilder(MOCK_ENTITY_SET.toImmutable())).build()
+        );
+        expectValidInstance(
           (new EntitySetBuilder(fromJS({ ...MOCK_ENTITY_SET }))).build()
+        );
+        expectValidInstance(
+          (new EntitySetBuilder(fromJS(MOCK_ENTITY_SET_OBJECT))).build()
         );
       });
 

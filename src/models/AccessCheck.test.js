@@ -23,7 +23,6 @@ function expectValidInstance(value) {
   expect(value.permissions).toEqual(MOCK_ACCESS_CHECK.permissions);
 }
 
-
 describe('AccessCheck', () => {
 
   describe('AccessCheckBuilder', () => {

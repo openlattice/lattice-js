@@ -461,7 +461,7 @@ export type {
  *
  */
 
-const MOCK_ENTITY_TYPE = new EntityTypeBuilder()
+const MOCK_ENTITY_TYPE = (new EntityTypeBuilder())
   .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
   .setCategory(SecurableTypes.EntityType)
   .setDescription('MockEntityTypeDescription')
@@ -481,7 +481,7 @@ const MOCK_ENTITY_TYPE = new EntityTypeBuilder()
 const MOCK_ENTITY_TYPE_OBJECT = MOCK_ENTITY_TYPE.toObject();
 
 function genRandomEntityType() {
-  return new EntityTypeBuilder()
+  return (new EntityTypeBuilder())
     .setBaseType(genRandomUUID())
     .setCategory(SecurableTypes.EntityType)
     .setDescription(genRandomString())

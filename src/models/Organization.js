@@ -114,10 +114,10 @@ class Organization {
       apps: this.apps,
       connections: this.connections,
       emailDomains: this.emailDomains,
-      grants: mapValues(this.grants, (g :Grant) => g.toObject()),
-      members: this.members.map((p :Principal) => p.toObject()),
+      grants: mapValues(this.grants, (grant) => grant.toObject()),
+      members: this.members.map((principal) => principal.toObject()),
       principal: this.principal.toObject(),
-      roles: this.roles.map((r :Role) => r.toObject()),
+      roles: this.roles.map((role) => role.toObject()),
       title: this.title,
     };
 

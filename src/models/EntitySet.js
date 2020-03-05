@@ -195,7 +195,7 @@ class EntitySetBuilder {
     }
 
     if (!isNonEmptyString(description)) {
-      throw new Error('invalid parameter: description must be a non-empty string');
+      throw new Error('invalid parameter: "description" must be a non-empty string');
     }
 
     this.description = description;
@@ -205,7 +205,7 @@ class EntitySetBuilder {
   setEntityTypeId(entityTypeId :UUID) :EntitySetBuilder {
 
     if (!isValidUUID(entityTypeId)) {
-      throw new Error('invalid parameter: entityTypeId must be a valid UUID');
+      throw new Error('invalid parameter: "entityTypeId" must be a valid UUID');
     }
 
     this.entityTypeId = entityTypeId;
@@ -240,7 +240,7 @@ class EntitySetBuilder {
     }
 
     if (!isValidUUID(entitySetId)) {
-      throw new Error('invalid parameter: entitySetId must be a valid UUID');
+      throw new Error('invalid parameter: "entitySetId" must be a valid UUID');
     }
 
     this.id = entitySetId;
@@ -271,7 +271,7 @@ class EntitySetBuilder {
   setName(name :string) :EntitySetBuilder {
 
     if (!isNonEmptyString(name)) {
-      throw new Error('invalid parameter: name must be a non-empty string');
+      throw new Error('invalid parameter: "name" must be a non-empty string');
     }
 
     this.name = name;
@@ -285,7 +285,7 @@ class EntitySetBuilder {
     }
 
     if (!isValidUUID(organizationId)) {
-      throw new Error('invalid parameter: organizationId must be a valid UUID');
+      throw new Error('invalid parameter: "organizationId" must be a valid UUID');
     }
 
     this.organizationId = organizationId;
@@ -295,7 +295,7 @@ class EntitySetBuilder {
   setTitle(title :string) :EntitySetBuilder {
 
     if (!isNonEmptyString(title)) {
-      throw new Error('invalid parameter: title must be a non-empty string');
+      throw new Error('invalid parameter: "title" must be a non-empty string');
     }
 
     this.title = title;

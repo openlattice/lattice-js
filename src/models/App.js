@@ -158,17 +158,17 @@ class AppBuilder {
     return this;
   }
 
-  setId(appId :?UUID) :AppBuilder {
+  setId(id :?UUID) :AppBuilder {
 
-    if (!isDefined(appId) || isEmptyString(appId)) {
+    if (!isDefined(id) || isEmptyString(id)) {
       return this;
     }
 
-    if (!isValidUUID(appId)) {
-      throw new Error('invalid parameter: "appId" must be a valid UUID');
+    if (!isValidUUID(id)) {
+      throw new Error('invalid parameter: "id" must be a valid UUID');
     }
 
-    this.id = appId;
+    this.id = id;
     return this;
   }
 
