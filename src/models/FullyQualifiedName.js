@@ -149,6 +149,8 @@ export default class FullyQualifiedName {
   namespace :string;
   name :string;
 
+  static of = (...args :any[]) => new FullyQualifiedName(...args)
+
   static isValid = (...args :any[]) :boolean => {
 
     if (args.length !== 1 && args.length !== 2) {
