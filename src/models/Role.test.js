@@ -1,8 +1,16 @@
 import { Map, Set, fromJS } from 'immutable';
-import Role, { ROLE_CLASS_PACKAGE, RoleBuilder, isValidRole as isValid } from './Role';
-import { AT_CLASS } from '../constants/GlobalConstants';
-import { MOCK_ROLE, genRandomRole } from '../utils/testing/MockData';
 
+import {
+  MOCK_ROLE,
+  MOCK_ROLE_OBJECT,
+  ROLE_CLASS_PACKAGE,
+  Role,
+  RoleBuilder,
+  genRandomRole,
+  isValidRole as isValid,
+} from './Role';
+
+import { AT_CLASS } from '../constants/GlobalConstants';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_SS,
@@ -10,9 +18,84 @@ import {
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
+function expectValidInstance(value) {
+
+  expect(value).toBeInstanceOf(Role);
+  expect(value[AT_CLASS]).toEqual(ROLE_CLASS_PACKAGE);
+
+  expect(value.aclKey).toBeDefined();
+  expect(value.description).toBeDefined();
+  expect(value.id).toBeDefined();
+  expect(value.organizationId).toBeDefined();
+  expect(value.principal).toBeDefined();
+  expect(value.title).toBeDefined();
+
+  expect(value.aclKey).toEqual(MOCK_ROLE.aclKey);
+  expect(value.description).toEqual(MOCK_ROLE.description);
+  expect(value.id).toEqual(MOCK_ROLE.id);
+  expect(value.organizationId).toEqual(MOCK_ROLE.organizationId);
+  expect(value.principal).toEqual(MOCK_ROLE.principal);
+  expect(value.title).toEqual(MOCK_ROLE.title);
+}
+
 describe('Role', () => {
 
   describe('RoleBuilder', () => {
+
+    describe('constructor()', () => {
+
+      test('should construct given an instance', () => {
+        expectValidInstance(
+          (new RoleBuilder(MOCK_ROLE)).build()
+        );
+      });
+
+      test('should construct given an object literal', () => {
+        expectValidInstance(
+          (new RoleBuilder({ ...MOCK_ROLE })).build()
+        );
+        expectValidInstance(
+          (new RoleBuilder(MOCK_ROLE_OBJECT)).build()
+        );
+      });
+
+      test('should construct given an immutable object', () => {
+        expectValidInstance(
+          (new RoleBuilder(MOCK_ROLE.toImmutable())).build()
+        );
+        expectValidInstance(
+          (new RoleBuilder(fromJS({ ...MOCK_ROLE }))).build()
+        );
+        expectValidInstance(
+          (new RoleBuilder(fromJS(MOCK_ROLE_OBJECT))).build()
+        );
+      });
+
+    });
+
+    describe('setDescription()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
+          expect(() => {
+            (new RoleBuilder()).setDescription(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new RoleBuilder()).setDescription();
+        }).not.toThrow();
+        expect(() => {
+          (new RoleBuilder()).setDescription('');
+        }).not.toThrow();
+        expect(() => {
+          (new RoleBuilder()).setDescription(MOCK_ROLE.description);
+        }).not.toThrow();
+      });
+
+    });
 
     describe('setId()', () => {
 
@@ -59,48 +142,6 @@ describe('Role', () => {
 
     });
 
-    describe('setTitle()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setTitle();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new RoleBuilder()).setTitle(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setTitle(MOCK_ROLE.title);
-        }).not.toThrow();
-      });
-
-    });
-
-    describe('setDescription()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(() => {
-            (new RoleBuilder()).setDescription(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setDescription();
-        }).not.toThrow();
-        expect(() => {
-          (new RoleBuilder()).setDescription(MOCK_ROLE.description);
-        }).not.toThrow();
-      });
-
-    });
-
     describe('setPrincipal()', () => {
 
       test('should throw when given invalid parameters', () => {
@@ -122,11 +163,33 @@ describe('Role', () => {
 
     });
 
+    describe('setTitle()', () => {
+
+      test('should throw when given invalid parameters', () => {
+        expect(() => {
+          (new RoleBuilder()).setTitle();
+        }).toThrow();
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(() => {
+            (new RoleBuilder()).setTitle(invalidInput);
+          }).toThrow();
+        });
+      });
+
+      test('should not throw when given valid parameters', () => {
+        expect(() => {
+          (new RoleBuilder()).setTitle(MOCK_ROLE.title);
+        }).not.toThrow();
+      });
+
+    });
+
     describe('build()', () => {
 
       test('should throw when a required property has not been set', () => {
 
         expect(() => {
+          // omitting setOrganizationId()
           (new RoleBuilder())
             .setDescription(MOCK_ROLE.description)
             .setId(MOCK_ROLE.id)
@@ -136,20 +199,22 @@ describe('Role', () => {
         }).toThrow();
 
         expect(() => {
-          (new RoleBuilder())
-            .setDescription(MOCK_ROLE.description)
-            .setId(MOCK_ROLE.id)
-            .setOrganizationId(MOCK_ROLE.organizationId)
-            .setPrincipal(MOCK_ROLE.principal)
-            .build();
-        }).toThrow();
-
-        expect(() => {
+          // omitting setPrincipal()
           (new RoleBuilder())
             .setDescription(MOCK_ROLE.description)
             .setId(MOCK_ROLE.id)
             .setOrganizationId(MOCK_ROLE.organizationId)
             .setTitle(MOCK_ROLE.title)
+            .build();
+        }).toThrow();
+
+        expect(() => {
+          // omitting setTitle()
+          (new RoleBuilder())
+            .setDescription(MOCK_ROLE.description)
+            .setId(MOCK_ROLE.id)
+            .setOrganizationId(MOCK_ROLE.organizationId)
+            .setPrincipal(MOCK_ROLE.principal)
             .build();
         }).toThrow();
       });
@@ -157,8 +222,9 @@ describe('Role', () => {
       test('should not throw when an optional property has not been set', () => {
 
         expect(() => {
+          // omitting setDescription()
           (new RoleBuilder())
-            .setDescription(MOCK_ROLE.description)
+            .setId(MOCK_ROLE.id)
             .setOrganizationId(MOCK_ROLE.organizationId)
             .setPrincipal(MOCK_ROLE.principal)
             .setTitle(MOCK_ROLE.title)
@@ -166,8 +232,9 @@ describe('Role', () => {
         }).not.toThrow();
 
         expect(() => {
+          // omitting setId()
           (new RoleBuilder())
-            .setId(MOCK_ROLE.id)
+            .setDescription(MOCK_ROLE.description)
             .setOrganizationId(MOCK_ROLE.organizationId)
             .setPrincipal(MOCK_ROLE.principal)
             .setTitle(MOCK_ROLE.title)
@@ -185,26 +252,7 @@ describe('Role', () => {
           .setTitle(MOCK_ROLE.title)
           .build();
 
-        expect(role).toBeInstanceOf(Role);
-        expect(role[AT_CLASS]).toEqual(ROLE_CLASS_PACKAGE);
-
-        expect(role.aclKey).toBeDefined();
-        expect(role.aclKey).toEqual(MOCK_ROLE.aclKey);
-
-        expect(role.description).toBeDefined();
-        expect(role.description).toEqual(MOCK_ROLE.description);
-
-        expect(role.id).toBeDefined();
-        expect(role.id).toEqual(MOCK_ROLE.id);
-
-        expect(role.organizationId).toBeDefined();
-        expect(role.organizationId).toEqual(MOCK_ROLE.organizationId);
-
-        expect(role.principal).toBeDefined();
-        expect(role.principal).toEqual(MOCK_ROLE.principal);
-
-        expect(role.title).toBeDefined();
-        expect(role.title).toEqual(MOCK_ROLE.title);
+        expectValidInstance(role);
       });
 
     });
@@ -216,32 +264,11 @@ describe('Role', () => {
     describe('valid', () => {
 
       test('should return true when given a valid object literal', () => {
+        expect(isValid(MOCK_ROLE_OBJECT)).toEqual(true);
+      });
+
+      test('should return true when given a valid instance ', () => {
         expect(isValid(MOCK_ROLE)).toEqual(true);
-      });
-
-      test('should return true when given a valid object instance ', () => {
-        expect(isValid(
-          new Role(
-            MOCK_ROLE.id,
-            MOCK_ROLE.organizationId,
-            MOCK_ROLE.title,
-            MOCK_ROLE.description,
-            MOCK_ROLE.principal
-          )
-        )).toEqual(true);
-      });
-
-      test('should return true when given an instance constructed by the builder', () => {
-
-        const role = (new RoleBuilder())
-          .setId(MOCK_ROLE.id)
-          .setOrganizationId(MOCK_ROLE.organizationId)
-          .setTitle(MOCK_ROLE.title)
-          .setDescription(MOCK_ROLE.description)
-          .setPrincipal(MOCK_ROLE.principal)
-          .build();
-
-        expect(isValid(role)).toEqual(true);
       });
 
     });
@@ -258,6 +285,12 @@ describe('Role', () => {
         });
       });
 
+      test('should return false when given an object literal with an invalid "description" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ROLE, description: invalidInput })).toEqual(false);
+        });
+      });
+
       test('should return false when given an object literal with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_ROLE, id: invalidInput })).toEqual(false);
@@ -270,34 +303,42 @@ describe('Role', () => {
         });
       });
 
-      test('should return false when given an object literal with an invalid "title" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ROLE, title: invalidInput })).toEqual(false);
-        });
-      });
-
-      test('should return false when given an object literal with an invalid "description" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid({ ...MOCK_ROLE, description: invalidInput })).toEqual(false);
-        });
-      });
-
       test('should return false when given an object literal with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_ROLE, principal: invalidInput })).toEqual(false);
         });
       });
 
+      test('should return false when given an object literal with an invalid "title" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid({ ...MOCK_ROLE, title: invalidInput })).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "description" property', () => {
+        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
+          expect(isValid(
+            new Role({
+              description: invalidInput,
+              id: MOCK_ROLE.id,
+              organizationId: MOCK_ROLE.organizationId,
+              principal: MOCK_ROLE.principal,
+              title: MOCK_ROLE.title,
+            })
+          )).toEqual(false);
+        });
+      });
+
       test('should return false when given an instance with an invalid "id" property', () => {
         INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
           expect(isValid(
-            new Role(
-              invalidInput,
-              MOCK_ROLE.organizationId,
-              MOCK_ROLE.title,
-              MOCK_ROLE.description,
-              MOCK_ROLE.principal,
-            )
+            new Role({
+              description: MOCK_ROLE.description,
+              id: invalidInput,
+              organizationId: MOCK_ROLE.organizationId,
+              principal: MOCK_ROLE.principal,
+              title: MOCK_ROLE.title,
+            })
           )).toEqual(false);
         });
       });
@@ -305,41 +346,13 @@ describe('Role', () => {
       test('should return false when given an instance with an invalid "organizationId" property', () => {
         INVALID_PARAMS_SS.forEach((invalidInput) => {
           expect(isValid(
-            new Role(
-              MOCK_ROLE.id,
-              invalidInput,
-              MOCK_ROLE.title,
-              MOCK_ROLE.description,
-              MOCK_ROLE.principal,
-            )
-          )).toEqual(false);
-        });
-      });
-
-      test('should return false when given an instance with an invalid "title" property', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(isValid(
-            new Role(
-              MOCK_ROLE.id,
-              MOCK_ROLE.organizationId,
-              invalidInput,
-              MOCK_ROLE.description,
-              MOCK_ROLE.principal,
-            )
-          )).toEqual(false);
-        });
-      });
-
-      test('should return false when given an instance with an invalid "description" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(isValid(
-            new Role(
-              MOCK_ROLE.id,
-              MOCK_ROLE.organizationId,
-              MOCK_ROLE.title,
-              invalidInput,
-              MOCK_ROLE.principal,
-            )
+            new Role({
+              description: MOCK_ROLE.description,
+              id: MOCK_ROLE.id,
+              organizationId: invalidInput,
+              principal: MOCK_ROLE.principal,
+              title: MOCK_ROLE.title,
+            })
           )).toEqual(false);
         });
       });
@@ -347,13 +360,27 @@ describe('Role', () => {
       test('should return false when given an instance with an invalid "principal" property', () => {
         INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
-            new Role(
-              MOCK_ROLE.id,
-              MOCK_ROLE.organizationId,
-              MOCK_ROLE.title,
-              MOCK_ROLE.description,
-              invalidInput,
-            )
+            new Role({
+              description: MOCK_ROLE.description,
+              id: MOCK_ROLE.id,
+              organizationId: MOCK_ROLE.organizationId,
+              principal: invalidInput,
+              title: MOCK_ROLE.title,
+            })
+          )).toEqual(false);
+        });
+      });
+
+      test('should return false when given an instance with an invalid "title" property', () => {
+        INVALID_PARAMS.forEach((invalidInput) => {
+          expect(isValid(
+            new Role({
+              description: MOCK_ROLE.description,
+              id: MOCK_ROLE.id,
+              organizationId: MOCK_ROLE.organizationId,
+              principal: MOCK_ROLE.principal,
+              title: invalidInput,
+            })
           )).toEqual(false);
         });
       });
@@ -365,14 +392,7 @@ describe('Role', () => {
   describe('equality', () => {
 
     test('valueOf()', () => {
-      const role = new Role(
-        MOCK_ROLE.id,
-        MOCK_ROLE.organizationId,
-        MOCK_ROLE.title,
-        MOCK_ROLE.description,
-        MOCK_ROLE.principal,
-      );
-      expect(role.valueOf()).toEqual(
+      expect(MOCK_ROLE.valueOf()).toEqual(
         fromJS({
           [AT_CLASS]: ROLE_CLASS_PACKAGE,
           aclKey: MOCK_ROLE.aclKey,
@@ -388,20 +408,8 @@ describe('Role', () => {
     test('Immutable.Set', () => {
 
       const randomRole = genRandomRole();
-      const role0 = new Role(
-        MOCK_ROLE.id,
-        MOCK_ROLE.organizationId,
-        MOCK_ROLE.title,
-        MOCK_ROLE.description,
-        MOCK_ROLE.principal,
-      );
-      const role1 = new Role(
-        MOCK_ROLE.id,
-        MOCK_ROLE.organizationId,
-        MOCK_ROLE.title,
-        MOCK_ROLE.description,
-        MOCK_ROLE.principal,
-      );
+      const role0 = (new RoleBuilder(MOCK_ROLE)).build();
+      const role1 = (new RoleBuilder(MOCK_ROLE)).build();
 
       const testSet = Set()
         .add(role0)
@@ -429,20 +437,8 @@ describe('Role', () => {
     test('Immutable.Map', () => {
 
       const randomRole = genRandomRole();
-      const role0 = new Role(
-        MOCK_ROLE.id,
-        MOCK_ROLE.organizationId,
-        MOCK_ROLE.title,
-        MOCK_ROLE.description,
-        MOCK_ROLE.principal,
-      );
-      const role1 = new Role(
-        MOCK_ROLE.id,
-        MOCK_ROLE.organizationId,
-        MOCK_ROLE.title,
-        MOCK_ROLE.description,
-        MOCK_ROLE.principal,
-      );
+      const role0 = (new RoleBuilder(MOCK_ROLE)).build();
+      const role1 = (new RoleBuilder(MOCK_ROLE)).build();
 
       const testMap = Map()
         .set(role0, 'test_value_1')
