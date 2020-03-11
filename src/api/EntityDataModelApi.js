@@ -21,7 +21,7 @@ import has from 'lodash/has';
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
+import FQN from '../models/FQN';
 import Logger from '../utils/Logger';
 import { EDM_API } from '../constants/ApiNames';
 import {
@@ -257,7 +257,7 @@ export function updateEntityDataModel(edm :Object) :Promise<*> {
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
+ * @param {FQN} schema
  * @return {Promise<Schema>} - a Promise that will resolve with the Schema definition as its fulfillment value
  *
  * @example
@@ -265,17 +265,17 @@ export function updateEntityDataModel(edm :Object) :Promise<*> {
  *   { "namespace": "LATTICE", "name": "MySchema" }
  * );
  */
-export function getSchema(schemaFqn :FullyQualifiedName) :Promise<*> {
+export function getSchema(schemaFQN :FQN) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
+  if (!FQN.isValid(schemaFQN)) {
+    errorMsg = 'invalid parameter: schemaFQN must be a valid FQN';
+    LOG.error(errorMsg, schemaFQN);
     return Promise.reject(errorMsg);
   }
 
-  const { namespace, name } = schemaFqn;
+  const { namespace, name } = schemaFQN;
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${SCHEMA_PATH}/${namespace}/${name}`)
@@ -347,7 +347,7 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<*> {
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
+ * @param {FQN} schemaFQN
  * @param {string} fileType
  * @returns {string} - the direct file download URL
  *
@@ -357,13 +357,13 @@ export function getAllSchemasInNamespace(namespace :string) :Promise<*> {
  *   "json"
  * );
  */
-export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string) :?string {
+export function getSchemaFileUrl(schemaFQN :FQN, fileType :string) :?string {
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
+  if (!FQN.isValid(schemaFQN)) {
+    errorMsg = 'invalid parameter: schemaFQN must be a valid FQN';
+    LOG.error(errorMsg, schemaFQN);
     return null;
   }
 
@@ -373,7 +373,7 @@ export function getSchemaFileUrl(schemaFqn :FullyQualifiedName, fileType :string
     return null;
   }
 
-  const { namespace, name } = schemaFqn;
+  const { namespace, name } = schemaFQN;
   return `${getApiBaseUrl(EDM_API)}/${SCHEMA_PATH}/${namespace}/${name}?fileType=${fileType.toLowerCase()}`;
 }
 
@@ -422,7 +422,7 @@ export function createSchema(schema :Schema) :Promise<*> {
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
+ * @param {FQN} schemaFQN
  * @return {Promise} - a Promise that resolves without a value
  *
  * @example
@@ -430,17 +430,17 @@ export function createSchema(schema :Schema) :Promise<*> {
  *   { "namespace": "LATTICE", "name": "MySchema" }
  * );
  */
-export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<*> {
+export function createEmptySchema(schemaFQN :FQN) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(schemaFqn)) {
-    errorMsg = 'invalid parameter: schemaFqn must be a valid FQN';
-    LOG.error(errorMsg, schemaFqn);
+  if (!FQN.isValid(schemaFQN)) {
+    errorMsg = 'invalid parameter: schemaFQN must be a valid FQN';
+    LOG.error(errorMsg, schemaFQN);
     return Promise.reject(errorMsg);
   }
 
-  const { namespace, name } = schemaFqn;
+  const { namespace, name } = schemaFQN;
 
   return getApiAxiosInstance(EDM_API)
     .put(`/${SCHEMA_PATH}/${namespace}/${name}`)
@@ -458,7 +458,7 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<*> {
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} schemaFqn
+ * @param {FQN} schemaFQN
  * @param {string} action
  * @param {UUID[]} entityTypeIds
  * @param {UUID[]} propertyTypeIds
@@ -477,7 +477,7 @@ export function createEmptySchema(schemaFqn :FullyQualifiedName) :Promise<*> {
  * )
  */
 export function updateSchema(
-  schemaFQN :FullyQualifiedName,
+  schemaFQN :FQN,
   action :string,
   entityTypeIds :UUID[],
   propertyTypeIds :UUID[]
@@ -485,7 +485,7 @@ export function updateSchema(
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(schemaFQN)) {
+  if (!FQN.isValid(schemaFQN)) {
     errorMsg = 'invalid parameter: schemaFQN must be a valid FQN';
     LOG.error(errorMsg, schemaFQN);
     return Promise.reject(errorMsg);
@@ -593,7 +593,7 @@ export function getEntityType(entityTypeId :UUID) :Promise<*> {
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} entityTypeFqn
+ * @param {FQN} entityTypeFQN
  * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
@@ -601,17 +601,17 @@ export function getEntityType(entityTypeId :UUID) :Promise<*> {
  *   { "namespace": "LATTICE", "name": "MyProperty" }
  * );
  */
-export function getEntityTypeId(entityTypeFqn :FullyQualifiedName) :Promise<*> {
+export function getEntityTypeId(entityTypeFQN :FQN) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(entityTypeFqn)) {
-    errorMsg = 'invalid parameter: entityTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, entityTypeFqn);
+  if (!FQN.isValid(entityTypeFQN)) {
+    errorMsg = 'invalid parameter: entityTypeFQN must be a valid FQN';
+    LOG.error(errorMsg, entityTypeFQN);
     return Promise.reject(errorMsg);
   }
 
-  const { namespace, name } = entityTypeFqn;
+  const { namespace, name } = entityTypeFQN;
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${IDS_PATH}/${ENTITY_TYPE_PATH}/${namespace}/${name}`)
@@ -969,7 +969,7 @@ export function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :
     return Promise.reject(errorMsg);
   }
 
-  if (has(metadata, 'type') && !FullyQualifiedName.isValid(metadata.type)) {
+  if (has(metadata, 'type') && !FQN.isValid(metadata.type)) {
     errorMsg = 'invalid parameter: type must be a valid FQN';
     LOG.error(errorMsg, metadata.type);
     return Promise.reject(errorMsg);
@@ -1089,7 +1089,7 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<*> {
  *
  * @static
  * @memberof lattice.EntityDataModelApi
- * @param {FullyQualifiedName} propertyTypeFqn
+ * @param {FQN} propertyTypeFQN
  * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
  *
  * @example
@@ -1097,17 +1097,17 @@ export function getPropertyType(propertyTypeId :UUID) :Promise<*> {
  *   { namespace: "LATTICE", name: "MyProperty" }
  * );
  */
-export function getPropertyTypeId(propertyTypeFqn :FullyQualifiedName) :Promise<*> {
+export function getPropertyTypeId(propertyTypeFQN :FQN) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(propertyTypeFqn)) {
-    errorMsg = 'invalid parameter: propertyTypeFqn must be a valid FQN';
-    LOG.error(errorMsg, propertyTypeFqn);
+  if (!FQN.isValid(propertyTypeFQN)) {
+    errorMsg = 'invalid parameter: propertyTypeFQN must be a valid FQN';
+    LOG.error(errorMsg, propertyTypeFQN);
     return Promise.reject(errorMsg);
   }
 
-  const { namespace, name } = propertyTypeFqn;
+  const { namespace, name } = propertyTypeFQN;
 
   return getApiAxiosInstance(EDM_API)
     .get(`/${IDS_PATH}/${PROPERTY_TYPE_PATH}/${namespace}/${name}`)
@@ -1326,7 +1326,7 @@ export function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Objec
     return Promise.reject(errorMsg);
   }
 
-  if (has(metadata, 'type') && !FullyQualifiedName.isValid(metadata.type)) {
+  if (has(metadata, 'type') && !FQN.isValid(metadata.type)) {
     errorMsg = 'invalid parameter: type must be a valid FQN';
     LOG.error(errorMsg, metadata.type);
     return Promise.reject(errorMsg);

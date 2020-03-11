@@ -1348,7 +1348,7 @@ function addConnections(organizationId :UUID, connections :string[]) :Promise<*>
  *   ["connection1", "connection2"]
  * );
  */
-function setConnections(organizationId :UUID, connections :string[]) :Promise<*> {
+function setConnections(organizationId :UUID, connections :?string[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -1369,6 +1369,7 @@ function setConnections(organizationId :UUID, connections :string[]) :Promise<*>
   }
   else {
     connectionsSet = Set().withMutations((set :Set<UUID>) => (
+      // $FlowFixMe
       connections.forEach((connection :string) => set.add(connection))
     )).toJS();
   }

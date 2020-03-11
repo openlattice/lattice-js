@@ -6,7 +6,7 @@ import { Map, fromJS, isImmutable } from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUUID } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('EntityDataKey');
@@ -105,22 +105,7 @@ class EntityDataKeyBuilder {
   }
 }
 
-function isValidEntityDataKey(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new EntityDataKeyBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
+const isValidEntityDataKey = (value :any) :boolean => isValidModel(value, EntityDataKeyBuilder, LOG);
 
 export {
   EntityDataKey,

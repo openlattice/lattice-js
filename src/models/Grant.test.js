@@ -16,132 +16,32 @@ import {
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(Grant);
-
-  expect(value.attribute).toBeDefined();
-  expect(value.grantType).toBeDefined();
-  expect(value.mappings).toBeDefined();
-
-  expect(value.attribute).toEqual(MOCK_GRANT.attribute);
-  expect(value.grantType).toEqual(MOCK_GRANT.grantType);
-  expect(value.mappings).toEqual(MOCK_GRANT.mappings);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfType,
+} from '../utils/testing/ModelTestUtils';
 
 describe('Grant', () => {
 
   describe('GrantBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new GrantBuilder(MOCK_GRANT)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new GrantBuilder({ ...MOCK_GRANT })).build()
-        );
-        expectValidInstance(
-          (new GrantBuilder(MOCK_GRANT_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new GrantBuilder(MOCK_GRANT.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new GrantBuilder(fromJS({ ...MOCK_GRANT }))).build()
-        );
-        expectValidInstance(
-          (new GrantBuilder(fromJS(MOCK_GRANT_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(Grant, GrantBuilder, MOCK_GRANT);
     });
 
     describe('setAttribute()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(() => {
-            (new GrantBuilder()).setAttribute(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new GrantBuilder()).setAttribute();
-        }).not.toThrow();
-        expect(() => {
-          (new GrantBuilder()).setAttribute('');
-        }).not.toThrow();
-        expect(() => {
-          (new GrantBuilder()).setAttribute(MOCK_GRANT.attribute);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_GRANT.attribute];
+      testBuilderSetter(GrantBuilder, 'setAttribute', validParams, true);
     });
 
     describe('setGrantType()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new GrantBuilder()).setGrantType();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new GrantBuilder()).setGrantType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        Object.values(GrantTypes).forEach((type) => {
-          expect(() => {
-            (new GrantBuilder()).setGrantType(type);
-          }).not.toThrow();
-        });
-      });
-
+      testBuilderSetterOfType(GrantBuilder, 'setGrantType', GrantTypes);
     });
 
     describe('setMappings()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new GrantBuilder()).setMappings(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new GrantBuilder()).setMappings([...MOCK_GRANT.mappings, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new GrantBuilder()).setMappings();
-        }).not.toThrow();
-        expect(() => {
-          (new GrantBuilder()).setMappings([]);
-        }).not.toThrow();
-        expect(() => {
-          (new GrantBuilder()).setMappings(MOCK_GRANT.mappings);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_GRANT.mappings];
+      testBuilderSetter(GrantBuilder, 'setMappings', validParams, true);
     });
 
     describe('build()', () => {

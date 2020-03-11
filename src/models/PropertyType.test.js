@@ -18,329 +18,72 @@ import {
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(PropertyType);
-
-  expect(value.analyzer).toBeDefined();
-  expect(value.datatype).toBeDefined();
-  expect(value.description).toBeDefined();
-  expect(value.enumValues).toBeDefined();
-  expect(value.id).toBeDefined();
-  expect(value.indexType).toBeDefined();
-  expect(value.multiValued).toBeDefined();
-  expect(value.pii).toBeDefined();
-  expect(value.schemas).toBeDefined();
-  expect(value.title).toBeDefined();
-  expect(value.type).toBeDefined();
-
-  expect(value.analyzer).toEqual(MOCK_PROPERTY_TYPE.analyzer);
-  expect(value.datatype).toEqual(MOCK_PROPERTY_TYPE.datatype);
-  expect(value.description).toEqual(MOCK_PROPERTY_TYPE.description);
-  expect(value.enumValues).toEqual(MOCK_PROPERTY_TYPE.enumValues);
-  expect(value.id).toEqual(MOCK_PROPERTY_TYPE.id);
-  expect(value.indexType).toEqual(MOCK_PROPERTY_TYPE.indexType);
-  expect(value.multiValued).toEqual(MOCK_PROPERTY_TYPE.multiValued);
-  expect(value.pii).toEqual(MOCK_PROPERTY_TYPE.pii);
-  expect(value.schemas).toEqual(MOCK_PROPERTY_TYPE.schemas);
-  expect(value.title).toEqual(MOCK_PROPERTY_TYPE.title);
-  expect(value.type).toEqual(MOCK_PROPERTY_TYPE.type);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfType,
+} from '../utils/testing/ModelTestUtils';
+import { AnalyzerTypes, IndexTypes } from '../constants/types';
 
 describe('PropertyType', () => {
 
   describe('PropertyTypeBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new PropertyTypeBuilder(MOCK_PROPERTY_TYPE)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new PropertyTypeBuilder({ ...MOCK_PROPERTY_TYPE })).build()
-        );
-        expectValidInstance(
-          (new PropertyTypeBuilder(MOCK_PROPERTY_TYPE_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new PropertyTypeBuilder(MOCK_PROPERTY_TYPE.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new PropertyTypeBuilder(fromJS({ ...MOCK_PROPERTY_TYPE }))).build()
-        );
-        expectValidInstance(
-          (new PropertyTypeBuilder(fromJS(MOCK_PROPERTY_TYPE_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(PropertyType, PropertyTypeBuilder, MOCK_PROPERTY_TYPE);
     });
 
     describe('setAnalyzer()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setAnalyzer(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setAnalyzer();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setAnalyzer('');
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setAnalyzer(MOCK_PROPERTY_TYPE.analyzer);
-        }).not.toThrow();
-      });
-
+      testBuilderSetterOfType(PropertyTypeBuilder, 'setAnalyzer', AnalyzerTypes, true);
     });
 
     describe('setDataType()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setDataType();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setDataType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setDataType(MOCK_PROPERTY_TYPE.datatype);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.datatype];
+      testBuilderSetter(PropertyTypeBuilder, 'setDataType', validParams);
     });
 
     describe('setDescription()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setDescription(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setDescription();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setDescription('');
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setDescription(MOCK_PROPERTY_TYPE.description);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.description];
+      testBuilderSetter(PropertyTypeBuilder, 'setDescription', validParams, true);
     });
 
     describe('setEnumValues()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setEnumValues(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setEnumValues();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setEnumValues([]);
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setEnumValues(MOCK_PROPERTY_TYPE.enumValues);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.enumValues];
+      testBuilderSetter(PropertyTypeBuilder, 'setEnumValues', validParams, true);
     });
 
     describe('setId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setId();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setId('');
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setId(MOCK_PROPERTY_TYPE.id);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.id];
+      testBuilderSetter(PropertyTypeBuilder, 'setId', validParams, true);
     });
 
     describe('setIndexType()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setIndexType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setIndexType();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setIndexType('');
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setIndexType(MOCK_PROPERTY_TYPE.indexType);
-        }).not.toThrow();
-      });
-
+      testBuilderSetterOfType(PropertyTypeBuilder, 'setIndexType', IndexTypes, true);
     });
 
     describe('setMultiValued()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setMultiValued(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setMultiValued();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setPii(MOCK_PROPERTY_TYPE.multiValued);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.multiValued];
+      testBuilderSetter(PropertyTypeBuilder, 'setMultiValued', validParams, true);
     });
 
     describe('setPii()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setPii(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setPii();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setPii(MOCK_PROPERTY_TYPE.pii);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.pii];
+      testBuilderSetter(PropertyTypeBuilder, 'setPii', validParams, true);
     });
 
     describe('setSchemas()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setSchemas(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new PropertyTypeBuilder()).setSchemas([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setSchemas([...MOCK_PROPERTY_TYPE.schemas, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setSchemas();
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setSchemas([]);
-        }).not.toThrow();
-        expect(() => {
-          (new PropertyTypeBuilder()).setSchemas(MOCK_PROPERTY_TYPE.schemas);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.schemas];
+      testBuilderSetter(PropertyTypeBuilder, 'setSchemas', validParams, true);
     });
 
     describe('setTitle()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setTitle();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setTitle(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setTitle(MOCK_PROPERTY_TYPE.title);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.title];
+      testBuilderSetter(PropertyTypeBuilder, 'setTitle', validParams);
     });
 
     describe('setType()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setType();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new PropertyTypeBuilder()).setType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PropertyTypeBuilder()).setType(MOCK_PROPERTY_TYPE.type);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PROPERTY_TYPE.type];
+      testBuilderSetter(PropertyTypeBuilder, 'setType', validParams);
     });
 
     describe('build()', () => {

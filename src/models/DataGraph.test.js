@@ -10,93 +10,27 @@ import {
 } from './DataGraph';
 
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_OBJECT } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(DataGraph);
-
-  expect(value.associations).toBeDefined();
-  expect(value.entities).toBeDefined();
-
-  expect(value.associations).toEqual(MOCK_DATA_GRAPH.associations);
-  expect(value.entities).toEqual(MOCK_DATA_GRAPH.entities);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+} from '../utils/testing/ModelTestUtils';
 
 describe('DataGraph', () => {
 
   describe('DataGraphBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new DataGraphBuilder(MOCK_DATA_GRAPH)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new DataGraphBuilder({ ...MOCK_DATA_GRAPH })).build()
-        );
-        expectValidInstance(
-          (new DataGraphBuilder(MOCK_DATA_GRAPH_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new DataGraphBuilder(MOCK_DATA_GRAPH.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new DataGraphBuilder(fromJS({ ...MOCK_DATA_GRAPH }))).build()
-        );
-        expectValidInstance(
-          (new DataGraphBuilder(fromJS(MOCK_DATA_GRAPH_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(DataGraph, DataGraphBuilder, MOCK_DATA_GRAPH);
     });
 
     describe('setAssociations()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new DataGraphBuilder()).setAssociations();
-        }).toThrow();
-        INVALID_PARAMS_FOR_OPTIONAL_OBJECT.forEach((invalidInput) => {
-          expect(() => {
-            (new DataGraphBuilder()).setAssociations(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new DataGraphBuilder()).setAssociations(MOCK_DATA_GRAPH.associations);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_DATA_GRAPH.associations];
+      testBuilderSetter(DataGraphBuilder, 'setAssociations', validParams, true);
     });
 
     describe('setEntities()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new DataGraphBuilder()).setEntities();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new DataGraphBuilder()).setEntities(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new DataGraphBuilder()).setEntities(MOCK_DATA_GRAPH.entities);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_DATA_GRAPH.entities];
+      testBuilderSetter(DataGraphBuilder, 'setEntities', validParams);
     });
 
     describe('build()', () => {
@@ -104,18 +38,20 @@ describe('DataGraph', () => {
       test('should throw when a required property has not been set', () => {
 
         expect(() => {
-          // omitting setAssociations
-          (new DataGraphBuilder())
-            .setEntities(MOCK_DATA_GRAPH.entities)
-            .build();
-        }).toThrow();
-
-        expect(() => {
           // omitting setEntities
           (new DataGraphBuilder())
             .setAssociations(MOCK_DATA_GRAPH.associations)
             .build();
         }).toThrow();
+      });
+
+      test('should set required properties that are allowed to be empty', () => {
+
+        const dataGraph = (new DataGraphBuilder())
+          .setEntities(MOCK_DATA_GRAPH.entities)
+          .build();
+
+        expect(dataGraph.associations).toEqual({});
       });
 
       test('should return a valid instance', () => {

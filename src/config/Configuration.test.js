@@ -1,10 +1,7 @@
 /* eslint-disable global-require */
 
+import { INVALID_PARAMS, INVALID_PARAMS_OPTIONAL_STRING } from '../utils/testing/InvalidParams';
 import { genRandomString } from '../utils/testing/MockUtils';
-import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_FOR_OPTIONAL
-} from '../utils/testing/Invalid';
 
 const MOCK_AUTH_TOKEN = `${genRandomString()}.${genRandomString()}.${genRandomString()}`;
 
@@ -66,7 +63,7 @@ describe('Configuration', () => {
     describe('authToken', () => {
 
       test('should throw if authToken is invalid', () => {
-        INVALID_PARAMS_FOR_OPTIONAL.forEach((invalid) => {
+        INVALID_PARAMS_OPTIONAL_STRING.forEach((invalid) => {
           expect(() => {
             Config.configure({
               authToken: invalid,

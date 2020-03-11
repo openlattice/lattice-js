@@ -11,95 +11,27 @@ import {
 
 import { ActionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(AclData);
-
-  expect(value.acl).toBeDefined();
-  expect(value.action).toBeDefined();
-
-  expect(value.acl).toEqual(MOCK_ACL_DATA.acl);
-  expect(value.action).toEqual(MOCK_ACL_DATA.action);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfType,
+} from '../utils/testing/ModelTestUtils';
 
 describe('AclData', () => {
 
   describe('AclDataBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new AclDataBuilder(MOCK_ACL_DATA)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new AclDataBuilder({ ...MOCK_ACL_DATA })).build()
-        );
-        expectValidInstance(
-          (new AclDataBuilder(MOCK_ACL_DATA_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new AclDataBuilder(MOCK_ACL_DATA.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new AclDataBuilder(fromJS({ ...MOCK_ACL_DATA }))).build()
-        );
-        expectValidInstance(
-          (new AclDataBuilder(fromJS(MOCK_ACL_DATA_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(AclData, AclDataBuilder, MOCK_ACL_DATA);
     });
 
     describe('setAcl()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AclDataBuilder()).setAcl();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new AclDataBuilder()).setAcl(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AclDataBuilder()).setAcl(MOCK_ACL_DATA.acl);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ACL_DATA.acl];
+      testBuilderSetter(AclDataBuilder, 'setAcl', validParams);
     });
 
     describe('setAction()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AclDataBuilder()).setAction();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new AclDataBuilder()).setAction(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        Object.values(ActionTypes).forEach((type) => {
-          expect(() => {
-            (new AclDataBuilder()).setAction(type);
-          }).not.toThrow();
-        });
-      });
-
+      testBuilderSetterOfType(AclDataBuilder, 'setAction', ActionTypes);
     });
 
     describe('build()', () => {

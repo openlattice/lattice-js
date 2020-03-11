@@ -20,7 +20,8 @@
 import Logger from '../utils/Logger';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
-import { AclData, isValidAclData, isValidAclDataArray } from '../models/AclData';
+import { AclData, isValidAclData } from '../models/AclData';
+import { isNonEmptyArray } from '../utils/LangUtils';
 import { isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 
@@ -171,7 +172,13 @@ export function updateAcls(aclData :AclData[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidAclDataArray(aclData)) {
+  if (!isNonEmptyArray(aclData)) {
+    errorMsg = 'invalid parameter: aclData must be a non-empty array';
+    LOG.error(errorMsg, aclData);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!aclData.every(isValidAclData)) {
     errorMsg = 'invalid parameter: aclData must be an array of valid AclData objects';
     LOG.error(errorMsg, aclData);
     return Promise.reject(errorMsg);

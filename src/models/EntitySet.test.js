@@ -1,14 +1,15 @@
 import { Map, Set, fromJS } from 'immutable';
 
 import {
-  MOCK_ENTITY_SET,
-  MOCK_ENTITY_SET_OBJECT,
   EntitySet,
   EntitySetBuilder,
+  MOCK_ENTITY_SET,
+  MOCK_ENTITY_SET_OBJECT,
   genRandomEntitySet,
   isValidEntitySet as isValid,
 } from './EntitySet';
 
+import { EntitySetFlagTypes } from '../constants/types';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
@@ -17,309 +18,62 @@ import {
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(EntitySet);
-
-  expect(value.contacts).toBeDefined();
-  expect(value.description).toBeDefined();
-  expect(value.entityTypeId).toBeDefined();
-  expect(value.flags).toBeDefined();
-  expect(value.id).toBeDefined();
-  expect(value.linkedEntitySets).toBeDefined();
-  expect(value.name).toBeDefined();
-  expect(value.organizationId).toBeDefined();
-  expect(value.title).toBeDefined();
-
-  expect(value.contacts).toEqual(MOCK_ENTITY_SET.contacts);
-  expect(value.description).toEqual(MOCK_ENTITY_SET.description);
-  expect(value.entityTypeId).toEqual(MOCK_ENTITY_SET.entityTypeId);
-  expect(value.flags).toEqual(MOCK_ENTITY_SET.flags);
-  expect(value.id).toEqual(MOCK_ENTITY_SET.id);
-  expect(value.linkedEntitySets).toEqual(MOCK_ENTITY_SET.linkedEntitySets);
-  expect(value.name).toEqual(MOCK_ENTITY_SET.name);
-  expect(value.organizationId).toEqual(MOCK_ENTITY_SET.organizationId);
-  expect(value.title).toEqual(MOCK_ENTITY_SET.title);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfTypes,
+} from '../utils/testing/ModelTestUtils';
 
 describe('EntitySet', () => {
 
   describe('EntitySetBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new EntitySetBuilder(MOCK_ENTITY_SET)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new EntitySetBuilder({ ...MOCK_ENTITY_SET })).build()
-        );
-        expectValidInstance(
-          (new EntitySetBuilder(MOCK_ENTITY_SET_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new EntitySetBuilder(MOCK_ENTITY_SET.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new EntitySetBuilder(fromJS({ ...MOCK_ENTITY_SET }))).build()
-        );
-        expectValidInstance(
-          (new EntitySetBuilder(fromJS(MOCK_ENTITY_SET_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(EntitySet, EntitySetBuilder, MOCK_ENTITY_SET);
     });
 
     describe('setContacts()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setContacts(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new EntitySetBuilder()).setContacts([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setContacts(Object.values(MOCK_ENTITY_SET.contacts).push(invalidInput));
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setContacts();
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setContacts([]);
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setContacts(MOCK_ENTITY_SET.contacts);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.contacts];
+      testBuilderSetter(EntitySetBuilder, 'setContacts', validParams, true);
     });
 
     describe('setDescription()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setDescription(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setDescription();
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setDescription('');
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setDescription(MOCK_ENTITY_SET.description);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.description];
+      testBuilderSetter(EntitySetBuilder, 'setDescription', validParams, true);
     });
 
     describe('setEntityTypeId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setEntityTypeId();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setEntityTypeId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setEntityTypeId(MOCK_ENTITY_SET.entityTypeId);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.entityTypeId];
+      testBuilderSetter(EntitySetBuilder, 'setEntityTypeId', validParams);
     });
 
     describe('setFlags()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setFlags(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new EntitySetBuilder()).setFlags([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setFlags(
-              Object.values(MOCK_ENTITY_SET.flags).push(invalidInput)
-            );
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setFlags();
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setFlags([]);
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setFlags(MOCK_ENTITY_SET.flags);
-        }).not.toThrow();
-      });
-
+      testBuilderSetterOfTypes(EntitySetBuilder, 'setFlags', EntitySetFlagTypes, true);
     });
 
     describe('setId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setId();
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setId('');
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setId(MOCK_ENTITY_SET.id);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.id];
+      testBuilderSetter(EntitySetBuilder, 'setId', validParams, true);
     });
 
     describe('setLinkedEntitySets()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setLinkedEntitySets(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new EntitySetBuilder()).setLinkedEntitySets([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setLinkedEntitySets(
-              Object.values(MOCK_ENTITY_SET.linkedEntitySets).push(invalidInput)
-            );
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setLinkedEntitySets();
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setLinkedEntitySets([]);
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.linkedEntitySets];
+      testBuilderSetter(EntitySetBuilder, 'setLinkedEntitySets', validParams, true);
     });
 
     describe('setName()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setName();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setName(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setName(MOCK_ENTITY_SET.name);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.name];
+      testBuilderSetter(EntitySetBuilder, 'setName', validParams);
     });
 
     describe('setOrganizationId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setOrganizationId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setOrganizationId();
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setOrganizationId('');
-        }).not.toThrow();
-        expect(() => {
-          (new EntitySetBuilder()).setOrganizationId(MOCK_ENTITY_SET.organizationId);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.organizationId];
+      testBuilderSetter(EntitySetBuilder, 'setOrganizationId', validParams, true);
     });
 
     describe('setTitle()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setTitle();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new EntitySetBuilder()).setTitle(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntitySetBuilder()).setTitle(MOCK_ENTITY_SET.title);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_SET.title];
+      testBuilderSetter(EntitySetBuilder, 'setTitle', validParams);
     });
 
     describe('build()', () => {

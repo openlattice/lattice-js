@@ -11,14 +11,14 @@ import {
   isImmutable,
 } from 'immutable';
 
-import FullyQualifiedName from './FullyQualifiedName';
-import type { FQN, FQNObject } from './FullyQualifiedName';
+import FQN from './FQN';
+import type { FQNObject } from './FQN';
 
 import AnalyzerTypes from '../constants/types/AnalyzerTypes';
 import IndexTypes from '../constants/types/IndexTypes';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomBoolean, genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 import type { AnalyzerType, IndexType } from '../constants/types';
 
@@ -325,7 +325,7 @@ class PropertyTypeBuilder {
     }
 
     try {
-      this.schemas = Set(schemas).map((fqn) => FullyQualifiedName.of(fqn)).toJS();
+      this.schemas = Set(schemas).map((fqn) => FQN.of(fqn)).toJS();
     }
     catch (e) {
       throw new Error('invalid parameter: "schemas" must be a non-empty array of valid FQNs');
@@ -346,7 +346,7 @@ class PropertyTypeBuilder {
 
   setType(propertyTypeFQN :FQN | FQNObject | string) :PropertyTypeBuilder {
 
-    this.type = FullyQualifiedName.of(propertyTypeFQN);
+    this.type = FQN.of(propertyTypeFQN);
     return this;
   }
 
@@ -384,33 +384,12 @@ class PropertyTypeBuilder {
   }
 }
 
-function isValidPropertyType(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new PropertyTypeBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidPropertyTypeArray(propertyTypes :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(propertyTypes, isValidPropertyType);
-}
+const isValidPropertyType = (value :any) :boolean => isValidModel(value, PropertyTypeBuilder, LOG);
 
 export {
   PropertyType,
   PropertyTypeBuilder,
   isValidPropertyType,
-  isValidPropertyTypeArray,
 };
 
 export type {
@@ -432,9 +411,9 @@ const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
   .setIndexType(IndexTypes.BTREE)
   .setMultiValued(true)
   .setPii(false)
-  .setSchemas([FullyQualifiedName.of('mock.schema')])
+  .setSchemas([FQN.of('mock.schema')])
   .setTitle('MockPropertyTypeTitle')
-  .setType(FullyQualifiedName.of('mock.propertytype'))
+  .setType(FQN.of('mock.propertytype'))
   .build();
 
 const MOCK_PROPERTY_TYPE_OBJECT = MOCK_PROPERTY_TYPE.toObject();
@@ -449,9 +428,9 @@ function genRandomPropertyType() :PropertyType {
     .setIndexType(IndexTypes.HASH)
     .setMultiValued(genRandomBoolean())
     .setPii(genRandomBoolean())
-    .setSchemas([new FullyQualifiedName(genRandomString(), genRandomString())])
+    .setSchemas([FQN.of(genRandomString(), genRandomString())])
     .setTitle(genRandomString())
-    .setType(FullyQualifiedName.of(genRandomString(), genRandomString()))
+    .setType(FQN.of(genRandomString(), genRandomString()))
     .build();
 }
 

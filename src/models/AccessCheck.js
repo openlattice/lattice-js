@@ -14,7 +14,7 @@ import {
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
@@ -94,7 +94,7 @@ class AccessCheckBuilder {
     return this;
   }
 
-  setPermissions(permissions :$ReadOnlyArray<PermissionType>) :AccessCheckBuilder {
+  setPermissions(permissions :?$ReadOnlyArray<PermissionType>) :AccessCheckBuilder {
 
     if (!isDefined(permissions)) {
       return this;
@@ -132,33 +132,12 @@ class AccessCheckBuilder {
   }
 }
 
-function isValidAccessCheck(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new AccessCheckBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidAccessCheckArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidAccessCheck);
-}
+const isValidAccessCheck = (value :any) :boolean => isValidModel(value, AccessCheckBuilder, LOG);
 
 export {
   AccessCheck,
   AccessCheckBuilder,
   isValidAccessCheck,
-  isValidAccessCheckArray,
 };
 
 export type {

@@ -17,10 +17,11 @@
  * // EntitySetsApi.get...
  */
 
+import isArray from 'lodash/isArray';
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
-import { EntitySet, isValidEntitySetArray } from '../models/EntitySet';
+import { EntitySet, isValidEntitySet } from '../models/EntitySet';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import {
   ALL_PATH,
@@ -29,7 +30,7 @@ import {
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
 import { getApiAxiosInstance } from '../utils/axios';
-import { isDefined, isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
+import { isDefined, isNonEmptyArray, isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 
 const LOG = new Logger('EntitySetsApi');
@@ -62,7 +63,13 @@ function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidEntitySetArray(entitySets)) {
+  if (!isNonEmptyArray(entitySets)) {
+    errorMsg = 'invalid parameter: entitySets must be a non-empty array';
+    LOG.error(errorMsg, entitySets);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!entitySets.every(isValidEntitySet)) {
     errorMsg = 'invalid parameter: entitySets must be a non-empty array of valid EntitySets';
     LOG.error(errorMsg, entitySets);
     return Promise.reject(errorMsg);

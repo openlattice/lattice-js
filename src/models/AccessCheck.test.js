@@ -1,127 +1,37 @@
 import { Map, Set, fromJS } from 'immutable';
 
 import {
-  MOCK_ACCESS_CHECK,
-  MOCK_ACCESS_CHECK_OBJECT,
   AccessCheck,
   AccessCheckBuilder,
+  MOCK_ACCESS_CHECK,
+  MOCK_ACCESS_CHECK_OBJECT,
   genRandomAccessCheck,
   isValidAccessCheck as isValid,
 } from './AccessCheck';
 
 import { PermissionTypes } from '../constants/types';
-import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(AccessCheck);
-
-  expect(value.aclKey).toBeDefined();
-  expect(value.permissions).toBeDefined();
-
-  expect(value.aclKey).toEqual(MOCK_ACCESS_CHECK.aclKey);
-  expect(value.permissions).toEqual(MOCK_ACCESS_CHECK.permissions);
-}
+import { INVALID_PARAMS, INVALID_PARAMS_OPTIONAL_ARRAY } from '../utils/testing/InvalidParams';
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfTypes,
+} from '../utils/testing/ModelTestUtils';
 
 describe('AccessCheck', () => {
 
   describe('AccessCheckBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new AccessCheckBuilder(MOCK_ACCESS_CHECK)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new AccessCheckBuilder({ ...MOCK_ACCESS_CHECK })).build()
-        );
-        expectValidInstance(
-          (new AccessCheckBuilder(MOCK_ACCESS_CHECK_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new AccessCheckBuilder(MOCK_ACCESS_CHECK.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new AccessCheckBuilder(fromJS({ ...MOCK_ACCESS_CHECK }))).build()
-        );
-        expectValidInstance(
-          (new AccessCheckBuilder(fromJS(MOCK_ACCESS_CHECK_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(AccessCheck, AccessCheckBuilder, MOCK_ACCESS_CHECK);
     });
 
     describe('setAclKey()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new AccessCheckBuilder()).setAclKey(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new AccessCheckBuilder()).setAclKey([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new AccessCheckBuilder()).setAclKey([...MOCK_ACCESS_CHECK.aclKey, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AccessCheckBuilder()).setAclKey(MOCK_ACCESS_CHECK.aclKey);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ACCESS_CHECK.aclKey];
+      testBuilderSetter(AccessCheckBuilder, 'setAclKey', validParams);
     });
 
     describe('setPermissions()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AccessCheckBuilder()).setPermissions(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new AccessCheckBuilder()).setPermissions([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AccessCheckBuilder()).setPermissions(Object.values(PermissionTypes).push(invalidInput));
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AccessCheckBuilder()).setPermissions();
-        }).not.toThrow();
-        expect(() => {
-          (new AccessCheckBuilder()).setPermissions([]);
-        }).not.toThrow();
-        Object.values(PermissionTypes).forEach((type) => {
-          expect(() => {
-            (new AccessCheckBuilder()).setPermissions([type]);
-          }).not.toThrow();
-        });
-      });
-
+      testBuilderSetterOfTypes(AccessCheckBuilder, 'setPermissions', PermissionTypes, true);
     });
 
     describe('build()', () => {
@@ -182,27 +92,33 @@ describe('AccessCheck', () => {
       });
 
       test('should return false when given an object literal with an invalid "aclKey" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, aclKey: invalidInput })).toEqual(false);
+        });
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, aclKey: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an object literal with an invalid "permissions" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, permissions: invalidInput })).toEqual(false);
+        });
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid({ ...MOCK_ACCESS_CHECK_OBJECT, permissions: [invalidInput] })).toEqual(false);
         });
       });
 
       test('should return false when given an instance with an invalid "aclKey" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new AccessCheck({
               aclKey: invalidInput,
               permissions: MOCK_ACCESS_CHECK.permissions,
             })
           )).toEqual(false);
+        });
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new AccessCheck({
               aclKey: [invalidInput],
@@ -213,13 +129,15 @@ describe('AccessCheck', () => {
       });
 
       test('should return false when given an instance with an invalid "permissions" property', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
+        INVALID_PARAMS_OPTIONAL_ARRAY.forEach((invalidInput) => {
           expect(isValid(
             new AccessCheck({
               aclKey: MOCK_ACCESS_CHECK.aclKey,
               permissions: invalidInput,
             })
           )).toEqual(false);
+        });
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(isValid(
             new AccessCheck({
               aclKey: MOCK_ACCESS_CHECK.aclKey,

@@ -11,7 +11,7 @@ import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { AT_CLASS } from '../constants/GlobalConstants';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Role');
@@ -201,34 +201,13 @@ class RoleBuilder {
   }
 }
 
-function isValidRole(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new RoleBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidRoleArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidRole);
-}
+const isValidRole = (value :any) :boolean => isValidModel(value, RoleBuilder, LOG);
 
 export {
   ROLE_CLASS_PACKAGE,
   Role,
   RoleBuilder,
   isValidRole,
-  isValidRoleArray,
 };
 
 export type {

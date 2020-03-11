@@ -13,16 +13,16 @@ import {
   SCHEMA_PATH,
   VERSION_PATH,
 } from '../constants/UrlConstants';
-import { FullyQualifiedName } from '../models';
+import { FQN } from '../models';
 import { MOCK_ASSOCIATION_TYPE } from '../models/AssociationType';
 import { MOCK_ENTITY_TYPE } from '../models/EntityType';
 import { MOCK_PROPERTY_TYPE } from '../models/PropertyType';
 import { MOCK_SCHEMA } from '../models/Schema';
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-  INVALID_PARAMS_SS,
-} from '../utils/testing/Invalid';
+  INVALID_PARAMS_OPTIONAL_ARRAY,
+  INVALID_PARAMS_REQUIRED_STRING,
+} from '../utils/testing/InvalidParams';
 import { genMockBaseUrl, genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
@@ -35,7 +35,7 @@ import {
 } from '../utils/testing/TestUtils';
 
 const MOCK_NAMESPACE = 'mock';
-const MOCK_FQN = FullyQualifiedName.of('mock.fqn');
+const MOCK_FQN = FQN.of('mock.fqn');
 const MOCK_EDM_DM = {
   associationTypes: [MOCK_ASSOCIATION_TYPE],
   entityTypes: [MOCK_ENTITY_TYPE],
@@ -202,7 +202,7 @@ function testGetSchema() {
     const fnToTest = EntityDataModelApi.getSchema;
 
     const validParams = [MOCK_FQN];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${SCHEMA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -222,7 +222,7 @@ function testGetSchemaFileUrl() {
 
     const MOCK_FILE_TYPE = 'json';
     const validParams = [MOCK_FQN, MOCK_FILE_TYPE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS_REQUIRED_STRING];
 
     test('should return the correct URL', () => {
 
@@ -269,7 +269,7 @@ function testGetAllSchemasInNamespace() {
     const fnToTest = EntityDataModelApi.getAllSchemasInNamespace;
 
     const validParams = [MOCK_FQN.namespace];
-    const invalidParams = [INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
     const axiosParams = [`/${SCHEMA_PATH}/${MOCK_FQN.namespace}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -307,7 +307,7 @@ function testCreateEmptySchema() {
     const fnToTest = EntityDataModelApi.createEmptySchema;
 
     const validParams = [MOCK_FQN];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${SCHEMA_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -334,10 +334,10 @@ function testUpdateSchema() {
     ];
 
     const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY
+      INVALID_PARAMS,
+      INVALID_PARAMS,
+      INVALID_PARAMS_OPTIONAL_ARRAY,
+      INVALID_PARAMS_OPTIONAL_ARRAY,
     ];
 
     const axiosParams = [
@@ -365,7 +365,7 @@ function testGetEntityType() {
     const fnToTest = EntityDataModelApi.getEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -384,7 +384,7 @@ function testGetEntityTypeId() {
     const fnToTest = EntityDataModelApi.getEntityTypeId;
 
     const validParams = [MOCK_FQN];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${IDS_PATH}/${ENTITY_TYPE_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -439,7 +439,7 @@ function testDeleteEntityType() {
     const fnToTest = EntityDataModelApi.deleteEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -458,7 +458,7 @@ function testAddPropertyTypeToEntityType() {
     const fnToTest = EntityDataModelApi.addPropertyTypeToEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id, MOCK_PROPERTY_TYPE.id];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -477,7 +477,7 @@ function testRemovePropertyTypeFromEntityType() {
     const fnToTest = EntityDataModelApi.removePropertyTypeFromEntityType;
 
     const validParams = [MOCK_ENTITY_TYPE.id, MOCK_PROPERTY_TYPE.id];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -496,7 +496,7 @@ function testUpdateEntityTypeMetaData() {
     const fnToTest = EntityDataModelApi.updateEntityTypeMetaData;
 
     const validParams = [MOCK_ENTITY_TYPE.id, MOCK_METADATA_UPDATE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${ENTITY_TYPE_PATH}/${MOCK_ENTITY_TYPE.id}`, MOCK_METADATA_UPDATE];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -515,7 +515,7 @@ function testGetPropertyType() {
     const fnToTest = EntityDataModelApi.getPropertyType;
 
     const validParams = [MOCK_PROPERTY_TYPE.id];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -534,7 +534,7 @@ function testGetPropertyTypeId() {
     const fnToTest = EntityDataModelApi.getPropertyTypeId;
 
     const validParams = [MOCK_FQN];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${IDS_PATH}/${PROPERTY_TYPE_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -570,7 +570,7 @@ function testGetAllPropertyTypesInNamespace() {
     const fnToTest = EntityDataModelApi.getAllPropertyTypesInNamespace;
 
     const validParams = [MOCK_FQN.namespace];
-    const invalidParams = [INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${NAMESPACE_PATH}/${MOCK_FQN.namespace}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -608,7 +608,7 @@ function testDeletePropertyType() {
     const fnToTest = EntityDataModelApi.deletePropertyType;
 
     const validParams = [MOCK_PROPERTY_TYPE.id];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -627,7 +627,7 @@ function testUpdatePropertyTypeMetaData() {
     const fnToTest = EntityDataModelApi.updatePropertyTypeMetaData;
 
     const validParams = [MOCK_PROPERTY_TYPE.id, MOCK_METADATA_UPDATE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${PROPERTY_TYPE_PATH}/${MOCK_PROPERTY_TYPE.id}`, MOCK_METADATA_UPDATE];
 
     testApiShouldReturnPromise(fnToTest, validParams);

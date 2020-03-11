@@ -11,7 +11,7 @@ import {
   isImmutable,
 } from 'immutable';
 
-import FullyQualifiedName from './FullyQualifiedName';
+import FQN from './FQN';
 import {
   MOCK_ENTITY_TYPE,
   EntityType,
@@ -25,12 +25,12 @@ import {
   genRandomPropertyType,
 } from './PropertyType';
 import type { EntityTypeObject } from './EntityType';
-import type { FQN, FQNObject } from './FullyQualifiedName';
+import type { FQNObject } from './FQN';
 import type { PropertyTypeObject } from './PropertyType';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel } from '../utils/ValidationUtils';
 import { genRandomString } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Schema');
@@ -125,7 +125,7 @@ class SchemaBuilder {
 
   setFQN(fqn :FQN) :SchemaBuilder {
 
-    this.fqn = FullyQualifiedName.of(fqn);
+    this.fqn = FQN.of(fqn);
     return this;
   }
 
@@ -173,33 +173,12 @@ class SchemaBuilder {
   }
 }
 
-function isValidSchema(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new SchemaBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidSchemaArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidSchema);
-}
+const isValidSchema = (value :any) :boolean => isValidModel(value, SchemaBuilder, LOG);
 
 export {
   Schema,
   SchemaBuilder,
   isValidSchema,
-  isValidSchemaArray,
 };
 
 export type {
@@ -214,7 +193,7 @@ export type {
 
 const MOCK_SCHEMA = (new SchemaBuilder())
   .setEntityTypes([MOCK_ENTITY_TYPE])
-  .setFQN(FullyQualifiedName.of('mock.schema'))
+  .setFQN(FQN.of('mock.schema'))
   .setPropertyTypes([MOCK_PROPERTY_TYPE])
   .build();
 
@@ -223,7 +202,7 @@ const MOCK_SCHEMA_OBJECT = MOCK_SCHEMA.toObject();
 function genRandomSchema() {
   return (new SchemaBuilder())
     .setEntityTypes([genRandomEntityType()])
-    .setFQN(FullyQualifiedName.of(genRandomString(), genRandomString()))
+    .setFQN(FQN.of(genRandomString(), genRandomString()))
     .setPropertyTypes([genRandomPropertyType(), genRandomPropertyType()])
     .build();
 }

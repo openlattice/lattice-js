@@ -4,7 +4,7 @@
 
 import has from 'lodash/has';
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
+import FQN from '../models/FQN';
 import Logger from '../utils/Logger';
 import { APP_API } from '../constants/ApiNames';
 import {
@@ -21,6 +21,7 @@ import { isValidAppType } from '../models/AppType';
 import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 import { isValidTypeArray, isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
+import type { App, AppType } from '../models';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AppApi');
@@ -251,7 +252,7 @@ export function installApp(appId :UUID, organizationId :UUID, prefix :string) :P
   *   "url": "https://openlattice.com/my_app"
   * });
   */
-export function createApp(app :Object) :Promise<*> {
+export function createApp(app :App) :Promise<*> {
 
   let errorMsg = '';
 
@@ -291,7 +292,7 @@ export function createApp(app :Object) :Promise<*> {
   *   "entityTypeId": "ec6865e6-e60e-424b-a071-6a9c1603d735"
   * });
   */
-export function createAppType(appType :Object) :Promise<*> {
+export function createAppType(appType :AppType) :Promise<*> {
 
   let errorMsg = '';
 
@@ -350,7 +351,7 @@ export function getAppType(appTypeId :UUID) :Promise<*> {
   *
   * @static
   * @memberof lattice.AppApi
-  * @param {FullyQualifiedName} appTypeFqn
+  * @param {FQN} appTypeFqn
   * @return {Promise<Object>} - a Promise that will resolve with the details of an app type
   *
   * @example
@@ -359,11 +360,11 @@ export function getAppType(appTypeId :UUID) :Promise<*> {
   * );
   */
 
-export function getAppTypeByFqn(appTypeFqn :FullyQualifiedName) :Promise<*> {
+export function getAppTypeByFqn(appTypeFqn :FQN) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!FullyQualifiedName.isValid(appTypeFqn)) {
+  if (!FQN.isValid(appTypeFqn)) {
     errorMsg = 'invalid parameter: appTypeFqn must be a valid FQN';
     LOG.error(errorMsg, appTypeFqn);
     return Promise.reject(errorMsg);
@@ -779,7 +780,7 @@ export function updateAppTypeMetadata(appTypeId :UUID, metadataUpdate :Object) :
     return Promise.reject(errorMsg);
   }
 
-  if (has(metadataUpdate, 'type') && !FullyQualifiedName.isValid(metadataUpdate.type)) {
+  if (has(metadataUpdate, 'type') && !FQN.isValid(metadataUpdate.type)) {
     errorMsg = 'invalid parameter: type must be a valid FQN';
     LOG.error(errorMsg, metadataUpdate.type);
     return Promise.reject(errorMsg);

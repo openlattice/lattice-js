@@ -11,7 +11,11 @@ import {
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
 import { MOCK_ENTITY_SET } from '../models/EntitySet';
-import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import {
+  INVALID_PARAMS,
+  INVALID_PARAMS_OPTIONAL_SPECIAL_STRING,
+  INVALID_PARAMS_REQUIRED_STRING,
+} from '../utils/testing/InvalidParams';
 import { genMockBaseUrl, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
@@ -78,7 +82,7 @@ function testDeleteEntitySet() {
     const fnToTest = EntitySetsApi.deleteEntitySet;
 
     const validParams = [MOCK_ENTITY_SET.id];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${ALL_PATH}/${MOCK_ENTITY_SET.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -114,7 +118,7 @@ function testGetEntitySet() {
     const fnToTest = EntitySetsApi.getEntitySet;
 
     const validParams = [MOCK_ENTITY_SET.id];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${ALL_PATH}/${MOCK_ENTITY_SET.id}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -133,7 +137,7 @@ function testGetEntitySetId() {
     const fnToTest = EntitySetsApi.getEntitySetId;
 
     const validParams = [MOCK_ENTITY_SET.name];
-    const invalidParams = [INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
     const axiosParams = [`/${IDS_PATH}/${MOCK_ENTITY_SET.name}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -152,7 +156,7 @@ function testGetEntitySetIds() {
     const fnToTest = EntitySetsApi.getEntitySetIds;
 
     const validParams = [[MOCK_ENTITY_SET.name]];
-    const invalidParams = [INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
     const axiosParams = [
       `/${IDS_PATH}`,
       [MOCK_ENTITY_SET.name],
@@ -174,7 +178,7 @@ function testGetPropertyTypeMetaDataForEntitySet() {
     const fnToTest = EntitySetsApi.getPropertyTypeMetaDataForEntitySet;
 
     const validParams = [genRandomUUID()];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${ALL_PATH}/${validParams[0]}/${METADATA_PATH}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -190,7 +194,7 @@ function testGetPropertyTypeMetaDataForEntitySet() {
     const fnToTest = EntitySetsApi.getPropertyTypeMetaDataForEntitySet;
 
     const validParams = [genRandomUUID(), genRandomUUID()];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_SS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS_OPTIONAL_SPECIAL_STRING];
     const axiosParams = [`/${ALL_PATH}/${validParams[0]}/${PROPERTIES_PATH}/${validParams[1]}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -209,7 +213,7 @@ function testGetPropertyTypeMetaDataForEntitySets() {
     const fnToTest = EntitySetsApi.getPropertyTypeMetaDataForEntitySets;
 
     const validParams = [[genRandomUUID(), genRandomUUID()]];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${ALL_PATH}/${METADATA_PATH}`, validParams[0]];
 
     testApiShouldReturnPromise(fnToTest, validParams);

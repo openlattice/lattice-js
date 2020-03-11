@@ -18,170 +18,43 @@ import {
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(Role);
-  expect(value[AT_CLASS]).toEqual(ROLE_CLASS_PACKAGE);
-
-  expect(value.aclKey).toBeDefined();
-  expect(value.description).toBeDefined();
-  expect(value.id).toBeDefined();
-  expect(value.organizationId).toBeDefined();
-  expect(value.principal).toBeDefined();
-  expect(value.title).toBeDefined();
-
-  expect(value.aclKey).toEqual(MOCK_ROLE.aclKey);
-  expect(value.description).toEqual(MOCK_ROLE.description);
-  expect(value.id).toEqual(MOCK_ROLE.id);
-  expect(value.organizationId).toEqual(MOCK_ROLE.organizationId);
-  expect(value.principal).toEqual(MOCK_ROLE.principal);
-  expect(value.title).toEqual(MOCK_ROLE.title);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfType,
+} from '../utils/testing/ModelTestUtils';
 
 describe('Role', () => {
 
   describe('RoleBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new RoleBuilder(MOCK_ROLE)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new RoleBuilder({ ...MOCK_ROLE })).build()
-        );
-        expectValidInstance(
-          (new RoleBuilder(MOCK_ROLE_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new RoleBuilder(MOCK_ROLE.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new RoleBuilder(fromJS({ ...MOCK_ROLE }))).build()
-        );
-        expectValidInstance(
-          (new RoleBuilder(fromJS(MOCK_ROLE_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(Role, RoleBuilder, MOCK_ROLE);
     });
 
     describe('setDescription()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(() => {
-            (new RoleBuilder()).setDescription(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setDescription();
-        }).not.toThrow();
-        expect(() => {
-          (new RoleBuilder()).setDescription('');
-        }).not.toThrow();
-        expect(() => {
-          (new RoleBuilder()).setDescription(MOCK_ROLE.description);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ROLE.description];
+      testBuilderSetter(RoleBuilder, 'setDescription', validParams, true);
     });
 
     describe('setId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new RoleBuilder()).setId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setId();
-        }).not.toThrow();
-        expect(() => {
-          (new RoleBuilder()).setId('');
-        }).not.toThrow();
-        expect(() => {
-          (new RoleBuilder()).setId(MOCK_ROLE.id);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ROLE.id];
+      testBuilderSetter(RoleBuilder, 'setId', validParams, true);
     });
 
     describe('setOrganizationId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setOrganizationId();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new RoleBuilder()).setOrganizationId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setOrganizationId(MOCK_ROLE.organizationId);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ROLE.organizationId];
+      testBuilderSetter(RoleBuilder, 'setOrganizationId', validParams);
     });
 
     describe('setPrincipal()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setPrincipal();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new RoleBuilder()).setPrincipal(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setPrincipal(MOCK_ROLE.principal);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ROLE.principal];
+      testBuilderSetter(RoleBuilder, 'setPrincipal', validParams);
     });
 
     describe('setTitle()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setTitle();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new RoleBuilder()).setTitle(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new RoleBuilder()).setTitle(MOCK_ROLE.title);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ROLE.title];
+      testBuilderSetter(RoleBuilder, 'setTitle', validParams);
     });
 
     describe('build()', () => {

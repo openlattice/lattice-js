@@ -21,10 +21,10 @@ import { DeleteTypes, UpdateTypes } from '../constants/types';
 import { MOCK_DATA_GRAPH } from '../models/DataGraph';
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-  INVALID_PARAMS_FOR_OPTIONAL_STRING,
-  INVALID_PARAMS_SS,
-} from '../utils/testing/Invalid';
+  INVALID_PARAMS_OPTIONAL_ARRAY,
+  INVALID_PARAMS_OPTIONAL_SPECIAL_STRING,
+  INVALID_PARAMS_REQUIRED_STRING,
+} from '../utils/testing/InvalidParams';
 import {
   genMockBaseUrl,
   genRandomString,
@@ -108,9 +108,9 @@ describe('DataApi', () => {
     ];
 
     const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+      INVALID_PARAMS,
+      INVALID_PARAMS_OPTIONAL_ARRAY,
+      INVALID_PARAMS_OPTIONAL_ARRAY,
     ];
 
     describe('should send a POST request with the correct params', () => {
@@ -172,9 +172,9 @@ describe('DataApi', () => {
     ];
 
     const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-      INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+      INVALID_PARAMS,
+      INVALID_PARAMS_OPTIONAL_ARRAY,
+      INVALID_PARAMS_OPTIONAL_ARRAY,
     ];
 
     describe('should send a POST request with the correct params', () => {
@@ -264,7 +264,7 @@ function createOrMergeEntityData() {
     }];
 
     const validParams = [mockEntitySetId, mockEntityData];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${SET_PATH}/?${SET_ID}=${mockEntitySetId}`, mockEntityData];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -285,13 +285,13 @@ function deleteEntitiesAndNeighbors() {
     const mockEntityKeyId = genRandomUUID();
     const validParams = [mockEntitySetId, { entityKeyIds: [mockEntityKeyId] }, DeleteTypes.Soft];
     const invalidParams = [
-      INVALID_PARAMS_SS,
+      INVALID_PARAMS,
       {
-        destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-        entityKeyIds: INVALID_PARAMS_SS,
-        sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+        destinationEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
+        entityKeyIds: INVALID_PARAMS,
+        sourceEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
       },
-      INVALID_PARAMS_SS,
+      INVALID_PARAMS,
     ];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -328,7 +328,7 @@ function deleteEntity() {
     const mockEKID = genRandomUUID();
     const mockESID = genRandomUUID();
     const validParams = [mockESID, mockEKID, DeleteTypes.Soft];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS, INVALID_PARAMS_OPTIONAL_SPECIAL_STRING];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);
@@ -359,7 +359,7 @@ function deleteEntityData() {
       const mockEKID = genRandomUUID();
       const mockBody = { data: [mockEKID] };
       const validParams = [mockESID, mockEKID, DeleteTypes.Soft];
-      const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_FOR_OPTIONAL_STRING];
+      const invalidParams = [INVALID_PARAMS, INVALID_PARAMS, INVALID_PARAMS_OPTIONAL_SPECIAL_STRING];
       testApiShouldReturnPromise(fnToTest, validParams);
       testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);
       testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
@@ -383,11 +383,7 @@ function deleteEntityData() {
       const mockEKIDs = [genRandomUUID()];
       const mockBody = { data: mockEKIDs };
       const validParams = [mockESID, mockEKIDs, DeleteTypes.Soft];
-      const invalidParams = [
-        INVALID_PARAMS_SS,
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-        INVALID_PARAMS_FOR_OPTIONAL_STRING
-      ];
+      const invalidParams = [INVALID_PARAMS, INVALID_PARAMS_OPTIONAL_ARRAY, INVALID_PARAMS_OPTIONAL_SPECIAL_STRING];
       testApiShouldReturnPromise(fnToTest, validParams);
       testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);
       testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
@@ -416,7 +412,7 @@ function deleteEntitySet() {
     const fnToTest = DataApi.deleteEntitySet;
     const mockEntitySetId = genRandomUUID();
     const validParams = [mockEntitySetId, 'Soft'];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);
@@ -447,7 +443,7 @@ function getEntityData() {
     const mockEntityKeyId = genRandomUUID();
 
     const validParams = [mockEntitySetId, mockEntityKeyId];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${mockEntitySetId}/${mockEntityKeyId}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -467,15 +463,8 @@ function getEntitySetDataFileUrl() {
     const mockEntitySetId = genRandomUUID();
     const mockCSRFToken = 'mock_csrf_token';
 
-    const validParams = [
-      mockEntitySetId,
-      MOCK_FILE_TYPE
-    ];
-
-    const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS
-    ];
+    const validParams = [mockEntitySetId, MOCK_FILE_TYPE];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS_REQUIRED_STRING];
 
     Config.getConfig.mockImplementation(() => fromJS({
       csrfToken: mockCSRFToken,
@@ -513,7 +502,7 @@ function getEntitySetSize() {
     const mockEntitySetId = genRandomUUID();
 
     const validParams = [mockEntitySetId];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${mockEntitySetId}/${COUNT_PATH}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -541,7 +530,7 @@ function replaceEntityData() {
     // TODO: generate invalid params for the "entities" param
 
     const validParams = [mockEntitySetId, mockEntityData, false];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS, []];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS, []];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);
@@ -587,7 +576,7 @@ function replaceEntityInEntitySet() {
     // TODO: generate invalid params for the "entity" param
 
     const validParams = [mockEntitySetId, mockEntityKeyId, mockEntity];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`, mockEntity];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -613,7 +602,7 @@ function replaceEntityInEntitySetUsingFqns() {
     // TODO: generate invalid params for the "entity" param
 
     const validParams = [mockEntitySetId, mockEntityKeyId, mockEntity];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${SET_PATH}/${mockEntitySetId}/${mockEntityKeyId}`, mockEntity];
 
     testApiShouldReturnPromise(fnToTest, validParams);

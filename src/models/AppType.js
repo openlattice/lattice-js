@@ -4,12 +4,12 @@
 
 import { Map, fromJS, isImmutable } from 'immutable';
 
-import FullyQualifiedName from './FullyQualifiedName';
-import type { FQN, FQNObject } from './FullyQualifiedName';
+import FQN from './FQN';
+import type { FQNObject } from './FQN';
 
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('AppType');
@@ -91,7 +91,7 @@ class AppTypeBuilder {
   entityTypeId :UUID;
   id :?UUID;
   title :string;
-  type :FullyQualifiedName;
+  type :FQN;
 
   constructor(value :any) {
 
@@ -161,7 +161,7 @@ class AppTypeBuilder {
 
   setType(appTypeFQN :FQN) :AppTypeBuilder {
 
-    this.type = FullyQualifiedName.of(appTypeFQN);
+    this.type = FQN.of(appTypeFQN);
     return this;
   }
 
@@ -189,33 +189,12 @@ class AppTypeBuilder {
   }
 }
 
-function isValidAppType(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new AppTypeBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidAppTypeArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidAppType);
-}
+const isValidAppType = (value :any) :boolean => isValidModel(value, AppTypeBuilder, LOG);
 
 export {
   AppType,
   AppTypeBuilder,
   isValidAppType,
-  isValidAppTypeArray,
 };
 
 export type {
@@ -233,7 +212,7 @@ const MOCK_APP_TYPE = (new AppTypeBuilder())
   .setEntityTypeId('cf411622-8b0e-4352-9bb2-367953fd09a3')
   .setId('27e5b4f0-243a-46c7-8ae3-8516ac0fad6a')
   .setTitle('MockAppTypeTitle')
-  .setType(FullyQualifiedName.of('mock.apptype'))
+  .setType(FQN.of('mock.apptype'))
   .build();
 
 const MOCK_APP_TYPE_OBJECT = MOCK_APP_TYPE.toObject();
@@ -244,7 +223,7 @@ function genRandomAppType() {
     .setEntityTypeId(genRandomUUID())
     .setId(genRandomUUID())
     .setTitle(genRandomString())
-    .setType(FullyQualifiedName.of(genRandomString(), genRandomString()))
+    .setType(FQN.of(genRandomString(), genRandomString()))
     .build();
 }
 

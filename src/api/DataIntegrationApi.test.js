@@ -1,26 +1,25 @@
 /* eslint-disable no-use-before-define */
 
-import * as AxiosUtils from '../utils/axios';
 import * as DataIntegrationApi from './DataIntegrationApi';
+
+import * as AxiosUtils from '../utils/axios';
 import { DATA_INTEGRATION_API } from '../constants/ApiNames';
 import { ENTITY_KEY_IDS_PATH } from '../constants/UrlConstants';
-import { INVALID_PARAMS } from '../utils/testing/Invalid';
-
+import { INVALID_PARAMS } from '../utils/testing/InvalidParams';
 import {
   genMockBaseUrl,
   genRandomString,
   genRandomUUID,
-  getMockAxiosInstance
+  getMockAxiosInstance,
 } from '../utils/testing/MockUtils';
-
 import {
   assertApiShouldSendCorrectHttpRequest,
   testApiShouldCatchRejectedPromise,
-  testApiShouldReturnPromise,
-  testApiShouldUseCorrectAxiosInstance,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
-  testApiShouldSendCorrectHttpRequest
+  testApiShouldReturnPromise,
+  testApiShouldSendCorrectHttpRequest,
+  testApiShouldUseCorrectAxiosInstance,
 } from '../utils/testing/TestUtils';
 
 const MOCK_ENTITIES = [

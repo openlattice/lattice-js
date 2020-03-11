@@ -1,119 +1,39 @@
+import {} from '../utils/testing/InvalidParams';
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
-  MOCK_ACE,
-  MOCK_ACE_OBJECT,
   Ace,
   AceBuilder,
+  MOCK_ACE,
+  MOCK_ACE_OBJECT,
   genRandomAce,
   isValidAce as isValid,
 } from './Ace';
 
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(Ace);
-
-  expect(value.permissions).toBeDefined();
-  expect(value.principal).toBeDefined();
-
-  expect(value.permissions).toEqual(MOCK_ACE.permissions);
-  expect(value.principal).toEqual(MOCK_ACE.principal);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfTypes,
+} from '../utils/testing/ModelTestUtils';
 
 describe('Ace', () => {
 
   describe('AceBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new AceBuilder(MOCK_ACE)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new AceBuilder({ ...MOCK_ACE })).build()
-        );
-        expectValidInstance(
-          (new AceBuilder(MOCK_ACE_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new AceBuilder(MOCK_ACE.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new AceBuilder(fromJS({ ...MOCK_ACE }))).build()
-        );
-        expectValidInstance(
-          (new AceBuilder(fromJS(MOCK_ACE_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(Ace, AceBuilder, MOCK_ACE);
     });
 
     describe('setPrincipal()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AceBuilder()).setPrincipal();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new AceBuilder()).setPrincipal(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AceBuilder()).setPrincipal(MOCK_ACE.principal);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ACE.principal];
+      testBuilderSetter(AceBuilder, 'setPrincipal', validParams);
     });
 
     describe('setPermissions()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AceBuilder()).setPermissions(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new AceBuilder()).setPermissions([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AceBuilder()).setPermissions(Object.values(PermissionTypes).push(invalidInput));
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AceBuilder()).setPermissions();
-        }).not.toThrow();
-        expect(() => {
-          (new AceBuilder()).setPermissions([]);
-        }).not.toThrow();
-        Object.values(PermissionTypes).forEach((type) => {
-          expect(() => {
-            (new AceBuilder()).setPermissions([type]);
-          }).not.toThrow();
-        });
-      });
-
+      testBuilderSetterOfTypes(AceBuilder, 'setPermissions', PermissionTypes, true);
     });
 
     describe('build()', () => {

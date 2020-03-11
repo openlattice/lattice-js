@@ -14,7 +14,7 @@ const EXPECTED_MODELS = Set([
   'EntityDataKeyBuilder',
   'EntitySetBuilder',
   'EntityTypeBuilder',
-  'FullyQualifiedName',
+  'FQN',
   'GrantBuilder',
   'OrganizationBuilder',
   'PrincipalBuilder',

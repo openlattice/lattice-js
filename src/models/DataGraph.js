@@ -2,6 +2,7 @@
  * @flow
  */
 
+import isEmpty from 'lodash/isEmpty';
 import {
   Map,
   fromJS,
@@ -11,7 +12,12 @@ import {
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidMultimap, isValidOrEmptyMultimap, isValidUUID } from '../utils/ValidationUtils';
+import {
+  isValidModel,
+  isValidMultimap,
+  isValidOrEmptyMultimap,
+  isValidUUID,
+} from '../utils/ValidationUtils';
 import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('DataGraph');
@@ -73,12 +79,17 @@ class DataGraphBuilder {
     }
   }
 
-  setAssociations(associations :Object) :DataGraphBuilder {
+  setAssociations(associations :?Object) :DataGraphBuilder {
+
+    if (!isDefined(associations)) {
+      return this;
+    }
 
     // TODO: still need to validate that associations are valid DataAssociation objects
 
     let theAssociations = associations;
     if (isCollection(associations)) {
+      // $FlowFixMe
       theAssociations = associations.toJS();
     }
 
@@ -110,7 +121,7 @@ class DataGraphBuilder {
   build() :DataGraph {
 
     if (!this.associations) {
-      throw new Error('missing property: "associations" is a required property');
+      this.associations = {};
     }
 
     if (!this.entities) {
@@ -124,22 +135,7 @@ class DataGraphBuilder {
   }
 }
 
-function isValidDataGraph(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new DataGraphBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
+const isValidDataGraph = (value :any) :boolean => isValidModel(value, DataGraphBuilder, LOG);
 
 export {
   DataGraph,

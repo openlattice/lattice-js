@@ -1,10 +1,10 @@
 import { Map, Set, fromJS } from 'immutable';
 
 import {
-  MOCK_APP,
-  MOCK_APP_OBJECT,
   App,
   AppBuilder,
+  MOCK_APP,
+  MOCK_APP_OBJECT,
   genRandomApp,
   isValidApp as isValid,
 } from './App';
@@ -15,205 +15,47 @@ import {
   INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
 } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(App);
-
-  expect(value.appTypeIds).toBeDefined();
-  expect(value.description).toBeDefined();
-  expect(value.id).toBeDefined();
-  expect(value.name).toBeDefined();
-  expect(value.title).toBeDefined();
-  expect(value.url).toBeDefined();
-
-  expect(value.appTypeIds).toEqual(MOCK_APP.appTypeIds);
-  expect(value.description).toEqual(MOCK_APP.description);
-  expect(value.id).toEqual(MOCK_APP.id);
-  expect(value.name).toEqual(MOCK_APP.name);
-  expect(value.title).toEqual(MOCK_APP.title);
-  expect(value.url).toEqual(MOCK_APP.url);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+} from '../utils/testing/ModelTestUtils';
 
 describe('App', () => {
 
   describe('AppBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new AppBuilder(MOCK_APP)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new AppBuilder({ ...MOCK_APP })).build()
-        );
-        expectValidInstance(
-          (new AppBuilder(MOCK_APP_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new AppBuilder(MOCK_APP.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new AppBuilder(fromJS({ ...MOCK_APP }))).build()
-        );
-        expectValidInstance(
-          (new AppBuilder(fromJS(MOCK_APP_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(App, AppBuilder, MOCK_APP);
     });
 
     describe('setAppTypeIds()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AppBuilder()).setAppTypeIds(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new AppBuilder()).setAppTypeIds([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AppBuilder()).setAppTypeIds([...MOCK_APP.appTypeIds, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setAppTypeIds();
-        }).not.toThrow();
-        expect(() => {
-          (new AppBuilder()).setAppTypeIds([]);
-        }).not.toThrow();
-        expect(() => {
-          (new AppBuilder()).setAppTypeIds(MOCK_APP.appTypeIds);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_APP.appTypeIds];
+      testBuilderSetter(AppBuilder, 'setAppTypeIds', validParams, true);
     });
 
     describe('setDescription()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(() => {
-            (new AppBuilder()).setDescription(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setDescription();
-        }).not.toThrow();
-        expect(() => {
-          (new AppBuilder()).setDescription('');
-        }).not.toThrow();
-        expect(() => {
-          (new AppBuilder()).setDescription(MOCK_APP.description);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_APP.description];
+      testBuilderSetter(AppBuilder, 'setDescription', validParams, true);
     });
 
     describe('setId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new AppBuilder()).setId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setId();
-        }).not.toThrow();
-        expect(() => {
-          (new AppBuilder()).setId('');
-        }).not.toThrow();
-        expect(() => {
-          (new AppBuilder()).setId(MOCK_APP.id);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_APP.id];
+      testBuilderSetter(AppBuilder, 'setId', validParams, true);
     });
 
     describe('setName()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setName();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new AppBuilder()).setName(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setName(MOCK_APP.name);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_APP.name];
+      testBuilderSetter(AppBuilder, 'setName', validParams);
     });
 
     describe('setTitle()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setTitle();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new AppBuilder()).setTitle(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setTitle(MOCK_APP.title);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_APP.title];
+      testBuilderSetter(AppBuilder, 'setTitle', validParams);
     });
 
     describe('setUrl()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setUrl();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new AppBuilder()).setUrl(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AppBuilder()).setUrl(MOCK_APP.url);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_APP.url];
+      testBuilderSetter(AppBuilder, 'setUrl', validParams);
     });
 
     describe('build()', () => {

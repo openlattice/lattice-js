@@ -13,16 +13,16 @@ import {
 } from 'immutable';
 
 import {
-  MOCK_ACE,
   Ace,
   AceBuilder,
+  MOCK_ACE,
   genRandomAce,
 } from './Ace';
 import type { AceObject } from './Ace';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Acl');
@@ -138,33 +138,12 @@ class AclBuilder {
   }
 }
 
-function isValidAcl(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new AclBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidAclArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidAcl);
-}
+const isValidAcl = (value :any) :boolean => isValidModel(value, AclBuilder, LOG);
 
 export {
   Acl,
   AclBuilder,
   isValidAcl,
-  isValidAclArray,
 };
 
 export type {

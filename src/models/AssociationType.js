@@ -23,7 +23,7 @@ import type { EntityTypeObject } from './EntityType';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidUUID, isValidModel } from '../utils/ValidationUtils';
 import { genRandomBoolean, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('AssociationType');
@@ -198,33 +198,12 @@ class AssociationTypeBuilder {
   }
 }
 
-function isValidAssociationType(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new AssociationTypeBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidAssociationTypeArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidAssociationType);
-}
+const isValidAssociationType = (value :any) :boolean => isValidModel(value, AssociationTypeBuilder, LOG);
 
 export {
   AssociationType,
   AssociationTypeBuilder,
   isValidAssociationType,
-  isValidAssociationTypeArray,
 };
 
 export type {

@@ -1,10 +1,9 @@
 /* eslint-disable no-use-before-define */
 
-import * as AxiosUtils from '../utils/axios';
 import * as SearchApi from './SearchApi';
-import { SEARCH_API } from '../constants/ApiNames';
-import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
+import * as AxiosUtils from '../utils/axios';
+import { SEARCH_API } from '../constants/ApiNames';
 import {
   ADVANCED_PATH,
   FQN_PATH,
@@ -14,14 +13,12 @@ import {
   SEARCH_ENTITY_TYPES_PATH,
   SEARCH_PROPERTY_TYPES_PATH,
 } from '../constants/UrlConstants';
-
 import {
   INVALID_PARAMS,
-  INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN,
-  INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-  INVALID_PARAMS_SS,
-} from '../utils/testing/Invalid';
-
+  INVALID_PARAMS_OPTIONAL_ARRAY,
+  INVALID_PARAMS_OPTIONAL_BOOLEAN,
+} from '../utils/testing/InvalidParams';
+import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
@@ -215,7 +212,7 @@ function testSearchEntitySetData() {
     ];
 
     const invalidParams = [
-      INVALID_PARAMS_SS,
+      INVALID_PARAMS,
       INVALID_PARAMS
     ];
 
@@ -259,7 +256,7 @@ function testAdvancedSearchEntitySetData() {
     ];
 
     const invalidParams = [
-      INVALID_PARAMS_SS,
+      INVALID_PARAMS,
       INVALID_PARAMS
     ];
 
@@ -474,7 +471,7 @@ function searchEntityNeighbors() {
 
     const fnToTest = SearchApi.searchEntityNeighbors;
     const validParams = [MOCK_ENTITY_SET_ID, MOCK_ENTITY_KEY_ID];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
     const axiosParams = [`/${MOCK_ENTITY_SET_ID}/${MOCK_ENTITY_KEY_ID}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -495,12 +492,12 @@ function searchEntityNeighborsWithFilter() {
       const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
       const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }];
       const invalidParams = [
-        INVALID_PARAMS_SS,
+        INVALID_PARAMS,
         {
-          destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-          edgeEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-          entityKeyIds: INVALID_PARAMS_SS,
-          sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+          destinationEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
+          edgeEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
+          entityKeyIds: INVALID_PARAMS,
+          sourceEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
         },
       ];
       const axiosParams = [
@@ -520,14 +517,14 @@ function searchEntityNeighborsWithFilter() {
       const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
       const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }, true];
       const invalidParams = [
-        INVALID_PARAMS_SS,
+        INVALID_PARAMS,
         {
-          destinationEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-          edgeEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
-          entityKeyIds: INVALID_PARAMS_SS,
-          sourceEntitySetIds: INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
+          destinationEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
+          edgeEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
+          entityKeyIds: INVALID_PARAMS,
+          sourceEntitySetIds: INVALID_PARAMS_OPTIONAL_ARRAY,
         },
-        INVALID_PARAMS_FOR_OPTIONAL_BOOLEAN
+        INVALID_PARAMS_OPTIONAL_BOOLEAN,
       ];
       const axiosParams = [
         `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}/${IDS_PATH}`,

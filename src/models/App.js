@@ -13,7 +13,7 @@ import {
 
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('App');
@@ -231,33 +231,12 @@ class AppBuilder {
   }
 }
 
-function isValidApp(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new AppBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidAppArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidApp);
-}
+const isValidApp = (value :any) :boolean => isValidModel(value, AppBuilder, LOG);
 
 export {
   App,
   AppBuilder,
   isValidApp,
-  isValidAppArray,
 };
 
 export type {

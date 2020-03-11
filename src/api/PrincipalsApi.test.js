@@ -12,7 +12,7 @@ import {
   USERS_PATH,
 } from '../constants/UrlConstants';
 import { genRandomPrincipal } from '../models/Principal';
-import { INVALID_PARAMS } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_REQUIRED_STRING } from '../utils/testing/InvalidParams';
 import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
@@ -105,7 +105,7 @@ describe('PrincipalsApi', () => {
     const mockUserId = genRandomString();
 
     const validParams = [mockUserId];
-    const invalidParams = [INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
     const axiosParams = [`/${USERS_PATH}/${mockUserId}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -122,7 +122,7 @@ describe('PrincipalsApi', () => {
     const mockInput = `${genRandomString()}`;
 
     const validParams = [mockInput];
-    const invalidParams = [INVALID_PARAMS];
+    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
     const axiosParams = [`/${USERS_PATH}/${SEARCH_PATH}/${mockInput}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);

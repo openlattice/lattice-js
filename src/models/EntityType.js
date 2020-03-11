@@ -13,8 +13,8 @@ import {
   isImmutable,
 } from 'immutable';
 
-import FullyQualifiedName from './FullyQualifiedName';
-import type { FQN, FQNObject } from './FullyQualifiedName';
+import FQN from './FQN';
+import type { FQNObject } from './FQN';
 
 import Logger from '../utils/Logger';
 import SecurableTypes from '../constants/types/SecurableTypes';
@@ -24,11 +24,7 @@ import {
   isEmptyString,
   isNonEmptyString,
 } from '../utils/LangUtils';
-import {
-  isValidMultimap,
-  isValidUUID,
-  validateNonEmptyArray,
-} from '../utils/ValidationUtils';
+import { isValidModel, isValidMultimap, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 
@@ -120,7 +116,7 @@ class EntityType {
     const entityTypeObj :EntityTypeObject = {
       key: this.key,
       properties: this.properties,
-      schemas: this.schemas.map((fqn :FQN) => fqn.toObject()),
+      schemas: this.schemas.map((fqn) => fqn.toObject()),
       title: this.title,
       type: this.type.toObject(),
     };
@@ -336,7 +332,7 @@ class EntityTypeBuilder {
     }
 
     try {
-      this.schemas = Set(schemas).map((fqn) => FullyQualifiedName.of(fqn)).toJS();
+      this.schemas = Set(schemas).map((fqn) => FQN.of(fqn)).toJS();
     }
     catch (e) {
       throw new Error('invalid parameter: "schemas" must be a non-empty array of valid FQNs');
@@ -376,7 +372,7 @@ class EntityTypeBuilder {
 
   setType(entityTypeFQN :FQN | FQNObject | string) :EntityTypeBuilder {
 
-    this.type = FullyQualifiedName.of(entityTypeFQN);
+    this.type = FQN.of(entityTypeFQN);
     return this;
   }
 
@@ -422,33 +418,12 @@ class EntityTypeBuilder {
   }
 }
 
-function isValidEntityType(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new EntityTypeBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidEntityTypeArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidEntityType);
-}
+const isValidEntityType = (value :any) :boolean => isValidModel(value, EntityTypeBuilder, LOG);
 
 export {
   EntityType,
   EntityTypeBuilder,
   isValidEntityType,
-  isValidEntityTypeArray,
 };
 
 export type {
@@ -472,10 +447,10 @@ const MOCK_ENTITY_TYPE = (new EntityTypeBuilder())
     'e39dfdfa-a3e6-4f1f-b54b-646a723c3085': ['TAG_0'],
   })
   .setPropertyTypes(['8f79e123-3411-4099-a41f-88e5d22d0e8d', 'e39dfdfa-a3e6-4f1f-b54b-646a723c3085'])
-  .setSchemas([FullyQualifiedName.of('mock.schema')])
+  .setSchemas([FQN.of('mock.schema')])
   .setShards(1)
   .setTitle('MockEntityTypeTitle')
-  .setType(FullyQualifiedName.of('mock.entitytype'))
+  .setType(FQN.of('mock.entitytype'))
   .build();
 
 const MOCK_ENTITY_TYPE_OBJECT = MOCK_ENTITY_TYPE.toObject();
@@ -492,10 +467,10 @@ function genRandomEntityType() {
       [genRandomUUID()]: [genRandomString()],
     })
     .setPropertyTypes([genRandomUUID(), genRandomUUID(), genRandomUUID()])
-    .setSchemas([FullyQualifiedName.of(genRandomString(), genRandomString())])
+    .setSchemas([FQN.of(genRandomString(), genRandomString())])
     .setShards(1)
     .setTitle(genRandomString())
-    .setType(FullyQualifiedName.of(genRandomString(), genRandomString()))
+    .setType(FQN.of(genRandomString(), genRandomString()))
     .build();
 }
 

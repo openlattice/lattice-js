@@ -7,7 +7,7 @@ import { Map, fromJS, isImmutable } from 'immutable';
 import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
-import { validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel } from '../utils/ValidationUtils';
 import { genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { PrincipalType } from '../constants/types/PrincipalTypes';
 
@@ -107,33 +107,12 @@ class PrincipalBuilder {
   }
 }
 
-function isValidPrincipal(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new PrincipalBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidPrincipalArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidPrincipal);
-}
+const isValidPrincipal = (value :any) :boolean => isValidModel(value, PrincipalBuilder, LOG);
 
 export {
   Principal,
   PrincipalBuilder,
   isValidPrincipal,
-  isValidPrincipalArray,
 };
 
 export type {

@@ -1,11 +1,12 @@
 /* eslint-disable arrow-body-style */
 
 import BBPromise from 'bluebird';
-
 import isPlainObject from 'lodash/isPlainObject';
-import * as AxiosUtils from '../axios';
-import { INVALID_PARAMS } from './Invalid';
+
+import { INVALID_PARAMS } from './InvalidParams';
 import { genRandomUUID, getMockAxiosInstance } from './MockUtils';
+
+import * as AxiosUtils from '../axios';
 
 export const OBJECT_TAG = '[object Object]';
 

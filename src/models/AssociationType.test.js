@@ -13,163 +13,39 @@ import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY,
   INVALID_PARAMS_FOR_REQUIRED_BOOLEAN,
-  INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(AssociationType);
-
-  expect(value.bidirectional).toBeDefined();
-  expect(value.dst).toBeDefined();
-  expect(value.entityType).toBeDefined();
-  expect(value.src).toBeDefined();
-
-  expect(value.bidirectional).toEqual(MOCK_ASSOCIATION_TYPE.bidirectional);
-  expect(value.dst).toEqual(MOCK_ASSOCIATION_TYPE.dst);
-  expect(value.entityType).toEqual(MOCK_ASSOCIATION_TYPE.entityType);
-  expect(value.src).toEqual(MOCK_ASSOCIATION_TYPE.src);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+} from '../utils/testing/ModelTestUtils';
 
 describe('AssociationType', () => {
 
   describe('AssociationTypeBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new AssociationTypeBuilder(MOCK_ASSOCIATION_TYPE)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new AssociationTypeBuilder({ ...MOCK_ASSOCIATION_TYPE })).build()
-        );
-        expectValidInstance(
-          (new AssociationTypeBuilder(MOCK_ASSOCIATION_TYPE_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new AssociationTypeBuilder(MOCK_ASSOCIATION_TYPE.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new AssociationTypeBuilder(fromJS({ ...MOCK_ASSOCIATION_TYPE }))).build()
-        );
-        expectValidInstance(
-          (new AssociationTypeBuilder(fromJS(MOCK_ASSOCIATION_TYPE_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(AssociationType, AssociationTypeBuilder, MOCK_ASSOCIATION_TYPE);
     });
 
     describe('setBidirectional()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AssociationTypeBuilder()).setBidirectional();
-        }).toThrow();
-        INVALID_PARAMS_FOR_REQUIRED_BOOLEAN.forEach((invalidInput) => {
-          expect(() => {
-            (new AssociationTypeBuilder()).setBidirectional(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AssociationTypeBuilder()).setBidirectional(MOCK_ASSOCIATION_TYPE.bidirectional);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ASSOCIATION_TYPE.bidirectional];
+      testBuilderSetter(AssociationTypeBuilder, 'setBidirectional', validParams);
     });
 
     describe('setEntityType()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new AssociationTypeBuilder()).setEntityType();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new AssociationTypeBuilder()).setEntityType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AssociationTypeBuilder()).setEntityType(MOCK_ASSOCIATION_TYPE.entityType);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ASSOCIATION_TYPE.entityType];
+      testBuilderSetter(AssociationTypeBuilder, 'setEntityType', validParams);
     });
 
     describe('setDestinationEntityTypeIds()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AssociationTypeBuilder()).setDestinationEntityTypeIds(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new AssociationTypeBuilder()).setDestinationEntityTypeIds([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new AssociationTypeBuilder()).setDestinationEntityTypeIds([...MOCK_ASSOCIATION_TYPE.dst, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AssociationTypeBuilder()).setDestinationEntityTypeIds();
-        }).not.toThrow();
-        expect(() => {
-          (new AssociationTypeBuilder()).setDestinationEntityTypeIds(MOCK_ASSOCIATION_TYPE.dst);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ASSOCIATION_TYPE.dst];
+      testBuilderSetter(AssociationTypeBuilder, 'setDestinationEntityTypeIds', validParams, true);
     });
 
     describe('setSourceEntityTypeIds()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new AssociationTypeBuilder()).setSourceEntityTypeIds(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new AssociationTypeBuilder()).setSourceEntityTypeIds([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new AssociationTypeBuilder()).setSourceEntityTypeIds([...MOCK_ASSOCIATION_TYPE.src, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new AssociationTypeBuilder()).setSourceEntityTypeIds();
-        }).not.toThrow();
-        expect(() => {
-          (new AssociationTypeBuilder()).setSourceEntityTypeIds(MOCK_ASSOCIATION_TYPE.src);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ASSOCIATION_TYPE.src];
+      testBuilderSetter(AssociationTypeBuilder, 'setSourceEntityTypeIds', validParams, true);
     });
 
     describe('build()', () => {

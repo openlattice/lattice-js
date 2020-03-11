@@ -15,7 +15,7 @@ import type { AclObject } from './Acl';
 import ActionTypes from '../constants/types/ActionTypes';
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel } from '../utils/ValidationUtils';
 import { pickRandomValue } from '../utils/testing/MockUtils';
 import type { ActionType } from '../constants/types/ActionTypes';
 
@@ -111,33 +111,12 @@ class AclDataBuilder {
   }
 }
 
-function isValidAclData(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new AclDataBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidAclDataArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidAclData);
-}
+const isValidAclData = (value :any) :boolean => isValidModel(value, AclDataBuilder, LOG);
 
 export {
   AclData,
   AclDataBuilder,
   isValidAclData,
-  isValidAclDataArray,
 };
 
 export type {

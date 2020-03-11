@@ -11,95 +11,27 @@ import {
 
 import { PrincipalTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(Principal);
-
-  expect(value.id).toBeDefined();
-  expect(value.type).toBeDefined();
-
-  expect(value.id).toEqual(MOCK_PRINCIPAL.id);
-  expect(value.type).toEqual(MOCK_PRINCIPAL.type);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfType,
+} from '../utils/testing/ModelTestUtils';
 
 describe('Principal', () => {
 
   describe('PrincipalBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new PrincipalBuilder(MOCK_PRINCIPAL)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new PrincipalBuilder({ ...MOCK_PRINCIPAL })).build()
-        );
-        expectValidInstance(
-          (new PrincipalBuilder(MOCK_PRINCIPAL_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new PrincipalBuilder(MOCK_PRINCIPAL.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new PrincipalBuilder(fromJS({ ...MOCK_PRINCIPAL }))).build()
-        );
-        expectValidInstance(
-          (new PrincipalBuilder(fromJS(MOCK_PRINCIPAL_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(Principal, PrincipalBuilder, MOCK_PRINCIPAL);
     });
 
     describe('setId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new PrincipalBuilder()).setId();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new PrincipalBuilder()).setId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new PrincipalBuilder()).setId(MOCK_PRINCIPAL.id);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_PRINCIPAL.id];
+      testBuilderSetter(PrincipalBuilder, 'setId', validParams);
     });
 
     describe('setType()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new PrincipalBuilder()).setType();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new PrincipalBuilder()).setType(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        Object.values(PrincipalTypes).forEach((type) => {
-          expect(() => {
-            (new PrincipalBuilder()).setType(type);
-          }).not.toThrow();
-        });
-      });
-
+      testBuilderSetterOfType(PrincipalBuilder, 'setType', PrincipalTypes);
     });
 
     describe('build()', () => {

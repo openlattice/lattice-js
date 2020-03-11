@@ -12,146 +12,33 @@ import {
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
-  INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(Schema);
-
-  expect(value.fqn).toBeDefined();
-  expect(value.entityTypes).toBeDefined();
-  expect(value.propertyTypes).toBeDefined();
-
-  expect(value.fqn).toEqual(MOCK_SCHEMA.fqn);
-  expect(value.entityTypes).toEqual(MOCK_SCHEMA.entityTypes);
-  expect(value.propertyTypes).toEqual(MOCK_SCHEMA.propertyTypes);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+} from '../utils/testing/ModelTestUtils';
 
 describe('Schema', () => {
 
   describe('SchemaBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new SchemaBuilder(MOCK_SCHEMA)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new SchemaBuilder({ ...MOCK_SCHEMA })).build()
-        );
-        expectValidInstance(
-          (new SchemaBuilder(MOCK_SCHEMA_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new SchemaBuilder(MOCK_SCHEMA.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new SchemaBuilder(fromJS({ ...MOCK_SCHEMA }))).build()
-        );
-        expectValidInstance(
-          (new SchemaBuilder(fromJS(MOCK_SCHEMA_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(Schema, SchemaBuilder, MOCK_SCHEMA);
     });
 
     describe('setEntityTypes()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new SchemaBuilder()).setEntityTypes(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new SchemaBuilder()).setEntityTypes([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new SchemaBuilder()).setEntityTypes([...MOCK_SCHEMA.entityTypes, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new SchemaBuilder()).setEntityTypes();
-        }).not.toThrow();
-        expect(() => {
-          (new SchemaBuilder()).setEntityTypes([]);
-        }).not.toThrow();
-        expect(() => {
-          (new SchemaBuilder()).setEntityTypes(MOCK_SCHEMA.entityTypes);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_SCHEMA.entityTypes];
+      testBuilderSetter(SchemaBuilder, 'setEntityTypes', validParams, true);
     });
 
     describe('setFQN()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new SchemaBuilder()).setFQN();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new SchemaBuilder()).setFQN(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new SchemaBuilder()).setFQN(MOCK_SCHEMA.fqn);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_SCHEMA.fqn];
+      testBuilderSetter(SchemaBuilder, 'setFQN', validParams);
     });
 
     describe('setPropertyTypes()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new SchemaBuilder()).setPropertyTypes(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new SchemaBuilder()).setPropertyTypes([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new SchemaBuilder()).setPropertyTypes([...MOCK_SCHEMA.propertyTypes, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new SchemaBuilder()).setPropertyTypes();
-        }).not.toThrow();
-        expect(() => {
-          (new SchemaBuilder()).setPropertyTypes([]);
-        }).not.toThrow();
-        expect(() => {
-          (new SchemaBuilder()).setPropertyTypes(MOCK_SCHEMA.propertyTypes);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_SCHEMA.propertyTypes];
+      testBuilderSetter(SchemaBuilder, 'setPropertyTypes', validParams, true);
     });
 
     describe('build()', () => {

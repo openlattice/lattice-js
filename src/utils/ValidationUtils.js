@@ -3,10 +3,13 @@
  */
 
 import isArray from 'lodash/isArray';
+import isString from 'lodash/isString';
 import isPlainObject from 'lodash/isPlainObject';
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
+import Logger from './Logger';
 import { isNonEmptyArray, isNonEmptyObject, isNonEmptyString } from './LangUtils';
+
+import FQN from '../models/FQN';
 
 type ValidatorFn = (value :any) => boolean;
 
@@ -37,7 +40,7 @@ export function validateNonEmptyArray(value :$ReadOnlyArray<any>, validatorFn :V
 
 export function isValidUUID(value :any) :boolean %checks {
 
-  return value && BASE_UUID_PATTERN.test(value);
+  return isString(value) && BASE_UUID_PATTERN.test(value);
 }
 
 export function isValidUUIDArray(value :any) :boolean %checks {
@@ -47,7 +50,7 @@ export function isValidUUIDArray(value :any) :boolean %checks {
 
 export function isValidFQNArray(value :any) :boolean %checks {
 
-  return validateNonEmptyArray(value, (fqn :any) => FullyQualifiedName.isValid(fqn));
+  return validateNonEmptyArray(value, (fqn :any) => FQN.isValid(fqn));
 }
 
 export function isValidTypeArray(values :$ReadOnlyArray<any>, types :Object) :boolean %checks {
@@ -111,3 +114,24 @@ export function isValidMultimapArray(values :$ReadOnlyArray<any>, validatorFn :V
 
   return validateNonEmptyArray(values, (value :any) => isValidMultimap(value, validatorFn));
 }
+
+function isValidModel(value :any, ModelBuilder :any, LOG :Logger) :boolean {
+
+  if (value === null || value === undefined) {
+    LOG.error('invalid parameter: "value" is not defined');
+    return false;
+  }
+
+  try {
+    (new ModelBuilder(value)).build();
+    return true;
+  }
+  catch (e) {
+    LOG.error(e.message, value);
+    return false;
+  }
+}
+
+export {
+  isValidModel,
+};

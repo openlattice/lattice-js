@@ -14,7 +14,7 @@ import {
 import Logger from '../utils/Logger';
 import { EntitySetFlagTypes } from '../constants/types';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomString, genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { EntitySetFlagType } from '../constants/types';
 
@@ -334,33 +334,12 @@ class EntitySetBuilder {
   }
 }
 
-function isValidEntitySet(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new EntitySetBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidEntitySetArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidEntitySet);
-}
+const isValidEntitySet = (value :any) :boolean => isValidModel(value, EntitySetBuilder, LOG);
 
 export {
   EntitySet,
   EntitySetBuilder,
   isValidEntitySet,
-  isValidEntitySetArray,
 };
 
 export type {

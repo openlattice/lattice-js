@@ -14,7 +14,7 @@ import {
 import GrantTypes from '../constants/types/GrantTypes';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel } from '../utils/ValidationUtils';
 import { genRandomString, pickRandomValue } from '../utils/testing/MockUtils';
 import type { GrantType } from '../constants/types/GrantTypes';
 
@@ -85,7 +85,7 @@ class GrantBuilder {
     }
   }
 
-  setAttribute(attribute :string) :GrantBuilder {
+  setAttribute(attribute :?string) :GrantBuilder {
 
     if (!isDefined(attribute) || isEmptyString(attribute)) {
       return this;
@@ -109,7 +109,7 @@ class GrantBuilder {
     return this;
   }
 
-  setMappings(mappings :$ReadOnlyArray<string>) :GrantBuilder {
+  setMappings(mappings :?$ReadOnlyArray<string>) :GrantBuilder {
 
     if (!isDefined(mappings)) {
       return this;
@@ -152,33 +152,12 @@ class GrantBuilder {
   }
 }
 
-function isValidGrant(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new GrantBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidGrantArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidGrant);
-}
+const isValidGrant = (value :any) :boolean => isValidModel(value, GrantBuilder, LOG);
 
 export {
   Grant,
   GrantBuilder,
   isValidGrant,
-  isValidGrantArray,
 };
 
 export type {

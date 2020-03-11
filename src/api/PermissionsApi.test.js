@@ -6,7 +6,7 @@ import * as AxiosUtils from '../utils/axios';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
 import { MOCK_ACL_DATA } from '../models/AclData';
-import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { INVALID_PARAMS } from '../utils/testing/InvalidParams';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
@@ -44,7 +44,7 @@ describe('PermissionsApi', () => {
     const fnToTest = PermissionsApi.getAcl;
 
     const validParams = [MOCK_ACL_KEY];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', MOCK_ACL_KEY];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -60,7 +60,7 @@ describe('PermissionsApi', () => {
     const fnToTest = PermissionsApi.getAclExplanation;
 
     const validParams = [MOCK_ACL_KEY];
-    const invalidParams = [INVALID_PARAMS_SS];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = [`/${EXPLAIN_PATH}`, MOCK_ACL_KEY];
 
     testApiShouldReturnPromise(fnToTest, validParams);

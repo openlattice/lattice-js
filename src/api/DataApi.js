@@ -20,7 +20,7 @@
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
-import FullyQualifiedName from '../models/FullyQualifiedName';
+import FQN from '../models/FQN';
 import Logger from '../utils/Logger';
 import { getConfig } from '../config/Configuration';
 import { DATA_API } from '../constants/ApiNames';
@@ -733,7 +733,7 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
   }
 
   // TODO: validate SetMultimap
-  if (!isValidMultimap(entity, FullyQualifiedName.isValid)) {
+  if (!isValidMultimap(entity, FQN.isValid)) {
     errorMsg = 'invalid parameter: entity must be a non-empty object';
     LOG.error(errorMsg, entity);
     return Promise.reject(errorMsg);

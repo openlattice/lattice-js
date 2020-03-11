@@ -31,7 +31,7 @@ import GrantTypes from '../constants/types/GrantTypes';
 import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import { genRandomInt, genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Organization');
@@ -432,33 +432,12 @@ class OrganizationBuilder {
   }
 }
 
-function isValidOrganization(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new OrganizationBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidOrganizationArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidOrganization);
-}
+const isValidOrganization = (value :any) :boolean => isValidModel(value, OrganizationBuilder, LOG);
 
 export {
   Organization,
   OrganizationBuilder,
   isValidOrganization,
-  isValidOrganizationArray,
 };
 
 export type {

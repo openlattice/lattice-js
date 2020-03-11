@@ -2,7 +2,7 @@
  * @flow
  */
 
-import FullyQualifiedName from './FullyQualifiedName';
+import FQN from './FQN';
 import { AccessCheck, AccessCheckBuilder } from './AccessCheck';
 import { Ace, AceBuilder } from './Ace';
 import { Acl, AclBuilder } from './Acl';
@@ -28,7 +28,7 @@ export type { AclDataObject } from './AclData';
 export type { AssociationTypeObject } from './AssociationType';
 export type { EntitySetObject } from './EntitySet';
 export type { EntityTypeObject } from './EntityType';
-export type { FQN, FQNObject } from './FullyQualifiedName';
+export type { FQNObject } from './FQN';
 export type { GrantObject } from './Grant';
 export type { PrincipalObject } from './Principal';
 export type { PropertyTypeObject } from './PropertyType';
@@ -67,7 +67,7 @@ export {
   EntityDataKeyBuilder,
   EntitySetBuilder,
   EntityTypeBuilder,
-  FullyQualifiedName,
+  FQN,
   GrantBuilder,
   OrganizationBuilder,
   PrincipalBuilder,

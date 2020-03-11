@@ -9,7 +9,6 @@ import {
   genRandomOrganization,
   isValidOrganization as isValid,
 } from './Organization';
-import { genRandomUUID } from '../utils/testing/MockUtils';
 
 import {
   INVALID_PARAMS,
@@ -19,397 +18,81 @@ import {
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
   INVALID_PARAMS_FOR_REQUIRED_NUMBER,
 } from '../utils/testing/Invalid';
+import { genRandomUUID } from '../utils/testing/MockUtils';
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+  testBuilderSetterOfType,
+} from '../utils/testing/ModelTestUtils';
 
 const INVALID_PARAMS_FOR_GRANT = INVALID_PARAMS_FOR_OPTIONAL_OBJECT.slice(0);
 INVALID_PARAMS_FOR_GRANT.push({ invalid_key: 'invalid_value' });
 INVALID_PARAMS_FOR_GRANT.push({ [genRandomUUID()]: 'invalid_value' });
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(Organization);
-
-  expect(value.apps).toBeDefined();
-  expect(value.connections).toBeDefined();
-  expect(value.description).toBeDefined();
-  expect(value.emailDomains).toBeDefined();
-  expect(value.grants).toBeDefined();
-  expect(value.id).toBeDefined();
-  expect(value.members).toBeDefined();
-  expect(value.principal).toBeDefined();
-  expect(value.roles).toBeDefined();
-  expect(value.title).toBeDefined();
-
-  expect(value.apps).toEqual(MOCK_ORGANIZATION.apps);
-  expect(value.connections).toEqual(MOCK_ORGANIZATION.connections);
-  expect(value.description).toEqual(MOCK_ORGANIZATION.description);
-  expect(value.emailDomains).toEqual(MOCK_ORGANIZATION.emailDomains);
-  expect(value.grants).toEqual(MOCK_ORGANIZATION.grants);
-  expect(value.id).toEqual(MOCK_ORGANIZATION.id);
-  expect(value.members).toEqual(MOCK_ORGANIZATION.members);
-  expect(value.principal).toEqual(MOCK_ORGANIZATION.principal);
-  expect(value.roles).toEqual(MOCK_ORGANIZATION.roles);
-  expect(value.title).toEqual(MOCK_ORGANIZATION.title);
-}
 
 describe('Organization', () => {
 
   describe('OrganizationBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new OrganizationBuilder(MOCK_ORGANIZATION)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new OrganizationBuilder({ ...MOCK_ORGANIZATION })).build()
-        );
-        expectValidInstance(
-          (new OrganizationBuilder(MOCK_ORGANIZATION_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new OrganizationBuilder(MOCK_ORGANIZATION.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new OrganizationBuilder(fromJS({ ...MOCK_ORGANIZATION }))).build()
-        );
-        expectValidInstance(
-          (new OrganizationBuilder(fromJS(MOCK_ORGANIZATION_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(Organization, OrganizationBuilder, MOCK_ORGANIZATION);
     });
 
     describe('setApps()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setApps(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new OrganizationBuilder()).setApps([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setApps([...MOCK_ORGANIZATION.apps, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setApps();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setApps([]);
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setApps(MOCK_ORGANIZATION.apps);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.apps];
+      testBuilderSetter(OrganizationBuilder, 'setApps', validParams, true);
     });
 
     describe('setConnections()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setConnections(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new OrganizationBuilder()).setConnections([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setConnections([...MOCK_ORGANIZATION.connections, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setConnections();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setConnections([]);
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setConnections(MOCK_ORGANIZATION.connections);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.connections];
+      testBuilderSetter(OrganizationBuilder, 'setConnections', validParams, true);
     });
 
     describe('setDescription()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_STRING.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setDescription(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setDescription();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setDescription('');
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setDescription(MOCK_ORGANIZATION.description);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.description];
+      testBuilderSetter(OrganizationBuilder, 'setDescription', validParams, true);
     });
 
     describe('setEmailDomains()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setEmailDomains(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new OrganizationBuilder()).setEmailDomains([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setEmailDomains([...MOCK_ORGANIZATION.emailDomains, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setEmailDomains();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setEmailDomains([]);
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setEmailDomains(MOCK_ORGANIZATION.emailDomains);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.emailDomains];
+      testBuilderSetter(OrganizationBuilder, 'setEmailDomains', validParams, true);
     });
 
     describe('setGrants()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_GRANT.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setGrants(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setGrants();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setGrants({});
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setGrants(MOCK_ORGANIZATION.grants);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.grants];
+      // const invalidParams = INVALID_PARAMS_FOR_OPTIONAL_OBJECT.slice(0);
+      // invalidParams.push({ invalid_key: 'invalid_value' });
+      // invalidParams.push({ [genRandomUUID()]: 'invalid_value' });
+      testBuilderSetter(OrganizationBuilder, 'setGrants', validParams, true);
     });
 
     describe('setId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setId();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setId('');
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setId(MOCK_ORGANIZATION.id);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.id];
+      testBuilderSetter(OrganizationBuilder, 'setId', validParams, true);
     });
 
     describe('setMembers()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setMembers(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new OrganizationBuilder()).setMembers([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setMembers([...MOCK_ORGANIZATION.members, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setMembers();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setMembers([]);
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setMembers(MOCK_ORGANIZATION.members);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.members];
+      testBuilderSetter(OrganizationBuilder, 'setMembers', validParams, true);
     });
 
     describe('setPartitions()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setPartitions(invalidInput);
-          }).toThrow();
-        });
-        INVALID_PARAMS_FOR_REQUIRED_NUMBER.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setPartitions([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_REQUIRED_NUMBER.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setPartitions([...MOCK_ORGANIZATION.partitions, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setPartitions();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setPartitions([]);
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setPartitions(MOCK_ORGANIZATION.partitions);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.partitions];
+      testBuilderSetter(OrganizationBuilder, 'setPartitions', validParams, true);
     });
 
     describe('setPrincipal()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setPrincipal();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setPrincipal(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setPrincipal(MOCK_ORGANIZATION.principal);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.principal];
+      testBuilderSetter(OrganizationBuilder, 'setPrincipal', validParams);
     });
 
     describe('setRoles()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setRoles(invalidInput);
-          }).toThrow();
-          expect(() => {
-            (new OrganizationBuilder()).setRoles([invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should throw when given a mix of valid and invalid parameters', () => {
-        INVALID_PARAMS_FOR_OPTIONAL_ARRAY.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setRoles([...MOCK_ORGANIZATION.roles, invalidInput]);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setRoles();
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setRoles([]);
-        }).not.toThrow();
-        expect(() => {
-          (new OrganizationBuilder()).setRoles(MOCK_ORGANIZATION.roles);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.roles];
+      testBuilderSetter(OrganizationBuilder, 'setRoles', validParams, true);
     });
 
     describe('setTitle()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setTitle();
-        }).toThrow();
-        INVALID_PARAMS.forEach((invalidInput) => {
-          expect(() => {
-            (new OrganizationBuilder()).setTitle(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new OrganizationBuilder()).setTitle(MOCK_ORGANIZATION.title);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ORGANIZATION.title];
+      testBuilderSetter(OrganizationBuilder, 'setTitle', validParams);
     });
 
     describe('build()', () => {

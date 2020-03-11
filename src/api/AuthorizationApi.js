@@ -17,14 +17,12 @@
  * // AuthorizationApi.check...
  */
 
-import isUndefined from 'lodash/isUndefined';
-
 import Logger from '../utils/Logger';
 import PermissionTypes from '../constants/types/PermissionTypes';
 import SecurableTypes from '../constants/types/SecurableTypes';
 import { AUTHORIZATION_API } from '../constants/ApiNames';
-import { AccessCheck, isValidAccessCheckArray } from '../models/AccessCheck';
-import { isDefined, isEmptyArray, isNonEmptyString } from '../utils/LangUtils';
+import { AccessCheck, isValidAccessCheck } from '../models/AccessCheck';
+import { isDefined, isNonEmptyArray, isNonEmptyString } from '../utils/LangUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 import type { SecurableType } from '../constants/types/SecurableTypes';
@@ -51,24 +49,26 @@ const LOG = new Logger('AuthorizationApi');
  *   ]
  * );
  */
-export function checkAuthorizations(queries :AccessCheck[]) :Promise<*> {
+export function checkAuthorizations(checks :AccessCheck[]) :Promise<*> {
 
   let errorMsg = '';
 
-  let accessChecks = queries;
-  if (isUndefined(queries) || isEmptyArray(queries)) {
-    accessChecks = [];
+  if (!isNonEmptyArray(checks)) {
+    errorMsg = 'invalid parameter: "checks" must be a non-empty array';
+    LOG.error(errorMsg, checks);
+    return Promise.reject(errorMsg);
   }
-  else if (!isValidAccessCheckArray(queries)) {
-    errorMsg = 'invalid parameter: queries must be an array of valid AccessChecks';
-    LOG.error(errorMsg, queries);
+
+  if (!checks.every(isValidAccessCheck)) {
+    errorMsg = 'invalid parameter: "checks" must be an array of valid AccessCheck objects';
+    LOG.error(errorMsg, checks);
     return Promise.reject(errorMsg);
   }
 
   // TODO: Immutable.Set() with tests
 
   return getApiAxiosInstance(AUTHORIZATION_API)
-    .post('/', accessChecks)
+    .post('/', checks)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

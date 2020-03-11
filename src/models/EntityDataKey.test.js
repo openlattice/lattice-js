@@ -10,93 +10,27 @@ import {
 } from './EntityDataKey';
 
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-
-function expectValidInstance(value) {
-
-  expect(value).toBeInstanceOf(EntityDataKey);
-
-  expect(value.entityKeyId).toBeDefined();
-  expect(value.entitySetId).toBeDefined();
-
-  expect(value.entityKeyId).toEqual(MOCK_ENTITY_DATA_KEY.entityKeyId);
-  expect(value.entitySetId).toEqual(MOCK_ENTITY_DATA_KEY.entitySetId);
-}
+import {
+  testBuilderConstructor,
+  testBuilderSetter,
+} from '../utils/testing/ModelTestUtils';
 
 describe('EntityDataKey', () => {
 
   describe('EntityDataKeyBuilder', () => {
 
     describe('constructor()', () => {
-
-      test('should construct given an instance', () => {
-        expectValidInstance(
-          (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY)).build()
-        );
-      });
-
-      test('should construct given an object literal', () => {
-        expectValidInstance(
-          (new EntityDataKeyBuilder({ ...MOCK_ENTITY_DATA_KEY })).build()
-        );
-        expectValidInstance(
-          (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY_OBJECT)).build()
-        );
-      });
-
-      test('should construct given an immutable object', () => {
-        expectValidInstance(
-          (new EntityDataKeyBuilder(MOCK_ENTITY_DATA_KEY.toImmutable())).build()
-        );
-        expectValidInstance(
-          (new EntityDataKeyBuilder(fromJS({ ...MOCK_ENTITY_DATA_KEY }))).build()
-        );
-        expectValidInstance(
-          (new EntityDataKeyBuilder(fromJS(MOCK_ENTITY_DATA_KEY_OBJECT))).build()
-        );
-      });
-
+      testBuilderConstructor(EntityDataKey, EntityDataKeyBuilder, MOCK_ENTITY_DATA_KEY);
     });
 
     describe('setEntityKeyId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new EntityDataKeyBuilder()).setEntityKeyId();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new EntityDataKeyBuilder()).setEntityKeyId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntityDataKeyBuilder()).setEntityKeyId(MOCK_ENTITY_DATA_KEY.entityKeyId);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_DATA_KEY.entityKeyId];
+      testBuilderSetter(EntityDataKeyBuilder, 'setEntityKeyId', validParams);
     });
 
     describe('setEntitySetId()', () => {
-
-      test('should throw when given invalid parameters', () => {
-        expect(() => {
-          (new EntityDataKeyBuilder()).setEntitySetId();
-        }).toThrow();
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
-          expect(() => {
-            (new EntityDataKeyBuilder()).setEntitySetId(invalidInput);
-          }).toThrow();
-        });
-      });
-
-      test('should not throw when given valid parameters', () => {
-        expect(() => {
-          (new EntityDataKeyBuilder()).setEntitySetId(MOCK_ENTITY_DATA_KEY.entitySetId);
-        }).not.toThrow();
-      });
-
+      const validParams = [MOCK_ENTITY_DATA_KEY.entitySetId];
+      testBuilderSetter(EntityDataKeyBuilder, 'setEntitySetId', validParams);
     });
 
     describe('build()', () => {

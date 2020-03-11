@@ -1,25 +1,23 @@
 /* eslint-disable no-use-before-define */
 
-import PermissionTypes from '../constants/types/PermissionTypes';
-import SecurableTypes from '../constants/types/SecurableTypes';
-import * as AxiosUtils from '../utils/axios';
 import * as AuthorizationApi from './AuthorizationApi';
+
+import * as AxiosUtils from '../utils/axios';
 import { AUTHORIZATION_API } from '../constants/ApiNames';
-import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
-
+import { PermissionTypes, SecurableTypes } from '../constants/types';
 import {
-  INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
-  INVALID_PARAMS_FOR_OPTIONAL_STRING,
-  INVALID_PARAMS_SS,
-} from '../utils/testing/Invalid';
-
+  INVALID_PARAMS,
+  INVALID_PARAMS_OPTIONAL_ARRAY,
+  INVALID_PARAMS_OPTIONAL_STRING,
+} from '../utils/testing/InvalidParams';
+import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
   testApiShouldRejectOnInvalidParameters,
   testApiShouldReturnPromise,
   testApiShouldSendCorrectHttpRequest,
-  testApiShouldUseCorrectAxiosInstance
+  testApiShouldUseCorrectAxiosInstance,
 } from '../utils/testing/TestUtils';
 
 /*
@@ -54,7 +52,7 @@ function testCheckAuthorizations() {
     }];
 
     const validParams = [mockQueries];
-    const invalidParams = [INVALID_PARAMS_FOR_OPTIONAL_ARRAY];
+    const invalidParams = [INVALID_PARAMS_OPTIONAL_ARRAY];
     const axiosParams = ['/', mockQueries];
 
     testApiShouldReturnPromise(fnToTest, validParams);
@@ -80,9 +78,9 @@ function testGetAccessibleObjects() {
     ];
 
     const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_FOR_OPTIONAL_STRING,
+      INVALID_PARAMS,
+      INVALID_PARAMS,
+      INVALID_PARAMS_OPTIONAL_STRING,
     ];
 
     const axiosParams = [

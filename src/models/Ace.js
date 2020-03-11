@@ -22,7 +22,7 @@ import type { PrincipalObject } from './Principal';
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
 import { isDefined } from '../utils/LangUtils';
-import { validateNonEmptyArray } from '../utils/ValidationUtils';
+import { isValidModel } from '../utils/ValidationUtils';
 import { pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
@@ -129,33 +129,12 @@ class AceBuilder {
   }
 }
 
-function isValidAce(value :any) :boolean {
-
-  if (!isDefined(value)) {
-    LOG.error('invalid parameter: "value" is not defined');
-    return false;
-  }
-
-  try {
-    (new AceBuilder(value)).build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(e.message, value);
-    return false;
-  }
-}
-
-function isValidAceArray(values :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(values, isValidAce);
-}
+const isValidAce = (value :any) :boolean => isValidModel(value, AceBuilder, LOG);
 
 export {
   Ace,
   AceBuilder,
   isValidAce,
-  isValidAceArray,
 };
 
 export type {
