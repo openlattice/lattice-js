@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -24,9 +28,10 @@ import {
   INVALID_PARAMS_OPTIONAL_NUMBER,
 } from '../utils/testing/InvalidParams';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfType,
+  testBuilderSet,
+  testBuilderSetType,
 } from '../utils/testing/ModelTestUtils';
 
 const INVALID_PARAMS_FOR_SHARD = INVALID_PARAMS_FOR_OPTIONAL_NUMBER.slice(0);
@@ -44,41 +49,41 @@ describe('EntityType', () => {
 
     describe('setBaseType()', () => {
       const validParams = [MOCK_ENTITY_TYPE.baseType];
-      testBuilderSetter(EntityTypeBuilder, 'setBaseType', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setBaseType', validParams, true);
     });
 
     describe('setCategory()', () => {
-      testBuilderSetterOfType(EntityTypeBuilder, 'setCategory', SecurableTypes, true);
+      testBuilderSetType(EntityTypeBuilder, 'setCategory', SecurableTypes, true);
     });
 
     describe('setDescription()', () => {
       const validParams = [MOCK_ENTITY_TYPE.description];
-      testBuilderSetter(EntityTypeBuilder, 'setDescription', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setDescription', validParams, true);
     });
 
     describe('setId()', () => {
       const validParams = [MOCK_ENTITY_TYPE.id];
-      testBuilderSetter(EntityTypeBuilder, 'setId', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setId', validParams, true);
     });
 
     describe('setKey()', () => {
       const validParams = [MOCK_ENTITY_TYPE.key];
-      testBuilderSetter(EntityTypeBuilder, 'setKey', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setKey', validParams, true);
     });
 
     describe('setPropertyTags()', () => {
       const validParams = [MOCK_ENTITY_TYPE.propertyTags];
-      testBuilderSetter(EntityTypeBuilder, 'setPropertyTags', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setPropertyTags', validParams, true);
     });
 
     describe('setPropertyTypes()', () => {
       const validParams = [MOCK_ENTITY_TYPE.properties];
-      testBuilderSetter(EntityTypeBuilder, 'setPropertyTypes', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setPropertyTypes', validParams, true);
     });
 
     describe('setSchemas()', () => {
       const validParams = [MOCK_ENTITY_TYPE.schemas];
-      testBuilderSetter(EntityTypeBuilder, 'setSchemas', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setSchemas', validParams, true);
     });
 
     describe('setShards()', () => {
@@ -87,155 +92,20 @@ describe('EntityType', () => {
       invalidParams.push(-1);
       invalidParams.push(0);
       invalidParams.push(20);
-      testBuilderSetter(EntityTypeBuilder, 'setShards', validParams, true);
+      testBuilderSet(EntityTypeBuilder, 'setShards', validParams, true);
     });
 
     describe('setTitle()', () => {
       const validParams = [MOCK_ENTITY_TYPE.title];
-      testBuilderSetter(EntityTypeBuilder, 'setTitle', validParams);
+      testBuilderSet(EntityTypeBuilder, 'setTitle', validParams);
     });
 
     describe('setType()', () => {
       const validParams = [MOCK_ENTITY_TYPE.type];
-      testBuilderSetter(EntityTypeBuilder, 'setType', validParams);
+      testBuilderSet(EntityTypeBuilder, 'setType', validParams);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          // omitting setTitle()
-          (new EntityTypeBuilder())
-            .setBaseType(MOCK_ENTITY_TYPE.baseType)
-            .setCategory(MOCK_ENTITY_TYPE.category)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setShards(MOCK_ENTITY_TYPE.shards)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setType()
-          (new EntityTypeBuilder())
-            .setBaseType(MOCK_ENTITY_TYPE.baseType)
-            .setCategory(MOCK_ENTITY_TYPE.category)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setShards(MOCK_ENTITY_TYPE.shards)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .build();
-        }).toThrow();
-
-      });
-
-      test('should not throw when an optional property has not been set', () => {
-
-        expect(() => {
-          // omitting setBaseType()
-          (new EntityTypeBuilder())
-            .setCategory(MOCK_ENTITY_TYPE.category)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setShards(MOCK_ENTITY_TYPE.shards)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setCategory()
-          (new EntityTypeBuilder())
-            .setBaseType(MOCK_ENTITY_TYPE.baseType)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setShards(MOCK_ENTITY_TYPE.shards)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setDescription()
-          (new EntityTypeBuilder())
-            .setBaseType(MOCK_ENTITY_TYPE.baseType)
-            .setCategory(MOCK_ENTITY_TYPE.category)
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setShards(MOCK_ENTITY_TYPE.shards)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setId()
-          (new EntityTypeBuilder())
-            .setBaseType(MOCK_ENTITY_TYPE.baseType)
-            .setCategory(MOCK_ENTITY_TYPE.category)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setShards(MOCK_ENTITY_TYPE.shards)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setPropertyTags()
-          (new EntityTypeBuilder())
-            .setBaseType(MOCK_ENTITY_TYPE.baseType)
-            .setCategory(MOCK_ENTITY_TYPE.category)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setShards(MOCK_ENTITY_TYPE.shards)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setShards()
-          (new EntityTypeBuilder())
-            .setBaseType(MOCK_ENTITY_TYPE.baseType)
-            .setCategory(MOCK_ENTITY_TYPE.category)
-            .setDescription(MOCK_ENTITY_TYPE.description)
-            .setId(MOCK_ENTITY_TYPE.id)
-            .setKey(MOCK_ENTITY_TYPE.key)
-            .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-            .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-            .setSchemas(MOCK_ENTITY_TYPE.schemas)
-            .setTitle(MOCK_ENTITY_TYPE.title)
-            .setType(MOCK_ENTITY_TYPE.type)
-            .build();
-        }).not.toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -256,23 +126,22 @@ describe('EntityType', () => {
         expect(entityType.schemas).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const entityType = (new EntityTypeBuilder())
-          .setBaseType(MOCK_ENTITY_TYPE.baseType)
-          .setCategory(MOCK_ENTITY_TYPE.category)
-          .setDescription(MOCK_ENTITY_TYPE.description)
-          .setId(MOCK_ENTITY_TYPE.id)
-          .setKey(MOCK_ENTITY_TYPE.key)
-          .setPropertyTags(MOCK_ENTITY_TYPE.propertyTags)
-          .setPropertyTypes(MOCK_ENTITY_TYPE.properties)
-          .setSchemas(MOCK_ENTITY_TYPE.schemas)
-          .setShards(MOCK_ENTITY_TYPE.shards)
-          .setTitle(MOCK_ENTITY_TYPE.title)
-          .setType(MOCK_ENTITY_TYPE.type)
-          .build();
-
-        expectValidInstance(entityType);
+      testBuilderBuild(EntityType, EntityTypeBuilder, MOCK_ENTITY_TYPE, {
+        optional: {
+          setBaseType: MOCK_ENTITY_TYPE.baseType,
+          setCategory: MOCK_ENTITY_TYPE.category,
+          setDescription: MOCK_ENTITY_TYPE.description,
+          setId: MOCK_ENTITY_TYPE.id,
+          setKey: MOCK_ENTITY_TYPE.key,
+          setPropertyTags: MOCK_ENTITY_TYPE.propertyTags,
+          setPropertyTypes: MOCK_ENTITY_TYPE.properties,
+          setSchemas: MOCK_ENTITY_TYPE.schemas,
+          setShards: MOCK_ENTITY_TYPE.shards,
+        },
+        required: {
+          setTitle: MOCK_ENTITY_TYPE.title,
+          setType: MOCK_ENTITY_TYPE.type,
+        },
       });
 
     });

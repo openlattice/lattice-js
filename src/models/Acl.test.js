@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -15,8 +19,9 @@ import {
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 describe('Acl', () => {
@@ -29,21 +34,15 @@ describe('Acl', () => {
 
     describe('setAclKey()', () => {
       const validParams = [MOCK_ACL.aclKey];
-      testBuilderSetter(AclBuilder, 'setAclKey', validParams);
+      testBuilderSet(AclBuilder, 'setAclKey', validParams);
     });
 
     describe('setAces()', () => {
       const validParams = [MOCK_ACL.aces];
-      testBuilderSetter(AclBuilder, 'setAces', validParams, true);
+      testBuilderSet(AclBuilder, 'setAces', validParams, true);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-        expect(() => {
-          (new AclBuilder()).build();
-        }).toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -54,14 +53,13 @@ describe('Acl', () => {
         expect(acl.aces).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const acl = (new AclBuilder())
-          .setAclKey(MOCK_ACL.aclKey)
-          .setAces(MOCK_ACL.aces)
-          .build();
-
-        expectValidInstance(acl);
+      testBuilderBuild(Acl, AclBuilder, MOCK_ACL, {
+        optional: {
+          setAces: MOCK_ACL.aces,
+        },
+        required: {
+          setAclKey: MOCK_ACL.aclKey,
+        },
       });
 
     });

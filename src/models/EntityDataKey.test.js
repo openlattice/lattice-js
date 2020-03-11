@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -11,8 +15,9 @@ import {
 
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 describe('EntityDataKey', () => {
@@ -25,43 +30,21 @@ describe('EntityDataKey', () => {
 
     describe('setEntityKeyId()', () => {
       const validParams = [MOCK_ENTITY_DATA_KEY.entityKeyId];
-      testBuilderSetter(EntityDataKeyBuilder, 'setEntityKeyId', validParams);
+      testBuilderSet(EntityDataKeyBuilder, 'setEntityKeyId', validParams);
     });
 
     describe('setEntitySetId()', () => {
       const validParams = [MOCK_ENTITY_DATA_KEY.entitySetId];
-      testBuilderSetter(EntityDataKeyBuilder, 'setEntitySetId', validParams);
+      testBuilderSet(EntityDataKeyBuilder, 'setEntitySetId', validParams);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          // omitting setEntityKeyId()
-          (new EntityDataKeyBuilder())
-            .setEntitySetId(MOCK_ENTITY_DATA_KEY.entitySetId)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setEntitySetId()
-          (new EntityDataKeyBuilder())
-            .setEntityKeyId(MOCK_ENTITY_DATA_KEY.entityKeyId)
-            .build();
-        }).toThrow();
+      testBuilderBuild(EntityDataKey, EntityDataKeyBuilder, MOCK_ENTITY_DATA_KEY, {
+        required: {
+          setEntityKeyId: MOCK_ENTITY_DATA_KEY.entityKeyId,
+          setEntitySetId: MOCK_ENTITY_DATA_KEY.entitySetId,
+        },
       });
-
-      test('should return a valid instance', () => {
-
-        const entityDataKey = (new EntityDataKeyBuilder())
-          .setEntityKeyId(MOCK_ENTITY_DATA_KEY.entityKeyId)
-          .setEntitySetId(MOCK_ENTITY_DATA_KEY.entitySetId)
-          .build();
-
-        expectValidInstance(entityDataKey);
-      });
-
     });
 
   });
@@ -155,11 +138,11 @@ describe('EntityDataKey', () => {
       expect(testSet.size).toEqual(2);
       expect(testSet.count()).toEqual(2);
 
-      expect(testSet.first().acl).toEqual(MOCK_ENTITY_DATA_KEY.acl);
-      expect(testSet.first().action).toEqual(MOCK_ENTITY_DATA_KEY.action);
+      expect(testSet.first().entityKeyId).toEqual(MOCK_ENTITY_DATA_KEY.entityKeyId);
+      expect(testSet.first().entitySetId).toEqual(MOCK_ENTITY_DATA_KEY.entitySetId);
 
-      expect(testSet.last().acl).toEqual(randomEntityDataKey.acl);
-      expect(testSet.last().action).toEqual(randomEntityDataKey.action);
+      expect(testSet.last().entityKeyId).toEqual(randomEntityDataKey.entityKeyId);
+      expect(testSet.last().entitySetId).toEqual(randomEntityDataKey.entitySetId);
     });
 
     test('Immutable.Map', () => {

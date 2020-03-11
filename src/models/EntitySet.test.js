@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -19,9 +23,10 @@ import {
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfTypes,
+  testBuilderSet,
+  testBuilderSetTypes,
 } from '../utils/testing/ModelTestUtils';
 
 describe('EntitySet', () => {
@@ -34,179 +39,49 @@ describe('EntitySet', () => {
 
     describe('setContacts()', () => {
       const validParams = [MOCK_ENTITY_SET.contacts];
-      testBuilderSetter(EntitySetBuilder, 'setContacts', validParams, true);
+      testBuilderSet(EntitySetBuilder, 'setContacts', validParams, true);
     });
 
     describe('setDescription()', () => {
       const validParams = [MOCK_ENTITY_SET.description];
-      testBuilderSetter(EntitySetBuilder, 'setDescription', validParams, true);
+      testBuilderSet(EntitySetBuilder, 'setDescription', validParams, true);
     });
 
     describe('setEntityTypeId()', () => {
       const validParams = [MOCK_ENTITY_SET.entityTypeId];
-      testBuilderSetter(EntitySetBuilder, 'setEntityTypeId', validParams);
+      testBuilderSet(EntitySetBuilder, 'setEntityTypeId', validParams);
     });
 
     describe('setFlags()', () => {
-      testBuilderSetterOfTypes(EntitySetBuilder, 'setFlags', EntitySetFlagTypes, true);
+      testBuilderSetTypes(EntitySetBuilder, 'setFlags', EntitySetFlagTypes, true);
     });
 
     describe('setId()', () => {
       const validParams = [MOCK_ENTITY_SET.id];
-      testBuilderSetter(EntitySetBuilder, 'setId', validParams, true);
+      testBuilderSet(EntitySetBuilder, 'setId', validParams, true);
     });
 
     describe('setLinkedEntitySets()', () => {
       const validParams = [MOCK_ENTITY_SET.linkedEntitySets];
-      testBuilderSetter(EntitySetBuilder, 'setLinkedEntitySets', validParams, true);
+      testBuilderSet(EntitySetBuilder, 'setLinkedEntitySets', validParams, true);
     });
 
     describe('setName()', () => {
       const validParams = [MOCK_ENTITY_SET.name];
-      testBuilderSetter(EntitySetBuilder, 'setName', validParams);
+      testBuilderSet(EntitySetBuilder, 'setName', validParams);
     });
 
     describe('setOrganizationId()', () => {
       const validParams = [MOCK_ENTITY_SET.organizationId];
-      testBuilderSetter(EntitySetBuilder, 'setOrganizationId', validParams, true);
+      testBuilderSet(EntitySetBuilder, 'setOrganizationId', validParams, true);
     });
 
     describe('setTitle()', () => {
       const validParams = [MOCK_ENTITY_SET.title];
-      testBuilderSetter(EntitySetBuilder, 'setTitle', validParams);
+      testBuilderSet(EntitySetBuilder, 'setTitle', validParams);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          // omitting setEntityTypeId()
-          (new EntitySetBuilder())
-            .setContacts(MOCK_ENTITY_SET.contacts)
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setId(MOCK_ENTITY_SET.id)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setName(MOCK_ENTITY_SET.name)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setName()
-          (new EntitySetBuilder())
-            .setContacts(MOCK_ENTITY_SET.contacts)
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setId(MOCK_ENTITY_SET.id)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setTitle()
-          (new EntitySetBuilder())
-            .setContacts(MOCK_ENTITY_SET.contacts)
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setId(MOCK_ENTITY_SET.id)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setName(MOCK_ENTITY_SET.name)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .build();
-        }).toThrow();
-      });
-
-      test('should not throw when an optional property has not been set', () => {
-
-        expect(() => {
-          // omitting setContacts()
-          (new EntitySetBuilder())
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setId(MOCK_ENTITY_SET.id)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setName(MOCK_ENTITY_SET.name)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setDescription()
-          (new EntitySetBuilder())
-            .setContacts(MOCK_ENTITY_SET.contacts)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setId(MOCK_ENTITY_SET.id)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setName(MOCK_ENTITY_SET.name)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setFlags()
-          (new EntitySetBuilder())
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setId(MOCK_ENTITY_SET.id)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setName(MOCK_ENTITY_SET.name)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setId()
-          (new EntitySetBuilder())
-            .setContacts(MOCK_ENTITY_SET.contacts)
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setName(MOCK_ENTITY_SET.name)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setLinkedEntitySets()
-          (new EntitySetBuilder())
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setId(MOCK_ENTITY_SET.id)
-            .setName(MOCK_ENTITY_SET.name)
-            .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setOrganizationId()
-          (new EntitySetBuilder())
-            .setContacts(MOCK_ENTITY_SET.contacts)
-            .setDescription(MOCK_ENTITY_SET.description)
-            .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-            .setFlags(MOCK_ENTITY_SET.flags)
-            .setId(MOCK_ENTITY_SET.id)
-            .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-            .setName(MOCK_ENTITY_SET.name)
-            .setTitle(MOCK_ENTITY_SET.title)
-            .build();
-        }).not.toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -225,21 +100,20 @@ describe('EntitySet', () => {
         expect(entitySet.contacts).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const entitySet = (new EntitySetBuilder())
-          .setContacts(MOCK_ENTITY_SET.contacts)
-          .setDescription(MOCK_ENTITY_SET.description)
-          .setEntityTypeId(MOCK_ENTITY_SET.entityTypeId)
-          .setFlags(MOCK_ENTITY_SET.flags)
-          .setId(MOCK_ENTITY_SET.id)
-          .setLinkedEntitySets(MOCK_ENTITY_SET.linkedEntitySets)
-          .setName(MOCK_ENTITY_SET.name)
-          .setOrganizationId(MOCK_ENTITY_SET.organizationId)
-          .setTitle(MOCK_ENTITY_SET.title)
-          .build();
-
-        expectValidInstance(entitySet);
+      testBuilderBuild(EntitySet, EntitySetBuilder, MOCK_ENTITY_SET, {
+        optional: {
+          setContacts: MOCK_ENTITY_SET.contacts,
+          setDescription: MOCK_ENTITY_SET.description,
+          setFlags: MOCK_ENTITY_SET.flags,
+          setId: MOCK_ENTITY_SET.id,
+          setLinkedEntitySets: MOCK_ENTITY_SET.linkedEntitySets,
+          setOrganizationId: MOCK_ENTITY_SET.organizationId,
+        },
+        required: {
+          setEntityTypeId: MOCK_ENTITY_SET.entityTypeId,
+          setName: MOCK_ENTITY_SET.name,
+          setTitle: MOCK_ENTITY_SET.title,
+        },
       });
 
     });

@@ -321,7 +321,7 @@ class OrganizationBuilder {
     return this;
   }
 
-  setPartitions(partitions :$ReadOnlyArray<number>) :OrganizationBuilder {
+  setPartitions(partitions :?$ReadOnlyArray<number>) :OrganizationBuilder {
 
     if (!isDefined(partitions)) {
       return this;

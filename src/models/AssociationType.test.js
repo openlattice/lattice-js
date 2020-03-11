@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -16,8 +20,9 @@ import {
 } from '../utils/testing/Invalid';
 
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 describe('AssociationType', () => {
@@ -30,63 +35,25 @@ describe('AssociationType', () => {
 
     describe('setBidirectional()', () => {
       const validParams = [MOCK_ASSOCIATION_TYPE.bidirectional];
-      testBuilderSetter(AssociationTypeBuilder, 'setBidirectional', validParams);
+      testBuilderSet(AssociationTypeBuilder, 'setBidirectional', validParams);
     });
 
     describe('setEntityType()', () => {
       const validParams = [MOCK_ASSOCIATION_TYPE.entityType];
-      testBuilderSetter(AssociationTypeBuilder, 'setEntityType', validParams);
+      testBuilderSet(AssociationTypeBuilder, 'setEntityType', validParams);
     });
 
     describe('setDestinationEntityTypeIds()', () => {
       const validParams = [MOCK_ASSOCIATION_TYPE.dst];
-      testBuilderSetter(AssociationTypeBuilder, 'setDestinationEntityTypeIds', validParams, true);
+      testBuilderSet(AssociationTypeBuilder, 'setDestinationEntityTypeIds', validParams, true);
     });
 
     describe('setSourceEntityTypeIds()', () => {
       const validParams = [MOCK_ASSOCIATION_TYPE.src];
-      testBuilderSetter(AssociationTypeBuilder, 'setSourceEntityTypeIds', validParams, true);
+      testBuilderSet(AssociationTypeBuilder, 'setSourceEntityTypeIds', validParams, true);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-        expect(() => {
-          // omitting setBidirectional()
-          (new AssociationTypeBuilder())
-            .setDestinationEntityTypeIds(MOCK_ASSOCIATION_TYPE.dst)
-            .setEntityType(MOCK_ASSOCIATION_TYPE.entityType)
-            .setSourceEntityTypeIds(MOCK_ASSOCIATION_TYPE.src)
-            .build();
-        }).toThrow();
-        expect(() => {
-          // omitting setEntityType()
-          (new AssociationTypeBuilder())
-            .setBidirectional(MOCK_ASSOCIATION_TYPE.bidirectional)
-            .setDestinationEntityTypeIds(MOCK_ASSOCIATION_TYPE.dst)
-            .setSourceEntityTypeIds(MOCK_ASSOCIATION_TYPE.src)
-            .build();
-        }).toThrow();
-      });
-
-      test('should not throw when an optional property has not been set', () => {
-        expect(() => {
-          // omitting setDestinationEntityTypeIds()
-          (new AssociationTypeBuilder())
-            .setBidirectional(MOCK_ASSOCIATION_TYPE.bidirectional)
-            .setEntityType(MOCK_ASSOCIATION_TYPE.entityType)
-            .setSourceEntityTypeIds(MOCK_ASSOCIATION_TYPE.src)
-            .build();
-        }).not.toThrow();
-        expect(() => {
-          // omitting setSourceEntityTypeIds()
-          (new AssociationTypeBuilder())
-            .setBidirectional(MOCK_ASSOCIATION_TYPE.bidirectional)
-            .setDestinationEntityTypeIds(MOCK_ASSOCIATION_TYPE.dst)
-            .setEntityType(MOCK_ASSOCIATION_TYPE.entityType)
-            .build();
-        }).not.toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -99,16 +66,15 @@ describe('AssociationType', () => {
         expect(associationType.src).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const associationType = (new AssociationTypeBuilder())
-          .setBidirectional(MOCK_ASSOCIATION_TYPE.bidirectional)
-          .setDestinationEntityTypeIds(MOCK_ASSOCIATION_TYPE.dst)
-          .setEntityType(MOCK_ASSOCIATION_TYPE.entityType)
-          .setSourceEntityTypeIds(MOCK_ASSOCIATION_TYPE.src)
-          .build();
-
-        expectValidInstance(associationType);
+      testBuilderBuild(AssociationType, AssociationTypeBuilder, MOCK_ASSOCIATION_TYPE, {
+        optional: {
+          setDestinationEntityTypeIds: MOCK_ASSOCIATION_TYPE.dst,
+          setSourceEntityTypeIds: MOCK_ASSOCIATION_TYPE.src,
+        },
+        required: {
+          setBidirectional: MOCK_ASSOCIATION_TYPE.bidirectional,
+          setEntityType: MOCK_ASSOCIATION_TYPE.entityType,
+        },
       });
 
     });

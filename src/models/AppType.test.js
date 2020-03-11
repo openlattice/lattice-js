@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -16,8 +20,9 @@ import {
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 describe('AppType', () => {
@@ -30,104 +35,41 @@ describe('AppType', () => {
 
     describe('setDescription()', () => {
       const validParams = [MOCK_APP_TYPE.description];
-      testBuilderSetter(AppTypeBuilder, 'setDescription', validParams, true);
+      testBuilderSet(AppTypeBuilder, 'setDescription', validParams, true);
     });
 
     describe('setEntityTypeId()', () => {
       const validParams = [MOCK_APP_TYPE.entityTypeId];
-      testBuilderSetter(AppTypeBuilder, 'setEntityTypeId', validParams);
+      testBuilderSet(AppTypeBuilder, 'setEntityTypeId', validParams);
     });
 
     describe('setId()', () => {
       const validParams = [MOCK_APP_TYPE.id];
-      testBuilderSetter(AppTypeBuilder, 'setId', validParams, true);
+      testBuilderSet(AppTypeBuilder, 'setId', validParams, true);
     });
 
     describe('setTitle()', () => {
       const validParams = [MOCK_APP_TYPE.title];
-      testBuilderSetter(AppTypeBuilder, 'setTitle', validParams);
+      testBuilderSet(AppTypeBuilder, 'setTitle', validParams);
     });
 
     describe('setType()', () => {
       const validParams = [MOCK_APP_TYPE.type];
-      testBuilderSetter(AppTypeBuilder, 'setType', validParams);
+      testBuilderSet(AppTypeBuilder, 'setType', validParams);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          (new AppTypeBuilder()).build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setEntityTypeId()
-          (new AppTypeBuilder())
-            .setDescription(MOCK_APP_TYPE.description)
-            .setId(MOCK_APP_TYPE.id)
-            .setTitle(MOCK_APP_TYPE.title)
-            .setType(MOCK_APP_TYPE.type)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setTitle()
-          (new AppTypeBuilder())
-            .setDescription(MOCK_APP_TYPE.description)
-            .setEntityTypeId(MOCK_APP_TYPE.entityTypeId)
-            .setId(MOCK_APP_TYPE.id)
-            .setType(MOCK_APP_TYPE.type)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setType()
-          (new AppTypeBuilder())
-            .setDescription(MOCK_APP_TYPE.description)
-            .setEntityTypeId(MOCK_APP_TYPE.entityTypeId)
-            .setId(MOCK_APP_TYPE.id)
-            .setTitle(MOCK_APP_TYPE.title)
-            .build();
-        }).toThrow();
+      testBuilderBuild(AppType, AppTypeBuilder, MOCK_APP_TYPE, {
+        optional: {
+          setDescription: MOCK_APP_TYPE.description,
+          setId: MOCK_APP_TYPE.id,
+        },
+        required: {
+          setEntityTypeId: MOCK_APP_TYPE.entityTypeId,
+          setTitle: MOCK_APP_TYPE.title,
+          setType: MOCK_APP_TYPE.type,
+        },
       });
-
-      test('should not throw when an optional property has not been set', () => {
-
-        expect(() => {
-          // omitting setDescription()
-          (new AppTypeBuilder())
-            .setEntityTypeId(MOCK_APP_TYPE.entityTypeId)
-            .setId(MOCK_APP_TYPE.id)
-            .setTitle(MOCK_APP_TYPE.title)
-            .setType(MOCK_APP_TYPE.type)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setId()
-          (new AppTypeBuilder())
-            .setDescription(MOCK_APP_TYPE.description)
-            .setEntityTypeId(MOCK_APP_TYPE.entityTypeId)
-            .setTitle(MOCK_APP_TYPE.title)
-            .setType(MOCK_APP_TYPE.type)
-            .build();
-        }).not.toThrow();
-      });
-
-      test('should return a valid instance', () => {
-
-        const appType = (new AppTypeBuilder())
-          .setDescription(MOCK_APP_TYPE.description)
-          .setEntityTypeId(MOCK_APP_TYPE.entityTypeId)
-          .setId(MOCK_APP_TYPE.id)
-          .setTitle(MOCK_APP_TYPE.title)
-          .setType(MOCK_APP_TYPE.type)
-          .build();
-
-        expectValidInstance(appType);
-      });
-
     });
 
   });

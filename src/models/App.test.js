@@ -16,8 +16,9 @@ import {
   INVALID_PARAMS_FOR_OPTIONAL_STRING,
 } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 describe('App', () => {
@@ -30,75 +31,35 @@ describe('App', () => {
 
     describe('setAppTypeIds()', () => {
       const validParams = [MOCK_APP.appTypeIds];
-      testBuilderSetter(AppBuilder, 'setAppTypeIds', validParams, true);
+      testBuilderSet(AppBuilder, 'setAppTypeIds', validParams, true);
     });
 
     describe('setDescription()', () => {
       const validParams = [MOCK_APP.description];
-      testBuilderSetter(AppBuilder, 'setDescription', validParams, true);
+      testBuilderSet(AppBuilder, 'setDescription', validParams, true);
     });
 
     describe('setId()', () => {
       const validParams = [MOCK_APP.id];
-      testBuilderSetter(AppBuilder, 'setId', validParams, true);
+      testBuilderSet(AppBuilder, 'setId', validParams, true);
     });
 
     describe('setName()', () => {
       const validParams = [MOCK_APP.name];
-      testBuilderSetter(AppBuilder, 'setName', validParams);
+      testBuilderSet(AppBuilder, 'setName', validParams);
     });
 
     describe('setTitle()', () => {
       const validParams = [MOCK_APP.title];
-      testBuilderSetter(AppBuilder, 'setTitle', validParams);
+      testBuilderSet(AppBuilder, 'setTitle', validParams);
     });
 
     describe('setUrl()', () => {
       const validParams = [MOCK_APP.url];
-      testBuilderSetter(AppBuilder, 'setUrl', validParams);
+      testBuilderSet(AppBuilder, 'setUrl', validParams);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          (new AppBuilder()).build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setName()
-          (new AppBuilder())
-            .setAppTypeIds(MOCK_APP.appTypeIds)
-            .setDescription(MOCK_APP.description)
-            .setId(MOCK_APP.id)
-            .setTitle(MOCK_APP.title)
-            .setUrl(MOCK_APP.url)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setTitle()
-          (new AppBuilder())
-            .setAppTypeIds(MOCK_APP.appTypeIds)
-            .setDescription(MOCK_APP.description)
-            .setId(MOCK_APP.id)
-            .setName(MOCK_APP.name)
-            .setUrl(MOCK_APP.url)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setUrl()
-          (new AppBuilder())
-            .setAppTypeIds(MOCK_APP.appTypeIds)
-            .setDescription(MOCK_APP.description)
-            .setId(MOCK_APP.id)
-            .setName(MOCK_APP.name)
-            .setTitle(MOCK_APP.title)
-            .build();
-        }).toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -114,43 +75,17 @@ describe('App', () => {
         expect(app.appTypeIds).toEqual([]);
       });
 
-      test('should not throw when an optional property has not been set', () => {
-
-        expect(() => {
-          // omitting setDescription()
-          (new AppBuilder())
-            .setAppTypeIds(MOCK_APP.appTypeIds)
-            .setId(MOCK_APP.id)
-            .setName(MOCK_APP.name)
-            .setTitle(MOCK_APP.title)
-            .setUrl(MOCK_APP.url)
-            .build();
-        }).not.toThrow();
-
-        expect(() => {
-          // omitting setId()
-          (new AppBuilder())
-            .setAppTypeIds(MOCK_APP.appTypeIds)
-            .setDescription(MOCK_APP.description)
-            .setName(MOCK_APP.name)
-            .setTitle(MOCK_APP.title)
-            .setUrl(MOCK_APP.url)
-            .build();
-        }).not.toThrow();
-      });
-
-      test('should return a valid instance', () => {
-
-        const app = (new AppBuilder())
-          .setAppTypeIds(MOCK_APP.appTypeIds)
-          .setDescription(MOCK_APP.description)
-          .setId(MOCK_APP.id)
-          .setName(MOCK_APP.name)
-          .setTitle(MOCK_APP.title)
-          .setUrl(MOCK_APP.url)
-          .build();
-
-        expectValidInstance(app);
+      testBuilderBuild(App, AppBuilder, MOCK_APP, {
+        optional: {
+          setAppTypeIds: MOCK_APP.appTypeIds,
+          setDescription: MOCK_APP.description,
+          setId: MOCK_APP.id,
+        },
+        required: {
+          setName: MOCK_APP.name,
+          setTitle: MOCK_APP.title,
+          setUrl: MOCK_APP.url,
+        },
       });
 
     });

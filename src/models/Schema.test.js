@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -14,8 +18,9 @@ import {
   INVALID_PARAMS_FOR_OPTIONAL_ARRAY,
 } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 describe('Schema', () => {
@@ -28,32 +33,20 @@ describe('Schema', () => {
 
     describe('setEntityTypes()', () => {
       const validParams = [MOCK_SCHEMA.entityTypes];
-      testBuilderSetter(SchemaBuilder, 'setEntityTypes', validParams, true);
+      testBuilderSet(SchemaBuilder, 'setEntityTypes', validParams, true);
     });
 
     describe('setFQN()', () => {
       const validParams = [MOCK_SCHEMA.fqn];
-      testBuilderSetter(SchemaBuilder, 'setFQN', validParams);
+      testBuilderSet(SchemaBuilder, 'setFQN', validParams);
     });
 
     describe('setPropertyTypes()', () => {
       const validParams = [MOCK_SCHEMA.propertyTypes];
-      testBuilderSetter(SchemaBuilder, 'setPropertyTypes', validParams, true);
+      testBuilderSet(SchemaBuilder, 'setPropertyTypes', validParams, true);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          // omitting setFQN()
-          (new SchemaBuilder())
-            .setEntityTypes(MOCK_SCHEMA.entityTypes)
-            .setPropertyTypes(MOCK_SCHEMA.propertyTypes)
-            .build();
-        }).toThrow();
-
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -65,15 +58,14 @@ describe('Schema', () => {
         expect(schema.propertyTypes).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const schema = (new SchemaBuilder())
-          .setEntityTypes(MOCK_SCHEMA.entityTypes)
-          .setFQN(MOCK_SCHEMA.fqn)
-          .setPropertyTypes(MOCK_SCHEMA.propertyTypes)
-          .build();
-
-        expectValidInstance(schema);
+      testBuilderBuild(Schema, SchemaBuilder, MOCK_SCHEMA, {
+        optional: {
+          setEntityTypes: MOCK_SCHEMA.entityTypes,
+          setPropertyTypes: MOCK_SCHEMA.propertyTypes,
+        },
+        required: {
+          setFQN: MOCK_SCHEMA.fqn,
+        },
       });
 
     });

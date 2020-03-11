@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -11,8 +15,9 @@ import {
 
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_OBJECT } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 describe('DataGraph', () => {
@@ -25,25 +30,15 @@ describe('DataGraph', () => {
 
     describe('setAssociations()', () => {
       const validParams = [MOCK_DATA_GRAPH.associations];
-      testBuilderSetter(DataGraphBuilder, 'setAssociations', validParams, true);
+      testBuilderSet(DataGraphBuilder, 'setAssociations', validParams, true);
     });
 
     describe('setEntities()', () => {
       const validParams = [MOCK_DATA_GRAPH.entities];
-      testBuilderSetter(DataGraphBuilder, 'setEntities', validParams);
+      testBuilderSet(DataGraphBuilder, 'setEntities', validParams);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          // omitting setEntities
-          (new DataGraphBuilder())
-            .setAssociations(MOCK_DATA_GRAPH.associations)
-            .build();
-        }).toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -54,14 +49,13 @@ describe('DataGraph', () => {
         expect(dataGraph.associations).toEqual({});
       });
 
-      test('should return a valid instance', () => {
-
-        const dataGraph = (new DataGraphBuilder())
-          .setAssociations(MOCK_DATA_GRAPH.associations)
-          .setEntities(MOCK_DATA_GRAPH.entities)
-          .build();
-
-        expectValidInstance(dataGraph);
+      testBuilderBuild(DataGraph, DataGraphBuilder, MOCK_DATA_GRAPH, {
+        optional: {
+          setAssociations: MOCK_DATA_GRAPH.associations,
+        },
+        required: {
+          setEntities: MOCK_DATA_GRAPH.entities,
+        },
       });
 
     });

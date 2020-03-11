@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -13,8 +17,9 @@ import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_OPTIONAL_ARRAY } from '../utils/testing/InvalidParams';
 import {
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfTypes,
+  testBuilderSet,
+  testBuilderSetTypes,
+  testBuilderBuild,
 } from '../utils/testing/ModelTestUtils';
 
 describe('AccessCheck', () => {
@@ -27,20 +32,14 @@ describe('AccessCheck', () => {
 
     describe('setAclKey()', () => {
       const validParams = [MOCK_ACCESS_CHECK.aclKey];
-      testBuilderSetter(AccessCheckBuilder, 'setAclKey', validParams);
+      testBuilderSet(AccessCheckBuilder, 'setAclKey', validParams);
     });
 
     describe('setPermissions()', () => {
-      testBuilderSetterOfTypes(AccessCheckBuilder, 'setPermissions', PermissionTypes, true);
+      testBuilderSetTypes(AccessCheckBuilder, 'setPermissions', PermissionTypes, true);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-        expect(() => {
-          (new AccessCheckBuilder()).build();
-        }).toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -51,14 +50,13 @@ describe('AccessCheck', () => {
         expect(accessCheck.permissions).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const accessCheck = (new AccessCheckBuilder())
-          .setAclKey(MOCK_ACCESS_CHECK.aclKey)
-          .setPermissions(MOCK_ACCESS_CHECK.permissions)
-          .build();
-
-        expectValidInstance(accessCheck);
+      testBuilderBuild(AccessCheck, AccessCheckBuilder, MOCK_ACCESS_CHECK, {
+        optional: {
+          setPermissions: MOCK_ACCESS_CHECK.permissions,
+        },
+        required: {
+          setAclKey: MOCK_ACCESS_CHECK.aclKey,
+        },
       });
 
     });

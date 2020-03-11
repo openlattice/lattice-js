@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -17,9 +21,10 @@ import {
   INVALID_PARAMS_SS,
 } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfType,
+  testBuilderSet,
+  testBuilderSetType,
 } from '../utils/testing/ModelTestUtils';
 
 describe('Grant', () => {
@@ -32,30 +37,19 @@ describe('Grant', () => {
 
     describe('setAttribute()', () => {
       const validParams = [MOCK_GRANT.attribute];
-      testBuilderSetter(GrantBuilder, 'setAttribute', validParams, true);
+      testBuilderSet(GrantBuilder, 'setAttribute', validParams, true);
     });
 
     describe('setGrantType()', () => {
-      testBuilderSetterOfType(GrantBuilder, 'setGrantType', GrantTypes);
+      testBuilderSetType(GrantBuilder, 'setGrantType', GrantTypes);
     });
 
     describe('setMappings()', () => {
       const validParams = [MOCK_GRANT.mappings];
-      testBuilderSetter(GrantBuilder, 'setMappings', validParams, true);
+      testBuilderSet(GrantBuilder, 'setMappings', validParams, true);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        // omitting setGrantType()
-        expect(() => {
-          (new GrantBuilder())
-            .setMappings(MOCK_GRANT.mappings)
-            .build();
-        }).toThrow();
-
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -67,15 +61,14 @@ describe('Grant', () => {
         expect(grant.mappings).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const grant = (new GrantBuilder())
-          .setAttribute(MOCK_GRANT.attribute)
-          .setGrantType(MOCK_GRANT.grantType)
-          .setMappings(MOCK_GRANT.mappings)
-          .build();
-
-        expectValidInstance(grant);
+      testBuilderBuild(Grant, GrantBuilder, MOCK_GRANT, {
+        optional: {
+          setAttribute: MOCK_GRANT.attribute,
+          setMappings: MOCK_GRANT.mappings,
+        },
+        required: {
+          setGrantType: MOCK_GRANT.grantType,
+        },
       });
 
     });

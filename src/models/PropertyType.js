@@ -179,7 +179,7 @@ class PropertyTypeBuilder {
       this.setId(value.get('id'));
       this.setIndexType(value.get('indexType'));
       this.setMultiValued(value.get('multiValued'));
-      this.setPii(value.get('pii'));
+      this.setPII(value.get('pii'));
       this.setSchemas(value.get('schemas'));
       this.setTitle(value.get('title'));
       this.setType(value.get('type'));
@@ -192,7 +192,7 @@ class PropertyTypeBuilder {
       this.setId(value.id);
       this.setIndexType(value.indexType);
       this.setMultiValued(value.multiValued);
-      this.setPii(value.pii);
+      this.setPII(value.pii);
       this.setSchemas(value.schemas);
       this.setTitle(value.title);
       this.setType(value.type);
@@ -300,7 +300,7 @@ class PropertyTypeBuilder {
     return this;
   }
 
-  setPii(pii :?boolean) :PropertyTypeBuilder {
+  setPII(pii :?boolean) :PropertyTypeBuilder {
 
     if (!isDefined(pii)) {
       return this;
@@ -410,7 +410,7 @@ const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
   .setId('3771c28a-cdee-403b-9cea-48845210f8ab')
   .setIndexType(IndexTypes.BTREE)
   .setMultiValued(true)
-  .setPii(false)
+  .setPII(false)
   .setSchemas([FQN.of('mock.schema')])
   .setTitle('MockPropertyTypeTitle')
   .setType(FQN.of('mock.propertytype'))
@@ -427,7 +427,7 @@ function genRandomPropertyType() :PropertyType {
     .setId(genRandomUUID())
     .setIndexType(IndexTypes.HASH)
     .setMultiValued(genRandomBoolean())
-    .setPii(genRandomBoolean())
+    .setPII(genRandomBoolean())
     .setSchemas([FQN.of(genRandomString(), genRandomString())])
     .setTitle(genRandomString())
     .setType(FQN.of(genRandomString(), genRandomString()))

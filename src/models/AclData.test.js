@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -12,9 +16,10 @@ import {
 import { ActionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfType,
+  testBuilderSet,
+  testBuilderSetType,
 } from '../utils/testing/ModelTestUtils';
 
 describe('AclData', () => {
@@ -27,42 +32,20 @@ describe('AclData', () => {
 
     describe('setAcl()', () => {
       const validParams = [MOCK_ACL_DATA.acl];
-      testBuilderSetter(AclDataBuilder, 'setAcl', validParams);
+      testBuilderSet(AclDataBuilder, 'setAcl', validParams);
     });
 
     describe('setAction()', () => {
-      testBuilderSetterOfType(AclDataBuilder, 'setAction', ActionTypes);
+      testBuilderSetType(AclDataBuilder, 'setAction', ActionTypes);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          // omitting setAction()
-          (new AclDataBuilder())
-            .setAcl(MOCK_ACL_DATA.acl)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setAcl()
-          (new AclDataBuilder())
-            .setAction(MOCK_ACL_DATA.action)
-            .build();
-        }).toThrow();
+      testBuilderBuild(AclData, AclDataBuilder, MOCK_ACL_DATA, {
+        required: {
+          setAcl: MOCK_ACL_DATA.acl,
+          setAction: MOCK_ACL_DATA.action,
+        },
       });
-
-      test('should return a valid instance', () => {
-
-        const aclData = (new AclDataBuilder())
-          .setAcl(MOCK_ACL_DATA.acl)
-          .setAction(MOCK_ACL_DATA.action)
-          .build();
-
-        expectValidInstance(aclData);
-      });
-
     });
 
   });

@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import { Map, Set, fromJS } from 'immutable';
 
 import {
@@ -12,9 +16,10 @@ import {
 import { PrincipalTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfType,
+  testBuilderSet,
+  testBuilderSetType,
 } from '../utils/testing/ModelTestUtils';
 
 describe('Principal', () => {
@@ -27,42 +32,20 @@ describe('Principal', () => {
 
     describe('setId()', () => {
       const validParams = [MOCK_PRINCIPAL.id];
-      testBuilderSetter(PrincipalBuilder, 'setId', validParams);
+      testBuilderSet(PrincipalBuilder, 'setId', validParams);
     });
 
     describe('setType()', () => {
-      testBuilderSetterOfType(PrincipalBuilder, 'setType', PrincipalTypes);
+      testBuilderSetType(PrincipalBuilder, 'setType', PrincipalTypes);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        expect(() => {
-          // omitting setId()
-          (new PrincipalBuilder())
-            .setType(MOCK_PRINCIPAL.type)
-            .build();
-        }).toThrow();
-
-        expect(() => {
-          // omitting setType()
-          (new PrincipalBuilder())
-            .setId(MOCK_PRINCIPAL.id)
-            .build();
-        }).toThrow();
+      testBuilderBuild(Principal, PrincipalBuilder, MOCK_PRINCIPAL, {
+        required: {
+          setId: MOCK_PRINCIPAL.id,
+          setType: MOCK_PRINCIPAL.type,
+        },
       });
-
-      test('should return a valid instance', () => {
-
-        const principal = (new PrincipalBuilder())
-          .setId(MOCK_PRINCIPAL.id)
-          .setType(MOCK_PRINCIPAL.type)
-          .build();
-
-        expectValidInstance(principal);
-      });
-
     });
 
   });

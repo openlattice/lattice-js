@@ -1,4 +1,6 @@
-import {} from '../utils/testing/InvalidParams';
+/*
+ * @flow
+ */
 
 import { Map, Set, fromJS } from 'immutable';
 
@@ -14,9 +16,10 @@ import {
 import { PermissionTypes } from '../constants/types';
 import { INVALID_PARAMS, INVALID_PARAMS_FOR_OPTIONAL_SS_ARRAY } from '../utils/testing/Invalid';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfTypes,
+  testBuilderSet,
+  testBuilderSetTypes,
 } from '../utils/testing/ModelTestUtils';
 
 describe('Ace', () => {
@@ -29,20 +32,14 @@ describe('Ace', () => {
 
     describe('setPrincipal()', () => {
       const validParams = [MOCK_ACE.principal];
-      testBuilderSetter(AceBuilder, 'setPrincipal', validParams);
+      testBuilderSet(AceBuilder, 'setPrincipal', validParams);
     });
 
     describe('setPermissions()', () => {
-      testBuilderSetterOfTypes(AceBuilder, 'setPermissions', PermissionTypes, true);
+      testBuilderSetTypes(AceBuilder, 'setPermissions', PermissionTypes, true);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-        expect(() => {
-          (new AceBuilder()).build();
-        }).toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -53,14 +50,13 @@ describe('Ace', () => {
         expect(ace.permissions).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const ace = (new AceBuilder())
-          .setPermissions(MOCK_ACE.permissions)
-          .setPrincipal(MOCK_ACE.principal)
-          .build();
-
-        expectValidInstance(ace);
+      testBuilderBuild(Ace, AceBuilder, MOCK_ACE, {
+        optional: {
+          setPermissions: MOCK_ACE.permissions,
+        },
+        required: {
+          setPrincipal: MOCK_ACE.principal,
+        },
       });
 
     });

@@ -7,6 +7,7 @@
 import _has from 'lodash/has';
 import _isArray from 'lodash/isArray';
 import _isBoolean from 'lodash/isBoolean';
+import _isEqual from 'lodash/isEqual';
 import _isNumber from 'lodash/isNumber';
 import _isPlainObject from 'lodash/isPlainObject';
 import _isString from 'lodash/isString';
@@ -62,7 +63,7 @@ function isSpecialString(value :string) {
  *
  */
 
-function expectValidInstance(Model :Class<any>, mockInstance :Class<any>, instance :any) {
+function expectValidInstance(Model :Class<any>, mockInstance :Object, instance :any) {
 
   expect(instance).toBeInstanceOf(Model);
 
@@ -75,7 +76,7 @@ function expectValidInstance(Model :Class<any>, mockInstance :Class<any>, instan
 function testBuilderConstructor(
   Model :Class<any>,
   ModelBuilder :Class<any>,
-  mockInstance :Class<any>,
+  mockInstance :Object,
 ) {
 
   const mockObject = mockInstance.toObject();
@@ -120,7 +121,97 @@ function testBuilderConstructor(
   });
 }
 
-function testBuilderSetter(
+function testBuilderBuild(
+  Model :Class<any>,
+  ModelBuilder :Class<any>,
+  mockInstance :Object,
+  setters :{ optional ?:Object; required ?:Object; },
+) {
+
+  // const emptySetters = setters.empty || {};
+  const optionalSetters = setters.optional || {};
+  const requiredSetters = setters.required || {};
+
+  const givenSetFunctions = [
+    ...Object.keys(optionalSetters),
+    ...Object.keys(requiredSetters),
+  ].sort();
+  const protoSetFunctions = Object
+    .getOwnPropertyNames(ModelBuilder.prototype)
+    .filter((value) => value.startsWith('set'))
+    .sort();
+
+  // console.log('givenSetFunctions', givenSetFunctions);
+  // console.log('protoSetFunctions', protoSetFunctions);
+
+  if (!_isEqual(givenSetFunctions, protoSetFunctions)) {
+    throw new Error('missing set functions');
+  }
+
+  test('should throw when a required property has not been set', () => {
+    if (Object.keys(requiredSetters).length > 0) {
+      expect(() => {
+        (new ModelBuilder()).build();
+      }).toThrow();
+    }
+    Object.keys(requiredSetters).forEach((reqSetFunction1) => {
+      const builder = new ModelBuilder();
+      // invoke all optional setters
+      Object.keys(optionalSetters).forEach((optSetFunction) => {
+        // console.log('invoking optional setter', optSetFunction);
+        builder[optSetFunction](optionalSetters[optSetFunction]);
+      });
+      // invoke all required setters, except this one
+      Object.keys(requiredSetters).forEach((reqSetFunction2) => {
+        if (reqSetFunction1 !== reqSetFunction2) {
+          // console.log('invoking required setter', reqSetFunction2);
+          builder[reqSetFunction2](requiredSetters[reqSetFunction2]);
+        }
+      });
+      expect(() => {
+        builder.build();
+      }).toThrow();
+    });
+  });
+
+  test('should not throw when an optional property has not been set', () => {
+    Object.keys(optionalSetters).forEach((optSetFunction1) => {
+      const builder = new ModelBuilder();
+      // invoke all required setters
+      Object.keys(requiredSetters).forEach((reqSetFunction) => {
+        // console.log('invoking required setter', reqSetFunction);
+        builder[reqSetFunction](requiredSetters[reqSetFunction]);
+      });
+      // invoke all optional setters, except this one
+      Object.keys(optionalSetters).forEach((optSetFunction2) => {
+        if (optSetFunction1 !== optSetFunction2) {
+          // console.log('invoking optional setter', optSetFunction2);
+          builder[optSetFunction2](optionalSetters[optSetFunction2]);
+        }
+      });
+      expect(() => {
+        builder.build();
+      }).not.toThrow();
+    });
+  });
+
+  // test('should set required properties that are allowed to be empty', () => {});
+
+  test('should return a valid instance', () => {
+
+    const builder = new ModelBuilder();
+    Object.keys(requiredSetters).forEach((reqSetFunction) => {
+      builder[reqSetFunction](requiredSetters[reqSetFunction]);
+    });
+    Object.keys(optionalSetters).forEach((optSetFunction2) => {
+      builder[optSetFunction2](optionalSetters[optSetFunction2]);
+    });
+
+    expectValidInstance(Model, mockInstance, builder.build());
+  });
+}
+
+function testBuilderSet(
   Builder :Class<any>,
   setFunction :Function,
   validParams :Array<any>,
@@ -222,7 +313,7 @@ function testBuilderSetter(
   });
 }
 
-function testBuilderSetterOfType(
+function testBuilderSetType(
   Builder :Class<any>,
   setFunction :Function,
   types :Object,
@@ -234,10 +325,10 @@ function testBuilderSetterOfType(
   }
 
   const validParams = [...Object.values(types)];
-  testBuilderSetter(Builder, setFunction, validParams, isOptional);
+  testBuilderSet(Builder, setFunction, validParams, isOptional);
 }
 
-function testBuilderSetterOfTypes(
+function testBuilderSetTypes(
   Builder :Class<any>,
   setFunction :Function,
   types :Object,
@@ -250,12 +341,13 @@ function testBuilderSetterOfTypes(
 
   const validParams = [Object.values(types)];
   Object.values(types).forEach((type) => validParams.push([type]));
-  testBuilderSetter(Builder, setFunction, validParams, isOptional);
+  testBuilderSet(Builder, setFunction, validParams, isOptional);
 }
 
 export {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfType,
-  testBuilderSetterOfTypes,
+  testBuilderSet,
+  testBuilderSetType,
+  testBuilderSetTypes,
 };

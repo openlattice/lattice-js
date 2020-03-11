@@ -1,3 +1,7 @@
+/*
+ * @flow
+ */
+
 import mapValues from 'lodash/mapValues';
 import { Map, Set, fromJS } from 'immutable';
 
@@ -20,9 +24,9 @@ import {
 } from '../utils/testing/Invalid';
 import { genRandomUUID } from '../utils/testing/MockUtils';
 import {
+  testBuilderBuild,
   testBuilderConstructor,
-  testBuilderSetter,
-  testBuilderSetterOfType,
+  testBuilderSet,
 } from '../utils/testing/ModelTestUtils';
 
 const INVALID_PARAMS_FOR_GRANT = INVALID_PARAMS_FOR_OPTIONAL_OBJECT.slice(0);
@@ -39,22 +43,22 @@ describe('Organization', () => {
 
     describe('setApps()', () => {
       const validParams = [MOCK_ORGANIZATION.apps];
-      testBuilderSetter(OrganizationBuilder, 'setApps', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setApps', validParams, true);
     });
 
     describe('setConnections()', () => {
       const validParams = [MOCK_ORGANIZATION.connections];
-      testBuilderSetter(OrganizationBuilder, 'setConnections', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setConnections', validParams, true);
     });
 
     describe('setDescription()', () => {
       const validParams = [MOCK_ORGANIZATION.description];
-      testBuilderSetter(OrganizationBuilder, 'setDescription', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setDescription', validParams, true);
     });
 
     describe('setEmailDomains()', () => {
       const validParams = [MOCK_ORGANIZATION.emailDomains];
-      testBuilderSetter(OrganizationBuilder, 'setEmailDomains', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setEmailDomains', validParams, true);
     });
 
     describe('setGrants()', () => {
@@ -62,126 +66,40 @@ describe('Organization', () => {
       // const invalidParams = INVALID_PARAMS_FOR_OPTIONAL_OBJECT.slice(0);
       // invalidParams.push({ invalid_key: 'invalid_value' });
       // invalidParams.push({ [genRandomUUID()]: 'invalid_value' });
-      testBuilderSetter(OrganizationBuilder, 'setGrants', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setGrants', validParams, true);
     });
 
     describe('setId()', () => {
       const validParams = [MOCK_ORGANIZATION.id];
-      testBuilderSetter(OrganizationBuilder, 'setId', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setId', validParams, true);
     });
 
     describe('setMembers()', () => {
       const validParams = [MOCK_ORGANIZATION.members];
-      testBuilderSetter(OrganizationBuilder, 'setMembers', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setMembers', validParams, true);
     });
 
     describe('setPartitions()', () => {
       const validParams = [MOCK_ORGANIZATION.partitions];
-      testBuilderSetter(OrganizationBuilder, 'setPartitions', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setPartitions', validParams, true);
     });
 
     describe('setPrincipal()', () => {
       const validParams = [MOCK_ORGANIZATION.principal];
-      testBuilderSetter(OrganizationBuilder, 'setPrincipal', validParams);
+      testBuilderSet(OrganizationBuilder, 'setPrincipal', validParams);
     });
 
     describe('setRoles()', () => {
       const validParams = [MOCK_ORGANIZATION.roles];
-      testBuilderSetter(OrganizationBuilder, 'setRoles', validParams, true);
+      testBuilderSet(OrganizationBuilder, 'setRoles', validParams, true);
     });
 
     describe('setTitle()', () => {
       const validParams = [MOCK_ORGANIZATION.title];
-      testBuilderSetter(OrganizationBuilder, 'setTitle', validParams);
+      testBuilderSet(OrganizationBuilder, 'setTitle', validParams);
     });
 
     describe('build()', () => {
-
-      test('should throw when a required property has not been set', () => {
-
-        // omitting setPrincipal()
-        expect(() => {
-          (new OrganizationBuilder())
-            .setApps(MOCK_ORGANIZATION.apps)
-            .setConnections(MOCK_ORGANIZATION.connections)
-            .setDescription(MOCK_ORGANIZATION.description)
-            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
-            .setGrants(MOCK_ORGANIZATION.grants)
-            .setId(MOCK_ORGANIZATION.id)
-            .setMembers(MOCK_ORGANIZATION.members)
-            .setPartitions(MOCK_ORGANIZATION.partitions)
-            .setRoles(MOCK_ORGANIZATION.roles)
-            .setTitle(MOCK_ORGANIZATION.title)
-            .build();
-        }).toThrow();
-
-        // omitting setTitle()
-        expect(() => {
-          (new OrganizationBuilder())
-            .setApps(MOCK_ORGANIZATION.apps)
-            .setConnections(MOCK_ORGANIZATION.connections)
-            .setDescription(MOCK_ORGANIZATION.description)
-            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
-            .setGrants(MOCK_ORGANIZATION.grants)
-            .setId(MOCK_ORGANIZATION.id)
-            .setMembers(MOCK_ORGANIZATION.members)
-            .setPartitions(MOCK_ORGANIZATION.partitions)
-            .setPrincipal(MOCK_ORGANIZATION.principal)
-            .setRoles(MOCK_ORGANIZATION.roles)
-            .build();
-        }).toThrow();
-      });
-
-      test('should not throw when an optional property has not been set', () => {
-
-        // omitting setDescription()
-        expect(() => {
-          (new OrganizationBuilder())
-            .setApps(MOCK_ORGANIZATION.apps)
-            .setConnections(MOCK_ORGANIZATION.connections)
-            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
-            .setGrants(MOCK_ORGANIZATION.grants)
-            .setId(MOCK_ORGANIZATION.id)
-            .setMembers(MOCK_ORGANIZATION.members)
-            .setPartitions(MOCK_ORGANIZATION.partitions)
-            .setPrincipal(MOCK_ORGANIZATION.principal)
-            .setRoles(MOCK_ORGANIZATION.roles)
-            .setTitle(MOCK_ORGANIZATION.title)
-            .build();
-        }).not.toThrow();
-
-        // omitting setId()
-        expect(() => {
-          (new OrganizationBuilder())
-            .setApps(MOCK_ORGANIZATION.apps)
-            .setConnections(MOCK_ORGANIZATION.connections)
-            .setDescription(MOCK_ORGANIZATION.description)
-            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
-            .setGrants(MOCK_ORGANIZATION.grants)
-            .setMembers(MOCK_ORGANIZATION.members)
-            .setPartitions(MOCK_ORGANIZATION.partitions)
-            .setPrincipal(MOCK_ORGANIZATION.principal)
-            .setRoles(MOCK_ORGANIZATION.roles)
-            .setTitle(MOCK_ORGANIZATION.title)
-            .build();
-        }).not.toThrow();
-
-        // omitting setPartitions()
-        expect(() => {
-          (new OrganizationBuilder())
-            .setApps(MOCK_ORGANIZATION.apps)
-            .setConnections(MOCK_ORGANIZATION.connections)
-            .setDescription(MOCK_ORGANIZATION.description)
-            .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
-            .setGrants(MOCK_ORGANIZATION.grants)
-            .setId(MOCK_ORGANIZATION.id)
-            .setMembers(MOCK_ORGANIZATION.members)
-            .setPrincipal(MOCK_ORGANIZATION.principal)
-            .setRoles(MOCK_ORGANIZATION.roles)
-            .setTitle(MOCK_ORGANIZATION.title)
-            .build();
-        }).not.toThrow();
-      });
 
       test('should set required properties that are allowed to be empty', () => {
 
@@ -201,23 +119,22 @@ describe('Organization', () => {
         expect(org.roles).toEqual([]);
       });
 
-      test('should return a valid instance', () => {
-
-        const org = (new OrganizationBuilder())
-          .setApps(MOCK_ORGANIZATION.apps)
-          .setConnections(MOCK_ORGANIZATION.connections)
-          .setDescription(MOCK_ORGANIZATION.description)
-          .setEmailDomains(MOCK_ORGANIZATION.emailDomains)
-          .setGrants(MOCK_ORGANIZATION.grants)
-          .setId(MOCK_ORGANIZATION.id)
-          .setMembers(MOCK_ORGANIZATION.members)
-          .setPartitions(MOCK_ORGANIZATION.partitions)
-          .setPrincipal(MOCK_ORGANIZATION.principal)
-          .setRoles(MOCK_ORGANIZATION.roles)
-          .setTitle(MOCK_ORGANIZATION.title)
-          .build();
-
-        expectValidInstance(org);
+      testBuilderBuild(Organization, OrganizationBuilder, MOCK_ORGANIZATION, {
+        optional: {
+          setApps: MOCK_ORGANIZATION.apps,
+          setConnections: MOCK_ORGANIZATION.connections,
+          setDescription: MOCK_ORGANIZATION.description,
+          setEmailDomains: MOCK_ORGANIZATION.emailDomains,
+          setGrants: MOCK_ORGANIZATION.grants,
+          setId: MOCK_ORGANIZATION.id,
+          setMembers: MOCK_ORGANIZATION.members,
+          setPartitions: MOCK_ORGANIZATION.partitions,
+          setRoles: MOCK_ORGANIZATION.roles,
+        },
+        required: {
+          setPrincipal: MOCK_ORGANIZATION.principal,
+          setTitle: MOCK_ORGANIZATION.title,
+        },
       });
 
     });
