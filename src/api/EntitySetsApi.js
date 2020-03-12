@@ -17,11 +17,9 @@
  * // EntitySetsApi.get...
  */
 
-import isArray from 'lodash/isArray';
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
-import { EntitySet, isValidEntitySet } from '../models/EntitySet';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import {
   ALL_PATH,
@@ -29,9 +27,15 @@ import {
   METADATA_PATH,
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
-import { getApiAxiosInstance } from '../utils/axios';
-import { isDefined, isNonEmptyArray, isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
+import { EntitySet, isValidEntitySet } from '../models/EntitySet';
+import {
+  isDefined,
+  isNonEmptyArray,
+  isNonEmptyString,
+  isNonEmptyStringArray,
+} from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
+import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('EntitySetsApi');
 

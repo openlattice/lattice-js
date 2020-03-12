@@ -3,7 +3,6 @@
  */
 
 import isArray from 'lodash/isArray';
-import isInteger from 'lodash/isInteger';
 import {
   Map,
   OrderedSet,
