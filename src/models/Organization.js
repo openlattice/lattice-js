@@ -450,7 +450,7 @@ export type {
  *
  */
 
-const MOCK_ORGANIZATION = (new OrganizationBuilder())
+const ORGANIZATION_MOCK = (new OrganizationBuilder())
   .setApps(['cdf67221-9bdc-4196-94db-d64915298b3e', 'd5ce57c3-9a1f-4842-bd2f-bec2b63c1ea8'])
   .setConnections(['CONNECTION_0', 'CONNECTION_1'])
   .setDescription('MockOrgDescription')
@@ -492,8 +492,6 @@ const MOCK_ORGANIZATION = (new OrganizationBuilder())
   .setTitle('MockOrgTitle')
   .build();
 
-const MOCK_ORGANIZATION_OBJECT = MOCK_ORGANIZATION.toObject();
-
 function genRandomOrganization() {
   return (new OrganizationBuilder())
     .setApps([genRandomUUID(), genRandomUUID()])
@@ -521,7 +519,6 @@ function genRandomOrganization() {
 }
 
 export {
-  MOCK_ORGANIZATION,
-  MOCK_ORGANIZATION_OBJECT,
+  ORGANIZATION_MOCK,
   genRandomOrganization,
 };

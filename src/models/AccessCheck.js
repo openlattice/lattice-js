@@ -150,12 +150,10 @@ export type {
  *
  */
 
-const MOCK_ACCESS_CHECK = (new AccessCheckBuilder())
+const ACCESS_CHECK_MOCK = (new AccessCheckBuilder())
   .setAclKey(['69682f1e-6039-44da-8342-522395b43738', '5e4a579a-ad72-4902-991c-027d80dcd590'])
   .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
   .build();
-
-const MOCK_ACCESS_CHECK_OBJECT = MOCK_ACCESS_CHECK.toObject();
 
 function genRandomAccessCheck() {
   return (new AccessCheckBuilder())
@@ -165,7 +163,6 @@ function genRandomAccessCheck() {
 }
 
 export {
-  MOCK_ACCESS_CHECK,
-  MOCK_ACCESS_CHECK_OBJECT,
+  ACCESS_CHECK_MOCK,
   genRandomAccessCheck,
 };

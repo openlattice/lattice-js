@@ -5,7 +5,7 @@
 import { Map, fromJS, isImmutable } from 'immutable';
 
 import {
-  MOCK_ACL,
+  ACL_MOCK,
   Acl,
   AclBuilder,
   genRandomAcl,
@@ -129,12 +129,10 @@ export type {
  *
  */
 
-const MOCK_ACL_DATA = (new AclDataBuilder())
-  .setAcl(MOCK_ACL)
+const ACL_DATA_MOCK = (new AclDataBuilder())
+  .setAcl(ACL_MOCK)
   .setAction(ActionTypes.ADD)
   .build();
-
-const MOCK_ACL_DATA_OBJECT = MOCK_ACL_DATA.toObject();
 
 function genRandomAclData() {
   return (new AclDataBuilder())
@@ -144,7 +142,6 @@ function genRandomAclData() {
 }
 
 export {
-  MOCK_ACL_DATA,
-  MOCK_ACL_DATA_OBJECT,
+  ACL_DATA_MOCK,
   genRandomAclData,
 };

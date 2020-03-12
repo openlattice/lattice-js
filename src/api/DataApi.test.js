@@ -18,7 +18,7 @@ import {
   TYPE_PATH
 } from '../constants/UrlConstants';
 import { DeleteTypes, UpdateTypes } from '../constants/types';
-import { MOCK_DATA_GRAPH } from '../models/DataGraph';
+import { DATA_GRAPH_MOCK } from '../models/DataGraph';
 import {
   INVALID_PARAMS,
   INVALID_PARAMS_OPTIONAL_ARRAY,
@@ -239,9 +239,9 @@ function createEntityAndAssociationData() {
   describe('createEntityAndAssociationData()', () => {
 
     const fnToTest = DataApi.createEntityAndAssociationData;
-    const validParams = [MOCK_DATA_GRAPH];
+    const validParams = [DATA_GRAPH_MOCK];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', MOCK_DATA_GRAPH];
+    const axiosParams = ['/', DATA_GRAPH_MOCK];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, DATA_API);

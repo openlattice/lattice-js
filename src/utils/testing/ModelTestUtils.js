@@ -11,7 +11,7 @@ import _isEqual from 'lodash/isEqual';
 import _isNumber from 'lodash/isNumber';
 import _isPlainObject from 'lodash/isPlainObject';
 import _isString from 'lodash/isString';
-import { fromJS } from 'immutable';
+import { Map, Set, fromJS } from 'immutable';
 
 import {
   INVALID_PARAMS,
@@ -55,6 +55,48 @@ function isSpecialString(value :string) {
   }
 
   return Object.keys(TheTypes).reduce((special, key) => special || _has(TheTypes[key], value), false);
+}
+
+function getInvalidParams(validParam :any, isOptional = false) {
+
+  let invalidParams = INVALID_PARAMS;
+
+  // optional && allowed to be empty
+  if (isOptional === true) {
+    if (isSpecialString(validParam)) {
+      invalidParams = INVALID_PARAMS_OPTIONAL_SPECIAL_STRING;
+    }
+    else if (_isString(validParam)) {
+      invalidParams = INVALID_PARAMS_OPTIONAL_STRING;
+    }
+    else if (_isBoolean(validParam)) {
+      invalidParams = INVALID_PARAMS_OPTIONAL_BOOLEAN;
+    }
+    else if (_isNumber(validParam)) {
+      invalidParams = INVALID_PARAMS_OPTIONAL_NUMBER;
+    }
+    else if (_isArray(validParam)) {
+      invalidParams = INVALID_PARAMS_OPTIONAL_ARRAY;
+    }
+    else if (_isPlainObject(validParam)) {
+      invalidParams = INVALID_PARAMS_OPTIONAL_OBJECT;
+    }
+    else {
+      invalidParams = INVALID_PARAMS_OPTIONAL;
+    }
+  }
+  // required
+  else if (_isString(validParam) && !isSpecialString(validParam)) {
+    invalidParams = INVALID_PARAMS_REQUIRED_STRING;
+  }
+  else if (_isBoolean(validParam)) {
+    invalidParams = INVALID_PARAMS_REQUIRED_BOOLEAN;
+  }
+  else if (_isNumber(validParam)) {
+    invalidParams = INVALID_PARAMS_REQUIRED_NUMBER;
+  }
+
+  return invalidParams;
 }
 
 /*
@@ -121,96 +163,6 @@ function testBuilderConstructor(
   });
 }
 
-function testBuilderBuild(
-  Model :Class<any>,
-  ModelBuilder :Class<any>,
-  mockInstance :Object,
-  setters :{ optional ?:Object; required ?:Object; },
-) {
-
-  // const emptySetters = setters.empty || {};
-  const optionalSetters = setters.optional || {};
-  const requiredSetters = setters.required || {};
-
-  const givenSetFunctions = [
-    ...Object.keys(optionalSetters),
-    ...Object.keys(requiredSetters),
-  ].sort();
-  const protoSetFunctions = Object
-    .getOwnPropertyNames(ModelBuilder.prototype)
-    .filter((value) => value.startsWith('set'))
-    .sort();
-
-  // console.log('givenSetFunctions', givenSetFunctions);
-  // console.log('protoSetFunctions', protoSetFunctions);
-
-  if (!_isEqual(givenSetFunctions, protoSetFunctions)) {
-    throw new Error('missing set functions');
-  }
-
-  test('should throw when a required property has not been set', () => {
-    if (Object.keys(requiredSetters).length > 0) {
-      expect(() => {
-        (new ModelBuilder()).build();
-      }).toThrow();
-    }
-    Object.keys(requiredSetters).forEach((reqSetFunction1) => {
-      const builder = new ModelBuilder();
-      // invoke all optional setters
-      Object.keys(optionalSetters).forEach((optSetFunction) => {
-        // console.log('invoking optional setter', optSetFunction);
-        builder[optSetFunction](optionalSetters[optSetFunction]);
-      });
-      // invoke all required setters, except this one
-      Object.keys(requiredSetters).forEach((reqSetFunction2) => {
-        if (reqSetFunction1 !== reqSetFunction2) {
-          // console.log('invoking required setter', reqSetFunction2);
-          builder[reqSetFunction2](requiredSetters[reqSetFunction2]);
-        }
-      });
-      expect(() => {
-        builder.build();
-      }).toThrow();
-    });
-  });
-
-  test('should not throw when an optional property has not been set', () => {
-    Object.keys(optionalSetters).forEach((optSetFunction1) => {
-      const builder = new ModelBuilder();
-      // invoke all required setters
-      Object.keys(requiredSetters).forEach((reqSetFunction) => {
-        // console.log('invoking required setter', reqSetFunction);
-        builder[reqSetFunction](requiredSetters[reqSetFunction]);
-      });
-      // invoke all optional setters, except this one
-      Object.keys(optionalSetters).forEach((optSetFunction2) => {
-        if (optSetFunction1 !== optSetFunction2) {
-          // console.log('invoking optional setter', optSetFunction2);
-          builder[optSetFunction2](optionalSetters[optSetFunction2]);
-        }
-      });
-      expect(() => {
-        builder.build();
-      }).not.toThrow();
-    });
-  });
-
-  // test('should set required properties that are allowed to be empty', () => {});
-
-  test('should return a valid instance', () => {
-
-    const builder = new ModelBuilder();
-    Object.keys(requiredSetters).forEach((reqSetFunction) => {
-      builder[reqSetFunction](requiredSetters[reqSetFunction]);
-    });
-    Object.keys(optionalSetters).forEach((optSetFunction2) => {
-      builder[optSetFunction2](optionalSetters[optSetFunction2]);
-    });
-
-    expectValidInstance(Model, mockInstance, builder.build());
-  });
-}
-
 function testBuilderSet(
   Builder :Class<any>,
   setFunction :Function,
@@ -218,62 +170,17 @@ function testBuilderSet(
   isOptional :boolean = false,
 ) {
 
-  let invalidParams = INVALID_PARAMS;
-  let invalidParamsForArrayItems = [];
-
-  // optional && allowed to be empty
-  if (isOptional === true) {
-    if (isSpecialString(validParams[0])) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_SPECIAL_STRING;
-    }
-    else if (_isString(validParams[0])) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_STRING;
-    }
-    else if (_isBoolean(validParams[0])) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_BOOLEAN;
-    }
-    else if (_isNumber(validParams[0])) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_NUMBER;
-    }
-    else if (_isArray(validParams[0])) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_ARRAY;
-    }
-    else if (_isPlainObject(validParams[0])) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_OBJECT;
-    }
-    else {
-      invalidParams = INVALID_PARAMS_OPTIONAL;
-    }
-  }
-  // required
-  else if (_isString(validParams[0]) && !isSpecialString(validParams[0])) {
-    invalidParams = INVALID_PARAMS_REQUIRED_STRING;
-  }
-  else if (_isBoolean(validParams[0])) {
-    invalidParams = INVALID_PARAMS_REQUIRED_BOOLEAN;
-  }
-
-  if (_isArray(validParams[0])) {
-    if (isSpecialString(validParams[0][0])) {
-      invalidParamsForArrayItems = INVALID_PARAMS;
-    }
-    else if (_isString(validParams[0][0])) {
-      invalidParamsForArrayItems = INVALID_PARAMS_REQUIRED_STRING;
-    }
-    else if (_isNumber(validParams[0][0])) {
-      invalidParamsForArrayItems = INVALID_PARAMS_REQUIRED_NUMBER;
-    }
-    else {
-      invalidParamsForArrayItems = INVALID_PARAMS;
-    }
-  }
+  const invalidParams = getInvalidParams(validParams[0], isOptional);
+  const invalidParamsForArrayItems = _isArray(validParams[0]) ? getInvalidParams(validParams[0][0]) : [];
 
   test('should throw when given invalid parameters', () => {
     invalidParams.forEach((invalidParam) => {
+      // console.log(setFunction, invalidParam);
       expectToThrowGivenInvalidParam(Builder, setFunction, invalidParam);
     });
     if (invalidParamsForArrayItems.length) {
       invalidParamsForArrayItems.forEach((invalidParam) => {
+        // console.log(setFunction, '[', invalidParam, ']');
         expectToThrowGivenInvalidParam(Builder, setFunction, [invalidParam]);
       });
     }
@@ -283,6 +190,7 @@ function testBuilderSet(
     test('should throw when given a mix of valid and invalid parameters', () => {
       validParams.forEach((validParam) => {
         invalidParamsForArrayItems.forEach((invalidParam) => {
+          // console.log(setFunction, invalidParam);
           expectToThrowGivenInvalidParam(Builder, setFunction, [...validParam, invalidParam]);
         });
       });
@@ -306,6 +214,7 @@ function testBuilderSet(
       }
     }
     validParams.forEach((validParam) => {
+      // console.log(setFunction, 'validParam', validParam);
       expect(() => {
         (new Builder())[setFunction](validParam);
       }).not.toThrow();
@@ -313,41 +222,251 @@ function testBuilderSet(
   });
 }
 
-function testBuilderSetType(
-  Builder :Class<any>,
-  setFunction :Function,
-  types :Object,
-  isOptional :boolean = false,
+function runModelTestSuite(
+  Model :Class<any>,
+  ModelBuilder :Class<any>,
+  mockInstance :Object,
+  isValid :Function,
+  genRandomModel :Function,
+  config :Object,
 ) {
 
-  if (!_isPlainObject(types)) {
-    throw new Error('"types" should be an enum object');
+  const givenSetFunctions = Object.keys(config).sort();
+  const protoSetFunctions = Object
+    .getOwnPropertyNames(ModelBuilder.prototype)
+    .filter((value) => value.startsWith('set'))
+    .sort();
+
+  if (!_isEqual(givenSetFunctions, protoSetFunctions)) {
+    throw new Error('missing set functions');
   }
 
-  const validParams = [...Object.values(types)];
-  testBuilderSet(Builder, setFunction, validParams, isOptional);
-}
+  const mockObject = mockInstance.toObject();
 
-function testBuilderSetTypes(
-  Builder :Class<any>,
-  setFunction :Function,
-  types :Object,
-  isOptional :boolean = false,
-) {
+  describe(`${Model.name}`, () => {
 
-  if (!_isPlainObject(types)) {
-    throw new Error('"types" should be an enum object');
-  }
+    describe(`${ModelBuilder.name}`, () => {
 
-  const validParams = [Object.values(types)];
-  Object.values(types).forEach((type) => validParams.push([type]));
-  testBuilderSet(Builder, setFunction, validParams, isOptional);
+      describe('constructor()', () => {
+        testBuilderConstructor(Model, ModelBuilder, mockInstance);
+      });
+
+      Object.keys(config).sort().forEach((setFunction :string) => {
+        const { isOptional, validParams } = config[setFunction];
+        describe(`${setFunction}()`, () => {
+          testBuilderSet(ModelBuilder, setFunction, validParams, isOptional);
+        });
+      });
+
+      describe('build()', () => {
+
+        const optionalSetFunctions = [];
+        const requiredSetFunctions = [];
+        Object.keys(config).sort().forEach((setFunction :string) => {
+          const { isOptional } = config[setFunction];
+          if (isOptional) {
+            optionalSetFunctions.push(setFunction);
+          }
+          else {
+            requiredSetFunctions.push(setFunction);
+          }
+        });
+
+        test('should throw when a required property has not been set', () => {
+          if (requiredSetFunctions.length > 0) {
+            expect(() => {
+              (new ModelBuilder()).build();
+            }).toThrow();
+          }
+          requiredSetFunctions.forEach((requiredSetFunction1) => {
+            const builder = new ModelBuilder();
+            // invoke all optional setters
+            optionalSetFunctions.forEach((optionalSetFunction) => {
+              builder[optionalSetFunction](config[optionalSetFunction].validParams[0]);
+            });
+            // invoke all required setters, except this one
+            requiredSetFunctions.forEach((requiredSetFunction2) => {
+              if (requiredSetFunction1 !== requiredSetFunction2) {
+                builder[requiredSetFunction2](config[requiredSetFunction2].validParams[0]);
+              }
+            });
+            expect(() => {
+              builder.build();
+            }).toThrow();
+          });
+        });
+
+        test('should not throw when an optional property has not been set', () => {
+          optionalSetFunctions.forEach((optionalSetFunction1) => {
+            const builder = new ModelBuilder();
+            // invoke all required setters
+            requiredSetFunctions.forEach((requiredSetFunction) => {
+              builder[requiredSetFunction](config[requiredSetFunction].validParams[0]);
+            });
+            // invoke all optional setters, except this one
+            optionalSetFunctions.forEach((optionalSetFunction2) => {
+              if (optionalSetFunction1 !== optionalSetFunction2) {
+                builder[optionalSetFunction2](config[optionalSetFunction2].validParams[0]);
+              }
+            });
+            expect(() => {
+              builder.build();
+            }).not.toThrow();
+          });
+        });
+
+        // test('should set required properties that are allowed to be empty', () => {});
+
+        test('should return a valid instance', () => {
+
+          const builder = new ModelBuilder();
+          requiredSetFunctions.forEach((requiredSetFunction) => {
+            builder[requiredSetFunction](config[requiredSetFunction].validParams[0]);
+          });
+          optionalSetFunctions.forEach((optionalSetFunction) => {
+            builder[optionalSetFunction](config[optionalSetFunction].validParams[0]);
+          });
+
+          expectValidInstance(Model, mockInstance, builder.build());
+        });
+
+      });
+
+    });
+
+    describe('isValid', () => {
+
+      describe('valid', () => {
+
+        test('should return true when given a valid object literal', () => {
+          expect(isValid(mockObject)).toEqual(true);
+        });
+
+        test('should return true when given a valid instance ', () => {
+          expect(isValid(mockInstance)).toEqual(true);
+        });
+
+      });
+
+      describe('invalid', () => {
+
+        test('should return false when not given any parameters', () => {
+          expect(isValid()).toEqual(false);
+        });
+
+        test('should return false when given invalid parameters', () => {
+          const errors = [];
+          INVALID_PARAMS.forEach((invalidParam) => {
+            if (isValid(invalidParam)) {
+              errors.push(`expected false - isValid(${JSON.stringify(invalidParam)})`);
+            }
+          });
+          expect(errors).toEqual([]);
+        });
+
+        Object.keys(config).sort().forEach((setFunction :string) => {
+          const { field, isOptional } = config[setFunction];
+          const invalidParams = getInvalidParams(mockObject[field], isOptional);
+          const invalidParamsForArrayItems = _isArray(mockObject[field]) ? getInvalidParams(mockObject[field][0]) : [];
+
+          describe(field, () => {
+            test('should return false when given an object literal with an invalid property', () => {
+              const errors = [];
+              const getErrorMessage = (invalidParam) => (
+                `expected false - isValid({ ..., ${field}: ${JSON.stringify(invalidParam)} })`
+              );
+              invalidParams.forEach((invalidParam) => {
+                if (isValid({ ...mockObject, [field]: invalidParam })) {
+                  errors.push(getErrorMessage(invalidParam));
+                }
+              });
+              if (invalidParamsForArrayItems.length) {
+                invalidParamsForArrayItems.forEach((invalidParam) => {
+                  if (isValid({ ...mockObject, [field]: [invalidParam] })) {
+                    errors.push(getErrorMessage([invalidParam]));
+                  }
+                });
+              }
+              expect(errors).toEqual([]);
+            });
+            test('should return false when given an instance with an invalid property', () => {
+              const errors = [];
+              const getErrorMessage = (invalidParam) => (
+                `expected false - isValid(new ${Model.name}({ ..., ${field}: ${JSON.stringify(invalidParam)} }))`
+              );
+              invalidParams.forEach((invalidParam) => {
+                if (isValid(new Model({ ...mockInstance, [field]: invalidParam }))) {
+                  errors.push(getErrorMessage(invalidParam));
+                }
+              });
+              if (invalidParamsForArrayItems.length) {
+                invalidParamsForArrayItems.forEach((invalidParam) => {
+                  if (isValid(new Model({ ...mockInstance, [field]: [invalidParam] }))) {
+                    errors.push(getErrorMessage([invalidParam]));
+                  }
+                });
+              }
+              expect(errors).toEqual([]);
+            });
+          });
+        });
+
+      });
+
+    });
+
+    describe('equality', () => {
+
+      test('valueOf()', () => {
+        expect(mockInstance.valueOf()).toEqual(fromJS(mockObject).hashCode());
+      });
+
+      test('Immutable.Set', () => {
+
+        const randomModel = genRandomModel();
+        const model0 = (new ModelBuilder(mockInstance)).build();
+        const model1 = (new ModelBuilder(mockInstance)).build();
+
+        const testSet = Set()
+          .add(model0)
+          .add(randomModel)
+          .add(model1);
+
+        expect(testSet.size).toEqual(2);
+        expect(testSet.count()).toEqual(2);
+
+        Object.keys(mockInstance).forEach((key) => {
+          expect(testSet.first()[key]).toEqual(mockInstance[key]);
+        });
+
+        Object.keys(mockInstance).forEach((key) => {
+          expect(testSet.last()[key]).toEqual(randomModel[key]);
+        });
+      });
+
+      test('Immutable.Map', () => {
+
+        const randomModel = genRandomModel();
+        const model0 = (new ModelBuilder(mockInstance)).build();
+        const model1 = (new ModelBuilder(mockInstance)).build();
+
+        const testMap = Map()
+          .set(model0, 'test_value_1')
+          .set(randomModel, 'test_value_2')
+          .set(model1, 'test_value_3');
+
+        expect(testMap.size).toEqual(2);
+        expect(testMap.count()).toEqual(2);
+        expect(testMap.get(model0)).toEqual('test_value_3');
+        expect(testMap.get(randomModel)).toEqual('test_value_2');
+        expect(testMap.get(model1)).toEqual('test_value_3');
+      });
+
+    });
+
+  });
 }
 
 export {
-  testBuilderBuild,
-  testBuilderConstructor,
-  testBuilderSet,
-  testBuilderSetType,
-  testBuilderSetTypes,
+  runModelTestSuite,
 };

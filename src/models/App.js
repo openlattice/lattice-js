@@ -249,7 +249,7 @@ export type {
  *
  */
 
-const MOCK_APP = (new AppBuilder())
+const APP_MOCK = (new AppBuilder())
   .setAppTypeIds(['c3dbd929-91c9-4b48-9545-a634038f34ba'])
   .setDescription('MockAppDescription')
   .setId('53f45e4b-48a4-4089-8932-3655a5b0d50a')
@@ -257,8 +257,6 @@ const MOCK_APP = (new AppBuilder())
   .setTitle('MockAppTitle')
   .setUrl('https://openlattice.com')
   .build();
-
-const MOCK_APP_OBJECT = MOCK_APP.toObject();
 
 function genRandomApp() {
   return (new AppBuilder())
@@ -272,7 +270,6 @@ function genRandomApp() {
 }
 
 export {
-  MOCK_APP,
-  MOCK_APP_OBJECT,
+  APP_MOCK,
   genRandomApp,
 };

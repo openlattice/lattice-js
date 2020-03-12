@@ -39,7 +39,6 @@ type EntityTypeObject = {|
   properties :UUID[];
   propertyTags ?:Object;
   schemas :FQNObject[];
-  shards ?:number;
   title :string;
   type :FQNObject;
 |};
@@ -54,7 +53,6 @@ class EntityType {
   properties :UUID[];
   propertyTags :?Object;
   schemas :FQN[];
-  shards :?number;
   title :string;
   type :FQN;
 
@@ -67,7 +65,6 @@ class EntityType {
     properties :UUID[];
     propertyTags :?Object;
     schemas :FQN[];
-    shards :?number;
     title :string;
     type :FQN;
   }) {
@@ -98,10 +95,6 @@ class EntityType {
 
     if (isDefined(entityType.propertyTags)) {
       this.propertyTags = entityType.propertyTags;
-    }
-
-    if (isDefined(entityType.shards)) {
-      this.shards = entityType.shards;
     }
   }
 
@@ -142,10 +135,6 @@ class EntityType {
       entityTypeObj.propertyTags = this.propertyTags;
     }
 
-    if (isDefined(this.shards)) {
-      entityTypeObj.shards = this.shards;
-    }
-
     return entityTypeObj;
   }
 
@@ -165,7 +154,6 @@ class EntityTypeBuilder {
   properties :UUID[];
   propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
-  shards :?number;
   title :string;
   type :FQN;
 
@@ -180,7 +168,6 @@ class EntityTypeBuilder {
       this.setPropertyTags(value.get('propertyTags'));
       this.setPropertyTypes(value.get('properties'));
       this.setSchemas(value.get('schemas'));
-      this.setShards(value.get('shards'));
       this.setTitle(value.get('title'));
       this.setType(value.get('type'));
     }
@@ -193,7 +180,6 @@ class EntityTypeBuilder {
       this.setPropertyTags(value.propertyTags);
       this.setPropertyTypes(value.properties);
       this.setSchemas(value.schemas);
-      this.setShards(value.shards);
       this.setTitle(value.title);
       this.setType(value.type);
     }
@@ -341,25 +327,6 @@ class EntityTypeBuilder {
     return this;
   }
 
-  setShards(shards :?number) :EntityTypeBuilder {
-
-    if (!isDefined(shards)) {
-      return this;
-    }
-
-    if (!isInteger(shards)) {
-      throw new Error('invalid parameter: "shards" must be an integer');
-    }
-
-    // com.openlattice.edm.type.EntityType
-    if (shards <= 0 || shards >= 20) {
-      throw new Error('invalid parameter: "shards" must be between 0 and 20');
-    }
-
-    this.shards = shards;
-    return this;
-  }
-
   setTitle(title :string) :EntityTypeBuilder {
 
     if (!isNonEmptyString(title)) {
@@ -411,7 +378,6 @@ class EntityTypeBuilder {
       properties: this.properties,
       propertyTags: this.propertyTags,
       schemas: this.schemas,
-      shards: this.shards,
       title: this.title,
       type: this.type,
     });
@@ -436,7 +402,7 @@ export type {
  *
  */
 
-const MOCK_ENTITY_TYPE = (new EntityTypeBuilder())
+const ENTITY_TYPE_MOCK = (new EntityTypeBuilder())
   .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
   .setCategory(SecurableTypes.EntityType)
   .setDescription('MockEntityTypeDescription')
@@ -448,12 +414,9 @@ const MOCK_ENTITY_TYPE = (new EntityTypeBuilder())
   })
   .setPropertyTypes(['8f79e123-3411-4099-a41f-88e5d22d0e8d', 'e39dfdfa-a3e6-4f1f-b54b-646a723c3085'])
   .setSchemas([FQN.of('mock.schema')])
-  .setShards(1)
   .setTitle('MockEntityTypeTitle')
   .setType(FQN.of('mock.entitytype'))
   .build();
-
-const MOCK_ENTITY_TYPE_OBJECT = MOCK_ENTITY_TYPE.toObject();
 
 function genRandomEntityType() {
   return (new EntityTypeBuilder())
@@ -468,14 +431,12 @@ function genRandomEntityType() {
     })
     .setPropertyTypes([genRandomUUID(), genRandomUUID(), genRandomUUID()])
     .setSchemas([FQN.of(genRandomString(), genRandomString())])
-    .setShards(1)
     .setTitle(genRandomString())
     .setType(FQN.of(genRandomString(), genRandomString()))
     .build();
 }
 
 export {
-  MOCK_ENTITY_TYPE,
-  MOCK_ENTITY_TYPE_OBJECT,
+  ENTITY_TYPE_MOCK,
   genRandomEntityType,
 };

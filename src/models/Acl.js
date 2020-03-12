@@ -13,9 +13,9 @@ import {
 } from 'immutable';
 
 import {
+  ACE_MOCK,
   Ace,
   AceBuilder,
-  MOCK_ACE,
   genRandomAce,
 } from './Ace';
 import type { AceObject } from './Ace';
@@ -156,8 +156,8 @@ export type {
  *
  */
 
-const MOCK_ACL = (new AclBuilder())
-  .setAces([MOCK_ACE])
+const ACL_MOCK = (new AclBuilder())
+  .setAces([ACE_MOCK])
   .setAclKey(['fae6af98-2675-45bd-9a5b-1619a87235a8', 'ae9e1cc3-ba0d-4532-9860-e5e7eaf36e83'])
   .build();
 
@@ -168,10 +168,7 @@ function genRandomAcl() {
     .build();
 }
 
-const MOCK_ACL_OBJECT = MOCK_ACL.toObject();
-
 export {
-  MOCK_ACL,
-  MOCK_ACL_OBJECT,
+  ACL_MOCK,
   genRandomAcl,
 };

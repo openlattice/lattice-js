@@ -2,7 +2,6 @@
  * @flow
  */
 
-import isEmpty from 'lodash/isEmpty';
 import {
   Map,
   fromJS,
@@ -153,7 +152,7 @@ export type {
  *
  */
 
-const MOCK_DATA_GRAPH = (new DataGraphBuilder())
+const DATA_GRAPH_MOCK = (new DataGraphBuilder())
   .setAssociations({
     'f914f31a-6486-4717-929d-dccecab05c47': [{
       data: {
@@ -172,8 +171,6 @@ const MOCK_DATA_GRAPH = (new DataGraphBuilder())
     }],
   })
   .build();
-
-const MOCK_DATA_GRAPH_OBJECT = MOCK_DATA_GRAPH.toObject();
 
 function genRandomDataGraph() {
   return (new DataGraphBuilder())
@@ -200,7 +197,6 @@ function genRandomDataGraph() {
 }
 
 export {
-  MOCK_DATA_GRAPH,
-  MOCK_DATA_GRAPH_OBJECT,
+  DATA_GRAPH_MOCK,
   genRandomDataGraph,
 };

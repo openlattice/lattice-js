@@ -38,9 +38,9 @@ const MOCK_NAME = 'NAME';
 const MOCK_NAMESPACE = 'NAMESPACE';
 const MOCK_SEARCH_TERM = genRandomString();
 const MOCK_ENTITY_KEY_ID = genRandomUUID();
-const MOCK_ENTITY_SET_ID = genRandomUUID();
-const MOCK_ENTITY_TYPE_ID = genRandomUUID();
-const MOCK_PROPERTY_TYPE_IDS = [genRandomUUID(), genRandomUUID()];
+const ENTITY_SET_MOCK_ID = genRandomUUID();
+const ENTITY_TYPE_MOCK_ID = genRandomUUID();
+const PROPERTY_TYPE_MOCK_IDS = [genRandomUUID(), genRandomUUID()];
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
@@ -113,7 +113,7 @@ function testSearchEntitySetMetaData() {
 
       const searchOptions = {
         searchTerm: MOCK_SEARCH_TERM,
-        entityTypeId: MOCK_ENTITY_TYPE_ID,
+        entityTypeId: ENTITY_TYPE_MOCK_ID,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -122,7 +122,7 @@ function testSearchEntitySetMetaData() {
         '/',
         {
           kw: MOCK_SEARCH_TERM,
-          entityTypeId: MOCK_ENTITY_TYPE_ID,
+          entityTypeId: ENTITY_TYPE_MOCK_ID,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -135,7 +135,7 @@ function testSearchEntitySetMetaData() {
 
       const searchOptions = {
         searchTerm: MOCK_SEARCH_TERM,
-        propertyTypeIds: MOCK_PROPERTY_TYPE_IDS,
+        propertyTypeIds: PROPERTY_TYPE_MOCK_IDS,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -144,7 +144,7 @@ function testSearchEntitySetMetaData() {
         '/',
         {
           kw: MOCK_SEARCH_TERM,
-          pid: MOCK_PROPERTY_TYPE_IDS,
+          pid: PROPERTY_TYPE_MOCK_IDS,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -156,7 +156,7 @@ function testSearchEntitySetMetaData() {
     describe('search by EntityType UUID', () => {
 
       const searchOptions = {
-        entityTypeId: MOCK_ENTITY_TYPE_ID,
+        entityTypeId: ENTITY_TYPE_MOCK_ID,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -164,7 +164,7 @@ function testSearchEntitySetMetaData() {
       const expectedParameters = [
         '/',
         {
-          entityTypeId: MOCK_ENTITY_TYPE_ID,
+          entityTypeId: ENTITY_TYPE_MOCK_ID,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -176,7 +176,7 @@ function testSearchEntitySetMetaData() {
     describe('search by PropertyType UUIDs', () => {
 
       const searchOptions = {
-        propertyTypeIds: MOCK_PROPERTY_TYPE_IDS,
+        propertyTypeIds: PROPERTY_TYPE_MOCK_IDS,
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
       };
@@ -184,7 +184,7 @@ function testSearchEntitySetMetaData() {
       const expectedParameters = [
         '/',
         {
-          pid: MOCK_PROPERTY_TYPE_IDS,
+          pid: PROPERTY_TYPE_MOCK_IDS,
           start: MOCK_START,
           maxHits: MOCK_MAX_HITS
         }
@@ -203,7 +203,7 @@ function testSearchEntitySetData() {
     const fnToTest = SearchApi.searchEntitySetData;
 
     const validParams = [
-      MOCK_ENTITY_SET_ID,
+      ENTITY_SET_MOCK_ID,
       {
         searchTerm: MOCK_SEARCH_TERM,
         start: MOCK_START,
@@ -217,7 +217,7 @@ function testSearchEntitySetData() {
     ];
 
     const axiosParams = [
-      `/${MOCK_ENTITY_SET_ID}`,
+      `/${ENTITY_SET_MOCK_ID}`,
       {
         searchTerm: MOCK_SEARCH_TERM,
         start: MOCK_START,
@@ -244,11 +244,11 @@ function testAdvancedSearchEntitySetData() {
 
     // TODO: searchFields needs to be List<SearchDetails>
     const validParams = [
-      MOCK_ENTITY_SET_ID,
+      ENTITY_SET_MOCK_ID,
       {
         searchFields: [
-          { [MOCK_PROPERTY_TYPE_IDS[0]]: MOCK_SEARCH_TERM },
-          { [MOCK_PROPERTY_TYPE_IDS[1]]: MOCK_SEARCH_TERM }
+          { [PROPERTY_TYPE_MOCK_IDS[0]]: MOCK_SEARCH_TERM },
+          { [PROPERTY_TYPE_MOCK_IDS[1]]: MOCK_SEARCH_TERM }
         ],
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
@@ -261,11 +261,11 @@ function testAdvancedSearchEntitySetData() {
     ];
 
     const axiosParams = [
-      `/${ADVANCED_PATH}/${MOCK_ENTITY_SET_ID}`,
+      `/${ADVANCED_PATH}/${ENTITY_SET_MOCK_ID}`,
       {
         searchFields: [
-          { [MOCK_PROPERTY_TYPE_IDS[0]]: MOCK_SEARCH_TERM },
-          { [MOCK_PROPERTY_TYPE_IDS[1]]: MOCK_SEARCH_TERM }
+          { [PROPERTY_TYPE_MOCK_IDS[0]]: MOCK_SEARCH_TERM },
+          { [PROPERTY_TYPE_MOCK_IDS[1]]: MOCK_SEARCH_TERM }
         ],
         start: MOCK_START,
         maxHits: MOCK_MAX_HITS
@@ -470,9 +470,9 @@ function searchEntityNeighbors() {
   describe('searchEntityNeighbors', () => {
 
     const fnToTest = SearchApi.searchEntityNeighbors;
-    const validParams = [MOCK_ENTITY_SET_ID, MOCK_ENTITY_KEY_ID];
+    const validParams = [ENTITY_SET_MOCK_ID, MOCK_ENTITY_KEY_ID];
     const invalidParams = [INVALID_PARAMS, INVALID_PARAMS];
-    const axiosParams = [`/${MOCK_ENTITY_SET_ID}/${MOCK_ENTITY_KEY_ID}`];
+    const axiosParams = [`/${ENTITY_SET_MOCK_ID}/${MOCK_ENTITY_KEY_ID}`];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, SEARCH_API);
@@ -490,7 +490,7 @@ function searchEntityNeighborsWithFilter() {
   describe('searchEntityNeighborsWithFilter', () => {
     describe('default', () => {
       const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
-      const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }];
+      const validParams = [ENTITY_SET_MOCK_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }];
       const invalidParams = [
         INVALID_PARAMS,
         {
@@ -501,7 +501,7 @@ function searchEntityNeighborsWithFilter() {
         },
       ];
       const axiosParams = [
-        `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`,
+        `/${ENTITY_SET_MOCK_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}`,
         { entityKeyIds: [MOCK_ENTITY_KEY_ID] },
       ];
 
@@ -515,7 +515,7 @@ function searchEntityNeighborsWithFilter() {
 
     describe('idsOnly = true', () => {
       const fnToTest = SearchApi.searchEntityNeighborsWithFilter;
-      const validParams = [MOCK_ENTITY_SET_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }, true];
+      const validParams = [ENTITY_SET_MOCK_ID, { entityKeyIds: [MOCK_ENTITY_KEY_ID] }, true];
       const invalidParams = [
         INVALID_PARAMS,
         {
@@ -527,7 +527,7 @@ function searchEntityNeighborsWithFilter() {
         INVALID_PARAMS_OPTIONAL_BOOLEAN,
       ];
       const axiosParams = [
-        `/${MOCK_ENTITY_SET_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}/${IDS_PATH}`,
+        `/${ENTITY_SET_MOCK_ID}/${NEIGHBORS_PATH}/${ADVANCED_PATH}/${IDS_PATH}`,
         { entityKeyIds: [MOCK_ENTITY_KEY_ID] },
       ];
 

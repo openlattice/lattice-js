@@ -13,13 +13,13 @@ import {
 
 import FQN from './FQN';
 import {
-  MOCK_ENTITY_TYPE,
+  ENTITY_TYPE_MOCK,
   EntityType,
   EntityTypeBuilder,
   genRandomEntityType,
 } from './EntityType';
 import {
-  MOCK_PROPERTY_TYPE,
+  PROPERTY_TYPE_MOCK,
   PropertyType,
   PropertyTypeBuilder,
   genRandomPropertyType,
@@ -191,13 +191,11 @@ export type {
  *
  */
 
-const MOCK_SCHEMA = (new SchemaBuilder())
-  .setEntityTypes([MOCK_ENTITY_TYPE])
+const SCHEMA_MOCK = (new SchemaBuilder())
+  .setEntityTypes([ENTITY_TYPE_MOCK])
   .setFQN(FQN.of('mock.schema'))
-  .setPropertyTypes([MOCK_PROPERTY_TYPE])
+  .setPropertyTypes([PROPERTY_TYPE_MOCK])
   .build();
-
-const MOCK_SCHEMA_OBJECT = MOCK_SCHEMA.toObject();
 
 function genRandomSchema() {
   return (new SchemaBuilder())
@@ -208,7 +206,6 @@ function genRandomSchema() {
 }
 
 export {
-  MOCK_SCHEMA,
-  MOCK_SCHEMA_OBJECT,
+  SCHEMA_MOCK,
   genRandomSchema,
 };

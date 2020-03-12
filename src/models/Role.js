@@ -220,15 +220,13 @@ export type {
  *
  */
 
-const MOCK_ROLE = (new RoleBuilder())
+const ROLE_MOCK = (new RoleBuilder())
   .setDescription('MockOrgRoleDescription')
   .setId('66da9306-3d1d-49d7-a8ee-8515c9c28434')
   .setOrganizationId('a77a0f9a-0e6f-4a98-a169-4d1e122b39a3')
   .setPrincipal((new PrincipalBuilder()).setId('MockOrgRolePrincipalId').setType(PrincipalTypes.ROLE).build())
   .setTitle('MockOrgRoleTitle')
   .build();
-
-const MOCK_ROLE_OBJECT = MOCK_ROLE.toObject();
 
 function genRandomRole() {
   return (new RoleBuilder())
@@ -240,7 +238,6 @@ function genRandomRole() {
     .build();
 }
 export {
-  MOCK_ROLE,
-  MOCK_ROLE_OBJECT,
+  ROLE_MOCK,
   genRandomRole,
 };

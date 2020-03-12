@@ -125,12 +125,10 @@ export type {
  *
  */
 
-const MOCK_PRINCIPAL = (new PrincipalBuilder())
+const PRINCIPAL_MOCK = (new PrincipalBuilder())
   .setId('MockPrincipalId')
   .setType(PrincipalTypes.USER)
   .build();
-
-const MOCK_PRINCIPAL_OBJECT = MOCK_PRINCIPAL.toObject();
 
 function genRandomPrincipal(type :?PrincipalType) :Principal {
   return (new PrincipalBuilder())
@@ -140,7 +138,6 @@ function genRandomPrincipal(type :?PrincipalType) :Principal {
 }
 
 export {
-  MOCK_PRINCIPAL,
-  MOCK_PRINCIPAL_OBJECT,
+  PRINCIPAL_MOCK,
   genRandomPrincipal,
 };

@@ -352,7 +352,7 @@ export type {
  *
  */
 
-const MOCK_ENTITY_SET = new EntitySetBuilder()
+const ENTITY_SET_MOCK = new EntitySetBuilder()
   .setContacts(['OPENLATTICE'])
   .setDescription('MockEntitySetDescription')
   .setEntityTypeId('78ad8735-d5dc-42ab-96d9-677bca55e60f')
@@ -363,8 +363,6 @@ const MOCK_ENTITY_SET = new EntitySetBuilder()
   .setOrganizationId('9b93bc80-79c3-44c8-807c-ada1a8d6484f')
   .setTitle('MockEntitySetTitle')
   .build();
-
-const MOCK_ENTITY_SET_OBJECT = MOCK_ENTITY_SET.toObject();
 
 function genRandomEntitySet() {
   return new EntitySetBuilder()
@@ -381,7 +379,6 @@ function genRandomEntitySet() {
 }
 
 export {
-  MOCK_ENTITY_SET,
-  MOCK_ENTITY_SET_OBJECT,
+  ENTITY_SET_MOCK,
   genRandomEntitySet,
 };

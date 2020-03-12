@@ -170,13 +170,11 @@ export type {
  *
  */
 
-const MOCK_GRANT = (new GrantBuilder())
+const GRANT_MOCK = (new GrantBuilder())
   .setAttribute('attribute')
   .setGrantType(GrantTypes.MANUAL)
   .setMappings(['MAPPING_1', 'MAPPING_2'])
   .build();
-
-const MOCK_GRANT_OBJECT = MOCK_GRANT.toObject();
 
 function genRandomGrant() {
   return (new GrantBuilder())
@@ -187,7 +185,6 @@ function genRandomGrant() {
 }
 
 export {
-  MOCK_GRANT,
-  MOCK_GRANT_OBJECT,
+  GRANT_MOCK,
   genRandomGrant,
 };

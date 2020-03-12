@@ -402,7 +402,7 @@ export type {
  *
  */
 
-const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
+const PROPERTY_TYPE_MOCK :PropertyType = new PropertyTypeBuilder()
   .setAnalyzer(AnalyzerTypes.STANDARD)
   .setDataType('String')
   .setDescription('MockPropertyTypeDescription')
@@ -415,8 +415,6 @@ const MOCK_PROPERTY_TYPE :PropertyType = new PropertyTypeBuilder()
   .setTitle('MockPropertyTypeTitle')
   .setType(FQN.of('mock.propertytype'))
   .build();
-
-const MOCK_PROPERTY_TYPE_OBJECT = MOCK_PROPERTY_TYPE.toObject();
 
 function genRandomPropertyType() :PropertyType {
   return new PropertyTypeBuilder()
@@ -435,7 +433,6 @@ function genRandomPropertyType() :PropertyType {
 }
 
 export {
-  MOCK_PROPERTY_TYPE,
-  MOCK_PROPERTY_TYPE_OBJECT,
+  PROPERTY_TYPE_MOCK,
   genRandomPropertyType,
 };

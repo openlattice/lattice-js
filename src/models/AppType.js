@@ -207,15 +207,13 @@ export type {
  *
  */
 
-const MOCK_APP_TYPE = (new AppTypeBuilder())
+const APP_TYPE_MOCK = (new AppTypeBuilder())
   .setDescription('MockAppTypeDescription')
   .setEntityTypeId('cf411622-8b0e-4352-9bb2-367953fd09a3')
   .setId('27e5b4f0-243a-46c7-8ae3-8516ac0fad6a')
   .setTitle('MockAppTypeTitle')
   .setType(FQN.of('mock.apptype'))
   .build();
-
-const MOCK_APP_TYPE_OBJECT = MOCK_APP_TYPE.toObject();
 
 function genRandomAppType() {
   return (new AppTypeBuilder())
@@ -228,7 +226,6 @@ function genRandomAppType() {
 }
 
 export {
-  MOCK_APP_TYPE,
-  MOCK_APP_TYPE_OBJECT,
+  APP_TYPE_MOCK,
   genRandomAppType,
 };

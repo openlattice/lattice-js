@@ -2,7 +2,6 @@
  * @flow
  */
 
-import has from 'lodash/has';
 import isArray from 'lodash/isArray';
 import isBoolean from 'lodash/isBoolean';
 import {
@@ -14,7 +13,7 @@ import {
 } from 'immutable';
 
 import {
-  MOCK_ENTITY_TYPE,
+  ENTITY_TYPE_MOCK,
   EntityType,
   EntityTypeBuilder,
   genRandomEntityType,
@@ -44,16 +43,16 @@ class AssociationType {
 
   constructor(associationType :{
     bidirectional :boolean;
-    destinationEntityTypeIds :UUID[];
+    dst :UUID[];
     entityType :EntityType;
-    sourceEntityTypeIds :UUID[];
+    src :UUID[];
   }) {
 
     // required properties
     this.bidirectional = associationType.bidirectional;
     this.entityType = associationType.entityType;
-    this.dst = associationType.destinationEntityTypeIds;
-    this.src = associationType.sourceEntityTypeIds;
+    this.dst = associationType.dst;
+    this.src = associationType.src;
   }
 
   toImmutable() :Map<*, *> {
@@ -91,25 +90,15 @@ class AssociationTypeBuilder {
 
     if (isImmutable(value)) {
       this.setBidirectional(value.get('bidirectional'));
-      this.setEntityType(value.get('entityType'));
       this.setDestinationEntityTypeIds(value.get('dst'));
+      this.setEntityType(value.get('entityType'));
       this.setSourceEntityTypeIds(value.get('src'));
     }
     else if (isDefined(value)) {
       this.setBidirectional(value.bidirectional);
+      this.setDestinationEntityTypeIds(value.dst);
       this.setEntityType(value.entityType);
-      if (has(value, 'dst')) {
-        this.setDestinationEntityTypeIds(value.dst);
-      }
-      else if (has(value, 'destinationEntityTypeIds')) {
-        this.setDestinationEntityTypeIds(value.destinationEntityTypeIds);
-      }
-      if (has(value, 'src')) {
-        this.setSourceEntityTypeIds(value.src);
-      }
-      else if (has(value, 'sourceEntityTypeIds')) {
-        this.setSourceEntityTypeIds(value.sourceEntityTypeIds);
-      }
+      this.setSourceEntityTypeIds(value.src);
     }
   }
 
@@ -191,9 +180,9 @@ class AssociationTypeBuilder {
 
     return new AssociationType({
       bidirectional: this.bidirectional,
-      destinationEntityTypeIds: this.destinationEntityTypeIds,
+      dst: this.destinationEntityTypeIds,
       entityType: this.entityType,
-      sourceEntityTypeIds: this.sourceEntityTypeIds,
+      src: this.sourceEntityTypeIds,
     });
   }
 }
@@ -216,14 +205,12 @@ export type {
  *
  */
 
-const MOCK_ASSOCIATION_TYPE = (new AssociationTypeBuilder())
-  .setEntityType(MOCK_ENTITY_TYPE)
+const ASSOCIATION_TYPE_MOCK = (new AssociationTypeBuilder())
+  .setEntityType(ENTITY_TYPE_MOCK)
   .setSourceEntityTypeIds(['c49832e9-8c49-4d24-984a-2221b4fa249b', 'bec4adc8-79dc-48ab-afda-e203c5573ff5'])
   .setDestinationEntityTypeIds(['91385fae-babc-4bd3-ba42-74decb9036f0', 'c1366efe-f619-4f30-bb6a-0b7437966e65'])
   .setBidirectional(false)
   .build();
-
-const MOCK_ASSOCIATION_TYPE_OBJECT = MOCK_ASSOCIATION_TYPE.toObject();
 
 function genRandomAssociationType() {
   return (new AssociationTypeBuilder())
@@ -235,7 +222,6 @@ function genRandomAssociationType() {
 }
 
 export {
-  MOCK_ASSOCIATION_TYPE,
-  MOCK_ASSOCIATION_TYPE_OBJECT,
+  ASSOCIATION_TYPE_MOCK,
   genRandomAssociationType,
 };

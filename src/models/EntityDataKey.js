@@ -123,12 +123,10 @@ export type {
  *
  */
 
-const MOCK_ENTITY_DATA_KEY = (new EntityDataKeyBuilder())
+const ENTITY_DATA_KEY_MOCK = (new EntityDataKeyBuilder())
   .setEntityKeyId('3f8bd01a-e211-4912-90d0-fbd2fefefe24')
   .setEntitySetId('e90e6d9c-d0ed-490b-ba3e-38b30f34a1eb')
   .build();
-
-const MOCK_ENTITY_DATA_KEY_OBJECT = MOCK_ENTITY_DATA_KEY.toObject();
 
 function genRandomEntityDataKey() {
   return (new EntityDataKeyBuilder())
@@ -138,7 +136,6 @@ function genRandomEntityDataKey() {
 }
 
 export {
-  MOCK_ENTITY_DATA_KEY,
-  MOCK_ENTITY_DATA_KEY_OBJECT,
+  ENTITY_DATA_KEY_MOCK,
   genRandomEntityDataKey,
 };

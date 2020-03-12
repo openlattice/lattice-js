@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import FQN from './FQN';
 
-import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
+import { INVALID_PARAMS, INVALID_PARAMS_REQUIRED_STRING } from '../utils/testing/InvalidParams';
 
 const MOCK_NAMESPACE = 'OL';
 const MOCK_NAME = 'DATA';
@@ -62,7 +62,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given 1 invalid parameter', () => {
-      INVALID_PARAMS_SS.forEach((invalidInput) => {
+      INVALID_PARAMS.forEach((invalidInput) => {
         expect(() => {
           FQN.of(invalidInput);
         }).toThrow('invalid FQN: namespace must be a non-empty string');
@@ -70,8 +70,8 @@ describe('FQN', () => {
     });
 
     test('should throw when given 2 invalid parameters', () => {
-      INVALID_PARAMS.forEach((invalidInput1) => {
-        INVALID_PARAMS.forEach((invalidInput2) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput1) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput2) => {
           expect(() => {
             FQN.of(invalidInput1, invalidInput2);
           }).toThrow('invalid FQN: namespace must be a non-empty string');
@@ -80,7 +80,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given 3 or more parameters', () => {
-      INVALID_PARAMS.forEach((invalidInput) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
         expect(() => {
           FQN.of(invalidInput, invalidInput, invalidInput);
         }).toThrow('invalid parameter count: FQN takes only 1 or 2 parameters, got 3');
@@ -88,7 +88,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given an Immutable object with an invalid namespace', () => {
-      INVALID_PARAMS.forEach((invalidInput) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
         expect(() => {
           FQN.of(fromJS({ namespace: invalidInput, name: MOCK_NAME }));
         }).toThrow('invalid FQN: namespace must be a non-empty string');
@@ -96,7 +96,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given an Immutable object with an invalid name', () => {
-      INVALID_PARAMS.forEach((invalidInput) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
         expect(() => {
           FQN.of(fromJS({ namespace: MOCK_NAMESPACE, name: invalidInput }));
         }).toThrow('invalid FQN: name must be a non-empty string');
@@ -104,7 +104,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given an FQN object literal with an invalid namespace', () => {
-      INVALID_PARAMS.forEach((invalidInput) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
         expect(() => {
           FQN.of({ namespace: invalidInput, name: MOCK_NAME });
         }).toThrow('invalid FQN: namespace must be a non-empty string');
@@ -112,7 +112,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given an FQN object literal with an invalid name', () => {
-      INVALID_PARAMS.forEach((invalidInput) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
         expect(() => {
           FQN.of({ namespace: MOCK_NAMESPACE, name: invalidInput });
         }).toThrow('invalid FQN: name must be a non-empty string');
@@ -120,7 +120,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given an FQN instance with an invalid namespace', () => {
-      INVALID_PARAMS.forEach((invalidInput) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
         expect(() => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.namespace = invalidInput;
@@ -130,7 +130,7 @@ describe('FQN', () => {
     });
 
     test('should throw when given an FQN instance with an invalid name', () => {
-      INVALID_PARAMS.forEach((invalidInput) => {
+      INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
         expect(() => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.name = invalidInput;
@@ -162,7 +162,7 @@ describe('FQN', () => {
       });
 
       test('should return an empty object literal if namespace was changed to an invalid value', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.namespace = invalidInput;
           expect(fqn.toObject()).toEqual({ namespace: '', name: '' });
@@ -170,7 +170,7 @@ describe('FQN', () => {
       });
 
       test('should return an empty object literal if name was changed to an invalid value', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.name = invalidInput;
           expect(fqn.toObject()).toEqual({ namespace: '', name: '' });
@@ -187,7 +187,7 @@ describe('FQN', () => {
       });
 
       test('should return empty string if namespace was changed to an invalid value', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.namespace = invalidInput;
           expect(fqn.toString()).toEqual('');
@@ -195,7 +195,7 @@ describe('FQN', () => {
       });
 
       test('should return empty string if name was changed to an invalid value', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.name = invalidInput;
           expect(fqn.toString()).toEqual('');
@@ -212,7 +212,7 @@ describe('FQN', () => {
       });
 
       test('should return empty string if namespace was changed to an invalid value', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.namespace = invalidInput;
           expect(fqn.valueOf()).toEqual('');
@@ -220,7 +220,7 @@ describe('FQN', () => {
       });
 
       test('should return empty string if name was changed to an invalid value', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.name = invalidInput;
           expect(fqn.valueOf()).toEqual('');
@@ -264,51 +264,51 @@ describe('FQN', () => {
       });
 
       test('should return false when given 1 invalid parameter', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(FQN.isValid(invalidInput)).toEqual(false);
         });
       });
 
       test('should return false when given 2 invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput1) => {
-          INVALID_PARAMS.forEach((invalidInput2) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput1) => {
+          INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput2) => {
             expect(FQN.isValid(invalidInput1, invalidInput2)).toEqual(false);
           });
         });
       });
 
       test('should return false when given 3 or more parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.isValid(invalidInput, invalidInput, invalidInput)).toEqual(false);
         });
       });
 
       test('should return false when given an Immutable object with an invalid namespace', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.isValid(fromJS({ namespace: invalidInput, name: MOCK_NAME }))).toEqual(false);
         });
       });
 
       test('should return false when given an Immutable object with an invalid name', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.isValid(fromJS({ namespace: MOCK_NAMESPACE, name: invalidInput }))).toEqual(false);
         });
       });
 
       test('should return false when given an FQN object literal with an invalid namespace', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.isValid({ namespace: invalidInput, name: MOCK_NAME })).toEqual(false);
         });
       });
 
       test('should return false when given an FQN object literal with an invalid name', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.isValid({ namespace: MOCK_NAMESPACE, name: invalidInput })).toEqual(false);
         });
       });
 
       test('should return false when given a FQN instance with an invalid namespace', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.namespace = invalidInput;
           expect(FQN.isValid(fqn)).toEqual(false);
@@ -316,7 +316,7 @@ describe('FQN', () => {
       });
 
       test('should return false when given a FQN instance with an invalid name', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.name = invalidInput;
           expect(FQN.isValid(fqn)).toEqual(false);
@@ -367,51 +367,51 @@ describe('FQN', () => {
       });
 
       test('should return an empty string when given 1 invalid parameter', () => {
-        INVALID_PARAMS_SS.forEach((invalidInput) => {
+        INVALID_PARAMS.forEach((invalidInput) => {
           expect(FQN.toString(invalidInput)).toEqual('');
         });
       });
 
       test('should return an empty string when given 2 invalid parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput1) => {
-          INVALID_PARAMS.forEach((invalidInput2) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput1) => {
+          INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput2) => {
             expect(FQN.toString(invalidInput1, invalidInput2)).toEqual('');
           });
         });
       });
 
       test('should return an empty string when given 3 or more parameters', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.toString(invalidInput, invalidInput, invalidInput)).toEqual('');
         });
       });
 
       test('should return an empty string when given an Immutable object with an invalid namespace', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.toString(fromJS({ namespace: invalidInput, name: MOCK_NAME }))).toEqual('');
         });
       });
 
       test('should return an empty string when given an Immutable object with an invalid name', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.toString(fromJS({ namespace: MOCK_NAMESPACE, name: invalidInput }))).toEqual('');
         });
       });
 
       test('should return an empty string when given an FQN object literal with an invalid namespace', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.toString({ namespace: invalidInput, name: MOCK_NAME })).toEqual('');
         });
       });
 
       test('should return an empty string when given an FQN object literal with an invalid name', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           expect(FQN.toString({ namespace: MOCK_NAMESPACE, name: invalidInput })).toEqual('');
         });
       });
 
       test('should return an empty string when given a FQN instance with an invalid namespace', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.namespace = invalidInput;
           expect(FQN.toString(fqn)).toEqual('');
@@ -419,7 +419,7 @@ describe('FQN', () => {
       });
 
       test('should return an empty string when given a FQN instance with an invalid name', () => {
-        INVALID_PARAMS.forEach((invalidInput) => {
+        INVALID_PARAMS_REQUIRED_STRING.forEach((invalidInput) => {
           const fqn = FQN.of(MOCK_NAMESPACE, MOCK_NAME);
           fqn.name = invalidInput;
           expect(FQN.toString(fqn)).toEqual('');

@@ -12,7 +12,7 @@ import {
 } from 'immutable';
 
 import {
-  MOCK_PRINCIPAL,
+  PRINCIPAL_MOCK,
   Principal,
   PrincipalBuilder,
   genRandomPrincipal,
@@ -147,12 +147,10 @@ export type {
  *
  */
 
-const MOCK_ACE = (new AceBuilder())
+const ACE_MOCK = (new AceBuilder())
   .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
-  .setPrincipal(MOCK_PRINCIPAL)
+  .setPrincipal(PRINCIPAL_MOCK)
   .build();
-
-const MOCK_ACE_OBJECT = MOCK_ACE.toObject();
 
 function genRandomAce() {
   return (new AceBuilder())
@@ -162,7 +160,6 @@ function genRandomAce() {
 }
 
 export {
-  MOCK_ACE,
-  MOCK_ACE_OBJECT,
+  ACE_MOCK,
   genRandomAce,
 };

@@ -5,7 +5,7 @@ import * as PermissionsApi from './PermissionsApi';
 import * as AxiosUtils from '../utils/axios';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
-import { MOCK_ACL_DATA } from '../models/AclData';
+import { ACL_DATA_MOCK } from '../models/AclData';
 import { INVALID_PARAMS } from '../utils/testing/InvalidParams';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
@@ -75,9 +75,9 @@ describe('PermissionsApi', () => {
 
     const fnToTest = PermissionsApi.updateAcl;
 
-    const validParams = [MOCK_ACL_DATA];
+    const validParams = [ACL_DATA_MOCK];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', MOCK_ACL_DATA];
+    const axiosParams = ['/', ACL_DATA_MOCK];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
@@ -91,9 +91,9 @@ describe('PermissionsApi', () => {
 
     const fnToTest = PermissionsApi.updateAcls;
 
-    const validParams = [[MOCK_ACL_DATA]];
+    const validParams = [[ACL_DATA_MOCK]];
     const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${UPDATE_PATH}`, [MOCK_ACL_DATA]];
+    const axiosParams = [`/${UPDATE_PATH}`, [ACL_DATA_MOCK]];
 
     testApiShouldReturnPromise(fnToTest, validParams);
     testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PERMISSIONS_API);
