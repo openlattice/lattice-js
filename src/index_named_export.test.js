@@ -10,7 +10,7 @@ import * as Lattice from './index';
 /* eslint-disable key-spacing */
 const EXPECTED_OBJ_EXPORTS = OrderedMap({
   AppApi             : { size: 7 },
-  AuthorizationApi   : { size: 2 },
+  AuthorizationApi   : { size: 1 },
   CodexApi           : { size: 1 },
   DataApi            : { size: 19 },
   DataIntegrationApi : { size: 2 },
