@@ -4,7 +4,6 @@ import * as ApiNames from './ApiNames';
 
 /* eslint-disable key-spacing */
 const EXPECTED_APIS = Map({
-  ANALYSIS_API         : 'AnalysisApi',
   APP_API              : 'AppApi',
   AUTHORIZATION_API    : 'AuthorizationApi',
   CODEX_API            : 'CodexApi',
@@ -12,15 +11,11 @@ const EXPECTED_APIS = Map({
   DATA_INTEGRATION_API : 'DataIntegrationApi',
   EDM_API              : 'EntityDataModelApi',
   ENTITY_SETS_API      : 'EntitySetsApi',
-  FEEDS_API            : 'FeedsApi',
-  LINKING_API          : 'LinkingApi',
   ORGANIZATIONS_API    : 'OrganizationsApi',
   PERMISSIONS_API      : 'PermissionsApi',
   PERSISTENT_SEARCH_API: 'PersistentSearchApi',
   PRINCIPALS_API       : 'PrincipalsApi',
-  REQUESTS_API         : 'RequestsApi',
   SEARCH_API           : 'SearchApi',
-  SUBSCRIPTION_API     : 'SubscriptionApi',
 }).sortBy((value, key) => key);
 /* eslint-enable */
 

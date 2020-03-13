@@ -18,14 +18,12 @@ import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as EntitySetsApi from './api/EntitySetsApi';
-import * as FeedsApi from './api/FeedsApi';
 import * as Models from './models';
 import * as OrganizationsApi from './api/OrganizationsApi';
 import * as PermissionsApi from './api/PermissionsApi';
 import * as PersistentSearchApi from './api/PersistentSearchApi';
 import * as PrincipalsApi from './api/PrincipalsApi';
 import * as SearchApi from './api/SearchApi';
-import * as SubscriptionApi from './api/SubscriptionApi';
 import * as Types from './constants/types';
 import { configure } from './config/Configuration';
 
@@ -45,13 +43,11 @@ export {
   DataIntegrationApi,
   EntityDataModelApi,
   EntitySetsApi,
-  FeedsApi,
   OrganizationsApi,
   PermissionsApi,
   PersistentSearchApi,
   PrincipalsApi,
   SearchApi,
-  SubscriptionApi,
 
   Constants,
   Models,
@@ -68,13 +64,11 @@ export default {
   DataIntegrationApi,
   EntityDataModelApi,
   EntitySetsApi,
-  FeedsApi,
   OrganizationsApi,
   PermissionsApi,
   PersistentSearchApi,
   PrincipalsApi,
   SearchApi,
-  SubscriptionApi,
 
   Constants,
   Models,
