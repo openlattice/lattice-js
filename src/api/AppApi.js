@@ -177,14 +177,6 @@ function getAppType(idOrFQN :UUID | FQN) :Promise<AppType> {
 }
 
 /**
- * @deprecated
- */
-function getAppTypeByFqn(fqn :FQN) :Promise<*> {
-  LOG.error('AppApi.getAppTypeByFqn() is deprecated. Please use AppApi.getAppType() instead');
-  return getAppType(fqn);
-}
-
-/**
  * `GET /app/type`
  *
  * Gets the AppType definitions for the given AppType ids.
@@ -274,7 +266,6 @@ export {
   getApp,
   getAppConfigs,
   getAppType,
-  getAppTypeByFqn,
   getAppTypes,
   installApp,
 };
