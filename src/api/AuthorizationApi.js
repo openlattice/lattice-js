@@ -36,7 +36,7 @@ const LOG = new Logger('AuthorizationApi');
  * @returns {Promise<Authorization[]>} - a Promise that resolves with the Authorizations
  *
  * @example
- * AuthorizationApi.checkAuthorizations(
+ * AuthorizationApi.getAuthorizations(
  *   [
  *     {
  *       "aclKey": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
@@ -45,7 +45,7 @@ const LOG = new Logger('AuthorizationApi');
  *   ]
  * );
  */
-function checkAuthorizations(checks :AccessCheck[]) :Promise<*> {
+function getAuthorizations(checks :AccessCheck[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -71,5 +71,5 @@ function checkAuthorizations(checks :AccessCheck[]) :Promise<*> {
 }
 
 export {
-  checkAuthorizations,
+  getAuthorizations,
 };
