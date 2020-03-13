@@ -18,14 +18,10 @@
  */
 
 import Logger from '../utils/Logger';
-import PermissionTypes from '../constants/types/PermissionTypes';
-import SecurableTypes from '../constants/types/SecurableTypes';
 import { AUTHORIZATION_API } from '../constants/ApiNames';
 import { AccessCheck, isValidAccessCheck } from '../models/AccessCheck';
-import { isDefined, isNonEmptyArray, isNonEmptyString } from '../utils/LangUtils';
+import { isNonEmptyArray } from '../utils/LangUtils';
 import { getApiAxiosInstance } from '../utils/axios';
-import type { PermissionType } from '../constants/types/PermissionTypes';
-import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('AuthorizationApi');
 
@@ -37,7 +33,7 @@ const LOG = new Logger('AuthorizationApi');
  * @static
  * @memberof lattice.AuthorizationApi
  * @param {AccessCheck[]} queries
- * @returns {Promise<Authorization[]>} - a Promise that will resolve with the Authorizations as its fulfillment value
+ * @returns {Promise<Authorization[]>} - a Promise that resolves with the Authorizations
  *
  * @example
  * AuthorizationApi.checkAuthorizations(
@@ -49,7 +45,7 @@ const LOG = new Logger('AuthorizationApi');
  *   ]
  * );
  */
-export function checkAuthorizations(checks :AccessCheck[]) :Promise<*> {
+function checkAuthorizations(checks :AccessCheck[]) :Promise<*> {
 
   let errorMsg = '';
 
@@ -65,8 +61,6 @@ export function checkAuthorizations(checks :AccessCheck[]) :Promise<*> {
     return Promise.reject(errorMsg);
   }
 
-  // TODO: Immutable.Set() with tests
-
   return getApiAxiosInstance(AUTHORIZATION_API)
     .post('/', checks)
     .then((axiosResponse) => axiosResponse.data)
@@ -76,62 +70,6 @@ export function checkAuthorizations(checks :AccessCheck[]) :Promise<*> {
     });
 }
 
-/**
- * `GET /authorizations`
- *
- * Gets all authorized objects of the given SecurableType with the given PermissionType.
- *
- * @static
- * @memberof lattice.AuthorizationApi
- * @param {SecurableType} securableType
- * @param {PermissionType} permission
- * @param {string} pagingToken (optional)
- * @returns {Promise<AuthorizedObjectsSearchResult>} - a Promise that will resolve with the authorized objects and a
- * paging token as its fulfillment value
- *
- * @example
- * AuthorizationApi.getAccessibleObjects(
- *   "EntityType",
- *   "READ",
- *   "{pagingToken}"
- * );
- */
-export function getAccessibleObjects(
-  securableType :SecurableType,
-  permission :PermissionType,
-  pagingToken :string
-) :Promise<*> {
-
-  let errorMsg :string = '';
-
-  if (!isNonEmptyString(securableType) || !SecurableTypes[securableType]) {
-    errorMsg = 'invalid parameter: securableType must be a valid SecurableType';
-    LOG.error(errorMsg, securableType);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyString(permission) || !PermissionTypes[permission]) {
-    errorMsg = 'invalid parameter: permission must be a valid PermissionType';
-    LOG.error(errorMsg, permission);
-    return Promise.reject(errorMsg);
-  }
-
-  if (isDefined(pagingToken) && !isNonEmptyString(pagingToken)) {
-    errorMsg = 'invalid parameter: when given, pagingToken must be a non-empty string';
-    LOG.error(errorMsg, pagingToken);
-    return Promise.reject(errorMsg);
-  }
-
-  let url = `/?objectType=${securableType}&permission=${permission}`;
-  if (isDefined(pagingToken)) {
-    url = `${url}&pagingToken=${pagingToken}`;
-  }
-
-  return getApiAxiosInstance(AUTHORIZATION_API)
-    .get(url)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
+export {
+  checkAuthorizations,
+};
