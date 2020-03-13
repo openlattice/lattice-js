@@ -1,10 +1,9 @@
-import * as AuthorizationApi from './AuthorizationApi';
+import * as CodexApi from './CodexApi';
 
 import * as AxiosUtils from '../utils/axios';
-import { AUTHORIZATION_API } from '../constants/ApiNames';
-import { ACCESS_CHECK_MOCK } from '../models/AccessCheck';
-import { INVALID_PARAMS_OPTIONAL_ARRAY } from '../utils/testing/InvalidParams';
-import { getMockAxiosInstance } from '../utils/testing/MockUtils';
+import { CODEX_API } from '../constants/ApiNames';
+import { INVALID_PARAMS } from '../utils/testing/InvalidParams';
+import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 import {
   testApiShouldCatchRejectedPromise,
   testApiShouldNotThrowOnInvalidParameters,
@@ -25,22 +24,22 @@ AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
  * tests
  */
 
-describe('AuthorizationApi', () => {
+describe('CodexApi', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('checkAuthorizations()', () => {
+  describe('sendOutgoingText()', () => {
 
-    const fnToTest = AuthorizationApi.checkAuthorizations;
+    const fnToTest = CodexApi.sendOutgoingText;
 
-    const validParams = [[ACCESS_CHECK_MOCK]];
-    const invalidParams = [INVALID_PARAMS_OPTIONAL_ARRAY];
+    const validParams = [{ organizationId: genRandomUUID(), messageContents: genRandomString() }];
+    const invalidParams = [INVALID_PARAMS];
     const axiosParams = ['/', validParams[0]];
 
     testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, AUTHORIZATION_API);
+    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, CODEX_API);
     testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
     testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
