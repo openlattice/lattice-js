@@ -10,9 +10,9 @@ import {
   isValidDataGraph,
 } from './DataGraph';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   DataGraph,
   DataGraphBuilder,
   DATA_GRAPH_MOCK,

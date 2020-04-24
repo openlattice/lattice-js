@@ -42,7 +42,7 @@ type AppConfig = {|
  *
  * @static
  * @memberof lattice.AppApi
- * @return {Promise<App[]>} - a Promise that resolves with all App definitions
+ * @returns {Promise<App[]>} - a Promise that resolves with all App definitions
  *
  * @example
  * AppApi.getApps();
@@ -67,10 +67,12 @@ function getAllApps() :Promise<App[]> {
  * @static
  * @memberof lattice.AppApi
  * @param {(UUID|string)} idOrName
- * @return {Promise<App>} - a Promise that resolves with the App definition
+ * @returns {Promise<App>} - a Promise that resolves with the App definition
  *
  * @example
  * AppApi.getApp("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ *
+ * @example
  * AppApi.getApp("AppName");
  */
 function getApp(idOrName :UUID | string) :Promise<App> {
@@ -101,30 +103,30 @@ function getApp(idOrName :UUID | string) :Promise<App> {
 }
 
 /**
- * `GET /app/config/{id}`
+ * `GET /app/config/{appId}`
  *
  * Gets the AppConfig definitions for the given App id.
  *
  * @static
  * @memberof lattice.AppApi
  * @param {UUID} id
- * @return {Promise<AppConfig[]>} - a Promise that resolves with the AppConfig definitions
+ * @returns {Promise<AppConfig[]>} - a Promise that resolves with the AppConfig definitions
  *
  * @example
  * AppApi.getAppConfigs("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-function getAppConfigs(id :UUID) :Promise<AppConfig[]> {
+function getAppConfigs(appId :UUID) :Promise<AppConfig[]> {
 
   let errorMsg = '';
 
-  if (!isValidUUID(id)) {
-    errorMsg = 'invalid parameter: id must be a valid UUID';
-    LOG.error(errorMsg, id);
+  if (!isValidUUID(appId)) {
+    errorMsg = 'invalid parameter: "appId" must be a valid UUID';
+    LOG.error(errorMsg, appId);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(APP_API)
-    .get(`/${CONFIG_PATH}/${id}`)
+    .get(`/${CONFIG_PATH}/${appId}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -133,7 +135,7 @@ function getAppConfigs(id :UUID) :Promise<AppConfig[]> {
 }
 
 /**
- * `GET /app/type/{id}`
+ * `GET /app/type/{appTypeId}`
  * `GET /app/type/lookup/{namespace}/{name}`
  *
  * Gets the AppType definition for the given AppType UUID or AppType FQN.
@@ -141,11 +143,15 @@ function getAppConfigs(id :UUID) :Promise<AppConfig[]> {
  * @static
  * @memberof lattice.AppApi
  * @param {(UUID|FQN)} idOrFQN
- * @return {Promise<AppType>} - a Promise that resolves with the AppType definition
+ * @returns {Promise<AppType>} - a Promise that resolves with the AppType definition
  *
  * @example
  * AppApi.getAppType("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e");
+ *
+ * @example
  * AppApi.getAppType("ol.apptype");
+ *
+ * @example
  * AppApi.getAppType({ "namespace": "ol", "name": "apptype" });
  */
 function getAppType(idOrFQN :UUID | FQN) :Promise<AppType> {
@@ -183,8 +189,8 @@ function getAppType(idOrFQN :UUID | FQN) :Promise<AppType> {
  *
  * @static
  * @memberof lattice.AppApi
- * @param {UUID[]} ids
- * @return {Promise<Map<UUID, AppType>>} - a Promise that resolves with a map of AppType id to AppTypes
+ * @param {UUID[]} appTypeIds
+ * @returns {Promise<Map<UUID, AppType>>} - a Promise that resolves with a map of AppType id to AppTypes
  *
  * @example
  * AppApi.getAppTypes([
@@ -192,18 +198,18 @@ function getAppType(idOrFQN :UUID | FQN) :Promise<AppType> {
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e"
  * ]);
  */
-function getAppTypes(ids :UUID[]) :Promise<Map<UUID, AppType>> {
+function getAppTypes(appTypeIds :UUID[]) :Promise<Map<UUID, AppType>> {
 
   let errorMsg = '';
 
-  if (!isValidUUIDArray(ids)) {
-    errorMsg = 'invalid parameter: ids must be a valid UUID array';
-    LOG.error(errorMsg, ids);
+  if (!isValidUUIDArray(appTypeIds)) {
+    errorMsg = 'invalid parameter: "appTypeIds" must be a valid UUID array';
+    LOG.error(errorMsg, appTypeIds);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(APP_API)
-    .post(`/${TYPE_PATH}/${BULK_PATH}`, ids)
+    .post(`/${TYPE_PATH}/${BULK_PATH}`, appTypeIds)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -221,7 +227,7 @@ function getAppTypes(ids :UUID[]) :Promise<Map<UUID, AppType>> {
  * @param {UUID} appId
  * @param {UUID} organizationId
  * @param {string} prefix
- * @return {Promise} - a Promise that resolves without a value
+ * @returns {Promise} - a Promise that resolves without a value
  *
  * @example
  * AppApi.installApp(

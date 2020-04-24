@@ -10,9 +10,9 @@ import {
   isValidSchema,
 } from './Schema';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   Schema,
   SchemaBuilder,
   SCHEMA_MOCK,

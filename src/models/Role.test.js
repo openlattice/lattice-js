@@ -10,9 +10,9 @@ import {
   isValidRole,
 } from './Role';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   Role,
   RoleBuilder,
   ROLE_MOCK,

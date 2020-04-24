@@ -11,9 +11,9 @@ import {
 } from './AclData';
 
 import { ActionTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   AclData,
   AclDataBuilder,
   ACL_DATA_MOCK,

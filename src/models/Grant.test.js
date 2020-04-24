@@ -11,9 +11,9 @@ import {
 } from './Grant';
 
 import { GrantTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   Grant,
   GrantBuilder,
   GRANT_MOCK,

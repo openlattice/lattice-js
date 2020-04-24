@@ -10,13 +10,13 @@ import {
   isValidOrganization,
 } from './Organization';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 // const INVALID_PARAMS_FOR_GRANT = INVALID_PARAMS_FOR_OPTIONAL_OBJECT.slice(0);
 // INVALID_PARAMS_FOR_GRANT.push({ invalid_key: 'invalid_value' });
 // INVALID_PARAMS_FOR_GRANT.push({ [genRandomUUID()]: 'invalid_value' });
 
-runModelTestSuite(
+runTestSuite(
   Organization,
   OrganizationBuilder,
   ORGANIZATION_MOCK,

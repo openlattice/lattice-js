@@ -10,9 +10,9 @@ import {
   isValidApp,
 } from './App';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   App,
   AppBuilder,
   APP_MOCK,

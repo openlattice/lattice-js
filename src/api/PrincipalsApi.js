@@ -37,7 +37,7 @@ const LOG = new Logger('PrincipalsApi');
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @return {Promise<Map<AclKey, Role>>} - a Promise that will resolve with a map of roles
+ * @returns {Promise<Map<AclKey, Role>>} - a Promise that will resolve with a map of roles
  *
  * @example
  * PrincipalsApi.getAllRoles();
@@ -58,7 +58,7 @@ function getAllRoles() :Promise<*> {
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @return {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of users
+ * @returns {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of users
  *
  * @example
  * PrincipalsApi.getAllUsers();
@@ -79,7 +79,7 @@ function getAllUsers() :Promise<*> {
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @return {Promise<Set<SecurablePrincipal>>} - a Promise that will resolve with a set of role SecurablePrincipals
+ * @returns {Promise<Set<SecurablePrincipal>>} - a Promise that will resolve with a set of role SecurablePrincipals
  *
  * @example
  * PrincipalsApi.getCurrentRoles();
@@ -101,7 +101,7 @@ function getCurrentRoles() :Promise<*> {
  * @static
  * @memberof lattice.PrincipalsApi
  * @param {Principal} principal
- * @return {Promise<SecurablePrincipal>} - a Promise that will resolve with the SecurablePrincipal
+ * @returns {Promise<SecurablePrincipal>} - a Promise that will resolve with the SecurablePrincipal
  *
  * @example
  * PrincipalsApi.getSecurablePrincipal({
@@ -134,7 +134,7 @@ function getSecurablePrincipal(principal :Principal) :Promise<*> {
  * @static
  * @memberof lattice.PrincipalsApi
  * @param {string} userId
- * @return {Promise}
+ * @returns {Promise}
  *
  * @example
  * PrincipalsApi.getUser("auth0|openlattice");
@@ -164,7 +164,7 @@ function getUser(userId :string) :Promise<*> {
  * @static
  * @memberof lattice.PrincipalsApi
  * @param {string} searchQuery
- * @return {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of matching users
+ * @returns {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of matching users
  *
  * @example
  * PrincipalsApi.searchAllUsers("openlattice");
@@ -193,7 +193,7 @@ function searchAllUsers(searchQuery :string) :Promise<*> {
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @return {Promise} - a Promise that resolves without a value
+ * @returns {Promise} - a Promise that resolves without a value
  *
  * @example
  * PrincipalsApi.syncUser();

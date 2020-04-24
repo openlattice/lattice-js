@@ -11,9 +11,9 @@ import {
 } from './PropertyType';
 
 import { AnalyzerTypes, IndexTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   PropertyType,
   PropertyTypeBuilder,
   PROPERTY_TYPE_MOCK,

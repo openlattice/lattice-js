@@ -13,9 +13,9 @@ import {
 } from './Ace';
 
 import { PermissionTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   Ace,
   AceBuilder,
   ACE_MOCK,

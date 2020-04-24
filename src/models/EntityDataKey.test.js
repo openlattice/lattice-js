@@ -10,9 +10,9 @@ import {
   isValidEntityDataKey,
 } from './EntityDataKey';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   EntityDataKey,
   EntityDataKeyBuilder,
   ENTITY_DATA_KEY_MOCK,

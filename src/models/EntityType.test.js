@@ -11,9 +11,9 @@ import {
 } from './EntityType';
 
 import { SecurableTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   EntityType,
   EntityTypeBuilder,
   ENTITY_TYPE_MOCK,

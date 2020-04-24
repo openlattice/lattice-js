@@ -4,31 +4,13 @@
 
 /* eslint-disable jest/no-identical-title, no-throw-literal */
 
-import _has from 'lodash/has';
 import _isArray from 'lodash/isArray';
-import _isBoolean from 'lodash/isBoolean';
 import _isEqual from 'lodash/isEqual';
-import _isNumber from 'lodash/isNumber';
-import _isPlainObject from 'lodash/isPlainObject';
 import _isString from 'lodash/isString';
 import { Map, Set, fromJS } from 'immutable';
 
-import {
-  INVALID_PARAMS,
-  INVALID_PARAMS_OPTIONAL,
-  INVALID_PARAMS_OPTIONAL_ARRAY,
-  INVALID_PARAMS_OPTIONAL_BOOLEAN,
-  INVALID_PARAMS_OPTIONAL_NUMBER,
-  INVALID_PARAMS_OPTIONAL_OBJECT,
-  INVALID_PARAMS_OPTIONAL_SPECIAL_STRING,
-  INVALID_PARAMS_OPTIONAL_STRING,
-  INVALID_PARAMS_REQUIRED_BOOLEAN,
-  INVALID_PARAMS_REQUIRED_NUMBER,
-  INVALID_PARAMS_REQUIRED_STRING,
-} from './InvalidParams';
-
-import * as TheTypes from '../../constants/types';
-import { isValidUUID } from '../ValidationUtils';
+import { INVALID_PARAMS } from './InvalidParams';
+import { getInvalidParams } from './TestUtils';
 
 /*
  *
@@ -42,61 +24,6 @@ function expectToThrowGivenInvalidParam(Builder :Class<any>, setFunction :Functi
     (new Builder())[setFunction](invalidParam);
     throw `expected function to throw: ${setFunction}(${JSON.stringify(invalidParam)})`;
   }).toThrow(Error);
-}
-
-function isSpecialString(value :string) {
-
-  if (!_isString(value)) {
-    return false;
-  }
-
-  if (isValidUUID(value)) {
-    return true;
-  }
-
-  return Object.keys(TheTypes).reduce((special, key) => special || _has(TheTypes[key], value), false);
-}
-
-function getInvalidParams(validParam :any, isOptional = false) {
-
-  let invalidParams = INVALID_PARAMS;
-
-  // optional && allowed to be empty
-  if (isOptional === true) {
-    if (isSpecialString(validParam)) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_SPECIAL_STRING;
-    }
-    else if (_isString(validParam)) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_STRING;
-    }
-    else if (_isBoolean(validParam)) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_BOOLEAN;
-    }
-    else if (_isNumber(validParam)) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_NUMBER;
-    }
-    else if (_isArray(validParam)) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_ARRAY;
-    }
-    else if (_isPlainObject(validParam)) {
-      invalidParams = INVALID_PARAMS_OPTIONAL_OBJECT;
-    }
-    else {
-      invalidParams = INVALID_PARAMS_OPTIONAL;
-    }
-  }
-  // required
-  else if (_isString(validParam) && !isSpecialString(validParam)) {
-    invalidParams = INVALID_PARAMS_REQUIRED_STRING;
-  }
-  else if (_isBoolean(validParam)) {
-    invalidParams = INVALID_PARAMS_REQUIRED_BOOLEAN;
-  }
-  else if (_isNumber(validParam)) {
-    invalidParams = INVALID_PARAMS_REQUIRED_NUMBER;
-  }
-
-  return invalidParams;
 }
 
 /*
@@ -222,7 +149,7 @@ function testBuilderSet(
   });
 }
 
-function runModelTestSuite(
+function runTestSuite(
   Model :Class<any>,
   ModelBuilder :Class<any>,
   mockInstance :Object,
@@ -468,5 +395,5 @@ function runModelTestSuite(
 }
 
 export {
-  runModelTestSuite,
+  runTestSuite,
 };

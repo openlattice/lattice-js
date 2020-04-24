@@ -11,9 +11,9 @@ import {
 } from './Principal';
 
 import { PrincipalTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   Principal,
   PrincipalBuilder,
   PRINCIPAL_MOCK,

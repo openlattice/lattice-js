@@ -13,9 +13,9 @@ import {
 } from './EntitySet';
 
 import { EntitySetFlagTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   EntitySet,
   EntitySetBuilder,
   ENTITY_SET_MOCK,

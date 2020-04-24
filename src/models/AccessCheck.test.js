@@ -13,9 +13,9 @@ import {
 } from './AccessCheck';
 
 import { PermissionTypes } from '../constants/types';
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   AccessCheck,
   AccessCheckBuilder,
   ACCESS_CHECK_MOCK,

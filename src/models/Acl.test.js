@@ -10,9 +10,9 @@ import {
   isValidAcl,
 } from './Acl';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   Acl,
   AclBuilder,
   ACL_MOCK,

@@ -20,6 +20,7 @@
 import Logger from '../utils/Logger';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
+import { Acl } from '../models/Acl';
 import { AclData, isValidAclData } from '../models/AclData';
 import { isNonEmptyArray } from '../utils/LangUtils';
 import { isValidUUIDArray } from '../utils/ValidationUtils';
@@ -40,7 +41,7 @@ const LOG = new Logger('PermissionsApi');
  * @example
  * PermissionsApi.getAcl(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
  */
-export function getAcl(aclKey :UUID[]) :Promise<*> {
+function getAcl(aclKey :UUID[]) :Promise<Acl> {
 
   let errorMsg = '';
 
@@ -72,7 +73,7 @@ export function getAcl(aclKey :UUID[]) :Promise<*> {
  * @example
  * PermissionsApi.getAclExplanation(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
  */
-export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
+function getAclExplanation(aclKey :UUID[]) :Promise<Object> {
 
   let errorMsg = '';
 
@@ -99,7 +100,7 @@ export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
  * @static
  * @memberof lattice.PermissionsApi
  * @param {AclData} aclData
- * @returns {Promise}
+ * @returns {Promise<void>} - a Promise that resolves without a value
  *
  * @example
  * PermissionsApi.updateAcls(
@@ -120,7 +121,7 @@ export function getAclExplanation(aclKey :UUID[]) :Promise<*> {
  *   }
  * );
  */
-export function updateAcl(aclData :AclData) :Promise<*> {
+function updateAcl(aclData :AclData) :Promise<void> {
 
   let errorMsg = '';
 
@@ -147,7 +148,7 @@ export function updateAcl(aclData :AclData) :Promise<*> {
  * @static
  * @memberof lattice.PermissionsApi
  * @param {AclData[]} aclData
- * @returns {Promise}
+ * @returns {Promise<void>} - a Promise that resolves without a value
  *
  * @example
  * PermissionsApi.updateAcls(
@@ -168,7 +169,7 @@ export function updateAcl(aclData :AclData) :Promise<*> {
  *   }]
  * );
  */
-export function updateAcls(aclData :AclData[]) :Promise<*> {
+function updateAcls(aclData :AclData[]) :Promise<void> {
 
   let errorMsg = '';
 
@@ -192,3 +193,10 @@ export function updateAcls(aclData :AclData[]) :Promise<*> {
       return Promise.reject(error);
     });
 }
+
+export {
+  getAcl,
+  getAclExplanation,
+  updateAcl,
+  updateAcls,
+};

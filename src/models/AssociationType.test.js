@@ -10,9 +10,9 @@ import {
   isValidAssociationType,
 } from './AssociationType';
 
-import { runModelTestSuite } from '../utils/testing/ModelTestUtils';
+import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
-runModelTestSuite(
+runTestSuite(
   AssociationType,
   AssociationTypeBuilder,
   ASSOCIATION_TYPE_MOCK,

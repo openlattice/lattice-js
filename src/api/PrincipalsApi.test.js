@@ -1,5 +1,3 @@
-/* eslint-disable no-use-before-define */
-
 import * as PrincipalsApi from './PrincipalsApi';
 
 import * as AxiosUtils from '../utils/axios';
@@ -11,140 +9,90 @@ import {
   SYNC_PATH,
   USERS_PATH,
 } from '../constants/UrlConstants';
-import { genRandomPrincipal } from '../models/Principal';
-import { INVALID_PARAMS, INVALID_PARAMS_REQUIRED_STRING } from '../utils/testing/InvalidParams';
-import { genRandomString, getMockAxiosInstance } from '../utils/testing/MockUtils';
-import {
-  testApiShouldCatchRejectedPromise,
-  testApiShouldNotThrowOnInvalidParameters,
-  testApiShouldRejectOnInvalidParameters,
-  testApiShouldReturnPromise,
-  testApiShouldSendCorrectHttpRequest,
-  testApiShouldUseCorrectAxiosInstance
-} from '../utils/testing/TestUtils';
+import { PRINCIPAL_MOCK } from '../models/Principal';
+import { runTestSuite } from '../utils/testing/APITestSuite';
+import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
-/*
- * mocks
- */
+const MOCK_USER_ID = 'openlattice|12345678901234567890';
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
 
-/*
- * tests
- */
-
-describe('PrincipalsApi', () => {
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  describe('getAllRoles()', () => {
-
-    const fnToTest = PrincipalsApi.getAllRoles;
-
-    const validParams = [];
-    const axiosParams = [`/${ROLES_PATH}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
-  describe('getAllUsers()', () => {
-
-    const fnToTest = PrincipalsApi.getAllUsers;
-
-    const validParams = [];
-    const axiosParams = [`/${USERS_PATH}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
-  describe('getCurrentRoles()', () => {
-
-    const fnToTest = PrincipalsApi.getCurrentRoles;
-
-    const validParams = [];
-    const axiosParams = [`/${ROLES_PATH}/${CURRENT_PATH}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
-  describe('getSecurablePrincipal()', () => {
-
-    const fnToTest = PrincipalsApi.getSecurablePrincipal;
-    const mockPrincipal = genRandomPrincipal();
-
-    const validParams = [mockPrincipal];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', mockPrincipal];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
-  describe('getUser()', () => {
-
-    const fnToTest = PrincipalsApi.getUser;
-    const mockUserId = genRandomString();
-
-    const validParams = [mockUserId];
-    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
-    const axiosParams = [`/${USERS_PATH}/${mockUserId}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
-  describe('searchAllUsers()', () => {
-
-    const fnToTest = PrincipalsApi.searchAllUsers;
-    const mockInput = `${genRandomString()}`;
-
-    const validParams = [mockInput];
-    const invalidParams = [INVALID_PARAMS_REQUIRED_STRING];
-    const axiosParams = [`/${USERS_PATH}/${SEARCH_PATH}/${mockInput}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
-  describe('syncUser()', () => {
-
-    const fnToTest = PrincipalsApi.syncUser;
-
-    const validParams = [];
-    const axiosParams = [`/${SYNC_PATH}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, PRINCIPALS_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-
+describe(PRINCIPALS_API, () => {
+  runTestSuite(
+    PrincipalsApi,
+    PRINCIPALS_API,
+    {
+      getAllRoles: {
+        '': { params: { optional: [], valid: [] } },
+        '()': {
+          method: 'get',
+          params: {
+            axios: [`/${ROLES_PATH}`],
+            valid: [],
+          },
+        },
+      },
+      getAllUsers: {
+        '': { params: { optional: [], valid: [] } },
+        '()': {
+          method: 'get',
+          params: {
+            axios: [`/${USERS_PATH}`],
+            valid: [],
+          },
+        },
+      },
+      getCurrentRoles: {
+        '': { params: { optional: [], valid: [] } },
+        '()': {
+          method: 'get',
+          params: {
+            axios: [`/${ROLES_PATH}/${CURRENT_PATH}`],
+            valid: [],
+          },
+        },
+      },
+      getSecurablePrincipal: {
+        '': { params: { optional: [false], valid: [PRINCIPAL_MOCK] } },
+        '(principals)': {
+          method: 'post',
+          params: {
+            axios: ['/', PRINCIPAL_MOCK],
+            valid: [PRINCIPAL_MOCK],
+          },
+        },
+      },
+      getUser: {
+        '': { params: { optional: [false], valid: [MOCK_USER_ID] } },
+        '(userId)': {
+          method: 'get',
+          params: {
+            axios: [`/${USERS_PATH}/${MOCK_USER_ID}`],
+            valid: [MOCK_USER_ID],
+          },
+        },
+      },
+      searchAllUsers: {
+        '': { params: { optional: [false], valid: ['openlattice'] } },
+        '(searchQuery)': {
+          method: 'get',
+          params: {
+            axios: [`/${USERS_PATH}/${SEARCH_PATH}/openlattice`],
+            valid: ['openlattice'],
+          },
+        },
+      },
+      syncUser: {
+        '': { params: { optional: [], valid: [] } },
+        '(searchQuery)': {
+          method: 'get',
+          params: {
+            axios: [`/${SYNC_PATH}`],
+            valid: [],
+          },
+        },
+      },
+    },
+  );
 });
