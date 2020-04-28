@@ -3,27 +3,27 @@
  */
 
 /**
- * AuthorizationApi ...
+ * AuthorizationsApi ...
  *
- * @module AuthorizationApi
+ * @module AuthorizationsApi
  * @memberof lattice
  *
  * @example
  * import Lattice from 'lattice';
- * // Lattice.AuthorizationApi.check...
+ * // Lattice.AuthorizationsApi.check...
  *
  * @example
- * import { AuthorizationApi } from 'lattice';
- * // AuthorizationApi.check...
+ * import { AuthorizationsApi } from 'lattice';
+ * // AuthorizationsApi.check...
  */
 
 import Logger from '../utils/Logger';
-import { AUTHORIZATION_API } from '../constants/ApiNames';
+import { AUTHORIZATIONS_API } from '../constants/ApiNames';
 import { AccessCheck, isValidAccessCheck } from '../models/AccessCheck';
 import { isNonEmptyArray } from '../utils/LangUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 
-const LOG = new Logger('AuthorizationApi');
+const LOG = new Logger('AuthorizationsApi');
 
 /**
  * `POST /authorizations`
@@ -31,12 +31,12 @@ const LOG = new Logger('AuthorizationApi');
  * Gets the Authorizations for the given AccessChecks.
  *
  * @static
- * @memberof lattice.AuthorizationApi
+ * @memberof lattice.AuthorizationsApi
  * @param {AccessCheck[]} queries
  * @returns {Promise<Authorization[]>} - a Promise that resolves with the Authorizations
  *
  * @example
- * AuthorizationApi.getAuthorizations(
+ * AuthorizationsApi.getAuthorizations(
  *   [
  *     {
  *       "aclKey": ["4b08e1f9-4a00-4169-92ea-10e377070220"],
@@ -61,7 +61,7 @@ function getAuthorizations(checks :AccessCheck[]) :Promise<*> {
     return Promise.reject(errorMsg);
   }
 
-  return getApiAxiosInstance(AUTHORIZATION_API)
+  return getApiAxiosInstance(AUTHORIZATIONS_API)
     .post('/', checks)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {

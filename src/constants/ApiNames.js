@@ -3,7 +3,7 @@
  */
 
 export const APP_API :'AppApi' = 'AppApi';
-export const AUTHORIZATION_API :'AuthorizationApi' = 'AuthorizationApi';
+export const AUTHORIZATIONS_API :'AuthorizationsApi' = 'AuthorizationsApi';
 export const CODEX_API :'CodexApi' = 'CodexApi';
 export const DATA_API :'DataApi' = 'DataApi';
 export const DATA_INTEGRATION_API :'DataIntegrationApi' = 'DataIntegrationApi';

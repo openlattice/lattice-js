@@ -5,7 +5,7 @@ import * as ApiNames from './ApiNames';
 /* eslint-disable key-spacing */
 const EXPECTED_APIS = Map({
   APP_API              : 'AppApi',
-  AUTHORIZATION_API    : 'AuthorizationApi',
+  AUTHORIZATIONS_API   : 'AuthorizationsApi',
   CODEX_API            : 'CodexApi',
   DATA_API             : 'DataApi',
   DATA_INTEGRATION_API : 'DataIntegrationApi',

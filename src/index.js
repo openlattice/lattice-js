@@ -11,7 +11,7 @@
  */
 
 import * as AppApi from './api/AppApi';
-import * as AuthorizationApi from './api/AuthorizationApi';
+import * as AuthorizationsApi from './api/AuthorizationsApi';
 import * as CodexApi from './api/CodexApi';
 import * as Constants from './constants/GlobalConstants';
 import * as DataApi from './api/DataApi';
@@ -37,7 +37,7 @@ const version :string = __VERSION__;
 
 export {
   AppApi,
-  AuthorizationApi,
+  AuthorizationsApi,
   CodexApi,
   DataApi,
   DataIntegrationApi,
@@ -58,7 +58,7 @@ export {
 
 export default {
   AppApi,
-  AuthorizationApi,
+  AuthorizationsApi,
   CodexApi,
   DataApi,
   DataIntegrationApi,

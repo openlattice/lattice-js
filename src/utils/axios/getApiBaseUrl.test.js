@@ -16,7 +16,7 @@ import { genRandomString } from '../testing/MockUtils';
 const API_TO_PATH_MAP = Map({
   [ApiNames.ANALYSIS_API]         : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ANALYSIS_PATH}`,
   [ApiNames.APP_API]              : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.APP_PATH}`,
-  [ApiNames.AUTHORIZATION_API]    : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.AUTHORIZATIONS_PATH}`,
+  [ApiNames.AUTHORIZATIONS_API]   : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.AUTHORIZATIONS_PATH}`,
   [ApiNames.CODEX_API]            : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.CODEX_PATH}`,
   [ApiNames.DATA_API]             : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.DATA_PATH}`,
   [ApiNames.DATA_INTEGRATION_API] : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.INTEGRATION_PATH}`,

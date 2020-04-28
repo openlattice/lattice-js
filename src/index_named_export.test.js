@@ -1,16 +1,15 @@
 /* eslint-disable import/no-named-as-default-member */
 import { OrderedMap } from 'immutable';
 
-import PACKAGE from '../package.json';
-
+import * as Lattice from './index';
 import { OBJECT_TAG } from './utils/testing/TestUtils';
 
-import * as Lattice from './index';
+import PACKAGE from '../package.json';
 
 /* eslint-disable key-spacing */
 const EXPECTED_OBJ_EXPORTS = OrderedMap({
   AppApi             : { size: 6 },
-  AuthorizationApi   : { size: 1 },
+  AuthorizationsApi  : { size: 1 },
   CodexApi           : { size: 1 },
   DataApi            : { size: 11 },
   DataIntegrationApi : { size: 1 },
