@@ -906,7 +906,7 @@ function removeSourceEntityTypeFromAssociationType(associationTypeId :UUID, enti
  *   }
  * );
  */
-function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :Promise<*> {
+function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :Promise<void> {
 
   // TODO: create data model: MetaUpdate
 
@@ -986,7 +986,7 @@ function updateEntityTypeMetaData(entityTypeId :UUID, metadata :Object) :Promise
  *   }
  * );
  */
-function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Object) :Promise<*> {
+function updatePropertyTypeMetaData(propertyTypeId :UUID, metadata :Object) :Promise<void> {
 
   // TODO: create data model: MetaDataUpdate
 
