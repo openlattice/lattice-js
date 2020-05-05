@@ -2,14 +2,20 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import { Map, Set, fromJS } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  Map,
+  OrderedSet,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
-import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidTypeArray, isValidUUIDArray, validateNonEmptyArray } from '../utils/ValidationUtils';
-
+import { isDefined } from '../utils/LangUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import { genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AccessCheck');
@@ -19,20 +25,18 @@ type AccessCheckObject = {|
   permissions :PermissionType[];
 |};
 
-/**
- * @class AccessCheck
- * @memberof lattice
- */
-export default class AccessCheck {
+class AccessCheck {
 
   aclKey :UUID[];
   permissions :PermissionType[];
 
-  constructor(aclKey :UUID[], permissions :PermissionType[]) {
+  constructor(accessCheck :{
+    aclKey :UUID[];
+    permissions :PermissionType[];
+  }) {
 
-    // required properties
-    this.aclKey = aclKey;
-    this.permissions = permissions;
+    this.aclKey = accessCheck.aclKey;
+    this.permissions = accessCheck.permissions;
   }
 
   toImmutable() :Map<*, *> {
@@ -42,7 +46,6 @@ export default class AccessCheck {
 
   toObject() :AccessCheckObject {
 
-    // required properties
     const accessCheckObj :AccessCheckObject = {
       aclKey: this.aclKey,
       permissions: this.permissions,
@@ -57,44 +60,57 @@ export default class AccessCheck {
   }
 }
 
-/**
- * @class AclBuilder
- * @memberof lattice
- */
-export class AccessCheckBuilder {
+class AccessCheckBuilder {
 
   aclKey :UUID[];
   permissions :PermissionType[];
 
-  setAclKey(aclKey :UUID[]) :AccessCheckBuilder {
+  constructor(value :any) {
 
-    if (!isDefined(aclKey) || isEmptyArray(aclKey)) {
-      return this;
+    if (isImmutable(value)) {
+      this.setAclKey(value.get('aclKey'));
+      this.setPermissions(value.get('permissions'));
+    }
+    else if (isDefined(value)) {
+      this.setAclKey(value.aclKey);
+      this.setPermissions(value.permissions);
+    }
+  }
+
+  setAclKey(aclKey :$ReadOnlyArray<UUID>) :AccessCheckBuilder {
+
+    if (!isArray(aclKey) && !isCollection(aclKey)) {
+      throw new Error('invalid parameter: "aclKey" must be an array');
     }
 
-    if (!isValidUUIDArray(aclKey)) {
-      throw new Error('invalid parameter: aclKey must be an array of valid UUIDs');
+    const set = OrderedSet(aclKey);
+    if (!set.isEmpty() && set.every(isValidUUID)) {
+      this.aclKey = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "aclKey" must be a non-empty array of UUIDs');
     }
 
-    this.aclKey = aclKey;
     return this;
   }
 
-  setPermissions(permissions :PermissionType[]) :AccessCheckBuilder {
+  setPermissions(permissions :?$ReadOnlyArray<PermissionType>) :AccessCheckBuilder {
 
-    if (!isDefined(permissions) || isEmptyArray(permissions)) {
+    if (!isDefined(permissions)) {
       return this;
     }
 
-    if (!isValidTypeArray(permissions, PermissionTypes)) {
-      throw new Error('invalid parameter: permissions must be an array of valid PermissionTypes');
+    if (!isArray(permissions) && !isCollection(permissions)) {
+      throw new Error('invalid parameter: "permissions" must be an array');
     }
 
-    this.permissions = Set().withMutations((set :Set<PermissionType>) => {
-      permissions.forEach((permission :PermissionType) => {
-        set.add(permission);
-      });
-    }).toJS();
+    const set = OrderedSet(permissions);
+    if (set.every((permission) => PermissionTypes[permission])) {
+      this.permissions = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "permissions" must be an array of PermissionTypes');
+    }
 
     return this;
   }
@@ -102,49 +118,51 @@ export class AccessCheckBuilder {
   build() {
 
     if (!this.aclKey) {
-      this.aclKey = [];
+      throw new Error('missing property: "aclKey" is a required property');
     }
 
     if (!this.permissions) {
       this.permissions = [];
     }
 
-    return new AccessCheck(this.aclKey, this.permissions);
+    return new AccessCheck({
+      aclKey: this.aclKey,
+      permissions: this.permissions,
+    });
   }
 }
 
-export function isValidAccessCheck(accessCheck :any) :boolean {
+const isValidAccessCheck = (value :any) :boolean => isValidModel(value, AccessCheckBuilder, LOG);
 
-  if (!isDefined(accessCheck)) {
-    LOG.error('invalid parameter: accessCheck must be defined', accessCheck);
-    return false;
-  }
-
-  if (!has(accessCheck, 'aclKey') || !has(accessCheck, 'permissions')) {
-    LOG.error('missing properties: accessCheck is missing required properties');
-    return false;
-  }
-
-  try {
-
-    (new AccessCheckBuilder())
-      .setAclKey(accessCheck.aclKey)
-      .setPermissions(accessCheck.permissions)
-      .build();
-
-    return true;
-  }
-  catch (e) {
-    LOG.error(`invalid AccessCheck: ${e.message}`, accessCheck);
-    return false;
-  }
-}
-
-export function isValidAccessCheckArray(accessChecks :AccessCheck[]) :boolean {
-
-  return validateNonEmptyArray(accessChecks, (accessCheck :AccessCheck) => isValidAccessCheck(accessCheck));
-}
+export {
+  AccessCheck,
+  AccessCheckBuilder,
+  isValidAccessCheck,
+};
 
 export type {
   AccessCheckObject,
+};
+
+/*
+ *
+ * for testing
+ *
+ */
+
+const ACCESS_CHECK_MOCK = (new AccessCheckBuilder())
+  .setAclKey(['69682f1e-6039-44da-8342-522395b43738', '5e4a579a-ad72-4902-991c-027d80dcd590'])
+  .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
+  .build();
+
+function genRandomAccessCheck() {
+  return (new AccessCheckBuilder())
+    .setAclKey([genRandomUUID(), genRandomUUID()])
+    .setPermissions([pickRandomValue(PermissionTypes)])
+    .build();
+}
+
+export {
+  ACCESS_CHECK_MOCK,
+  genRandomAccessCheck,
 };

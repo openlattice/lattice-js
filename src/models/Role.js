@@ -2,16 +2,17 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS, isImmutable } from 'immutable';
+
+import { Principal, PrincipalBuilder, genRandomPrincipal } from './Principal';
+import type { PrincipalObject } from './Principal';
 
 import Logger from '../utils/Logger';
-import Principal, { isValidPrincipal } from './Principal';
+import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { AT_CLASS } from '../constants/GlobalConstants';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
-import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
-
-import type { PrincipalObject } from './Principal';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Role');
 const ROLE_CLASS_PACKAGE :'com.openlattice.organization.roles.Role' = 'com.openlattice.organization.roles.Role';
@@ -26,11 +27,7 @@ type RoleObject = {|
   title :string;
 |};
 
-/**
- * @class Role
- * @memberof lattice
- */
-export default class Role {
+class Role {
 
   aclKey :?UUID[];
   description :?string;
@@ -39,30 +36,30 @@ export default class Role {
   principal :Principal;
   title :string;
 
-  constructor(
-    id :?UUID,
-    organizationId :UUID,
-    title :string,
-    description :?string,
-    principal :Principal,
-  ) {
+  constructor(role :{
+    description :?string;
+    id :?UUID;
+    organizationId :UUID;
+    principal :Principal;
+    title :string;
+  }) {
 
     // required properties
-    this.organizationId = organizationId;
-    this.principal = principal;
-    this.title = title;
+    this.organizationId = role.organizationId;
+    this.principal = role.principal;
+    this.title = role.title;
 
     // $FlowFixMe
     this[AT_CLASS] = ROLE_CLASS_PACKAGE;
 
     // optional properties
-    if (isDefined(description)) {
-      this.description = description;
+    if (isDefined(role.description)) {
+      this.description = role.description;
     }
 
-    if (isDefined(id)) {
-      this.aclKey = [organizationId, id];
-      this.id = id;
+    if (isDefined(role.id)) {
+      this.aclKey = [role.organizationId, role.id];
+      this.id = role.id;
     }
   }
 
@@ -100,11 +97,7 @@ export default class Role {
   }
 }
 
-/**
- * @class RoleBuilder
- * @memberof lattice
- */
-export class RoleBuilder {
+class RoleBuilder {
 
   description :?string;
   id :?UUID;
@@ -112,38 +105,22 @@ export class RoleBuilder {
   principal :Principal;
   title :string;
 
-  setId(id :?UUID) :RoleBuilder {
+  constructor(value :any) {
 
-    if (!isDefined(id) || isEmptyString(id)) {
-      return this;
+    if (isImmutable(value)) {
+      this.setDescription(value.get('description'));
+      this.setId(value.get('id'));
+      this.setOrganizationId(value.get('organizationId'));
+      this.setPrincipal(value.get('principal'));
+      this.setTitle(value.get('title'));
     }
-
-    if (!isValidUUID(id)) {
-      throw new Error('invalid parameter: id must be a valid UUID');
+    else if (isDefined(value)) {
+      this.setDescription(value.description);
+      this.setId(value.id);
+      this.setOrganizationId(value.organizationId);
+      this.setPrincipal(value.principal);
+      this.setTitle(value.title);
     }
-
-    this.id = id;
-    return this;
-  }
-
-  setOrganizationId(organizationId :UUID) :RoleBuilder {
-
-    if (!isValidUUID(organizationId)) {
-      throw new Error('invalid parameter: organizationId must be a valid UUID');
-    }
-
-    this.organizationId = organizationId;
-    return this;
-  }
-
-  setTitle(title :string) :RoleBuilder {
-
-    if (!isNonEmptyString(title)) {
-      throw new Error('invalid parameter: title must be a non-empty string');
-    }
-
-    this.title = title;
-    return this;
   }
 
   setDescription(description :?string) :RoleBuilder {
@@ -153,93 +130,114 @@ export class RoleBuilder {
     }
 
     if (!isNonEmptyString(description)) {
-      throw new Error('invalid parameter: description must be a non-empty string');
+      throw new Error('invalid parameter: "description" must be a non-empty string');
     }
 
     this.description = description;
     return this;
   }
 
-  setPrincipal(principal :Principal) :RoleBuilder {
+  setId(id :?UUID) :RoleBuilder {
 
-    if (!isValidPrincipal(principal)) {
-      throw new Error('invalid parameter: principal must be a valid Principal');
+    if (!isDefined(id) || isEmptyString(id)) {
+      return this;
     }
 
-    this.principal = principal;
+    if (!isValidUUID(id)) {
+      throw new Error('invalid parameter: "id" must be a valid UUID');
+    }
+
+    this.id = id;
+    return this;
+  }
+
+  setOrganizationId(organizationId :UUID) :RoleBuilder {
+
+    if (!isValidUUID(organizationId)) {
+      throw new Error('invalid parameter: "organizationId" must be a valid UUID');
+    }
+
+    this.organizationId = organizationId;
+    return this;
+  }
+
+  setPrincipal(principal :Principal) :RoleBuilder {
+
+    this.principal = (new PrincipalBuilder(principal)).build();
+    return this;
+  }
+
+  setTitle(title :string) :RoleBuilder {
+
+    if (!isNonEmptyString(title)) {
+      throw new Error('invalid parameter: "title" must be a non-empty string');
+    }
+
+    this.title = title;
     return this;
   }
 
   build() :Role {
 
     if (!this.organizationId) {
-      throw new Error('missing property: organizationId is a required property');
-    }
-
-    if (!this.title) {
-      throw new Error('missing property: title is a required property');
+      throw new Error('missing property: "organizationId" is a required property');
     }
 
     if (!this.principal) {
-      throw new Error('missing property: principal is a required property');
+      throw new Error('missing property: "principal" is a required property');
     }
 
-    return new Role(
-      this.id,
-      this.organizationId,
-      this.title,
-      this.description,
-      this.principal
-    );
+    if (!this.title) {
+      throw new Error('missing property: "title" is a required property');
+    }
+
+    return new Role({
+      description: this.description,
+      id: this.id,
+      organizationId: this.organizationId,
+      principal: this.principal,
+      title: this.title,
+    });
   }
 }
 
-export function isValidRole(role :any) :boolean {
-
-  if (!isDefined(role)) {
-    LOG.error('invalid parameter: role must be defined', role);
-    return false;
-  }
-
-  try {
-
-    const roleBuilder = new RoleBuilder();
-
-    // required properties
-    roleBuilder
-      .setOrganizationId(role.organizationId)
-      .setTitle(role.title)
-      .setPrincipal(role.principal)
-      .build();
-
-    // optional properties
-    if (has(role, 'id')) {
-      roleBuilder.setId(role.id);
-    }
-
-    if (has(role, 'description')) {
-      roleBuilder.setDescription(role.description);
-    }
-
-    roleBuilder.build();
-
-    return true;
-  }
-  catch (e) {
-    LOG.error(`invalid Role: ${e.message}`, role);
-    return false;
-  }
-}
-
-export function isValidRoleArray(roles :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(roles, isValidRole);
-}
+const isValidRole = (value :any) :boolean => isValidModel(value, RoleBuilder, LOG);
 
 export {
   ROLE_CLASS_PACKAGE,
+  Role,
+  RoleBuilder,
+  isValidRole,
 };
 
 export type {
   RoleObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const ROLE_MOCK = (new RoleBuilder())
+  .setDescription('MockOrgRoleDescription')
+  .setId('66da9306-3d1d-49d7-a8ee-8515c9c28434')
+  .setOrganizationId('a77a0f9a-0e6f-4a98-a169-4d1e122b39a3')
+  .setPrincipal((new PrincipalBuilder()).setId('MockOrgRolePrincipalId').setType(PrincipalTypes.ROLE).build())
+  .setTitle('MockOrgRoleTitle')
+  .build();
+
+function genRandomRole() {
+  return (new RoleBuilder())
+    .setDescription(genRandomString())
+    .setId(genRandomUUID())
+    .setOrganizationId(genRandomUUID())
+    .setPrincipal(genRandomPrincipal())
+    .setTitle(genRandomString())
+    .build();
+}
+export {
+  ROLE_MOCK,
+  genRandomRole,
 };

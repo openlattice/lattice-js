@@ -2,13 +2,13 @@
  * @flow
  */
 
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS, isImmutable } from 'immutable';
 
 import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
-import { validateNonEmptyArray } from '../utils/ValidationUtils';
-
+import { isValidModel } from '../utils/ValidationUtils';
+import { genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { PrincipalType } from '../constants/types/PrincipalTypes';
 
 const LOG = new Logger('Principal');
@@ -18,19 +18,18 @@ type PrincipalObject = {|
   type :PrincipalType;
 |};
 
-/**
- * @class Principal
- * @memberof lattice
- */
-export default class Principal {
+class Principal {
 
   id :string;
   type :PrincipalType;
 
-  constructor(id :string, type :PrincipalType) {
+  constructor(principal :{
+    id :string;
+    type :PrincipalType;
+  }) {
 
-    this.type = type;
-    this.id = id;
+    this.id = principal.id;
+    this.type = principal.type;
   }
 
   toImmutable() :Map<*, *> {
@@ -54,19 +53,27 @@ export default class Principal {
   }
 }
 
-/**
- * @class PrincipalBuilder
- * @memberof lattice
- */
-export class PrincipalBuilder {
+class PrincipalBuilder {
 
   id :string;
   type :PrincipalType;
 
+  constructor(value :any) {
+
+    if (isImmutable(value)) {
+      this.setId(value.get('id'));
+      this.setType(value.get('type'));
+    }
+    else if (isDefined(value)) {
+      this.setId(value.id);
+      this.setType(value.type);
+    }
+  }
+
   setId(id :string) :PrincipalBuilder {
 
     if (!isNonEmptyString(id)) {
-      throw new Error('invalid parameter: id must be a non-empty string');
+      throw new Error('invalid parameter: "id" must be a non-empty string');
     }
 
     this.id = id;
@@ -75,8 +82,8 @@ export class PrincipalBuilder {
 
   setType(type :PrincipalType) :PrincipalBuilder {
 
-    if (!isNonEmptyString(type) || !PrincipalTypes[type]) {
-      throw new Error('invalid parameter: type must be a valid PrincipalType');
+    if (!PrincipalTypes[type]) {
+      throw new Error('invalid parameter: "type" must be a valid PrincipalType');
     }
 
     this.type = type;
@@ -86,44 +93,51 @@ export class PrincipalBuilder {
   build() :Principal {
 
     if (!this.id) {
-      throw new Error('missing property: id is a required property');
+      throw new Error('missing property: "id" is a required property');
     }
 
     if (!this.type) {
-      throw new Error('missing property: type is a required property');
+      throw new Error('missing property: "type" is a required property');
     }
 
-    return new Principal(this.id, this.type);
+    return new Principal({
+      id: this.id,
+      type: this.type,
+    });
   }
 }
 
-export function isValidPrincipal(principal :any) :boolean {
+const isValidPrincipal = (value :any) :boolean => isValidModel(value, PrincipalBuilder, LOG);
 
-  if (!isDefined(principal)) {
-    LOG.error('invalid principal: principal must be defined', principal);
-    return false;
-  }
-
-  try {
-
-    (new PrincipalBuilder())
-      .setId(principal.id)
-      .setType(principal.type)
-      .build();
-
-    return true;
-  }
-  catch (e) {
-    LOG.error(`invalid Principal: ${e.message}`, principal);
-    return false;
-  }
-}
-
-export function isValidPrincipalArray(principals :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(principals, isValidPrincipal);
-}
+export {
+  Principal,
+  PrincipalBuilder,
+  isValidPrincipal,
+};
 
 export type {
   PrincipalObject
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const PRINCIPAL_MOCK = (new PrincipalBuilder())
+  .setId('MockPrincipalId')
+  .setType(PrincipalTypes.USER)
+  .build();
+
+function genRandomPrincipal(type :?PrincipalType) :Principal {
+  return (new PrincipalBuilder())
+    .setId(genRandomUUID())
+    .setType(type || pickRandomValue(PrincipalTypes))
+    .build();
+}
+
+export {
+  PRINCIPAL_MOCK,
+  genRandomPrincipal,
 };

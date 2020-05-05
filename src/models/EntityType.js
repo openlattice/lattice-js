@@ -2,31 +2,29 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import isInteger from 'lodash/isInteger';
-import { Map, Set, fromJS } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  Map,
+  OrderedSet,
+  Set,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
-import FullyQualifiedName from './FullyQualifiedName';
-import SecurableTypes from '../constants/types/SecurableTypes';
+import FQN from './FQN';
+import type { FQNObject } from './FQN';
+
 import Logger from '../utils/Logger';
-
+import SecurableTypes from '../constants/types/SecurableTypes';
 import {
   isDefined,
-  isEmptyArray,
   isEmptyObject,
   isEmptyString,
-  isNonEmptyString
+  isNonEmptyString,
 } from '../utils/LangUtils';
-
-import {
-  isValidFQNArray,
-  isValidMultimap,
-  isValidUUID,
-  isValidUUIDArray,
-  validateNonEmptyArray,
-} from '../utils/ValidationUtils';
-
-import type { FQN, FQNObject } from './FullyQualifiedName';
+import { isValidModel, isValidMultimap, isValidUUID } from '../utils/ValidationUtils';
+import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('EntityType');
@@ -38,18 +36,13 @@ type EntityTypeObject = {|
   id ?:UUID;
   key :UUID[];
   properties :UUID[];
-  propertyTags ?:Object; // LinkedHashMultimap<UUID, String>
+  propertyTags ?:Object;
   schemas :FQNObject[];
-  shards ?:number;
   title :string;
   type :FQNObject;
 |};
 
-/**
- * @class EntityType
- * @memberof lattice
- */
-export default class EntityType {
+class EntityType {
 
   baseType :?UUID;
   category :?SecurableType;
@@ -57,56 +50,50 @@ export default class EntityType {
   id :?UUID;
   key :UUID[];
   properties :UUID[];
-  propertyTags :?Object; // LinkedHashMultimap<UUID, String>
+  propertyTags :?Object;
   schemas :FQN[];
-  shards :?number;
   title :string;
   type :FQN;
 
-  constructor(
-    id :?UUID,
-    type :FQN,
-    title :string,
-    description :?string,
-    schemas :FQN[],
-    key :UUID[],
-    properties :UUID[],
-    baseType :?UUID,
-    category :?SecurableType,
-    propertyTags :?Object,
-    shards :?number,
-  ) {
+  constructor(entityType :{
+    baseType :?UUID;
+    category :?SecurableType;
+    description :?string;
+    id :?UUID;
+    key :UUID[];
+    properties :UUID[];
+    propertyTags :?Object;
+    schemas :FQN[];
+    title :string;
+    type :FQN;
+  }) {
 
     // required properties
-    this.key = key;
-    this.properties = properties;
-    this.schemas = schemas;
-    this.title = title;
-    this.type = type;
+    this.key = entityType.key;
+    this.properties = entityType.properties;
+    this.schemas = entityType.schemas;
+    this.title = entityType.title;
+    this.type = entityType.type;
 
     // optional properties
-    if (isDefined(baseType)) {
-      this.baseType = baseType;
+    if (isDefined(entityType.baseType)) {
+      this.baseType = entityType.baseType;
     }
 
-    if (isDefined(category)) {
-      this.category = category;
+    if (isDefined(entityType.category)) {
+      this.category = entityType.category;
     }
 
-    if (isDefined(description)) {
-      this.description = description;
+    if (isDefined(entityType.description)) {
+      this.description = entityType.description;
     }
 
-    if (isDefined(id)) {
-      this.id = id;
+    if (isDefined(entityType.id)) {
+      this.id = entityType.id;
     }
 
-    if (isDefined(propertyTags)) {
-      this.propertyTags = propertyTags;
-    }
-
-    if (isDefined(shards)) {
-      this.shards = shards;
+    if (isDefined(entityType.propertyTags)) {
+      this.propertyTags = entityType.propertyTags;
     }
   }
 
@@ -121,7 +108,7 @@ export default class EntityType {
     const entityTypeObj :EntityTypeObject = {
       key: this.key,
       properties: this.properties,
-      schemas: this.schemas.map((fqn :FQN) => fqn.toObject()),
+      schemas: this.schemas.map((fqn) => fqn.toObject()),
       title: this.title,
       type: this.type.toObject(),
     };
@@ -147,10 +134,6 @@ export default class EntityType {
       entityTypeObj.propertyTags = this.propertyTags;
     }
 
-    if (isDefined(this.shards)) {
-      entityTypeObj.shards = this.shards;
-    }
-
     return entityTypeObj;
   }
 
@@ -160,11 +143,7 @@ export default class EntityType {
   }
 }
 
-/**
- * @class EntityTypeBuilder
- * @memberof lattice
- */
-export class EntityTypeBuilder {
+class EntityTypeBuilder {
 
   baseType :?UUID;
   category :?SecurableType;
@@ -174,113 +153,35 @@ export class EntityTypeBuilder {
   properties :UUID[];
   propertyTags :?Object; // LinkedHashMultimap<UUID, String>
   schemas :FQN[];
-  shards :?number;
   title :string;
   type :FQN;
 
-  setId(entityTypeId :?UUID) :EntityTypeBuilder {
+  constructor(value :any) {
 
-    if (!isDefined(entityTypeId) || isEmptyString(entityTypeId)) {
-      return this;
+    if (isImmutable(value)) {
+      this.setBaseType(value.get('baseType'));
+      this.setCategory(value.get('category'));
+      this.setDescription(value.get('description'));
+      this.setId(value.get('id'));
+      this.setKey(value.get('key'));
+      this.setPropertyTags(value.get('propertyTags'));
+      this.setPropertyTypes(value.get('properties'));
+      this.setSchemas(value.get('schemas'));
+      this.setTitle(value.get('title'));
+      this.setType(value.get('type'));
     }
-
-    if (!isValidUUID(entityTypeId)) {
-      throw new Error('invalid parameter: entityTypeId must be a valid UUID');
+    else if (isDefined(value)) {
+      this.setBaseType(value.baseType);
+      this.setCategory(value.category);
+      this.setDescription(value.description);
+      this.setId(value.id);
+      this.setKey(value.key);
+      this.setPropertyTags(value.propertyTags);
+      this.setPropertyTypes(value.properties);
+      this.setSchemas(value.schemas);
+      this.setTitle(value.title);
+      this.setType(value.type);
     }
-
-    this.id = entityTypeId;
-    return this;
-  }
-
-  setType(entityTypeFqn :FQN | FQNObject | string) :EntityTypeBuilder {
-
-    if (!FullyQualifiedName.isValid(entityTypeFqn)) {
-      throw new Error('invalid parameter: entityTypeFqn must be a valid FQN');
-    }
-
-    this.type = new FullyQualifiedName(entityTypeFqn);
-    return this;
-  }
-
-  setTitle(title :string) :EntityTypeBuilder {
-
-    if (!isNonEmptyString(title)) {
-      throw new Error('invalid parameter: title must be a non-empty string');
-    }
-
-    this.title = title;
-    return this;
-  }
-
-  setDescription(description :?string) :EntityTypeBuilder {
-
-    if (!isDefined(description) || isEmptyString(description)) {
-      return this;
-    }
-
-    if (!isNonEmptyString(description)) {
-      throw new Error('invalid parameter: description must be a non-empty string');
-    }
-
-    this.description = description;
-    return this;
-  }
-
-  setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :EntityTypeBuilder {
-
-    if (!isDefined(schemas) || isEmptyArray(schemas)) {
-      return this;
-    }
-
-    if (!isValidFQNArray(schemas)) {
-      throw new Error('invalid parameter: schemas must be a non-empty array of valid FQNs');
-    }
-
-    this.schemas = Set().withMutations((set :Set<FQN>) => {
-      schemas.forEach((schemaFQN :FQN | FQNObject) => {
-        set.add(new FullyQualifiedName(schemaFQN));
-      });
-    }).toJS();
-
-    return this;
-  }
-
-  setKey(key :UUID[]) :EntityTypeBuilder {
-
-    if (!isDefined(key) || isEmptyArray(key)) {
-      return this;
-    }
-
-    if (!isValidUUIDArray(key)) {
-      throw new Error('invalid parameter: key must be a non-empty array of valid UUIDs');
-    }
-
-    this.key = Set().withMutations((set :Set<UUID>) => {
-      key.forEach((keyId :UUID) => {
-        set.add(keyId);
-      });
-    }).toJS();
-
-    return this;
-  }
-
-  setPropertyTypes(propertyTypes :UUID[]) :EntityTypeBuilder {
-
-    if (!isDefined(propertyTypes) || isEmptyArray(propertyTypes)) {
-      return this;
-    }
-
-    if (!isValidUUIDArray(propertyTypes)) {
-      throw new Error('invalid parameter: propertyTypes must be a non-empty array of valid UUIDs');
-    }
-
-    this.properties = Set().withMutations((set :Set<UUID>) => {
-      propertyTypes.forEach((propertyTypeId :UUID) => {
-        set.add(propertyTypeId);
-      });
-    }).toJS();
-
-    return this;
   }
 
   setBaseType(baseType :?UUID) :EntityTypeBuilder {
@@ -290,7 +191,7 @@ export class EntityTypeBuilder {
     }
 
     if (!isValidUUID(baseType)) {
-      throw new Error('invalid parameter: baseType must be a valid UUID');
+      throw new Error('invalid parameter: "baseType" must be a valid UUID');
     }
 
     this.baseType = baseType;
@@ -303,62 +204,152 @@ export class EntityTypeBuilder {
       return this;
     }
 
-    if (!isNonEmptyString(category) || !SecurableTypes[category]) {
-      throw new Error('invalid parameter: category must be a valid SecurableType');
+    if (!SecurableTypes[category]) {
+      throw new Error('invalid parameter: "category" must be a valid SecurableType');
     }
 
     this.category = category;
     return this;
   }
 
-  setPropertyTags(propertyTags :?Object) :EntityTypeBuilder {
+  setDescription(description :?string) :EntityTypeBuilder {
 
-    if (!isDefined(propertyTags) || isEmptyObject(propertyTags)) {
+    if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
 
-    if (!isValidMultimap(propertyTags, isValidUUID)) {
-      throw new Error('invalid parameter: propertyTags must be a non-empty multimap object');
+    if (!isNonEmptyString(description)) {
+      throw new Error('invalid parameter: "description" must be a non-empty string');
     }
 
-    this.propertyTags = propertyTags;
+    this.description = description;
     return this;
   }
 
-  setShards(shards :?number) :EntityTypeBuilder {
+  setId(entityTypeId :?UUID) :EntityTypeBuilder {
 
-    if (!isDefined(shards)) {
+    if (!isDefined(entityTypeId) || isEmptyString(entityTypeId)) {
       return this;
     }
 
-    if (!isInteger(shards)) {
-      throw new Error('invalid parameter: shards must be an integer');
+    if (!isValidUUID(entityTypeId)) {
+      throw new Error('invalid parameter: "entityTypeId" must be a valid UUID');
     }
 
-    // com.openlattice.edm.type.EntityType
-    if (shards <= 0 || shards >= 20) {
-      throw new Error('invalid parameter: shards must be a valid integer');
+    this.id = entityTypeId;
+    return this;
+  }
+
+  setKey(key :$ReadOnlyArray<UUID>) :EntityTypeBuilder {
+
+    if (!isDefined(key)) {
+      return this;
     }
 
-    this.shards = shards;
+    if (!isArray(key) && !isCollection(key)) {
+      throw new Error('invalid parameter: "key" must be an array');
+    }
+
+    const set = OrderedSet(key);
+    if (set.every(isValidUUID)) {
+      this.key = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "key" must be a non-empty array of UUIDs');
+    }
+
+    return this;
+  }
+
+  setPropertyTags(propertyTags :?Object) :EntityTypeBuilder {
+
+    if (!isDefined(propertyTags)) {
+      return this;
+    }
+
+    let tags = propertyTags;
+    if (isCollection(tags)) {
+      // $FlowFixMe
+      tags = tags.toJS();
+    }
+
+    if (isEmptyObject(tags)) {
+      return this;
+    }
+
+    if (!isValidMultimap(tags, isValidUUID)) {
+      throw new Error('invalid parameter: "propertyTags" must be a valid multimap object');
+    }
+
+    this.propertyTags = tags;
+    return this;
+  }
+
+  setPropertyTypes(propertyTypes :$ReadOnlyArray<UUID>) :EntityTypeBuilder {
+
+    if (!isDefined(propertyTypes)) {
+      return this;
+    }
+
+    if (!isArray(propertyTypes) && !isCollection(propertyTypes)) {
+      throw new Error('invalid parameter: "propertyTypes" must be an array');
+    }
+
+    const set = OrderedSet(propertyTypes);
+    if (set.every(isValidUUID)) {
+      this.properties = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "propertyTypes" must be a non-empty array of UUIDs');
+    }
+
+    return this;
+  }
+
+  setSchemas(schemas :$ReadOnlyArray<FQN | FQNObject>) :EntityTypeBuilder {
+
+    if (!isDefined(schemas)) {
+      return this;
+    }
+
+    if (!isArray(schemas) && !isCollection(schemas)) {
+      throw new Error('invalid parameter: "schemas" must be an array');
+    }
+
+    try {
+      this.schemas = Set(schemas).map((fqn) => FQN.of(fqn)).toJS();
+    }
+    catch (e) {
+      throw new Error('invalid parameter: "schemas" must be a non-empty array of valid FQNs');
+    }
+
+    return this;
+  }
+
+  setTitle(title :string) :EntityTypeBuilder {
+
+    if (!isNonEmptyString(title)) {
+      throw new Error('invalid parameter: "title" must be a non-empty string');
+    }
+
+    this.title = title;
+    return this;
+  }
+
+  setType(entityTypeFQN :FQN | FQNObject | string) :EntityTypeBuilder {
+
+    this.type = FQN.of(entityTypeFQN);
     return this;
   }
 
   build() :EntityType {
 
-    let errorMsg :string = '';
-
-    if (!isDefined(this.type)) {
-      errorMsg = 'missing property: type is a required property';
+    if (!this.type) {
+      throw new Error('missing property: "type" is a required property');
     }
 
-    if (!isDefined(this.title)) {
-      errorMsg = 'missing property: title is a required property';
-    }
-
-    if (errorMsg) {
-      LOG.error(errorMsg);
-      throw new Error(errorMsg);
+    if (!this.title) {
+      throw new Error('missing property: "title" is a required property');
     }
 
     if (!this.key) {
@@ -369,7 +360,6 @@ export class EntityTypeBuilder {
       this.properties = [];
     }
 
-    // "propertyTags" is not required, but the backend returns it even if it's empty, so we'll treat it as required
     if (!this.propertyTags) {
       this.propertyTags = {};
     }
@@ -378,80 +368,74 @@ export class EntityTypeBuilder {
       this.schemas = [];
     }
 
-    return new EntityType(
-      this.id,
-      this.type,
-      this.title,
-      this.description,
-      this.schemas,
-      this.key,
-      this.properties,
-      this.baseType,
-      this.category,
-      this.propertyTags,
-      this.shards,
-    );
+    return new EntityType({
+      baseType: this.baseType,
+      category: this.category,
+      description: this.description,
+      id: this.id,
+      key: this.key,
+      properties: this.properties,
+      propertyTags: this.propertyTags,
+      schemas: this.schemas,
+      title: this.title,
+      type: this.type,
+    });
   }
 }
 
-export function isValidEntityType(entityType :?EntityType | EntityTypeObject) :boolean {
+const isValidEntityType = (value :any) :boolean => isValidModel(value, EntityTypeBuilder, LOG);
 
-  if (!isDefined(entityType)) {
-    LOG.error('invalid parameter: entityType must be defined', entityType);
-    return false;
-  }
-
-  try {
-
-    const entityTypeBuilder = new EntityTypeBuilder();
-
-    // required properties
-    entityTypeBuilder
-      .setKey(entityType.key)
-      .setPropertyTypes(entityType.properties)
-      .setSchemas(entityType.schemas)
-      .setTitle(entityType.title)
-      .setType(entityType.type);
-
-    // optional properties
-    if (has(entityType, 'baseType')) {
-      entityTypeBuilder.setBaseType(entityType.baseType);
-    }
-
-    if (has(entityType, 'category')) {
-      entityTypeBuilder.setCategory(entityType.category);
-    }
-
-    if (has(entityType, 'description')) {
-      entityTypeBuilder.setDescription(entityType.description);
-    }
-
-    if (has(entityType, 'id')) {
-      entityTypeBuilder.setId(entityType.id);
-    }
-
-    if (has(entityType, 'propertyTags')) {
-      entityTypeBuilder.setPropertyTags(entityType.propertyTags);
-    }
-
-    if (has(entityType, 'shards')) {
-      entityTypeBuilder.setShards(entityType.shards);
-    }
-
-    entityTypeBuilder.build();
-    return true;
-  }
-  catch (e) {
-    LOG.error(`invalid EntityType: ${e.message}`, entityType);
-    return false;
-  }
-}
-
-export function isValidEntityTypeArray(entityTypes :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(entityTypes, (entityType :any) => isValidEntityType(entityType));
-}
+export {
+  EntityType,
+  EntityTypeBuilder,
+  isValidEntityType,
+};
 
 export type {
   EntityTypeObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const ENTITY_TYPE_MOCK = (new EntityTypeBuilder())
+  .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
+  .setCategory(SecurableTypes.EntityType)
+  .setDescription('MockEntityTypeDescription')
+  .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
+  .setKey(['8f79e123-3411-4099-a41f-88e5d22d0e8d'])
+  .setPropertyTags({
+    '8f79e123-3411-4099-a41f-88e5d22d0e8d': ['TAG_0', 'TAG_1'],
+    'e39dfdfa-a3e6-4f1f-b54b-646a723c3085': ['TAG_0'],
+  })
+  .setPropertyTypes(['8f79e123-3411-4099-a41f-88e5d22d0e8d', 'e39dfdfa-a3e6-4f1f-b54b-646a723c3085'])
+  .setSchemas([FQN.of('mock.schema')])
+  .setTitle('MockEntityTypeTitle')
+  .setType(FQN.of('mock.entitytype'))
+  .build();
+
+function genRandomEntityType() {
+  return (new EntityTypeBuilder())
+    .setBaseType(genRandomUUID())
+    .setCategory(SecurableTypes.EntityType)
+    .setDescription(genRandomString())
+    .setId(genRandomUUID())
+    .setKey([genRandomUUID(), genRandomUUID()])
+    .setPropertyTags({
+      [genRandomUUID()]: [genRandomString(), genRandomString()],
+      [genRandomUUID()]: [genRandomString()],
+    })
+    .setPropertyTypes([genRandomUUID(), genRandomUUID(), genRandomUUID()])
+    .setSchemas([FQN.of(genRandomString(), genRandomString())])
+    .setTitle(genRandomString())
+    .setType(FQN.of(genRandomString(), genRandomString()))
+    .build();
+}
+
+export {
+  ENTITY_TYPE_MOCK,
+  genRandomEntityType,
 };

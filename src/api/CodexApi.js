@@ -19,6 +19,7 @@
 
 import Logger from '../utils/Logger';
 import { CODEX_API } from '../constants/ApiNames';
+import { isNonEmptyObject } from '../utils/LangUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('CodexApi');
@@ -42,7 +43,16 @@ const LOG = new Logger('CodexApi');
  *   }
  * );
  */
-export function sendOutgoingText(messageRequest :Object) :Promise<*> {
+function sendOutgoingText(messageRequest :Object) :Promise<void> {
+
+  let errorMsg = '';
+
+  // TODO: needs more validation
+  if (!isNonEmptyObject(messageRequest)) {
+    errorMsg = 'invalid parameter: "messageRequest" must be a non-empty object';
+    LOG.error(errorMsg, messageRequest);
+    return Promise.reject(errorMsg);
+  }
 
   return getApiAxiosInstance(CODEX_API)
     .post('/', messageRequest)
@@ -52,3 +62,7 @@ export function sendOutgoingText(messageRequest :Object) :Promise<*> {
       return Promise.reject(error);
     });
 }
+
+export {
+  sendOutgoingText,
+};

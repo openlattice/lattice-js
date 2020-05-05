@@ -7,6 +7,7 @@ import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 const EXPECTED_ENUM = Map({
   ADD     : 'ADD',
   REMOVE  : 'REMOVE',
+  REPLACE : 'REPLACE',
   REQUEST : 'REQUEST',
   SET     : 'SET',
 }).sortBy((value, key) => key);

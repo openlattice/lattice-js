@@ -2,15 +2,28 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import { Map, fromJS } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  List,
+  Map,
+  OrderedSet,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
-import Ace, { isValidAceArray } from './Ace';
-import Logger from '../utils/Logger';
-import { isDefined, isEmptyArray } from '../utils/LangUtils';
-import { isValidUUIDArray, validateNonEmptyArray } from '../utils/ValidationUtils';
-
+import {
+  ACE_MOCK,
+  Ace,
+  AceBuilder,
+  genRandomAce,
+} from './Ace';
 import type { AceObject } from './Ace';
+
+import Logger from '../utils/Logger';
+import { isDefined } from '../utils/LangUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Acl');
 
@@ -19,19 +32,18 @@ type AclObject = {|
   aces :AceObject[];
 |};
 
-/**
- * @class Acl
- * @memberof lattice
- */
-export default class Acl {
+class Acl {
 
   aces :Ace[];
   aclKey :UUID[];
 
-  constructor(aclKey :UUID[], aces :Ace[]) {
+  constructor(acl :{
+    aces :Ace[];
+    aclKey :UUID[];
+  }) {
 
-    this.aces = aces;
-    this.aclKey = aclKey;
+    this.aces = acl.aces;
+    this.aclKey = acl.aclKey;
   }
 
   toImmutable() :Map<*, *> {
@@ -42,7 +54,7 @@ export default class Acl {
   toObject() :AclObject {
 
     const aclObj :AclObject = {
-      aces: this.aces.map((ace :Ace) => ace.toObject()),
+      aces: this.aces.map((ace) => ace.toObject()),
       aclKey: this.aclKey,
     };
 
@@ -55,40 +67,57 @@ export default class Acl {
   }
 }
 
-/**
- * @class AclBuilder
- * @memberof lattice
- */
-export class AclBuilder {
+class AclBuilder {
 
   aces :Ace[];
   aclKey :UUID[];
 
-  setAces(aces :Ace[]) :AclBuilder {
+  constructor(value :any) {
 
-    if (!isDefined(aces) || isEmptyArray(aces)) {
+    if (isImmutable(value)) {
+      this.setAces(value.get('aces'));
+      this.setAclKey(value.get('aclKey'));
+    }
+    else if (isDefined(value)) {
+      this.setAces(value.aces);
+      this.setAclKey(value.aclKey);
+    }
+  }
+
+  setAces(aces :$ReadOnlyArray<Ace>) :AclBuilder {
+
+    if (!isDefined(aces)) {
       return this;
     }
 
-    if (!isValidAceArray(aces)) {
-      throw new Error('invalid parameter: aces must be a non-empty array of valid Aces');
+    if (!isArray(aces) && !isCollection(aces)) {
+      throw new Error('invalid parameter: "aces" must be an array');
     }
 
-    this.aces = aces;
+    try {
+      this.aces = List(aces).map((ace) => (new AceBuilder(ace)).build()).toJS();
+    }
+    catch (e) {
+      throw new Error('invalid parameter: "aces" must be an array of Aces');
+    }
+
     return this;
   }
 
-  setAclKey(aclKey :UUID[]) :AclBuilder {
+  setAclKey(aclKey :$ReadOnlyArray<UUID>) :AclBuilder {
 
-    if (!isDefined(aclKey) || isEmptyArray(aclKey)) {
-      return this;
+    if (!isArray(aclKey) && !isCollection(aclKey)) {
+      throw new Error('invalid parameter: "aclKey" must be an array');
     }
 
-    if (!isValidUUIDArray(aclKey)) {
-      throw new Error('invalid parameter: aclKey must be a non-empty array of valid UUIDs');
+    const set = OrderedSet(aclKey);
+    if (!set.isEmpty() && set.every(isValidUUID)) {
+      this.aclKey = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "aclKey" must be a non-empty array of UUIDs');
     }
 
-    this.aclKey = aclKey;
     return this;
   }
 
@@ -99,45 +128,47 @@ export class AclBuilder {
     }
 
     if (!this.aclKey) {
-      this.aclKey = [];
+      throw new Error('missing property: "aclKey" is a required property');
     }
 
-    return new Acl(this.aclKey, this.aces);
+    return new Acl({
+      aces: this.aces,
+      aclKey: this.aclKey,
+    });
   }
 }
 
-export function isValidAcl(acl :any) :boolean {
+const isValidAcl = (value :any) :boolean => isValidModel(value, AclBuilder, LOG);
 
-  if (!isDefined(acl)) {
-    LOG.error('invalid parameter: acl must be defined', acl);
-    return false;
-  }
-
-  if (!has(acl, 'aclKey') || !has(acl, 'aces')) {
-    LOG.error('invalid parameter: acl is missing required properties');
-    return false;
-  }
-
-  try {
-
-    (new AclBuilder())
-      .setAclKey(acl.aclKey)
-      .setAces(acl.aces)
-      .build();
-
-    return true;
-  }
-  catch (e) {
-    LOG.error(`invalid Acl: ${e.message}`, acl);
-    return false;
-  }
-}
-
-export function isValidAclArray(values :any[]) :boolean {
-
-  return validateNonEmptyArray(values, (value :any) => isValidAcl(value));
-}
+export {
+  Acl,
+  AclBuilder,
+  isValidAcl,
+};
 
 export type {
   AclObject,
+};
+
+/*
+ *
+ * for testing
+ *
+ */
+
+const ACL_MOCK = (new AclBuilder())
+  .setAces([ACE_MOCK])
+  .setAclKey(['fae6af98-2675-45bd-9a5b-1619a87235a8', 'ae9e1cc3-ba0d-4532-9860-e5e7eaf36e83'])
+  .build();
+
+function genRandomAcl() {
+  return (new AclBuilder())
+    .setAces([genRandomAce(), genRandomAce()])
+    .setAclKey([genRandomUUID(), genRandomUUID()])
+    .build();
+}
+
+export {
+  ACL_MOCK,
+  genRandomAcl,
 };

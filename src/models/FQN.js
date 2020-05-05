@@ -12,29 +12,29 @@
  * }
  * ```
  *
- * @class FullyQualifiedName
+ * @class FQN
  * @memberof lattice
  *
  * @example
  * // create from an object literal
- * const fqn = new FullyQualifiedName({
- *   namespace: "LATTICE",
- *   name: "Data"
+ * const fqn = new FQN({
+ *   namespace: "OL",
+ *   name: "DATA"
  * });
  *
  * @example
  * // create from separate "namespace" and "name" parameters
- * const fqn = new FullyQualifiedName("LATTICE", "Data");
+ * const fqn = new FQN("OL", "DATA");
  *
  * @example
  * // create from a fully qualified name string, from which "namespace" and "name" will be parsed
- * const fqn = new FullyQualifiedName("LATTICE.Data");
+ * const fqn = new FQN("OL.DATA");
  *
  * @example
  * // usage:
- * fqn.getNamespace(); // "LATTICE"
- * fqn.getName(); // "Data"
- * fqn.toString(); // "LATTICE.Data"
+ * fqn.getNamespace(); // "OL"
+ * fqn.getName(); // "DATA"
+ * fqn.toString(); // "OL.DATA"
  */
 
 import isObject from 'lodash/isObject';
@@ -44,28 +44,28 @@ import { isImmutable } from 'immutable';
 import Logger from '../utils/Logger';
 import { isNonEmptyString } from '../utils/LangUtils';
 
-const LOG = new Logger('FullyQualifiedName');
-const FQN_MAX_LENGTH :number = 63;
+const LOG = new Logger('FQN');
+const FQN_MAX_LENGTH :63 = 63;
 
 type FQNObject = {|
   namespace :string;
   name :string;
 |};
 
-function parseFqnString(fullyQualifiedName :string) :FQNObject {
+function parseStringAsFQN(fqn :string) :FQNObject {
 
-  if (!isNonEmptyString(fullyQualifiedName)) {
+  if (!isNonEmptyString(fqn)) {
     return { namespace: '', name: '' };
   }
 
-  const dotIndex = fullyQualifiedName.lastIndexOf('.');
+  const dotIndex = fqn.lastIndexOf('.');
 
-  if (dotIndex === -1 || dotIndex === 0 || dotIndex === fullyQualifiedName.length - 1) {
+  if (dotIndex === -1 || dotIndex === 0 || dotIndex === fqn.length - 1) {
     return { namespace: '', name: '' };
   }
 
-  const namespace :string = fullyQualifiedName.substring(0, dotIndex);
-  const name :string = fullyQualifiedName.substring(dotIndex + 1);
+  const namespace :string = fqn.substring(0, dotIndex);
+  const name :string = fqn.substring(dotIndex + 1);
 
   return {
     namespace,
@@ -80,9 +80,9 @@ function processArgs(...args :any[]) :FQNObject {
 
   /*
    * case 1: a single parameter which can be either:
-   *   - an instance of FullyQualifiedName
-   *   - an object literal to represent a FullyQualifiedName
-   *   - a FullyQualifiedName as a string
+   *   - an FQN instance
+   *   - an FQN as an object literal
+   *   - an FQN as a string
    */
   if (args.length === 1) {
 
@@ -111,9 +111,9 @@ function processArgs(...args :any[]) :FQNObject {
     }
     else if (isString(args[0])) {
 
-      // if it's a string, it must be a properly formatted FullyQualifiedName string
-      const fqnStr :string = args[0];
-      fqnObj = parseFqnString(fqnStr);
+      // if it's a string, it must be a properly formatted FQN string
+      const fqn :string = args[0];
+      fqnObj = parseStringAsFQN(fqn);
     }
 
     /* eslint-disable prefer-destructuring */
@@ -137,17 +137,40 @@ function processArgs(...args :any[]) :FQNObject {
   };
 }
 
-function toString(namespace :string, name :string) :string {
+function toString(namespace :string, name :string, throwIfInvalid = false) :string {
 
-  return (isNonEmptyString(namespace) && isNonEmptyString(name))
-    ? `${namespace}.${name}`
-    : '';
+  let errorMsg = '';
+
+  if (isNonEmptyString(namespace)) {
+    if (isNonEmptyString(name)) {
+      const fqn = `${namespace}.${name}`;
+      if (fqn.length <= FQN_MAX_LENGTH) {
+        return fqn;
+      }
+      errorMsg = `invalid FQN: FQNs must be <= ${FQN_MAX_LENGTH} characters, got ${fqn.length}`;
+    }
+    else {
+      errorMsg = 'invalid FQN: name must be a non-empty string';
+    }
+  }
+  else {
+    errorMsg = 'invalid FQN: namespace must be a non-empty string';
+  }
+
+  if (throwIfInvalid === true) {
+    LOG.error(errorMsg);
+    throw new Error(errorMsg);
+  }
+
+  return '';
 }
 
-export default class FullyQualifiedName {
+export default class FQN {
 
   namespace :string;
   name :string;
+
+  static of = (...args :any[]) => new FQN(...args)
 
   static isValid = (...args :any[]) :boolean => {
 
@@ -156,8 +179,7 @@ export default class FullyQualifiedName {
     }
 
     const { namespace, name } = processArgs(...args);
-    const fqn :string = toString(namespace, name);
-    return isNonEmptyString(namespace) && isNonEmptyString(name) && fqn.length <= FQN_MAX_LENGTH;
+    return toString(namespace, name) !== '';
   }
 
   static toString = (...args :any[]) :string => {
@@ -167,42 +189,19 @@ export default class FullyQualifiedName {
     }
 
     const { namespace, name } = processArgs(...args);
-    const fqn :string = toString(namespace, name);
-
-    if (fqn.length > FQN_MAX_LENGTH) {
-      return '';
-    }
-    return fqn;
+    return toString(namespace, name);
   }
 
   constructor(...args :any[]) {
 
     if (args.length !== 1 && args.length !== 2) {
-      const error = `invalid parameter count: FullyQualifiedName takes only 1 or 2 parameters, got ${args.length}`;
+      const error = `invalid parameter count: FQN takes only 1 or 2 parameters, got ${args.length}`;
       LOG.error(error);
       throw new Error(error);
     }
 
     const { namespace, name } = processArgs(...args);
-
-    if (!isNonEmptyString(namespace)) {
-      const error = 'invalid FQN: namespace must be a non-empty string';
-      LOG.error(error);
-      throw new Error(error);
-    }
-
-    if (!isNonEmptyString(name)) {
-      const error = 'invalid FQN: name must be a non-empty string';
-      LOG.error(error);
-      throw new Error(error);
-    }
-
-    const fqn :string = toString(namespace, name);
-    if (fqn.length > FQN_MAX_LENGTH) {
-      const error = `invalid FQN: FQNs must be <= 63 characters, got ${fqn.length}`;
-      LOG.error(error, fqn);
-      throw new Error(error);
-    }
+    toString(namespace, name, true);
 
     this.namespace = namespace;
     this.name = name;
@@ -218,26 +217,13 @@ export default class FullyQualifiedName {
     return this.name;
   }
 
-  /**
-   * @deprecated
-   */
-  getFullyQualifiedName() :string {
-
-    LOG.warn('getFullyQualifiedName() is deprecated. Please use toString() instead.');
-    return this.toString();
-  }
-
   toObject() :FQNObject {
 
-    return (isNonEmptyString(this.namespace) && isNonEmptyString(this.name))
-      ? {
-        namespace: this.namespace,
-        name: this.name
-      }
-      : {
-        namespace: '',
-        name: ''
-      };
+    const { namespace, name } = this;
+    if (toString(namespace, name) === '') {
+      return { namespace: '', name: '' };
+    }
+    return { namespace, name };
   }
 
   toString() :string {
@@ -245,15 +231,12 @@ export default class FullyQualifiedName {
     return toString(this.namespace, this.name);
   }
 
-  // for Immutable.js equality
   valueOf() :string {
 
-    // TODO: use Immutable.hash()
     return this.toString();
   }
 }
 
 export type {
-  FullyQualifiedName as FQN,
   FQNObject,
 };

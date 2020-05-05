@@ -20,7 +20,6 @@
 import { Set } from 'immutable';
 
 import Logger from '../utils/Logger';
-import EntitySet, { isValidEntitySetArray } from '../models/EntitySet';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import {
   ALL_PATH,
@@ -28,9 +27,15 @@ import {
   METADATA_PATH,
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
-import { getApiAxiosInstance } from '../utils/axios';
-import { isDefined, isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
+import { EntitySet, isValidEntitySet } from '../models/EntitySet';
+import {
+  isDefined,
+  isNonEmptyArray,
+  isNonEmptyString,
+  isNonEmptyStringArray,
+} from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
+import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('EntitySetsApi');
 
@@ -42,8 +47,8 @@ const LOG = new Logger('EntitySetsApi');
  * @static
  * @memberof lattice.EntitySetsApi
  * @param {EntitySet[]} entitySets
- * @return {Promise<Map<string, UUID>>} - a Promise that will resolve with a Map as its fulfillment value, where
- * the key is the EntitySet name and the value is the newly-created EntitySet UUID
+ * @returns {Promise<Map<string, UUID>>} - a Promise that resolves with a mapping where the key is the EntitySet name
+ * and the value is the newly-created EntitySet id
  *
  * @example
  * EntitySetsApi.createEntitySets(
@@ -62,7 +67,13 @@ function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isValidEntitySetArray(entitySets)) {
+  if (!isNonEmptyArray(entitySets)) {
+    errorMsg = 'invalid parameter: entitySets must be a non-empty array';
+    LOG.error(errorMsg, entitySets);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!entitySets.every(isValidEntitySet)) {
     errorMsg = 'invalid parameter: entitySets must be a non-empty array of valid EntitySets';
     LOG.error(errorMsg, entitySets);
     return Promise.reject(errorMsg);
@@ -80,19 +91,19 @@ function createEntitySets(entitySets :EntitySet[]) :Promise<*> {
 }
 
 /**
- * `DELETE /entity-sets/all/{uuid}`
+ * `DELETE /entity-sets/all/{entitySetId}`
  *
- * Deletes the EntitySet definition for the given EntitySet UUID.
+ * Deletes the EntitySet definition for the given EntitySet id.
  *
  * @static
  * @memberof lattice.EntitySetsApi
  * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves without a value
+ * @returns {Promise<void>} - a Promise that resolves without a value
  *
  * @example
  * EntitySetsApi.deleteEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-function deleteEntitySet(entitySetId :UUID) :Promise<*> {
+function deleteEntitySet(entitySetId :UUID) :Promise<void> {
 
   let errorMsg = '';
 
@@ -118,12 +129,12 @@ function deleteEntitySet(entitySetId :UUID) :Promise<*> {
  *
  * @static
  * @memberof lattice.EntitySetsApi
- * @return {Promise<EntitySet[]>} - a Promise that will resolve with all EntitySet definitions
+ * @returns {Promise<EntitySet[]>} - a Promise that resolves with all EntitySet definitions
  *
  * @example
  * EntitySetsApi.getAllEntitySets();
  */
-function getAllEntitySets() :Promise<*> {
+function getAllEntitySets() :Promise<EntitySet[]> {
 
   return getApiAxiosInstance(ENTITY_SETS_API)
     .get('/')
@@ -135,19 +146,19 @@ function getAllEntitySets() :Promise<*> {
 }
 
 /**
- * `GET /entity-sets/all/{uuid}`
+ * `GET /entity-sets/all/{entitySetId}`
  *
- * Gets the EntitySet definition for the given EntitySet UUID.
+ * Gets the EntitySet definition for the given EntitySet id.
  *
  * @static
  * @memberof lattice.EntitySetsApi
  * @param {UUID} entitySetId
- * @return {Promise<EntitySet>} - a Promise that will resolve with the EntitySet definition as its fulfillment value
+ * @returns {Promise<EntitySet>} - a Promise that resolves with the EntitySet definition
  *
  * @example
  * EntitySetsApi.getEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-function getEntitySet(entitySetId :UUID) :Promise<*> {
+function getEntitySet(entitySetId :UUID) :Promise<EntitySet> {
 
   let errorMsg = '';
 
@@ -167,19 +178,19 @@ function getEntitySet(entitySetId :UUID) :Promise<*> {
 }
 
 /**
- * `GET /entity-sets/ids/{name}`
+ * `GET /entity-sets/ids/{entitySetName}`
  *
- * Gets the EntitySet UUID for the given EntitySet name.
+ * Gets the EntitySet id for the given EntitySet name.
  *
  * @static
  * @memberof lattice.EntitySetsApi
  * @param {string} entitySetName
- * @return {Promise<UUID>} - a Promise that will resolve with the UUID as its fulfillment value
+ * @returns {Promise<UUID>} - a Promise that resolves with the EntitySet id
  *
  * @example
  * EntitySetsApi.getEntitySetId("MyEntitySet");
  */
-function getEntitySetId(entitySetName :string) :Promise<*> {
+function getEntitySetId(entitySetName :string) :Promise<UUID> {
 
   let errorMsg = '';
 
@@ -201,12 +212,13 @@ function getEntitySetId(entitySetName :string) :Promise<*> {
 /**
  * `POST /entity-sets/ids`
  *
- * Gets the EntitySet UUIDs for the given EntitySet names.
+ * Gets the EntitySet ids for the given EntitySet names.
  *
  * @static
  * @memberof lattice.EntitySetsApi
  * @param {string} entitySetName
- * @return {Promise<Map<String, UUID>>} - a Promise that will resolve with the id mapping as its fulfillment value
+ * @returns {Promise<Map<string, UUID>>} - a Promise that resolves with a mapping where the key is the EntitySet name
+ * and the value is the EntitySet id
  *
  * @example
  * EntitySetsApi.getEntitySetIds(["EntitySet1", "EntitySet2"]);
@@ -241,7 +253,7 @@ function getEntitySetIds(entitySetNames :string[]) :Promise<*> {
  * @memberof lattice.EntitySetsApi
  * @param {UUID} entitySetId
  * @param {UUID} propertyTypeId
- * @return {Promise}
+ * @returns {Promise}
  *
  * @example
  * EntitySetsApi.getPropertyTypeMetaDataForEntitySet("ec6865e6-e60e-424b-a071-6a9c1603d735");
@@ -293,7 +305,7 @@ function getPropertyTypeMetaDataForEntitySet(entitySetId :UUID, propertyTypeId ?
  * @static
  * @memberof lattice.EntitySetsApi
  * @param {UUID[]} entitySetIds
- * @return {Promise}
+ * @returns {Promise}
  *
  * @example
  * EntitySetsApi.getPropertyTypeMetaDataForEntitySets(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
