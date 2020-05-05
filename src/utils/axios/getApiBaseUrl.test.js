@@ -1,10 +1,11 @@
 import { Map, fromJS } from 'immutable';
 
 import getApiBaseUrl from './getApiBaseUrl';
+
 import * as ApiNames from '../../constants/ApiNames';
-import * as UrlConstants from '../../constants/UrlConstants';
 import * as Config from '../../config/Configuration';
-import { INVALID_PARAMS_SS } from '../testing/Invalid';
+import * as UrlConstants from '../../constants/UrlConstants';
+import { INVALID_PARAMS } from '../testing/InvalidParams';
 import { genRandomString } from '../testing/MockUtils';
 
 /*
@@ -15,7 +16,7 @@ import { genRandomString } from '../testing/MockUtils';
 const API_TO_PATH_MAP = Map({
   [ApiNames.ANALYSIS_API]         : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ANALYSIS_PATH}`,
   [ApiNames.APP_API]              : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.APP_PATH}`,
-  [ApiNames.AUTHORIZATION_API]    : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.AUTHORIZATIONS_PATH}`,
+  [ApiNames.AUTHORIZATIONS_API]   : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.AUTHORIZATIONS_PATH}`,
   [ApiNames.CODEX_API]            : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.CODEX_PATH}`,
   [ApiNames.DATA_API]             : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.DATA_PATH}`,
   [ApiNames.DATA_INTEGRATION_API] : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.INTEGRATION_PATH}`,
@@ -52,7 +53,7 @@ Config.getConfig.mockImplementation(() => fromJS({
 describe('AxiosUtils : getApiBaseUrl()', () => {
 
   test('should throw if the given API is invalid', () => {
-    INVALID_PARAMS_SS.forEach((invalid) => {
+    INVALID_PARAMS.forEach((invalid) => {
       expect(() => {
         getApiBaseUrl(invalid);
       }).toThrow();

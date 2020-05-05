@@ -1,17 +1,24 @@
-import { Map } from 'immutable';
+import { OrderedMap } from 'immutable';
 
 import GrantTypes from './GrantTypes';
 import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 
-const EXPECTED_ENUM = Map({
+const EXPECTED_ENUM = OrderedMap({
   ATTRIBUTES: 'Attributes',
+  Attributes: 'Attributes',
   AUTOMATIC: 'Automatic',
+  Automatic: 'Automatic',
   CLAIM: 'Claim',
+  Claim: 'Claim',
   EMAIL_DOMAIN: 'EmailDomain',
+  EmailDomain: 'EmailDomain',
   GROUPS: 'Groups',
+  Groups: 'Groups',
   MANUAL: 'Manual',
+  Manual: 'Manual',
   ROLES: 'Roles',
-}).sortBy((value, key) => key);
+  Roles: 'Roles',
+});
 
 describe('GrantTypes', () => {
 

@@ -20,33 +20,8 @@
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
-import DataGraph, { isValidDataGraph } from '../models/DataGraph';
-import FullyQualifiedName from '../models/FullyQualifiedName';
 import Logger from '../utils/Logger';
-import { getConfig } from '../config/Configuration';
 import { DATA_API } from '../constants/ApiNames';
-import { UpdateTypes, DeleteTypes } from '../constants/types';
-import { getApiBaseUrl, getApiAxiosInstance } from '../utils/axios';
-import {
-  isDefined,
-  isEmptyArray,
-  isNonEmptyObject,
-  isNonEmptyString,
-} from '../utils/LangUtils';
-
-import {
-  ALL_PATH,
-  ASSOCIATION_PATH,
-  COUNT_PATH,
-  CSRF_TOKEN,
-  DETAILED_PATH,
-  FILE_TYPE,
-  NEIGHBORS_PATH,
-  SET_ID,
-  SET_PATH,
-  TYPE_PATH,
-} from '../constants/UrlConstants';
-
 import {
   DESTINATION,
   DESTINATION_ES_IDS,
@@ -54,27 +29,44 @@ import {
   SOURCE,
   SOURCE_ES_IDS,
 } from '../constants/SerializationConstants';
-
+import {
+  ALL_PATH,
+  ASSOCIATION_PATH,
+  COUNT_PATH,
+  DETAILED_PATH,
+  NEIGHBORS_PATH,
+  SET_ID,
+  SET_PATH,
+  TYPE_PATH,
+} from '../constants/UrlConstants';
+import { DeleteTypes, UpdateTypes } from '../constants/types';
+import { DataGraph, isValidDataGraph } from '../models/DataGraph';
+import {
+  isDefined,
+  isEmptyArray,
+  isNonEmptyObject,
+  isNonEmptyString,
+} from '../utils/LangUtils';
 import {
   isValidMultimap,
   isValidMultimapArray,
   isValidUUID,
   isValidUUIDArray,
 } from '../utils/ValidationUtils';
-
-import type { UpdateType, DeleteType } from '../constants/types';
+import { getApiAxiosInstance } from '../utils/axios';
+import type { DeleteType, UpdateType } from '../constants/types';
 
 const LOG = new Logger('DataApi');
 
 /**
  * `POST /data/association`
  *
- * Creates associations (edges) from the given DataEdgeKeys.
+ * Creates associations (edges) from the given data.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {Object} associations
- * @return {Promise} - a Promise that resolves with the count of associations (edges) that were created
+ * @returns {Promise<number>} - a Promise that resolves with the count of associations (edges) that were created
  *
  * @example
  * DataApi.createAssociations({
@@ -93,13 +85,14 @@ const LOG = new Logger('DataApi');
  *   }]
  * });
  */
-export function createAssociations(associations :Object) :Promise<*> {
+function createAssociations(associations :Object) :Promise<number> {
 
   let errorMsg = '';
-  // TODO: Create a DataEdge Model and DataEdge.test.js - Set validation by mapping UUID to set of DataEdges
+
+  // TODO: DataEdge model, ListMultiMap validation
 
   if (!isNonEmptyObject(associations)) {
-    errorMsg = 'invalid parameter: associations must be a non-empty Object of association EntitySetIds to DataEdges';
+    errorMsg = 'invalid parameter: "associations" must be a non-empty object';
     LOG.error(errorMsg, associations);
     return Promise.reject(errorMsg);
   }
@@ -121,7 +114,7 @@ export function createAssociations(associations :Object) :Promise<*> {
  * @static
  * @memberof lattice.DataApi
  * @param {DataGraph} data
- * @return {Promise} - a Promise that resolves with the ids of the entities and associations that were created
+ * @returns {Promise<Object>} - a Promise that resolves with the ids of the entities and associations that were created
  *
  * @example
  * DataApi.createEntityAndAssociationData({
@@ -142,12 +135,12 @@ export function createAssociations(associations :Object) :Promise<*> {
  *   },
  * });
  */
-export function createEntityAndAssociationData(data :DataGraph) :Promise<*> {
+function createEntityAndAssociationData(data :DataGraph) :Promise<Object> {
 
   let errorMsg = '';
 
   if (!isValidDataGraph(data)) {
-    errorMsg = 'invalid parameter: data must be a valid DataGraph';
+    errorMsg = 'invalid parameter: "data" must be a valid DataGraph';
     LOG.error(errorMsg, data);
     return Promise.reject(errorMsg);
   }
@@ -164,13 +157,13 @@ export function createEntityAndAssociationData(data :DataGraph) :Promise<*> {
 /**
  * `POST /data/set/?setId={entitySetId}`
  *
- * Creates or updates entities for the given entity data, and returns the corresponding entity UUIDs.
+ * Creates or updates entities for the given entity data, and returns the corresponding entity ids.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {Object} entities
- * @return {Promise<UUID[]>} - a Promise that resolves with a list of UUIDs
+ * @returns {Promise<UUID[]>} - a Promise that resolves with a list of ids
  *
  * @example
  * DataApi.createOrMergeEntityData(
@@ -181,8 +174,7 @@ export function createEntityAndAssociationData(data :DataGraph) :Promise<*> {
  *   }]
  * );
  */
-
-export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :Promise<*> {
+function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :Promise<UUID[]> {
 
   let errorMsg = '';
 
@@ -209,87 +201,19 @@ export function createOrMergeEntityData(entitySetId :UUID, entities :Object[]) :
 }
 
 /**
- * `DELETE /data/set/{entitySetId}?type=Soft`
- *
- * Deletes entities with the given entityKeyIds from the EntitySet with the given entitySetId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID || UUID[]} entityKeyIds
- * @param {DeleteType} deleteType
- * @return {Promise} - a Promise that resolves with the count of entities that were deleted
- *
- * @example
- * DataApi.deleteEntityData(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   ["ec6865e6-e60e-424b-a071-6a9c1603d735", "3bf2a30d-fda0-4389-a1e6-8546b230efad"],
- *   "Soft"
- * );
- */
-export function deleteEntityData(
-  entitySetId :UUID,
-  entityKeyIds :UUID | UUID[],
-  deleteType ?:DeleteType = DeleteTypes.SOFT
-) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  // $FlowFixMe
-  if (!isValidUUID(entityKeyIds) && !isValidUUIDArray(entityKeyIds)) {
-    errorMsg = 'invalid parameter: entityKeyIds must be a valid UUID or array of UUIDs';
-    LOG.error(errorMsg, entityKeyIds);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!DeleteTypes[deleteType]) {
-    errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
-    LOG.error(errorMsg, deleteType);
-    return Promise.reject(errorMsg);
-  }
-
-  let data = entityKeyIds;
-  if (typeof entityKeyIds === 'string') {
-    data = [entityKeyIds];
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}`, { data })
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * @deprecated
- */
-export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :DeleteType) :Promise<*> {
-  LOG.error('DataApi.deleteEntity() is deprecated. Please use DataApi.deleteEntityData() instead');
-  return deleteEntityData(entitySetId, entityKeyId, deleteType);
-}
-
-/**
  * `POST /data/set/{entitySetId}/neighbors?type=Hard`
  *
- *  Deletes the entities matching the given entity ids and all of its neighbor entities provided in the filter.
+ * Deletes the entity data for the given entityKeyIds, and all neighbor entity data matching the given filter.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {Object} filter
  * @param {DeleteType} deleteType
- * @return {Promise} - a Promise that resolves with the count of entities that were deleted
+ * @returns {Promise<number>} - a Promise that resolves with the count of entities that were deleted
  *
  * @example
- * DataApi.deleteEntitiesAndNeighbors(
+ * DataApi.deleteEntityAndNeighborData(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   {
  *     "entityKeyIds": ["3bf2a30d-fda0-4389-a1e6-8546b230efad", "ec6865e6-e60e-424b-a071-6a9c1603d735"],
@@ -299,8 +223,13 @@ export function deleteEntity(entitySetId :UUID, entityKeyId :UUID, deleteType :D
  *   "Hard"
  * );
  */
+function deleteEntityAndNeighborData(
+  entitySetId :UUID,
+  filter :Object,
+  deleteType ?:DeleteType = DeleteTypes.SOFT,
+) :Promise<number> {
 
-export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, deleteType :DeleteType) :Promise<*> {
+  // TODO: EntityFilter model
 
   let errorMsg = '';
   const data :Object = {};
@@ -370,33 +299,36 @@ export function deleteEntitiesAndNeighbors(entitySetId :UUID, filter :Object, de
 }
 
 /**
- * @deprecated
- */
-export function clearEntityFromEntitySet(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
-
-  LOG.error('DataApi.clearEntityFromEntitySet() is deprecated. Please use DataApi.deleteEntity() instead.');
-  return deleteEntity(entitySetId, entityKeyId, DeleteTypes.Soft);
-}
-
-/**
- * `DELETE /data/set/{entitySetId}/all?type=Soft`
+ * `DELETE /data/set/{entitySetId}?type=Soft`
  *
- * Deletes an EntitySet.
+ * Deletes entities with the given entityKeyIds from the EntitySet with the given entitySetId.
  *
  * @static
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
+ * @param {UUID || UUID[]} entityKeyIds
  * @param {DeleteType} deleteType
- * @return {Promise} - a Promise that resolves with the count of entities that were deleted
+ * @returns {Promise<number>} - a Promise that resolves with the count of entities that were deleted
  *
  * @example
- * DataApi.deleteEntitySet(
-*   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
-*   "Soft"
-* );
-*/
-
-export function deleteEntitySet(entitySetId :UUID, deleteType :DeleteType) :Promise<*> {
+ * DataApi.deleteEntityData(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   "01af0000-0000-0000-8000-000000000004",
+ *   "Soft"
+ * );
+ *
+ * @example
+ * DataApi.deleteEntityData(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   ["01af0000-0000-0000-8000-000000000004", "00230000-0000-0000-8000-000000000004"],
+ *   "Soft"
+ * );
+ */
+function deleteEntityData(
+  entitySetId :UUID,
+  entityKeyIds :UUID | UUID[],
+  deleteType ?:DeleteType = DeleteTypes.SOFT,
+) :Promise<number> {
 
   let errorMsg = '';
 
@@ -406,8 +338,59 @@ export function deleteEntitySet(entitySetId :UUID, deleteType :DeleteType) :Prom
     return Promise.reject(errorMsg);
   }
 
-  if (!isNonEmptyString(deleteType) || !DeleteTypes[deleteType]) {
+  // $FlowFixMe
+  if (!isValidUUID(entityKeyIds) && !isValidUUIDArray(entityKeyIds)) {
+    errorMsg = 'invalid parameter: entityKeyIds must be a valid UUID or array of UUIDs';
+    LOG.error(errorMsg, entityKeyIds);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!DeleteTypes[deleteType]) {
     errorMsg = 'invalid parameter: deleteType must be a valid DeleteType';
+    LOG.error(errorMsg, deleteType);
+    return Promise.reject(errorMsg);
+  }
+
+  let data = entityKeyIds;
+  if (typeof entityKeyIds === 'string') {
+    data = [entityKeyIds];
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}`, { data })
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `DELETE /data/set/{entitySetId}/all?type=Soft`
+ *
+ * Deletes all data from the EntitySet with the given entitySetId.
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {DeleteType} deleteType
+ * @returns {Promise<number>} - a Promise that resolves with the count of entities that were deleted
+ *
+ * @example
+ * DataApi.deleteEntitySetData("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "Soft");
+ */
+function deleteEntitySetData(entitySetId :UUID, deleteType ?:DeleteType = DeleteTypes.SOFT) :Promise<number> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: "entitySetId" must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!DeleteTypes[deleteType]) {
+    errorMsg = 'invalid parameter: "deleteType" must be a valid DeleteType';
     LOG.error(errorMsg, deleteType);
     return Promise.reject(errorMsg);
   }
@@ -422,15 +405,6 @@ export function deleteEntitySet(entitySetId :UUID, deleteType :DeleteType) :Prom
 }
 
 /**
- * @deprecated
- */
-export function clearEntitySet(entitySetId :UUID) :Promise<*> {
-
-  LOG.error('DataApi.clearEntitySet() is deprecated. Please use DataApi.deleteEntitySet() instead.');
-  return deleteEntitySet(entitySetId, DeleteTypes.Soft);
-}
-
-/**
  * `GET /data/{entitySetId}/{entityKeyId}`
  *
  * Returns the entity data with the given entityKeyId in the EntitySet with the given entitySetId.
@@ -439,23 +413,23 @@ export function clearEntitySet(entitySetId :UUID) :Promise<*> {
  * @memberof lattice.DataApi
  * @param {UUID} entitySetId
  * @param {UUID} entityKeyId
- * @return {Promise} - a Promise that resolves with the requested entity data
+ * @returns {Promise<Object>} - a Promise that resolves with the requested entity data
  *
  * @example
  * DataApi.getEntityData("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e", "ec6865e6-e60e-424b-a071-6a9c1603d735")
  */
-export function getEntityData(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
+function getEntityData(entitySetId :UUID, entityKeyId :UUID) :Promise<Object> {
 
   let errorMsg = '';
 
   if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    errorMsg = 'invalid parameter: "entitySetId" must be a valid UUID';
     LOG.error(errorMsg, entitySetId);
     return Promise.reject(errorMsg);
   }
 
   if (!isValidUUID(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
+    errorMsg = 'invalid parameter: "entityKeyId" must be a valid UUID';
     LOG.error(errorMsg, entityKeyId);
     return Promise.reject(errorMsg);
   }
@@ -470,301 +444,6 @@ export function getEntityData(entitySetId :UUID, entityKeyId :UUID) :Promise<*> 
 }
 
 /**
- * @deprecated
- */
-export function getEntity(entitySetId :UUID, entityKeyId :UUID) :Promise<*> {
-
-  LOG.error('DataApi.getEntity() is deprecated. Please use DataApi.getEntityData() instead.');
-  return getEntityData(entitySetId, entityKeyId);
-}
-
-/**
- * Returns the URL to be used for a direct file download for all data for the given EntitySet UUID.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {string} fileType
- * @returns {string} - the direct file download URL
- *
- * @example
- * DataApi.getEntitySetDataFileUrl("ec6865e6-e60e-424b-a071-6a9c1603d735", "json");
- */
-export function getEntitySetDataFileUrl(entitySetId :UUID, fileType :string) :?string {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return null;
-  }
-
-  // TODO: create an allowed file type constants map, and validate fileType against it
-
-  if (!isNonEmptyString(fileType)) {
-    errorMsg = 'invalid parameter: fileType must be a non-empty string';
-    LOG.error(errorMsg, fileType);
-    return null;
-  }
-
-  // NOTE: CSRF token must be equal to CSRF cookie
-  const csrfToken :?string = getConfig().get('csrfToken', '');
-  if (!isNonEmptyString(csrfToken)) {
-    errorMsg = 'invalid csrf token';
-    LOG.error(errorMsg, csrfToken);
-    return null;
-  }
-
-  return `${getApiBaseUrl(DATA_API)}/${SET_PATH}/${entitySetId}`
-    + `?${FILE_TYPE}=${fileType.toLowerCase()}`
-    + `&${CSRF_TOKEN}=${csrfToken}`;
-}
-
-/**
- * `GET /data/{entitySetId}/count`
- *
- * Returns the number of entities in the specified entity set
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @return {Promise} - a Promise that resolves with the entity count
- *
- * @example
- * DataApi.getEntitySetSize("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e")
- */
-export function getEntitySetSize(entitySetId :UUID) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .get(`/${entitySetId}/${COUNT_PATH}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `PUT /data/set/{entitySetId}`
- *
- * // TODO: description
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {Object} entities
- * @param {UpdateType} updateType
- * @return {Promise} - a Promise that resolves with the count of entities that were updated
- *
- * @example
- * DataApi.updateEntityData(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   {
- *     "219f0000-0000-0000-8000-000000000000": {
- *       "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
- *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
- *     }
- *   },
- *   'PartialReplace'
- * );
- */
-export function updateEntityData(entitySetId :UUID, entities :Object, updateType :UpdateType) :Promise<*> {
-
-  let errorMsg = '';
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isNonEmptyObject(entities)) {
-    errorMsg = 'invalid parameter: entities must be a non-empty object';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  const ids :any[] = Object.keys(entities);
-
-  // validate all keys are UUIDs
-  for (let index1 = 0; index1 < ids.length; index1 += 1) {
-    const id :any = ids[index1];
-    if (!isValidUUID(id)) {
-      errorMsg = 'invalid parameter: entities must be a non-empty object where all keys are UUIDs';
-      LOG.error(errorMsg, id);
-      return Promise.reject(errorMsg);
-    }
-  }
-
-  // validate all values are multimaps
-  // TODO: validate SetMultimap
-  for (let index2 = 0; index2 < ids.length; index2 += 1) {
-    const value :any = entities[ids[index2]];
-    if (!isValidMultimap(value, isValidUUID)) {
-      errorMsg = 'invalid parameter: entities must be a non-empty object where all values are multimaps';
-      LOG.error(errorMsg, value);
-      return Promise.reject(errorMsg);
-    }
-  }
-
-  if (!isNonEmptyString(updateType) || !UpdateTypes[updateType]) {
-    errorMsg = 'invalid parameter: updateType must be a valid UpdateType';
-    LOG.error(errorMsg, updateType);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .put(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${updateType}`, entities)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * @deprecated
- */
-export function replaceEntityData(entitySetId :UUID, entities :Object, partial :boolean = false) :Promise<*> {
-
-  LOG.error('DataApi.replaceEntityData() is deprecated. Please use DataApi.updateEntityData() instead.');
-
-  const updateType :UpdateType = (partial === true) ? UpdateTypes.PartialReplace : UpdateTypes.Replace;
-  return updateEntityData(entitySetId, entities, updateType);
-}
-
-/**
- * `PUT /data/set/{entitySetId}/{entityKeyId}`
- *
- * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @param {Object} entity
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.replaceEntityInEntitySet(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
- *     "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
- *   }
- * );
- */
-export function replaceEntityInEntitySet(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
-
-  let errorMsg = '';
-  LOG.warn('DataApi.replaceEntityInEntitySet() is deprecated. Please use DataApi.updateEntityData() instead.');
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUUID(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate SetMultimap
-  if (!isValidMultimap(entity, isValidUUID)) {
-    errorMsg = 'invalid parameter: entity must be a non-empty multimap';
-    LOG.error(errorMsg, entity);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .put(`/${SET_PATH}/${entitySetId}/${entityKeyId}`, entity)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `POST /data/set/{entitySetId}/{entityKeyId}`
- *
- * Replaces the entity data for the given entityKeyId in the EntitySet with the given entitySetId.
- *
- * @static
- * @memberof lattice.DataApi
- * @param {UUID} entitySetId
- * @param {UUID} entityKeyId
- * @param {Object} entity
- * @return {Promise} - a Promise that resolves without a value
- *
- * @example
- * DataApi.replaceEntityInEntitySetUsingFqns(
- *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
- *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
- *   {
- *     "namespace1.name1": ["value_1", "value_2"],
- *     "namespace2.name2": ["value_3", "value_4"]
- *   }
- * );
- */
-export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId :UUID, entity :Object) :Promise<*> {
-
-  let errorMsg = '';
-  LOG.warn('DataApi.replaceEntityInEntitySetUsingFqns() is deprecated. Please use DataApi.updateEntityData() instead.');
-
-  if (!isValidUUID(entitySetId)) {
-    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
-    LOG.error(errorMsg, entitySetId);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isValidUUID(entityKeyId)) {
-    errorMsg = 'invalid parameter: entityKeyId must be a valid UUID';
-    LOG.error(errorMsg, entityKeyId);
-    return Promise.reject(errorMsg);
-  }
-
-  // TODO: validate SetMultimap
-  if (!isValidMultimap(entity, FullyQualifiedName.isValid)) {
-    errorMsg = 'invalid parameter: entity must be a non-empty object';
-    LOG.error(errorMsg, entity);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(DATA_API)
-    .post(`/${SET_PATH}/${entitySetId}/${entityKeyId}`, entity)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-
-/*
- *
- *
- *
- * everything above needs to be looked over, also alphabetized
- *
- *
- *
- */
-
-
-/**
  * `POST /data/set/{entitySetId}`
  *
  * Gets all data for the given EntitySet UUID with respect to the given filters.
@@ -774,7 +453,7 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
  * @param {UUID} entitySetId
  * @param {UUID[]} propertyTypeIds
  * @param {UUID[]} entityKeyIds
- * @returns {Promise<Object[]>} - a Promise that will resolve with the EntitySet data as its fulfillment value
+ * @returns {Promise<Object[]>} - a Promise that resolves with the EntitySet data as its fulfillment value
  *
  * @example
  * DataApi.getEntitySetData(
@@ -783,7 +462,7 @@ export function replaceEntityInEntitySetUsingFqns(entitySetId :UUID, entityKeyId
  *   ["8b470000-0000-0000-8000-000000000007"]
  * );
  */
-function getEntitySetData(entitySetId :UUID, propertyTypeIds ?:UUID[], entityKeyIds ?:UUID[]) :Promise<*> {
+function getEntitySetData(entitySetId :UUID, propertyTypeIds ?:UUID[], entityKeyIds ?:UUID[]) :Promise<Object[]> {
 
   let errorMsg = '';
 
@@ -831,6 +510,38 @@ function getEntitySetData(entitySetId :UUID, propertyTypeIds ?:UUID[], entityKey
 }
 
 /**
+ * `GET /data/{entitySetId}/count`
+ *
+ * Returns the number of entities in the specified entity set
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @returns {Promise<number>} - a Promise that resolves with the entity count
+ *
+ * @example
+ * DataApi.getEntitySetSize("0c8be4b7-0bd5-4dd1-a623-da78871c9d0e")
+ */
+function getEntitySetSize(entitySetId :UUID) :Promise<number> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .get(`/${entitySetId}/${COUNT_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /data/set/{entitySetId}/detailed`
  *
  * @static
@@ -838,7 +549,7 @@ function getEntitySetData(entitySetId :UUID, propertyTypeIds ?:UUID[], entityKey
  * @param {UUID} entitySetId
  * @param {UUID[]} propertyTypeIds
  * @param {UUID[]} entityKeyIds
- * @return {Promise}
+ * @returns {Promise}
  *
  * @example
  * EntitySetsApi.getLinkedEntitySetBreakdown(
@@ -894,7 +605,98 @@ function getLinkedEntitySetBreakdown(entitySetId :UUID, propertyTypeIds ?:UUID[]
     });
 }
 
+/**
+ * `PUT /data/set/{entitySetId}`
+ *
+ * // TODO: description
+ *
+ * @static
+ * @memberof lattice.DataApi
+ * @param {UUID} entitySetId
+ * @param {Object} entityData
+ * @param {UpdateType} updateType
+ * @returns {Promise<number>} - a Promise that resolves with the count of entities that were updated
+ *
+ * @example
+ * DataApi.updateEntityData(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "219f0000-0000-0000-8000-000000000000": {
+ *       "8f79e123-3411-4099-a41f-88e5d22d0e8d": ["value_1", "value_2"],
+ *       "fae6af98-2675-45bd-9a5b-1619a87235a8": ["value_3", "value_4"]
+ *     }
+ *   },
+ *   'PartialReplace'
+ * );
+ */
+function updateEntityData(
+  entitySetId :UUID,
+  entityData :Object,
+  updateType ?:UpdateType = UpdateTypes.PARTIAL_REPLACE,
+) :Promise<number> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: "entitySetId" must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(entityData)) {
+    errorMsg = 'invalid parameter: "entityData" must be a non-empty object';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  const ids :any[] = Object.keys(entityData);
+
+  // validate all keys are UUIDs
+  for (let index1 = 0; index1 < ids.length; index1 += 1) {
+    const id :any = ids[index1];
+    if (!isValidUUID(id)) {
+      errorMsg = 'invalid parameter: "entityData" must be a non-empty object where all keys are UUIDs';
+      LOG.error(errorMsg, id);
+      return Promise.reject(errorMsg);
+    }
+  }
+
+  // validate all values are multimaps
+  // TODO: validate SetMultimap
+  for (let index2 = 0; index2 < ids.length; index2 += 1) {
+    const value :any = entityData[ids[index2]];
+    if (!isValidMultimap(value, isValidUUID)) {
+      errorMsg = 'invalid parameter: "entityData" must be a non-empty object where all values are multimaps';
+      LOG.error(errorMsg, value);
+      return Promise.reject(errorMsg);
+    }
+  }
+
+  if (!UpdateTypes[updateType]) {
+    errorMsg = 'invalid parameter: "updateType" must be a valid UpdateType';
+    LOG.error(errorMsg, updateType);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .put(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${updateType}`, entityData)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
+  createAssociations,
+  createEntityAndAssociationData,
+  createOrMergeEntityData,
+  deleteEntityAndNeighborData,
+  deleteEntityData,
+  deleteEntitySetData,
+  getEntityData,
   getEntitySetData,
+  getEntitySetSize,
   getLinkedEntitySetBreakdown,
+  updateEntityData,
 };

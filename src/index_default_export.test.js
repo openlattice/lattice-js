@@ -1,33 +1,27 @@
 /* eslint-disable import/no-named-as-default-member */
 import { OrderedMap } from 'immutable';
 
-import PACKAGE from '../package.json';
-
+import Lattice from './index';
 import { OBJECT_TAG } from './utils/testing/TestUtils';
 
-import Lattice from './index';
+import PACKAGE from '../package.json';
 
 /* eslint-disable key-spacing */
 const EXPECTED_OBJ_EXPORTS = OrderedMap({
-  AnalysisApi        : { size: 2 },
-  AppApi             : { size: 18 },
-  AuthorizationApi   : { size: 2 },
+  AppApi             : { size: 6 },
+  AuthorizationsApi  : { size: 1 },
   CodexApi           : { size: 1 },
-  DataApi            : { size: 19 },
-  DataIntegrationApi : { size: 2 },
-  EntityDataModelApi : { size: 51 },
+  DataApi            : { size: 11 },
+  DataIntegrationApi : { size: 1 },
+  EntityDataModelApi : { size: 27 },
   EntitySetsApi      : { size: 8 },
-  FeedsApi           : { size: 1 },
-  LinkingApi         : { size: 2 },
-  OrganizationsApi   : { size: 32 },
+  OrganizationsApi   : { size: 27 },
   PermissionsApi     : { size: 4 },
-  PersistentSearchApi: { size: 5 },
+  PersistentSearchApi: { size: 3 },
   PrincipalsApi      : { size: 7 },
-  RequestsApi        : { size: 3 },
-  SearchApi          : { size: 14 },
-  SubscriptionApi    : { size: 3 },
+  SearchApi          : { size: 3 },
   Constants          : { size: 8 },
-  Models             : { size: 66 },
+  Models             : { size: 18 },
   Types              : { size: 12 },
 });
 /* eslint-enable key-spacing */

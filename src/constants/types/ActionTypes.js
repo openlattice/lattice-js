@@ -5,6 +5,7 @@
 type ActionTypesEnum = {|
   ADD :'ADD';
   REMOVE :'REMOVE';
+  REPLACE :'REPLACE';
   REQUEST :'REQUEST';
   SET :'SET';
 |};
@@ -12,6 +13,7 @@ type ActionTypesEnum = {|
 const ActionTypes :{| ...ActionTypesEnum |} = Object.freeze({
   ADD: 'ADD',
   REMOVE: 'REMOVE',
+  REPLACE: 'REPLACE',
   REQUEST: 'REQUEST',
   SET: 'SET',
 });

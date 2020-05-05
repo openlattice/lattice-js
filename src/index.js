@@ -10,26 +10,20 @@
  * @module lattice
  */
 
-import * as AnalysisApi from './api/AnalysisApi';
 import * as AppApi from './api/AppApi';
-import * as AuthorizationApi from './api/AuthorizationApi';
+import * as AuthorizationsApi from './api/AuthorizationsApi';
 import * as CodexApi from './api/CodexApi';
+import * as Constants from './constants/GlobalConstants';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as EntitySetsApi from './api/EntitySetsApi';
-import * as FeedsApi from './api/FeedsApi';
-import * as LinkingApi from './api/LinkingApi';
+import * as Models from './models';
 import * as OrganizationsApi from './api/OrganizationsApi';
 import * as PermissionsApi from './api/PermissionsApi';
 import * as PersistentSearchApi from './api/PersistentSearchApi';
 import * as PrincipalsApi from './api/PrincipalsApi';
-import * as RequestsApi from './api/RequestsApi';
 import * as SearchApi from './api/SearchApi';
-import * as SubscriptionApi from './api/SubscriptionApi';
-
-import * as Constants from './constants/GlobalConstants';
-import * as Models from './models';
 import * as Types from './constants/types';
 import { configure } from './config/Configuration';
 
@@ -42,23 +36,18 @@ declare var __VERSION__ :string;
 const version :string = __VERSION__;
 
 export {
-  AnalysisApi,
   AppApi,
-  AuthorizationApi,
+  AuthorizationsApi,
   CodexApi,
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,
   EntitySetsApi,
-  FeedsApi,
-  LinkingApi,
   OrganizationsApi,
   PermissionsApi,
   PersistentSearchApi,
   PrincipalsApi,
-  RequestsApi,
   SearchApi,
-  SubscriptionApi,
 
   Constants,
   Models,
@@ -68,23 +57,18 @@ export {
 };
 
 export default {
-  AnalysisApi,
   AppApi,
-  AuthorizationApi,
+  AuthorizationsApi,
   CodexApi,
   DataApi,
   DataIntegrationApi,
   EntityDataModelApi,
   EntitySetsApi,
-  FeedsApi,
-  LinkingApi,
   OrganizationsApi,
   PermissionsApi,
   PersistentSearchApi,
   PrincipalsApi,
-  RequestsApi,
   SearchApi,
-  SubscriptionApi,
 
   Constants,
   Models,

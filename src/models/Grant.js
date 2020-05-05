@@ -2,19 +2,20 @@
  * @flow
  */
 
-import { Map, Set, fromJS } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  Map,
+  Set,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
 import GrantTypes from '../constants/types/GrantTypes';
 import Logger from '../utils/Logger';
-import {
-  isDefined,
-  isEmptyArray,
-  isEmptyString,
-  isNonEmptyString,
-  isNonEmptyStringArray,
-} from '../utils/LangUtils';
-import { validateNonEmptyArray } from '../utils/ValidationUtils';
-
+import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
+import { isValidModel } from '../utils/ValidationUtils';
+import { genRandomString, pickRandomValue } from '../utils/testing/MockUtils';
 import type { GrantType } from '../constants/types/GrantTypes';
 
 const LOG = new Logger('Grant');
@@ -25,16 +26,21 @@ type GrantObject = {|
   mappings :string[];
 |};
 
-export default class Grant {
+class Grant {
+
   attribute :string;
   grantType :GrantType;
   mappings :string[];
 
-  constructor(attribute :string, grantType :GrantType, mappings :string[]) {
+  constructor(grant :{
+    attribute :string;
+    grantType :GrantType;
+    mappings :string[];
+  }) {
 
-    this.attribute = attribute;
-    this.grantType = grantType;
-    this.mappings = mappings;
+    this.attribute = grant.attribute;
+    this.grantType = grant.grantType;
+    this.mappings = grant.mappings;
   }
 
   toImmutable() :Map<*, *> {
@@ -59,20 +65,34 @@ export default class Grant {
   }
 }
 
-export class GrantBuilder {
+class GrantBuilder {
 
   attribute :string;
   grantType :GrantType;
   mappings :string[];
 
-  setAttribute(attribute :string) :GrantBuilder {
+  constructor(value :any) {
+
+    if (isImmutable(value)) {
+      this.setAttribute(value.get('attribute'));
+      this.setGrantType(value.get('grantType'));
+      this.setMappings(value.get('mappings'));
+    }
+    else if (isDefined(value)) {
+      this.setAttribute(value.attribute);
+      this.setGrantType(value.grantType);
+      this.setMappings(value.mappings);
+    }
+  }
+
+  setAttribute(attribute :?string) :GrantBuilder {
 
     if (!isDefined(attribute) || isEmptyString(attribute)) {
       return this;
     }
 
     if (!isNonEmptyString(attribute)) {
-      throw new Error('invalid parameter: attribute must be a string');
+      throw new Error('invalid parameter: "attribute" must be a string');
     }
 
     this.attribute = attribute;
@@ -82,28 +102,30 @@ export class GrantBuilder {
   setGrantType(grantType :GrantType) :GrantBuilder {
 
     if (!Object.values(GrantTypes).includes(grantType)) {
-      throw new Error('invalid parameter: grantType must be a valid GrantType');
+      throw new Error('invalid parameter: "grantType" must be a valid GrantType');
     }
 
     this.grantType = grantType;
     return this;
   }
 
-  setMappings(mappings :$ReadOnlyArray<string>) :GrantBuilder {
+  setMappings(mappings :?$ReadOnlyArray<string>) :GrantBuilder {
 
-    if (!isDefined(mappings) || isEmptyArray(mappings)) {
+    if (!isDefined(mappings)) {
       return this;
     }
 
-    if (!isNonEmptyStringArray(mappings)) {
-      throw new Error('invalid parameter: mappings must be a non-empty array of strings');
+    if (!isArray(mappings) && !isCollection(mappings)) {
+      throw new Error('invalid parameter: "mappings" must be an array');
     }
 
-    this.mappings = Set().withMutations((set :Set<string>) => {
-      mappings.forEach((mapping :string) => {
-        set.add(mapping);
-      });
-    }).toJS();
+    const set = Set(mappings);
+    if (set.every(isNonEmptyString)) {
+      this.mappings = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "mappings" must be a non-empty array of non-empty strings');
+    }
 
     return this;
   }
@@ -122,40 +144,47 @@ export class GrantBuilder {
       this.mappings = [];
     }
 
-    return new Grant(this.attribute, this.grantType, this.mappings);
+    return new Grant({
+      attribute: this.attribute,
+      grantType: this.grantType,
+      mappings: this.mappings,
+    });
   }
 }
 
-export function isValidGrant(grant :any) :boolean {
+const isValidGrant = (value :any) :boolean => isValidModel(value, GrantBuilder, LOG);
 
-  if (!isDefined(grant)) {
-
-    LOG.error('invalid parameter: grant must be defined', grant);
-    return false;
-  }
-
-  try {
-
-    (new GrantBuilder())
-      .setAttribute(grant.attribute)
-      .setGrantType(grant.grantType)
-      .setMappings(grant.mappings)
-      .build();
-
-    return true;
-  }
-  catch (e) {
-
-    LOG.error(e, grant);
-    return false;
-  }
-}
-
-export function isValidGrantArray(grant :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(grant, isValidGrant);
-}
+export {
+  Grant,
+  GrantBuilder,
+  isValidGrant,
+};
 
 export type {
   GrantObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const GRANT_MOCK = (new GrantBuilder())
+  .setAttribute('attribute')
+  .setGrantType(GrantTypes.MANUAL)
+  .setMappings(['MAPPING_1', 'MAPPING_2'])
+  .build();
+
+function genRandomGrant() {
+  return (new GrantBuilder())
+    .setAttribute(genRandomString())
+    .setGrantType(pickRandomValue(GrantTypes))
+    .setMappings([genRandomString()])
+    .build();
+}
+
+export {
+  GRANT_MOCK,
+  genRandomGrant,
 };

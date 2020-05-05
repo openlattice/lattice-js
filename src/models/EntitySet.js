@@ -2,24 +2,20 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import { Map, Set, fromJS } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  Map,
+  Set,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
 import Logger from '../utils/Logger';
 import { EntitySetFlagTypes } from '../constants/types';
-import {
-  isDefined,
-  isEmptyArray,
-  isEmptyString,
-  isNonEmptyString,
-  isNonEmptyStringArray
-} from '../utils/LangUtils';
-import {
-  isValidTypeArray,
-  isValidUUID,
-  isValidUUIDArray,
-  validateNonEmptyArray,
-} from '../utils/ValidationUtils';
+import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import { genRandomString, genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { EntitySetFlagType } from '../constants/types';
 
 const LOG = new Logger('EntitySet');
@@ -36,11 +32,7 @@ type EntitySetObject = {|
   title :string;
 |};
 
-/**
- * @class EntitySet
- * @memberof lattice
- */
-export default class EntitySet {
+class EntitySet {
 
   contacts :string[];
   description :?string;
@@ -52,43 +44,43 @@ export default class EntitySet {
   organizationId :?UUID;
   title :string;
 
-  constructor(
-    id :?UUID,
-    entityTypeId :UUID,
-    name :string,
-    title :string,
-    description :?string,
-    contacts :string[],
-    linkedEntitySets :?UUID[],
-    flags :?EntitySetFlagType[],
-    organizationId :?UUID,
-  ) {
+  constructor(entitySet :{
+    contacts :string[];
+    description :?string;
+    entityTypeId :UUID;
+    flags :?EntitySetFlagType[];
+    id :?UUID;
+    linkedEntitySets :?UUID[];
+    name :string;
+    organizationId :?UUID;
+    title :string;
+  }) {
 
     // required properties
-    this.entityTypeId = entityTypeId;
-    this.name = name;
-    this.title = title;
-    this.contacts = contacts;
+    this.contacts = entitySet.contacts;
+    this.entityTypeId = entitySet.entityTypeId;
+    this.name = entitySet.name;
+    this.title = entitySet.title;
 
     // optional properties
-    if (isDefined(description)) {
-      this.description = description;
+    if (isDefined(entitySet.description)) {
+      this.description = entitySet.description;
     }
 
-    if (isDefined(id)) {
-      this.id = id;
+    if (isDefined(entitySet.flags)) {
+      this.flags = entitySet.flags;
     }
 
-    if (isDefined(linkedEntitySets)) {
-      this.linkedEntitySets = linkedEntitySets;
+    if (isDefined(entitySet.id)) {
+      this.id = entitySet.id;
     }
 
-    if (isDefined(flags)) {
-      this.flags = flags;
+    if (isDefined(entitySet.linkedEntitySets)) {
+      this.linkedEntitySets = entitySet.linkedEntitySets;
     }
 
-    if (isDefined(organizationId)) {
-      this.organizationId = organizationId;
+    if (isDefined(entitySet.organizationId)) {
+      this.organizationId = entitySet.organizationId;
     }
   }
 
@@ -137,11 +129,7 @@ export default class EntitySet {
   }
 }
 
-/**
- * @class EntitySetBuilder
- * @memberof lattice
- */
-export class EntitySetBuilder {
+class EntitySetBuilder {
 
   contacts :string[];
   description :?string;
@@ -153,47 +141,50 @@ export class EntitySetBuilder {
   organizationId :?UUID;
   title :string;
 
-  setId(entitySetId :?UUID) :EntitySetBuilder {
+  constructor(value :any) {
 
-    if (!isDefined(entitySetId) || isEmptyString(entitySetId)) {
+    if (isImmutable(value)) {
+      this.setContacts(value.get('contacts'));
+      this.setDescription(value.get('description'));
+      this.setEntityTypeId(value.get('entityTypeId'));
+      this.setFlags(value.get('flags'));
+      this.setId(value.get('id'));
+      this.setLinkedEntitySets(value.get('linkedEntitySets'));
+      this.setName(value.get('name'));
+      this.setOrganizationId(value.get('organizationId'));
+      this.setTitle(value.get('title'));
+    }
+    else if (isDefined(value)) {
+      this.setContacts(value.contacts);
+      this.setDescription(value.description);
+      this.setEntityTypeId(value.entityTypeId);
+      this.setFlags(value.flags);
+      this.setId(value.id);
+      this.setLinkedEntitySets(value.linkedEntitySets);
+      this.setName(value.name);
+      this.setOrganizationId(value.organizationId);
+      this.setTitle(value.title);
+    }
+  }
+
+  setContacts(contacts :$ReadOnlyArray<string>) :EntitySetBuilder {
+
+    if (!isDefined(contacts)) {
       return this;
     }
 
-    if (!isValidUUID(entitySetId)) {
-      throw new Error('invalid parameter: entitySetId must be a valid UUID');
+    if (!isArray(contacts) && !isCollection(contacts)) {
+      throw new Error('invalid parameter: "contacts" must be an array');
     }
 
-    this.id = entitySetId;
-    return this;
-  }
-
-  setEntityTypeId(entityTypeId :UUID) :EntitySetBuilder {
-
-    if (!isValidUUID(entityTypeId)) {
-      throw new Error('invalid parameter: entityTypeId must be a valid UUID');
+    const set = Set(contacts);
+    if (set.every(isNonEmptyString)) {
+      this.contacts = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "contacts" must be a non-empty array of non-empty strings');
     }
 
-    this.entityTypeId = entityTypeId;
-    return this;
-  }
-
-  setName(name :string) :EntitySetBuilder {
-
-    if (!isNonEmptyString(name)) {
-      throw new Error('invalid parameter: name must be a non-empty string');
-    }
-
-    this.name = name;
-    return this;
-  }
-
-  setTitle(title :string) :EntitySetBuilder {
-
-    if (!isNonEmptyString(title)) {
-      throw new Error('invalid parameter: title must be a non-empty string');
-    }
-
-    this.title = title;
     return this;
   }
 
@@ -204,69 +195,86 @@ export class EntitySetBuilder {
     }
 
     if (!isNonEmptyString(description)) {
-      throw new Error('invalid parameter: description must be a non-empty string');
+      throw new Error('invalid parameter: "description" must be a non-empty string');
     }
 
     this.description = description;
     return this;
   }
 
-  setContacts(contacts :$ReadOnlyArray<string>) :EntitySetBuilder {
+  setEntityTypeId(entityTypeId :UUID) :EntitySetBuilder {
 
-    if (!isDefined(contacts) || isEmptyArray(contacts)) {
+    if (!isValidUUID(entityTypeId)) {
+      throw new Error('invalid parameter: "entityTypeId" must be a valid UUID');
+    }
+
+    this.entityTypeId = entityTypeId;
+    return this;
+  }
+
+  setFlags(flags :?$ReadOnlyArray<EntitySetFlagType>) :EntitySetBuilder {
+
+    if (!isDefined(flags)) {
       return this;
     }
 
-    if (!isNonEmptyStringArray(contacts)) {
-      throw new Error('invalid parameter: contacts must be an array of strings');
+    if (!isArray(flags) && !isCollection(flags)) {
+      throw new Error('invalid parameter: "flags" must be an array');
     }
 
-    this.contacts = Set().withMutations((set :Set<string>) => {
-      contacts.forEach((contact :string) => {
-        set.add(contact);
-      });
-    }).toJS();
+    const set = Set(flags);
+    if (set.every((flag) => isNonEmptyString(flag) && EntitySetFlagTypes[flag])) {
+      this.flags = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "flags" must be an array of EntitySetFlagTypes');
+    }
 
+    return this;
+  }
+
+  setId(entitySetId :?UUID) :EntitySetBuilder {
+
+    if (!isDefined(entitySetId) || isEmptyString(entitySetId)) {
+      return this;
+    }
+
+    if (!isValidUUID(entitySetId)) {
+      throw new Error('invalid parameter: "entitySetId" must be a valid UUID');
+    }
+
+    this.id = entitySetId;
     return this;
   }
 
   setLinkedEntitySets(entitySetIds :?$ReadOnlyArray<UUID>) :EntitySetBuilder {
 
-    if (!isDefined(entitySetIds) || isEmptyArray(entitySetIds)) {
+    if (!isDefined(entitySetIds)) {
       return this;
     }
 
-    const ids = entitySetIds || [];
-    if (!isValidUUIDArray(ids)) {
-      throw new Error('invalid parameter: entitySetIds must be an array of valid UUIDs');
+    if (!isArray(entitySetIds) && !isCollection(entitySetIds)) {
+      throw new Error('invalid parameter: "entitySetIds" must be an array');
     }
 
-    this.linkedEntitySets = Set().withMutations((set :Set<UUID>) => {
-      ids.forEach((entitySetId :UUID) => {
-        set.add(entitySetId);
-      });
-    }).toJS();
+    const set = Set(entitySetIds);
+    if (set.every(isValidUUID)) {
+      this.linkedEntitySets = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "entitySetIds" must be a non-empty array of UUIDs');
+    }
 
     return this;
   }
 
-  setFlags(entitySetFlags :?$ReadOnlyArray<EntitySetFlagType>) :EntitySetBuilder {
+  setName(name :string) :EntitySetBuilder {
 
-    if (!isDefined(entitySetFlags) || isEmptyArray(entitySetFlags)) {
-      return this;
+    if (!isNonEmptyString(name)) {
+      throw new Error('invalid parameter: "name" must be a non-empty string');
     }
 
-    const flags = entitySetFlags || [];
-    if (!isValidTypeArray(flags, EntitySetFlagTypes)) {
-      throw new Error('invalid parameter: flags must be an array of valid EntitySetFlagTypes');
-    }
-
-    this.flags = Set().withMutations((set :Set<EntitySetFlagType>) => {
-      flags.forEach((flag :EntitySetFlagType) => {
-        set.add(flag);
-      });
-    }).toJS();
-
+    this.name = name;
     return this;
   }
 
@@ -277,100 +285,100 @@ export class EntitySetBuilder {
     }
 
     if (!isValidUUID(organizationId)) {
-      throw new Error('invalid parameter: organizationId must be a valid UUID');
+      throw new Error('invalid parameter: "organizationId" must be a valid UUID');
     }
 
     this.organizationId = organizationId;
     return this;
   }
 
+  setTitle(title :string) :EntitySetBuilder {
+
+    if (!isNonEmptyString(title)) {
+      throw new Error('invalid parameter: "title" must be a non-empty string');
+    }
+
+    this.title = title;
+    return this;
+  }
+
   build() :EntitySet {
 
     if (!this.entityTypeId) {
-      throw new Error('missing property: entityTypeId is a required property');
+      throw new Error('missing property: "entityTypeId" is a required property');
     }
 
     if (!this.name) {
-      throw new Error('missing property: name is a required property');
+      throw new Error('missing property: "name" is a required property');
     }
 
     if (!this.title) {
-      throw new Error('missing property: title is a required property');
+      throw new Error('missing property: "title" is a required property');
     }
 
     if (!this.contacts) {
       this.contacts = [];
     }
 
-    return new EntitySet(
-      this.id,
-      this.entityTypeId,
-      this.name,
-      this.title,
-      this.description,
-      this.contacts,
-      this.linkedEntitySets,
-      this.flags,
-      this.organizationId,
-    );
+    return new EntitySet({
+      contacts: this.contacts,
+      description: this.description,
+      entityTypeId: this.entityTypeId,
+      flags: this.flags,
+      id: this.id,
+      linkedEntitySets: this.linkedEntitySets,
+      name: this.name,
+      organizationId: this.organizationId,
+      title: this.title,
+    });
   }
 }
 
-export function isValidEntitySet(entitySet :any) :boolean {
+const isValidEntitySet = (value :any) :boolean => isValidModel(value, EntitySetBuilder, LOG);
 
-  if (!isDefined(entitySet)) {
-    LOG.error('invalid parameter: entitySet must be defined', entitySet);
-    return false;
-  }
-
-  try {
-
-    const entitySetBuilder = new EntitySetBuilder();
-
-    // required properties
-    entitySetBuilder
-      .setContacts(entitySet.contacts)
-      .setEntityTypeId(entitySet.entityTypeId)
-      .setName(entitySet.name)
-      .setTitle(entitySet.title);
-
-    // optional properties
-    if (has(entitySet, 'description')) {
-      entitySetBuilder.setDescription(entitySet.description);
-    }
-
-    if (has(entitySet, 'flags')) {
-      entitySetBuilder.setFlags(entitySet.flags);
-    }
-
-    if (has(entitySet, 'id')) {
-      entitySetBuilder.setId(entitySet.id);
-    }
-
-    if (has(entitySet, 'linkedEntitySets')) {
-      entitySetBuilder.setLinkedEntitySets(entitySet.linkedEntitySets);
-    }
-
-    if (has(entitySet, 'organizationId')) {
-      entitySetBuilder.setOrganizationId(entitySet.organizationId);
-    }
-
-    entitySetBuilder.build();
-
-    return true;
-  }
-  catch (e) {
-
-    LOG.error(e, entitySet);
-    return false;
-  }
-}
-
-export function isValidEntitySetArray(entitySets :$ReadOnlyArray<any>) :boolean {
-
-  return validateNonEmptyArray(entitySets, isValidEntitySet);
-}
+export {
+  EntitySet,
+  EntitySetBuilder,
+  isValidEntitySet,
+};
 
 export type {
   EntitySetObject,
+};
+
+/*
+ *
+ * testing
+ *
+ */
+
+const ENTITY_SET_MOCK = new EntitySetBuilder()
+  .setContacts(['OPENLATTICE'])
+  .setDescription('MockEntitySetDescription')
+  .setEntityTypeId('78ad8735-d5dc-42ab-96d9-677bca55e60f')
+  .setFlags([EntitySetFlagTypes.ASSOCIATION])
+  .setId('6685abaf-5508-4f34-a3c7-46b687f66ddd')
+  .setLinkedEntitySets(['cf72e97f-109c-46a1-bb89-93a8753fd7ac'])
+  .setName('MockEntitySetName')
+  .setOrganizationId('9b93bc80-79c3-44c8-807c-ada1a8d6484f')
+  .setTitle('MockEntitySetTitle')
+  .build();
+
+function genRandomEntitySet() {
+  return new EntitySetBuilder()
+    .setContacts([genRandomString()])
+    .setDescription(genRandomString())
+    .setEntityTypeId(genRandomUUID())
+    .setFlags([pickRandomValue(EntitySetFlagTypes)])
+    .setId(genRandomUUID())
+    .setLinkedEntitySets([genRandomUUID(), genRandomUUID()])
+    .setName(genRandomString())
+    .setOrganizationId(genRandomUUID())
+    .setTitle(genRandomString())
+    .build();
+}
+
+export {
+  ENTITY_SET_MOCK,
+  genRandomEntitySet,
 };
