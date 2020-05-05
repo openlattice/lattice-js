@@ -7,5 +7,5 @@ import getApiAxiosInstance from './getApiAxiosInstance';
 
 export {
   getApiBaseUrl,
-  getApiAxiosInstance
+  getApiAxiosInstance,
 };

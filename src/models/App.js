@@ -2,29 +2,32 @@
  * @flow
  */
 
-import has from 'lodash/has';
-import { Set } from 'immutable';
+import isArray from 'lodash/isArray';
+import {
+  Map,
+  Set,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
 import Logger from '../utils/Logger';
-
-import {
-  isDefined,
-  isEmptyString,
-  isNonEmptyString
-} from '../utils/LangUtils';
-
-import {
-  isValidUUID,
-  isValidUUIDArray
-} from '../utils/ValidationUtils';
+import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('App');
 
-/**
- * @class App
- * @memberof lattice
- */
-export default class App {
+type AppObject = {|
+  appTypeIds :UUID[];
+  description ?:string;
+  id ?:UUID;
+  name :string;
+  title :string;
+  url :string;
+|};
+
+class App {
 
   appTypeIds :UUID[];
   description :?string;
@@ -33,39 +36,65 @@ export default class App {
   title :string;
   url :string;
 
-
-  constructor(
-    appTypeIds :UUID[],
-    description :?string,
-    id :?UUID,
-    name :string,
-    title :string,
-    url :string
-  ) {
+  constructor(app :{
+    appTypeIds :UUID[];
+    description :?string;
+    id :?UUID;
+    name :string;
+    title :string;
+    url :string;
+  }) {
 
     // required properties
-    this.appTypeIds = appTypeIds;
-    this.name = name;
-    this.title = title;
-    this.url = url;
+    this.appTypeIds = app.appTypeIds;
+    this.name = app.name;
+    this.title = app.title;
+    this.url = app.url;
 
     // optional properties
-    if (isDefined(id)) {
-      this.id = id;
+    if (isDefined(app.id)) {
+      this.id = app.id;
     }
 
-    if (isDefined(description)) {
-      this.description = description;
+    if (isDefined(app.description)) {
+      this.description = app.description;
+    }
+  }
+
+  toImmutable() :Map<*, *> {
+
+    return fromJS(this.toObject());
+  }
+
+  toObject() :AppObject {
+
+    // required properties
+    const appObj :AppObject = {
+      appTypeIds: this.appTypeIds,
+      name: this.name,
+      title: this.title,
+      url: this.url,
+    };
+
+    // optional properties
+    if (isDefined(this.id)) {
+      appObj.id = this.id;
     }
 
+    if (isDefined(this.description)) {
+      appObj.description = this.description;
+    }
+
+    return appObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
-/**
- * @class AppBuilder
- * @memberof lattice
- */
-export class AppBuilder {
+class AppBuilder {
 
   appTypeIds :UUID[];
   description :?string;
@@ -74,51 +103,79 @@ export class AppBuilder {
   title :string;
   url :string;
 
-  setAppTypeIds(appTypeIds :UUID[]) :AppBuilder {
-    if (!isValidUUIDArray(appTypeIds)) {
-      throw new Error('invalid parameter: appTypeIds must be a valid UUID array');
+  constructor(value :any) {
+
+    if (isImmutable(value)) {
+      this.setAppTypeIds(value.get('appTypeIds'));
+      this.setDescription(value.get('description'));
+      this.setId(value.get('id'));
+      this.setName(value.get('name'));
+      this.setTitle(value.get('title'));
+      this.setUrl(value.get('url'));
+    }
+    else if (isDefined(value)) {
+      this.setAppTypeIds(value.appTypeIds);
+      this.setDescription(value.description);
+      this.setId(value.id);
+      this.setName(value.name);
+      this.setTitle(value.title);
+      this.setUrl(value.url);
+    }
+  }
+
+  setAppTypeIds(appTypeIds :$ReadOnlyArray<UUID>) :AppBuilder {
+
+    if (!isDefined(appTypeIds)) {
+      return this;
     }
 
-    this.appTypeIds = Set().withMutations((set :Set<UUID>) => {
-      appTypeIds.forEach((appTypeId :UUID) => {
-        set.add(appTypeId);
-      });
-    }).toJS();
+    if (!isArray(appTypeIds) && !isCollection(appTypeIds)) {
+      throw new Error('invalid parameter: "appTypeIds" must be an array');
+    }
+
+    const set = Set(appTypeIds);
+    if (set.every(isValidUUID)) {
+      this.appTypeIds = set.toJS();
+    }
+    else {
+      throw new Error('invalid parameter: "appTypeIds" must be a non-empty array of UUIDs');
+    }
 
     return this;
   }
 
   setDescription(description :?string) :AppBuilder {
+
     if (!isDefined(description) || isEmptyString(description)) {
       return this;
     }
 
     if (!isNonEmptyString(description)) {
-      throw new Error('invalid parameter: description must be a non-empty string');
+      throw new Error('invalid parameter: "description" must be a non-empty string');
     }
 
     this.description = description;
     return this;
   }
 
-  setId(appId :?UUID) :AppBuilder {
+  setId(id :?UUID) :AppBuilder {
 
-    if (!isDefined(appId) || isEmptyString(appId)) {
+    if (!isDefined(id) || isEmptyString(id)) {
       return this;
     }
 
-    if (!isValidUUID(appId)) {
-      throw new Error('invalid parameter: appId must be a valid UUID');
+    if (!isValidUUID(id)) {
+      throw new Error('invalid parameter: "id" must be a valid UUID');
     }
 
-    this.id = appId;
+    this.id = id;
     return this;
   }
 
   setName(name :string) :AppBuilder {
 
     if (!isNonEmptyString(name)) {
-      throw new Error('invalid parameter: name must be a non-empty string');
+      throw new Error('invalid parameter: "name" must be a non-empty string');
     }
 
     this.name = name;
@@ -126,8 +183,9 @@ export class AppBuilder {
   }
 
   setTitle(title :string) :AppBuilder {
+
     if (!isNonEmptyString(title)) {
-      throw new Error('invalid parameter: title must be a non-empty string');
+      throw new Error('invalid parameter: "title" must be a non-empty string');
     }
 
     this.title = title;
@@ -135,8 +193,9 @@ export class AppBuilder {
   }
 
   setUrl(url :string) :AppBuilder {
+
     if (!isNonEmptyString(url)) {
-      throw new Error('invalid parameter: url must be a non-empty string');
+      throw new Error('invalid parameter: "url" must be a non-empty string');
     }
 
     this.url = url;
@@ -146,68 +205,71 @@ export class AppBuilder {
   build() :App {
 
     if (!this.appTypeIds) {
-      throw new Error('missing property: appTypeIds is a required property');
+      this.appTypeIds = [];
     }
 
     if (!this.name) {
-      throw new Error('missing property: name is a required property');
+      throw new Error('missing property: "name" is a required property');
     }
 
     if (!this.title) {
-      throw new Error('missing property: title is a required property');
+      throw new Error('missing property: "title" is a required property');
     }
 
     if (!this.url) {
-      throw new Error('missing property: url is a required property');
+      throw new Error('missing property: "url" is a required property');
     }
 
-    return new App(
-      this.appTypeIds,
-      this.description,
-      this.id,
-      this.name,
-      this.title,
-      this.url
-    );
+    return new App({
+      appTypeIds: this.appTypeIds,
+      description: this.description,
+      id: this.id,
+      name: this.name,
+      title: this.title,
+      url: this.url,
+    });
   }
 }
 
-export function isValidApp(app :any) :boolean {
+const isValidApp = (value :any) :boolean => isValidModel(value, AppBuilder, LOG);
 
-  if (!isDefined(app)) {
+export {
+  App,
+  AppBuilder,
+  isValidApp,
+};
 
-    LOG.error('invalid parameter: app must be defined', app);
-    return false;
-  }
+export type {
+  AppObject,
+};
 
-  try {
+/*
+ *
+ * testing
+ *
+ */
 
-    const appBuilder = new AppBuilder();
+const APP_MOCK = (new AppBuilder())
+  .setAppTypeIds(['c3dbd929-91c9-4b48-9545-a634038f34ba'])
+  .setDescription('MockAppDescription')
+  .setId('53f45e4b-48a4-4089-8932-3655a5b0d50a')
+  .setName('MockAppName')
+  .setTitle('MockAppTitle')
+  .setUrl('https://openlattice.com')
+  .build();
 
-    // required properties
-    appBuilder
-      .setAppTypeIds(app.appTypeIds)
-      .setName(app.name)
-      .setTitle(app.title)
-      .setUrl(app.url)
-      .build();
-
-    // optional properties
-    if (has(app, 'id')) {
-      appBuilder.setId(app.id);
-    }
-
-    if (has(app, 'description')) {
-      appBuilder.setDescription(app.description);
-    }
-
-    appBuilder.build();
-
-    return true;
-  }
-  catch (e) {
-
-    LOG.error(e, app);
-    return false;
-  }
+function genRandomApp() {
+  return (new AppBuilder())
+    .setAppTypeIds([genRandomUUID()])
+    .setDescription(genRandomString())
+    .setId(genRandomUUID())
+    .setName(genRandomString())
+    .setTitle(genRandomString())
+    .setUrl(genRandomString())
+    .build();
 }
+
+export {
+  APP_MOCK,
+  genRandomApp,
+};

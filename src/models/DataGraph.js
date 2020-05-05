@@ -1,117 +1,202 @@
 /*
  * @flow
  */
-import { Map, fromJS } from 'immutable';
+
+import {
+  Map,
+  fromJS,
+  isCollection,
+  isImmutable,
+} from 'immutable';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidMultimap, isValidOrEmptyMultimap, isValidUUID } from '../utils/ValidationUtils';
-
+import {
+  isValidModel,
+  isValidMultimap,
+  isValidOrEmptyMultimap,
+  isValidUUID,
+} from '../utils/ValidationUtils';
+import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('DataGraph');
 
-/**
- * @class DataGraph
- * @memberof lattice
- */
-export default class DataGraph {
+type DataGraphObject = {|
+  associations :Object;
+  entities :Object;
+|};
+
+class DataGraph {
 
   associations :Object;
   entities :Object;
 
-  constructor(associations :Object, entities :Object) {
+  constructor(dataGraph :{
+    associations :Object;
+    entities :Object;
+  }) {
 
-    // required properties
-    this.associations = associations;
-    this.entities = entities;
+    this.associations = dataGraph.associations;
+    this.entities = dataGraph.entities;
   }
 
-  asImmutable() :Map<string, Object> {
+  toImmutable() :Map<*, *> {
 
-    const plainObj = {};
-
-    // required properties
-    plainObj.associations = this.associations;
-    plainObj.entities = this.entities;
-
-    return fromJS(plainObj);
+    return fromJS(this.toObject());
   }
 
-  valueOf() {
-    return JSON.stringify({
+  toObject() :DataGraphObject {
+
+    const aceObj :DataGraphObject = {
       associations: this.associations,
       entities: this.entities,
-    });
+    };
+
+    return aceObj;
+  }
+
+  valueOf() :number {
+
+    return this.toImmutable().hashCode();
   }
 }
 
-/**
- * @class DataGraphBuilder
- * @memberof lattice
- */
-export class DataGraphBuilder {
+class DataGraphBuilder {
 
-  associations :Object; // ListMultimap<UUID, DataAssociation>
-  entities :Object; // ListMultimap<UUID, SetMultimap<UUID, Object>>
+  associations :Object;
+  entities :Object;
 
-  setAssociations(associations :Object) :DataGraphBuilder {
+  constructor(value :any) {
 
-    if (!isValidOrEmptyMultimap(associations, isValidUUID)) {
-      throw new Error('invalid parameter: associations must be a non-empty object where all values are multimaps');
+    if (isImmutable(value)) {
+      this.setAssociations(value.get('associations'));
+      this.setEntities(value.get('entities'));
+    }
+    else if (isDefined(value)) {
+      this.setAssociations(value.associations);
+      this.setEntities(value.entities);
+    }
+  }
+
+  setAssociations(associations :?Object) :DataGraphBuilder {
+
+    if (!isDefined(associations)) {
+      return this;
     }
 
-    // TODO: still need to validate that values are valid DataAssociation objects
+    // TODO: still need to validate that associations are valid DataAssociation objects
 
-    this.associations = associations;
+    let theAssociations = associations;
+    if (isCollection(associations)) {
+      // $FlowFixMe
+      theAssociations = associations.toJS();
+    }
+
+    if (!isValidOrEmptyMultimap(theAssociations, isValidUUID)) {
+      throw new Error('invalid parameter: "associations" must be a non-empty object where all values are multimaps');
+    }
+
+    this.associations = theAssociations;
     return this;
   }
 
   setEntities(entities :Object) :DataGraphBuilder {
 
-    if (!isValidMultimap(entities, isValidUUID)) {
-      throw new Error('invalid parameter: entities must be a non-empty object where all values are multimaps');
+    // TODO: still need to validate that entities are valid multimap objects
+
+    let theEntities = entities;
+    if (isCollection(entities)) {
+      theEntities = entities.toJS();
     }
 
-    // TODO: still need to validate that values are valid multimap objects
+    if (!isValidMultimap(theEntities, isValidUUID)) {
+      throw new Error('invalid parameter: "entities" must be a non-empty object where all values are multimaps');
+    }
 
-    this.entities = entities;
+    this.entities = theEntities;
     return this;
   }
 
   build() :DataGraph {
 
     if (!this.associations) {
-      throw new Error('missing property: associations is a required property');
+      this.associations = {};
     }
 
     if (!this.entities) {
-      throw new Error('missing property: entities is a required property');
+      throw new Error('missing property: "entities" is a required property');
     }
 
-    return new DataGraph(this.associations, this.entities);
+    return new DataGraph({
+      associations: this.associations,
+      entities: this.entities,
+    });
   }
 }
 
-export function isValidDataGraph(data :any) :boolean {
+const isValidDataGraph = (value :any) :boolean => isValidModel(value, DataGraphBuilder, LOG);
 
-  if (!isDefined(data)) {
+export {
+  DataGraph,
+  DataGraphBuilder,
+  isValidDataGraph,
+};
 
-    LOG.error('invalid parameter: data must be defined', data);
-    return false;
-  }
+export type {
+  DataGraphObject,
+};
 
-  try {
+/*
+ *
+ * testing
+ *
+ */
 
-    (new DataGraphBuilder())
-      .setAssociations(data.associations)
-      .setEntities(data.entities)
-      .build();
+const DATA_GRAPH_MOCK = (new DataGraphBuilder())
+  .setAssociations({
+    'f914f31a-6486-4717-929d-dccecab05c47': [{
+      data: {
+        '87f38161-9c95-4166-9721-8514882dac22': ['2020-02-02']
+      },
+      dstEntityKeyId: 'ff0e0000-0000-0000-8000-00000000fc5e',
+      dstEntitySetId: 'ccdaba20-f6ba-401c-a63d-17c6578ffb67',
+      srcEntityIndex: 0,
+      srcEntitySetId: 'd6760122-eaf7-42e6-9339-923df3f4790a',
+    }]
+  })
+  .setEntities({
+    'd6760122-eaf7-42e6-9339-923df3f4790a': [{
+      'a791ca8d-b433-4a2b-be04-43d43cea14a7': ['VALUE_1'],
+      '2a45205e-703c-43eb-a060-921bf7245f6a': ['VALUE_2', 'VALUE_3'],
+    }],
+  })
+  .build();
 
-    return true;
-  }
-  catch (e) {
-
-    LOG.error(e, data);
-    return false;
-  }
+function genRandomDataGraph() {
+  return (new DataGraphBuilder())
+    .setAssociations({
+      [genRandomUUID()]: [{
+        dstEntityIndex: 2,
+        dstEntityKeyId: genRandomUUID(),
+        dstEntitySetId: genRandomUUID(),
+        srcEntityIndex: 4,
+        srcEntityKeyId: genRandomUUID(),
+        srcEntitySetId: genRandomUUID(),
+      }],
+    })
+    .setEntities({
+      [genRandomUUID()]: [{
+        [genRandomUUID()]: [genRandomString()],
+        [genRandomUUID()]: [genRandomString(), genRandomString()],
+      }],
+      [genRandomUUID()]: [{
+        [genRandomUUID()]: [genRandomString()],
+      }],
+    })
+    .build();
 }
+
+export {
+  DATA_GRAPH_MOCK,
+  genRandomDataGraph,
+};

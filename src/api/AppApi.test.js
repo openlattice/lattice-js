@@ -1,458 +1,106 @@
-/* eslint-disable no-use-before-define */
-
 import * as AppApi from './AppApi';
-import * as AxiosUtils from '../utils/axios';
-import PermissionTypes from '../constants/types/PermissionTypes';
-import { APP_API } from '../constants/ApiNames';
-import { INVALID_PARAMS, INVALID_PARAMS_SS } from '../utils/testing/Invalid';
-import {
-  MOCK_APP_DM,
-  MOCK_APP_TYPE_DM,
-  MOCK_ENTITY_SET,
-  MOCK_FQN,
-  MOCK_ORGANIZATION,
-} from '../utils/testing/MockData';
-import { genRandomString, genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
+import * as AxiosUtils from '../utils/axios';
+import { APP_API } from '../constants/ApiNames';
 import {
   BULK_PATH,
   CONFIG_PATH,
   INSTALL_PATH,
   LOOKUP_PATH,
   TYPE_PATH,
-  UPDATE_PATH
 } from '../constants/UrlConstants';
+import { APP_MOCK } from '../models/App';
+import { APP_TYPE_MOCK } from '../models/AppType';
+import { ORGANIZATION_MOCK as ORG_MOCK } from '../models/Organization';
+import { runTestSuite } from '../utils/testing/APITestSuite';
+import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
-import {
-  testApiShouldCatchRejectedPromise,
-  testApiShouldNotThrowOnInvalidParameters,
-  testApiShouldRejectOnInvalidParameters,
-  testApiShouldReturnPromise,
-  testApiShouldSendCorrectHttpRequest,
-  testApiShouldUseCorrectAxiosInstance
-} from '../utils/testing/TestUtils';
-
-/*
- * mocks
- */
+const MOCK_PREFIX = 'mock-prefix';
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
 
-/*
- * tests
- */
-
-describe('AppApi', () => {
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  testGetApps();
-  testGetApp();
-  testGetAppByName();
-  testGetAppTypesForAppTypeIds();
-  testGetConfigurations();
-  testInstallApp();
-  testCreateApp();
-  testCreateAppType();
-  testGetAppType();
-  testGetAppTypeByFqn();
-  testDeleteApp();
-  testDeleteAppType();
-  testAddAppTypeToApp();
-  testRemoveAppTypeFromApp();
-  testUpdateAppEntitySetConfig();
-  testUpdateAppConfigPermissions();
-  testUpdateAppMetadata();
-  testUpdateAppTypeMetadata();
+describe(APP_API, () => {
+  runTestSuite(
+    AppApi,
+    APP_API,
+    {
+      getAllApps: {
+        '': { params: { optional: [], valid: [] } },
+        '()': {
+          method: 'get',
+          params: {
+            axios: ['/'],
+            valid: [],
+          },
+        },
+      },
+      getApp: {
+        '': { params: { optional: [false], valid: [APP_MOCK.name] } },
+        '(appId)': {
+          method: 'get',
+          params: {
+            axios: [`/${APP_MOCK.id}`],
+            valid: [APP_MOCK.id],
+          },
+        },
+        '(appName)': {
+          method: 'get',
+          params: {
+            axios: [`/${LOOKUP_PATH}/${APP_MOCK.name}`],
+            valid: [APP_MOCK.name],
+          },
+        },
+      },
+      getAppConfigs: {
+        '': { params: { optional: [false], valid: [APP_MOCK.id] } },
+        '(appId)': {
+          method: 'get',
+          params: {
+            axios: [`/${CONFIG_PATH}/${APP_MOCK.id}`],
+            valid: [APP_MOCK.id],
+          },
+        },
+      },
+      getAppType: {
+        '': { params: { optional: [false], valid: [APP_TYPE_MOCK.id] } },
+        '(appTypeId)': {
+          method: 'get',
+          params: {
+            axios: [`/${TYPE_PATH}/${APP_TYPE_MOCK.id}`],
+            valid: [APP_TYPE_MOCK.id],
+          },
+        },
+        '(appTypeFQN)': {
+          method: 'get',
+          params: {
+            axios: [
+              `/${TYPE_PATH}/${LOOKUP_PATH}/${APP_TYPE_MOCK.type.getNamespace()}/${APP_TYPE_MOCK.type.getName()}`
+            ],
+            valid: [APP_TYPE_MOCK.type],
+          },
+        },
+      },
+      getAppTypes: {
+        '': { params: { optional: [false], valid: [[APP_TYPE_MOCK.id]] } },
+        '(appTypeIds)': {
+          method: 'post',
+          params: {
+            axios: [`/${TYPE_PATH}/${BULK_PATH}`, [APP_TYPE_MOCK.id]],
+            valid: [[APP_TYPE_MOCK.id]],
+          },
+        },
+      },
+      installApp: {
+        '': { params: { optional: [false, false, false], valid: [APP_MOCK.id, ORG_MOCK.id, MOCK_PREFIX] } },
+        '(appId, organizationId, prefix)': {
+          method: 'get',
+          params: {
+            axios: [`/${INSTALL_PATH}/${APP_MOCK.id}/${ORG_MOCK.id}/${MOCK_PREFIX}`],
+            valid: [APP_MOCK.id, ORG_MOCK.id, MOCK_PREFIX],
+          },
+        },
+      },
+    },
+  );
 });
-
-function testGetApps() {
-
-  describe('getApps()', () => {
-
-    const fnToTest = AppApi.getApps;
-
-    const validParams = [];
-    const invalidParams = [];
-    const axiosParams = ['/'];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetApp() {
-
-  describe('getApp()', () => {
-
-    const fnToTest = AppApi.getApp;
-    const mockId = genRandomUUID();
-
-    const validParams = [mockId];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${mockId}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetAppByName() {
-
-  describe('getAppByName', () => {
-
-    const fnToTest = AppApi.getAppByName;
-    const mockName = genRandomString();
-
-    const validParams = [mockName];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${LOOKUP_PATH}/${mockName}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetAppTypesForAppTypeIds() {
-
-  describe('getAppTypesForAppTypeIds', () => {
-
-    const fnToTest = AppApi.getAppTypesForAppTypeIds;
-    const mockId = genRandomUUID();
-
-    const validParams = [[mockId]];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [
-      `/${TYPE_PATH}/${BULK_PATH}`,
-      [mockId]
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetConfigurations() {
-
-  describe('getConfigurations()', () => {
-
-    const fnToTest = AppApi.getConfigurations;
-    const mockId = genRandomUUID();
-
-    const validParams = [mockId];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${CONFIG_PATH}/${mockId}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testInstallApp() {
-
-  describe('installApp()', () => {
-
-    const fnToTest = AppApi.installApp;
-    const mockId = genRandomUUID();
-    const mockPrefix = genRandomString();
-
-    const validParams = [
-      mockId,
-      MOCK_ORGANIZATION.id,
-      mockPrefix
-    ];
-
-    const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS
-    ];
-
-    const axiosParams = [
-      `/${INSTALL_PATH}/${mockId}/${MOCK_ORGANIZATION.id}/${mockPrefix}`
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testCreateApp() {
-
-  describe('createApp()', () => {
-
-    const fnToTest = AppApi.createApp;
-
-    const validParams = [MOCK_APP_DM];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = ['/', MOCK_APP_DM];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testCreateAppType() {
-
-  describe('createAppType()', () => {
-
-    const fnToTest = AppApi.createAppType;
-
-    const validParams = [MOCK_APP_TYPE_DM];
-    const invalidParams = [INVALID_PARAMS];
-    const axiosParams = [`/${TYPE_PATH}`, MOCK_APP_TYPE_DM];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetAppType() {
-
-  describe('getAppType()', () => {
-
-    const fnToTest = AppApi.getAppType;
-
-    const validParams = [MOCK_APP_TYPE_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${TYPE_PATH}/${MOCK_APP_TYPE_DM.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testGetAppTypeByFqn() {
-
-  describe('getAppTypeByFqn()', () => {
-
-    const fnToTest = AppApi.getAppTypeByFqn;
-
-    const validParams = [MOCK_FQN];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${TYPE_PATH}/${LOOKUP_PATH}/${MOCK_FQN.namespace}/${MOCK_FQN.name}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testDeleteApp() {
-
-  describe('deleteApp()', () => {
-
-    const fnToTest = AppApi.deleteApp;
-
-    const validParams = [MOCK_APP_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${MOCK_APP_DM.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testDeleteAppType() {
-
-  describe('deleteAppType()', () => {
-
-    const fnToTest = AppApi.deleteAppType;
-
-    const validParams = [MOCK_APP_TYPE_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS];
-    const axiosParams = [`/${TYPE_PATH}/${MOCK_APP_TYPE_DM.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testAddAppTypeToApp() {
-
-  describe('addAppTypeToApp()', () => {
-
-    const fnToTest = AppApi.addAppTypeToApp;
-
-    const validParams = [MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testRemoveAppTypeFromApp() {
-
-  describe('removeAppTypeFromApp()', () => {
-
-    const fnToTest = AppApi.removeAppTypeFromApp;
-
-    const validParams = [MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}`];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'delete');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testUpdateAppEntitySetConfig() {
-
-  describe('updateAppEntitySetConfig()', () => {
-
-    const fnToTest = AppApi.updateAppEntitySetConfig;
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, MOCK_ENTITY_SET.id];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS, INVALID_PARAMS_SS];
-    const axiosParams = [
-      `/${UPDATE_PATH}/${MOCK_ORGANIZATION.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}/${MOCK_ENTITY_SET.id}`
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'get');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testUpdateAppConfigPermissions() {
-
-  describe('updateAppConfigPermissions()', () => {
-
-    const fnToTest = AppApi.updateAppConfigPermissions;
-    const permissions = [PermissionTypes.READ, PermissionTypes.WRITE];
-
-    const validParams = [MOCK_ORGANIZATION.id, MOCK_APP_DM.id, MOCK_APP_TYPE_DM.id, permissions];
-    const invalidParams = [
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS,
-      INVALID_PARAMS_SS,
-      [INVALID_PARAMS_SS, INVALID_PARAMS_SS]
-    ];
-    const axiosParams = [
-      `/${UPDATE_PATH}/${MOCK_ORGANIZATION.id}/${MOCK_APP_DM.id}/${MOCK_APP_TYPE_DM.id}`,
-      permissions
-    ];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testUpdateAppMetadata() {
-
-  describe('updateAppMetadata()', () => {
-
-    const fnToTest = AppApi.updateAppMetadata;
-    const MOCK_METADATA_UPDATE = {
-      appTypeIds: [genRandomUUID(), genRandomUUID()],
-      description: genRandomString(),
-      id: genRandomUUID(),
-      name: genRandomString(),
-      title: genRandomString(),
-      url: genRandomString()
-    };
-
-    const validParams = [MOCK_APP_DM.id, MOCK_METADATA_UPDATE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${UPDATE_PATH}/${MOCK_APP_DM.id}`, MOCK_METADATA_UPDATE];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
-
-function testUpdateAppTypeMetadata() {
-
-  describe('updateAppTypeMetadata()', () => {
-
-    const fnToTest = AppApi.updateAppTypeMetadata;
-    const MOCK_METADATA_UPDATE = {
-      description: genRandomString(),
-      entityTypeId: genRandomUUID(),
-      id: genRandomUUID(),
-      title: genRandomString(),
-      type: MOCK_FQN
-    };
-
-    const validParams = [MOCK_APP_TYPE_DM.id, MOCK_METADATA_UPDATE];
-    const invalidParams = [INVALID_PARAMS_SS, INVALID_PARAMS];
-    const axiosParams = [`/${TYPE_PATH}/${UPDATE_PATH}/${MOCK_APP_TYPE_DM.id}`, MOCK_METADATA_UPDATE];
-
-    testApiShouldReturnPromise(fnToTest, validParams);
-    testApiShouldUseCorrectAxiosInstance(fnToTest, validParams, APP_API);
-    testApiShouldNotThrowOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldRejectOnInvalidParameters(fnToTest, validParams, invalidParams);
-    testApiShouldSendCorrectHttpRequest(fnToTest, validParams, axiosParams, 'post');
-    testApiShouldCatchRejectedPromise(fnToTest, validParams);
-  });
-}
