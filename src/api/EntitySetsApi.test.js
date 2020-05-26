@@ -4,6 +4,8 @@ import * as AxiosUtils from '../utils/axios';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import {
   ALL_PATH,
+  BY_ID_PATH,
+  BY_NAME_PATH,
   IDS_PATH,
   METADATA_PATH,
   PROPERTIES_PATH,
@@ -78,6 +80,37 @@ describe(ENTITY_SETS_API, () => {
           params: {
             axios: [`/${IDS_PATH}`, [ENTITY_SET_MOCK.name]],
             valid: [[ENTITY_SET_MOCK.name]],
+          },
+        },
+      },
+      getEntitySets: {
+        '': { params: { optional: [false], valid: [[ENTITY_SET_MOCK.id]] } },
+        '(entitySetIds)': {
+          method: 'post',
+          params: {
+            axios: [`/${BY_ID_PATH}`, [ENTITY_SET_MOCK.id]],
+            valid: [[ENTITY_SET_MOCK.id]],
+          },
+        },
+        '(entitySetIds) - duplicates': {
+          method: 'post',
+          params: {
+            axios: [`/${BY_ID_PATH}`, [ENTITY_SET_MOCK.id]],
+            valid: [[ENTITY_SET_MOCK.id, ENTITY_SET_MOCK.id]],
+          },
+        },
+        '(entitySetNames)': {
+          method: 'post',
+          params: {
+            axios: [`/${BY_NAME_PATH}`, [ENTITY_SET_MOCK.name]],
+            valid: [[ENTITY_SET_MOCK.name]],
+          },
+        },
+        '(entitySetNames) - duplicates': {
+          method: 'post',
+          params: {
+            axios: [`/${BY_NAME_PATH}`, [ENTITY_SET_MOCK.name]],
+            valid: [[ENTITY_SET_MOCK.name, ENTITY_SET_MOCK.name]],
           },
         },
       },
