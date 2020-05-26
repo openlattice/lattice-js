@@ -23,17 +23,14 @@ import Logger from '../utils/Logger';
 import { ENTITY_SETS_API } from '../constants/ApiNames';
 import {
   ALL_PATH,
+  BY_ID_PATH,
+  BY_NAME_PATH,
   IDS_PATH,
   METADATA_PATH,
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
 import { EntitySet, isValidEntitySet } from '../models/EntitySet';
-import {
-  isDefined,
-  isNonEmptyArray,
-  isNonEmptyString,
-  isNonEmptyStringArray,
-} from '../utils/LangUtils';
+import { isDefined, isNonEmptyArray, isNonEmptyString } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 
@@ -216,7 +213,7 @@ function getEntitySetId(entitySetName :string) :Promise<UUID> {
  *
  * @static
  * @memberof lattice.EntitySetsApi
- * @param {string} entitySetName
+ * @param {string[]} entitySetName
  * @returns {Promise<Map<string, UUID>>} - a Promise that resolves with a mapping where the key is the EntitySet name
  * and the value is the EntitySet id
  *
@@ -227,8 +224,14 @@ function getEntitySetIds(entitySetNames :string[]) :Promise<*> {
 
   let errorMsg = '';
 
-  if (!isNonEmptyStringArray(entitySetNames)) {
-    errorMsg = 'invalid parameter: entitySetNames must be a non-empty array of strings';
+  if (!isNonEmptyArray(entitySetNames)) {
+    errorMsg = 'invalid parameter: "entitySetNames" must be a non-empty array';
+    LOG.error(errorMsg, entitySetNames);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!entitySetNames.every(isNonEmptyString)) {
+    errorMsg = 'invalid parameter: "entitySetNames" must be an array of strings';
     LOG.error(errorMsg, entitySetNames);
     return Promise.reject(errorMsg);
   }
@@ -240,6 +243,59 @@ function getEntitySetIds(entitySetNames :string[]) :Promise<*> {
       LOG.error(error);
       return Promise.reject(error);
     });
+}
+
+/**
+ * `POST /entity-sets/by-id`
+ * `POST /entity-sets/by-name`
+ *
+ * Gets the EntitySet definitions for the given EntitySet ids or names.
+ *
+ * @static
+ * @memberof lattice.EntitySetsApi
+ * @param {UUID[] | string[]} idsOrNames
+ * @returns {Promise} - a Promise that resolves with the EntitySet definitions
+ *
+ * @example
+ * EntitySetsApi.getEntitySets(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
+ * EntitySetsApi.getEntitySets(["EntitySet1", "EntitySet2"]);
+ */
+function getEntitySets(idsOrNames :UUID[] | string[]) :Promise<EntitySet[]> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyArray(idsOrNames)) {
+    errorMsg = 'invalid parameter: "idsOrNames" must be a non-empty array';
+    LOG.error(errorMsg, idsOrNames);
+    return Promise.reject(errorMsg);
+  }
+
+  const idsOrNamesSet = Set(idsOrNames);
+
+  // isValidUUID check must be first since UUIDs are strings
+  if (idsOrNamesSet.every(isValidUUID)) {
+    return getApiAxiosInstance(ENTITY_SETS_API)
+      .post(`/${BY_ID_PATH}`, idsOrNamesSet.toJS())
+      .then((axiosResponse) => axiosResponse.data)
+      .catch((error :Error) => {
+        LOG.error(error);
+        return Promise.reject(error);
+      });
+  }
+
+  if (idsOrNamesSet.every(isNonEmptyString)) {
+    return getApiAxiosInstance(ENTITY_SETS_API)
+      .post(`/${BY_NAME_PATH}`, idsOrNamesSet.toJS())
+      .then((axiosResponse) => axiosResponse.data)
+      .catch((error :Error) => {
+        LOG.error(error);
+        return Promise.reject(error);
+      });
+  }
+
+  errorMsg = 'invalid parameter: "idsOrNames" must be an array of EntitySet ids or names';
+  LOG.error(errorMsg, idsOrNames);
+  return Promise.reject(errorMsg);
 }
 
 /**
@@ -337,6 +393,7 @@ export {
   getEntitySet,
   getEntitySetId,
   getEntitySetIds,
+  getEntitySets,
   getPropertyTypeMetaDataForEntitySet,
   getPropertyTypeMetaDataForEntitySets,
 };
