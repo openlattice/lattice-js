@@ -380,10 +380,18 @@ function runTestSuite(
         const testMap = Map()
           .set(model0, 'test_value_1')
           .set(randomModel, 'test_value_2')
-          .set(model1, 'test_value_3');
+          .set(model1, 'test_value_3')
+          .set(genRandomModel(), 'test_value_4')
+          .set(genRandomModel(), 'test_value_5')
+          .set(genRandomModel(), 'test_value_6')
+          .set(genRandomModel(), 'test_value_7')
+          .set(genRandomModel(), 'test_value_8')
+          .set(genRandomModel(), 'test_value_9')
+          .set(genRandomModel(), 'test_value_10')
+          .set(genRandomModel(), 'test_value_11');
 
-        expect(testMap.size).toEqual(2);
-        expect(testMap.count()).toEqual(2);
+        expect(testMap.size).toEqual(10);
+        expect(testMap.count()).toEqual(10);
         expect(testMap.get(model0)).toEqual('test_value_3');
         expect(testMap.get(randomModel)).toEqual('test_value_2');
         expect(testMap.get(model1)).toEqual('test_value_3');

@@ -21,7 +21,7 @@ import {
   genRandomGrant,
   isValidGrant,
 } from './Grant';
-import { Principal, PrincipalBuilder } from './Principal';
+import { Principal, PrincipalBuilder, genRandomPrincipal } from './Principal';
 import { Role, RoleBuilder, genRandomRole } from './Role';
 import type { GrantObject } from './Grant';
 import type { PrincipalObject } from './Principal';
@@ -501,10 +501,16 @@ function genRandomOrganization() {
     .setGrants({ [genRandomUUID()]: genRandomGrant() })
     .setId(genRandomUUID())
     .setMembers([
-      (new PrincipalBuilder())
-        .setId(genRandomString())
-        .setType(PrincipalTypes.USER)
-        .build()
+      genRandomPrincipal(PrincipalTypes.USER), // 0
+      genRandomPrincipal(PrincipalTypes.USER), // 1
+      genRandomPrincipal(PrincipalTypes.USER), // 2
+      genRandomPrincipal(PrincipalTypes.USER), // 3
+      genRandomPrincipal(PrincipalTypes.USER), // 4
+      genRandomPrincipal(PrincipalTypes.USER), // 5
+      genRandomPrincipal(PrincipalTypes.USER), // 6
+      genRandomPrincipal(PrincipalTypes.USER), // 7
+      genRandomPrincipal(PrincipalTypes.USER), // 8 - https://github.com/immutable-js/immutable-js/issues/1643
+      genRandomPrincipal(PrincipalTypes.USER), // 9
     ])
     .setPartitions([genRandomInt()])
     .setPrincipal(
