@@ -11,19 +11,13 @@ import {
   isImmutable,
 } from 'immutable';
 
-import {
-  PRINCIPAL_MOCK,
-  Principal,
-  PrincipalBuilder,
-  genRandomPrincipal,
-} from './Principal';
+import { Principal, PrincipalBuilder } from './Principal';
 import type { PrincipalObject } from './Principal';
 
 import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel } from '../utils/ValidationUtils';
-import { pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('Ace');
@@ -139,27 +133,4 @@ export {
 
 export type {
   AceObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ACE_MOCK = (new AceBuilder())
-  .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
-  .setPrincipal(PRINCIPAL_MOCK)
-  .build();
-
-function genRandomAce() {
-  return (new AceBuilder())
-    .setPermissions([pickRandomValue(PermissionTypes)])
-    .setPrincipal(genRandomPrincipal())
-    .build();
-}
-
-export {
-  ACE_MOCK,
-  genRandomAce,
 };

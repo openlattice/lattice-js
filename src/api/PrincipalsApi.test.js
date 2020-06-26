@@ -9,8 +9,8 @@ import {
   SYNC_PATH,
   USERS_PATH,
 } from '../constants/UrlConstants';
-import { PRINCIPAL_MOCK } from '../models/Principal';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import { PRINCIPAL_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_USER_ID = 'openlattice|12345678901234567890';

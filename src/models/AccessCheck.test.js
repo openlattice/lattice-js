@@ -5,14 +5,13 @@
 import { Map } from 'immutable';
 
 import {
-  ACCESS_CHECK_MOCK,
   AccessCheck,
   AccessCheckBuilder,
-  genRandomAccessCheck,
   isValidAccessCheck,
 } from './AccessCheck';
 
 import { PermissionTypes } from '../constants/types';
+import { ACCESS_CHECK_MOCK, genRandomAccessCheck } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

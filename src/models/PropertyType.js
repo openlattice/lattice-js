@@ -19,7 +19,6 @@ import IndexTypes from '../constants/types/IndexTypes';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomBoolean, genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 import type { AnalyzerType, IndexType } from '../constants/types';
 
 const LOG = new Logger('PropertyType');
@@ -394,45 +393,4 @@ export {
 
 export type {
   PropertyTypeObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const PROPERTY_TYPE_MOCK :PropertyType = new PropertyTypeBuilder()
-  .setAnalyzer(AnalyzerTypes.STANDARD)
-  .setDataType('String')
-  .setDescription('MockPropertyTypeDescription')
-  .setEnumValues(['ENUM_1', 'ENUM_2'])
-  .setId('3771c28a-cdee-403b-9cea-48845210f8ab')
-  .setIndexType(IndexTypes.BTREE)
-  .setMultiValued(true)
-  .setPII(false)
-  .setSchemas([FQN.of('mock.schema')])
-  .setTitle('MockPropertyTypeTitle')
-  .setType(FQN.of('mock.propertytype'))
-  .build();
-
-function genRandomPropertyType() :PropertyType {
-  return new PropertyTypeBuilder()
-    .setAnalyzer(AnalyzerTypes.STANDARD)
-    .setDataType('String')
-    .setDescription(genRandomString())
-    .setEnumValues([genRandomString(), genRandomString()])
-    .setId(genRandomUUID())
-    .setIndexType(IndexTypes.HASH)
-    .setMultiValued(genRandomBoolean())
-    .setPII(genRandomBoolean())
-    .setSchemas([FQN.of(genRandomString(), genRandomString())])
-    .setTitle(genRandomString())
-    .setType(FQN.of(genRandomString(), genRandomString()))
-    .build();
-}
-
-export {
-  PROPERTY_TYPE_MOCK,
-  genRandomPropertyType,
 };

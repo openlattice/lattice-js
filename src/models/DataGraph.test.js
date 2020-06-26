@@ -3,13 +3,12 @@
  */
 
 import {
-  DATA_GRAPH_MOCK,
   DataGraph,
   DataGraphBuilder,
-  genRandomDataGraph,
   isValidDataGraph,
 } from './DataGraph';
 
+import { DATA_GRAPH_MOCK, genRandomDataGraph } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

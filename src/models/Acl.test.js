@@ -3,13 +3,12 @@
  */
 
 import {
-  ACL_MOCK,
   Acl,
   AclBuilder,
-  genRandomAcl,
   isValidAcl,
 } from './Acl';
 
+import { ACL_MOCK, genRandomAcl } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

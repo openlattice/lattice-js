@@ -9,10 +9,12 @@ import {
   LOOKUP_PATH,
   TYPE_PATH,
 } from '../constants/UrlConstants';
-import { APP_MOCK } from '../models/App';
-import { APP_TYPE_MOCK } from '../models/AppType';
-import { ORGANIZATION_MOCK as ORG_MOCK } from '../models/Organization';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import {
+  APP_MOCK,
+  APP_TYPE_MOCK,
+  ORGANIZATION_MOCK as ORG_MOCK,
+} from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_PREFIX = 'mock-prefix';

@@ -10,7 +10,6 @@ import type { FQNObject } from './FQN';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('AppType');
 
@@ -199,33 +198,4 @@ export {
 
 export type {
   AppTypeObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const APP_TYPE_MOCK = (new AppTypeBuilder())
-  .setDescription('MockAppTypeDescription')
-  .setEntityTypeId('cf411622-8b0e-4352-9bb2-367953fd09a3')
-  .setId('27e5b4f0-243a-46c7-8ae3-8516ac0fad6a')
-  .setTitle('MockAppTypeTitle')
-  .setType(FQN.of('mock.apptype'))
-  .build();
-
-function genRandomAppType() {
-  return (new AppTypeBuilder())
-    .setDescription(genRandomString())
-    .setEntityTypeId(genRandomUUID())
-    .setId(genRandomUUID())
-    .setTitle(genRandomString())
-    .setType(FQN.of(genRandomString(), genRandomString()))
-    .build();
-}
-
-export {
-  APP_TYPE_MOCK,
-  genRandomAppType,
 };

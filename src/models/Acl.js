@@ -12,18 +12,12 @@ import {
   isImmutable,
 } from 'immutable';
 
-import {
-  ACE_MOCK,
-  Ace,
-  AceBuilder,
-  genRandomAce,
-} from './Ace';
+import { Ace, AceBuilder } from './Ace';
 import type { AceObject } from './Ace';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Acl');
 
@@ -148,27 +142,4 @@ export {
 
 export type {
   AclObject,
-};
-
-/*
- *
- * for testing
- *
- */
-
-const ACL_MOCK = (new AclBuilder())
-  .setAces([ACE_MOCK])
-  .setAclKey(['fae6af98-2675-45bd-9a5b-1619a87235a8', 'ae9e1cc3-ba0d-4532-9860-e5e7eaf36e83'])
-  .build();
-
-function genRandomAcl() {
-  return (new AclBuilder())
-    .setAces([genRandomAce(), genRandomAce()])
-    .setAclKey([genRandomUUID(), genRandomUUID()])
-    .build();
-}
-
-export {
-  ACL_MOCK,
-  genRandomAcl,
 };

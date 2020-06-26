@@ -13,8 +13,8 @@ import {
   TYPE_PATH,
 } from '../constants/UrlConstants';
 import { DeleteTypes, UpdateTypes } from '../constants/types';
-import { DATA_GRAPH_MOCK } from '../models/DataGraph';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import { DATA_GRAPH_MOCK } from '../utils/testing/MockData';
 import { genRandomUUID, getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_ESID = '308ad50c-ccc7-4971-ae1b-d20f74175cad';

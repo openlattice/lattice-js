@@ -14,11 +14,13 @@ import {
 } from '../constants/UrlConstants';
 import { ActionTypes } from '../constants/types';
 import { FQN } from '../models';
-import { ASSOCIATION_TYPE_MOCK } from '../models/AssociationType';
-import { ENTITY_TYPE_MOCK } from '../models/EntityType';
-import { PROPERTY_TYPE_MOCK } from '../models/PropertyType';
-import { SCHEMA_MOCK } from '../models/Schema';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import {
+  ASSOCIATION_TYPE_MOCK,
+  ENTITY_TYPE_MOCK,
+  PROPERTY_TYPE_MOCK,
+  SCHEMA_MOCK,
+} from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_FQN = FQN.of('mock.fqn');

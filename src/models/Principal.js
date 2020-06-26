@@ -8,7 +8,6 @@ import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel } from '../utils/ValidationUtils';
-import { genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { PrincipalType } from '../constants/types/PrincipalTypes';
 
 const LOG = new Logger('Principal');
@@ -117,27 +116,4 @@ export {
 
 export type {
   PrincipalObject
-};
-
-/*
- *
- * testing
- *
- */
-
-const PRINCIPAL_MOCK = (new PrincipalBuilder())
-  .setId('MockPrincipalId')
-  .setType(PrincipalTypes.USER)
-  .build();
-
-function genRandomPrincipal(type :?PrincipalType) :Principal {
-  return (new PrincipalBuilder())
-    .setId(genRandomUUID())
-    .setType(type || pickRandomValue(PrincipalTypes))
-    .build();
-}
-
-export {
-  PRINCIPAL_MOCK,
-  genRandomPrincipal,
 };

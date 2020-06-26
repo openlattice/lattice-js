@@ -3,14 +3,13 @@
  */
 
 import {
-  ACL_DATA_MOCK,
   AclData,
   AclDataBuilder,
-  genRandomAclData,
   isValidAclData,
 } from './AclData';
 
 import { ActionTypes } from '../constants/types';
+import { ACL_DATA_MOCK, genRandomAclData } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

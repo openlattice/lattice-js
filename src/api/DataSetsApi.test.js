@@ -2,12 +2,9 @@ import * as DataSetsApi from './DataSetsApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { DATA_SETS_API } from '../constants/ApiNames';
-import {
-  EXTERNAL_DB_COLUMN_PATH,
-  EXTERNAL_DB_TABLE_PATH,
-} from '../constants/UrlConstants';
-import { ORGANIZATION_MOCK } from '../models/Organization';
+import { EXTERNAL_DB_COLUMN_PATH, EXTERNAL_DB_TABLE_PATH } from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import { ORGANIZATION_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 jest.mock('../utils/axios');
