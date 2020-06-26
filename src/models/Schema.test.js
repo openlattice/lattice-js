@@ -3,13 +3,12 @@
  */
 
 import {
-  SCHEMA_MOCK,
   Schema,
   SchemaBuilder,
-  genRandomSchema,
   isValidSchema,
 } from './Schema';
 
+import { SCHEMA_MOCK, genRandomSchema } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

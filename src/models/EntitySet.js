@@ -15,7 +15,6 @@ import Logger from '../utils/Logger';
 import { EntitySetFlagTypes } from '../constants/types';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomString, genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { EntitySetFlagType } from '../constants/types';
 
 const LOG = new Logger('EntitySet');
@@ -344,41 +343,4 @@ export {
 
 export type {
   EntitySetObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ENTITY_SET_MOCK = new EntitySetBuilder()
-  .setContacts(['OPENLATTICE'])
-  .setDescription('MockEntitySetDescription')
-  .setEntityTypeId('78ad8735-d5dc-42ab-96d9-677bca55e60f')
-  .setFlags([EntitySetFlagTypes.ASSOCIATION])
-  .setId('6685abaf-5508-4f34-a3c7-46b687f66ddd')
-  .setLinkedEntitySets(['cf72e97f-109c-46a1-bb89-93a8753fd7ac'])
-  .setName('MockEntitySetName')
-  .setOrganizationId('9b93bc80-79c3-44c8-807c-ada1a8d6484f')
-  .setTitle('MockEntitySetTitle')
-  .build();
-
-function genRandomEntitySet() {
-  return new EntitySetBuilder()
-    .setContacts([genRandomString()])
-    .setDescription(genRandomString())
-    .setEntityTypeId(genRandomUUID())
-    .setFlags([pickRandomValue(EntitySetFlagTypes)])
-    .setId(genRandomUUID())
-    .setLinkedEntitySets([genRandomUUID(), genRandomUUID()])
-    .setName(genRandomString())
-    .setOrganizationId(genRandomUUID())
-    .setTitle(genRandomString())
-    .build();
-}
-
-export {
-  ENTITY_SET_MOCK,
-  genRandomEntitySet,
 };

@@ -3,13 +3,12 @@
  */
 
 import {
-  ROLE_MOCK,
   Role,
   RoleBuilder,
-  genRandomRole,
   isValidRole,
 } from './Role';
 
+import { ROLE_MOCK, genRandomRole } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

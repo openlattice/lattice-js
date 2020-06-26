@@ -10,9 +10,8 @@ import {
   METADATA_PATH,
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
-import { ENTITY_SET_MOCK } from '../models/EntitySet';
-import { PROPERTY_TYPE_MOCK } from '../models/PropertyType';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import { ENTITY_SET_MOCK, PROPERTY_TYPE_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 jest.mock('../utils/axios');

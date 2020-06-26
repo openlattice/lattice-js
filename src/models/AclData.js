@@ -4,19 +4,13 @@
 
 import { Map, fromJS, isImmutable } from 'immutable';
 
-import {
-  ACL_MOCK,
-  Acl,
-  AclBuilder,
-  genRandomAcl,
-} from './Acl';
+import { Acl, AclBuilder } from './Acl';
 import type { AclObject } from './Acl';
 
 import ActionTypes from '../constants/types/ActionTypes';
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel } from '../utils/ValidationUtils';
-import { pickRandomValue } from '../utils/testing/MockUtils';
 import type { ActionType } from '../constants/types/ActionTypes';
 
 const LOG = new Logger('AclData');
@@ -121,27 +115,4 @@ export {
 
 export type {
   AclDataObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ACL_DATA_MOCK = (new AclDataBuilder())
-  .setAcl(ACL_MOCK)
-  .setAction(ActionTypes.ADD)
-  .build();
-
-function genRandomAclData() {
-  return (new AclDataBuilder())
-    .setAcl(genRandomAcl())
-    .setAction(pickRandomValue(ActionTypes))
-    .build();
-}
-
-export {
-  ACL_DATA_MOCK,
-  genRandomAclData,
 };

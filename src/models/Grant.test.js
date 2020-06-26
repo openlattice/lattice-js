@@ -3,14 +3,13 @@
  */
 
 import {
-  GRANT_MOCK,
   Grant,
   GrantBuilder,
-  genRandomGrant,
   isValidGrant,
 } from './Grant';
 
 import { GrantTypes } from '../constants/types';
+import { GRANT_MOCK, genRandomGrant } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

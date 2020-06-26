@@ -4,15 +4,13 @@
 
 import { Map, fromJS, isImmutable } from 'immutable';
 
-import { Principal, PrincipalBuilder, genRandomPrincipal } from './Principal';
+import { Principal, PrincipalBuilder } from './Principal';
 import type { PrincipalObject } from './Principal';
 
 import Logger from '../utils/Logger';
-import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { AT_CLASS } from '../constants/GlobalConstants';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Role');
 const ROLE_CLASS_PACKAGE :'com.openlattice.organization.roles.Role' = 'com.openlattice.organization.roles.Role';
@@ -212,32 +210,4 @@ export {
 
 export type {
   RoleObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ROLE_MOCK = (new RoleBuilder())
-  .setDescription('MockOrgRoleDescription')
-  .setId('66da9306-3d1d-49d7-a8ee-8515c9c28434')
-  .setOrganizationId('a77a0f9a-0e6f-4a98-a169-4d1e122b39a3')
-  .setPrincipal((new PrincipalBuilder()).setId('MockOrgRolePrincipalId').setType(PrincipalTypes.ROLE).build())
-  .setTitle('MockOrgRoleTitle')
-  .build();
-
-function genRandomRole() {
-  return (new RoleBuilder())
-    .setDescription(genRandomString())
-    .setId(genRandomUUID())
-    .setOrganizationId(genRandomUUID())
-    .setPrincipal(genRandomPrincipal())
-    .setTitle(genRandomString())
-    .build();
-}
-export {
-  ROLE_MOCK,
-  genRandomRole,
 };

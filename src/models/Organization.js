@@ -15,24 +15,17 @@ import {
   isImmutable,
 } from 'immutable';
 
-import {
-  Grant,
-  GrantBuilder,
-  genRandomGrant,
-  isValidGrant,
-} from './Grant';
-import { Principal, PrincipalBuilder, genRandomPrincipal } from './Principal';
-import { Role, RoleBuilder, genRandomRole } from './Role';
+import { Grant, isValidGrant } from './Grant';
+import { Principal, PrincipalBuilder } from './Principal';
+import { Role, RoleBuilder } from './Role';
 import type { GrantObject } from './Grant';
 import type { PrincipalObject } from './Principal';
 import type { RoleObject } from './Role';
 
-import GrantTypes from '../constants/types/GrantTypes';
 import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomInt, genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Organization');
 
@@ -442,89 +435,4 @@ export {
 
 export type {
   OrganizationObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ORGANIZATION_MOCK = (new OrganizationBuilder())
-  .setApps(['cdf67221-9bdc-4196-94db-d64915298b3e', 'd5ce57c3-9a1f-4842-bd2f-bec2b63c1ea8'])
-  .setConnections(['CONNECTION_0', 'CONNECTION_1'])
-  .setDescription('MockOrgDescription')
-  .setEmailDomains(['openlattice.com'])
-  .setGrants({
-    'b95d538b-4358-45fe-9fa5-de7987fbc502': (new GrantBuilder())
-      .setGrantType(GrantTypes.MANUAL)
-      .setMappings(['MAPPING_1', 'MAPPING_2'])
-      .build()
-  })
-  .setId('5e5da17a-1b9a-4ef3-9798-8dab02fa6c8a')
-  .setMembers([
-    (new PrincipalBuilder())
-      .setId('MockOrgMemberPrincipal')
-      .setType(PrincipalTypes.USER)
-      .build()
-  ])
-  .setPartitions([128])
-  .setPrincipal(
-    (new PrincipalBuilder())
-      .setId('MockOrgPrincipalId')
-      .setType(PrincipalTypes.ORGANIZATION)
-      .build()
-  )
-  .setRoles([
-    (new RoleBuilder())
-      .setDescription('MockOrgRoleDescription')
-      .setId('9f13d087-dc12-4cb0-8033-abcf70584846')
-      .setOrganizationId('5e5da17a-1b9a-4ef3-9798-8dab02fa6c8a')
-      .setPrincipal(
-        (new PrincipalBuilder())
-          .setId('MockOrgRolePrincipalId')
-          .setType(PrincipalTypes.ROLE)
-          .build()
-      )
-      .setTitle('MockOrgRoleTitle')
-      .build()
-  ])
-  .setTitle('MockOrgTitle')
-  .build();
-
-function genRandomOrganization() {
-  return (new OrganizationBuilder())
-    .setApps([genRandomUUID(), genRandomUUID()])
-    .setConnections([genRandomString(), genRandomString()])
-    .setDescription(genRandomString())
-    .setEmailDomains([`${genRandomString()}.com`])
-    .setGrants({ [genRandomUUID()]: genRandomGrant() })
-    .setId(genRandomUUID())
-    .setMembers([
-      genRandomPrincipal(PrincipalTypes.USER), // 0
-      genRandomPrincipal(PrincipalTypes.USER), // 1
-      genRandomPrincipal(PrincipalTypes.USER), // 2
-      genRandomPrincipal(PrincipalTypes.USER), // 3
-      genRandomPrincipal(PrincipalTypes.USER), // 4
-      genRandomPrincipal(PrincipalTypes.USER), // 5
-      genRandomPrincipal(PrincipalTypes.USER), // 6
-      genRandomPrincipal(PrincipalTypes.USER), // 7
-      genRandomPrincipal(PrincipalTypes.USER), // 8 - https://github.com/immutable-js/immutable-js/issues/1643
-      genRandomPrincipal(PrincipalTypes.USER), // 9
-    ])
-    .setPartitions([genRandomInt()])
-    .setPrincipal(
-      (new PrincipalBuilder())
-        .setId(genRandomString())
-        .setType(PrincipalTypes.ORGANIZATION)
-        .build()
-    )
-    .setRoles([genRandomRole(), genRandomRole()])
-    .setTitle(genRandomString())
-    .build();
-}
-
-export {
-  ORGANIZATION_MOCK,
-  genRandomOrganization,
 };

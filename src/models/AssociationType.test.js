@@ -3,13 +3,12 @@
  */
 
 import {
-  ASSOCIATION_TYPE_MOCK,
   AssociationType,
   AssociationTypeBuilder,
-  genRandomAssociationType,
   isValidAssociationType,
 } from './AssociationType';
 
+import { ASSOCIATION_TYPE_MOCK, genRandomAssociationType } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

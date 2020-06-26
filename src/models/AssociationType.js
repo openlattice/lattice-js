@@ -12,18 +12,12 @@ import {
   isImmutable,
 } from 'immutable';
 
-import {
-  ENTITY_TYPE_MOCK,
-  EntityType,
-  EntityTypeBuilder,
-  genRandomEntityType,
-} from './EntityType';
+import { EntityType, EntityTypeBuilder } from './EntityType';
 import type { EntityTypeObject } from './EntityType';
 
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
-import { isValidUUID, isValidModel } from '../utils/ValidationUtils';
-import { genRandomBoolean, genRandomUUID } from '../utils/testing/MockUtils';
+import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 
 const LOG = new Logger('AssociationType');
 
@@ -197,31 +191,4 @@ export {
 
 export type {
   AssociationTypeObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ASSOCIATION_TYPE_MOCK = (new AssociationTypeBuilder())
-  .setEntityType(ENTITY_TYPE_MOCK)
-  .setSourceEntityTypeIds(['c49832e9-8c49-4d24-984a-2221b4fa249b', 'bec4adc8-79dc-48ab-afda-e203c5573ff5'])
-  .setDestinationEntityTypeIds(['91385fae-babc-4bd3-ba42-74decb9036f0', 'c1366efe-f619-4f30-bb6a-0b7437966e65'])
-  .setBidirectional(false)
-  .build();
-
-function genRandomAssociationType() {
-  return (new AssociationTypeBuilder())
-    .setEntityType(genRandomEntityType())
-    .setSourceEntityTypeIds([genRandomUUID(), genRandomUUID()])
-    .setDestinationEntityTypeIds([genRandomUUID(), genRandomUUID(), genRandomUUID()])
-    .setBidirectional(genRandomBoolean())
-    .build();
-}
-
-export {
-  ASSOCIATION_TYPE_MOCK,
-  genRandomAssociationType,
 };

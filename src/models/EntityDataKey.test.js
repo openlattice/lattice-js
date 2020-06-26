@@ -3,13 +3,12 @@
  */
 
 import {
-  ENTITY_DATA_KEY_MOCK,
   EntityDataKey,
   EntityDataKeyBuilder,
-  genRandomEntityDataKey,
   isValidEntityDataKey,
 } from './EntityDataKey';
 
+import { ENTITY_DATA_KEY_MOCK, genRandomEntityDataKey } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

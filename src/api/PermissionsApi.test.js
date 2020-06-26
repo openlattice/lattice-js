@@ -3,8 +3,8 @@ import * as PermissionsApi from './PermissionsApi';
 import * as AxiosUtils from '../utils/axios';
 import { PERMISSIONS_API } from '../constants/ApiNames';
 import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
-import { ACL_DATA_MOCK } from '../models/AclData';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import { ACL_DATA_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_ACL_KEY = [

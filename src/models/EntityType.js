@@ -24,7 +24,6 @@ import {
   isNonEmptyString,
 } from '../utils/LangUtils';
 import { isValidModel, isValidMultimap, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 import type { SecurableType } from '../constants/types/SecurableTypes';
 
 const LOG = new Logger('EntityType');
@@ -393,49 +392,4 @@ export {
 
 export type {
   EntityTypeObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ENTITY_TYPE_MOCK = (new EntityTypeBuilder())
-  .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
-  .setCategory(SecurableTypes.EntityType)
-  .setDescription('MockEntityTypeDescription')
-  .setId('ec6865e6-e60e-424b-a071-6a9c1603d735')
-  .setKey(['8f79e123-3411-4099-a41f-88e5d22d0e8d'])
-  .setPropertyTags({
-    '8f79e123-3411-4099-a41f-88e5d22d0e8d': ['TAG_0', 'TAG_1'],
-    'e39dfdfa-a3e6-4f1f-b54b-646a723c3085': ['TAG_0'],
-  })
-  .setPropertyTypes(['8f79e123-3411-4099-a41f-88e5d22d0e8d', 'e39dfdfa-a3e6-4f1f-b54b-646a723c3085'])
-  .setSchemas([FQN.of('mock.schema')])
-  .setTitle('MockEntityTypeTitle')
-  .setType(FQN.of('mock.entitytype'))
-  .build();
-
-function genRandomEntityType() {
-  return (new EntityTypeBuilder())
-    .setBaseType(genRandomUUID())
-    .setCategory(SecurableTypes.EntityType)
-    .setDescription(genRandomString())
-    .setId(genRandomUUID())
-    .setKey([genRandomUUID(), genRandomUUID()])
-    .setPropertyTags({
-      [genRandomUUID()]: [genRandomString(), genRandomString()],
-      [genRandomUUID()]: [genRandomString()],
-    })
-    .setPropertyTypes([genRandomUUID(), genRandomUUID(), genRandomUUID()])
-    .setSchemas([FQN.of(genRandomString(), genRandomString())])
-    .setTitle(genRandomString())
-    .setType(FQN.of(genRandomString(), genRandomString()))
-    .build();
-}
-
-export {
-  ENTITY_TYPE_MOCK,
-  genRandomEntityType,
 };
