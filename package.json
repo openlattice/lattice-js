@@ -72,7 +72,7 @@
     "build:prod": "webpack --config config/webpack/webpack.config.js --env.production",
     "clean": "rimraf build/*.js",
     "flow": "flow check",
-    "lib": "webpack-dev-server --config config/webpack/webpack.config.js --env.development --port 9000 --content-base build/",
+    "lib": "webpack-dev-server --config config/webpack/webpack.config.js --env.development --port 9100 --content-base build/",
     "lint": "eslint --config .eslintrc src",
     "release:major": "npm version major -m \"releasing v%s\" && npm publish",
     "release:minor": "npm version minor -m \"releasing v%s\" && npm publish",

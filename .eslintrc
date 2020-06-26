@@ -1,18 +1,18 @@
 {
-  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "jest": true
+  },
   "extends": [
     "airbnb-base",
     "plugin:flowtype/recommended"
   ],
+  "parser": "babel-eslint",
   "plugins": [
     "flowtype",
     "import",
     "jest"
   ],
-  "env": {
-    "browser": true,
-    "jest": true
-  },
   "settings": {
     "flowtype": {
       "onlyFilesWithFlowAnnotation": true
@@ -69,6 +69,7 @@
           "OrderedList",
           "Map",
           "OrderedMap",
+          "Seq",
           "Set",
           "OrderedSet",
           "SortableContainer",
@@ -114,6 +115,6 @@
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
-    "jest/valid-expect": "error",
+    "jest/valid-expect": "error"
   }
 }

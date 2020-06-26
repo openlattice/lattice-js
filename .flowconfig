@@ -12,9 +12,9 @@
 #   https://github.com/facebook/flow/blob/master/lib/streams.js
 #
 [ignore]
-./build/.*
-./config/.*
 .*/node_modules/.*
+<PROJECT_ROOT>/build/.*
+<PROJECT_ROOT>/config/.*
 
 [libs]
 ./src/types.js.flow
