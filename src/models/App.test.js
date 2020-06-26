@@ -3,13 +3,12 @@
  */
 
 import {
-  APP_MOCK,
   App,
   AppBuilder,
-  genRandomApp,
   isValidApp,
 } from './App';
 
+import { APP_MOCK, genRandomApp } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

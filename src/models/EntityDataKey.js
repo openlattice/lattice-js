@@ -7,7 +7,6 @@ import { Map, fromJS, isImmutable } from 'immutable';
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('EntityDataKey');
 
@@ -115,27 +114,4 @@ export {
 
 export type {
   EntityDataKeyObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const ENTITY_DATA_KEY_MOCK = (new EntityDataKeyBuilder())
-  .setEntityKeyId('3f8bd01a-e211-4912-90d0-fbd2fefefe24')
-  .setEntitySetId('e90e6d9c-d0ed-490b-ba3e-38b30f34a1eb')
-  .build();
-
-function genRandomEntityDataKey() {
-  return (new EntityDataKeyBuilder())
-    .setEntityKeyId(genRandomUUID())
-    .setEntitySetId(genRandomUUID())
-    .build();
-}
-
-export {
-  ENTITY_DATA_KEY_MOCK,
-  genRandomEntityDataKey,
 };

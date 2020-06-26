@@ -5,14 +5,13 @@
 import { Map } from 'immutable';
 
 import {
-  ACE_MOCK,
   Ace,
   AceBuilder,
-  genRandomAce,
   isValidAce,
 } from './Ace';
 
 import { PermissionTypes } from '../constants/types';
+import { ACE_MOCK, genRandomAce } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

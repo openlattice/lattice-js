@@ -21,6 +21,7 @@ const API_TO_PATH_MAP = Map({
   [ApiNames.DATA_API]             : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.DATA_PATH}`,
   [ApiNames.DATA_INTEGRATION_API] : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.INTEGRATION_PATH}`,
   [ApiNames.DATA_SOURCES_API]     : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.DATA_SOURCES_PATH}`,
+  [ApiNames.DATA_SETS_API]        : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ORG_DB_PATH}`,
   [ApiNames.EDM_API]              : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.EDM_PATH}`,
   [ApiNames.ENTITY_SETS_API]      : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ENTITY_SETS_PATH}`,
   [ApiNames.FEEDS_API]            : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.FEEDS_PATH}`,

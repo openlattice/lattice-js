@@ -17,7 +17,6 @@ import {
   isValidOrEmptyMultimap,
   isValidUUID,
 } from '../utils/ValidationUtils';
-import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('DataGraph');
 
@@ -144,59 +143,4 @@ export {
 
 export type {
   DataGraphObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const DATA_GRAPH_MOCK = (new DataGraphBuilder())
-  .setAssociations({
-    'f914f31a-6486-4717-929d-dccecab05c47': [{
-      data: {
-        '87f38161-9c95-4166-9721-8514882dac22': ['2020-02-02']
-      },
-      dstEntityKeyId: 'ff0e0000-0000-0000-8000-00000000fc5e',
-      dstEntitySetId: 'ccdaba20-f6ba-401c-a63d-17c6578ffb67',
-      srcEntityIndex: 0,
-      srcEntitySetId: 'd6760122-eaf7-42e6-9339-923df3f4790a',
-    }]
-  })
-  .setEntities({
-    'd6760122-eaf7-42e6-9339-923df3f4790a': [{
-      'a791ca8d-b433-4a2b-be04-43d43cea14a7': ['VALUE_1'],
-      '2a45205e-703c-43eb-a060-921bf7245f6a': ['VALUE_2', 'VALUE_3'],
-    }],
-  })
-  .build();
-
-function genRandomDataGraph() {
-  return (new DataGraphBuilder())
-    .setAssociations({
-      [genRandomUUID()]: [{
-        dstEntityIndex: 2,
-        dstEntityKeyId: genRandomUUID(),
-        dstEntitySetId: genRandomUUID(),
-        srcEntityIndex: 4,
-        srcEntityKeyId: genRandomUUID(),
-        srcEntitySetId: genRandomUUID(),
-      }],
-    })
-    .setEntities({
-      [genRandomUUID()]: [{
-        [genRandomUUID()]: [genRandomString()],
-        [genRandomUUID()]: [genRandomString(), genRandomString()],
-      }],
-      [genRandomUUID()]: [{
-        [genRandomUUID()]: [genRandomString()],
-      }],
-    })
-    .build();
-}
-
-export {
-  DATA_GRAPH_MOCK,
-  genRandomDataGraph,
 };

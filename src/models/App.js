@@ -14,7 +14,6 @@ import {
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomString, genRandomUUID } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('App');
 
@@ -241,35 +240,4 @@ export {
 
 export type {
   AppObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const APP_MOCK = (new AppBuilder())
-  .setAppTypeIds(['c3dbd929-91c9-4b48-9545-a634038f34ba'])
-  .setDescription('MockAppDescription')
-  .setId('53f45e4b-48a4-4089-8932-3655a5b0d50a')
-  .setName('MockAppName')
-  .setTitle('MockAppTitle')
-  .setUrl('https://openlattice.com')
-  .build();
-
-function genRandomApp() {
-  return (new AppBuilder())
-    .setAppTypeIds([genRandomUUID()])
-    .setDescription(genRandomString())
-    .setId(genRandomUUID())
-    .setName(genRandomString())
-    .setTitle(genRandomString())
-    .setUrl(genRandomString())
-    .build();
-}
-
-export {
-  APP_MOCK,
-  genRandomApp,
 };

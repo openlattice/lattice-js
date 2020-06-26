@@ -3,13 +3,12 @@
  */
 
 import {
-  APP_TYPE_MOCK,
   AppType,
   AppTypeBuilder,
-  genRandomAppType,
   isValidAppType,
 } from './AppType';
 
+import { APP_TYPE_MOCK, genRandomAppType } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

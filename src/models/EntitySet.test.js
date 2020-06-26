@@ -5,14 +5,13 @@
 import { Map } from 'immutable';
 
 import {
-  ENTITY_SET_MOCK,
   EntitySet,
   EntitySetBuilder,
-  genRandomEntitySet,
   isValidEntitySet,
 } from './EntitySet';
 
 import { EntitySetFlagTypes } from '../constants/types';
+import { ENTITY_SET_MOCK, genRandomEntitySet } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

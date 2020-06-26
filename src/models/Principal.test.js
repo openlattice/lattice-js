@@ -3,14 +3,13 @@
  */
 
 import {
-  PRINCIPAL_MOCK,
   Principal,
   PrincipalBuilder,
-  genRandomPrincipal,
   isValidPrincipal,
 } from './Principal';
 
 import { PrincipalTypes } from '../constants/types';
+import { PRINCIPAL_MOCK, genRandomPrincipal } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

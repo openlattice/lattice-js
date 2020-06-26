@@ -3,14 +3,13 @@
  */
 
 import {
-  PROPERTY_TYPE_MOCK,
   PropertyType,
   PropertyTypeBuilder,
-  genRandomPropertyType,
   isValidPropertyType,
 } from './PropertyType';
 
 import { AnalyzerTypes, IndexTypes } from '../constants/types';
+import { PROPERTY_TYPE_MOCK, genRandomPropertyType } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

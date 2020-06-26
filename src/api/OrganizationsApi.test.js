@@ -26,10 +26,12 @@ import {
   AclDataBuilder,
   PrincipalBuilder,
 } from '../models';
-import { GRANT_MOCK } from '../models/Grant';
-import { ORGANIZATION_MOCK as ORG_MOCK } from '../models/Organization';
-import { ROLE_MOCK } from '../models/Role';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import {
+  GRANT_MOCK,
+  ORGANIZATION_MOCK as ORG_MOCK,
+  ROLE_MOCK,
+} from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_CONNECTION = 'mock_connection';

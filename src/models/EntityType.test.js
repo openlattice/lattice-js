@@ -3,14 +3,13 @@
  */
 
 import {
-  ENTITY_TYPE_MOCK,
   EntityType,
   EntityTypeBuilder,
-  genRandomEntityType,
   isValidEntityType,
 } from './EntityType';
 
 import { SecurableTypes } from '../constants/types';
+import { ENTITY_TYPE_MOCK, genRandomEntityType } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 runTestSuite(

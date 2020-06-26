@@ -15,7 +15,6 @@ import Logger from '../utils/Logger';
 import { PermissionTypes } from '../constants/types';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
-import { genRandomUUID, pickRandomValue } from '../utils/testing/MockUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
 
 const LOG = new Logger('AccessCheck');
@@ -142,27 +141,4 @@ export {
 
 export type {
   AccessCheckObject,
-};
-
-/*
- *
- * for testing
- *
- */
-
-const ACCESS_CHECK_MOCK = (new AccessCheckBuilder())
-  .setAclKey(['69682f1e-6039-44da-8342-522395b43738', '5e4a579a-ad72-4902-991c-027d80dcd590'])
-  .setPermissions([PermissionTypes.READ, PermissionTypes.WRITE])
-  .build();
-
-function genRandomAccessCheck() {
-  return (new AccessCheckBuilder())
-    .setAclKey([genRandomUUID(), genRandomUUID()])
-    .setPermissions([pickRandomValue(PermissionTypes)])
-    .build();
-}
-
-export {
-  ACCESS_CHECK_MOCK,
-  genRandomAccessCheck,
 };

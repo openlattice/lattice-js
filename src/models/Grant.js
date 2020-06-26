@@ -15,7 +15,6 @@ import GrantTypes from '../constants/types/GrantTypes';
 import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel } from '../utils/ValidationUtils';
-import { genRandomString, pickRandomValue } from '../utils/testing/MockUtils';
 import type { GrantType } from '../constants/types/GrantTypes';
 
 const LOG = new Logger('Grant');
@@ -162,29 +161,4 @@ export {
 
 export type {
   GrantObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const GRANT_MOCK = (new GrantBuilder())
-  .setAttribute('attribute')
-  .setGrantType(GrantTypes.MANUAL)
-  .setMappings(['MAPPING_1', 'MAPPING_2'])
-  .build();
-
-function genRandomGrant() {
-  return (new GrantBuilder())
-    .setAttribute(genRandomString())
-    .setGrantType(pickRandomValue(GrantTypes))
-    .setMappings([genRandomString()])
-    .build();
-}
-
-export {
-  GRANT_MOCK,
-  genRandomGrant,
 };

@@ -2,8 +2,8 @@ import * as AuthorizationsApi from './AuthorizationsApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { AUTHORIZATIONS_API } from '../constants/ApiNames';
-import { ACCESS_CHECK_MOCK } from '../models/AccessCheck';
 import { runTestSuite } from '../utils/testing/APITestSuite';
+import { ACCESS_CHECK_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 jest.mock('../utils/axios');

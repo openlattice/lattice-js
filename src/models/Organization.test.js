@@ -3,13 +3,12 @@
  */
 
 import {
-  ORGANIZATION_MOCK,
   Organization,
   OrganizationBuilder,
-  genRandomOrganization,
   isValidOrganization,
 } from './Organization';
 
+import { ORGANIZATION_MOCK, genRandomOrganization } from '../utils/testing/MockData';
 import { runTestSuite } from '../utils/testing/ModelTestSuite';
 
 // const INVALID_PARAMS_FOR_GRANT = INVALID_PARAMS_FOR_OPTIONAL_OBJECT.slice(0);

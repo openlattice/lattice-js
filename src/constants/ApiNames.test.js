@@ -9,6 +9,7 @@ const EXPECTED_APIS = Map({
   CODEX_API            : 'CodexApi',
   DATA_API             : 'DataApi',
   DATA_INTEGRATION_API : 'DataIntegrationApi',
+  DATA_SETS_API        : 'DataSetsApi',
   EDM_API              : 'EntityDataModelApi',
   ENTITY_SETS_API      : 'EntitySetsApi',
   ORGANIZATIONS_API    : 'OrganizationsApi',

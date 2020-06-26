@@ -12,18 +12,8 @@ import {
 } from 'immutable';
 
 import FQN from './FQN';
-import {
-  ENTITY_TYPE_MOCK,
-  EntityType,
-  EntityTypeBuilder,
-  genRandomEntityType,
-} from './EntityType';
-import {
-  PROPERTY_TYPE_MOCK,
-  PropertyType,
-  PropertyTypeBuilder,
-  genRandomPropertyType,
-} from './PropertyType';
+import { EntityType, EntityTypeBuilder } from './EntityType';
+import { PropertyType, PropertyTypeBuilder } from './PropertyType';
 import type { EntityTypeObject } from './EntityType';
 import type { FQNObject } from './FQN';
 import type { PropertyTypeObject } from './PropertyType';
@@ -31,7 +21,6 @@ import type { PropertyTypeObject } from './PropertyType';
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel } from '../utils/ValidationUtils';
-import { genRandomString } from '../utils/testing/MockUtils';
 
 const LOG = new Logger('Schema');
 
@@ -183,29 +172,4 @@ export {
 
 export type {
   SchemaObject,
-};
-
-/*
- *
- * testing
- *
- */
-
-const SCHEMA_MOCK = (new SchemaBuilder())
-  .setEntityTypes([ENTITY_TYPE_MOCK])
-  .setFQN(FQN.of('mock.schema'))
-  .setPropertyTypes([PROPERTY_TYPE_MOCK])
-  .build();
-
-function genRandomSchema() {
-  return (new SchemaBuilder())
-    .setEntityTypes([genRandomEntityType()])
-    .setFQN(FQN.of(genRandomString(), genRandomString()))
-    .setPropertyTypes([genRandomPropertyType(), genRandomPropertyType()])
-    .build();
-}
-
-export {
-  SCHEMA_MOCK,
-  genRandomSchema,
 };
