@@ -16,6 +16,7 @@ import * as CodexApi from './api/CodexApi';
 import * as Constants from './constants/GlobalConstants';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
+import * as DataSetsApi from './api/DataSetsApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as EntitySetsApi from './api/EntitySetsApi';
 import * as Models from './models';
@@ -41,6 +42,7 @@ export {
   CodexApi,
   DataApi,
   DataIntegrationApi,
+  DataSetsApi,
   EntityDataModelApi,
   EntitySetsApi,
   OrganizationsApi,
@@ -62,6 +64,7 @@ export default {
   CodexApi,
   DataApi,
   DataIntegrationApi,
+  DataSetsApi,
   EntityDataModelApi,
   EntitySetsApi,
   OrganizationsApi,
