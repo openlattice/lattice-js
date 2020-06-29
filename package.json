@@ -55,7 +55,7 @@
     "eslint-plugin-jest": "~23.17.0",
     "flow-bin": "~0.125.0",
     "import-sort-style-openlattice": "~0.1.0",
-    "jest": "~25.4.0",
+    "jest": "~26.1.0",
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
     "uuid": "~8.1.0",
