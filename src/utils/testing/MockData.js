@@ -140,7 +140,6 @@ function genRandomAppType() {
     .build();
 }
 
-
 const ENTITY_TYPE_MOCK = (new EntityTypeBuilder())
   .setBaseType('9a768c9b-b76f-4fa1-be60-0178695cdbc3')
   .setCategory(SecurableTypes.EntityType)
@@ -272,7 +271,6 @@ function genRandomEntitySet() {
     .setTitle(genRandomString())
     .build();
 }
-
 
 const GRANT_MOCK = (new GrantBuilder())
   .setAttribute('attribute')

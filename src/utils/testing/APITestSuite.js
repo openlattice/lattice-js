@@ -49,7 +49,8 @@ function runTestSuite(
   });
 
   Object.keys(config).sort().forEach((fnName) => {
-    describe(fnName, () => {
+
+    const describeCallback = () => {
 
       const fnToTest = api[fnName];
       const tests = config[fnName];
@@ -85,9 +86,18 @@ function runTestSuite(
               throw new Error(`bad axios test case, expected... ${AXIOS_TEST_CASE}`);
             }
             testApiShouldSendCorrectHttpRequest(fnToTest, params.valid, params.axios, method);
+            testApiShouldCatchRejectedPromise(fnToTest, params.valid);
           });
         });
-    });
+    };
+
+    if (config[fnName].only) {
+      // eslint-disable-next-line jest/no-focused-tests
+      describe.only(fnName, describeCallback);
+    }
+    else {
+      describe(fnName, describeCallback);
+    }
   });
 }
 

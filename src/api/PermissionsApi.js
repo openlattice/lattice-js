@@ -25,6 +25,7 @@ import { AclData, isValidAclData } from '../models/AclData';
 import { isNonEmptyArray } from '../utils/LangUtils';
 import { isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
+import type { UUID } from '../types';
 
 const LOG = new Logger('PermissionsApi');
 

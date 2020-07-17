@@ -38,6 +38,7 @@ import { Schema, isValidSchema } from '../models/Schema';
 import { isNonEmptyObject, isNonEmptyString, isNonEmptyStringArray } from '../utils/LangUtils';
 import { isValidUUID, validateNonEmptyArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
+import type { UUID } from '../types';
 
 const LOG = new Logger('EntityDataModelApi');
 

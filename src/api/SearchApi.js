@@ -34,7 +34,7 @@ import {
   PROPERTY_TYPE_IDS,
   SOURCE,
   SOURCE_ES_IDS,
-  START
+  START,
 } from '../constants/SerializationConstants';
 import {
   ADVANCED_PATH,
@@ -49,6 +49,7 @@ import {
 } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
+import type { UUID } from '../types';
 
 const LOG = new Logger('SearchApi');
 

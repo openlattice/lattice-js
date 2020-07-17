@@ -24,6 +24,7 @@ import { PERSISTENT_SEARCH_API } from '../constants/ApiNames';
 import { isNonEmptyObject } from '../utils/LangUtils';
 import { isValidUUID } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
+import type { UUID } from '../types';
 
 const LOG = new Logger('PersistentSearchApi');
 

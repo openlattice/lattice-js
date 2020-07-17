@@ -11,6 +11,7 @@ import Logger from '../utils/Logger';
 import { AT_CLASS } from '../constants/GlobalConstants';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import type { UUID } from '../types';
 
 const LOG = new Logger('Role');
 const ROLE_CLASS_PACKAGE :'com.openlattice.organization.roles.Role' = 'com.openlattice.organization.roles.Role';
