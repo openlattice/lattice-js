@@ -35,6 +35,7 @@ const LOG = new Logger('DataSetsApi');
  * @static
  * @memberof lattice.DataSetsApi
  * @param {UUID} organizationId
+ * @param {UUID} dataSetId
  * @param {boolean} columns
  * @returns {Promise<Object>}
  */
