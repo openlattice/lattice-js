@@ -26,6 +26,7 @@ import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import type { UUID } from '../types';
 
 const LOG = new Logger('Organization');
 

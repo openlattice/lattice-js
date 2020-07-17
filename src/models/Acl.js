@@ -18,6 +18,7 @@ import type { AceObject } from './Ace';
 import Logger from '../utils/Logger';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import type { UUID } from '../types';
 
 const LOG = new Logger('Acl');
 

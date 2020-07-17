@@ -57,6 +57,7 @@ import {
 import { isValidUUID } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 import type { ActionType } from '../constants/types';
+import type { UUID } from '../types';
 
 const LOG = new Logger('OrganizationsApi');
 

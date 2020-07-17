@@ -21,6 +21,7 @@ import type {
   OrganizationObject,
   PrincipalObject,
 } from '../models';
+import type { UUID } from '../types';
 
 const LOG = new Logger('AppApi');
 

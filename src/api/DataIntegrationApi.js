@@ -29,11 +29,7 @@ import {
 } from '../utils/LangUtils';
 import { isValidUUID } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
-
-type EntityKey = {|
-  entityId :string;
-  entitySetId :UUID;
-|};
+import type { EntityKey, UUID } from '../types';
 
 const LOG = new Logger('DataIntegrationApi');
 

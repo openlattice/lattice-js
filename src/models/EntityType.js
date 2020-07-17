@@ -25,6 +25,7 @@ import {
 } from '../utils/LangUtils';
 import { isValidModel, isValidMultimap, isValidUUID } from '../utils/ValidationUtils';
 import type { SecurableType } from '../constants/types/SecurableTypes';
+import type { UUID } from '../types';
 
 const LOG = new Logger('EntityType');
 
