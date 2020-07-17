@@ -33,6 +33,7 @@ import { EntitySet, isValidEntitySet } from '../models/EntitySet';
 import { isDefined, isNonEmptyArray, isNonEmptyString } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
+import type { UUID } from '../types';
 
 const LOG = new Logger('EntitySetsApi');
 

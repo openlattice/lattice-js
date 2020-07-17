@@ -55,6 +55,7 @@ import {
 } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 import type { DeleteType, UpdateType } from '../constants/types';
+import type { UUID } from '../types';
 
 const LOG = new Logger('DataApi');
 

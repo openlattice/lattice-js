@@ -15,6 +15,3 @@
 .*/node_modules/.*
 <PROJECT_ROOT>/build/.*
 <PROJECT_ROOT>/config/.*
-
-[libs]
-./src/types.js.flow

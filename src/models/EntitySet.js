@@ -16,6 +16,7 @@ import { EntitySetFlagTypes } from '../constants/types';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import type { EntitySetFlagType } from '../constants/types';
+import type { UUID } from '../types';
 
 const LOG = new Logger('EntitySet');
 

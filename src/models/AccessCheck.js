@@ -16,6 +16,7 @@ import { PermissionTypes } from '../constants/types';
 import { isDefined } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import type { PermissionType } from '../constants/types/PermissionTypes';
+import type { UUID } from '../types';
 
 const LOG = new Logger('AccessCheck');
 

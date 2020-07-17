@@ -20,6 +20,7 @@ import Logger from '../utils/Logger';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
 import type { AnalyzerType, IndexType } from '../constants/types';
+import type { UUID } from '../types';
 
 const LOG = new Logger('PropertyType');
 
