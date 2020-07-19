@@ -7,7 +7,7 @@ updates:
     day: sunday
     time: "09:00"
     timezone: America/Los_Angeles
-  open-pull-requests-limit: 10
+  open-pull-requests-limit: 50
   ignore:
   - dependency-name: immutable
     versions:
