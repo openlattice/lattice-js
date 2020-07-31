@@ -167,7 +167,7 @@ function getPersistentSearches(includeExpired :boolean) :Promise<Object[]> {
  *   "2018-12-22T01:57:02.801Z"
  * );
  */
-function updatePersistentSearchExpiration(persistentSearchId :UUID, expiration :string) :Promise<*> {
+function updatePersistentSearchExpiration(persistentSearchId :UUID, expiration :string) :Promise<void> {
 
   let errorMsg = '';
 
@@ -184,9 +184,7 @@ function updatePersistentSearchExpiration(persistentSearchId :UUID, expiration :
   }
 
   return getApiAxiosInstance(PERSISTENT_SEARCH_API)
-    .patch(`/${persistentSearchId}/${EXPIRATION_PATH}`, expiration, {
-      headers: { 'Content-Type': 'application/json' }
-    })
+    .patch(`/${persistentSearchId}/${EXPIRATION_PATH}`, expiration)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

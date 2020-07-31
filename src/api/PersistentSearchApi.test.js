@@ -60,7 +60,7 @@ describe(PERSISTENT_SEARCH_API, () => {
       },
       updatePersistentSearchExpiration: {
         '': { params: { optional: [false], valid: [MOCK_PS_ID, MOCK_EXPIRATION] } },
-        '(updatePersistentSearchExpiration)': {
+        '(persistentSearchId, expiration)': {
           method: 'patch',
           params: {
             axios: [
