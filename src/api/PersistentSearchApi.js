@@ -21,7 +21,8 @@ import _isBoolean from 'lodash/isBoolean';
 
 import Logger from '../utils/Logger';
 import { PERSISTENT_SEARCH_API } from '../constants/ApiNames';
-import { isNonEmptyObject } from '../utils/LangUtils';
+import { EXPIRATION_PATH } from '../constants/UrlConstants';
+import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 import { isValidUUID } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 import type { UUID } from '../types';
@@ -149,8 +150,50 @@ function getPersistentSearches(includeExpired :boolean) :Promise<Object[]> {
     });
 }
 
+/**
+ * `PATCH /persistentsearch/{persistentSearchId}/expiration`
+ *
+ * Updates the expiration date of a particular PersistentSearch
+ *
+ * @static
+ * @memberof lattice.PersistentSearchApi
+ * @param {UUID} persistentSearchId The id of the PersistentSearch to update
+ * @param {string} expiration The new expiration date
+ * @returns {Promise} - a Promise that resolves once the expiration date has been updated
+ *
+ * @example
+ * PersistentSearchApi.updatePersistentSearchExpiration("ec6865e6-e60e-424b-a071-6a9c1603d735", "2018-12-22T01:57:02.801Z");
+ */
+function updatePersistentSearchExpiration(persistentSearchId :UUID, expiration :string) :Promise<*> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(persistentSearchId)) {
+    errorMsg = 'invalid parameter: "persistentSearchId" must be a valid UUID';
+    LOG.error(errorMsg, persistentSearchId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(expiration)) {
+    errorMsg = 'invalid parameter: "expiration" must be a valid string';
+    LOG.error(errorMsg, persistentSearchId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PERSISTENT_SEARCH_API)
+    .patch(`/${persistentSearchId}/${EXPIRATION_PATH}`, expiration, {
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   createPersistentSearch,
   expirePersistentSearch,
   getPersistentSearches,
+  updatePersistentSearchExpiration,
 };
