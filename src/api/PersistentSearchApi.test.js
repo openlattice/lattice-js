@@ -6,8 +6,9 @@ import { runTestSuite } from '../utils/testing/APITestSuite';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_PS_ID = '4fdc5bf1-ac50-4c89-896a-5e37882d7daf';
+const MOCK_EXPIRATION = '2020-03-24T15:22:13.079-07:00';
 const MOCK_PS = {
-  expiration: '2020-03-24T15:22:13.079-07:00',
+  expiration: MOCK_EXPIRATION,
   constraints: {},
   type: 'TEST',
 };
@@ -54,6 +55,19 @@ describe(PERSISTENT_SEARCH_API, () => {
           params: {
             axios: [`?includeExpired=${false}`],
             valid: [false],
+          },
+        },
+      },
+      updatePersistentSearchExpiration: {
+        '': { params: { optional: [false], valid: [MOCK_PS_ID, MOCK_EXPIRATION] } },
+        '(persistentSearchId, expiration)': {
+          method: 'patch',
+          params: {
+            axios: [
+              `/${MOCK_PS_ID}/expiration`,
+              MOCK_EXPIRATION,
+            ],
+            valid: [MOCK_PS_ID, MOCK_EXPIRATION],
           },
         },
       },
