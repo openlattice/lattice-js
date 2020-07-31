@@ -66,7 +66,6 @@ describe(PERSISTENT_SEARCH_API, () => {
             axios: [
               `/${MOCK_PS_ID}/expiration`,
               MOCK_EXPIRATION,
-              { headers: { 'Content-Type': 'application/json' } }
             ],
             valid: [MOCK_PS_ID, MOCK_EXPIRATION],
           },
