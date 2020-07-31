@@ -162,7 +162,10 @@ function getPersistentSearches(includeExpired :boolean) :Promise<Object[]> {
  * @returns {Promise} - a Promise that resolves once the expiration date has been updated
  *
  * @example
- * PersistentSearchApi.updatePersistentSearchExpiration("ec6865e6-e60e-424b-a071-6a9c1603d735", "2018-12-22T01:57:02.801Z");
+ * PersistentSearchApi.updatePersistentSearchExpiration(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "2018-12-22T01:57:02.801Z"
+ * );
  */
 function updatePersistentSearchExpiration(persistentSearchId :UUID, expiration :string) :Promise<*> {
 
