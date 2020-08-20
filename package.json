@@ -59,7 +59,7 @@
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
     "uuid": "~8.2.0",
-    "webpack": "~4.43.0",
+    "webpack": "~4.44.1",
     "webpack-cli": "~3.3.0",
     "webpack-dev-server": "~3.11.0"
   },
