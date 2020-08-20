@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@babel/cli": "~7.10.5",
-    "@babel/core": "~7.10.5",
+    "@babel/core": "~7.11.1",
     "@babel/plugin-proposal-class-properties": "~7.10.4",
     "@babel/plugin-proposal-object-rest-spread": "~7.10.4",
     "@babel/plugin-transform-runtime": "~7.10.5",
@@ -42,7 +42,7 @@
     "@babel/register": "~7.10.5",
     "@babel/runtime": "~7.10.5",
     "babel-eslint": "~10.1.0",
-    "babel-jest": "~26.1.0",
+    "babel-jest": "~26.3.0",
     "babel-loader": "~8.1.0",
     "bluebird": "~3.7.0",
     "documentation": "~13.0.0",
@@ -58,7 +58,7 @@
     "jest": "~26.4.0",
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
-    "uuid": "~8.2.0",
+    "uuid": "~8.3.0",
     "webpack": "~4.44.1",
     "webpack-cli": "~3.3.0",
     "webpack-dev-server": "~3.11.0"
