@@ -2,7 +2,7 @@ import * as PermissionsApi from './PermissionsApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { PERMISSIONS_API } from '../constants/ApiNames';
-import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
+import { BULK_PATH, EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import { ACL_DATA_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
@@ -35,7 +35,7 @@ describe(PERMISSIONS_API, () => {
         '(aclKeys)': {
           method: 'post',
           params: {
-            axios: ['/', [MOCK_ACL_KEY]],
+            axios: [`/${BULK_PATH}`, [MOCK_ACL_KEY]],
             valid: [[MOCK_ACL_KEY]],
           },
         },
