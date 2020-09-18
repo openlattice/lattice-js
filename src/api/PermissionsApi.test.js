@@ -30,6 +30,16 @@ describe(PERMISSIONS_API, () => {
           },
         },
       },
+      getAcls: {
+        '': { params: { optional: [false], valid: [[MOCK_ACL_KEY]] } },
+        '(aclKeys)': {
+          method: 'post',
+          params: {
+            axios: ['/', [MOCK_ACL_KEY]],
+            valid: [[MOCK_ACL_KEY]],
+          },
+        },
+      },
       getAclExplanation: {
         '': { params: { optional: [false], valid: [MOCK_ACL_KEY] } },
         '(aclKey)': {
