@@ -19,12 +19,12 @@
 
 import Logger from '../utils/Logger';
 import { PERMISSIONS_API } from '../constants/ApiNames';
-import { EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
-import { Acl } from '../models/Acl';
+import { BULK_PATH, EXPLAIN_PATH, UPDATE_PATH } from '../constants/UrlConstants';
 import { AclData, isValidAclData } from '../models/AclData';
 import { isNonEmptyArray } from '../utils/LangUtils';
-import { isValidUUIDArray } from '../utils/ValidationUtils';
+import { isValidUUID } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
+import type { AclObject } from '../models/Acl';
 import type { UUID } from '../types';
 
 const LOG = new Logger('PermissionsApi');
@@ -37,23 +37,71 @@ const LOG = new Logger('PermissionsApi');
  * @static
  * @memberof lattice.PermissionsApi
  * @param {UUID[]} aclKey
- * @returns {Promise<Acl>}
+ * @returns {Promise<AclObject>}
  *
  * @example
  * PermissionsApi.getAcl(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
  */
-function getAcl(aclKey :UUID[]) :Promise<Acl> {
+function getAcl(aclKey :UUID[]) :Promise<AclObject> {
 
   let errorMsg = '';
 
-  if (!isValidUUIDArray(aclKey)) {
-    errorMsg = 'invalid parameter: aclKey must be a non-empty array of valid UUIDs';
+  if (!isNonEmptyArray(aclKey)) {
+    errorMsg = 'invalid parameter: "aclKey" must be a non-empty array';
+    LOG.error(errorMsg, aclKey);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!aclKey.every(isValidUUID)) {
+    errorMsg = 'invalid parameter: "aclKey" must be an array of valid UUIDs';
     LOG.error(errorMsg, aclKey);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PERMISSIONS_API)
     .post('/', aclKey)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `POST /permissions/bulk`
+ *
+ * Gets the set of ACLs for the given ACL Keys, only if the user is the owner of all ACL Keys.
+ *
+ * @static
+ * @memberof lattice.PermissionsApi
+ * @param {UUID[][]} aclKeys
+ * @returns {Promise<AclObject[]>}
+ *
+ * @example
+ * PermissionsApi.getAcls([
+ *   ["ec6865e6-e60e-424b-a071-6a9c1603d735"],
+ *   ["64f24067-7551-471d-9346-a649b54146f0", "3b330d38-e9ba-467b-8eb3-2f4498d6f72e"],
+ * );
+ */
+function getAcls(aclKeys :UUID[][]) :Promise<AclObject[]> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyArray(aclKeys)) {
+    errorMsg = 'invalid parameter: "aclKeys" must be a non-empty array';
+    LOG.error(errorMsg, aclKeys);
+    return Promise.reject(errorMsg);
+  }
+
+  const isValid = aclKeys.every((aclKey) => aclKey.every(isValidUUID));
+  if (!isValid) {
+    errorMsg = 'invalid parameter: "aclKeys" is not valid UUID[][]';
+    LOG.error(errorMsg, aclKeys);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PERMISSIONS_API)
+    .post(`/${BULK_PATH}`, aclKeys)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -78,8 +126,14 @@ function getAclExplanation(aclKey :UUID[]) :Promise<Object> {
 
   let errorMsg = '';
 
-  if (!isValidUUIDArray(aclKey)) {
-    errorMsg = 'invalid parameter: aclKey must be a valid UUID array';
+  if (!isNonEmptyArray(aclKey)) {
+    errorMsg = 'invalid parameter: "aclKey" must be a non-empty array';
+    LOG.error(errorMsg, aclKey);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!aclKey.every(isValidUUID)) {
+    errorMsg = 'invalid parameter: "aclKey" must be an array of valid UUIDs';
     LOG.error(errorMsg, aclKey);
     return Promise.reject(errorMsg);
   }
@@ -198,6 +252,7 @@ function updateAcls(aclData :AclData[]) :Promise<void> {
 export {
   getAcl,
   getAclExplanation,
+  getAcls,
   updateAcl,
   updateAcls,
 };
