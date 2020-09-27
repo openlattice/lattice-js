@@ -3,13 +3,11 @@
  */
 
 import isArray from 'lodash/isArray';
-import isString from 'lodash/isString';
 import isPlainObject from 'lodash/isPlainObject';
+import isString from 'lodash/isString';
 
 import Logger from './Logger';
-import { isNonEmptyArray, isNonEmptyObject, isNonEmptyString } from './LangUtils';
-
-import FQN from '../models/FQN';
+import { isNonEmptyArray, isNonEmptyObject } from './LangUtils';
 
 type ValidatorFn = (value :any) => boolean;
 
@@ -46,18 +44,6 @@ export function isValidUUID(value :any) :boolean %checks {
 export function isValidUUIDArray(value :any) :boolean %checks {
 
   return value && validateNonEmptyArray(value, (id :any) => isValidUUID(id));
-}
-
-export function isValidFQNArray(value :any) :boolean %checks {
-
-  return validateNonEmptyArray(value, (fqn :any) => FQN.isValid(fqn));
-}
-
-export function isValidTypeArray(values :$ReadOnlyArray<any>, types :Object) :boolean %checks {
-
-  return validateNonEmptyArray(values, (value :any) => (
-    isNonEmptyString(value) && types[value]
-  ));
 }
 
 export function isValidMultimap(value :any, validatorFn :ValidatorFn) :boolean {
