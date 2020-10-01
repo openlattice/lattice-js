@@ -21,6 +21,7 @@ export const CONTACT_PATH :'contact' = 'contact';
 export const COUNT_PATH :'count' = 'count';
 export const CSRF_TOKEN :'csrfToken' = 'csrfToken';
 export const CURRENT_PATH :'current' = 'current';
+export const DATABASE_PATH :'database' = 'database';
 export const DATASTORE_PATH :'datastore' = 'datastore';
 export const DATA_PATH :'data' = 'data';
 export const DATA_SOURCES_PATH :'datasource' = 'datasource';

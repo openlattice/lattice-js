@@ -25,6 +25,7 @@ import Logger from '../utils/Logger';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import {
   CONNECTIONS_PATH,
+  DATABASE_PATH,
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
   ENTITY_SETS_PATH,
@@ -522,6 +523,36 @@ function getOrganization(organizationId :UUID) :Promise<*> {
 }
 
 /**
+ * `GET /organizations/{orgId}/database`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<string>}
+ *
+ * @example
+ * OrganizationsApi.getOrganizationDatabaseName("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getOrganizationDatabaseName(organizationId :UUID) :Promise<string> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${DATABASE_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /organizations/{orgId}/entity-sets`
  *
  * Retrieves all the organization entity sets without filtering.
@@ -942,6 +973,43 @@ function removeRoleFromMember(organizationId :UUID, roleId :UUID, memberId :stri
 }
 
 /**
+ * `GET /organizations/{orgId}/database`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} databaseName
+ * @returns {Promise<void>}
+ *
+ * @example
+ * OrganizationsApi.renameOrganizationDatabase("ec6865e6-e60e-424b-a071-6a9c1603d735", "openlattice");
+ */
+function renameOrganizationDatabase(organizationId :UUID, databaseName :string) :Promise<void> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(databaseName)) {
+    errorMsg = 'invalid parameter: "databaseName" must be a non-empty string';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .patch(`/${organizationId}/${DATABASE_PATH}`, databaseName)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PATCH /permissions`
  *
  * Revokes trust between organizations by removing READ permission on the Organization Principal.
@@ -1249,6 +1317,7 @@ export {
   deleteRole,
   getAllOrganizations,
   getOrganization,
+  getOrganizationDatabaseName,
   getOrganizationEntitySets,
   getOrganizationIntegrationAccount,
   getOrganizationMembers,
@@ -1260,6 +1329,7 @@ export {
   removeDomainsFromOrganization,
   removeMemberFromOrganization,
   removeRoleFromMember,
+  renameOrganizationDatabase,
   revokeTrustFromOrganization,
   updateOrganizationDescription,
   updateOrganizationTitle,
