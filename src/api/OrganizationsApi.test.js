@@ -5,6 +5,7 @@ import * as AxiosUtils from '../utils/axios';
 import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import {
   CONNECTIONS_PATH,
+  DATABASE_PATH,
   DESCRIPTION_PATH,
   EMAIL_DOMAINS_PATH,
   ENTITY_SETS_PATH,
@@ -34,6 +35,7 @@ import {
 } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
+const MOCK_DB_NAME = 'mock_database_name';
 const MOCK_CONNECTION = 'mock_connection';
 const MOCK_DOMAIN = 'openlattice.com';
 const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
@@ -183,6 +185,16 @@ describe(ORGANIZATIONS_API, () => {
           },
         },
       },
+      getOrganizationDatabaseName: {
+        '': { params: { optional: [false], valid: [ORG_MOCK.id] } },
+        '(organizationId)': {
+          method: 'get',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATABASE_PATH}`],
+            valid: [ORG_MOCK.id],
+          },
+        },
+      },
       getOrganizationEntitySets: {
         '': { params: { optional: [false], valid: [ORG_MOCK.id] } },
         '(organizationId)': {
@@ -310,6 +322,16 @@ describe(ORGANIZATIONS_API, () => {
               `/${ORG_MOCK.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${ROLE_MOCK.id}/${MEMBERS_PATH}/${MOCK_MEMBER_ID}`
             ],
             valid: [ORG_MOCK.id, ROLE_MOCK.id, MOCK_MEMBER_ID],
+          },
+        },
+      },
+      renameOrganizationDatabase: {
+        '': { params: { optional: [false, false], valid: [ORG_MOCK.id, MOCK_DB_NAME] } },
+        '(organizationId, databaseName)': {
+          method: 'patch',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATABASE_PATH}`, MOCK_DB_NAME],
+            valid: [ORG_MOCK.id, MOCK_DB_NAME],
           },
         },
       },

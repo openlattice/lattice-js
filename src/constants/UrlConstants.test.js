@@ -23,6 +23,7 @@ const EXPECTED = Map({
   COUNT_PATH                    : 'count',
   CSRF_TOKEN                    : 'csrfToken',
   CURRENT_PATH                  : 'current',
+  DATABASE_PATH                 : 'database',
   DATASTORE_PATH                : 'datastore',
   DATA_PATH                     : 'data',
   DATA_SOURCES_PATH             : 'datasource',
