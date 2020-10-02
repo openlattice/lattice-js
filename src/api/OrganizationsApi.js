@@ -1000,8 +1000,14 @@ function renameOrganizationDatabase(organizationId :UUID, databaseName :string) 
     return Promise.reject(errorMsg);
   }
 
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+  };
+
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .patch(`/${organizationId}/${DATABASE_PATH}`, databaseName)
+    .patch(`/${organizationId}/${DATABASE_PATH}`, databaseName, axiosConfig)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
