@@ -1,6 +1,6 @@
 {
   "name": "lattice",
-  "version": "0.81.0",
+  "version": "0.81.1",
   "homepage": "https://github.com/openlattice/lattice-js",
   "description": "JavaScript SDK for all OpenLattice REST APIs",
   "author": {
@@ -46,7 +46,7 @@
     "babel-loader": "~8.1.0",
     "bluebird": "~3.7.0",
     "documentation": "~13.0.0",
-    "eslint": "~7.10.0",
+    "eslint": "~7.11.0",
     "eslint-config-airbnb-base": "~14.2.0",
     "eslint-import-resolver-webpack": "~0.12.0",
     "eslint-loader": "~4.0.0",
