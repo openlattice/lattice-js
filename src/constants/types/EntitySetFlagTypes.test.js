@@ -1,14 +1,16 @@
-import { Map } from 'immutable';
+import { OrderedMap } from 'immutable';
 
 import EntitySetFlagTypes from './EntitySetFlagTypes';
 import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 
-const EXPECTED_ENUM = Map({
+const EXPECTED_ENUM = OrderedMap({
   ASSOCIATION: 'ASSOCIATION',
   AUDIT: 'AUDIT',
   EXTERNAL: 'EXTERNAL',
   LINKING: 'LINKING',
-}).sortBy((value, key) => key);
+  TRANSPORTED: 'TRANSPORTED',
+  UNVERSIONED: 'UNVERSIONED',
+});
 
 describe('IndexTypes', () => {
 
