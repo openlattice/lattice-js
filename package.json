@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "main": "build/index.js",
   "dependencies": {
-    "axios": "~0.20.0",
+    "axios": "~0.21.0",
     "immutable": "4.0.0-rc.10",
     "lodash": "~4.17.10",
     "loglevel": "~1.7.0",
