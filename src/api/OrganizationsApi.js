@@ -62,6 +62,12 @@ import type { UUID } from '../types';
 
 const LOG = new Logger('OrganizationsApi');
 
+const AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN = {
+  headers: {
+    'Content-Type': 'text/plain',
+  },
+};
+
 /*
  *
  * internal
@@ -1001,7 +1007,7 @@ function renameOrganizationDatabase(organizationId :UUID, databaseName :string) 
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .patch(`/${organizationId}/${DATABASE_PATH}`, databaseName)
+    .patch(`/${organizationId}/${DATABASE_PATH}`, databaseName, AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -1072,11 +1078,7 @@ function updateOrganizationDescription(organizationId :UUID, description ?:strin
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .put(
-      `/${organizationId}/${DESCRIPTION_PATH}`,
-      newDescription,
-      { headers: { 'Content-Type': 'text/plain' } },
-    )
+    .put(`/${organizationId}/${DESCRIPTION_PATH}`, newDescription, AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -1117,14 +1119,8 @@ function updateOrganizationTitle(organizationId :UUID, title :string) :Promise<v
     return Promise.reject(errorMsg);
   }
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  };
-
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .put(`/${organizationId}/${TITLE_PATH}`, title, axiosConfig)
+    .put(`/${organizationId}/${TITLE_PATH}`, title, AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -1190,7 +1186,7 @@ function updateRoleDescription(organizationId :UUID, roleId :UUID, description ?
     .put(
       `/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${DESCRIPTION_PATH}`,
       newDescription,
-      { headers: { 'Content-Type': 'text/plain' } },
+      AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
     )
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
@@ -1291,14 +1287,12 @@ function updateRoleTitle(organizationId :UUID, roleId :UUID, title :string) :Pro
     return Promise.reject(errorMsg);
   }
 
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  };
-
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .put(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${TITLE_PATH}`, title, axiosConfig)
+    .put(
+      `/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}/${TITLE_PATH}`,
+      title,
+      AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
+    )
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

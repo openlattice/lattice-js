@@ -65,8 +65,17 @@ describe('AxiosUtils : newAxiosInstance()', () => {
       headers: {
         common: {
           Authorization: `Bearer ${mockAuthToken}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
+        patch: {
+          'Content-Type': 'application/json',
+        },
+        post: {
+          'Content-Type': 'application/json',
+        },
+        put: {
+          'Content-Type': 'application/json',
+        },
       }
     });
 
@@ -84,8 +93,17 @@ describe('AxiosUtils : newAxiosInstance()', () => {
       baseURL: mockBaseUrl,
       headers: {
         common: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
+        patch: {
+          'Content-Type': 'application/json',
+        },
+        post: {
+          'Content-Type': 'application/json',
+        },
+        put: {
+          'Content-Type': 'application/json',
+        },
       }
     });
 

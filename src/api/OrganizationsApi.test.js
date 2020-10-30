@@ -40,6 +40,12 @@ const MOCK_CONNECTION = 'mock_connection';
 const MOCK_DOMAIN = 'openlattice.com';
 const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
 
+const AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN = {
+  headers: {
+    'Content-Type': 'text/plain',
+  },
+};
+
 const updateAclSpy = jest.spyOn(PermissionsApi, 'updateAcl');
 
 jest.mock('../utils/axios');
@@ -330,7 +336,7 @@ describe(ORGANIZATIONS_API, () => {
         '(organizationId, databaseName)': {
           method: 'patch',
           params: {
-            axios: [`/${ORG_MOCK.id}/${DATABASE_PATH}`, MOCK_DB_NAME],
+            axios: [`/${ORG_MOCK.id}/${DATABASE_PATH}`, MOCK_DB_NAME, AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN],
             valid: [ORG_MOCK.id, MOCK_DB_NAME],
           },
         },
@@ -343,7 +349,7 @@ describe(ORGANIZATIONS_API, () => {
             axios: [
               `/${ORG_MOCK.id}/${DESCRIPTION_PATH}`,
               ORG_MOCK.description,
-              { headers: { 'Content-Type': 'text/plain' } },
+              AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id, ORG_MOCK.description],
           },
@@ -354,7 +360,7 @@ describe(ORGANIZATIONS_API, () => {
             axios: [
               `/${ORG_MOCK.id}/${DESCRIPTION_PATH}`,
               '',
-              { headers: { 'Content-Type': 'text/plain' } },
+              AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id],
           },
@@ -368,7 +374,7 @@ describe(ORGANIZATIONS_API, () => {
             axios: [
               `/${ORG_MOCK.id}/${TITLE_PATH}`,
               ORG_MOCK.title,
-              { headers: { 'Content-Type': 'text/plain' } },
+              AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id, ORG_MOCK.title],
           },
@@ -382,7 +388,7 @@ describe(ORGANIZATIONS_API, () => {
             axios: [
               `/${ORG_MOCK.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${ROLE_MOCK.id}/${DESCRIPTION_PATH}`,
               ROLE_MOCK.description,
-              { headers: { 'Content-Type': 'text/plain' } },
+              AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id, ROLE_MOCK.id, ROLE_MOCK.description],
           },
@@ -393,7 +399,7 @@ describe(ORGANIZATIONS_API, () => {
             axios: [
               `/${ORG_MOCK.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${ROLE_MOCK.id}/${DESCRIPTION_PATH}`,
               '',
-              { headers: { 'Content-Type': 'text/plain' } },
+              AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id, ROLE_MOCK.id],
           },
@@ -417,7 +423,7 @@ describe(ORGANIZATIONS_API, () => {
             axios: [
               `/${ORG_MOCK.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${ROLE_MOCK.id}/${TITLE_PATH}`,
               ROLE_MOCK.title,
-              { headers: { 'Content-Type': 'text/plain' } },
+              AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id, ROLE_MOCK.id, ROLE_MOCK.title],
           },
