@@ -19,10 +19,11 @@ export default function newAxiosInstance(baseUrl :string) :Axios {
   const axiosConfigObj :Object = {
     baseURL: baseUrl,
     headers: {
-      common: {
-        'Content-Type': 'application/json'
-      }
-    }
+      common: { 'Content-Type': 'application/json' },
+      patch: { 'Content-Type': 'application/json' },
+      post: { 'Content-Type': 'application/json' },
+      put: { 'Content-Type': 'application/json' },
+    },
   };
 
   const authToken :string = getConfig().get('authToken', '');
