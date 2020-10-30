@@ -29,6 +29,7 @@ import {
   EDGE_ES_IDS,
   ENTITY_KEY_IDS,
   ENTITY_TYPE_ID,
+  EXCLUDE_PROPERTY_TYPES,
   KEYWORD,
   MAX_HITS,
   PROPERTY_TYPE_IDS,
@@ -293,6 +294,9 @@ function searchEntitySetMetaData(searchOptions :Object) :Promise<Object> {
         set.add(id);
       });
     }).toJS();
+  }
+  else {
+    data[EXCLUDE_PROPERTY_TYPES] = true;
   }
 
   return getApiAxiosInstance(SEARCH_API)

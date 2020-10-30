@@ -8,6 +8,7 @@ export const EDGE :'edge' = 'edge';
 export const EDGE_ES_IDS :'edgeEntitySetIds' = 'edgeEntitySetIds';
 export const ENTITY_KEY_IDS :'entityKeyIds' = 'entityKeyIds';
 export const ENTITY_TYPE_ID :'entityTypeId' = 'entityTypeId';
+export const EXCLUDE_PROPERTY_TYPES :'excludePropertyTypes' = 'excludePropertyTypes';
 export const FUZZY :'fuzzy' = 'fuzzy';
 export const KEYWORD :'kw' = 'kw';
 export const MAX_HITS :'maxHits' = 'maxHits';
