@@ -167,6 +167,7 @@ describe(SEARCH_API, () => {
           method: 'post',
           params: {
             axios: ['/', {
+              excludePropertyTypes: true,
               kw: MOCK_SEARCH_TERM,
               maxHits: MOCK_MAX_HITS,
               start: MOCK_START,
@@ -183,6 +184,7 @@ describe(SEARCH_API, () => {
           params: {
             axios: ['/', {
               entityTypeId: MOCK_ETID,
+              excludePropertyTypes: true,
               kw: MOCK_SEARCH_TERM,
               maxHits: MOCK_MAX_HITS,
               start: MOCK_START,
@@ -217,6 +219,7 @@ describe(SEARCH_API, () => {
           params: {
             axios: ['/', {
               entityTypeId: MOCK_ETID,
+              excludePropertyTypes: true,
               maxHits: MOCK_MAX_HITS,
               start: MOCK_START,
             }],
