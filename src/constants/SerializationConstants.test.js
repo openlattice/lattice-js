@@ -15,6 +15,7 @@ const EXPECTED = OrderedMap({
   MAX_HITS: 'maxHits',
   NAME: 'name',
   NAMESPACE: 'namespace',
+  ORGANIZATION_ID: 'organizationId',
   PROPERTY_TYPE_IDS: 'pid',
   SEARCH_FIELDS: 'searchFields',
   SEARCH_TERM: 'searchTerm',
