@@ -32,7 +32,7 @@ import {
   EXCLUDE_PROPERTY_TYPES,
   KEYWORD,
   MAX_HITS,
-  ORGANIZATION,
+  ORGANIZATION_ID,
   PROPERTY_TYPE_IDS,
   SOURCE,
   SOURCE_ES_IDS,
@@ -302,7 +302,7 @@ function searchEntitySetMetaData(searchOptions :Object) :Promise<Object> {
   }
 
   if (isValidUUID(organizationId)) {
-    data[ORGANIZATION] = organizationId;
+    data[ORGANIZATION_ID] = organizationId;
   }
 
   return getApiAxiosInstance(SEARCH_API)
