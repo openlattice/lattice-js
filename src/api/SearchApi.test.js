@@ -12,6 +12,7 @@ const MOCK_START = 10;
 const MOCK_MAX_HITS = 100;
 const MOCK_SEARCH_TERM = 'mockSearchTerm';
 
+const MOCK_ORG_ID = '7c523ade-f0f1-4eb8-d109-8c61598e3d27';
 const MOCK_EKID_1 = '08e30000-0000-0000-8000-000000000004';
 const MOCK_EKID_2 = '00480000-0000-0000-8000-000000000004';
 const MOCK_ESID_1 = '899476b9-b390-48c2-a2b7-d17230e02d57';
@@ -241,6 +242,24 @@ describe(SEARCH_API, () => {
             valid: [{
               maxHits: MOCK_MAX_HITS,
               propertyTypeIds: [MOCK_PTID_1, MOCK_PTID_2],
+              start: MOCK_START,
+            }],
+          },
+        },
+        '({ organizationId, searchTerm, maxHits, start })': {
+          method: 'post',
+          params: {
+            axios: ['/', {
+              excludePropertyTypes: true,
+              kw: MOCK_SEARCH_TERM,
+              maxHits: MOCK_MAX_HITS,
+              organizationId: MOCK_ORG_ID,
+              start: MOCK_START,
+            }],
+            valid: [{
+              maxHits: MOCK_MAX_HITS,
+              organizationId: MOCK_ORG_ID,
+              searchTerm: MOCK_SEARCH_TERM,
               start: MOCK_START,
             }],
           },
