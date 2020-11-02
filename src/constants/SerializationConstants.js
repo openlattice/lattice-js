@@ -14,6 +14,7 @@ export const KEYWORD :'kw' = 'kw';
 export const MAX_HITS :'maxHits' = 'maxHits';
 export const NAME :'name' = 'name';
 export const NAMESPACE :'namespace' = 'namespace';
+export const ORGANIZATION_ID :'organizationId' = 'organizationId';
 export const PROPERTY_TYPE_IDS :'pid' = 'pid';
 export const SEARCH_FIELDS :'searchFields' = 'searchFields';
 export const SEARCH_TERM :'searchTerm' = 'searchTerm';
