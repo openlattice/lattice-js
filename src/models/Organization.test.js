@@ -57,6 +57,11 @@ runTestSuite(
       isOptional: true,
       validParams: [ORGANIZATION_MOCK.members],
     },
+    setMetaDataEntitySetIds: {
+      field: 'metadataEntitySetIds',
+      isOptional: true,
+      validParams: [ORGANIZATION_MOCK.metadataEntitySetIds],
+    },
     setPartitions: {
       field: 'partitions',
       isOptional: true,
