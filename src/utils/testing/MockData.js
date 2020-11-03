@@ -322,6 +322,11 @@ const ORGANIZATION_MOCK = (new OrganizationBuilder())
       .setType(PrincipalTypes.USER)
       .build()
   ])
+  .setMetaDataEntitySetIds({
+    columns: 'd505b4f6-8094-46a4-8cf1-6396924392be',
+    datasets: '109cd2fe-621e-49a6-8e0d-608190460a4f',
+    organization: '8f52d20b-f082-442f-9156-5ec4aecee308',
+  })
   .setPartitions([128])
   .setPrincipal(
     (new PrincipalBuilder())
@@ -366,6 +371,11 @@ function genRandomOrganization() {
       genRandomPrincipal(PrincipalTypes.USER), // 8 - https://github.com/immutable-js/immutable-js/issues/1643
       genRandomPrincipal(PrincipalTypes.USER), // 9
     ])
+    .setMetaDataEntitySetIds({
+      columns: genRandomUUID(),
+      datasets: genRandomUUID(),
+      organization: genRandomUUID(),
+    })
     .setPartitions([genRandomInt()])
     .setPrincipal(
       (new PrincipalBuilder())

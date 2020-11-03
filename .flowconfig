@@ -15,3 +15,6 @@
 .*/node_modules/.*
 <PROJECT_ROOT>/build/.*
 <PROJECT_ROOT>/config/.*
+
+[options]
+esproposal.optional_chaining=enable
