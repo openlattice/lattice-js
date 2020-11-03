@@ -11,6 +11,7 @@ import {
   Map,
   Set,
   fromJS,
+  get,
   isCollection,
   isImmutable,
 } from 'immutable';
@@ -38,6 +39,7 @@ type OrganizationObject = {|
   grants :{ [UUID] :GrantObject };
   id ?:UUID;
   members :PrincipalObject[];
+  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
   partitions ?:number[];
   principal :PrincipalObject;
   roles :RoleObject[];
@@ -53,6 +55,7 @@ class Organization {
   grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
+  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
   partitions :?number[];
   principal :Principal;
   roles :Role[];
@@ -66,6 +69,7 @@ class Organization {
     grants :{ [UUID] :Grant };
     id :?UUID;
     members :Principal[];
+    metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
     partitions :?number[];
     principal :Principal;
     roles :Role[];
@@ -78,6 +82,7 @@ class Organization {
     this.connections = org.connections;
     this.grants = org.grants;
     this.members = org.members;
+    this.metadataEntitySetIds = org.metadataEntitySetIds;
     this.principal = org.principal;
     this.roles = org.roles;
     this.title = org.title;
@@ -110,6 +115,7 @@ class Organization {
       emailDomains: this.emailDomains,
       grants: mapValues(this.grants, (grant) => grant.toObject()),
       members: this.members.map((principal) => principal.toObject()),
+      metadataEntitySetIds: this.metadataEntitySetIds,
       principal: this.principal.toObject(),
       roles: this.roles.map((role) => role.toObject()),
       title: this.title,
@@ -146,6 +152,7 @@ class OrganizationBuilder {
   grants :{ [UUID] :Grant };
   id :?UUID;
   members :Principal[];
+  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
   partitions :?number[];
   principal :Principal;
   roles :Role[];
@@ -161,6 +168,7 @@ class OrganizationBuilder {
       this.setGrants(value.get('grants'));
       this.setId(value.get('id'));
       this.setMembers(value.get('members'));
+      this.setMetaDataEntitySetIds(value.get('metadataEntitySetIds'));
       this.setPartitions(value.get('partitions'));
       this.setPrincipal(value.get('principal'));
       this.setRoles(value.get('roles'));
@@ -174,6 +182,7 @@ class OrganizationBuilder {
       this.setGrants(value.grants);
       this.setId(value.id);
       this.setMembers(value.members);
+      this.setMetaDataEntitySetIds(value.metadataEntitySetIds);
       this.setPartitions(value.partitions);
       this.setPrincipal(value.principal);
       this.setRoles(value.roles);
@@ -315,6 +324,35 @@ class OrganizationBuilder {
     return this;
   }
 
+  setMetaDataEntitySetIds(
+    metadataEntitySetIds :$ReadOnly<{ columns :UUID; datasets :UUID; organization :UUID; }>,
+  ) :OrganizationBuilder {
+
+    if (!isDefined(metadataEntitySetIds)) {
+      return this;
+    }
+
+    if (!isValidUUID(get(metadataEntitySetIds, 'columns'))) {
+      throw new Error('invalid parameter: "metadataEntitySetIds.columns" must be a valid UUID');
+    }
+
+    if (!isValidUUID(get(metadataEntitySetIds, 'datasets'))) {
+      throw new Error('invalid parameter: "metadataEntitySetIds.datasets" must be a valid UUID');
+    }
+
+    if (!isValidUUID(get(metadataEntitySetIds, 'organization'))) {
+      throw new Error('invalid parameter: "metadataEntitySetIds.organization" must be a valid UUID');
+    }
+
+    this.metadataEntitySetIds = {
+      columns: get(metadataEntitySetIds, 'columns'),
+      datasets: get(metadataEntitySetIds, 'datasets'),
+      organization: get(metadataEntitySetIds, 'organization'),
+    };
+
+    return this;
+  }
+
   setPartitions(partitions :?$ReadOnlyArray<number>) :OrganizationBuilder {
 
     if (!isDefined(partitions)) {
@@ -406,6 +444,10 @@ class OrganizationBuilder {
       this.members = [];
     }
 
+    if (!this.metadataEntitySetIds) {
+      this.metadataEntitySetIds = {};
+    }
+
     if (!this.roles) {
       this.roles = [];
     }
@@ -418,6 +460,7 @@ class OrganizationBuilder {
       grants: this.grants,
       id: this.id,
       members: this.members,
+      metadataEntitySetIds: this.metadataEntitySetIds,
       partitions: this.partitions,
       principal: this.principal,
       roles: this.roles,
