@@ -31,6 +31,8 @@ import type { UUID } from '../types';
 
 const LOG = new Logger('Organization');
 
+const UNINITIALIZED_UUID = '00000000-0000-0000-0000-000000000000';
+
 type OrganizationObject = {|
   apps :UUID[];
   connections :string[];
@@ -445,7 +447,11 @@ class OrganizationBuilder {
     }
 
     if (!this.metadataEntitySetIds) {
-      this.metadataEntitySetIds = {};
+      this.metadataEntitySetIds = {
+        columns: UNINITIALIZED_UUID,
+        datasets: UNINITIALIZED_UUID,
+        organization: UNINITIALIZED_UUID,
+      };
     }
 
     if (!this.roles) {
