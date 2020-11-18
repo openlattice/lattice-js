@@ -7,6 +7,7 @@ type EntitySetFlagTypesEnum = {|
   AUDIT :'AUDIT';
   EXTERNAL :'EXTERNAL';
   LINKING :'LINKING';
+  METADATA :'METADATA';
   TRANSPORTED :'TRANSPORTED';
   UNVERSIONED :'UNVERSIONED';
 |};
@@ -16,6 +17,7 @@ const EntitySetFlagTypes :{| ...EntitySetFlagTypesEnum |} = Object.freeze({
   AUDIT: 'AUDIT',
   EXTERNAL: 'EXTERNAL',
   LINKING: 'LINKING',
+  METADATA: 'METADATA',
   TRANSPORTED: 'TRANSPORTED',
   UNVERSIONED: 'UNVERSIONED',
 });

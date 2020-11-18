@@ -1,6 +1,7 @@
 import { OrderedMap } from 'immutable';
 
 import EntitySetFlagTypes from './EntitySetFlagTypes';
+
 import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 
 const EXPECTED_ENUM = OrderedMap({
@@ -8,6 +9,7 @@ const EXPECTED_ENUM = OrderedMap({
   AUDIT: 'AUDIT',
   EXTERNAL: 'EXTERNAL',
   LINKING: 'LINKING',
+  METADATA: 'METADATA',
   TRANSPORTED: 'TRANSPORTED',
   UNVERSIONED: 'UNVERSIONED',
 });
