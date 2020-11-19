@@ -4,6 +4,7 @@ import * as AxiosUtils from '../utils/axios';
 import { PRINCIPALS_API } from '../constants/ApiNames';
 import {
   CURRENT_PATH,
+  DB_PATH,
   ROLES_PATH,
   SEARCH_PATH,
   SYNC_PATH,
@@ -39,6 +40,16 @@ describe(PRINCIPALS_API, () => {
           method: 'get',
           params: {
             axios: [`/${USERS_PATH}`],
+            valid: [],
+          },
+        },
+      },
+      getAtlasCredentials: {
+        '': { params: { optional: [], valid: [] } },
+        '()': {
+          method: 'get',
+          params: {
+            axios: [`/${DB_PATH}`],
             valid: [],
           },
         },

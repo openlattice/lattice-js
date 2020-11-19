@@ -21,6 +21,7 @@ import Logger from '../utils/Logger';
 import { PRINCIPALS_API } from '../constants/ApiNames';
 import {
   CURRENT_PATH,
+  DB_PATH,
   ROLES_PATH,
   SEARCH_PATH,
   SYNC_PATH,
@@ -67,6 +68,27 @@ function getAllUsers() :Promise<*> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .get(`/${USERS_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /principals/db`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @returns {Promise<Object>} - a Promise that will resolve with an object containing the username and credential
+ *
+ * @example
+ * PrincipalsApi.getAtlasCredentials();
+ */
+function getAtlasCredentials() {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .get(`/${DB_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -212,6 +234,7 @@ function syncUser() :Promise<*> {
 export {
   getAllRoles,
   getAllUsers,
+  getAtlasCredentials,
   getCurrentRoles,
   getSecurablePrincipal,
   getUser,
