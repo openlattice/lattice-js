@@ -27,6 +27,7 @@ import {
   CONNECTIONS_PATH,
   DATABASE_PATH,
   DESCRIPTION_PATH,
+  DESTROY_PATH,
   EMAIL_DOMAINS_PATH,
   ENTITY_SETS_PATH,
   GRANT_PATH,
@@ -35,6 +36,7 @@ import {
   PRINCIPALS_PATH,
   ROLES_PATH,
   TITLE_PATH,
+  TRANSPORT_PATH,
 } from '../constants/UrlConstants';
 import {
   ActionTypes,
@@ -466,6 +468,46 @@ function deleteRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
     .delete(`/${organizationId}/${PRINCIPALS_PATH}/${ROLES_PATH}/${roleId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /organizations/{orgId}/{entitySetId}/destroy`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} entitySetId
+ * @returns {Promise<void>} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.destroyTransportedOrganizationEntitySet(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "d66c4c7d-0aa9-43f3-bb80-9ebcbd5e21ea"
+ * );
+ */
+function destroyTransportedOrganizationEntitySet(organizationId :UUID, entitySetId :UUID) :Promise<void> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: "entitySetId" must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${entitySetId}/${DESTROY_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -1038,6 +1080,46 @@ function revokeTrustFromOrganization(organizationId :UUID, trustedPrincipalId :s
 }
 
 /**
+ * `GET /organizations/{orgId}/{entitySetId}/transport`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} entitySetId
+ * @returns {Promise<void>} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.transportOrganizationEntitySet(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "d66c4c7d-0aa9-43f3-bb80-9ebcbd5e21ea"
+ * );
+ */
+function transportOrganizationEntitySet(organizationId :UUID, entitySetId :UUID) :Promise<void> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: "entitySetId" must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${entitySetId}/${TRANSPORT_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PUT /organizations/{orgId}/description`
  *
  * Updates the description for the given Organization id.
@@ -1309,6 +1391,7 @@ export {
   createRole,
   deleteOrganization,
   deleteRole,
+  destroyTransportedOrganizationEntitySet,
   getAllOrganizations,
   getOrganization,
   getOrganizationDatabaseName,
@@ -1325,6 +1408,7 @@ export {
   removeRoleFromMember,
   renameOrganizationDatabase,
   revokeTrustFromOrganization,
+  transportOrganizationEntitySet,
   updateOrganizationDescription,
   updateOrganizationTitle,
   updateRoleDescription,
