@@ -21,7 +21,12 @@ import _isInteger from 'lodash/isInteger';
 
 import Logger from '../utils/Logger';
 import { DATA_SETS_API } from '../constants/ApiNames';
-import { DATA_PATH, EXTERNAL_DB_COLUMN_PATH, EXTERNAL_DB_TABLE_PATH } from '../constants/UrlConstants';
+import {
+  DATA_PATH,
+  EXTERNAL_DB_COLUMN_PATH,
+  EXTERNAL_DB_TABLE_PATH,
+  SCHEMA_PATH,
+} from '../constants/UrlConstants';
 import { isValidUUID } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 import type { UUID } from '../types';
@@ -166,8 +171,44 @@ function getOrganizationDataSetData(organizationId :UUID, dataSetId :UUID, count
     });
 }
 
+/**
+ * `GET /{organizationId}/{dataSetId}/{count}/data`
+ *
+ * @static
+ * @memberof lattice.DataSetsApi
+ * @param {UUID} organizationId
+ * @param {UUID} dataSetId
+ * @param {number} count
+ * @returns {Promise<string>}
+ */
+function getOrganizationDataSetSchema(organizationId :UUID, dataSetId :UUID) :Promise<string> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(dataSetId)) {
+    errorMsg = 'invalid parameter: "dataSetId" must be a valid UUID';
+    LOG.error(errorMsg, dataSetId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_SETS_API)
+    .get(`/${organizationId}/${dataSetId}/${SCHEMA_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   getOrganizationDataSet,
   getOrganizationDataSets,
   getOrganizationDataSetData,
+  getOrganizationDataSetSchema,
 };
