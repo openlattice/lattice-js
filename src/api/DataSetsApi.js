@@ -172,13 +172,12 @@ function getOrganizationDataSetData(organizationId :UUID, dataSetId :UUID, count
 }
 
 /**
- * `GET /{organizationId}/{dataSetId}/{count}/data`
+ * `GET /{organizationId}/{dataSetId}/schema`
  *
  * @static
  * @memberof lattice.DataSetsApi
  * @param {UUID} organizationId
  * @param {UUID} dataSetId
- * @param {number} count
  * @returns {Promise<string>}
  */
 function getOrganizationDataSetSchema(organizationId :UUID, dataSetId :UUID) :Promise<string> {
