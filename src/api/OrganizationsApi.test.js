@@ -7,6 +7,7 @@ import {
   CONNECTIONS_PATH,
   DATABASE_PATH,
   DESCRIPTION_PATH,
+  DESTROY_PATH,
   EMAIL_DOMAINS_PATH,
   ENTITY_SETS_PATH,
   GRANT_PATH,
@@ -15,6 +16,7 @@ import {
   PRINCIPALS_PATH,
   ROLES_PATH,
   TITLE_PATH,
+  TRANSPORT_PATH,
 } from '../constants/UrlConstants';
 import {
   ActionTypes,
@@ -29,6 +31,7 @@ import {
 } from '../models';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import {
+  ENTITY_SET_MOCK,
   GRANT_MOCK,
   ORGANIZATION_MOCK as ORG_MOCK,
   ROLE_MOCK,
@@ -168,6 +171,16 @@ describe(ORGANIZATIONS_API, () => {
           params: {
             axios: [`/${ORG_MOCK.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${ROLE_MOCK.id}`],
             valid: [ORG_MOCK.id, ROLE_MOCK.id],
+          },
+        },
+      },
+      destroyTransportedOrganizationEntitySet: {
+        '': { params: { optional: [false, false], valid: [ORG_MOCK.id, ENTITY_SET_MOCK.id] } },
+        '(organizationId, entitySetId)': {
+          method: 'get',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${ENTITY_SET_MOCK.id}/${DESTROY_PATH}`],
+            valid: [ORG_MOCK.id, ENTITY_SET_MOCK.id],
           },
         },
       },
@@ -338,6 +351,16 @@ describe(ORGANIZATIONS_API, () => {
           params: {
             axios: [`/${ORG_MOCK.id}/${DATABASE_PATH}`, MOCK_DB_NAME, AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN],
             valid: [ORG_MOCK.id, MOCK_DB_NAME],
+          },
+        },
+      },
+      transportOrganizationEntitySet: {
+        '': { params: { optional: [false, false], valid: [ORG_MOCK.id, ENTITY_SET_MOCK.id] } },
+        '(organizationId, entitySetId)': {
+          method: 'get',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${ENTITY_SET_MOCK.id}/${TRANSPORT_PATH}`],
+            valid: [ORG_MOCK.id, ENTITY_SET_MOCK.id],
           },
         },
       },

@@ -2,7 +2,12 @@ import * as DataSetsApi from './DataSetsApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { DATA_SETS_API } from '../constants/ApiNames';
-import { DATA_PATH, EXTERNAL_DB_COLUMN_PATH, EXTERNAL_DB_TABLE_PATH } from '../constants/UrlConstants';
+import {
+  DATA_PATH,
+  EXTERNAL_DB_COLUMN_PATH,
+  EXTERNAL_DB_TABLE_PATH,
+  SCHEMA_PATH,
+} from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import { ORGANIZATION_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
@@ -83,6 +88,16 @@ describe(DATA_SETS_API, () => {
           params: {
             axios: [`/${ORGANIZATION_MOCK.id}/${MOCK_DATA_SET_ID}/97/${DATA_PATH}`],
             valid: [ORGANIZATION_MOCK.id, MOCK_DATA_SET_ID, 97],
+          },
+        },
+      },
+      getOrganizationDataSetSchema: {
+        '': { params: { optional: [false, false], valid: [ORGANIZATION_MOCK.id, MOCK_DATA_SET_ID] } },
+        '(organizationId, dataSetId)': {
+          method: 'get',
+          params: {
+            axios: [`/${ORGANIZATION_MOCK.id}/${MOCK_DATA_SET_ID}/${SCHEMA_PATH}`],
+            valid: [ORGANIZATION_MOCK.id, MOCK_DATA_SET_ID],
           },
         },
       },
