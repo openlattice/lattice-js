@@ -310,10 +310,16 @@ const ORGANIZATION_MOCK = (new OrganizationBuilder())
   .setDescription('MockOrgDescription')
   .setEmailDomains(['openlattice.com'])
   .setGrants({
-    'b95d538b-4358-45fe-9fa5-de7987fbc502': (new GrantBuilder())
-      .setGrantType(GrantTypes.MANUAL)
-      .setMappings(['MAPPING_1', 'MAPPING_2'])
-      .build()
+    'b95d538b-4358-45fe-9fa5-de7987fbc502': {
+      [GrantTypes.MANUAL]: (new GrantBuilder())
+        .setGrantType(GrantTypes.MANUAL)
+        .setMappings(['MAPPING_1', 'MAPPING_2'])
+        .build(),
+      [GrantTypes.ROLES]: (new GrantBuilder())
+        .setGrantType(GrantTypes.ROLES)
+        .setMappings(['MAPPING_3', 'MAPPING_4'])
+        .build(),
+    }
   })
   .setId('5e5da17a-1b9a-4ef3-9798-8dab02fa6c8a')
   .setMembers([
@@ -357,7 +363,20 @@ function genRandomOrganization() {
     .setConnections([genRandomString(), genRandomString()])
     .setDescription(genRandomString())
     .setEmailDomains([`${genRandomString()}.com`])
-    .setGrants({ [genRandomUUID()]: genRandomGrant() })
+    .setGrants({
+      [genRandomUUID()]: {
+        [GrantTypes.AUTOMATIC]: (new GrantBuilder())
+          .setGrantType(GrantTypes.AUTOMATIC)
+          .setMappings([genRandomString(), genRandomString()])
+          .build(),
+      },
+      [genRandomUUID()]: {
+        [GrantTypes.GROUPS]: (new GrantBuilder())
+          .setGrantType(GrantTypes.GROUPS)
+          .setMappings([genRandomString(), genRandomString()])
+          .build(),
+      },
+    })
     .setId(genRandomUUID())
     .setMembers([
       genRandomPrincipal(PrincipalTypes.USER), // 0
