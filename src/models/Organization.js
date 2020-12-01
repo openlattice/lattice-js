@@ -16,7 +16,7 @@ import {
   isImmutable,
 } from 'immutable';
 
-import { Grant, isValidGrant } from './Grant';
+import { Grant, GrantBuilder } from './Grant';
 import { Principal, PrincipalBuilder } from './Principal';
 import { Role, RoleBuilder } from './Role';
 import type { GrantObject } from './Grant';
@@ -27,6 +27,7 @@ import Logger from '../utils/Logger';
 import PrincipalTypes from '../constants/types/PrincipalTypes';
 import { isDefined, isEmptyString, isNonEmptyString } from '../utils/LangUtils';
 import { isValidModel, isValidUUID } from '../utils/ValidationUtils';
+import type { GrantType } from '../constants/types/GrantTypes';
 import type { UUID } from '../types';
 
 const LOG = new Logger('Organization');
@@ -38,7 +39,7 @@ type OrganizationObject = {|
   connections :string[];
   description ?:string;
   emailDomains :string[];
-  grants :{ [UUID] :GrantObject };
+  grants :{ [UUID] :{ [GrantType] :GrantObject} };
   id ?:UUID;
   members :PrincipalObject[];
   metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
@@ -54,7 +55,7 @@ class Organization {
   connections :string[];
   description :?string;
   emailDomains :string[];
-  grants :{ [UUID] :Grant };
+  grants :{ [UUID] :{ [GrantType] :Grant} };
   id :?UUID;
   members :Principal[];
   metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
@@ -68,7 +69,7 @@ class Organization {
     connections :string[];
     description :?string;
     emailDomains :string[];
-    grants :{ [UUID] :Grant };
+    grants :{ [UUID] :{ [GrantType] :Grant} };
     id :?UUID;
     members :Principal[];
     metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
@@ -115,7 +116,7 @@ class Organization {
       apps: this.apps,
       connections: this.connections,
       emailDomains: this.emailDomains,
-      grants: mapValues(this.grants, (grant) => grant.toObject()),
+      grants: mapValues(this.grants, (grantMap) => mapValues(grantMap, (grant) => grant.toObject())),
       members: this.members.map((principal) => principal.toObject()),
       metadataEntitySetIds: this.metadataEntitySetIds,
       principal: this.principal.toObject(),
@@ -151,7 +152,7 @@ class OrganizationBuilder {
   connections :string[];
   description :?string;
   emailDomains :string[];
-  grants :{ [UUID] :Grant };
+  grants :{ [UUID] :{ [GrantType] :Grant} };
   id :?UUID;
   members :Principal[];
   metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
@@ -279,16 +280,22 @@ class OrganizationBuilder {
       throw new Error('invalid parameter: "grants" must be an object');
     }
 
-    const map = Map(grants);
-    if (!map.keySeq().every(isValidUUID)) {
-      throw new Error('invalid parameter: "grants" must be an object where all keys are valid UUIDs');
+    try {
+      this.grants = Map().withMutations((mutableMap :Map) => {
+        fromJS(grants).forEach((grantMap :Map, id :UUID) => {
+          if (!isValidUUID(id)) {
+            throw new Error('invalid parameter: "grants" must be a map where all keys are valid UUIDs');
+          }
+          grantMap.forEach((grant :Map, grantType :GrantType) => {
+            mutableMap.setIn([id, grantType], (new GrantBuilder(grant)).build());
+          });
+        });
+      }).toJS();
+    }
+    catch (e) {
+      throw new Error('invalid parameter: "grants" must be a map where all values are a map of GrantType to Grant');
     }
 
-    if (!map.valueSeq().every(isValidGrant)) {
-      throw new Error('invalid parameter: "grants" must be an object where all values are valid Grants');
-    }
-
-    this.grants = map.toJS();
     return this;
   }
 
