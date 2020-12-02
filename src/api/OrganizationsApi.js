@@ -34,6 +34,7 @@ import {
   INTEGRATION_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
+  PROMOTE_PATH,
   ROLES_PATH,
   TITLE_PATH,
   TRANSPORT_PATH,
@@ -928,6 +929,46 @@ function removeDomainsFromOrganization(organizationId :UUID, domains ?:string[])
 }
 
 /**
+ * `POST /organizations/promote/{organizationId}`
+ *
+ * Moves the specified table from the staging schema to the openlattice schema in the organization's external database
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {string} tableName
+ * @returns {Promise<void>}
+ *
+ * @example
+ * OrganiationsApi.promoteStagingTable(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735"
+ *   "tableName"
+ * );
+ */
+function promoteStagingTable(organizationId :UUID, tableName :string) :Promise<void> {
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyString(tableName)) {
+    errorMsg = 'invalid parameter: "tableName" must be a non-empty string';
+    LOG.error(errorMsg, tableName);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${PROMOTE_PATH}/${organizationId}`, tableName)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `DELETE /organizations/{orgId}/principals/members/{memberId}`
  *
  * Removes the member identified by the given member UUID from the organization identified by the given org UUID.
@@ -1402,6 +1443,7 @@ export {
   getRole,
   getUsersWithRole,
   grantTrustToOrganization,
+  promoteStagingTable,
   removeConnectionsFromOrganization,
   removeDomainsFromOrganization,
   removeMemberFromOrganization,

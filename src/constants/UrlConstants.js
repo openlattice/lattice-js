@@ -63,6 +63,7 @@ export const PARTIAL :'partial' = 'partial';
 export const PERMISSIONS_PATH :'permissions' = 'permissions';
 export const PERSISTENT_SEARCH_PATH :'persistentsearch' = 'persistentsearch';
 export const PRINCIPALS_PATH :'principals' = 'principals';
+export const PROMOTE_PATH :'promote' = 'promote';
 export const PROPERTIES_PATH :'properties' = 'properties';
 export const PROPERTY_TYPE_PATH :'property/type' = 'property/type';
 export const REFRESH_PATH :'refresh' = 'refresh';
