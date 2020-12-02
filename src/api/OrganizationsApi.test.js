@@ -14,6 +14,7 @@ import {
   INTEGRATION_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
+  PROMOTE_PATH,
   ROLES_PATH,
   TITLE_PATH,
   TRANSPORT_PATH,
@@ -280,7 +281,7 @@ describe(ORGANIZATIONS_API, () => {
         '(organizationId, tableName)': {
           method: 'post',
           params: {
-            axios: [`/promote/${ORG_MOCK.id}`, MOCK_TABLE_NAME],
+            axios: [`/${PROMOTE_PATH}/${ORG_MOCK.id}`, MOCK_TABLE_NAME],
             valid: [ORG_MOCK.id, MOCK_TABLE_NAME],
           },
         },
