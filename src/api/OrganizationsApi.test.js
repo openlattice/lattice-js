@@ -38,10 +38,11 @@ import {
 } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
-const MOCK_DB_NAME = 'mock_database_name';
 const MOCK_CONNECTION = 'mock_connection';
+const MOCK_DB_NAME = 'mock_database_name';
 const MOCK_DOMAIN = 'openlattice.com';
 const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
+const MOCK_TABLE_NAME = 'mock_table_name';
 
 const AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN = {
   headers: {
@@ -271,6 +272,16 @@ describe(ORGANIZATIONS_API, () => {
           params: {
             axios: [`/${ORG_MOCK.id}/${PRINCIPALS_PATH}/${ROLES_PATH}/${ROLE_MOCK.id}/${MEMBERS_PATH}`],
             valid: [ORG_MOCK.id, ROLE_MOCK.id],
+          },
+        },
+      },
+      promoteStagingTable: {
+        '': { params: { optional: [false, false], valid: [ORG_MOCK.id, MOCK_TABLE_NAME] } },
+        '(organizationId, tableName)': {
+          method: 'post',
+          params: {
+            axios: [`/promote/${ORG_MOCK.id}`, MOCK_TABLE_NAME],
+            valid: [ORG_MOCK.id, MOCK_TABLE_NAME],
           },
         },
       },
