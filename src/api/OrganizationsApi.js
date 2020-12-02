@@ -34,6 +34,7 @@ import {
   INTEGRATION_PATH,
   MEMBERS_PATH,
   PRINCIPALS_PATH,
+  PROMOTE_PATH,
   ROLES_PATH,
   TITLE_PATH,
   TRANSPORT_PATH,
@@ -959,7 +960,7 @@ function promoteStagingTable(organizationId :UUID, tableName :string) :Promise<*
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/promote/${organizationId}`, tableName)
+    .post(`/${PROMOTE_PATH}/${organizationId}`, tableName)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
