@@ -936,7 +936,7 @@ function removeDomainsFromOrganization(organizationId :UUID, domains ?:string[])
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {string} tableName
- * @returns {Promise}
+ * @returns {Promise<void>}
  *
  * @example
  * OrganiationsApi.promoteStagingTable(
@@ -944,7 +944,7 @@ function removeDomainsFromOrganization(organizationId :UUID, domains ?:string[])
  *   "tableName"
  * );
  */
-function promoteStagingTable(organizationId :UUID, tableName :string) :Promise<*> {
+function promoteStagingTable(organizationId :UUID, tableName :string) :Promise<void> {
   let errorMsg = '';
 
   if (!isValidUUID(organizationId)) {
