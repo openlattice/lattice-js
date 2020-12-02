@@ -17,7 +17,7 @@ jobs:
       matrix:
         node-version: [10.x, 12.x, 14.x]
     steps:
-      - name: checkout ${{ env.GITHUB_REPOSITORY }}
+      - name: checkout
         uses: actions/checkout@v2
 
       - name: node ${{ matrix.node-version }}
