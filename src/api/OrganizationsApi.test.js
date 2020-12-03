@@ -281,7 +281,11 @@ describe(ORGANIZATIONS_API, () => {
         '(organizationId, tableName)': {
           method: 'post',
           params: {
-            axios: [`/${PROMOTE_PATH}/${ORG_MOCK.id}`, MOCK_TABLE_NAME],
+            axios: [
+              `/${PROMOTE_PATH}/${ORG_MOCK.id}`,
+              MOCK_TABLE_NAME,
+              AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
+            ],
             valid: [ORG_MOCK.id, MOCK_TABLE_NAME],
           },
         },
