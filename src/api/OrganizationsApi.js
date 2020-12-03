@@ -960,7 +960,7 @@ function promoteStagingTable(organizationId :UUID, tableName :string) :Promise<v
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .post(`/${PROMOTE_PATH}/${organizationId}`, tableName)
+    .post(`/${PROMOTE_PATH}/${organizationId}`, tableName, AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
