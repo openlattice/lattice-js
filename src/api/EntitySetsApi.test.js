@@ -140,6 +140,45 @@ describe(ENTITY_SETS_API, () => {
           },
         },
       },
+      updateEntitySetMetadata: {
+        '': {
+          params: {
+            optional: [false, false],
+            valid: [
+              ENTITY_SET_MOCK.id,
+              {
+                contacts: ['OPENLATTICE'],
+                description: 'MockEntitySetDescription',
+                name: 'MockEntitySetName',
+                title: 'MockEntitySetTitle'
+              }
+            ]
+          }
+        },
+        '(entitySetId, update)': {
+          method: 'patch',
+          params: {
+            axios: [
+              `/${ALL_PATH}/${ENTITY_SET_MOCK.id}/${METADATA_PATH}`,
+              {
+                contacts: ['OPENLATTICE'],
+                description: 'MockEntitySetDescription',
+                name: 'MockEntitySetName',
+                title: 'MockEntitySetTitle'
+              }
+            ],
+            valid: [
+              ENTITY_SET_MOCK.id,
+              {
+                contacts: ['OPENLATTICE'],
+                description: 'MockEntitySetDescription',
+                name: 'MockEntitySetName',
+                title: 'MockEntitySetTitle'
+              }
+            ],
+          },
+        },
+      },
     },
   );
 });
