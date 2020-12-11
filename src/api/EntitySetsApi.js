@@ -392,7 +392,6 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
     });
 }
 
-
 /**
  * `PATCH /entity-sets/all/{id}/metadata`
  *
