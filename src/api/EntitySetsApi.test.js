@@ -140,7 +140,7 @@ describe(ENTITY_SETS_API, () => {
           },
         },
       },
-      updateEntitySetMetadata: {
+      updateEntitySetMetaData: {
         '': {
           params: {
             optional: [false, false],

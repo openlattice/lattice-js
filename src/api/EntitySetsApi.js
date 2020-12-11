@@ -404,7 +404,7 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
  * @returns {Promise<number>} - a Promise that resolves without a value
  *
  * @example
- * EntityDataModelApi.updateEntitySetMetadata(
+ * EntityDataModelApi.updateEntitySetMetaData(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   {
  *     "title": 'titleString',
@@ -414,7 +414,7 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
  *   }
  * )
  */
-function updateEntitySetMetadata(entitySetId :UUID, update :Object) :Promise<number> {
+function updateEntitySetMetaData(entitySetId :UUID, update :Object) :Promise<number> {
 
   let errorMsg = '';
 
@@ -449,5 +449,5 @@ export {
   getEntitySets,
   getPropertyTypeMetaDataForEntitySet,
   getPropertyTypeMetaDataForEntitySets,
-  updateEntitySetMetadata
+  updateEntitySetMetaData
 };
