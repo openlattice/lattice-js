@@ -407,10 +407,10 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
  * EntityDataModelApi.updateEntitySetMetaData(
  *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
  *   {
- *     "title": 'titleString',
- *     "description": 'descriptionString',
+ *     "title": "titleString",
+ *     "description": "descriptionString",
  *     "contacts": ["contact_1", "contact_2"],
- *     "name": 'nameString'
+ *     "name": "nameString"
  *   }
  * )
  */
