@@ -258,6 +258,13 @@ const ENTITY_SET_MOCK = (new EntitySetBuilder())
   .setTitle('MockEntitySetTitle')
   .build();
 
+const METADATA_UPDATE_MOCK = {
+  contacts: ['OPENLATTICE'],
+  description: 'MockEntitySetDescription',
+  name: 'MockEntitySetName',
+  title: 'MockEntitySetTitle'
+};
+
 function genRandomEntitySet() {
   return new EntitySetBuilder()
     .setContacts([genRandomString()])
@@ -462,6 +469,7 @@ export {
   DATA_GRAPH_MOCK,
   ENTITY_DATA_KEY_MOCK,
   ENTITY_SET_MOCK,
+  METADATA_UPDATE_MOCK,
   ENTITY_TYPE_MOCK,
   GRANT_MOCK,
   ORGANIZATION_MOCK,
