@@ -415,7 +415,7 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
  *   }
  * )
  */
-function updateEntitySetMetadata(entitySetId :UUID, update :Object) :Promise<void> {
+function updateEntitySetMetadata(entitySetId :UUID, update :Object) :Promise<number> {
 
   let errorMsg = '';
 
