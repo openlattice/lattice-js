@@ -399,9 +399,9 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
  *
  * @static
  * @memberof lattice.EntitySetsApi
- * @param {UUID[]} entitySetId ID for entity set.
+ * @param {UUID} entitySetId ID for entity set.
  * @param {Object} update Only title, description, contacts and name fields are accepted. Other fields are ignored.
- * @returns {Promise<void>} - a Promise that resolves without a value
+ * @returns {Promise<number>} - a Promise that resolves without a value
  *
  * @example
  * EntityDataModelApi.updateEntitySetMetadata(
