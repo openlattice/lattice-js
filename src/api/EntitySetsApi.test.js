@@ -11,7 +11,7 @@ import {
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
-import { ENTITY_SET_MOCK, PROPERTY_TYPE_MOCK } from '../utils/testing/MockData';
+import { ENTITY_SET_MOCK, METADATA_UPDATE_MOCK, PROPERTY_TYPE_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 jest.mock('../utils/axios');
@@ -146,12 +146,7 @@ describe(ENTITY_SETS_API, () => {
             optional: [false, false],
             valid: [
               ENTITY_SET_MOCK.id,
-              {
-                contacts: ['OPENLATTICE'],
-                description: 'MockEntitySetDescription',
-                name: 'MockEntitySetName',
-                title: 'MockEntitySetTitle'
-              }
+              METADATA_UPDATE_MOCK
             ]
           }
         },
@@ -160,21 +155,11 @@ describe(ENTITY_SETS_API, () => {
           params: {
             axios: [
               `/${ALL_PATH}/${ENTITY_SET_MOCK.id}/${METADATA_PATH}`,
-              {
-                contacts: ['OPENLATTICE'],
-                description: 'MockEntitySetDescription',
-                name: 'MockEntitySetName',
-                title: 'MockEntitySetTitle'
-              }
+              METADATA_UPDATE_MOCK
             ],
             valid: [
               ENTITY_SET_MOCK.id,
-              {
-                contacts: ['OPENLATTICE'],
-                description: 'MockEntitySetDescription',
-                name: 'MockEntitySetName',
-                title: 'MockEntitySetTitle'
-              }
+              METADATA_UPDATE_MOCK
             ],
           },
         },
