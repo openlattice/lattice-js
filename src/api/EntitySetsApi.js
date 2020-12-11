@@ -30,7 +30,12 @@ import {
   PROPERTIES_PATH,
 } from '../constants/UrlConstants';
 import { EntitySet, isValidEntitySet } from '../models/EntitySet';
-import { isDefined, isNonEmptyArray, isNonEmptyString } from '../utils/LangUtils';
+import {
+  isDefined,
+  isNonEmptyArray,
+  isNonEmptyObject,
+  isNonEmptyString
+} from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 import type { UUID } from '../types';
@@ -387,6 +392,53 @@ function getPropertyTypeMetaDataForEntitySets(entitySetIds :UUID[]) :Promise<*> 
     });
 }
 
+/**
+ * `PATCH /entity-sets/all/{id}/metadata`
+ *
+ * Updates the metadata for a given entity set.
+ *
+ * @static
+ * @memberof lattice.EntitySetsApi
+ * @param {UUID} entitySetId ID for entity set.
+ * @param {Object} update Only title, description, contacts and name fields are accepted. Other fields are ignored.
+ * @returns {Promise<number>} - a Promise that resolves without a value
+ *
+ * @example
+ * EntityDataModelApi.updateEntitySetMetaData(
+ *   "0c8be4b7-0bd5-4dd1-a623-da78871c9d0e",
+ *   {
+ *     "title": "titleString",
+ *     "description": "descriptionString",
+ *     "contacts": ["contact_1", "contact_2"],
+ *     "name": "nameString"
+ *   }
+ * )
+ */
+function updateEntitySetMetaData(entitySetId :UUID, update :Object) :Promise<number> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(entitySetId)) {
+    errorMsg = 'invalid parameter: entitySetId must be a valid UUID';
+    LOG.error(errorMsg, entitySetId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(update)) {
+    errorMsg = 'invalid parameter: update must be a non-empty object';
+    LOG.error(errorMsg, update);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ENTITY_SETS_API)
+    .patch(`/${ALL_PATH}/${entitySetId}/${METADATA_PATH}`, update)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   createEntitySets,
   deleteEntitySet,
@@ -397,4 +449,5 @@ export {
   getEntitySets,
   getPropertyTypeMetaDataForEntitySet,
   getPropertyTypeMetaDataForEntitySets,
+  updateEntitySetMetaData
 };
