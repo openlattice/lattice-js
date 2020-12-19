@@ -15,6 +15,7 @@ import { PRINCIPAL_MOCK } from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_USER_ID = 'openlattice|12345678901234567890';
+const MOCK_USER_ID_2 = 'auth0|12345678901234567890';
 
 jest.mock('../utils/axios');
 AxiosUtils.getApiAxiosInstance.mockImplementation(() => getMockAxiosInstance());
@@ -81,6 +82,16 @@ describe(PRINCIPALS_API, () => {
           params: {
             axios: [`/${USERS_PATH}/${MOCK_USER_ID}`],
             valid: [MOCK_USER_ID],
+          },
+        },
+      },
+      getUsers: {
+        '': { params: { optional: [false], valid: [MOCK_USER_ID, MOCK_USER_ID_2] } },
+        '(userIds)': {
+          method: 'post',
+          params: {
+            axios: [`/${USERS_PATH}`, [MOCK_USER_ID, MOCK_USER_ID_2]],
+            valid: [MOCK_USER_ID, MOCK_USER_ID_2],
           },
         },
       },
