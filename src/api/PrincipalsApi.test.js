@@ -91,7 +91,7 @@ describe(PRINCIPALS_API, () => {
           method: 'post',
           params: {
             axios: [`/${USERS_PATH}`, [MOCK_USER_ID, MOCK_USER_ID_2]],
-            valid: [MOCK_USER_ID, MOCK_USER_ID_2],
+            valid: [[MOCK_USER_ID, MOCK_USER_ID_2]],
           },
         },
       },
