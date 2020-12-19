@@ -86,7 +86,7 @@ describe(PRINCIPALS_API, () => {
         },
       },
       getUsers: {
-        '': { params: { optional: [false], valid: [MOCK_USER_ID, MOCK_USER_ID_2] } },
+        '': { params: { optional: [false], valid: [[MOCK_USER_ID, MOCK_USER_ID_2]] } },
         '(userIds)': {
           method: 'post',
           params: {
