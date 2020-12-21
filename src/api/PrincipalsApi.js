@@ -28,7 +28,7 @@ import {
   USERS_PATH,
 } from '../constants/UrlConstants';
 import { Principal, isValidPrincipal } from '../models/Principal';
-import { isNonEmptyString } from '../utils/LangUtils';
+import { isNonEmptyArray, isNonEmptyString } from '../utils/LangUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('PrincipalsApi');
@@ -181,6 +181,42 @@ function getUser(userId :string) :Promise<*> {
 }
 
 /**
+ * `POST /principals/users`
+ *
+ * @static
+ * @memberof lattice.PrincipalsApi
+ * @param {Array<string>} userIds
+ * @returns {Promise}
+ *
+ * @example
+ * PrincipalsApi.getUsers(["auth0|openlattice", "google-oauth2|abc123"]);
+ */
+function getUsers(userIds :string[]) :Promise<Object> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyArray(userIds)) {
+    errorMsg = 'invalid parameter: "userIds" must be a non-empty array';
+    LOG.error(errorMsg, userIds);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!userIds.every(isNonEmptyString)) {
+    errorMsg = 'invalid parameter: "userIds" must be an array of strings';
+    LOG.error(errorMsg, userIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .post(`/${USERS_PATH}`, userIds)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /principals/users/search/{searchQuery}`
  *
  * @static
@@ -238,6 +274,7 @@ export {
   getCurrentRoles,
   getSecurablePrincipal,
   getUser,
+  getUsers,
   searchAllUsers,
   syncUser,
 };
