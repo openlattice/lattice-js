@@ -217,6 +217,16 @@ describe(ORGANIZATIONS_API, () => {
           },
         },
       },
+      getOrganizationDataSources: {
+        '': { params: { optional: [false], valid: [ORG_MOCK.id] } },
+        '(organizationId)': {
+          method: 'get',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATASOURCE_PATH}`],
+            valid: [ORG_MOCK.id],
+          },
+        },
+      },
       getOrganizationDatabaseName: {
         '': { params: { optional: [false], valid: [ORG_MOCK.id] } },
         '(organizationId)': {

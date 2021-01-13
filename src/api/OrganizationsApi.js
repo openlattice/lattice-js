@@ -574,6 +574,36 @@ function getOrganization(organizationId :UUID) :Promise<*> {
 }
 
 /**
+ * `GET /organizations/{orgId}/datasource`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Object[]>} - a Promise that resolves with the organization data sources
+ *
+ * @example
+ * OrganizationsApi.getOrganizationDataSources("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getOrganizationDataSources(organizationId :UUID) :Promise<Object[]> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${DATASOURCE_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /organizations/{orgId}/database`
  *
  * @static
@@ -1539,6 +1569,7 @@ export {
   destroyTransportedOrganizationEntitySet,
   getAllOrganizations,
   getOrganization,
+  getOrganizationDataSources,
   getOrganizationDatabaseName,
   getOrganizationEntitySets,
   getOrganizationIntegrationAccount,
