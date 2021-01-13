@@ -841,7 +841,7 @@ function grantTrustToOrganization(organizationId :UUID, trustedPrincipalId :stri
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {Object} dataSource
- * @returns {Promise<UUID>} - a Promise that resolves with the newly-created datasource id
+ * @returns {Promise<UUID>} - a Promise that resolves with the newly-created data source id
  *
  * @example
  * OrganizationsApi.registerOrganizationDataSource(
@@ -1256,7 +1256,7 @@ function updateOrganizationDataSource(organizationId :UUID, dataSourceId :UUID, 
   }
 
   return getApiAxiosInstance(ORGANIZATIONS_API)
-    .put(`/${organizationId}/${DATASOURCE_PATH}/${dataSourceId}`)
+    .put(`/${organizationId}/${DATASOURCE_PATH}/${dataSourceId}`, dataSource)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
