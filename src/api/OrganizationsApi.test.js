@@ -6,6 +6,7 @@ import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import {
   CONNECTIONS_PATH,
   DATABASE_PATH,
+  DATASOURCE_PATH,
   DESCRIPTION_PATH,
   DESTROY_PATH,
   EMAIL_DOMAINS_PATH,
@@ -44,6 +45,15 @@ const MOCK_DB_NAME = 'mock_database_name';
 const MOCK_DOMAIN = 'openlattice.com';
 const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
 const MOCK_TABLE_NAME = 'mock_table_name';
+
+const MOCK_DATA_SOURCE = {
+  database: 'database',
+  driver: 'driver',
+  name: 'name',
+  password: 'password',
+  url: 'url',
+  username: 'username',
+};
 
 const AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN = {
   headers: {
@@ -287,6 +297,16 @@ describe(ORGANIZATIONS_API, () => {
               AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id, MOCK_TABLE_NAME],
+          },
+        },
+      },
+      registerOrganizationDataSource: {
+        '': { params: { optional: [false, false], valid: [ORG_MOCK.id, MOCK_DATA_SOURCE] } },
+        '(organizationId, dataSource)': {
+          method: 'post',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATASOURCE_PATH}`, MOCK_DATA_SOURCE],
+            valid: [ORG_MOCK.id, MOCK_DATA_SOURCE],
           },
         },
       },

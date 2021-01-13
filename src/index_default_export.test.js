@@ -16,7 +16,7 @@ const EXPECTED_OBJ_EXPORTS = OrderedMap({
   DataSetsApi        : { size: 4 },
   EntityDataModelApi : { size: 27 },
   EntitySetsApi      : { size: 10 },
-  OrganizationsApi   : { size: 32 },
+  OrganizationsApi   : { size: 33 },
   PermissionsApi     : { size: 5 },
   PersistentSearchApi: { size: 4 },
   PrincipalsApi      : { size: 9 },

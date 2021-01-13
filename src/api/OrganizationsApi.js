@@ -26,6 +26,7 @@ import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import {
   CONNECTIONS_PATH,
   DATABASE_PATH,
+  DATASOURCE_PATH,
   DESCRIPTION_PATH,
   DESTROY_PATH,
   EMAIL_DOMAINS_PATH,
@@ -55,6 +56,7 @@ import {
   isDefined,
   isEmptyArray,
   isEmptyString,
+  isNonEmptyObject,
   isNonEmptyString,
   isNonEmptyStringArray,
 } from '../utils/LangUtils';
@@ -833,6 +835,53 @@ function grantTrustToOrganization(organizationId :UUID, trustedPrincipalId :stri
 }
 
 /**
+ * `POST /organizations/{orgId}/datasource`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Object} dataSource
+ * @returns {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.registerOrganizationDataSource(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "name": "name",
+ *     "url": "url",
+ *     "driver": "driver",
+ *     "database": "database",
+ *     "username": "username",
+ *     "password": "password"
+ *   }
+ * );
+ */
+function registerOrganizationDataSource(organizationId :UUID, dataSource :Object) :Promise<UUID> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(dataSource)) {
+    errorMsg = 'invalid parameter: "dataSource" must be a non-empty object';
+    LOG.error(errorMsg, dataSource);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${DATASOURCE_PATH}`, dataSource)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `DELETE /organizations/{orgId}/connections`
  *
  * @static
@@ -1444,6 +1493,7 @@ export {
   getUsersWithRole,
   grantTrustToOrganization,
   promoteStagingTable,
+  registerOrganizationDataSource,
   removeConnectionsFromOrganization,
   removeDomainsFromOrganization,
   removeMemberFromOrganization,
