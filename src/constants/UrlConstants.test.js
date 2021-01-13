@@ -25,7 +25,7 @@ const EXPECTED = Map({
   CURRENT_PATH                  : 'current',
   DATABASE_PATH                 : 'database',
   DATASTORE_PATH                : 'datastore',
-  MOCK_DATA_SOURCE              : 'datasource',
+  DATASOURCE_PATH               : 'datasource',
   DATA_PATH                     : 'data',
   DB_PATH                       : 'db',
   DESCRIPTION_PATH              : 'description',
