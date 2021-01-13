@@ -841,7 +841,7 @@ function grantTrustToOrganization(organizationId :UUID, trustedPrincipalId :stri
  * @memberof lattice.OrganizationsApi
  * @param {UUID} organizationId
  * @param {Object} dataSource
- * @returns {Promise} - a Promise that resolves without a value
+ * @returns {Promise<UUID>} - a Promise that resolves with the newly-created datasource id
  *
  * @example
  * OrganizationsApi.registerOrganizationDataSource(
@@ -1210,6 +1210,61 @@ function transportOrganizationEntitySet(organizationId :UUID, entitySetId :UUID)
 }
 
 /**
+ * `PUT /organizations/{orgId}/datasource/{dataSourceId}`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} dataSourceId
+ * @param {Object} dataSource
+ * @returns {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateOrganizationDataSource(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "adec59a3-0c25-4ad4-a407-9c510acbf0d0",
+ *   {
+ *     "name": "name",
+ *     "url": "url",
+ *     "driver": "driver",
+ *     "database": "database",
+ *     "username": "username",
+ *     "password": "password"
+ *   }
+ * );
+ */
+function updateOrganizationDataSource(organizationId :UUID, dataSourceId :UUID, dataSource :Object) :Promise<void> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(dataSourceId)) {
+    errorMsg = 'invalid parameter: "dataSourceId" must be a valid UUID';
+    LOG.error(errorMsg, dataSourceId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(dataSource)) {
+    errorMsg = 'invalid parameter: "dataSource" must be a non-empty object';
+    LOG.error(errorMsg, dataSource);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${DATASOURCE_PATH}/${dataSourceId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PUT /organizations/{orgId}/description`
  *
  * Updates the description for the given Organization id.
@@ -1501,6 +1556,7 @@ export {
   renameOrganizationDatabase,
   revokeTrustFromOrganization,
   transportOrganizationEntitySet,
+  updateOrganizationDataSource,
   updateOrganizationDescription,
   updateOrganizationTitle,
   updateRoleDescription,

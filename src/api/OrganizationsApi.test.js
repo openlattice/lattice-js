@@ -46,6 +46,7 @@ const MOCK_DOMAIN = 'openlattice.com';
 const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
 const MOCK_TABLE_NAME = 'mock_table_name';
 
+const MOCK_ID = 'adec59a3-0c25-4ad4-a407-9c510acbf0d0';
 const MOCK_DATA_SOURCE = {
   database: 'database',
   driver: 'driver',
@@ -397,6 +398,16 @@ describe(ORGANIZATIONS_API, () => {
           params: {
             axios: [`/${ORG_MOCK.id}/${ENTITY_SET_MOCK.id}/${TRANSPORT_PATH}`],
             valid: [ORG_MOCK.id, ENTITY_SET_MOCK.id],
+          },
+        },
+      },
+      updateOrganizationDataSource: {
+        '': { params: { optional: [false, false, false], valid: [ORG_MOCK.id, MOCK_ID, MOCK_DATA_SOURCE] } },
+        '(organizationId, dataSourceId, dataSource)': {
+          method: 'put',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATASOURCE_PATH}/${MOCK_ID}`, MOCK_DATA_SOURCE],
+            valid: [ORG_MOCK.id, MOCK_ID, MOCK_DATA_SOURCE],
           },
         },
       },
