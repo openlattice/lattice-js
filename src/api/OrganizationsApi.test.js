@@ -6,6 +6,7 @@ import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import {
   CONNECTIONS_PATH,
   DATABASE_PATH,
+  DATASOURCE_PATH,
   DESCRIPTION_PATH,
   DESTROY_PATH,
   EMAIL_DOMAINS_PATH,
@@ -44,6 +45,16 @@ const MOCK_DB_NAME = 'mock_database_name';
 const MOCK_DOMAIN = 'openlattice.com';
 const MOCK_MEMBER_ID = 'openlattice|12345678901234567890';
 const MOCK_TABLE_NAME = 'mock_table_name';
+
+const MOCK_ID = 'adec59a3-0c25-4ad4-a407-9c510acbf0d0';
+const MOCK_DATA_SOURCE = {
+  database: 'database',
+  driver: 'driver',
+  name: 'name',
+  password: 'password',
+  url: 'url',
+  username: 'username',
+};
 
 const AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN = {
   headers: {
@@ -206,6 +217,16 @@ describe(ORGANIZATIONS_API, () => {
           },
         },
       },
+      getOrganizationDataSources: {
+        '': { params: { optional: [false], valid: [ORG_MOCK.id] } },
+        '(organizationId)': {
+          method: 'get',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATASOURCE_PATH}`],
+            valid: [ORG_MOCK.id],
+          },
+        },
+      },
       getOrganizationDatabaseName: {
         '': { params: { optional: [false], valid: [ORG_MOCK.id] } },
         '(organizationId)': {
@@ -287,6 +308,16 @@ describe(ORGANIZATIONS_API, () => {
               AXIOS_CONFIG_CONTENT_TYPE_TEXT_PLAIN,
             ],
             valid: [ORG_MOCK.id, MOCK_TABLE_NAME],
+          },
+        },
+      },
+      registerOrganizationDataSource: {
+        '': { params: { optional: [false, false], valid: [ORG_MOCK.id, MOCK_DATA_SOURCE] } },
+        '(organizationId, dataSource)': {
+          method: 'post',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATASOURCE_PATH}`, MOCK_DATA_SOURCE],
+            valid: [ORG_MOCK.id, MOCK_DATA_SOURCE],
           },
         },
       },
@@ -377,6 +408,16 @@ describe(ORGANIZATIONS_API, () => {
           params: {
             axios: [`/${ORG_MOCK.id}/${ENTITY_SET_MOCK.id}/${TRANSPORT_PATH}`],
             valid: [ORG_MOCK.id, ENTITY_SET_MOCK.id],
+          },
+        },
+      },
+      updateOrganizationDataSource: {
+        '': { params: { optional: [false, false, false], valid: [ORG_MOCK.id, MOCK_ID, MOCK_DATA_SOURCE] } },
+        '(organizationId, dataSourceId, dataSource)': {
+          method: 'put',
+          params: {
+            axios: [`/${ORG_MOCK.id}/${DATASOURCE_PATH}/${MOCK_ID}`, MOCK_DATA_SOURCE],
+            valid: [ORG_MOCK.id, MOCK_ID, MOCK_DATA_SOURCE],
           },
         },
       },
