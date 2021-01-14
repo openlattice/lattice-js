@@ -26,6 +26,7 @@ import { ORGANIZATIONS_API } from '../constants/ApiNames';
 import {
   CONNECTIONS_PATH,
   DATABASE_PATH,
+  DATASOURCE_PATH,
   DESCRIPTION_PATH,
   DESTROY_PATH,
   EMAIL_DOMAINS_PATH,
@@ -55,6 +56,7 @@ import {
   isDefined,
   isEmptyArray,
   isEmptyString,
+  isNonEmptyObject,
   isNonEmptyString,
   isNonEmptyStringArray,
 } from '../utils/LangUtils';
@@ -572,6 +574,36 @@ function getOrganization(organizationId :UUID) :Promise<*> {
 }
 
 /**
+ * `GET /organizations/{orgId}/datasource`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Object[]>} - a Promise that resolves with the organization data sources
+ *
+ * @example
+ * OrganizationsApi.getOrganizationDataSources("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getOrganizationDataSources(organizationId :UUID) :Promise<Object[]> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .get(`/${organizationId}/${DATASOURCE_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /organizations/{orgId}/database`
  *
  * @static
@@ -830,6 +862,53 @@ function getUsersWithRole(organizationId :UUID, roleId :UUID) :Promise<*> {
 function grantTrustToOrganization(organizationId :UUID, trustedPrincipalId :string) :Promise<*> {
 
   return updateTrustForOrganization(organizationId, trustedPrincipalId, ActionTypes.ADD);
+}
+
+/**
+ * `POST /organizations/{orgId}/datasource`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {Object} dataSource
+ * @returns {Promise<UUID>} - a Promise that resolves with the newly-created data source id
+ *
+ * @example
+ * OrganizationsApi.registerOrganizationDataSource(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   {
+ *     "name": "name",
+ *     "url": "url",
+ *     "driver": "driver",
+ *     "database": "database",
+ *     "username": "username",
+ *     "password": "password"
+ *   }
+ * );
+ */
+function registerOrganizationDataSource(organizationId :UUID, dataSource :Object) :Promise<UUID> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(dataSource)) {
+    errorMsg = 'invalid parameter: "dataSource" must be a non-empty object';
+    LOG.error(errorMsg, dataSource);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .post(`/${organizationId}/${DATASOURCE_PATH}`, dataSource)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
 }
 
 /**
@@ -1161,6 +1240,61 @@ function transportOrganizationEntitySet(organizationId :UUID, entitySetId :UUID)
 }
 
 /**
+ * `PUT /organizations/{orgId}/datasource/{dataSourceId}`
+ *
+ * @static
+ * @memberof lattice.OrganizationsApi
+ * @param {UUID} organizationId
+ * @param {UUID} dataSourceId
+ * @param {Object} dataSource
+ * @returns {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * OrganizationsApi.updateOrganizationDataSource(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "adec59a3-0c25-4ad4-a407-9c510acbf0d0",
+ *   {
+ *     "name": "name",
+ *     "url": "url",
+ *     "driver": "driver",
+ *     "database": "database",
+ *     "username": "username",
+ *     "password": "password"
+ *   }
+ * );
+ */
+function updateOrganizationDataSource(organizationId :UUID, dataSourceId :UUID, dataSource :Object) :Promise<void> {
+
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(dataSourceId)) {
+    errorMsg = 'invalid parameter: "dataSourceId" must be a valid UUID';
+    LOG.error(errorMsg, dataSourceId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isNonEmptyObject(dataSource)) {
+    errorMsg = 'invalid parameter: "dataSource" must be a non-empty object';
+    LOG.error(errorMsg, dataSource);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(ORGANIZATIONS_API)
+    .put(`/${organizationId}/${DATASOURCE_PATH}/${dataSourceId}`, dataSource)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PUT /organizations/{orgId}/description`
  *
  * Updates the description for the given Organization id.
@@ -1435,6 +1569,7 @@ export {
   destroyTransportedOrganizationEntitySet,
   getAllOrganizations,
   getOrganization,
+  getOrganizationDataSources,
   getOrganizationDatabaseName,
   getOrganizationEntitySets,
   getOrganizationIntegrationAccount,
@@ -1444,6 +1579,7 @@ export {
   getUsersWithRole,
   grantTrustToOrganization,
   promoteStagingTable,
+  registerOrganizationDataSource,
   removeConnectionsFromOrganization,
   removeDomainsFromOrganization,
   removeMemberFromOrganization,
@@ -1451,6 +1587,7 @@ export {
   renameOrganizationDatabase,
   revokeTrustFromOrganization,
   transportOrganizationEntitySet,
+  updateOrganizationDataSource,
   updateOrganizationDescription,
   updateOrganizationTitle,
   updateRoleDescription,
