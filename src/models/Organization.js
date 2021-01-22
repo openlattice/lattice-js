@@ -42,7 +42,14 @@ type OrganizationObject = {|
   grants :{ [UUID] :{ [GrantType] :GrantObject} };
   id ?:UUID;
   members :PrincipalObject[];
-  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+  metadataEntitySetIds :{
+    accessRequests :UUID;
+    columns :UUID;
+    datasets :UUID;
+    organization :UUID;
+    schemas :UUID;
+    views :UUID;
+  };
   partitions ?:number[];
   principal :PrincipalObject;
   roles :RoleObject[];
@@ -58,7 +65,14 @@ class Organization {
   grants :{ [UUID] :{ [GrantType] :Grant} };
   id :?UUID;
   members :Principal[];
-  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+  metadataEntitySetIds :{
+    accessRequests :UUID;
+    columns :UUID;
+    datasets :UUID;
+    organization :UUID;
+    schemas :UUID;
+    views :UUID;
+  };
   partitions :?number[];
   principal :Principal;
   roles :Role[];
@@ -72,7 +86,14 @@ class Organization {
     grants :{ [UUID] :{ [GrantType] :Grant} };
     id :?UUID;
     members :Principal[];
-    metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+    metadataEntitySetIds :{
+      accessRequests :UUID;
+      columns :UUID;
+      datasets :UUID;
+      organization :UUID;
+      schemas :UUID;
+      views :UUID;
+    };
     partitions :?number[];
     principal :Principal;
     roles :Role[];
@@ -155,7 +176,14 @@ class OrganizationBuilder {
   grants :{ [UUID] :{ [GrantType] :Grant} };
   id :?UUID;
   members :Principal[];
-  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+  metadataEntitySetIds :{
+    accessRequests :UUID;
+    columns :UUID;
+    datasets :UUID;
+    organization :UUID;
+    schemas :UUID;
+    views :UUID;
+  };
   partitions :?number[];
   principal :Principal;
   roles :Role[];
@@ -334,11 +362,22 @@ class OrganizationBuilder {
   }
 
   setMetaDataEntitySetIds(
-    metadataEntitySetIds :$ReadOnly<{ columns :UUID; datasets :UUID; organization :UUID; }>,
+    metadataEntitySetIds :$ReadOnly<{
+      accessRequests :UUID;
+      columns :UUID;
+      datasets :UUID;
+      organization :UUID;
+      schemas :UUID;
+      views :UUID;
+    }>,
   ) :OrganizationBuilder {
 
     if (!isDefined(metadataEntitySetIds)) {
       return this;
+    }
+
+    if (!isValidUUID(get(metadataEntitySetIds, 'accessRequests'))) {
+      throw new Error('invalid parameter: "metadataEntitySetIds.accessRequests" must be a valid UUID');
     }
 
     if (!isValidUUID(get(metadataEntitySetIds, 'columns'))) {
@@ -353,10 +392,21 @@ class OrganizationBuilder {
       throw new Error('invalid parameter: "metadataEntitySetIds.organization" must be a valid UUID');
     }
 
+    if (!isValidUUID(get(metadataEntitySetIds, 'schemas'))) {
+      throw new Error('invalid parameter: "metadataEntitySetIds.schemas" must be a valid UUID');
+    }
+
+    if (!isValidUUID(get(metadataEntitySetIds, 'views'))) {
+      throw new Error('invalid parameter: "metadataEntitySetIds.views" must be a valid UUID');
+    }
+
     this.metadataEntitySetIds = {
+      accessRequests: get(metadataEntitySetIds, 'accessRequests'),
       columns: get(metadataEntitySetIds, 'columns'),
       datasets: get(metadataEntitySetIds, 'datasets'),
       organization: get(metadataEntitySetIds, 'organization'),
+      schemas: get(metadataEntitySetIds, 'schemas'),
+      views: get(metadataEntitySetIds, 'views'),
     };
 
     return this;
@@ -455,9 +505,12 @@ class OrganizationBuilder {
 
     if (!this.metadataEntitySetIds) {
       this.metadataEntitySetIds = {
+        accessRequests: UNINITIALIZED_UUID,
         columns: UNINITIALIZED_UUID,
         datasets: UNINITIALIZED_UUID,
         organization: UNINITIALIZED_UUID,
+        schemas: UNINITIALIZED_UUID,
+        views: UNINITIALIZED_UUID,
       };
     }
 
