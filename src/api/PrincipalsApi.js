@@ -20,6 +20,7 @@
 import Logger from '../utils/Logger';
 import { PRINCIPALS_API } from '../constants/ApiNames';
 import {
+  CREDENTIAL_PATH,
   CURRENT_PATH,
   DB_PATH,
   ROLES_PATH,
@@ -217,6 +218,27 @@ function getUsers(userIds :string[]) :Promise<Object> {
 }
 
 /**
+* `POST /principals/db/credential`
+*
+* @static
+* @memberof lattice.PrincipalsApi
+* @returns {Promise} - a Promise that resolves without a value
+*
+* @example
+* PrincipalsApi.regenerateCredential();
+*/
+function regenerateCredential() :Promise<*> {
+
+  return getApiAxiosInstance(PRINCIPALS_API)
+    .post(`/${DB_PATH}/${CREDENTIAL_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `GET /principals/users/search/{searchQuery}`
  *
  * @static
@@ -275,6 +297,7 @@ export {
   getSecurablePrincipal,
   getUser,
   getUsers,
+  regenerateCredential,
   searchAllUsers,
   syncUser,
 };
