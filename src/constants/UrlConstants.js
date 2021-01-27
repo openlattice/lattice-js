@@ -19,6 +19,7 @@ export const CONFIG_PATH :'config' = 'config';
 export const CONNECTIONS_PATH :'connections' = 'connections';
 export const CONTACT_PATH :'contact' = 'contact';
 export const COUNT_PATH :'count' = 'count';
+export const CREDENTIAL_PATH :'credential' = 'credential';
 export const CSRF_TOKEN :'csrfToken' = 'csrfToken';
 export const CURRENT_PATH :'current' = 'current';
 export const DATABASE_PATH :'database' = 'database';
