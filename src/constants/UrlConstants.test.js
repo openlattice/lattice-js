@@ -21,6 +21,7 @@ const EXPECTED = Map({
   CONNECTIONS_PATH              : 'connections',
   CONTACT_PATH                  : 'contact',
   COUNT_PATH                    : 'count',
+  CREDENTIAL_PATH               : 'credential',
   CSRF_TOKEN                    : 'csrfToken',
   CURRENT_PATH                  : 'current',
   DATABASE_PATH                 : 'database',
