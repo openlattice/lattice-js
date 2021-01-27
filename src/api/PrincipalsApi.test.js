@@ -3,6 +3,7 @@ import * as PrincipalsApi from './PrincipalsApi';
 import * as AxiosUtils from '../utils/axios';
 import { PRINCIPALS_API } from '../constants/ApiNames';
 import {
+  CREDENTIAL_PATH,
   CURRENT_PATH,
   DB_PATH,
   ROLES_PATH,
@@ -92,6 +93,16 @@ describe(PRINCIPALS_API, () => {
           params: {
             axios: [`/${USERS_PATH}`, [MOCK_USER_ID, MOCK_USER_ID_2]],
             valid: [[MOCK_USER_ID, MOCK_USER_ID_2]],
+          },
+        },
+      },
+      regenerateCredential: {
+        '': { params: { optional: [], valid: [] } },
+        '()': {
+          method: 'post',
+          params: {
+            axios: [`/${DB_PATH}/${CREDENTIAL_PATH}`],
+            valid: [],
           },
         },
       },
