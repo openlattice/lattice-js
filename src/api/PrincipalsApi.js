@@ -227,7 +227,7 @@ function getUsers(userIds :string[]) :Promise<Object> {
 * @example
 * PrincipalsApi.regenerateCredential();
 */
-function regenerateCredential() :Promise<*> {
+function regenerateCredential() :Promise<void> {
 
   return getApiAxiosInstance(PRINCIPALS_API)
     .post(`/${DB_PATH}/${CREDENTIAL_PATH}`)
