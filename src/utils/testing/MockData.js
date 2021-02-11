@@ -339,6 +339,8 @@ const ORGANIZATION_MOCK = (new OrganizationBuilder())
     columns: 'd505b4f6-8094-46a4-8cf1-6396924392be',
     datasets: '109cd2fe-621e-49a6-8e0d-608190460a4f',
     organization: '8f52d20b-f082-442f-9156-5ec4aecee308',
+    schemas: '5fbbd6c1-2830-47bf-83e4-6bde92636f98',
+    views: 'cf5b3ada-b58c-4547-9619-75402d193b08',
   })
   .setPartitions([128])
   .setPrincipal(
@@ -401,6 +403,8 @@ function genRandomOrganization() {
       columns: genRandomUUID(),
       datasets: genRandomUUID(),
       organization: genRandomUUID(),
+      schemas: genRandomUUID(),
+      views: genRandomUUID(),
     })
     .setPartitions([genRandomInt()])
     .setPrincipal(
