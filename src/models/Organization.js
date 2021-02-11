@@ -43,7 +43,6 @@ type OrganizationObject = {|
   id ?:UUID;
   members :PrincipalObject[];
   metadataEntitySetIds :{
-    accessRequests :UUID;
     columns :UUID;
     datasets :UUID;
     organization :UUID;
@@ -66,7 +65,6 @@ class Organization {
   id :?UUID;
   members :Principal[];
   metadataEntitySetIds :{
-    accessRequests :UUID;
     columns :UUID;
     datasets :UUID;
     organization :UUID;
@@ -87,7 +85,6 @@ class Organization {
     id :?UUID;
     members :Principal[];
     metadataEntitySetIds :{
-      accessRequests :UUID;
       columns :UUID;
       datasets :UUID;
       organization :UUID;
@@ -177,7 +174,6 @@ class OrganizationBuilder {
   id :?UUID;
   members :Principal[];
   metadataEntitySetIds :{
-    accessRequests :UUID;
     columns :UUID;
     datasets :UUID;
     organization :UUID;
@@ -363,7 +359,6 @@ class OrganizationBuilder {
 
   setMetaDataEntitySetIds(
     metadataEntitySetIds :$ReadOnly<{
-      accessRequests :UUID;
       columns :UUID;
       datasets :UUID;
       organization :UUID;
@@ -376,38 +371,26 @@ class OrganizationBuilder {
       return this;
     }
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'accessRequests'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.accessRequests" must be a valid UUID');
+    if (!isPlainObject(metadataEntitySetIds) && !isCollection(metadataEntitySetIds)) {
+      throw new Error('invalid parameter: "metadataEntitySetIds" must be an object');
     }
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'columns'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.columns" must be a valid UUID');
-    }
+    this.metadataEntitySetIds = {};
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'datasets'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.datasets" must be a valid UUID');
-    }
+    const columnsESID = get(metadataEntitySetIds, 'columns');
+    this.metadataEntitySetIds.columns = isValidUUID(columnsESID) ? columnsESID : UNINITIALIZED_UUID;
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'organization'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.organization" must be a valid UUID');
-    }
+    const datasetsESID = get(metadataEntitySetIds, 'datasets');
+    this.metadataEntitySetIds.datasets = isValidUUID(datasetsESID) ? datasetsESID : UNINITIALIZED_UUID;
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'schemas'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.schemas" must be a valid UUID');
-    }
+    const organizationESID = get(metadataEntitySetIds, 'organization');
+    this.metadataEntitySetIds.organization = isValidUUID(organizationESID) ? organizationESID : UNINITIALIZED_UUID;
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'views'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.views" must be a valid UUID');
-    }
+    const schemasESID = get(metadataEntitySetIds, 'schemas');
+    this.metadataEntitySetIds.schemas = isValidUUID(schemasESID) ? schemasESID : UNINITIALIZED_UUID;
 
-    this.metadataEntitySetIds = {
-      accessRequests: get(metadataEntitySetIds, 'accessRequests'),
-      columns: get(metadataEntitySetIds, 'columns'),
-      datasets: get(metadataEntitySetIds, 'datasets'),
-      organization: get(metadataEntitySetIds, 'organization'),
-      schemas: get(metadataEntitySetIds, 'schemas'),
-      views: get(metadataEntitySetIds, 'views'),
-    };
+    const viewsESID = get(metadataEntitySetIds, 'views');
+    this.metadataEntitySetIds.views = isValidUUID(viewsESID) ? viewsESID : UNINITIALIZED_UUID;
 
     return this;
   }
@@ -505,7 +488,6 @@ class OrganizationBuilder {
 
     if (!this.metadataEntitySetIds) {
       this.metadataEntitySetIds = {
-        accessRequests: UNINITIALIZED_UUID,
         columns: UNINITIALIZED_UUID,
         datasets: UNINITIALIZED_UUID,
         organization: UNINITIALIZED_UUID,
