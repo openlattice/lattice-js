@@ -42,7 +42,13 @@ type OrganizationObject = {|
   grants :{ [UUID] :{ [GrantType] :GrantObject} };
   id ?:UUID;
   members :PrincipalObject[];
-  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+  metadataEntitySetIds :{
+    columns :UUID;
+    datasets :UUID;
+    organization :UUID;
+    schemas :UUID;
+    views :UUID;
+  };
   partitions ?:number[];
   principal :PrincipalObject;
   roles :RoleObject[];
@@ -58,7 +64,13 @@ class Organization {
   grants :{ [UUID] :{ [GrantType] :Grant} };
   id :?UUID;
   members :Principal[];
-  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+  metadataEntitySetIds :{
+    columns :UUID;
+    datasets :UUID;
+    organization :UUID;
+    schemas :UUID;
+    views :UUID;
+  };
   partitions :?number[];
   principal :Principal;
   roles :Role[];
@@ -72,7 +84,13 @@ class Organization {
     grants :{ [UUID] :{ [GrantType] :Grant} };
     id :?UUID;
     members :Principal[];
-    metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+    metadataEntitySetIds :{
+      columns :UUID;
+      datasets :UUID;
+      organization :UUID;
+      schemas :UUID;
+      views :UUID;
+    };
     partitions :?number[];
     principal :Principal;
     roles :Role[];
@@ -155,7 +173,13 @@ class OrganizationBuilder {
   grants :{ [UUID] :{ [GrantType] :Grant} };
   id :?UUID;
   members :Principal[];
-  metadataEntitySetIds :{ columns :UUID; datasets :UUID; organization :UUID; };
+  metadataEntitySetIds :{
+    columns :UUID;
+    datasets :UUID;
+    organization :UUID;
+    schemas :UUID;
+    views :UUID;
+  };
   partitions :?number[];
   principal :Principal;
   roles :Role[];
@@ -334,30 +358,39 @@ class OrganizationBuilder {
   }
 
   setMetaDataEntitySetIds(
-    metadataEntitySetIds :$ReadOnly<{ columns :UUID; datasets :UUID; organization :UUID; }>,
+    metadataEntitySetIds :$ReadOnly<{
+      columns :UUID;
+      datasets :UUID;
+      organization :UUID;
+      schemas :UUID;
+      views :UUID;
+    }>,
   ) :OrganizationBuilder {
 
     if (!isDefined(metadataEntitySetIds)) {
       return this;
     }
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'columns'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.columns" must be a valid UUID');
+    if (!isPlainObject(metadataEntitySetIds) && !isCollection(metadataEntitySetIds)) {
+      throw new Error('invalid parameter: "metadataEntitySetIds" must be an object');
     }
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'datasets'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.datasets" must be a valid UUID');
-    }
+    this.metadataEntitySetIds = {};
 
-    if (!isValidUUID(get(metadataEntitySetIds, 'organization'))) {
-      throw new Error('invalid parameter: "metadataEntitySetIds.organization" must be a valid UUID');
-    }
+    const columnsESID = get(metadataEntitySetIds, 'columns');
+    this.metadataEntitySetIds.columns = isValidUUID(columnsESID) ? columnsESID : UNINITIALIZED_UUID;
 
-    this.metadataEntitySetIds = {
-      columns: get(metadataEntitySetIds, 'columns'),
-      datasets: get(metadataEntitySetIds, 'datasets'),
-      organization: get(metadataEntitySetIds, 'organization'),
-    };
+    const datasetsESID = get(metadataEntitySetIds, 'datasets');
+    this.metadataEntitySetIds.datasets = isValidUUID(datasetsESID) ? datasetsESID : UNINITIALIZED_UUID;
+
+    const organizationESID = get(metadataEntitySetIds, 'organization');
+    this.metadataEntitySetIds.organization = isValidUUID(organizationESID) ? organizationESID : UNINITIALIZED_UUID;
+
+    const schemasESID = get(metadataEntitySetIds, 'schemas');
+    this.metadataEntitySetIds.schemas = isValidUUID(schemasESID) ? schemasESID : UNINITIALIZED_UUID;
+
+    const viewsESID = get(metadataEntitySetIds, 'views');
+    this.metadataEntitySetIds.views = isValidUUID(viewsESID) ? viewsESID : UNINITIALIZED_UUID;
 
     return this;
   }
@@ -458,6 +491,8 @@ class OrganizationBuilder {
         columns: UNINITIALIZED_UUID,
         datasets: UNINITIALIZED_UUID,
         organization: UNINITIALIZED_UUID,
+        schemas: UNINITIALIZED_UUID,
+        views: UNINITIALIZED_UUID,
       };
     }
 
