@@ -12,6 +12,7 @@ import {
   Set,
   fromJS,
   get,
+  has,
   isCollection,
   isImmutable,
 } from 'immutable';
@@ -32,8 +33,6 @@ import type { UUID } from '../types';
 
 const LOG = new Logger('Organization');
 
-const UNINITIALIZED_UUID = '00000000-0000-0000-0000-000000000000';
-
 type OrganizationObject = {|
   apps :UUID[];
   connections :string[];
@@ -46,8 +45,6 @@ type OrganizationObject = {|
     columns :UUID;
     datasets :UUID;
     organization :UUID;
-    schemas :UUID;
-    views :UUID;
   };
   partitions ?:number[];
   principal :PrincipalObject;
@@ -68,8 +65,6 @@ class Organization {
     columns :UUID;
     datasets :UUID;
     organization :UUID;
-    schemas :UUID;
-    views :UUID;
   };
   partitions :?number[];
   principal :Principal;
@@ -88,8 +83,6 @@ class Organization {
       columns :UUID;
       datasets :UUID;
       organization :UUID;
-      schemas :UUID;
-      views :UUID;
     };
     partitions :?number[];
     principal :Principal;
@@ -177,8 +170,6 @@ class OrganizationBuilder {
     columns :UUID;
     datasets :UUID;
     organization :UUID;
-    schemas :UUID;
-    views :UUID;
   };
   partitions :?number[];
   principal :Principal;
@@ -362,8 +353,6 @@ class OrganizationBuilder {
       columns :UUID;
       datasets :UUID;
       organization :UUID;
-      schemas :UUID;
-      views :UUID;
     }>,
   ) :OrganizationBuilder {
 
@@ -377,20 +366,26 @@ class OrganizationBuilder {
 
     this.metadataEntitySetIds = {};
 
-    const columnsESID = get(metadataEntitySetIds, 'columns');
-    this.metadataEntitySetIds.columns = isValidUUID(columnsESID) ? columnsESID : UNINITIALIZED_UUID;
+    if (has(metadataEntitySetIds, 'columns')) {
+      const columnsESID = get(metadataEntitySetIds, 'columns');
+      if (isValidUUID(columnsESID)) {
+        this.metadataEntitySetIds.columns = columnsESID;
+      }
+    }
 
-    const datasetsESID = get(metadataEntitySetIds, 'datasets');
-    this.metadataEntitySetIds.datasets = isValidUUID(datasetsESID) ? datasetsESID : UNINITIALIZED_UUID;
+    if (has(metadataEntitySetIds, 'datasets')) {
+      const datasetsESID = get(metadataEntitySetIds, 'datasets');
+      if (isValidUUID(datasetsESID)) {
+        this.metadataEntitySetIds.datasets = datasetsESID;
+      }
+    }
 
-    const organizationESID = get(metadataEntitySetIds, 'organization');
-    this.metadataEntitySetIds.organization = isValidUUID(organizationESID) ? organizationESID : UNINITIALIZED_UUID;
-
-    const schemasESID = get(metadataEntitySetIds, 'schemas');
-    this.metadataEntitySetIds.schemas = isValidUUID(schemasESID) ? schemasESID : UNINITIALIZED_UUID;
-
-    const viewsESID = get(metadataEntitySetIds, 'views');
-    this.metadataEntitySetIds.views = isValidUUID(viewsESID) ? viewsESID : UNINITIALIZED_UUID;
+    if (has(metadataEntitySetIds, 'organization')) {
+      const organizationESID = get(metadataEntitySetIds, 'organization');
+      if (isValidUUID(organizationESID)) {
+        this.metadataEntitySetIds.organization = organizationESID;
+      }
+    }
 
     return this;
   }
@@ -487,13 +482,7 @@ class OrganizationBuilder {
     }
 
     if (!this.metadataEntitySetIds) {
-      this.metadataEntitySetIds = {
-        columns: UNINITIALIZED_UUID,
-        datasets: UNINITIALIZED_UUID,
-        organization: UNINITIALIZED_UUID,
-        schemas: UNINITIALIZED_UUID,
-        views: UNINITIALIZED_UUID,
-      };
+      this.metadataEntitySetIds = {};
     }
 
     if (!this.roles) {
