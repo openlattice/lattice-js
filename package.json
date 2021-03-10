@@ -46,7 +46,7 @@
     "eslint-import-resolver-webpack": "~0.13.0",
     "eslint-plugin-flowtype": "~5.3.0",
     "eslint-plugin-import": "~2.22.0",
-    "eslint-plugin-jest": "~24.1.0",
+    "eslint-plugin-jest": "~24.2.1",
     "flow-bin": "~0.131.0",
     "immutable": "4.0.0-rc.10",
     "import-sort-style-openlattice": "~0.1.0",
