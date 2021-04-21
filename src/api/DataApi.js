@@ -712,16 +712,18 @@ function updateEntityData(
  *
  * @example
  * DataApi.loadBinaryProperties(
- *  {
-*      "843fbf13-1857-4786-ac84-fd15b9f83b0b": { // entitySetId
-*        "3d810000-0000-0000-8000-000000025d14": { // entityKeyId
-*          "5364cb1b-ecf4-459d-b8d4-99b47b31281c": { // propertyTypeId
-*            // s3 digest: content disposition
-*            "500534a6a1072dfff31f4bc50e7154e8": "attachment; filename=\"filename.jpg\""
-*          }
-*        }
-*      }
-*    }
+ *   {
+ *     "value": {
+ *       "843fbf13-1857-4786-ac84-fd15b9f83b0b": { // entitySetId
+ *         "3d810000-0000-0000-8000-000000025d14": { // entityKeyId
+ *           "5364cb1b-ecf4-459d-b8d4-99b47b31281c": { // propertyTypeId
+ *             // s3 digest: content disposition
+ *             "500534a6a1072dfff31f4bc50e7154e8": "attachment; filename=\"filename.jpg\""
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
  * );
  */
 
@@ -737,7 +739,7 @@ function loadBinaryProperties(
   }
 
   return getApiAxiosInstance(DATA_API)
-    .post(`/${BINARY_PATH}`, { value: binaryObjectRequest })
+    .post(`/${BINARY_PATH}`, binaryObjectRequest)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
