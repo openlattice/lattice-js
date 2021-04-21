@@ -5,6 +5,7 @@ import { DATA_API } from '../constants/ApiNames';
 import {
   ALL_PATH,
   ASSOCIATION_PATH,
+  BLOCK_PATH,
   COUNT_PATH,
   DETAILED_PATH,
   NEIGHBORS_PATH,
@@ -113,29 +114,61 @@ describe(DATA_API, () => {
         '(entitySetId, entityKeyId, DeleteType=SOFT)': {
           method: 'delete',
           params: {
-            axios: [`/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.SOFT}`, { data: [MOCK_EKID_1] }],
-            valid: [MOCK_ESID, MOCK_EKID_1, DeleteTypes.SOFT],
+            axios: [
+              `/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.SOFT}&${BLOCK_PATH}=${true}`,
+              { data: [MOCK_EKID_1] }
+            ],
+            valid: [MOCK_ESID, MOCK_EKID_1, DeleteTypes.SOFT, true],
           },
         },
         '(entitySetId, entityKeyId, DeleteType=HARD)': {
           method: 'delete',
           params: {
-            axios: [`/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.HARD}`, { data: [MOCK_EKID_1] }],
-            valid: [MOCK_ESID, MOCK_EKID_1, DeleteTypes.HARD],
+            axios: [
+              `/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.HARD}&${BLOCK_PATH}=${true}`,
+              { data: [MOCK_EKID_1] }
+            ],
+            valid: [MOCK_ESID, MOCK_EKID_1, DeleteTypes.HARD, true],
           },
         },
         '(entitySetId, entityKeyIds, DeleteType=SOFT)': {
           method: 'delete',
           params: {
-            axios: [`/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.SOFT}`, { data: [MOCK_EKID_1, MOCK_EKID_2] }],
-            valid: [MOCK_ESID, [MOCK_EKID_1, MOCK_EKID_2], DeleteTypes.SOFT],
+            axios: [
+              `/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.SOFT}&${BLOCK_PATH}=${true}`,
+              { data: [MOCK_EKID_1, MOCK_EKID_2] }
+            ],
+            valid: [MOCK_ESID, [MOCK_EKID_1, MOCK_EKID_2], DeleteTypes.SOFT, true],
           },
         },
         '(entitySetId, entityKeyIds, DeleteType=HARD)': {
           method: 'delete',
           params: {
-            axios: [`/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.HARD}`, { data: [MOCK_EKID_1, MOCK_EKID_2] }],
-            valid: [MOCK_ESID, [MOCK_EKID_1, MOCK_EKID_2], DeleteTypes.HARD],
+            axios: [
+              `/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.HARD}&${BLOCK_PATH}=${true}`,
+              { data: [MOCK_EKID_1, MOCK_EKID_2] }
+            ],
+            valid: [MOCK_ESID, [MOCK_EKID_1, MOCK_EKID_2], DeleteTypes.HARD, true],
+          },
+        },
+        '(entitySetId, entityKeyId, DeleteType=SOFT, false)': {
+          method: 'delete',
+          params: {
+            axios: [
+              `/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.SOFT}&${BLOCK_PATH}=${false}`,
+              { data: [MOCK_EKID_1, MOCK_EKID_2] }
+            ],
+            valid: [MOCK_ESID, [MOCK_EKID_1, MOCK_EKID_2], DeleteTypes.SOFT, false],
+          },
+        },
+        '(entitySetId, entityKeyId, DeleteType=HARD, false)': {
+          method: 'delete',
+          params: {
+            axios: [
+              `/${SET_PATH}/${MOCK_ESID}?${TYPE_PATH}=${DeleteTypes.HARD}&${BLOCK_PATH}=${false}`,
+              { data: [MOCK_EKID_1, MOCK_EKID_2] }
+            ],
+            valid: [MOCK_ESID, [MOCK_EKID_1, MOCK_EKID_2], DeleteTypes.HARD, false],
           },
         },
       },
