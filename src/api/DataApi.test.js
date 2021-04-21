@@ -39,12 +39,10 @@ const MOCK_ENTITY_DATA = {
 };
 
 const MOCK_BINARY_OBJECT_REQUEST = {
-  value: {
+  [genRandomUUID()]: {
     [genRandomUUID()]: {
       [genRandomUUID()]: {
-        [genRandomUUID()]: {
-          [MOCK_S3_DIGEST]: MOCK_CONTENT_DISPOSITION
-        }
+        [MOCK_S3_DIGEST]: MOCK_CONTENT_DISPOSITION
       }
     }
   }
@@ -291,7 +289,7 @@ describe(DATA_API, () => {
         '(binaryObjectRequest)': {
           method: 'post',
           params: {
-            axios: [`/${BINARY_PATH}`, MOCK_BINARY_OBJECT_REQUEST],
+            axios: [`/${BINARY_PATH}`, { value: MOCK_BINARY_OBJECT_REQUEST }],
             valid: [MOCK_BINARY_OBJECT_REQUEST],
           },
         },
