@@ -10,6 +10,7 @@ export const ASSEMBLE_PATH :'assemble' = 'assemble';
 export const ASSOCIATION_PATH :'association' = 'association';
 export const ASSOCIATION_TYPE_PATH :'association/type' = 'association/type';
 export const AUTHORIZATIONS_PATH :'authorizations' = 'authorizations';
+export const BINARY_PATH :'binary' = 'binary';
 export const BLOCK_PATH :'block' = 'block';
 export const BULK_PATH :'bulk' = 'bulk';
 export const BY_ID_PATH :'by-id' = 'by-id';

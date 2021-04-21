@@ -5,6 +5,7 @@ import { DATA_API } from '../constants/ApiNames';
 import {
   ALL_PATH,
   ASSOCIATION_PATH,
+  BINARY_PATH,
   BLOCK_PATH,
   COUNT_PATH,
   DETAILED_PATH,
@@ -22,6 +23,8 @@ const MOCK_ESID = '308ad50c-ccc7-4971-ae1b-d20f74175cad';
 const MOCK_EKID_1 = '01af0000-0000-0000-8000-000000000004';
 const MOCK_EKID_2 = '00230000-0000-0000-8000-000000000004';
 const MOCK_PTID_1 = '6547de32-de64-4521-9c78-dfb6a930cb97';
+const MOCK_S3_DIGEST = '4e5dde0393853f5974614ae430b85f9f';
+const MOCK_CONTENT_DISPOSITION = 'attachment; filename="filename.jpg"';
 
 const MOCK_DATA_EDGE = {
   [`${genRandomUUID()}`]: [{
@@ -34,6 +37,16 @@ const MOCK_DATA_EDGE = {
 const MOCK_ENTITY_DATA = {
   [genRandomUUID()]: ['value_1', 'value_2'],
   [genRandomUUID()]: ['value_3', 'value_4'],
+};
+
+const MOCK_BINARY_OBJECT_REQUEST = {
+  [genRandomUUID()]: {
+    [genRandomUUID()]: {
+      [genRandomUUID()]: {
+        [MOCK_S3_DIGEST]: MOCK_CONTENT_DISPOSITION
+      }
+    }
+  }
 };
 
 jest.mock('../utils/axios');
@@ -186,6 +199,16 @@ describe(DATA_API, () => {
           params: {
             axios: [`/${SET_PATH}/${MOCK_ESID}/${ALL_PATH}?${TYPE_PATH}=${DeleteTypes.HARD}`],
             valid: [MOCK_ESID, DeleteTypes.HARD],
+          },
+        },
+      },
+      getBinaryProperties: {
+        '': { params: { optional: [false], valid: [MOCK_BINARY_OBJECT_REQUEST] } },
+        '(binaryObjectRequest)': {
+          method: 'post',
+          params: {
+            axios: [`/${BINARY_PATH}`, MOCK_BINARY_OBJECT_REQUEST],
+            valid: [MOCK_BINARY_OBJECT_REQUEST],
           },
         },
       },
