@@ -17,6 +17,7 @@
  * // DataApi.get...
  */
 
+import isBoolean from 'lodash/isBoolean';
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
@@ -32,6 +33,8 @@ import {
 import {
   ALL_PATH,
   ASSOCIATION_PATH,
+  BINARY_PATH,
+  BLOCK_PATH,
   COUNT_PATH,
   DETAILED_PATH,
   NEIGHBORS_PATH,
@@ -329,6 +332,7 @@ function deleteEntityData(
   entitySetId :UUID,
   entityKeyIds :UUID | UUID[],
   deleteType ?:DeleteType = DeleteTypes.SOFT,
+  block ?:boolean = true,
 ) :Promise<number> {
 
   let errorMsg = '';
@@ -352,13 +356,19 @@ function deleteEntityData(
     return Promise.reject(errorMsg);
   }
 
+  if (!isBoolean(block)) {
+    errorMsg = 'invalid parameter: block must be a boolean';
+    LOG.error(errorMsg, block);
+    return Promise.reject(errorMsg);
+  }
+
   let data = entityKeyIds;
   if (typeof entityKeyIds === 'string') {
     data = [entityKeyIds];
   }
 
   return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}`, { data })
+    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}&${BLOCK_PATH}=${block}`, { data })
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -688,6 +698,55 @@ function updateEntityData(
     });
 }
 
+/**
+ * `POST /data/binary`
+ *
+ * Loads a presigned URL for a particular binary object with the requested content disposition
+ *
+ * @static
+ * @memberof lattice.DATA_API
+ * @param {Object} binaryObjectRequest
+ * @returns {Promise<Object>} - a Promise that resolves the same request structure, with the
+ * content disposition field replaced by a presigned URL for the requested binary object, with the
+ * specified content disposition
+ *
+ * @example
+ * DataApi.getBinaryProperties(
+ *   {
+ *     "value": {
+ *       "843fbf13-1857-4786-ac84-fd15b9f83b0b": { // entitySetId
+ *         "3d810000-0000-0000-8000-000000025d14": { // entityKeyId
+ *           "5364cb1b-ecf4-459d-b8d4-99b47b31281c": { // propertyTypeId
+ *             // s3 digest: content disposition
+ *             "500534a6a1072dfff31f4bc50e7154e8": "attachment; filename=\"filename.jpg\""
+ *           }
+ *         }
+ *       }
+ *     }
+ *   }
+ * );
+ */
+
+function getBinaryProperties(
+  binaryObjectRequest :Object
+) :Promise<Object> {
+
+  let errorMsg = '';
+  if (!isNonEmptyObject(binaryObjectRequest)) {
+    errorMsg = 'invalid parameter: "binaryObjectRequest" must be a non-empty object';
+    LOG.error(errorMsg, binaryObjectRequest);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post(`/${BINARY_PATH}`, binaryObjectRequest)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   createAssociations,
   createEntityAndAssociationData,
@@ -695,6 +754,7 @@ export {
   deleteEntityAndNeighborData,
   deleteEntityData,
   deleteEntitySetData,
+  getBinaryProperties,
   getEntityData,
   getEntitySetData,
   getEntitySetSize,
