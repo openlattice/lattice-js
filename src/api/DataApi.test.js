@@ -104,7 +104,12 @@ describe(DATA_API, () => {
         },
       },
       deleteEntityData: {
-        '': { params: { optional: [false, false, true], valid: [MOCK_ESID, MOCK_EKID_1, DeleteTypes.SOFT] } },
+        '': {
+          params: {
+            optional: [false, false, true, true],
+            valid: [MOCK_ESID, MOCK_EKID_1, DeleteTypes.SOFT, true]
+          }
+        },
         '(entitySetId, entityKeyId, DeleteType=SOFT)': {
           method: 'delete',
           params: {
