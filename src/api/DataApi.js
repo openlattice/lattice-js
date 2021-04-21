@@ -17,6 +17,7 @@
  * // DataApi.get...
  */
 
+import isBoolean from 'lodash/isBoolean';
 import isUndefined from 'lodash/isUndefined';
 import { Set } from 'immutable';
 
@@ -33,6 +34,7 @@ import {
   ALL_PATH,
   ASSOCIATION_PATH,
   BINARY_PATH,
+  BLOCK_PATH,
   COUNT_PATH,
   DETAILED_PATH,
   NEIGHBORS_PATH,
@@ -330,6 +332,7 @@ function deleteEntityData(
   entitySetId :UUID,
   entityKeyIds :UUID | UUID[],
   deleteType ?:DeleteType = DeleteTypes.SOFT,
+  block ?:boolean = true,
 ) :Promise<number> {
 
   let errorMsg = '';
@@ -353,13 +356,19 @@ function deleteEntityData(
     return Promise.reject(errorMsg);
   }
 
+  if (!isBoolean(block)) {
+    errorMsg = 'invalid parameter: block must be a boolean';
+    LOG.error(errorMsg, block);
+    return Promise.reject(errorMsg);
+  }
+
   let data = entityKeyIds;
   if (typeof entityKeyIds === 'string') {
     data = [entityKeyIds];
   }
 
   return getApiAxiosInstance(DATA_API)
-    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}`, { data })
+    .delete(`/${SET_PATH}/${entitySetId}?${TYPE_PATH}=${deleteType}&${BLOCK_PATH}=${block}`, { data })
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
