@@ -32,6 +32,7 @@ import {
 import {
   ALL_PATH,
   ASSOCIATION_PATH,
+  BINARY_PATH,
   COUNT_PATH,
   DETAILED_PATH,
   NEIGHBORS_PATH,
@@ -688,6 +689,55 @@ function updateEntityData(
     });
 }
 
+/**
+ * `POST /data/binary`
+ *
+ * Loads a presigned URL for a particular binary object with the requested content disposition
+ *
+ * @static
+ * @memberof lattice.DATA_API
+ * @param {Object} binaryObjectRequest
+ * @returns {Promise<Object>} - a Promise that resolves the same request structure, with the
+ * content disposition field replaced by a presigned URL for the requested binary object, with the
+ * specified content disposition
+ *
+ * @example
+ * DataApi.loadBinaryProperties(
+ *  {
+ *    "value": {
+ *      "843fbf13-1857-4786-ac84-fd15b9f83b0b": { // entitySetId
+ *        "3d810000-0000-0000-8000-000000025d14": { // entityKeyId
+ *          "5364cb1b-ecf4-459d-b8d4-99b47b31281c": { // propertyTypeId
+ *            // s3 digest: content disposition
+ *            "500534a6a1072dfff31f4bc50e7154e8": "attachment; filename=\"filename.jpg\""
+ *          }
+ *        }
+ *      }
+ *    }
+ *  }
+ * );
+ */
+
+function loadBinaryProperties(
+  binaryObjectRequest :Object
+) :Promise<Object> {
+
+  let errorMsg = '';
+  if (!isNonEmptyObject(binaryObjectRequest)) {
+    errorMsg = 'invalid parameter: "binaryObjectRequest" must be a non-empty object';
+    LOG.error(errorMsg, binaryObjectRequest);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_API)
+    .post(`/${BINARY_PATH}`, binaryObjectRequest)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   createAssociations,
   createEntityAndAssociationData,
@@ -699,5 +749,6 @@ export {
   getEntitySetData,
   getEntitySetSize,
   getLinkedEntitySetBreakdown,
+  loadBinaryProperties,
   updateEntityData,
 };
