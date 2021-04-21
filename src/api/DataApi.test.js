@@ -202,6 +202,16 @@ describe(DATA_API, () => {
           },
         },
       },
+      getBinaryProperties: {
+        '': { params: { optional: [false], valid: [MOCK_BINARY_OBJECT_REQUEST] } },
+        '(binaryObjectRequest)': {
+          method: 'post',
+          params: {
+            axios: [`/${BINARY_PATH}`, MOCK_BINARY_OBJECT_REQUEST],
+            valid: [MOCK_BINARY_OBJECT_REQUEST],
+          },
+        },
+      },
       getEntityData: {
         '': { params: { optional: [false, false], valid: [MOCK_ESID, MOCK_EKID_1] } },
         '(entitySetId, entityKeyId)': {
@@ -322,16 +332,6 @@ describe(DATA_API, () => {
           },
         },
       },
-      loadBinaryProperties: {
-        '': { params: { optional: [false], valid: [MOCK_BINARY_OBJECT_REQUEST] } },
-        '(binaryObjectRequest)': {
-          method: 'post',
-          params: {
-            axios: [`/${BINARY_PATH}`, MOCK_BINARY_OBJECT_REQUEST],
-            valid: [MOCK_BINARY_OBJECT_REQUEST],
-          },
-        },
-      }
     },
   );
 

@@ -711,7 +711,7 @@ function updateEntityData(
  * specified content disposition
  *
  * @example
- * DataApi.loadBinaryProperties(
+ * DataApi.getBinaryProperties(
  *   {
  *     "value": {
  *       "843fbf13-1857-4786-ac84-fd15b9f83b0b": { // entitySetId
@@ -727,7 +727,7 @@ function updateEntityData(
  * );
  */
 
-function loadBinaryProperties(
+function getBinaryProperties(
   binaryObjectRequest :Object
 ) :Promise<Object> {
 
@@ -754,10 +754,10 @@ export {
   deleteEntityAndNeighborData,
   deleteEntityData,
   deleteEntitySetData,
+  getBinaryProperties,
   getEntityData,
   getEntitySetData,
   getEntitySetSize,
   getLinkedEntitySetBreakdown,
-  loadBinaryProperties,
   updateEntityData,
 };
