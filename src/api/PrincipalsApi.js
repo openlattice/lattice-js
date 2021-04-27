@@ -29,7 +29,7 @@ import {
   USERS_PATH,
 } from '../constants/UrlConstants';
 import { Principal, isValidPrincipal } from '../models/Principal';
-import { isNonEmptyArray, isNonEmptyString } from '../utils/LangUtils';
+import { isNonEmptyArray, isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 
 const LOG = new Logger('PrincipalsApi');
@@ -239,28 +239,28 @@ function regenerateCredential() :Promise<void> {
 }
 
 /**
- * `GET /principals/users/search/{searchQuery}`
+ * `POST /principals/users/search`
  *
  * @static
  * @memberof lattice.PrincipalsApi
- * @param {string} searchQuery
- * @returns {Promise<Map<String, Auth0UserBasic>>} - a Promise that will resolve with a map of matching users
+ * @param {Object} fields
+ * @returns {Promise<Map<String, User>>} - a Promise that will resolve with a map of matching users
  *
  * @example
- * PrincipalsApi.searchAllUsers("openlattice");
+ * PrincipalsApi.searchUsers({ email: "*@openlattice.com" });
  */
-function searchAllUsers(searchQuery :string) :Promise<*> {
+function searchUsers(fields :{ email ?:string, name ?:string }) :Promise<Object> {
 
   let errorMsg = '';
 
-  if (!isNonEmptyString(searchQuery)) {
-    errorMsg = 'invalid parameter: searchQuery must be a non-empty string';
-    LOG.error(errorMsg, searchQuery);
+  if (!isNonEmptyObject(fields)) {
+    errorMsg = 'invalid parameter: "fields" must be a non-empty object';
+    LOG.error(errorMsg, fields);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(PRINCIPALS_API)
-    .get(`/${USERS_PATH}/${SEARCH_PATH}/${searchQuery}`)
+    .post(`/${USERS_PATH}/${SEARCH_PATH}`, fields)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -298,6 +298,6 @@ export {
   getUser,
   getUsers,
   regenerateCredential,
-  searchAllUsers,
+  searchUsers,
   syncUser,
 };

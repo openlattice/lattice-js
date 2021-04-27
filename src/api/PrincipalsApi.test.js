@@ -106,13 +106,27 @@ describe(PRINCIPALS_API, () => {
           },
         },
       },
-      searchAllUsers: {
-        '': { params: { optional: [false], valid: ['openlattice'] } },
-        '(searchQuery)': {
-          method: 'get',
+      searchUsers: {
+        '': { params: { optional: [false], valid: [{ name: 'openlattice' }] } },
+        '({ email })': {
+          method: 'post',
           params: {
-            axios: [`/${USERS_PATH}/${SEARCH_PATH}/openlattice`],
-            valid: ['openlattice'],
+            axios: [`/${USERS_PATH}/${SEARCH_PATH}`, { email: 'test@openlattice.com' }],
+            valid: [{ email: 'test@openlattice.com' }],
+          },
+        },
+        '({ name })': {
+          method: 'post',
+          params: {
+            axios: [`/${USERS_PATH}/${SEARCH_PATH}`, { name: 'openlattice' }],
+            valid: [{ name: 'openlattice' }],
+          },
+        },
+        '({ email, name })': {
+          method: 'post',
+          params: {
+            axios: [`/${USERS_PATH}/${SEARCH_PATH}`, { email: 'test@openlattice.com', name: 'openlattice' }],
+            valid: [{ email: 'test@openlattice.com', name: 'openlattice' }],
           },
         },
       },
