@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "main": "build/index.js",
   "dependencies": {
-    "@babel/runtime-corejs3": "~7.13.10",
+    "@babel/runtime-corejs3": "~7.14.0",
     "axios": "~0.21.0",
     "loglevel": "~1.7.0",
     "validator": "~13.6.0"
@@ -62,7 +62,7 @@
     "webpack-node-externals": "~3.0.0"
   },
   "peerDependencies": {
-    "@babel/runtime-corejs3": "~7.13.10",
+    "@babel/runtime-corejs3": "~7.14.0",
     "immutable": "4.0.0-rc.10",
     "lodash": "~4.17.21"
   },
