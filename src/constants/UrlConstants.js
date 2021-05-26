@@ -16,6 +16,7 @@ export const BULK_PATH :'bulk' = 'bulk';
 export const BY_ID_PATH :'by-id' = 'by-id';
 export const BY_NAME_PATH :'by-name' = 'by-name';
 export const CODEX_PATH :'codex' = 'codex';
+export const COLLABORATIONS_PATH :'collaborations' = 'collaborations';
 export const COMPLEX_TYPE_PATH :'complex/type' = 'complex/type';
 export const CONFIG_PATH :'config' = 'config';
 export const CONNECTIONS_PATH :'connections' = 'connections';

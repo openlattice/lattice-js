@@ -18,6 +18,7 @@ const EXPECTED = Map({
   BY_ID_PATH                    : 'by-id',
   BY_NAME_PATH                  : 'by-name',
   CODEX_PATH                    : 'codex',
+  COLLABORATIONS_PATH           : 'collaborations',
   COMPLEX_TYPE_PATH             : 'complex/type',
   CONFIG_PATH                   : 'config',
   CONNECTIONS_PATH              : 'connections',
