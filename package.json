@@ -41,7 +41,7 @@
     "bluebird": "~3.7.0",
     "core-js": "~3.11.0",
     "documentation": "~13.2.0",
-    "eslint": "~7.25.0",
+    "eslint": "~7.27.0",
     "eslint-config-airbnb-base": "~14.2.0",
     "eslint-import-resolver-webpack": "~0.13.0",
     "eslint-plugin-flowtype": "~5.7.1",
