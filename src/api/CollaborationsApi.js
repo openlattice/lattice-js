@@ -382,6 +382,59 @@ function projectTableToCollaboration(collaborationId :UUID, organizationId :UUID
     });
 }
 
+/**
+ * `DELETE /collaborations/{collaborationId}/project/{organizationId}/{tableId}`
+ *
+ * Remove a projected table from a collaboration
+ *
+ * @static
+ * @memberof lattice.CollaborationsApi
+ * @param {UUID} collaborationId
+ * @param {UUID} organizationId
+ * @param {UUID} tableId
+ * @returns {Promise} - a Promise that resolves without a value
+ *
+ * @example
+ * CollaborationsApi.removeProjectedTableFromCollaboration(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "01af0000-0000-0000-8000-000000000004",
+ *   "00230000-0000-0000-8000-000000000004",
+ * );
+ */
+function removeProjectedTableFromCollaboration(
+  collaborationId :UUID,
+  organizationId :UUID,
+  tableId :UUID,
+) :Promise<void> {
+  let errorMsg = '';
+
+  if (!isValidUUID(collaborationId)) {
+    errorMsg = 'invalid parameter: "collaborationId" must be a valid UUID';
+    LOG.error(errorMsg, collaborationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUID(tableId)) {
+    errorMsg = 'invalid parameter: "tableId" must be a valid UUID';
+    LOG.error(errorMsg, tableId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(COLLABORATIONS_API)
+    .delete(`/${collaborationId}/${PROJECT_PATH}/${organizationId}/${tableId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   addOrganizationsToCollaboration,
   createCollaboration,
@@ -392,5 +445,6 @@ export {
   getCollaborationsIncludingOrganization,
   projectTableToCollaboration,
   removeOrganizationsFromCollaboration,
+  removeProjectedTableFromCollaboration,
   renameDatabase,
 };

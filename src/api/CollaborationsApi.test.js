@@ -154,6 +154,21 @@ describe(COLLABORATIONS_API, () => {
           },
         },
       },
+      removeProjectedTableFromCollaboration: {
+        '': {
+          params: {
+            optional: [false, false, false],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID]
+          }
+        },
+        '(collaborationId, organizationId, tableId)': {
+          method: 'delete',
+          params: {
+            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_ID_1}/${MOCK_TABLE_ID}`],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID],
+          },
+        },
+      },
     },
   );
 });
