@@ -86,6 +86,7 @@ export const SRC_PATH :'src' = 'src';
 export const SUBSCRIPTIONS_PATH :'subscriptions' = 'subscriptions';
 export const SYNCHRONIZE_PATH :'synchronize' = 'synchronize';
 export const SYNC_PATH :'sync' = 'sync';
+export const TABLES_PATH :'tables' = 'tables';
 export const TITLE_PATH :'title' = 'title';
 export const TRANSPORT_PATH :'transport' = 'transport';
 export const TYPES_PATH :'types' = 'types';

@@ -4,7 +4,7 @@ import * as CollaborationsApi from './CollaborationsApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
-import { DATABASE_PATH, ORGANIZATIONS_PATH, PROJECT_PATH } from '../constants/UrlConstants';
+import { DATABASE_PATH, ORGANIZATIONS_PATH, PROJECT_PATH, TABLES_PATH } from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
@@ -154,18 +154,18 @@ describe(COLLABORATIONS_API, () => {
           },
         },
       },
-      removeProjectedTableFromCollaboration: {
+      getProjectedTablesInOrganization: {
         '': {
           params: {
-            optional: [false, false, false],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID]
+            optional: [false],
+            valid: [MOCK_ORG_ID_1]
           }
         },
-        '(collaborationId, organizationId, tableId)': {
-          method: 'delete',
+        '(organizationId)': {
+          method: 'get',
           params: {
-            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_ID_1}/${MOCK_TABLE_ID}`],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID],
+            axios: [`/${ORGANIZATIONS_PATH}/${MOCK_ORG_ID_1}/${TABLES_PATH}`],
+            valid: [MOCK_ORG_ID_1],
           },
         },
       },
