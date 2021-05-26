@@ -69,6 +69,7 @@ const EXPECTED = Map({
   PERMISSIONS_PATH              : 'permissions',
   PERSISTENT_SEARCH_PATH        : 'persistentsearch',
   PRINCIPALS_PATH               : 'principals',
+  PROJECT_PATH                  : 'project',
   PROMOTE_PATH                  : 'promote',
   PROPERTIES_PATH               : 'properties',
   PROPERTY_TYPE_PATH            : 'property/type',

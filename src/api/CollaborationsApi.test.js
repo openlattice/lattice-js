@@ -4,13 +4,14 @@ import * as CollaborationsApi from './CollaborationsApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
-import { DATABASE_PATH, ORGANIZATIONS_PATH } from '../constants/UrlConstants';
+import { DATABASE_PATH, ORGANIZATIONS_PATH, PROJECT_PATH } from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_COLLABORATION_ID = uuid();
 const MOCK_ORG_ID_1 = uuid();
 const MOCK_ORG_ID_2 = uuid();
+const MOCK_TABLE_ID = uuid();
 const MOCK_NAME = 'test_collaboration';
 const MOCK_COLLABORATION = {
   description: 'Test',
@@ -79,7 +80,7 @@ describe(COLLABORATIONS_API, () => {
         },
       },
       addOrganizationsToCollaboration: {
-        '': { params: { optional: [false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1] } },
+        '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1] } },
         '(collaborationId, organzationId)': {
           method: 'post',
           params: {
@@ -96,7 +97,7 @@ describe(COLLABORATIONS_API, () => {
         },
       },
       removeOrganizationsFromCollaboration: {
-        '': { params: { optional: [false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1] } },
+        '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1] } },
         '(collaborationId, organzationId)': {
           method: 'delete',
           params: {
@@ -129,7 +130,7 @@ describe(COLLABORATIONS_API, () => {
         },
       },
       renameDatabase: {
-        '': { params: { optional: [false], valid: [MOCK_COLLABORATION_ID, MOCK_NAME] } },
+        '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_NAME] } },
         '(collaborationId, name)': {
           method: 'patch',
           params: {
@@ -137,7 +138,22 @@ describe(COLLABORATIONS_API, () => {
             valid: [MOCK_COLLABORATION_ID, MOCK_NAME],
           },
         },
-      }
+      },
+      projectTableToCollaboration: {
+        '': {
+          params: {
+            optional: [false, false, false],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID]
+          }
+        },
+        '(collaborationId, organizationId, tableId)': {
+          method: 'get',
+          params: {
+            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_ID_1}/${MOCK_TABLE_ID}`],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID],
+          },
+        },
+      },
     },
   );
 });
