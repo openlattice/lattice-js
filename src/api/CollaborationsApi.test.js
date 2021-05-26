@@ -169,6 +169,21 @@ describe(COLLABORATIONS_API, () => {
           },
         },
       },
+      getProjectedTablesInCollaboration: {
+        '': {
+          params: {
+            optional: [false],
+            valid: [MOCK_COLLABORATION_ID]
+          }
+        },
+        '(organizationId)': {
+          method: 'get',
+          params: {
+            axios: [`/${MOCK_COLLABORATION_ID}/${TABLES_PATH}`],
+            valid: [MOCK_COLLABORATION_ID],
+          },
+        },
+      },
     },
   );
 });

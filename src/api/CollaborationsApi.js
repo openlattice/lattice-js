@@ -436,7 +436,7 @@ function removeProjectedTableFromCollaboration(
 }
 
 /**
- * `GET /collaborations/organizations/{organizationId}`
+ * `GET /collaborations/organizations/{organizationId}/tables`
  *
  * Loads all authorized projected tables in an organization
  *
@@ -467,6 +467,38 @@ function getProjectedTablesInOrganization(organizationId :UUID) :Promise<Object>
     });
 }
 
+/**
+ * `GET /collaborations/{collaborationId}/tables`
+ *
+ * Loads all authorized projected tables in a collaboration
+ *
+ * @static
+ * @memberof lattice.CollaborationsApi
+ * @param {UUID} collaborationId
+ * @returns {Promise<Object>} - a Promise that resolves with a map from
+ * organizationId to all table ids projected to the requested collaboration from that organization.
+ *
+ * @example
+ * CollaborationsApi.getProjectedTablesInCollaboration("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getProjectedTablesInCollaboration(collaborationId :UUID) :Promise<Object> {
+  let errorMsg = '';
+
+  if (!isValidUUID(collaborationId)) {
+    errorMsg = 'invalid parameter: "collaborationId" must be a valid UUID';
+    LOG.error(errorMsg, collaborationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(COLLABORATIONS_API)
+    .get(`/${collaborationId}/${TABLES_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   addOrganizationsToCollaboration,
   createCollaboration,
@@ -475,6 +507,7 @@ export {
   getCollaborationDatabaseInfo,
   getCollaborations,
   getCollaborationsIncludingOrganization,
+  getProjectedTablesInCollaboration,
   getProjectedTablesInOrganization,
   projectTableToCollaboration,
   removeOrganizationsFromCollaboration,
