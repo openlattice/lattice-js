@@ -4,20 +4,26 @@ import * as CollaborationsApi from './CollaborationsApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
-import { DATABASE_PATH, ORGANIZATIONS_PATH, PROJECT_PATH, TABLES_PATH } from '../constants/UrlConstants';
+import {
+  DATABASE_PATH,
+  ORGANIZATIONS_PATH,
+  PROJECT_PATH,
+  TABLES_PATH,
+} from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 const MOCK_COLLABORATION_ID = uuid();
-const MOCK_ORG_ID_1 = uuid();
-const MOCK_ORG_ID_2 = uuid();
-const MOCK_TABLE_ID = uuid();
+const MOCK_ORG_1_ID = uuid();
+const MOCK_ORG_2_ID = uuid();
+const MOCK_TABLE_1_ID = uuid();
+const MOCK_TABLE_2_ID = uuid();
 const MOCK_NAME = 'test_collaboration';
 const MOCK_COLLABORATION = {
   description: 'Test',
   id: MOCK_COLLABORATION_ID,
   name: MOCK_NAME,
-  organizationIds: [MOCK_ORG_ID_1, MOCK_ORG_ID_2],
+  organizationIds: [MOCK_ORG_1_ID, MOCK_ORG_2_ID],
   title: 'Test Collaboration',
 };
 
@@ -60,12 +66,12 @@ describe(COLLABORATIONS_API, () => {
         },
       },
       getCollaborationsIncludingOrganization: {
-        '': { params: { optional: [false], valid: [MOCK_ORG_ID_1] } },
+        '': { params: { optional: [false], valid: [MOCK_ORG_1_ID] } },
         '(organizationId)': {
           method: 'get',
           params: {
-            axios: [`/${ORGANIZATIONS_PATH}/${MOCK_ORG_ID_1}`],
-            valid: [MOCK_ORG_ID_1],
+            axios: [`/${ORGANIZATIONS_PATH}/${MOCK_ORG_1_ID}`],
+            valid: [MOCK_ORG_1_ID],
           },
         },
       },
@@ -80,32 +86,32 @@ describe(COLLABORATIONS_API, () => {
         },
       },
       addOrganizationsToCollaboration: {
-        '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1] } },
+        '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID] } },
         '(collaborationId, organzationId)': {
           method: 'post',
           params: {
-            axios: [`/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`, [MOCK_ORG_ID_1]],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1],
+            axios: [`/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`, [MOCK_ORG_1_ID]],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID],
           },
         },
         '(collaborationId, organzationIds)': {
           method: 'post',
           params: {
-            axios: [`/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`, [MOCK_ORG_ID_1, MOCK_ORG_ID_2]],
-            valid: [MOCK_COLLABORATION_ID, [MOCK_ORG_ID_1, MOCK_ORG_ID_2]],
+            axios: [`/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`, [MOCK_ORG_1_ID, MOCK_ORG_2_ID]],
+            valid: [MOCK_COLLABORATION_ID, [MOCK_ORG_1_ID, MOCK_ORG_2_ID]],
           },
         },
       },
       removeOrganizationsFromCollaboration: {
-        '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1] } },
+        '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID] } },
         '(collaborationId, organzationId)': {
           method: 'delete',
           params: {
             axios: [
               `/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`,
-              { data: [MOCK_ORG_ID_1] },
+              { data: [MOCK_ORG_1_ID] },
             ],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID],
           },
         },
         '(collaborationId, organzationIds)': {
@@ -113,9 +119,9 @@ describe(COLLABORATIONS_API, () => {
           params: {
             axios: [
               `/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`,
-              { data: [MOCK_ORG_ID_1, MOCK_ORG_ID_2] },
+              { data: [MOCK_ORG_1_ID, MOCK_ORG_2_ID] },
             ],
-            valid: [MOCK_COLLABORATION_ID, [MOCK_ORG_ID_1, MOCK_ORG_ID_2]],
+            valid: [MOCK_COLLABORATION_ID, [MOCK_ORG_1_ID, MOCK_ORG_2_ID]],
           },
         },
       },
@@ -143,14 +149,14 @@ describe(COLLABORATIONS_API, () => {
         '': {
           params: {
             optional: [false, false, false],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID]
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_TABLE_1_ID]
           }
         },
         '(collaborationId, organizationId, tableId)': {
           method: 'get',
           params: {
-            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_ID_1}/${MOCK_TABLE_ID}`],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_ID_1, MOCK_TABLE_ID],
+            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_1_ID}/${MOCK_TABLE_1_ID}`],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_TABLE_1_ID],
           },
         },
       },
@@ -158,14 +164,14 @@ describe(COLLABORATIONS_API, () => {
         '': {
           params: {
             optional: [false],
-            valid: [MOCK_ORG_ID_1]
+            valid: [MOCK_ORG_1_ID]
           }
         },
         '(organizationId)': {
           method: 'get',
           params: {
-            axios: [`/${ORGANIZATIONS_PATH}/${MOCK_ORG_ID_1}/${TABLES_PATH}`],
-            valid: [MOCK_ORG_ID_1],
+            axios: [`/${ORGANIZATIONS_PATH}/${MOCK_ORG_1_ID}/${TABLES_PATH}`],
+            valid: [MOCK_ORG_1_ID],
           },
         },
       },
@@ -181,6 +187,23 @@ describe(COLLABORATIONS_API, () => {
           params: {
             axios: [`/${MOCK_COLLABORATION_ID}/${TABLES_PATH}`],
             valid: [MOCK_COLLABORATION_ID],
+          },
+        },
+      },
+      getProjectionCollaborationsForTables: {
+        '': { params: { optional: [false], valid: [MOCK_TABLE_1_ID] } },
+        '(tableId)': {
+          method: 'post',
+          params: {
+            axios: [`/${TABLES_PATH}`, [MOCK_TABLE_1_ID]],
+            valid: [MOCK_TABLE_1_ID],
+          },
+        },
+        '(tableIds)': {
+          method: 'post',
+          params: {
+            axios: [`/${TABLES_PATH}`, [MOCK_TABLE_1_ID, MOCK_TABLE_2_ID]],
+            valid: [[MOCK_TABLE_1_ID, MOCK_TABLE_2_ID]],
           },
         },
       },

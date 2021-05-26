@@ -499,6 +499,49 @@ function getProjectedTablesInCollaboration(collaborationId :UUID) :Promise<Objec
     });
 }
 
+/**
+ * `POST /collaborations/tables`
+ *
+ * Loads all collaborations each requested table is projected to
+ *
+ * @static
+ * @memberof lattice.CollaborationsApi
+ * @param {UUID || UUID[]} tableIds
+ * @returns {Promise<Object>} - a Promise that resolves with a map from
+ * organizationId to all table ids projected to the requested collaboration from that organization.
+ *
+ * @example
+ * CollaborationsApi.getProjectionCollaborationsForTables("01af0000-0000-0000-8000-000000000004");
+ *
+ * @example
+ * CollaborationsApi.getProjectionCollaborationsForTables([
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   "01af0000-0000-0000-8000-000000000004",
+ * ]);
+ */
+function getProjectionCollaborationsForTables(tableIds :UUID | UUID[]) :Promise<Object> {
+  let errorMsg = '';
+
+  if (!isValidUUID(tableIds) && !isValidUUIDArray(tableIds)) {
+    errorMsg = 'invalid parameter: tableIds must be a valid UUID or array of UUIDs';
+    LOG.error(errorMsg, tableIds);
+    return Promise.reject(errorMsg);
+  }
+
+  let tables = tableIds;
+  if (typeof tableIds === 'string') {
+    tables = [tableIds];
+  }
+
+  return getApiAxiosInstance(COLLABORATIONS_API)
+    .post(`/${TABLES_PATH}`, tables)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   addOrganizationsToCollaboration,
   createCollaboration,
@@ -509,6 +552,7 @@ export {
   getCollaborationsIncludingOrganization,
   getProjectedTablesInCollaboration,
   getProjectedTablesInOrganization,
+  getProjectionCollaborationsForTables,
   projectTableToCollaboration,
   removeOrganizationsFromCollaboration,
   removeProjectedTableFromCollaboration,
