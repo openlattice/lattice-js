@@ -2,7 +2,12 @@
 
 import Logger from '../utils/Logger';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
-import { DATABASE_PATH, ORGANIZATIONS_PATH, PROJECT_PATH, TABLES_PATH } from '../constants/UrlConstants';
+import {
+  DATABASE_PATH,
+  ORGANIZATIONS_PATH,
+  PROJECT_PATH,
+  TABLES_PATH,
+} from '../constants/UrlConstants';
 import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
