@@ -4,9 +4,9 @@ import Logger from '../utils/Logger';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
 import {
   DATABASE_PATH,
+  DATA_SETS_PATH,
   ORGANIZATIONS_PATH,
   PROJECT_PATH,
-  TABLES_PATH,
 } from '../constants/UrlConstants';
 import { isNonEmptyObject, isNonEmptyString } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
@@ -26,7 +26,7 @@ type Collaboration = {|
 /**
  * `GET /collaborations/`
  *
- * Get collaborations
+ * Gets all [Collaboration] objects the caller has [Permission.READ] on.
  *
  * @static
  * @memberof lattice.CollaborationsApi
@@ -47,9 +47,73 @@ function getCollaborations() :Promise<Collaboration[]> {
 }
 
 /**
+ * `GET /collaborations/{collaborationId}`
+ *
+ * Gets the [Collaboration] object with the given collaboration id. The caller must have [Permission.READ] on the
+ * target [Collaboration] object.
+ *
+ * @static
+ * @memberof lattice.CollaborationsApi
+ * @param {UUID} collaborationId
+ * @returns {Promise<Collaboration>} - a Promise that resolves with a collaboration object
+ *
+ * @example
+ * CollaborationsApi.getCollaboration("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getCollaboration(collaborationId :UUID) :Promise<Collaboration> {
+  let errorMsg = '';
+
+  if (!isValidUUID(collaborationId)) {
+    errorMsg = 'invalid parameter: "collaborationId" must be a valid UUID';
+    LOG.error(errorMsg, collaborationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(COLLABORATIONS_API)
+    .get(`/${collaborationId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /collaborations/organizations/{organiationId}`
+ *
+ * Gets all [Collaboration] objects the caller has [Permission.READ] on that include the given organization id. The
+ * caller must have [Permission.READ] on the target [Organization] object.
+ *
+ * @static
+ * @memberof lattice.CollaborationsApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Collaboration[]>} - a Promise that resolves with a list of collaboration objects
+ *
+ * @example
+ * CollaborationsApi.getCollaborationsWithOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ */
+function getCollaborationsWithOrganization(organizationId :UUID) :Promise<Collaboration[]> {
+  let errorMsg = '';
+
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(COLLABORATIONS_API)
+    .get(`/${ORGANIZATIONS_PATH}/${organizationId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `POST /collaborations/`
  *
- * Create a collaboration
+ * Creates a new [Collaboration] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
@@ -81,71 +145,10 @@ function createCollaboration(collaboration :Collaboration) :Promise<UUID> {
 }
 
 /**
- * `GET /collaborations/{collaborationId}`
- *
- * Get collaboration by id
- *
- * @static
- * @memberof lattice.CollaborationsApi
- * @param {UUID} collaborationId
- * @returns {Promise<Collaboration>} - a Promise that resolves with a collaboration object
- *
- * @example
- * CollaborationsApi.getCollaboration("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getCollaboration(collaborationId :UUID) :Promise<Collaboration> {
-  let errorMsg = '';
-
-  if (!isValidUUID(collaborationId)) {
-    errorMsg = 'invalid parameter: "collaborationId" must be a valid UUID';
-    LOG.error(errorMsg, collaborationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(COLLABORATIONS_API)
-    .get(`/${collaborationId}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
- * `GET /collaborations/organizations/{organiationId}`
- *
- * Get collaborations that include a specified organization by id
- *
- * @static
- * @memberof lattice.CollaborationsApi
- * @param {UUID} organizationId
- * @returns {Promise<Collaboration[]>} - a Promise that resolves with a list of collaboration objects
- *
- * @example
- * CollaborationsApi.getCollaborationsIncludingOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
- */
-function getCollaborationsIncludingOrganization(organizationId :UUID) :Promise<Collaboration[]> {
-  let errorMsg = '';
-
-  if (!isValidUUID(organizationId)) {
-    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
-    LOG.error(errorMsg, organizationId);
-    return Promise.reject(errorMsg);
-  }
-
-  return getApiAxiosInstance(COLLABORATIONS_API)
-    .get(`/${ORGANIZATIONS_PATH}/${organizationId}`)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
-/**
  * `DELETE /collaborations/{collaborationId}`
  *
- * Delete collaboration by collaboration id
+ * Deletes the [Collaboration] object with the given collaboration id. The caller must have [Permission.OWNER] on
+ * the target [Collaboration] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
@@ -174,9 +177,10 @@ function deleteCollaboration(collaborationId :UUID) :Promise<Collaboration[]> {
 }
 
 /**
- * `POST /collaborations/{collaborationId}/organzations`
+ * `PATCH /collaborations/{collaborationId}/organzations`
  *
- * Add organizations to a collaboration by organization ids
+ * Adds the given organization ids to the [Collaboration] object with the given collaboration id. The caller must
+ * have [Permission.OWNER] on the target [Collaboration] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
@@ -213,7 +217,7 @@ function addOrganizationsToCollaboration(collaborationId :UUID, organizationIds 
   }
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .post(`/${collaborationId}/organizations`, organizations)
+    .patch(`/${collaborationId}/organizations`, organizations)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -224,7 +228,8 @@ function addOrganizationsToCollaboration(collaborationId :UUID, organizationIds 
 /**
  * `DELETE /collaborations/{collaborationId}/organzations`
  *
- * Remove organizations from a collaboration by organization ids
+ * Removes the given organization ids from the [Collaboration] object with the given collaboration id. The caller
+ * must have [Permission.OWNER] on the target [Collaboration] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
@@ -272,7 +277,8 @@ function removeOrganizationsFromCollaboration(collaborationId :UUID, organizatio
 /**
  * `GET /collaborations/{collaborationId}/database`
  *
- * Delete collaboration by collaboration id
+ * Gets the database info for the [Collaboration] object with the given collaboration id. The caller must have
+ * [Permission.READ] on the target [Collaboration] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
@@ -303,7 +309,8 @@ function getCollaborationDatabaseInfo(collaborationId :UUID) :Promise<Collaborat
 /**
  * `PATCH /collaborations/{collaborationId}/database`
  *
- * Rename collaboration database
+ * Renames the database belonging to the [Collaboration] object with the given collaboration id. The caller must
+ * have [Permission.OWNER] on the target [Collaboration] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
@@ -312,9 +319,9 @@ function getCollaborationDatabaseInfo(collaborationId :UUID) :Promise<Collaborat
  * @returns {Promise} - a Promise that resolves without a value
  *
  * @example
- * CollaborationsApi.renameDatabase("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ * CollaborationsApi.renameCollaborationDatabase("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-function renameDatabase(collaborationId :UUID, name :string) :Promise<void> {
+function renameCollaborationDatabase(collaborationId :UUID, name :string) :Promise<void> {
   let errorMsg = '';
 
   if (!isValidUUID(collaborationId)) {
@@ -339,25 +346,29 @@ function renameDatabase(collaborationId :UUID, name :string) :Promise<void> {
 }
 
 /**
- * `GET /collaborations/{collaborationId}/project/{organizationId}/{tableId}`
+ * `GET /collaborations/{collaborationId}/project/{organizationId}/{dataSetId}`
  *
- * Project table to collaboration
+ * Adds the given data set id to the [Collaboration] object with the given collaboration id. The target data set
+ * object must belong to the [Organization] object with the given organization id. The caller must have:
+ *   - [Permission.READ] on the target [Collaboration] object
+ *   - [Permission.READ] on the target [Organization] object
+ *   - [Permission.OWNER] on the target data set object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
  * @param {UUID} collaborationId
  * @param {UUID} organizationId
- * @param {UUID} tableId
+ * @param {UUID} dataSetId
  * @returns {Promise} - a Promise that resolves without a value
  *
  * @example
- * CollaborationsApi.projectTableToCollaboration(
+ * CollaborationsApi.addDataSetToCollaboration(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "01af0000-0000-0000-8000-000000000004",
  *   "00230000-0000-0000-8000-000000000004",
  * );
  */
-function projectTableToCollaboration(collaborationId :UUID, organizationId :UUID, tableId :UUID) :Promise<void> {
+function addDataSetToCollaboration(collaborationId :UUID, organizationId :UUID, dataSetId :UUID) :Promise<void> {
   let errorMsg = '';
 
   if (!isValidUUID(collaborationId)) {
@@ -372,14 +383,14 @@ function projectTableToCollaboration(collaborationId :UUID, organizationId :UUID
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUUID(tableId)) {
-    errorMsg = 'invalid parameter: "tableId" must be a valid UUID';
-    LOG.error(errorMsg, tableId);
+  if (!isValidUUID(dataSetId)) {
+    errorMsg = 'invalid parameter: "dataSetId" must be a valid UUID';
+    LOG.error(errorMsg, dataSetId);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .get(`/${collaborationId}/${PROJECT_PATH}/${organizationId}/${tableId}`)
+    .get(`/${collaborationId}/${PROJECT_PATH}/${organizationId}/${dataSetId}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -388,28 +399,32 @@ function projectTableToCollaboration(collaborationId :UUID, organizationId :UUID
 }
 
 /**
- * `DELETE /collaborations/{collaborationId}/project/{organizationId}/{tableId}`
+ * `DELETE /collaborations/{collaborationId}/project/{organizationId}/{dataSetId}`
  *
- * Remove a projected table from a collaboration
+ * Removes the given data set id from the [Collaboration] object with the given collaboration id. The target data
+ * set object must belong to the [Organization] object with the given organization id. The caller must have:
+ *   - [Permission.READ] on the target [Collaboration] object
+ *   - [Permission.READ] on the target [Organization] object
+ *   - [Permission.OWNER] on the target data set object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
  * @param {UUID} collaborationId
  * @param {UUID} organizationId
- * @param {UUID} tableId
+ * @param {UUID} dataSetId
  * @returns {Promise} - a Promise that resolves without a value
  *
  * @example
- * CollaborationsApi.removeProjectedTableFromCollaboration(
+ * CollaborationsApi.removeDataSetFromCollaboration(
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "01af0000-0000-0000-8000-000000000004",
  *   "00230000-0000-0000-8000-000000000004",
  * );
  */
-function removeProjectedTableFromCollaboration(
+function removeDataSetFromCollaboration(
   collaborationId :UUID,
   organizationId :UUID,
-  tableId :UUID,
+  dataSetId :UUID,
 ) :Promise<void> {
   let errorMsg = '';
 
@@ -425,14 +440,14 @@ function removeProjectedTableFromCollaboration(
     return Promise.reject(errorMsg);
   }
 
-  if (!isValidUUID(tableId)) {
-    errorMsg = 'invalid parameter: "tableId" must be a valid UUID';
-    LOG.error(errorMsg, tableId);
+  if (!isValidUUID(dataSetId)) {
+    errorMsg = 'invalid parameter: "dataSetId" must be a valid UUID';
+    LOG.error(errorMsg, dataSetId);
     return Promise.reject(errorMsg);
   }
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .delete(`/${collaborationId}/${PROJECT_PATH}/${organizationId}/${tableId}`)
+    .delete(`/${collaborationId}/${PROJECT_PATH}/${organizationId}/${dataSetId}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -441,20 +456,22 @@ function removeProjectedTableFromCollaboration(
 }
 
 /**
- * `GET /collaborations/organizations/{organizationId}/tables`
+ * `GET /collaborations/organizations/{organizationId}/datasets`
  *
- * Loads all authorized projected tables in an organization
+ * Gets all data set ids that belong to the [Organization] object with the given organization id that are added
+ * to any [Collaboration] objects that the caller has [Permission.READ] on. The caller must have [Permission.READ]
+ * on the target [Organization] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
  * @param {UUID} organizationId
  * @returns {Promise<Object>} - a Promise that resolves with a map from collaborationId
- * to all table ids projected in that collaboration.
+ * to all data set ids projected in that collaboration.
  *
  * @example
- * CollaborationsApi.getProjectedTablesInOrganization("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ * CollaborationsApi.getOrganizationCollaborationDataSets("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-function getProjectedTablesInOrganization(organizationId :UUID) :Promise<Object> {
+function getOrganizationCollaborationDataSets(organizationId :UUID) :Promise<Object> {
   let errorMsg = '';
 
   if (!isValidUUID(organizationId)) {
@@ -464,7 +481,7 @@ function getProjectedTablesInOrganization(organizationId :UUID) :Promise<Object>
   }
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .get(`/${ORGANIZATIONS_PATH}/${organizationId}/${TABLES_PATH}`)
+    .get(`/${ORGANIZATIONS_PATH}/${organizationId}/${DATA_SETS_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -473,20 +490,22 @@ function getProjectedTablesInOrganization(organizationId :UUID) :Promise<Object>
 }
 
 /**
- * `GET /collaborations/{collaborationId}/tables`
+ * `GET /collaborations/{collaborationId}/datasets`
  *
- * Loads all authorized projected tables in a collaboration
+ * Gets all data set ids that are added to the [Collaboration] object with the given collaboration id that belong
+ * to any [Organization] objects that the caller has [Permission.READ] on. The caller must have [Permission.READ]
+ * on the target [Collaboration] object.
  *
  * @static
  * @memberof lattice.CollaborationsApi
  * @param {UUID} collaborationId
  * @returns {Promise<Object>} - a Promise that resolves with a map from
- * organizationId to all table ids projected to the requested collaboration from that organization.
+ * organizationId to all data set ids projected to the requested collaboration from that organization.
  *
  * @example
- * CollaborationsApi.getProjectedTablesInCollaboration("ec6865e6-e60e-424b-a071-6a9c1603d735");
+ * CollaborationsApi.getCollaborationDataSets("ec6865e6-e60e-424b-a071-6a9c1603d735");
  */
-function getProjectedTablesInCollaboration(collaborationId :UUID) :Promise<Object> {
+function getCollaborationDataSets(collaborationId :UUID) :Promise<Object> {
   let errorMsg = '';
 
   if (!isValidUUID(collaborationId)) {
@@ -496,7 +515,7 @@ function getProjectedTablesInCollaboration(collaborationId :UUID) :Promise<Objec
   }
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .get(`/${collaborationId}/${TABLES_PATH}`)
+    .get(`/${collaborationId}/${DATA_SETS_PATH}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -505,41 +524,42 @@ function getProjectedTablesInCollaboration(collaborationId :UUID) :Promise<Objec
 }
 
 /**
- * `POST /collaborations/tables`
+ * `POST /collaborations/datasets`
  *
- * Loads all collaborations each requested table is projected to
+ * Gets all [Collaboration] ids that the caller has [Permission.READ] on that include the given data set ids that
+ * the caller has [Permission.READ] on.
  *
  * @static
  * @memberof lattice.CollaborationsApi
- * @param {UUID || UUID[]} tableIds
+ * @param {UUID || UUID[]} dataSetIds
  * @returns {Promise<Object>} - a Promise that resolves with a map from
- * organizationId to all table ids projected to the requested collaboration from that organization.
+ * organizationId to all data set ids projected to the requested collaboration from that organization.
  *
  * @example
- * CollaborationsApi.getProjectionCollaborationsForTables("01af0000-0000-0000-8000-000000000004");
+ * CollaborationsApi.getCollaborationsWithDataSets("01af0000-0000-0000-8000-000000000004");
  *
  * @example
- * CollaborationsApi.getProjectionCollaborationsForTables([
+ * CollaborationsApi.getCollaborationsWithDataSets([
  *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
  *   "01af0000-0000-0000-8000-000000000004",
  * ]);
  */
-function getProjectionCollaborationsForTables(tableIds :UUID | UUID[]) :Promise<Object> {
+function getCollaborationsWithDataSets(dataSetIds :UUID | UUID[]) :Promise<Object> {
   let errorMsg = '';
 
-  if (!isValidUUID(tableIds) && !isValidUUIDArray(tableIds)) {
-    errorMsg = 'invalid parameter: tableIds must be a valid UUID or array of UUIDs';
-    LOG.error(errorMsg, tableIds);
+  if (!isValidUUID(dataSetIds) && !isValidUUIDArray(dataSetIds)) {
+    errorMsg = 'invalid parameter: dataSetIds must be a valid UUID or array of UUIDs';
+    LOG.error(errorMsg, dataSetIds);
     return Promise.reject(errorMsg);
   }
 
-  let tables = tableIds;
-  if (typeof tableIds === 'string') {
-    tables = [tableIds];
+  let datasets = dataSetIds;
+  if (typeof dataSetIds === 'string') {
+    datasets = [dataSetIds];
   }
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .post(`/${TABLES_PATH}`, tables)
+    .post(`/${DATA_SETS_PATH}`, datasets)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -554,12 +574,12 @@ export {
   getCollaboration,
   getCollaborationDatabaseInfo,
   getCollaborations,
-  getCollaborationsIncludingOrganization,
-  getProjectedTablesInCollaboration,
-  getProjectedTablesInOrganization,
-  getProjectionCollaborationsForTables,
-  projectTableToCollaboration,
+  getCollaborationsWithOrganization,
+  getCollaborationDataSets,
+  getOrganizationCollaborationDataSets,
+  getCollaborationsWithDataSets,
+  addDataSetToCollaboration,
   removeOrganizationsFromCollaboration,
-  removeProjectedTableFromCollaboration,
-  renameDatabase,
+  removeDataSetFromCollaboration,
+  renameCollaborationDatabase,
 };

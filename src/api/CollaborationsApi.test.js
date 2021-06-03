@@ -6,9 +6,9 @@ import * as AxiosUtils from '../utils/axios';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
 import {
   DATABASE_PATH,
+  DATA_SETS_PATH,
   ORGANIZATIONS_PATH,
   PROJECT_PATH,
-  TABLES_PATH,
 } from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
@@ -16,8 +16,8 @@ import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 const MOCK_COLLABORATION_ID = uuid();
 const MOCK_ORG_1_ID = uuid();
 const MOCK_ORG_2_ID = uuid();
-const MOCK_TABLE_1_ID = uuid();
-const MOCK_TABLE_2_ID = uuid();
+const MOCK_DATA_SET_1_ID = uuid();
+const MOCK_DATA_SET_2_ID = uuid();
 const MOCK_NAME = 'test_collaboration';
 const MOCK_COLLABORATION = {
   description: 'Test',
@@ -65,7 +65,7 @@ describe(COLLABORATIONS_API, () => {
           },
         },
       },
-      getCollaborationsIncludingOrganization: {
+      getCollaborationsWithOrganization: {
         '': { params: { optional: [false], valid: [MOCK_ORG_1_ID] } },
         '(organizationId)': {
           method: 'get',
@@ -88,14 +88,14 @@ describe(COLLABORATIONS_API, () => {
       addOrganizationsToCollaboration: {
         '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID] } },
         '(collaborationId, organzationId)': {
-          method: 'post',
+          method: 'patch',
           params: {
             axios: [`/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`, [MOCK_ORG_1_ID]],
             valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID],
           },
         },
         '(collaborationId, organzationIds)': {
-          method: 'post',
+          method: 'patch',
           params: {
             axios: [`/${MOCK_COLLABORATION_ID}/${ORGANIZATIONS_PATH}`, [MOCK_ORG_1_ID, MOCK_ORG_2_ID]],
             valid: [MOCK_COLLABORATION_ID, [MOCK_ORG_1_ID, MOCK_ORG_2_ID]],
@@ -135,7 +135,7 @@ describe(COLLABORATIONS_API, () => {
           },
         },
       },
-      renameDatabase: {
+      renameCollaborationDatabase: {
         '': { params: { optional: [false, false], valid: [MOCK_COLLABORATION_ID, MOCK_NAME] } },
         '(collaborationId, name)': {
           method: 'patch',
@@ -145,22 +145,37 @@ describe(COLLABORATIONS_API, () => {
           },
         },
       },
-      projectTableToCollaboration: {
+      addDataSetToCollaboration: {
         '': {
           params: {
             optional: [false, false, false],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_TABLE_1_ID]
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_DATA_SET_1_ID]
           }
         },
-        '(collaborationId, organizationId, tableId)': {
+        '(collaborationId, organizationId, dataSetId)': {
           method: 'get',
           params: {
-            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_1_ID}/${MOCK_TABLE_1_ID}`],
-            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_TABLE_1_ID],
+            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_1_ID}/${MOCK_DATA_SET_1_ID}`],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_DATA_SET_1_ID],
           },
         },
       },
-      getProjectedTablesInOrganization: {
+      removeDataSetFromCollaboration: {
+        '': {
+          params: {
+            optional: [false, false, false],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_DATA_SET_1_ID]
+          }
+        },
+        '(collaborationId, organizationId, dataSetId)': {
+          method: 'delete',
+          params: {
+            axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_1_ID}/${MOCK_DATA_SET_1_ID}`],
+            valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_DATA_SET_1_ID],
+          },
+        },
+      },
+      getOrganizationCollaborationDataSets: {
         '': {
           params: {
             optional: [false],
@@ -170,12 +185,12 @@ describe(COLLABORATIONS_API, () => {
         '(organizationId)': {
           method: 'get',
           params: {
-            axios: [`/${ORGANIZATIONS_PATH}/${MOCK_ORG_1_ID}/${TABLES_PATH}`],
+            axios: [`/${ORGANIZATIONS_PATH}/${MOCK_ORG_1_ID}/${DATA_SETS_PATH}`],
             valid: [MOCK_ORG_1_ID],
           },
         },
       },
-      getProjectedTablesInCollaboration: {
+      getCollaborationDataSets: {
         '': {
           params: {
             optional: [false],
@@ -185,25 +200,25 @@ describe(COLLABORATIONS_API, () => {
         '(organizationId)': {
           method: 'get',
           params: {
-            axios: [`/${MOCK_COLLABORATION_ID}/${TABLES_PATH}`],
+            axios: [`/${MOCK_COLLABORATION_ID}/${DATA_SETS_PATH}`],
             valid: [MOCK_COLLABORATION_ID],
           },
         },
       },
-      getProjectionCollaborationsForTables: {
-        '': { params: { optional: [false], valid: [MOCK_TABLE_1_ID] } },
-        '(tableId)': {
+      getCollaborationsWithDataSets: {
+        '': { params: { optional: [false], valid: [MOCK_DATA_SET_1_ID] } },
+        '(dataSetId)': {
           method: 'post',
           params: {
-            axios: [`/${TABLES_PATH}`, [MOCK_TABLE_1_ID]],
-            valid: [MOCK_TABLE_1_ID],
+            axios: [`/${DATA_SETS_PATH}`, [MOCK_DATA_SET_1_ID]],
+            valid: [MOCK_DATA_SET_1_ID],
           },
         },
-        '(tableIds)': {
+        '(dataSetIds)': {
           method: 'post',
           params: {
-            axios: [`/${TABLES_PATH}`, [MOCK_TABLE_1_ID, MOCK_TABLE_2_ID]],
-            valid: [[MOCK_TABLE_1_ID, MOCK_TABLE_2_ID]],
+            axios: [`/${DATA_SETS_PATH}`, [MOCK_DATA_SET_1_ID, MOCK_DATA_SET_2_ID]],
+            valid: [[MOCK_DATA_SET_1_ID, MOCK_DATA_SET_2_ID]],
           },
         },
       },
