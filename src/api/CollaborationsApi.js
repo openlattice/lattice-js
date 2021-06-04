@@ -315,7 +315,7 @@ function getCollaborationDatabaseInfo(collaborationId :UUID) :Promise<Collaborat
  * @static
  * @memberof lattice.CollaborationsApi
  * @param {UUID} collaborationId
- * @param {UUID} name
+ * @param {string} name
  * @returns {Promise} - a Promise that resolves without a value
  *
  * @example
