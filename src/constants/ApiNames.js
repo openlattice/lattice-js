@@ -5,6 +5,7 @@
 export const APP_API :'AppApi' = 'AppApi';
 export const AUTHORIZATIONS_API :'AuthorizationsApi' = 'AuthorizationsApi';
 export const CODEX_API :'CodexApi' = 'CodexApi';
+export const COLLABORATIONS_API :'CollaborationsApi' = 'CollaborationsApi';
 export const DATA_API :'DataApi' = 'DataApi';
 export const DATA_INTEGRATION_API :'DataIntegrationApi' = 'DataIntegrationApi';
 export const DATA_SETS_API :'DataSetsApi' = 'DataSetsApi';

@@ -18,6 +18,7 @@ const API_TO_PATH_MAP = Map({
   [ApiNames.APP_API]              : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.APP_PATH}`,
   [ApiNames.AUTHORIZATIONS_API]   : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.AUTHORIZATIONS_PATH}`,
   [ApiNames.CODEX_API]            : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.CODEX_PATH}`,
+  [ApiNames.COLLABORATIONS_API]   : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.COLLABORATIONS_PATH}`,
   [ApiNames.DATA_API]             : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.DATA_PATH}`,
   [ApiNames.DATA_INTEGRATION_API] : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.INTEGRATION_PATH}`,
   [ApiNames.DATA_SETS_API]        : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ORG_DB_PATH}`,
