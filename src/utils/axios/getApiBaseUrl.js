@@ -17,6 +17,7 @@ const API_TO_PATH_MAP :Map<string, string> = OrderedMap({
   [ApiNames.DATA_API]             : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.DATA_PATH}`,
   [ApiNames.DATA_INTEGRATION_API] : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.INTEGRATION_PATH}`,
   [ApiNames.DATA_SETS_API]        : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ORG_DB_PATH}`,
+  [ApiNames.DATA_SET_METADATA_API]: `${UrlConstants.DATASTORE_PATH}/${UrlConstants.METADATA_PATH}`,
   [ApiNames.EDM_API]              : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.EDM_PATH}`,
   [ApiNames.ENTITY_SETS_API]      : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ENTITY_SETS_PATH}`,
   [ApiNames.ORGANIZATIONS_API]    : `${UrlConstants.DATASTORE_PATH}/${UrlConstants.ORGANIZATIONS_PATH}`,
