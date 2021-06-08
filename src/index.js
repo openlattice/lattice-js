@@ -17,6 +17,7 @@ import * as CollaborationsApi from './api/CollaborationsApi';
 import * as Constants from './constants/GlobalConstants';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
+import * as DataSetMetadataApi from './api/DataSetMetadataApi';
 import * as DataSetsApi from './api/DataSetsApi';
 import * as EntityDataModelApi from './api/EntityDataModelApi';
 import * as EntitySetsApi from './api/EntitySetsApi';
@@ -45,6 +46,7 @@ export {
   CollaborationsApi,
   DataApi,
   DataIntegrationApi,
+  DataSetMetadataApi,
   DataSetsApi,
   EntityDataModelApi,
   EntitySetsApi,
@@ -68,6 +70,7 @@ export default {
   CollaborationsApi,
   DataApi,
   DataIntegrationApi,
+  DataSetMetadataApi,
   DataSetsApi,
   EntityDataModelApi,
   EntitySetsApi,
