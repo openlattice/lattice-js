@@ -13,6 +13,7 @@
 import * as AppApi from './api/AppApi';
 import * as AuthorizationsApi from './api/AuthorizationsApi';
 import * as CodexApi from './api/CodexApi';
+import * as CollaborationsApi from './api/CollaborationsApi';
 import * as Constants from './constants/GlobalConstants';
 import * as DataApi from './api/DataApi';
 import * as DataIntegrationApi from './api/DataIntegrationApi';
@@ -42,6 +43,7 @@ export {
   AppApi,
   AuthorizationsApi,
   CodexApi,
+  CollaborationsApi,
   DataApi,
   DataIntegrationApi,
   DataSetMetadataApi,
@@ -65,6 +67,7 @@ export default {
   AppApi,
   AuthorizationsApi,
   CodexApi,
+  CollaborationsApi,
   DataApi,
   DataIntegrationApi,
   DataSetMetadataApi,
