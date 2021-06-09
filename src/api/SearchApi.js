@@ -28,32 +28,59 @@ import {
   EDGE,
   EDGE_ES_IDS,
   ENTITY_KEY_IDS,
-  ENTITY_TYPE_ID,
-  EXCLUDE_PROPERTY_TYPES,
-  KEYWORD,
-  MAX_HITS,
-  ORGANIZATION_ID,
-  PROPERTY_TYPE_IDS,
   SOURCE,
   SOURCE_ES_IDS,
-  START,
 } from '../constants/SerializationConstants';
 import {
   ADVANCED_PATH,
+  DATA_SETS_PATH,
   IDS_PATH,
   NEIGHBORS_PATH,
 } from '../constants/UrlConstants';
-import {
-  isDefined,
-  isEmptyArray,
-  isNonEmptyObject,
-  isNonEmptyString,
-} from '../utils/LangUtils';
+import { isDefined, isEmptyArray, isNonEmptyObject } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
 import type { UUID } from '../types';
 
 const LOG = new Logger('SearchApi');
+
+/**
+ * `POST /search/datasets`
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {Object} searchOptions
+ * @returns {Promise<Object>}
+ *
+ * @example
+ * SearchApi.searchDataSetMetadata(
+ *   {
+ *     "excludeColumns": false,
+ *     "maxHits": 100,
+ *     "organizationIds": ["3bf2a30d-fda0-4389-a1e6-8546b230efad"],
+ *     "searchTerm": "test",
+ *     "start": 0
+ *   }
+ * );
+ */
+function searchDataSetMetadata(searchOptions :Object) :Promise<Object> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyObject(searchOptions)) {
+    errorMsg = 'invalid parameter: "searchOptions" must be a non-empty object';
+    LOG.error(errorMsg, searchOptions);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .post(`/${DATA_SETS_PATH}`, searchOptions)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
 
 /**
  * `POST /search/{entitySetId}/neighbors/advanced`
@@ -222,100 +249,8 @@ function searchEntitySetData(searchConstraints :Object) :Promise<Object> {
     });
 }
 
-/**
- * `POST /search`
- *
- * Searches all EntitySet metadata with the given parameters.
- *
- * @static
- * @memberof lattice.SearchApi
- * @param {Object} searchOptions
- * @returns {Promise<Object>} - a Promise that resolves with the search results
- */
-function searchEntitySetMetaData(searchOptions :Object) :Promise<Object> {
-
-  let errorMsg = '';
-
-  if (!isNonEmptyObject(searchOptions)) {
-    errorMsg = 'invalid parameter: "searchOptions" must be a non-empty object';
-    LOG.error(errorMsg, searchOptions);
-    return Promise.reject(errorMsg);
-  }
-
-  const data = {};
-  const {
-    entityTypeId,
-    maxHits,
-    organizationId,
-    propertyTypeIds,
-    searchTerm,
-    start,
-  } = searchOptions;
-
-  if (!isFinite(start) || start < 0) {
-    errorMsg = 'invalid property: "start" must be a positive number';
-    LOG.error(errorMsg, start);
-    return Promise.reject(errorMsg);
-  }
-
-  if (!isFinite(maxHits) || maxHits < 0) {
-    errorMsg = 'invalid property: "maxHits" must be a positive number';
-    LOG.error(errorMsg, maxHits);
-    return Promise.reject(errorMsg);
-  }
-
-  data[START] = start;
-  data[MAX_HITS] = maxHits;
-
-  if (isDefined(searchTerm)) {
-    if (!isNonEmptyString(searchTerm)) {
-      errorMsg = 'invalid property: "searchTerm" must be a non-empty string';
-      LOG.error(errorMsg, searchTerm);
-      return Promise.reject(errorMsg);
-    }
-    data[KEYWORD] = searchTerm;
-  }
-
-  if (isDefined(entityTypeId)) {
-    if (!isValidUUID(entityTypeId)) {
-      errorMsg = 'invalid parameter: "entityTypeId" must be a valid UUID';
-      LOG.error(errorMsg, entityTypeId);
-      return Promise.reject(errorMsg);
-    }
-    data[ENTITY_TYPE_ID] = entityTypeId;
-  }
-
-  if (isDefined(propertyTypeIds)) {
-    if (!isValidUUIDArray(propertyTypeIds)) {
-      errorMsg = 'invalid parameter: "propertyTypeIds" must be a non-empty array of valid UUIDs';
-      LOG.error(errorMsg, propertyTypeIds);
-      return Promise.reject(errorMsg);
-    }
-    data[PROPERTY_TYPE_IDS] = Set().withMutations((set :Set<UUID>) => {
-      propertyTypeIds.forEach((id :UUID) => {
-        set.add(id);
-      });
-    }).toJS();
-  }
-  else {
-    data[EXCLUDE_PROPERTY_TYPES] = true;
-  }
-
-  if (isValidUUID(organizationId)) {
-    data[ORGANIZATION_ID] = organizationId;
-  }
-
-  return getApiAxiosInstance(SEARCH_API)
-    .post('/', data)
-    .then((axiosResponse) => axiosResponse.data)
-    .catch((error :Error) => {
-      LOG.error(error);
-      return Promise.reject(error);
-    });
-}
-
 export {
+  searchDataSetMetadata,
   searchEntityNeighborsWithFilter,
   searchEntitySetData,
-  searchEntitySetMetaData,
 };
