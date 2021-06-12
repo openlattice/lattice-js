@@ -68,7 +68,7 @@ describe(DATA_SET_METADATA_API, () => {
       getOrganizationDataSetsMetadata: {
         '': { params: { optional: [false], valid: [[ORGANIZATION_MOCK.id]] } },
         '(organizationId)': {
-          method: 'post',
+          method: 'get',
           params: {
             axios: [`/${DATA_SETS_PATH}/${ORGANIZATIONS_PATH}/${ORGANIZATION_MOCK.id}`],
             valid: [[ORGANIZATION_MOCK.id]],
