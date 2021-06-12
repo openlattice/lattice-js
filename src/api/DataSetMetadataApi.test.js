@@ -2,9 +2,19 @@ import * as DataSetMetadataApi from './DataSetMetadataApi';
 
 import * as AxiosUtils from '../utils/axios';
 import { DATA_SET_METADATA_API } from '../constants/ApiNames';
-import { COLUMNS_PATH, DATA_SETS_PATH, UPDATE_PATH } from '../constants/UrlConstants';
+import {
+  COLUMNS_PATH,
+  DATA_SETS_PATH,
+  ORGANIZATIONS_PATH,
+  UPDATE_PATH,
+} from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
-import { ENTITY_SET_MOCK, METADATA_UPDATE_MOCK, PROPERTY_TYPE_MOCK } from '../utils/testing/MockData';
+import {
+  ENTITY_SET_MOCK,
+  METADATA_UPDATE_MOCK,
+  ORGANIZATION_MOCK,
+  PROPERTY_TYPE_MOCK,
+} from '../utils/testing/MockData';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
 
 jest.mock('../utils/axios');
@@ -52,6 +62,16 @@ describe(DATA_SET_METADATA_API, () => {
           params: {
             axios: [`/${COLUMNS_PATH}`, [ENTITY_SET_MOCK.id]],
             valid: [[ENTITY_SET_MOCK.id]],
+          },
+        },
+      },
+      getOrganizationDataSetsMetadata: {
+        '': { params: { optional: [false], valid: [[ORGANIZATION_MOCK.id]] } },
+        '(organizationId)': {
+          method: 'post',
+          params: {
+            axios: [`/${DATA_SETS_PATH}/${ORGANIZATIONS_PATH}/${ORGANIZATION_MOCK.id}`],
+            valid: [[ORGANIZATION_MOCK.id]],
           },
         },
       },
