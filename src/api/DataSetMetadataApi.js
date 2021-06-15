@@ -19,7 +19,12 @@
 
 import Logger from '../utils/Logger';
 import { DATA_SET_METADATA_API } from '../constants/ApiNames';
-import { COLUMNS_PATH, DATA_SETS_PATH, UPDATE_PATH } from '../constants/UrlConstants';
+import {
+  COLUMNS_PATH,
+  DATA_SETS_PATH,
+  ORGANIZATIONS_PATH,
+  UPDATE_PATH,
+} from '../constants/UrlConstants';
 import { isNonEmptyArray, isNonEmptyObject } from '../utils/LangUtils';
 import { isValidUUID } from '../utils/ValidationUtils';
 import { getApiAxiosInstance } from '../utils/axios';
@@ -204,6 +209,38 @@ function getDataSetColumnsMetadata(dataSetIds :UUID[]) :Promise<Map<UUID, DataSe
 }
 
 /**
+ * `GET /metadata/datasets/organizations/{organizationId}`
+ *
+ * Gets all data set metadata objects that belong to the organization object with the given organization id.
+ *
+ * @static
+ * @memberof lattice.DataSetMetadataApi
+ * @param {UUID} organizationId
+ * @returns {Promise<Map<UUID, DataSetMetadata>>}
+ *
+ * @example
+ * DataSetMetadataApi.getOrganizationDataSetsMetadata(["ec6865e6-e60e-424b-a071-6a9c1603d735"]);
+ */
+function getOrganizationDataSetsMetadata(organizationId :UUID) :Promise<Map<UUID, DataSetMetadata>> {
+
+  let errorMsg = '';
+
+  if (!isNonEmptyArray(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a non-empty array';
+    LOG.error(errorMsg, organizationId);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(DATA_SET_METADATA_API)
+    .get(`/${DATA_SETS_PATH}/${ORGANIZATIONS_PATH}/${organizationId}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
  * `PATCH /metadata/update/{dataSetId}`
  *
  * Applies the given metadata updates to the data set with the given data set id.
@@ -306,6 +343,7 @@ export {
   getDataSetColumnMetadata,
   getDataSetColumnsMetadata,
   getDataSetsMetadata,
+  getOrganizationDataSetsMetadata,
   updateDataSetColumnMetadata,
   updateDataSetMetadata,
 };
