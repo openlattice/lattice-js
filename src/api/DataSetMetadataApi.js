@@ -225,8 +225,8 @@ function getOrganizationDataSetsMetadata(organizationId :UUID) :Promise<Map<UUID
 
   let errorMsg = '';
 
-  if (!isNonEmptyArray(organizationId)) {
-    errorMsg = 'invalid parameter: "organizationId" must be a non-empty array';
+  if (!isValidUUID(organizationId)) {
+    errorMsg = 'invalid parameter: "organizationId" must be a valid UUID';
     LOG.error(errorMsg, organizationId);
     return Promise.reject(errorMsg);
   }
