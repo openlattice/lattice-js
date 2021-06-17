@@ -346,7 +346,7 @@ function renameCollaborationDatabase(collaborationId :UUID, name :string) :Promi
 }
 
 /**
- * `GET /collaborations/{collaborationId}/project/{organizationId}/{dataSetId}`
+ * `PATCH /collaborations/{collaborationId}/project/{organizationId}/{dataSetId}`
  *
  * Adds the given data set id to the [Collaboration] object with the given collaboration id. The target data set
  * object must belong to the [Organization] object with the given organization id. The caller must have:
@@ -390,7 +390,7 @@ function addDataSetToCollaboration(collaborationId :UUID, organizationId :UUID, 
   }
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .get(`/${collaborationId}/${PROJECT_PATH}/${organizationId}/${dataSetId}`)
+    .patch(`/${collaborationId}/${PROJECT_PATH}/${organizationId}/${dataSetId}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);

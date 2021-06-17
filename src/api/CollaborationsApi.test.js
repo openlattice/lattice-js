@@ -153,7 +153,7 @@ describe(COLLABORATIONS_API, () => {
           }
         },
         '(collaborationId, organizationId, dataSetId)': {
-          method: 'get',
+          method: 'patch',
           params: {
             axios: [`/${MOCK_COLLABORATION_ID}/${PROJECT_PATH}/${MOCK_ORG_1_ID}/${MOCK_DATA_SET_1_ID}`],
             valid: [MOCK_COLLABORATION_ID, MOCK_ORG_1_ID, MOCK_DATA_SET_1_ID],
