@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "main": "build/index.js",
   "dependencies": {
-    "@babel/runtime-corejs3": "~7.14.0",
+    "@babel/runtime-corejs3": "~7.15.3",
     "axios": "~0.21.0",
     "loglevel": "~1.7.0",
     "validator": "~13.6.0"
