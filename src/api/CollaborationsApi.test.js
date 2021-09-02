@@ -5,6 +5,7 @@ import * as CollaborationsApi from './CollaborationsApi';
 import * as AxiosUtils from '../utils/axios';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
 import {
+  ALL_PATH,
   DATABASE_PATH,
   DATA_SETS_PATH,
   ORGANIZATIONS_PATH,
@@ -35,13 +36,23 @@ describe(COLLABORATIONS_API, () => {
     CollaborationsApi,
     COLLABORATIONS_API,
     {
-      getCollaborations: {
+      getAllCollaborations: {
         '': { params: { optional: [], valid: [] } },
         '()': {
           method: 'get',
           params: {
-            axios: ['/'],
+            axios: [`/${ALL_PATH}`],
             valid: [],
+          },
+        },
+      },
+      getCollaborations: {
+        '': { params: { optional: [false], valid: [[MOCK_COLLABORATION_ID, MOCK_COLLABORATION_ID]] } },
+        '()': {
+          method: 'get',
+          params: {
+            axios: [`?id=${MOCK_COLLABORATION_ID}&id=${MOCK_COLLABORATION_ID}`],
+            valid: [[MOCK_COLLABORATION_ID, MOCK_COLLABORATION_ID]],
           },
         },
       },

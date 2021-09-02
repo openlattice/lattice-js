@@ -1,8 +1,11 @@
 // @flow
 
+import qs from 'qs';
+
 import Logger from '../utils/Logger';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
 import {
+  ALL_PATH,
   DATABASE_PATH,
   DATA_SETS_PATH,
   ORGANIZATIONS_PATH,
@@ -24,7 +27,7 @@ type Collaboration = {|
 |};
 
 /**
- * `GET /collaborations/`
+ * `GET /collaborations/all`
  *
  * Gets all [Collaboration] objects the caller has [Permission.READ] on.
  *
@@ -33,12 +36,40 @@ type Collaboration = {|
  * @returns {Promise<Collaboration[]>} - a Promise that resolves with an array of collaboration objects
  *
  * @example
- * CollaborationsApi.getCollaborations();
+ * CollaborationsApi.getAllCollaborations();
  */
-function getCollaborations() :Promise<Collaboration[]> {
+function getAllCollaborations() :Promise<Collaboration[]> {
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .get('/')
+    .get(`/${ALL_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /collaborations`
+ *
+ * Gets [Collaboration] objects the caller has [Permission.READ] on for a provided list of collaboration ids.
+ *
+ * @static
+ * @memberof lattice.CollaborationsApi
+ * @returns {Promise<Collaboration[]>} - a Promise that resolves with a map of
+ * collaboration ids to collaboration objects
+ *
+ * @example
+ * CollaborationsApi.getCollaborations();
+ */
+function getCollaborations(ids :UUID[]) :Promise<Map<UUID, Collaboration[]>> {
+
+  const queryParams = qs.stringify({
+    id: ids,
+  }, { arrayFormat: 'repeat' });
+
+  return getApiAxiosInstance(COLLABORATIONS_API)
+    .get(`?${queryParams}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -568,18 +599,19 @@ function getCollaborationsWithDataSets(dataSetIds :UUID | UUID[]) :Promise<Objec
 }
 
 export {
+  addDataSetToCollaboration,
   addOrganizationsToCollaboration,
   createCollaboration,
   deleteCollaboration,
+  getAllCollaborations,
   getCollaboration,
+  getCollaborationDataSets,
   getCollaborationDatabaseInfo,
   getCollaborations,
-  getCollaborationsWithOrganization,
-  getCollaborationDataSets,
-  getOrganizationCollaborationDataSets,
   getCollaborationsWithDataSets,
-  addDataSetToCollaboration,
-  removeOrganizationsFromCollaboration,
+  getCollaborationsWithOrganization,
+  getOrganizationCollaborationDataSets,
   removeDataSetFromCollaboration,
+  removeOrganizationsFromCollaboration,
   renameCollaborationDatabase,
 };
