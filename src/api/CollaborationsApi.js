@@ -557,14 +557,14 @@ function getCollaborationDataSets(collaborationId :UUID) :Promise<Object> {
 /**
  * `POST /collaborations/datasets`
  *
- * Gets all [Collaboration] ids that the caller has [Permission.READ] on that include the given data set ids that
+ * Gets all [Collaboration] objects that the caller has [Permission.READ] on that include the given data set ids that
  * the caller has [Permission.READ] on.
  *
  * @static
  * @memberof lattice.CollaborationsApi
  * @param {UUID || UUID[]} dataSetIds
  * @returns {Promise<Object>} - a Promise that resolves with a map from
- * organizationId to all data set ids projected to the requested collaboration from that organization.
+ * data set ids to all Collaboration objects each data set is projected to.
  *
  * @example
  * CollaborationsApi.getCollaborationsWithDataSets("01af0000-0000-0000-8000-000000000004");
