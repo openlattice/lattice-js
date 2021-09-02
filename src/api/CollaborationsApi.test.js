@@ -51,7 +51,7 @@ describe(COLLABORATIONS_API, () => {
         '()': {
           method: 'get',
           params: {
-            axios: [`?ids=${MOCK_COLLABORATION_ID},${MOCK_COLLABORATION_ID}`],
+            axios: [`?ids=${MOCK_COLLABORATION_ID}%2C${MOCK_COLLABORATION_ID}`],
             valid: [[MOCK_COLLABORATION_ID, MOCK_COLLABORATION_ID]],
           },
         },
