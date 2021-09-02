@@ -50,7 +50,7 @@ function getAllCollaborations() :Promise<Collaboration[]> {
 }
 
 /**
- * `GET /collaborations?id=2b4e7ada-6d72-4226-a6eb-432f3fc08c9a&id= 58ff7df9-9298-4707-ba36-118761c5aa71 `
+ * `GET /collaborations?id=2b4e7ada-6d72-4226-a6eb-432f3fc08c9a&id=58ff7df9-9298-4707-ba36-118761c5aa71 `
  *
  * Gets [Collaboration] objects the caller has [Permission.READ] on for a provided list of collaboration ids.
  *
