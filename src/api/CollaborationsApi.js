@@ -64,9 +64,7 @@ function getAllCollaborations() :Promise<Collaboration[]> {
  */
 function getCollaborations(ids :UUID[]) :Promise<Map<UUID, Collaboration[]>> {
 
-  const queryParams = qs.stringify({
-    id: ids,
-  }, { arrayFormat: 'repeat' });
+  const queryParams = qs.stringify({ ids }, { arrayFormat: 'comma' });
 
   return getApiAxiosInstance(COLLABORATIONS_API)
     .get(`?${queryParams}`)
