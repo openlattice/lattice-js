@@ -46,7 +46,7 @@
     "eslint-plugin-flowtype": "~6.0.1",
     "eslint-plugin-import": "~2.24.0",
     "eslint-plugin-jest": "~24.4.0",
-    "flow-bin": "~0.131.0",
+    "flow-bin": "~0.160.2",
     "immutable": "4.0.0-rc.10",
     "import-sort-style-openlattice": "~0.1.0",
     "jest": "~27.1.0",
