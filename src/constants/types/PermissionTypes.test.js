@@ -5,6 +5,7 @@ import { testEnumIntegrity } from '../../utils/testing/TestUtils';
 
 const EXPECTED_ENUM = Map({
   DISCOVER: 'DISCOVER',
+  INTEGRATE: 'INTEGRATE',
   LINK: 'LINK',
   MATERIALIZE: 'MATERIALIZE',
   OWNER: 'OWNER',
