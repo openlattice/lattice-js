@@ -4,6 +4,7 @@
 
 type PermissionTypesEnum = {|
   DISCOVER :'DISCOVER';
+  INTEGRATE :'INTEGRATE';
   LINK :'LINK';
   MATERIALIZE :'MATERIALIZE';
   OWNER :'OWNER';
@@ -13,6 +14,7 @@ type PermissionTypesEnum = {|
 
 const PermissionTypes :{| ...PermissionTypesEnum |} = Object.freeze({
   DISCOVER: 'DISCOVER',
+  INTEGRATE: 'INTEGRATE',
   LINK: 'LINK',
   MATERIALIZE: 'MATERIALIZE',
   OWNER: 'OWNER',
