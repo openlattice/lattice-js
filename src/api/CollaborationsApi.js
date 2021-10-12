@@ -1,8 +1,11 @@
 // @flow
 
+import qs from 'qs';
+
 import Logger from '../utils/Logger';
 import { COLLABORATIONS_API } from '../constants/ApiNames';
 import {
+  ALL_PATH,
   DATABASE_PATH,
   DATA_SETS_PATH,
   ORGANIZATIONS_PATH,
@@ -24,7 +27,7 @@ type Collaboration = {|
 |};
 
 /**
- * `GET /collaborations/`
+ * `GET /collaborations/all`
  *
  * Gets all [Collaboration] objects the caller has [Permission.READ] on.
  *
@@ -33,12 +36,38 @@ type Collaboration = {|
  * @returns {Promise<Collaboration[]>} - a Promise that resolves with an array of collaboration objects
  *
  * @example
- * CollaborationsApi.getCollaborations();
+ * CollaborationsApi.getAllCollaborations();
  */
-function getCollaborations() :Promise<Collaboration[]> {
+function getAllCollaborations() :Promise<Collaboration[]> {
 
   return getApiAxiosInstance(COLLABORATIONS_API)
-    .get('/')
+    .get(`/${ALL_PATH}`)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
+/**
+ * `GET /collaborations?id=2b4e7ada-6d72-4226-a6eb-432f3fc08c9a&id=58ff7df9-9298-4707-ba36-118761c5aa71 `
+ *
+ * Gets [Collaboration] objects the caller has [Permission.READ] on for a provided list of collaboration ids.
+ *
+ * @static
+ * @memberof lattice.CollaborationsApi
+ * @returns {Promise<Collaboration[]>} - a Promise that resolves with a map of
+ * collaboration ids to collaboration objects
+ *
+ * @example
+ * CollaborationsApi.getCollaborations();
+ */
+function getCollaborations(ids :UUID[]) :Promise<Map<UUID, Collaboration[]>> {
+
+  const queryParams = qs.stringify({ ids }, { arrayFormat: 'comma' });
+
+  return getApiAxiosInstance(COLLABORATIONS_API)
+    .get(`?${queryParams}`)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
@@ -526,14 +555,14 @@ function getCollaborationDataSets(collaborationId :UUID) :Promise<Object> {
 /**
  * `POST /collaborations/datasets`
  *
- * Gets all [Collaboration] ids that the caller has [Permission.READ] on that include the given data set ids that
+ * Gets all [Collaboration] objects that the caller has [Permission.READ] on that include the given data set ids that
  * the caller has [Permission.READ] on.
  *
  * @static
  * @memberof lattice.CollaborationsApi
  * @param {UUID || UUID[]} dataSetIds
  * @returns {Promise<Object>} - a Promise that resolves with a map from
- * organizationId to all data set ids projected to the requested collaboration from that organization.
+ * data set ids to all Collaboration objects each data set is projected to.
  *
  * @example
  * CollaborationsApi.getCollaborationsWithDataSets("01af0000-0000-0000-8000-000000000004");
@@ -568,18 +597,19 @@ function getCollaborationsWithDataSets(dataSetIds :UUID | UUID[]) :Promise<Objec
 }
 
 export {
+  addDataSetToCollaboration,
   addOrganizationsToCollaboration,
   createCollaboration,
   deleteCollaboration,
+  getAllCollaborations,
   getCollaboration,
+  getCollaborationDataSets,
   getCollaborationDatabaseInfo,
   getCollaborations,
-  getCollaborationsWithOrganization,
-  getCollaborationDataSets,
-  getOrganizationCollaborationDataSets,
   getCollaborationsWithDataSets,
-  addDataSetToCollaboration,
-  removeOrganizationsFromCollaboration,
+  getCollaborationsWithOrganization,
+  getOrganizationCollaborationDataSets,
   removeDataSetFromCollaboration,
+  removeOrganizationsFromCollaboration,
   renameCollaborationDatabase,
 };
