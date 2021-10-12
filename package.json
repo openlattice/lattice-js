@@ -27,6 +27,7 @@
     "@babel/runtime-corejs3": "~7.15.3",
     "axios": "~0.21.0",
     "loglevel": "~1.7.0",
+    "qs": "~6.10.1",
     "validator": "~13.6.0"
   },
   "devDependencies": {
@@ -45,7 +46,7 @@
     "eslint-import-resolver-webpack": "~0.13.1",
     "eslint-plugin-flowtype": "~6.1.0",
     "eslint-plugin-import": "~2.24.0",
-    "eslint-plugin-jest": "~24.4.0",
+    "eslint-plugin-jest": "~24.6.0",
     "flow-bin": "~0.131.0",
     "immutable": "4.0.0-rc.10",
     "import-sort-style-openlattice": "~0.1.0",
@@ -55,8 +56,8 @@
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
     "uuid": "~8.3.2",
-    "webpack": "~5.54.0",
-    "webpack-cli": "~4.8.0",
+    "webpack": "~5.58.1",
+    "webpack-cli": "~4.9.0",
     "webpack-dev-server": "~4.3.0",
     "webpack-node-externals": "~3.0.0"
   },
