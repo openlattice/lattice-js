@@ -25,7 +25,7 @@
   "main": "build/index.js",
   "dependencies": {
     "@babel/runtime-corejs3": "~7.15.3",
-    "axios": "~0.21.0",
+    "axios": "~0.23.0",
     "loglevel": "~1.7.0",
     "qs": "~6.10.1",
     "validator": "~13.6.0"
