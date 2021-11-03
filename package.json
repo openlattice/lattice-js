@@ -28,7 +28,7 @@
     "axios": "~0.21.0",
     "loglevel": "~1.7.0",
     "qs": "~6.10.1",
-    "validator": "~13.6.0"
+    "validator": "~13.7.0"
   },
   "devDependencies": {
     "@babel/cli": "~7.15.7",
