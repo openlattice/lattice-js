@@ -6,9 +6,11 @@ import * as AxiosUtils from '../utils/axios';
 import { SEARCH_API } from '../constants/ApiNames';
 import {
   ADVANCED_PATH,
+  COUNT_PATH,
   DATA_SETS_PATH,
   IDS_PATH,
   NEIGHBORS_PATH,
+  SEARCH_ENTITY_TYPES_PATH,
 } from '../constants/UrlConstants';
 import { runTestSuite } from '../utils/testing/APITestSuite';
 import { getMockAxiosInstance } from '../utils/testing/MockUtils';
@@ -36,6 +38,24 @@ describe(SEARCH_API, () => {
     SearchApi,
     SEARCH_API,
     {
+      countEntitiesInSets: {
+        '': {
+          params: {
+            optional: [false, false],
+            valid: [MOCK_EKID_1, [MOCK_ESID_1, MOCK_ESID_2]],
+          },
+        },
+        '(entityTypeId, [entitySetIds])': {
+          method: 'post',
+          params: {
+            axios: [`/${SEARCH_ENTITY_TYPES_PATH}/${MOCK_EKID_1}/${COUNT_PATH}`, [
+              MOCK_ESID_1,
+              MOCK_ESID_2
+            ]],
+            valid: [MOCK_EKID_1, [MOCK_ESID_1, MOCK_ESID_2]],
+          },
+        },
+      },
       searchDataSetMetadata: {
         '': {
           params: {
