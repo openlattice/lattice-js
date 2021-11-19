@@ -33,6 +33,7 @@ import {
 } from '../constants/SerializationConstants';
 import {
   ADVANCED_PATH,
+  COUNT_PATH,
   DATA_SETS_PATH,
   IDS_PATH,
   NEIGHBORS_PATH,
@@ -79,7 +80,7 @@ function countEntitiesInSets(entityTypeId :UUID, entitySetIds :UUID[]) :Promise<
   }
 
   return getApiAxiosInstance(SEARCH_API)
-    .post(`/${SEARCH_ENTITY_TYPES_PATH}/${entityTypeId}/count`, entitySetIds)
+    .post(`/${SEARCH_ENTITY_TYPES_PATH}/${entityTypeId}/${COUNT_PATH}`, entitySetIds)
     .then((axiosResponse) => axiosResponse.data)
     .catch((error :Error) => {
       LOG.error(error);
