@@ -36,6 +36,7 @@ import {
   DATA_SETS_PATH,
   IDS_PATH,
   NEIGHBORS_PATH,
+  SEARCH_ENTITY_TYPES_PATH,
 } from '../constants/UrlConstants';
 import { isDefined, isEmptyArray, isNonEmptyObject } from '../utils/LangUtils';
 import { isValidUUID, isValidUUIDArray } from '../utils/ValidationUtils';
@@ -249,8 +250,50 @@ function searchEntitySetData(searchConstraints :Object) :Promise<Object> {
     });
 }
 
+/**
+ * `POST /search/entity_types/<ENTITY_TYPE_ID>/count`
+ *
+ * Searches EntitySet data according to the given constraints.
+ *
+ * @static
+ * @memberof lattice.SearchApi
+ * @param {UUID[]} entitySetIds
+ * @returns {Promise<number>} - a Promise that resolves with the number of entities within the provided entity sets.
+ * Entity sets must belong to the same provided entity type
+ *
+ * @example
+ * SearchApi.countEntitiesInSets(
+ *   "ec6865e6-e60e-424b-a071-6a9c1603d735",
+ *   ["3bf2a30d-fda0-4389-a1e6-8546b230efad", "11442cb3-99dc-4842-8736-6c76e6fcc7c4"]
+ * );
+ */
+function countEntitiesInSets(entityTypeId :UUID, entitySetIds :UUID[]) :Promise<number> {
+  let errorMsg = '';
+
+  if (!isValidUUID(entityTypeId)) {
+    errorMsg = 'invalid parameter: "entityTypeId" must be a valid UUID';
+    LOG.error(errorMsg, entitySetIds);
+    return Promise.reject(errorMsg);
+  }
+
+  if (!isValidUUIDArray(entitySetIds)) {
+    errorMsg = 'invalid parameter: "entitySetIds" must be a non-empty array of valid UUIDs';
+    LOG.error(errorMsg, entitySetIds);
+    return Promise.reject(errorMsg);
+  }
+
+  return getApiAxiosInstance(SEARCH_API)
+    .post(`/${SEARCH_ENTITY_TYPES_PATH}/${entityTypeId}/count`, entitySetIds)
+    .then((axiosResponse) => axiosResponse.data)
+    .catch((error :Error) => {
+      LOG.error(error);
+      return Promise.reject(error);
+    });
+}
+
 export {
   searchDataSetMetadata,
   searchEntityNeighborsWithFilter,
   searchEntitySetData,
+  countEntitiesInSets,
 };
