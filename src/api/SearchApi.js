@@ -251,12 +251,13 @@ function searchEntitySetData(searchConstraints :Object) :Promise<Object> {
 }
 
 /**
- * `POST /search/entity_types/<ENTITY_TYPE_ID>/count`
+ * `POST /search/entity_types/{entityTypeId}/count`
  *
  * Searches EntitySet data according to the given constraints.
  *
  * @static
  * @memberof lattice.SearchApi
+ * @param {UUID} entityTypeId
  * @param {UUID[]} entitySetIds
  * @returns {Promise<number>} - a Promise that resolves with the number of entities within the provided entity sets.
  * Entity sets must belong to the same provided entity type
