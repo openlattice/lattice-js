@@ -26,7 +26,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "~7.16.3",
     "axios": "~0.21.0",
-    "loglevel": "~1.7.0",
+    "loglevel": "~1.8.0",
     "qs": "~6.10.1",
     "validator": "~13.7.0"
   },
@@ -52,7 +52,7 @@
     "import-sort-style-openlattice": "~0.1.0",
     "jest": "~27.3.1",
     "lodash": "~4.17.21",
-    "loglevel": "~1.7.1",
+    "loglevel": "~1.8.0",
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
     "uuid": "~8.3.2",
