@@ -52,7 +52,6 @@
     "import-sort-style-openlattice": "~0.1.0",
     "jest": "~27.4.7",
     "lodash": "~4.17.21",
-    "loglevel": "~1.7.1",
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
     "uuid": "~8.3.2",
