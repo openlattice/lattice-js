@@ -27,9 +27,7 @@ const LOG = new Logger('Configuration');
 const ENV_URLS :Map<string, string> = fromJS({
   LOCAL: 'http://localhost:8080',
   STAGING: 'https://api.staging.openlattice.com',
-  STAGING_CA: 'https://api.staging.ca.openlattice.com',
   PRODUCTION: 'https://api.openlattice.com',
-  PRODUCTION_CA: 'https://api.ca.openlattice.com',
 });
 
 let configuration :Map<string, string> = fromJS({
@@ -64,23 +62,11 @@ function setBaseUrl(config :LatticeConfig) :void {
     else if (config.baseUrl === 'staging' || config.baseUrl === ENV_URLS.get('STAGING')) {
       configuration = configuration.set('baseUrl', ENV_URLS.get('STAGING'));
     }
-    else if (config.baseUrl === 'staging_ca' || config.baseUrl === ENV_URLS.get('STAGING_CA')) {
-      configuration = configuration.set('baseUrl', ENV_URLS.get('STAGING_CA'));
-    }
     else if (config.baseUrl === 'production' || config.baseUrl === ENV_URLS.get('PRODUCTION')) {
       configuration = configuration.set('baseUrl', ENV_URLS.get('PRODUCTION'));
     }
-    else if (config.baseUrl === 'production_ca' || config.baseUrl === ENV_URLS.get('PRODUCTION_CA')) {
-      configuration = configuration.set('baseUrl', ENV_URLS.get('PRODUCTION_CA'));
-    }
-    // mild url validation to at least check the protocol and domain
-    else if (config.baseUrl.startsWith('https://') && config.baseUrl.endsWith('openlattice.com')) {
-      configuration = configuration.set('baseUrl', config.baseUrl);
-    }
     else {
-      const errorMsg = 'invalid parameter - baseUrl must be a valid URL';
-      LOG.error(errorMsg, config.baseUrl);
-      throw new Error(errorMsg);
+      configuration = configuration.set('baseUrl', config.baseUrl);
     }
   }
   else {
