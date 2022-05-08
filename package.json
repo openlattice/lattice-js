@@ -50,7 +50,7 @@
     "flow-bin": "~0.131.0",
     "immutable": "4.0.0-rc.10",
     "import-sort-style-openlattice": "~0.1.0",
-    "jest": "~27.4.7",
+    "jest": "~28.1.0",
     "lodash": "~4.17.21",
     "npm-run-all": "~4.1.0",
     "rimraf": "~3.0.0",
