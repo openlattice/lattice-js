@@ -27,7 +27,7 @@
     "@babel/runtime-corejs3": "~7.16.8",
     "axios": "~0.24.0",
     "loglevel": "~1.8.0",
-    "qs": "~6.10.3",
+    "qs": "~6.11.0",
     "validator": "~13.7.0"
   },
   "devDependencies": {
